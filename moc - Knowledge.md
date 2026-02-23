@@ -67,6 +67,7 @@ Agent tooling patterns, CLI design, and infrastructure.
 - [[agent-first engineering replaces coding with environment design scaffolding and feedback loops]] — OpenAI's zero-human-code experiment: 1M lines via Codex, AGENTS.md as table of contents, enforced architecture, garbage collection for AI slop
 - [[prompt caching is the foundational constraint for building long-running agents]] — Claude Code's engineering lessons: prefix ordering, cache-safe plan mode, defer_loading for tools, cache-safe compaction
 - [[top AI papers week of Feb 16-22 2026 reveal that agents consume skills better than they create them]] — ten papers: SkillsBench (curated skills +16pp, self-generated 0pp), LCM beats Claude Code, MemoryArena exposes recall-vs-action gap, delegation frameworks
+- [[code execution with MCP cuts tool token overhead 98 percent by presenting servers as filesystem APIs instead of upfront definitions]] — wrapping MCP tools as TypeScript files on a filesystem for on-demand discovery, in-code data filtering, PII tokenization, and emergent skill persistence
 
 ### Learnings
 
