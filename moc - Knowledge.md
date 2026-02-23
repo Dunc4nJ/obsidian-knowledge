@@ -1,0 +1,112 @@
+---
+created: 2026-01-31
+description: Navigation hub for cross-cutting knowledge that spans projects — best practices, frameworks, research
+source: internal
+type: moc
+---
+
+# Knowledge
+
+Cross-cutting knowledge that spans projects. Best practices, frameworks, research.
+
+## AI Agents
+
+Financial and investment-focused multi-agent systems.
+
+- [[orchestration architecture determines multi-agent investment quality]] — architecture choice shapes output quality more than agent count in multi-agent investment committees
+- [[simple financial agents outperform complex ones when tool routing is tight]] — reducing decision space via subagent encapsulation beats monolithic tool exposure for financial research
+
+## Agents
+
+Agent architecture, memory systems, background agents, and tooling.
+
+### Agentic Memory
+
+Vault philosophy and agent integration patterns.
+
+- [[Obsidian as Agentic Memory]] — architectural pillars for building agent knowledge systems (synthesizes vibe note-taking patterns and tools-for-thought lineage)
+- [[four memory layers serve different knowledge types]] — CASS, CM, ms, and the vault as a unified memory system
+- [[progressive disclosure filters force agent selectivity over what enters context]] — progressive disclosure for agent context curation
+- [[inline annotations beat copy-paste editing by keeping instructions where they belong]] — spatial editing with inline annotations
+- [[transcript mining turns meetings into captured decisions and extracted knowledge]] — transcript mining as knowledge capture
+- [[git hooks as thinking journal let you time-travel through note evolution]] — git as thinking journal via async hooks
+- [[PARA and atomic facts give AI agents durable structured memory]] — three-layer memory architecture with PARA directories, atomic facts, memory decay, and QMD search
+
+### Background Agents
+
+Agents that run continuously in the background — monitoring, alerting, proactive discovery.
+
+- [[background agents shift alerting from reactive keyword matching to proactive semantic discovery]] — Fintool's architecture separating trigger filtering from LLM semantic analysis
+
+### Data Agents
+
+AI agents for data analysis, SQL generation, and enterprise analytics.
+
+- [[OpenAI internal data agent succeeds through six layers of context not model capability alone]] — six-layer context architecture (metadata, queries, code definitions, docs, memory, runtime) for reasoning over 600PB
+
+### Orchestration
+
+How multiple agents coordinate: sessions, routing, scheduling, task systems, and shared infrastructure.
+
+- [[2 to 5 worker agents per lead is the sweet spot for multi agent orchestration]] — lead/worker ratios, role staffing by CLI, specs + review layers
+- [[multi-agent squads work when independent sessions share a mission control system]] — multi-session orchestration with heartbeats and a shared Mission Control substrate
+- [[Athena is a vault librarian agent that maintains structure links and capture workflows]] — dedicated vault maintenance agent scope, standards, and cadence
+
+### Tooling
+
+Agent tooling patterns, CLI design, and infrastructure.
+
+- [[capturing internal APIs can replace most agent browser automation]] — capture internal endpoints once, then switch agents from UI clicking to API-speed actions
+- [[skill workflows]] — skills as folder-based modules (scripts + templates + nested skills) with progressive disclosure for repeatable automation
+- [[ralph loops prevents context pollution in long running ai builds]] — iterative, file-backed loops as an antidote to long-run context pollution
+- [[agentic image generation loop]] — generate→annotate→refine workflows for producing and iterating visual assets in Claude Code
+- [[skill graphs outperform single skill files by letting agents traverse linked domain knowledge on demand]] — wikilinked markdown skill networks with progressive disclosure, YAML descriptions, and MOCs for deep domain traversal
+- [[context tax compounds through cache misses bloated tools and unbudgeted output tokens]] — thirteen techniques for reducing LLM token costs: KV cache stability, append-only context, filesystem tool outputs, subagent delegation, output budgeting
+- [[agentic search with grep and full-file loading replaces RAG when context windows are large enough]] — RAG was a context-poor workaround; agents using grep, glob, and full-file loading outperform chunking-embedding-reranking pipelines
+- [[agent-first engineering replaces coding with environment design scaffolding and feedback loops]] — OpenAI's zero-human-code experiment: 1M lines via Codex, AGENTS.md as table of contents, enforced architecture, garbage collection for AI slop
+
+### Learnings
+
+Hard-won operational insights from running agents.
+
+- [[learning - structured state files beat append-only logs for agent task persistence across compaction]] — JSON state files let agents reconstruct task context instantly after compaction
+- [[learning - soul files written as earned beliefs outperform rule-based instructions]] — belief-narrative SOUL.md makes LLMs internalize values rather than comply with checklists
+
+## Ecommerce
+
+Marketing, creative testing, and automation learnings that apply across brands.
+
+- [[advertising angles are testable hypotheses not copywriting]] — angles are experiments you can test and iterate, not inspiration-only copywriting
+- [[recursive skill loops improve marketing outputs by generating scoring diagnosing and iterating until thresholds are met]] — generate→evaluate→improve loops with explicit scoring criteria for consistent copy/creative
+- [[advertising works when a content farm feeds modular assets into an agent-driven assembly line]] — modular assets + agent assembly lines make creative output scalable
+- [[content systems beat content calendars when assets are modular tagged and agent-operable]] — modular, tagged asset libraries outperform fixed calendars for iteration
+- [[seo briefs beat seo tools when you separate serp gaps structure and differentiation]] — prompt-driven brief workflow (SERP gaps → structure → differentiation) as a repeatable system
+- [[copy strategy converts when a messaging hierarchy voice chart and channel matrix anchor every asset to one promise]] — messaging systems outperform one-off copy
+- [[meta ad library research finds winners through longevity signals creative families and angle extraction]] — use longevity + creative families to reverse-engineer winners
+- [[ai longform ai videos look real when the starting frame and audio are high quality]] — upstream asset quality (starting frame + audio) is the realism bottleneck
+- [[meta ads strategy]] — campaign architecture, creative strategy, audience targeting, measurement, and 2026 platform shifts
+- [[sora 2 prompting improves video consistency when prompts read like cinematographer briefs]] — video prompting patterns for consistent shots (shot briefs, lighting continuity, image input anchoring)
+- [[ads become searchable and remixable when structured as concept-module-asset-variant objects with enum tags]] — four-entity object model with enum tags for querying, mechanical variant generation, and concept-level learning
+- [[shadcn component libraries let you ship ecommerce sites faster]] — component kits that speed storefront builds and iteration
+- [[skill architecture beats skill writing when memory contracts and learning loops connect the system]] — five architectural patterns that turn isolated AI marketing skills into a compounding system
+- [[nine prompts turn Claude plus Higgsfield into a product video factory]] — nine-prompt pipeline from angle generation through retargeting sequences
+
+## Prediction Markets
+
+Prediction market arbitrage, quantitative trading, and market microstructure.
+
+- [[mathematical infrastructure not luck extracted 40 million from Polymarket]] — integer programming, Bregman projections, and Frank-Wolfe algorithms for systematic prediction market arbitrage
+- [[polymarket arbitrage trading requires barrier frank-wolfe initialization and adaptive contraction]] — implementation roadmap: feasible initialization, barrier stability for LMSR, and profit-guaranteed stopping rules
+- [[polymarket research papers]] — reading list: inefficiency/price misalignment, volatility modeling, and prediction market mechanism design
+- [[attention markets shift arbitrage from binary constraints to latency correlation and manipulation volatility]] — attention-market microstructure shifts edge to oracle latency, correlation dislocations, and manipulation-linked volatility
+- [[polymarket alpha compounds when traders specialize in one repeatable execution edge]] — edge comes from strategy specialization, procedural discipline, and execution speed rather than broad prediction generalism
+- [[hedge funds use prediction market data for risk calibration not outcome prediction]] — empirical Kelly sizing, calibration surfaces, and maker-taker order flow decomposition using 400M+ open-source trade dataset
+- [[kelly criterion determines optimal prediction market bet size from three inputs]] — the Kelly-Thorp criterion calculates optimal bankroll fraction from win probability, loss probability, and payout odds
+- [[polymarket 5-minute market bot latency depends on server region with ireland and stockholm 294ms faster than seoul]] — Ireland/Stockholm achieve 250-280ms CLOB latency vs Seoul 550ms+, making region selection a core edge
+- [[polymarket US retail API launches with 23 REST and 2 WebSocket endpoints for regulated trading]] — official US-regulated retail API with Ed25519 auth and Python/TypeScript SDKs
+- [[synth volatility forecasts find 10 percent edge on polymarket crypto hourly contracts]] — 24h crypto volatility forecasts identify 10%+ mispricings on hourly up/down contracts
+- [[weather markets on polymarket print money because most traders ignore NOAA forecasts]] — systematic mispricing from retail traders ignoring freely available 94%-accurate NOAA forecasts
+
+## Thinking
+
+- [[genius thinking is the ability to keep thinking past threat reactions]]
