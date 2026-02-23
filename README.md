@@ -1,3 +1,8 @@
+---
+created: 2026-02-23
+description: Repository README for the published obsidian-knowledge vault subset
+---
+
 # obsidian-knowledge
 
 Curated knowledge base on AI agents, ecommerce, and prediction markets.

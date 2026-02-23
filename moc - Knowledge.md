@@ -9,16 +9,16 @@ type: moc
 
 Cross-cutting knowledge that spans projects. Best practices, frameworks, research.
 
-## AI Agents
+## Agents
+
+Agent architecture, memory systems, background agents, and tooling.
+
+### AI Agents
 
 Financial and investment-focused multi-agent systems.
 
 - [[orchestration architecture determines multi-agent investment quality]] — architecture choice shapes output quality more than agent count in multi-agent investment committees
 - [[simple financial agents outperform complex ones when tool routing is tight]] — reducing decision space via subagent encapsulation beats monolithic tool exposure for financial research
-
-## Agents
-
-Agent architecture, memory systems, background agents, and tooling.
 
 ### Agentic Memory
 
@@ -51,6 +51,7 @@ How multiple agents coordinate: sessions, routing, scheduling, task systems, and
 - [[2 to 5 worker agents per lead is the sweet spot for multi agent orchestration]] — lead/worker ratios, role staffing by CLI, specs + review layers
 - [[multi-agent squads work when independent sessions share a mission control system]] — multi-session orchestration with heartbeats and a shared Mission Control substrate
 - [[Athena is a vault librarian agent that maintains structure links and capture workflows]] — dedicated vault maintenance agent scope, standards, and cadence
+- [[codex custom multi-agent roles unlock repeatable subagent specialization]] — Codex 0.102.0 custom roles with configurable models, reasoning, permissions, system prompts, and hidden thread limits
 
 ### Tooling
 
@@ -64,6 +65,8 @@ Agent tooling patterns, CLI design, and infrastructure.
 - [[context tax compounds through cache misses bloated tools and unbudgeted output tokens]] — thirteen techniques for reducing LLM token costs: KV cache stability, append-only context, filesystem tool outputs, subagent delegation, output budgeting
 - [[agentic search with grep and full-file loading replaces RAG when context windows are large enough]] — RAG was a context-poor workaround; agents using grep, glob, and full-file loading outperform chunking-embedding-reranking pipelines
 - [[agent-first engineering replaces coding with environment design scaffolding and feedback loops]] — OpenAI's zero-human-code experiment: 1M lines via Codex, AGENTS.md as table of contents, enforced architecture, garbage collection for AI slop
+- [[prompt caching is the foundational constraint for building long-running agents]] — Claude Code's engineering lessons: prefix ordering, cache-safe plan mode, defer_loading for tools, cache-safe compaction
+- [[top AI papers week of Feb 16-22 2026 reveal that agents consume skills better than they create them]] — ten papers: SkillsBench (curated skills +16pp, self-generated 0pp), LCM beats Claude Code, MemoryArena exposes recall-vs-action gap, delegation frameworks
 
 ### Learnings
 
@@ -71,6 +74,7 @@ Hard-won operational insights from running agents.
 
 - [[learning - structured state files beat append-only logs for agent task persistence across compaction]] — JSON state files let agents reconstruct task context instantly after compaction
 - [[learning - soul files written as earned beliefs outperform rule-based instructions]] — belief-narrative SOUL.md makes LLMs internalize values rather than comply with checklists
+- [[social media platform login automation varies dramatically by platform]] — IG allows automated login, FB blocks all automated auth, TK rate-limits after 2-3 attempts; daily engagement works headless once authenticated
 
 ## Ecommerce
 
@@ -106,6 +110,12 @@ Prediction market arbitrage, quantitative trading, and market microstructure.
 - [[polymarket US retail API launches with 23 REST and 2 WebSocket endpoints for regulated trading]] — official US-regulated retail API with Ed25519 auth and Python/TypeScript SDKs
 - [[synth volatility forecasts find 10 percent edge on polymarket crypto hourly contracts]] — 24h crypto volatility forecasts identify 10%+ mispricings on hourly up/down contracts
 - [[weather markets on polymarket print money because most traders ignore NOAA forecasts]] — systematic mispricing from retail traders ignoring freely available 94%-accurate NOAA forecasts
+
+## LLMs
+
+Foundational architecture, training, scaling, and interpretability of large language models.
+
+- [[twenty-six papers capture ninety percent of the alpha behind modern LLMs from attention through reasoning and mixture of experts]] — curated reading order from Transformers through scaling laws, alignment, reasoning, and MoE architectures
 
 ## Thinking
 
