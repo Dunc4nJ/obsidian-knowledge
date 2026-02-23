@@ -59,7 +59,6 @@ Agent tooling patterns, CLI design, and infrastructure.
 
 - [[capturing internal APIs can replace most agent browser automation]] — capture internal endpoints once, then switch agents from UI clicking to API-speed actions
 - [[skill workflows]] — skills as folder-based modules (scripts + templates + nested skills) with progressive disclosure for repeatable automation
-- [[ralph loops prevents context pollution in long running ai builds]] — iterative, file-backed loops as an antidote to long-run context pollution
 - [[agentic image generation loop]] — generate→annotate→refine workflows for producing and iterating visual assets in Claude Code
 - [[skill graphs outperform single skill files by letting agents traverse linked domain knowledge on demand]] — wikilinked markdown skill networks with progressive disclosure, YAML descriptions, and MOCs for deep domain traversal
 - [[context tax compounds through cache misses bloated tools and unbudgeted output tokens]] — thirteen techniques for reducing LLM token costs: KV cache stability, append-only context, filesystem tool outputs, subagent delegation, output budgeting
