@@ -30,6 +30,7 @@ Vault philosophy and agent integration patterns.
 - [[inline annotations beat copy-paste editing by keeping instructions where they belong]] — spatial editing with inline annotations
 - [[transcript mining turns meetings into captured decisions and extracted knowledge]] — transcript mining as knowledge capture
 - [[git hooks as thinking journal let you time-travel through note evolution]] — git as thinking journal via async hooks
+- [[obsidian vaults become memory graphs when agents traverse wikilinked notes with claim-based titles and layered orientation]] — arscontexta's comprehensive guide: vault philosophy, 3-layer orientation (tree/index/MOCs), composable claim-titled notes, agent breadcrumbs, CLAUDE.md as system philosophy
 - [[PARA and atomic facts give AI agents durable structured memory]] — three-layer memory architecture with PARA directories, atomic facts, memory decay, and QMD search
 
 ### Background Agents
