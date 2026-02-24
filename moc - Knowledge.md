@@ -73,6 +73,7 @@ Model Context Protocol — servers, best practices, and efficient tool integrati
 
 - [[MCP Best Practices]] — collected best practices from 50+ sources on building and consuming MCP servers
 - [[tool search lets Claude Code lazy-load MCP tools when definitions exceed 10 percent of context]] — dynamic tool loading triggered at 10% context threshold, resolving 67K+ token bloat from multiple MCP servers
+- [[mem0-knowledge-graph|MCP knowledge graphs give AI relationship-aware memory that vector databases cannot]] — Mem0's guide: entity relationships vs isolated embeddings, enterprise governance, phased rollout, MCP security specs
 - [[code execution with MCP cuts tool token overhead 98 percent by presenting servers as filesystem APIs instead of upfront definitions]] — wrapping MCP tools as TypeScript files on a filesystem for on-demand discovery, in-code data filtering, PII tokenization, and emergent skill persistence
 
 ### Learnings
