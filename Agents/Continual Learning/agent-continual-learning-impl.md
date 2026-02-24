@@ -1,3 +1,10 @@
+---
+created: 2026-02-23
+description: Deep implementation analysis of how letta-code, scout, and serena handle continual learning in practice — what is actually implemented, what is partial, and what is aspirational.
+source: internal
+type: analysis
+---
+
 # Continual Learning Implementations Across Letta, Scout, and Serena
 
 ## 1. Purpose

@@ -19,6 +19,7 @@ Financial and investment-focused multi-agent systems.
 
 - [[orchestration architecture determines multi-agent investment quality]] — architecture choice shapes output quality more than agent count in multi-agent investment committees
 - [[simple financial agents outperform complex ones when tool routing is tight]] — reducing decision space via subagent encapsulation beats monolithic tool exposure for financial research
+- [[over 40 percent of agentic AI projects fail due to poor architecture not model limitations]] — ten engineering principles for production agents: threat modeling, typed contracts, RBAC, context compression, deterministic orchestration, memory separation, reliability mechanics, OpenTelemetry observability
 
 ### Agentic Memory
 
@@ -118,6 +119,7 @@ Prediction market arbitrage, quantitative trading, and market microstructure.
 - [[polymarket US retail API launches with 23 REST and 2 WebSocket endpoints for regulated trading]] — official US-regulated retail API with Ed25519 auth and Python/TypeScript SDKs
 - [[synth volatility forecasts find 10 percent edge on polymarket crypto hourly contracts]] — 24h crypto volatility forecasts identify 10%+ mispricings on hourly up/down contracts
 - [[weather markets on polymarket print money because most traders ignore NOAA forecasts]] — systematic mispricing from retail traders ignoring freely available 94%-accurate NOAA forecasts
+- [[prediction markets are the purest test of quantitative finance because every position resolves to truth]] — 28-paper synthesis: backtest overfitting, Deflated Sharpe Ratio, Black-Litterman for prediction portfolios, LMSR = softmax, and the institutional convergence on Polymarket
 
 ## LLMs
 

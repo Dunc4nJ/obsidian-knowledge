@@ -1,3 +1,10 @@
+---
+created: 2026-02-21
+description: Letta Code is a coding agent built around persistent, long-lived agents with memory-first architecture rather than independent sessions — the top model-agnostic OSS harness on TerminalBench.
+source: https://www.letta.com/blog/letta-code
+type: reference
+---
+
 # Letta Code: A Memory-First Coding Agent
 
 **Source:** https://www.letta.com/blog/letta-code
