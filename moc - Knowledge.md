@@ -120,6 +120,7 @@ Prediction market arbitrage, quantitative trading, and market microstructure.
 - [[synth volatility forecasts find 10 percent edge on polymarket crypto hourly contracts]] — 24h crypto volatility forecasts identify 10%+ mispricings on hourly up/down contracts
 - [[weather markets on polymarket print money because most traders ignore NOAA forecasts]] — systematic mispricing from retail traders ignoring freely available 94%-accurate NOAA forecasts
 - [[prediction markets are the purest test of quantitative finance because every position resolves to truth]] — 28-paper synthesis: backtest overfitting, Deflated Sharpe Ratio, Black-Litterman for prediction portfolios, LMSR = softmax, and the institutional convergence on Polymarket
+- [[becoming a prediction market quant requires five phases from bayesian thinking through live deployment]] — complete roadmap: Bayesian probability, microstructure, Avellaneda-Stoikov, empirical Kelly, VPIN, and production infrastructure
 
 ## LLMs
 
