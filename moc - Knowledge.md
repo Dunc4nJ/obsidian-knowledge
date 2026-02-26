@@ -67,6 +67,7 @@ How multiple agents coordinate: sessions, routing, scheduling, task systems, and
 Agent runtime, scaling, persistence, and production deployment.
 
 - [[seven runtime failures emerge when demo agents meet production distributed systems]] — seven sins of agentic software: stateful distributed systems, broken request-response, persistence, multi-tenancy, governance as execution model, scaling conflicts, trust vs observability
+- [[agents need a database because stateless reasoning cores require stateful storage]] — own the database for context control, self-learning loops, evaluation datasets, and zero vendor dependency
 
 ### Harness Engineering
 
@@ -103,6 +104,7 @@ How agents learn and improve over time — memory-first architectures, persisten
 
 - [[letta-code-blog|Letta Code is a memory-first coding agent that topped TerminalBench by treating sessions as persistent agents]] — persistent long-lived agents with memory-first architecture beat independent sessions on TerminalBench
 - [[agent-continual-learning-impl|Continual learning implementations across letta-code, scout, and serena reveal what's real vs aspirational]] — deep implementation analysis: what letta-code, scout, and serena actually implement for continual learning vs what is partial or aspirational
+- [[learning machines turn agents from stateless tools into systems that compound knowledge across users and sessions]] — extensible Learning Stores protocol: cross-user knowledge continuity, custom domain stores, roadmap from learning to decision logging to self-improvement
 
 ### Codebase Search
 
