@@ -1,3 +1,9 @@
+---
+created: 2026-02-25
+type: reference
+description: "Single-vector embeddings have fundamental theoretical limitations where embedding dimension constrains which top-k document combinations can be returned, with state-of-the-art models failing on simple tasks that expose this."
+source: "https://arxiv.org/html/2508.21038"
+---
 Title: On the Theoretical Limitations of Embedding-Based Retrieval
 
 URL Source: https://arxiv.org/html/2508.21038

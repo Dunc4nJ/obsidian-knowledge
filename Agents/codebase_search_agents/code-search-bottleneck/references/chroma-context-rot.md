@@ -1,3 +1,9 @@
+---
+created: 2026-02-25
+type: reference
+description: "LLM performance degrades as input length increases even when task complexity is held constant, undermining the assumption that longer context windows solve retrieval problems."
+source: "https://research.trychroma.com/context-rot"
+---
 Title: Context Rot: How Increasing Input Tokens Impacts LLM Performance
 
 URL Source: https://research.trychroma.com/context-rot

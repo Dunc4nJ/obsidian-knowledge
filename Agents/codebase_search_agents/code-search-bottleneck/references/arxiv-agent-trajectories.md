@@ -1,3 +1,9 @@
+---
+created: 2026-02-25
+type: reference
+description: "Failed coding agent trajectories are consistently longer with higher variance than successful ones, and while 72-81% of failures correctly identify files, success depends on approximate rather than exact code modifications."
+source: "https://arxiv.org/html/2511.00197"
+---
 Title: Understanding Code Agent Behaviour: An Empirical Study of Success and Failure Trajectories
 
 URL Source: https://arxiv.org/html/2511.00197

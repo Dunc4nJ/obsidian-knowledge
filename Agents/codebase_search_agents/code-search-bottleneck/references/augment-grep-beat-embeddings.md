@@ -1,3 +1,9 @@
+---
+created: 2026-02-25
+type: reference
+description: "Augment's SWE-Bench agent found that grep and find were sufficient for retrieval, with agent persistence compensating for less sophisticated tools over embedding-based approaches."
+source: "https://jxnl.co/writing/2025/09/11/why-grep-beat-embeddings-in-our-swe-bench-agent-lessons-from-augment/"
+---
 Title: Why Grep Beat Embeddings in Our SWE-Bench Agent (Lessons from Augment) - Jason Liu
 
 URL Source: https://jxnl.co/writing/2025/09/11/why-grep-beat-embeddings-in-our-swe-bench-agent-lessons-from-augment/

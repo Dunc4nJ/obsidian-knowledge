@@ -1,3 +1,9 @@
+---
+created: 2026-02-25
+type: reference
+description: "RAG solidified its role as critical enterprise AI infrastructure in 2025 despite debates, evolving toward context engineering that combines retrieval with long-context windows."
+source: "https://ragflow.io/blog/rag-review-2025-from-rag-to-context"
+---
 Title: From RAG to Context - A 2025 year-end review of RAG
 
 URL Source: https://ragflow.io/blog/rag-review-2025-from-rag-to-context

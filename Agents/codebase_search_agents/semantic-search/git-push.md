@@ -1,3 +1,8 @@
+---
+created: 2026-02-25
+type: project-doc
+description: "Repo Storage provides AI-native git for coding agents with built-in WarpGrep search and no indexing required."
+---
 # Repo Storage
 
 AI-native git for coding agents

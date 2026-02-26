@@ -1,3 +1,8 @@
+---
+created: 2026-02-25
+type: project-doc
+description: "Index of Morph's two code search approaches: WarpGrep (agentic ripgrep subagent, no indexing) and Semantic Search (embedding + reranking RAG pipeline)."
+---
 # Semantic Code Search — Morph Documentation
 
 Two approaches to AI-powered code search, both available via the Morph MCP server.

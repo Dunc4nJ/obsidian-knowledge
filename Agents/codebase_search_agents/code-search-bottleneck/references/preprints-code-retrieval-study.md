@@ -1,3 +1,9 @@
+---
+created: 2026-02-25
+type: reference
+description: "Code retrieval is the critical bottleneck for coding agents, with context quality mattering more than reasoning capability across lexical, semantic, LSP, and agentic search approaches."
+source: "https://www.preprints.org/manuscript/202510.0924"
+---
 Title: An Exploratory Study of Code Retrieval Techniques in Coding Agents
 
 URL Source: https://www.preprints.org/manuscript/202510.0924

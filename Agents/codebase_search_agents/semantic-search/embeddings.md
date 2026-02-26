@@ -1,3 +1,8 @@
+---
+created: 2026-02-25
+type: project-doc
+description: "Morph's embedding API converts code and text into semantic vectors using the morph-embedding-v3 model for search and similarity tasks."
+---
 # Embedding Model
 
 Create semantic embeddings for code with our OpenAI-compatible API

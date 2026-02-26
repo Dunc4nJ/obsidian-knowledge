@@ -1,3 +1,8 @@
+---
+created: 2026-02-25
+type: project-doc
+description: "WarpGrepProvider interface allows custom file system implementations for caching, batching, or output formatting beyond the default remoteCommands approach."
+---
 # Custom Providers
 
 Implement custom file system providers

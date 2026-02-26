@@ -1,3 +1,8 @@
+---
+created: 2026-02-25
+type: project-doc
+description: "Guide for connecting to Morph's edit_file and warpgrep_codebase_search tools via MCP in Claude Code, Codex, Cursor, and other clients."
+---
 # MCP Integration
 
 Connect to Morph's blazing-fast file editing via Model Context Protocol

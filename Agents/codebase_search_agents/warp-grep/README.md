@@ -1,3 +1,8 @@
+---
+created: 2026-02-25
+type: project-doc
+description: "WarpGrep is a code search subagent that runs intelligent multi-step ripgrep searches in a separate context window, completing 24 tool calls in under 6 seconds without embeddings."
+---
 # WarpGrep
 
 4x faster agentic code search with better long-horizon performance. No embeddings required.

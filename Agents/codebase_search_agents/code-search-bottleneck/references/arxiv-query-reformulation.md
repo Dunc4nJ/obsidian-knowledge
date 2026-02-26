@@ -1,3 +1,9 @@
+---
+created: 2026-02-25
+type: reference
+description: "LLM-powered query reformulation improves file-level bug localization by 35% over BM25 baseline and 22% over SWE-agent through structured information extraction from bug reports."
+source: "https://arxiv.org/html/2512.07022"
+---
 Title: Reformulate, Retrieve, Localize: Agents for Repository-Level Bug Localization
 
 URL Source: https://arxiv.org/html/2512.07022

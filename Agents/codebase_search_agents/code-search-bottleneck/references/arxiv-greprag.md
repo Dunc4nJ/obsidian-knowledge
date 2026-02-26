@@ -1,3 +1,9 @@
+---
+created: 2026-02-25
+type: reference
+description: "Lightweight grep-based retrieval outperforms complex graph-based methods for repository-level code completion, with GrepRAG achieving 7-15% improvement in exact match over state-of-the-art baselines."
+source: "https://arxiv.org/html/2601.23254"
+---
 Title: GrepRAG: An Empirical Study and Optimization of Grep-Like Retrieval for Code Completion
 
 URL Source: https://arxiv.org/html/2601.23254

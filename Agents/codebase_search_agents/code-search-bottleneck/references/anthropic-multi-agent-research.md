@@ -1,3 +1,9 @@
+---
+created: 2026-02-25
+type: reference
+description: "Anthropic's multi-agent research system uses an orchestrator-worker pattern where token usage alone explains 80% of performance variance, validating parallel subagent architectures."
+source: "https://www.anthropic.com/engineering/multi-agent-research-system"
+---
 Title: How we built our multi-agent research system
 
 URL Source: https://www.anthropic.com/engineering/multi-agent-research-system

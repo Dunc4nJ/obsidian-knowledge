@@ -1,3 +1,9 @@
+---
+created: 2026-02-25
+type: reference
+description: "LocAgent uses graph-guided LLM agents for code localization, combining structural code graphs with language model reasoning."
+source: "https://aclanthology.org/2025.acl-long.426/"
+---
 Source: https://aclanthology.org/2025.acl-long.426/
 PDF: https://aclanthology.org/2025.acl-long.426.pdf
 

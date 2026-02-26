@@ -1,3 +1,8 @@
+---
+created: 2026-02-25
+type: project-doc
+description: "Morph's rerank API reorders search results by relevance using the morph-rerank-v3 model, achieving state-of-the-art accuracy-to-speed ratio on coding benchmarks."
+---
 # Rerank Model
 
 Reorder search results by relevance with our specialized reranking API

@@ -1,3 +1,9 @@
+---
+created: 2026-02-25
+type: reference
+description: "Input tokens dominate coding agent costs with up to 10x variance between runs, and predicting total token consumption before execution is nearly random (Pearson's r < 0.15)."
+source: "https://openreview.net/forum?id=1bUeVB3fov"
+---
 Title: How Do Coding Agents Spend Your Money? Analyzing and Predicting...
 
 URL Source: https://openreview.net/forum?id=1bUeVB3fov

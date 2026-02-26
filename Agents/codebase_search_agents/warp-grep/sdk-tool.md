@@ -1,3 +1,8 @@
+---
+created: 2026-02-25
+type: project-doc
+description: "SDK adapters for using WarpGrep as an AI agent tool with Anthropic, OpenAI, Gemini, and Vercel AI SDK clients."
+---
 # Agent Tool
 
 Use Warp Grep as a tool in your AI agents

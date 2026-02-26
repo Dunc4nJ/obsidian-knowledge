@@ -1,3 +1,9 @@
+---
+created: 2026-02-25
+type: reference
+description: "Cognition's SWE-grep models match frontier coding models' retrieval capabilities in an order of magnitude less time, addressing the 60%+ of agent turns spent on context retrieval."
+source: "https://cognition.ai/blog/swe-grep"
+---
 Title: Cognition | Introducing SWE-grep and SWE-grep-mini: RL for Multi-Turn, Fast Context Retrieval
 
 URL Source: https://cognition.ai/blog/swe-grep

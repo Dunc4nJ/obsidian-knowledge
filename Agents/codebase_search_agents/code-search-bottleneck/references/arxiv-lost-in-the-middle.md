@@ -1,3 +1,9 @@
+---
+created: 2026-02-25
+type: reference
+description: "LLM performance degrades by over 30% when relevant information is in the middle of long contexts, following a U-shaped curve that favors start and end positions."
+source: "https://arxiv.org/abs/2307.03172"
+---
 Title: Lost in the Middle: How Language Models Use Long Contexts
 
 URL Source: https://arxiv.org/abs/2307.03172

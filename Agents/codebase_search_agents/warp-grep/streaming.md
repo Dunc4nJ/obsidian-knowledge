@@ -1,3 +1,8 @@
+---
+created: 2026-02-25
+type: project-doc
+description: "The streamSteps flag enables real-time streaming of WarpGrep search progress via an async generator that yields each turn's tool calls."
+---
 # Streaming
 
 Stream Warp Grep progress in real-time

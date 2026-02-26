@@ -1,3 +1,8 @@
+---
+created: 2026-02-25
+type: project-doc
+description: "Semantic Search uses two-stage retrieval (vector search plus GPU reranking) to find code with natural language queries in about 1230ms."
+---
 # Semantic Search
 
 Find code with natural language - ~1230ms, two-stage retrieval

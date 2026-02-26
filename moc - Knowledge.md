@@ -55,6 +55,12 @@ How multiple agents coordinate: sessions, routing, scheduling, task systems, and
 - [[Athena is a vault librarian agent that maintains structure links and capture workflows]] — dedicated vault maintenance agent scope, standards, and cadence
 - [[codex custom multi-agent roles unlock repeatable subagent specialization]] — Codex 0.102.0 custom roles with configurable models, reasoning, permissions, system prompts, and hidden thread limits
 
+### Harness Engineering
+
+Agent harness design — system prompts, tools, middleware, and execution flow that shape model behavior.
+
+- [[harness engineering improved a coding agent 13 points by changing only system prompts tools and middleware]] — LangChain's deepagents-cli: self-verification middleware, trace-based improvement loops, reasoning budget sandwiches, loop detection
+
 ### Tooling
 
 Agent tooling patterns, CLI design, and infrastructure.
@@ -76,6 +82,20 @@ Model Context Protocol — servers, best practices, and efficient tool integrati
 - [[tool search lets Claude Code lazy-load MCP tools when definitions exceed 10 percent of context]] — dynamic tool loading triggered at 10% context threshold, resolving 67K+ token bloat from multiple MCP servers
 - [[mem0-knowledge-graph|MCP knowledge graphs give AI relationship-aware memory that vector databases cannot]] — Mem0's guide: entity relationships vs isolated embeddings, enterprise governance, phased rollout, MCP security specs
 - [[code execution with MCP cuts tool token overhead 98 percent by presenting servers as filesystem APIs instead of upfront definitions]] — wrapping MCP tools as TypeScript files on a filesystem for on-demand discovery, in-code data filtering, PII tokenization, and emergent skill persistence
+
+### Continual Learning
+
+How agents learn and improve over time — memory-first architectures, persistent context, and cross-session learning.
+
+- [[letta-code-blog|Letta Code is a memory-first coding agent that topped TerminalBench by treating sessions as persistent agents]] — persistent long-lived agents with memory-first architecture beat independent sessions on TerminalBench
+- [[agent-continual-learning-impl|Continual learning implementations across letta-code, scout, and serena reveal what's real vs aspirational]] — deep implementation analysis: what letta-code, scout, and serena actually implement for continual learning vs what is partial or aspirational
+
+### Codebase Search
+
+Agent code search, semantic retrieval, and the bottleneck between code generation and code retrieval.
+
+- [[Knowledge/Agents/codebase_search_agents/index|Semantic Code Search — Morph Documentation]] — two approaches to AI-powered code search via the Morph MCP server
+- [[Knowledge/Agents/codebase_search_agents/code-search-bottleneck/blog|Coding agents are bottlenecked by search not coding ability]] — survey of recent research on why AI coding agents fail at retrieval, not generation
 
 ### Learnings
 
@@ -119,8 +139,16 @@ Prediction market arbitrage, quantitative trading, and market microstructure.
 - [[polymarket US retail API launches with 23 REST and 2 WebSocket endpoints for regulated trading]] — official US-regulated retail API with Ed25519 auth and Python/TypeScript SDKs
 - [[synth volatility forecasts find 10 percent edge on polymarket crypto hourly contracts]] — 24h crypto volatility forecasts identify 10%+ mispricings on hourly up/down contracts
 - [[weather markets on polymarket print money because most traders ignore NOAA forecasts]] — systematic mispricing from retail traders ignoring freely available 94%-accurate NOAA forecasts
+- [[professional weather models give polymarket traders forecast edges across five time horizons]] — practical toolkit: ECMWF/ICON/GFS/AROME/HRRR matched to time horizons, plus Windy/Meteoblue/Pivotal/WeatherBell platforms
 - [[prediction markets are the purest test of quantitative finance because every position resolves to truth]] — 28-paper synthesis: backtest overfitting, Deflated Sharpe Ratio, Black-Litterman for prediction portfolios, LMSR = softmax, and the institutional convergence on Polymarket
 - [[becoming a prediction market quant requires five phases from bayesian thinking through live deployment]] — complete roadmap: Bayesian probability, microstructure, Avellaneda-Stoikov, empirical Kelly, VPIN, and production infrastructure
+- [[prediction market calibration bias transfers wealth from takers to makers at 80 of 99 price levels]] — calibration function C(p,t) reveals systematic mispricing: 1-cent contracts resolve at 0.43% not 1%, takers lose at 80/99 price levels
+- [[prediction market calibration error is a structured surface not a scalar and its flattening signals lost price discovery]] — 2D calibration surface C(K,τ) with price skew / temporal drift decomposition, Market Coherence Index, and delta-neutral portfolio construction
+- [[polymarket market making requires avellaneda-stoikov reservation pricing adapted for binary settlement]] — Avellaneda-Stoikov reservation pricing, GLFT inventory bounds, Glosten-Milgrom adverse selection, and VPIN kill switches for Polymarket order books
+- [[polymarket feb 18 rule change killed taker bots and made market making the new meta]] — removal of 500ms taker delay + dynamic taker fees up to 1.56% killed arb bots, making maker-side LP the only profitable strategy
+- [[quantitative trading requires six math domains from statistics through risk management]] — roadmap of math for systematic trading: statistics, linear algebra, time series, stochastic calculus, optimization, and risk management
+- [[polymarket copy trading exploits on-chain transparency to follow proven whale wallets]] — complete copy trading system: whale wallet scoring, topic-based baskets, Kelly sizing, and 1.2s latency pipeline
+- [[fractional kelly turns 5-minute polymarket bitcoin markets from gambling into a system]] — fractional Kelly (k=0.25) applied to 5-minute BTC markets: discipline over emotion, practical sizing, and drawdown control
 
 ## LLMs
 

@@ -1,3 +1,9 @@
+---
+created: 2026-02-25
+type: reference
+description: "Agentless achieves the highest open-source SWE-bench Lite performance (32%) at $0.70 per issue using a simple three-phase localization-repair-validation approach without autonomous agent decision-making."
+source: "https://arxiv.org/html/2407.01489"
+---
 Title: Demystifying LLM-based Software Engineering Agents
 
 URL Source: https://arxiv.org/html/2407.01489

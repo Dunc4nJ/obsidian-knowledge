@@ -1,3 +1,9 @@
+---
+created: 2026-02-25
+type: project-doc
+description: "Research across Anthropic, DeepMind, Cognition, and others consistently shows coding agents fail due to retrieval, not generation — with 60%+ of agent time spent searching."
+source: "https://www.morphllm.com/blog/code-search-bottleneck"
+---
 # The Research Is Clear: Coding Agents Are Bottlenecked by Search, Not Coding Ability
 
 > A survey of recent research on why AI coding agents fail — and why the answer is almost always retrieval, not generation.

@@ -1,3 +1,9 @@
+---
+created: 2026-02-25
+type: reference
+description: "SWE-Search enhances software agents with Monte Carlo Tree Search and iterative refinement for more effective code search and issue resolution."
+source: "https://arxiv.org/abs/2410.20285"
+---
 Title: SWE-Search: Enhancing Software Agents with Monte Carlo Tree Search and Iterative Refinement
 
 URL Source: https://arxiv.org/abs/2410.20285
