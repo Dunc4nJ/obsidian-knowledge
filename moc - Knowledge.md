@@ -14,6 +14,7 @@ Cross-cutting knowledge that spans projects. Best practices, frameworks, researc
 Frameworks and playbooks for finding and building profitable products.
 
 - [[domain-specific agents beat general-purpose ones by owning verification in boring industries]] — indie builder playbook: pick boring industries with expensive document workflows, compress domain learning with agents, build verification-first automation pipelines
+- [[model-market fit is the prerequisite layer beneath product-market fit for AI startups]] — MMF framework: the model must do the core job before the market can pull the product. Legal AI exploded post-GPT-4; finance stuck at 56% accuracy. The 80/99 gap is infinite in regulated verticals
 
 ## Agents
 
