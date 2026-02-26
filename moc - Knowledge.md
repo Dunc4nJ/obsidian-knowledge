@@ -9,6 +9,12 @@ type: moc
 
 Cross-cutting knowledge that spans projects. Best practices, frameworks, research.
 
+## Business Ideas
+
+Frameworks and playbooks for finding and building profitable products.
+
+- [[domain-specific agents beat general-purpose ones by owning verification in boring industries]] — indie builder playbook: pick boring industries with expensive document workflows, compress domain learning with agents, build verification-first automation pipelines
+
 ## Agents
 
 Agent architecture, memory systems, background agents, and tooling.
