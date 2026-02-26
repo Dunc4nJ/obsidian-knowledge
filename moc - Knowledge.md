@@ -62,6 +62,12 @@ How multiple agents coordinate: sessions, routing, scheduling, task systems, and
 - [[Athena is a vault librarian agent that maintains structure links and capture workflows]] — dedicated vault maintenance agent scope, standards, and cadence
 - [[codex custom multi-agent roles unlock repeatable subagent specialization]] — Codex 0.102.0 custom roles with configurable models, reasoning, permissions, system prompts, and hidden thread limits
 
+### Infrastructure
+
+Agent runtime, scaling, persistence, and production deployment.
+
+- [[seven runtime failures emerge when demo agents meet production distributed systems]] — seven sins of agentic software: stateful distributed systems, broken request-response, persistence, multi-tenancy, governance as execution model, scaling conflicts, trust vs observability
+
 ### Harness Engineering
 
 Agent harness design — system prompts, tools, middleware, and execution flow that shape model behavior.
@@ -81,6 +87,7 @@ Agent tooling patterns, CLI design, and infrastructure.
 - [[agent-first engineering replaces coding with environment design scaffolding and feedback loops]] — OpenAI's zero-human-code experiment: 1M lines via Codex, AGENTS.md as table of contents, enforced architecture, garbage collection for AI slop
 - [[prompt caching is the foundational constraint for building long-running agents]] — Claude Code's engineering lessons: prefix ordering, cache-safe plan mode, defer_loading for tools, cache-safe compaction
 - [[top AI papers week of Feb 16-22 2026 reveal that agents consume skills better than they create them]] — ten papers: SkillsBench (curated skills +16pp, self-generated 0pp), LCM beats Claude Code, MemoryArena exposes recall-vs-action gap, delegation frameworks
+- [[CLIs are the agent-native interface because legacy tooling is already machine-readable]] — Karpathy: CLIs are the ideal agent surface because agents natively compose terminal tools into pipelines; product builders must offer CLI/MCP/markdown docs
 ### MCP
 
 Model Context Protocol — servers, best practices, and efficient tool integration patterns.
