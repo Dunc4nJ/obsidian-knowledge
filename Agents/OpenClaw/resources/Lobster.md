@@ -14,6 +14,18 @@ Lobster is an OpenClaw-native workflow shell — a typed, JSON-first pipeline en
 
 It solves the re-planning problem: instead of an agent spending tokens figuring out each step every time, you codify the workflow once and Lobster executes it deterministically with resumability. No new auth surface (it doesn't own tokens), local-first execution, and the approval gate integrates with OpenClaw's TTY or emits events for agent-driven approval. Ships as an optional OpenClaw plugin.
 
+## How it works
+
+**Typed pipelines:** Commands pass JSON objects/arrays (not text) through a pipeline. Built-in data shaping: `where` (filter), `pick` (select fields), `head` (limit), with `json` and `table` renderers.
+
+**Workflow files:** YAML/JSON `.lobster` files define multi-step workflows with `steps`, `env`, `condition`, and `approve` gates. Each step can reference previous step outputs via `$stepId.stdout`. Run with `lobster run path/to/workflow.lobster`.
+
+**Approval gates:** `approve` command provides a TTY prompt or `--emit` mode for OpenClaw integration, enabling human-in-the-loop checkpoints in automated pipelines.
+
+**Built-in workflows:** Ships with `github.pr.monitor` that tracks PR state changes (open/merged/approved) with diffing against previous snapshots. Returns structured JSON with changed fields and full PR snapshot.
+
+**No auth surface:** Lobster doesn't own OAuth tokens or credentials — it delegates to existing tools and the host environment.
+
 ## Key links
 
 - [GitHub](https://github.com/openclaw/lobster)
