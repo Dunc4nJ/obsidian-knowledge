@@ -19,9 +19,16 @@ The core trick is avoiding the brute-force "dump files into context" approach th
 - [GitHub](https://github.com/HKUDS/FastCode)
 - [Demo Video](https://youtu.be/NwexLWHPBOY)
 
+## How it works
+
+**Phase 1 — Semantic-Structural Code Representation:** Parses codebases using AST across 8+ languages into hierarchical code units (files → classes → functions → docs). Builds a hybrid index combining semantic embeddings + BM25 keyword search. Constructs three interconnected graphs: Call Graph, Dependency Graph, Inheritance Graph.
+
+**Phase 2 — Lightning-Fast Navigation:** Two-stage search (find candidates, then rank/filter). Code skimming reads function signatures, class definitions, and type hints instead of full files — like reading chapter titles instead of every page. Graph traversal follows code connections up to 2 hops to trace dependencies.
+
+**Phase 3 — Cost-Efficient Context Management:** Budget-aware decision making weighs confidence level, query complexity, codebase size, resource cost, and iteration count before deciding what to fetch. Adaptive stopping reassesses whether it has enough context. Value-first selection prioritizes high-impact, low-cost information.
+
 ## Notes
 
-- Three-phase: structural representation → graph navigation with code skimming → budget-aware context management
 - MCP server integration for Cursor, Claude Code, Windsurf
 - Web UI + CLI + API
 - Could be useful for our own coding agent workflows — the graph-based navigation approach is worth exploring
