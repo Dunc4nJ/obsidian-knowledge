@@ -69,6 +69,7 @@ Agent runtime, scaling, persistence, and production deployment.
 - [[seven runtime failures emerge when demo agents meet production distributed systems]] — seven sins of agentic software: stateful distributed systems, broken request-response, persistence, multi-tenancy, governance as execution model, scaling conflicts, trust vs observability
 - [[agents need a database because stateless reasoning cores require stateful storage]] — own the database for context control, self-learning loops, evaluation datasets, and zero vendor dependency
 - [[the Codex App Server turns a CLI agent harness into a stable bidirectional JSON-RPC protocol for any client]] — OpenAI's JSON-RPC protocol over stdio enabling IDE, web, and third-party integrations with the same agent harness
+- [[isolating the entire agent in a sandbox is more secure than isolating just the tool]] — Browser Use's move from tool-level sandboxing to full agent isolation in Unikraft micro-VMs with a stateless control plane
 
 ### Harness Engineering
 
