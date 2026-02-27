@@ -7,6 +7,12 @@ type: framework
 
 ## Key Takeaways
 
+*Pattern 1: tool isolation — secure but coupled and unscalable*
+![[larsencc-470668-002.jpg]]
+
+*Pattern 2: full agent isolation — secure, decoupled, and scalable*
+![[larsencc-470668-003.jpg]]
+
 There are two patterns for sandboxing agents that execute arbitrary code. Pattern 1 isolates the dangerous tool (code execution runs in a sandbox, the agent stays on your backend). Pattern 2 isolates the entire agent — it runs in a sandbox with zero secrets and communicates with the outside world through a control plane that holds all credentials. Browser Use started with Pattern 1 and moved to Pattern 2 because it makes the agent disposable: nothing worth stealing, nothing worth preserving. This aligns with the broader principle that [[agents need a database because stateless reasoning cores require stateful storage]] — the control plane and database hold the truth, while the agent itself is ephemeral.
 
 The concrete implementation uses Unikraft micro-VMs in production (booting in under a second) and Docker containers in development, with a single config switch between them. The sandbox receives only three environment variables: a session token, a control plane URL, and a session ID. Additional hardening includes compiling Python to bytecode and deleting source files, dropping privileges after startup, and stripping environment variables from the process after reading them into memory.
@@ -16,6 +22,12 @@ The control plane acts as a stateless proxy for everything: LLM calls (where it 
 The Gateway protocol abstracts the backend: in production a `ControlPlaneGateway` sends HTTP requests to the control plane; in local dev a `DirectGateway` calls LLMs directly. The agent code is identical in both environments. Scaling is independent per layer — more sandboxes via Unikraft, more control plane instances behind a load balancer.
 
 The tradeoff is an extra network hop on every operation and three services instead of one, but in practice the latency is noise compared to LLM response times.
+
+*Production architecture: backends fan out to Unikraft agent sandboxes, which talk through the control plane to external services*
+![[larsencc-470668-001.jpg]]
+
+*Scaled deployment with multiple backend instances, N sandboxes on Unikraft bare metal, and replicated control plane*
+![[larsencc-470668-004.jpg]]
 
 ## External Resources
 
