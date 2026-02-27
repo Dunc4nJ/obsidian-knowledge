@@ -108,6 +108,7 @@ How agents learn and improve over time — memory-first architectures, persisten
 - [[letta-code-blog|Letta Code is a memory-first coding agent that topped TerminalBench by treating sessions as persistent agents]] — persistent long-lived agents with memory-first architecture beat independent sessions on TerminalBench
 - [[agent-continual-learning-impl|Continual learning implementations across letta-code, scout, and serena reveal what's real vs aspirational]] — deep implementation analysis: what letta-code, scout, and serena actually implement for continual learning vs what is partial or aspirational
 - [[learning machines turn agents from stateless tools into systems that compound knowledge across users and sessions]] — extensible Learning Stores protocol: cross-user knowledge continuity, custom domain stores, roadmap from learning to decision logging to self-improvement
+- [[async RL from real conversations lets agents continuously improve without blocking inference]] — OpenClaw-RL: fully async RL framework turning real conversations into training signals via PRM judging and on-policy distillation, self-hosted and open source
 
 ### Codebase Search
 
