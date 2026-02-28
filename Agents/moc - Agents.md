@@ -13,8 +13,8 @@ Knowledge about building, running, and improving AI agents. Each subfolder cover
 ### Agentic Memory
 How agents store, retrieve, and evolve knowledge across sessions. Memory architectures, vault-as-memory patterns, state persistence, context survival across compaction. If the note is about *what agents remember and how*, it goes here. If it's about *how agents selectively load context into a prompt*, that's Tooling (context engineering).
 
-### Codebase Search
-Code search, semantic code retrieval, embedding-based code indexing, grep-vs-RAG tradeoffs, and tools that help agents navigate large codebases. The overlap with Tooling is tight — place it here if the core topic is *finding code*, in Tooling if it's about *general agent tool design*.
+### Search
+Agentic search strategies — code search, semantic retrieval, embedding-based indexing, grep-vs-RAG tradeoffs, long-horizon search behavior, search-vs-reasoning tradeoffs, and tools that help agents find information in codebases or broader environments. The overlap with Tooling is tight — place it here if the core topic is *search strategy or retrieval*, in Tooling if it's about *general agent tool design*.
 
 ### Continual Learning
 Agents that improve over time — RL from conversations, self-improvement loops, memory systems that compound knowledge across sessions, skill acquisition. The key test: *does the agent get better at its job over time?* If yes, it belongs here. If it just has good static context architecture, that's Tooling.

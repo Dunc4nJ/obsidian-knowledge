@@ -117,7 +117,7 @@ How agents learn and improve over time — memory-first architectures, persisten
 - [[learning machines turn agents from stateless tools into systems that compound knowledge across users and sessions]] — extensible Learning Stores protocol: cross-user knowledge continuity, custom domain stores, roadmap from learning to decision logging to self-improvement
 - [[async RL from real conversations lets agents continuously improve without blocking inference]] — OpenClaw-RL: fully async RL framework turning real conversations into training signals via PRM judging and on-policy distillation, self-hosted and open source
 
-### Codebase Search
+### Search
 
 Agent code search, semantic retrieval, and the bottleneck between code generation and code retrieval.
 
