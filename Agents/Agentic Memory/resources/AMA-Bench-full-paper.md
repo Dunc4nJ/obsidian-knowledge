@@ -10,11 +10,11 @@ Large Language Models (LLMs) are deployed as autonomous agents in increasingly c
 
 Large Language Models (LLMs) have rapidly evolved from solving closed-form reasoning tasks (Fig. 1 (a)) and serving as chatbots (Fig. 1 (b)), to serving as autonomous agents (Fig. 1(c)). Autonomous agents require long-horizon reasoning
 
-<span id="page-0-0"></span>![](_page_0_Picture_8.jpeg)
+<span id="page-0-0"></span>![](../../../_media/_page_0_Picture_8.jpeg)
 
 Figure 1. Comparison of memory across reasoning, chatbots, and agent applications. Agent trajectories exhibit unique properties, including being causally grounded, diverse symbolic artifacts, and dense objective information.
 
-<span id="page-0-1"></span>![](_page_0_Figure_10.jpeg)
+<span id="page-0-1"></span>![](../../../_media/_page_0_Figure_10.jpeg)
 
 Figure 2. Model performance across agent task families in AMA-Bench.
 
@@ -22,7 +22,7 @@ and experience reuse to complete tasks like open-space navigation, code editing,
 
 <sup>&</sup>lt;sup>1</sup>University of California, San Diego, USA <sup>2</sup>independent research. Correspondence to: Jishen Zhao <jzhao@ucsd.edu>.
 
-<span id="page-1-0"></span>![](_page_1_Figure_0.jpeg)
+<span id="page-1-0"></span>![](../../../_media/_page_1_Figure_0.jpeg)
 
 Figure 3. Domain and question type distribution in AMA-Bench.
 
@@ -88,7 +88,7 @@ the underlying causality within stored information.
 
 In this section, we introduce AMA-Bench (Benchmarking Agent Memory with Any length), a benchmark suite designed to evaluate memory systems in agent-centric memory. We first present a general problem formulation that abstracts agent-environment interaction and provides a unified definition of memory systems for agent applications in Sec. 3.1. Building on this formulation, Sec. 3.2 identifies which memory capabilities are essential for long-horizon decision-making and operationalizes them as evaluation dimensions. Finally, Sec. 3.3 describes how we construct AMA-Bench, including both real-world and synthetic subsets.
 
-<span id="page-3-3"></span>![](_page_3_Figure_0.jpeg)
+<span id="page-3-3"></span>![](../../../_media/_page_3_Figure_0.jpeg)
 
 Figure 4. Formalizing memory system and capability for agentic applications.
 
@@ -123,7 +123,7 @@ We curate high-quality, long-horizon trajectories from six representative real-w
 
 The real-world environments are treated as black boxes: we only observe agent-environment interaction logs (action and observation trajectories) and do not have access to the environment backend state. Building on the capability taxonomy in Sec. 3.2, we manually annotate each selected trajectory with 12 memory-intensive QA pairs that collectively cover all categories in Tab. 2. Each question is formulated such that its answer is supported by explicit and unambiguous evidence within the trajectory, ensuring that the correctness
 
-<span id="page-4-0"></span>![](_page_4_Figure_0.jpeg)
+<span id="page-4-0"></span>![](../../../_media/_page_4_Figure_0.jpeg)
 
 Figure 5. Synthetic subset construction pipeline. We synthesize an executable environment backend with explicit latent states and transitions, render machine-generated observations to form trajectories, and programmatically generate trajectory-grounded QA pairs.
 
@@ -165,7 +165,7 @@ Fig. 6 compares representative memory systems against a long context baseline ac
 
 ## <span id="page-5-3"></span><span id="page-5-1"></span>Motivation2: Memory Design bottlenecks the model performance.
 
-![](_page_5_Figure_6.jpeg)
+![](../../../_media/_page_5_Figure_6.jpeg)
 
 Figure 7. Impact of Model Scale vs. Memory Architecture. While scaling the backbone yields marginal gains, the choice of memory system accounts for the majority of performance variance.
 
@@ -192,7 +192,7 @@ Tab. 3 demonstrates two limitations. First, many methods degrade sharply after c
 
 by 41.3%, suggesting that compression tuned for redundant natural language fails to preserve dense state and causal information in agent memory. Second, similarity-based retrieval is unreliable: HippoRAG2 remains strong under constructed memory with needle turn but drops by 43.2% performance end-to-end.
 
-<span id="page-5-6"></span>![](_page_5_Figure_16.jpeg)
+<span id="page-5-6"></span>![](../../../_media/_page_5_Figure_16.jpeg)
 
 Figure 8. Overview of the AMA-agent. (A) Illustrates the transition from trajectories to a structured causality graph. (B) depicts the retrieval mechanism, utilizing tool-augment search.
 
@@ -226,11 +226,11 @@ Metrics. We report both Accuracy and F1-score. Accuracy measures the instances j
 
 Real-world Subset. We report the main results on the realworld subset in Tab. [4](#page-7-0) (evaluating models with long contexts) and Tab. [5](#page-7-1) (comparing different memory systems). While GPT 5.2 achieves the highest average accuracy (0.73) as Tab. [4](#page-7-0) shows , its performance suggests that even strong commercial models have not fully mastered trajectory-based
 
-<span id="page-6-0"></span>![](_page_6_Figure_11.jpeg)
+<span id="page-6-0"></span>![](../../../_media/_page_6_Figure_11.jpeg)
 
 A. Correlation Analysis between Synthetic and Real-world Performance.
 
-![](_page_6_Figure_13.jpeg)
+![](../../../_media/_page_6_Figure_13.jpeg)
 
 *Figure 9.* Performance Benchmarking. We evaluate 15 memory methods across Qwen 8B and 32B backbones.
 
