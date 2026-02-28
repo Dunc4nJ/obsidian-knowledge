@@ -19,3 +19,4 @@ How agents store, retrieve, and evolve knowledge across sessions. Memory archite
 - [[obsidian vaults become memory graphs when agents traverse wikilinked notes with claim-based titles and layered orientation]]
 - [[progressive disclosure filters force agent selectivity over what enters context]]
 - [[transcript mining turns meetings into captured decisions and extracted knowledge]]
+- [[AMA-Bench evaluates long-horizon memory for agentic applications using real and synthetic trajectories]]
