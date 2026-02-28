@@ -3,6 +3,7 @@ created: 2026-02-28
 description: AMA-Bench is the first benchmark for evaluating agent memory on real agentic trajectories (not chatbot dialogues), revealing that existing memory systems underperform long-context baselines. AMA-Agent introduces a causality graph and tool-augmented retrieval to address this.
 source: https://arxiv.org/abs/2602.22769
 type: research-paper
+full-extraction: "[[resources/AMA-Bench-full-paper.md]]"
 ---
 
 # AMA-Bench evaluates long-horizon memory for agentic applications using real and synthetic trajectories

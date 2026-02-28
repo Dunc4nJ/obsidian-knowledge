@@ -32,6 +32,9 @@ Three variance reduction techniques (antithetic variates, control variates, stra
 
 > @gemchange_ltd — 2026-02-28
 >
+> *Article header*
+> ![[gemchange-951831-001.jpg]]
+>
 > How to Simulate Like a Quant Desk. Every Model, Every Formula, Runnable Code
 >
 > This isn't a list of techniques.
@@ -66,11 +69,17 @@ Three variance reduction techniques (antithetic variates, control variates, stra
 >
 > The estimator for event probability p=P(A) is just the sample mean:
 >
+> *Monte Carlo sample mean estimator*
+> ![[gemchange-951831-002.png]]
+>
 > The Central Limit Theorem gives you the convergence rate: O(N^{-1/2}, with variance Var(p^_N)=p(1−p)/N.
 >
 > The variance is maximized at p=0.5p A contract trading at 50 cents the most uncertain, most actively traded contract on the platform is exactly where your Monte Carlo estimates are least precise.
 >
 > To hit ±0.01 precision at 95% confidence when p=0.50:
+>
+> *Required sample size for precision at p=0.50*
+> ![[gemchange-951831-003.png]]
 >
 > That's manageable. But it gets worse fast when you need to simulate paths, not just endpoints.
 >
@@ -160,6 +169,9 @@ Three variance reduction techniques (antithetic variates, control variates, stra
 >
 > Importance sampling replaces the original probability measure with one that oversamples the rare region, then corrects the bias with a likelihood
 >
+> *Importance sampling likelihood ratio (Radon-Nikodym derivative)*
+> ![[gemchange-951831-005.png]]
+>
 > Likelihood ratio or Radon-Nikodym derivative
 >
 > Not useful directly, but it tells you what to aim for.
@@ -167,6 +179,9 @@ Three variance reduction techniques (antithetic variates, control variates, stra
 > The practical workhorse is exponential tilting.
 >
 > If your underlying follows a random walk with increments Δ_i having moment generating function M(γ)=E[e^γΔ], you tilt the distribution:
+>
+> *Exponential tilting formula*
+> ![[gemchange-951831-006.png]]
 >
 > choosing γ to make the rare event typical. For a contract that pays off when a sum exceeds a large threshold, γ solves the Lundberg equation M(γ)=1.
 >
@@ -254,7 +269,13 @@ Three variance reduction techniques (antithetic variates, control variates, stra
 >
 > The state evolves via a logit random walk (keeps probabilities bounded):
 >
+> *State evolution equation (logit random walk)*
+> ![[gemchange-951831-007.png]]
+>
 > Observations are noisy readings of the true state:
+>
+> *Observation equation*
+> ![[gemchange-951831-008.png]]
 >
 > The Bootstrap Particle Filter
 >
@@ -380,11 +401,17 @@ Three variance reduction techniques (antithetic variates, control variates, stra
 >
 > When the payoff function is monotone (which binary contracts always are higher prices mean higher probability of exceeding the strike), the variance reduction is guaranteed:
 >
+> *Antithetic variates variance reduction*
+> ![[gemchange-951831-011.png]]
+>
 > Typical reduction is around 50-75%. Zero extra computational cost beyond doubling the function evaluations (which you were going to do anyway).
 >
 > Exploit What You Already Know
 >
 > If you're simulating a binary contract {S_T > K} under stochastic volatility (no closed form), use the Black-Scholes digital price p_{BS} (which has a closed form) as a control variate:
+>
+> *Control variate estimator*
+> ![[gemchange-951831-012.png]]
 >
 > Divide and Conquer
 >
@@ -431,6 +458,9 @@ Three variance reduction techniques (antithetic variates, control variates, stra
 >
 > Sklar's Theorem
 >
+> *Sklar's Theorem — joint distribution decomposition*
+> ![[gemchange-951831-009.png]]
+>
 > where C is the copula (the pure dependency structure) and F_i are the marginal CDFs. You can model each market's marginal behavior separately, then glue them together with a copula that captures the dependency including in the tails.
 >
 > The Tail Dependence Problem
@@ -440,6 +470,9 @@ Three variance reduction techniques (antithetic variates, control variates, stra
 > This is catastrophically wrong for correlated prediction markets.
 >
 > Student-t copula
+>
+> *Student-t copula tail dependence coefficient*
+> ![[gemchange-951831-010.png]]
 >
 > With ν=4 and ρ=0.6, tail dependence is approximately 0.18 - an 18% probability that extreme co-movement occurs given one contract hits an extreme. Gaussian would say 0%.
 >
@@ -676,6 +709,9 @@ Three variance reduction techniques (antithetic variates, control variates, stra
 > How fast prices converge depends on the ratio of informed to noise traders, how market maker spread responds to information flow, and why the informed traders extract profit at noise traders expense.
 >
 > **Part VIII: The Production Stack**
+>
+> *Production stack architecture — five layers from data ingestion to monitoring*
+> ![[gemchange-951831-004.png]]
 >
 > Here's the complete system, from market data to trade execution:
 >
