@@ -149,3 +149,26 @@ Research direction shifts every ~3 months (computer use, one-shot coding, long-h
 
 - [Market analysis thread by Sean Cai](https://x.com/SeanZCai/status/2027459906543226921) — original source
 - Related: [[agent RL training environments let you use the same tools for production and training]]
+## Original Content
+
+> [!quote]- Source Material
+> **Where Data Companies are heading in 2026** — Sean Cai on X
+>
+> Part #1, focusing on the fact that: subjective self serve post training infra is a thing.
+>
+> RLaaS takes on new buzzwords as it develops. A few months ago, he posted a chart showing how infrastructure players sit between model providers and enterprise workloads.
+>
+> The point: data companies that are neither strong in research-first innovation nor high-volume throughput are vulnerable to short-term cycles and overinvestment in the wrong data shapes.
+>
+> A key point is that enterprise environments are often subjective and regulated, meaning they can’t use cloud-based models directly and often require **post-training** to reach acceptable reliability.
+>
+> His broader thread frames this as a separate economic layer between base models and enterprise adoption:
+>
+> - On-prem and regulated settings need custom workflows.
+> - High-variance, taste-heavy tasks need additional training and evaluation layers.
+> - Infrastructure is becoming standardized as organizations avoid one-off data-engineering builds.
+> - Tooling like Tinker, Harbor, Prime Intellect, and CGFT are early examples of this layer.
+>
+> The key claim: post-training infrastructure is becoming the deciding layer for how quickly teams can ship reliable production agents.
+>
+> [Original source](https://x.com/SeanZCai/status/2027459906543226921)

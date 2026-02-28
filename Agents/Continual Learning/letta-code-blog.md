@@ -49,3 +49,19 @@ npm install -g @letta-ai/letta-code
 ```
 
 Full docs: [docs.letta.com/letta-code](https://docs.letta.com/letta-code)
+## Original Content
+
+> [!quote]- Source Material
+> **Letta Code is a memory-first coding agent** — Letta team (Dec 16, 2025)
+>
+> Letta Code is built around persistent, long-lived coding agents that retain memory across sessions, rather than treating each interaction as independent. It is positioned as a memory-first approach and as a model-agnostic OSS harness.
+>
+> Core workflows include `/init` for codebase onboarding (deep research, memory formation, memory block updates) and `/remember` to force explicit reflection and learning.
+>
+> Agents can learn reusable skills from prior work, represented as `.md` files, enabling transfer across repetitive tasks such as DB migrations, dashboarding, and API documentation.
+>
+> Built-in persisted state and `/search` provide access to prior conversation and conversation metadata, supporting continuity and speed across sessions.
+>
+> The article also emphasizes benchmark competitiveness with model-provider harnesses and highlights that model-agnostic architecture can be strong enough to perform similarly while retaining portability.
+>
+> [Original source](https://www.letta.com/blog/letta-code)
