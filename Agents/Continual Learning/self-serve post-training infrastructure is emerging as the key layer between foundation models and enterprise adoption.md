@@ -152,23 +152,42 @@ Research direction shifts every ~3 months (computer use, one-shot coding, long-h
 ## Original Content
 
 > [!quote]- Source Material
-> **Where Data Companies are heading in 2026** — Sean Cai on X
->
-> Part #1, focusing on the fact that: subjective self serve post training infra is a thing.
->
-> RLaaS takes on new buzzwords as it develops. A few months ago, he posted a chart showing how infrastructure players sit between model providers and enterprise workloads.
->
-> The point: data companies that are neither strong in research-first innovation nor high-volume throughput are vulnerable to short-term cycles and overinvestment in the wrong data shapes.
->
-> A key point is that enterprise environments are often subjective and regulated, meaning they can’t use cloud-based models directly and often require **post-training** to reach acceptable reliability.
->
-> His broader thread frames this as a separate economic layer between base models and enterprise adoption:
->
-> - On-prem and regulated settings need custom workflows.
-> - High-variance, taste-heavy tasks need additional training and evaluation layers.
-> - Infrastructure is becoming standardized as organizations avoid one-off data-engineering builds.
-> - Tooling like Tinker, Harbor, Prime Intellect, and CGFT are early examples of this layer.
->
-> The key claim: post-training infrastructure is becoming the deciding layer for how quickly teams can ship reliable production agents.
->
-> [Original source](https://x.com/SeanZCai/status/2027459906543226921)
+> 
+> @SeanZCai (Sean Cai):
+> Article: Where Data Companies are heading in 2026
+> 
+> Part #1, focusing on the fact that: subjective self serve post training infra is a thing.  Shorter reads given focus on particular topics, excerpted from upcoming State of Data March 2026.
+> 
+> RLaaS takes on new buzzwords as it develops.  A few months ago, I posted this maniacal diagram:
+> 
+> The circled portion is indicative of the inflection point a lot of RL environments companies are making.  The ones without great research DNA (and are Type 2 data adherents) realize they can’t persist in the same category because they A) cannot produce the same contrived data volume and B) cannot be research first enough to anticipate and proactively respond to shifts in changing research demands.
+> 
+> The consequences of simultaneously not being research first and not being a volume winner is that you can neither compete against research first players like Fleet who define new shapes of data for new arbitrary research directions like long horizon & taste, while also not being able to provide substantial data in short timeframes like Handshake/Invisible/Turing/Scale/Surge.  It is the reason many are folding as of late and getting bought out by larger volume first players (with a couple acquisitions by neoclouds and labs hidden from the limelight).
+> 
+> A key part about these markets that not many realize is that spend is driven by arbitrary change in research direction.  Without the ability to anticipate arbitrary changes in research direction and the ability to “float atop the research zeitgeist,” one will end up overoptimizing for data production and infrastructure buildouts of a certain type that don’t persist beyond 3 months.  A key example is computer use infrastructure and one-shot coding tasks (as long horizon specs become more standardized).
+> 
+> Currently RLaaS engagements focus the shape of training sparse example problems in enterprise grade settings.  Applied Compute and Mercor’s [recent engagement](https://x.com/mercor_ai/status/2016653132672201023) emphasizes the fact that a linearly increasing performant model could be trained with “fewer than 1k high-quality data points from Mercor.”  This is ironic because this is the [explicit focus](https://x.com/tbpn/status/2016665424742797376) of newer neolabs like Flapping Airplanes, who espouse that they are focused on “frontier data efficiency.”
+> 
+> Let’s return to my definition of verifiability:
+> 
+> A huge reason why this notion of self-serve post training infrastructure for enterprises is taking off is because all signs point towards a persisting layer of economic activity between models and enterprise adoption:
+> 
+> - On prem and regulated industries can’t use cloud-based models out of the box
+> 
+> - Bespoke work flows that require subjectivity need a degree of post training to pass a minimum reliability threshold
+> 
+> - Post training is getting easier with [PI lab](https://www.primeintellect.ai/blog/lab), [Tinker](https://thinkingmachines.ai/tinker/), and the likes of CGFT
+> 
+> - Everyone is hiring FDEs on lab side, which should tell you that last mile implementation, as [championed](https://www.ciridae.com/) by my friend Jack Soslow, is the actual bottleneck
+> 
+> - Infra like Tinker shows signs of life and large large ML team buildouts at interesting F500s are gradually building post training sophistication.  In no where is this more obvious than Microsoft beginning post-training, whereas many would have written them and Amazon off 5 months ago.
+> 
+> Intrinsically, that everyone has bespoke work flows with high degrees of subjectivity tied to organizational cultures means that their workflows are extremely unverifiable by my earlier definitions of verifiability:
+> 
+> because they intrinsically have both low veracity and proliferation of verification charecteristics.
+> 
+> Subjective self serve post training infra, in variations, is the explicit goal of many unnamed new neolabs started today, and most publicly represented in spirit by the likes of [Prime Intellect’s Lab](https://www.primeintellect.ai/blog/lab) and open source projects like [Harbor RL](https://harborframework.com/) (abstracting away complex reward rubric generation from masses of unstructured data for use in RL).  The most promising ones today combine top shelf research pedigree with extremely convincing FDE use cases in real world organizations.  Many die on the hills of integrating taste into unverifiable domains which are common in IRL use cases or developing models for low proliferation of verification business problems.  All are specialists in counteracting modalities of work with low asymmetry of verification.
+> 
+> For all its intents and purposes, though, many have forgotten Tinker.  In their quest to build out infrastructure for abstracting away post training, you must build the entire suite to develop stickiness or risk getting leapfrogged by other players.  For example - who still remembers that OAI is one of the few labs that have an API for DPO finetuning?
+> date: Fri Feb 27 19:04:44 +0000 2026
+> url: https://x.com/SeanZCai/status/2027459906543226921
