@@ -23,6 +23,10 @@ Research and frameworks for building AI agents that persistently learn, remember
 - [[learning machines turn agents from stateless tools into systems that compound knowledge across users and sessions]] — extensible Learning Stores enabling cross-user knowledge continuity
 - [[letta-code-blog]] — Letta Code: memory-first coding agent architecture, top model-agnostic OSS harness on TerminalBench
 
+## Infrastructure
+
+- [[self-serve post-training infrastructure is emerging as the key layer between foundation models and enterprise adoption]] — survey of emerging self-serve post-training tools (Prime Intellect Lab, Tinker, Harbor RL, CGFT) for enterprise RL/fine-tuning loops
+
 ## Analysis
 
 - [[agent-continual-learning-impl]] — deep implementation comparison of continual learning in letta-code, scout, and serena
