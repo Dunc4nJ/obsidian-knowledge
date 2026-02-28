@@ -176,6 +176,7 @@ Prediction market arbitrage, quantitative trading, and market microstructure.
 - [[quantitative trading requires six math domains from statistics through risk management]] — roadmap of math for systematic trading: statistics, linear algebra, time series, stochastic calculus, optimization, and risk management
 - [[polymarket copy trading exploits on-chain transparency to follow proven whale wallets]] — complete copy trading system: whale wallet scoring, topic-based baskets, Kelly sizing, and 1.2s latency pipeline
 - [[fractional kelly turns 5-minute polymarket bitcoin markets from gambling into a system]] — fractional Kelly (k=0.25) applied to 5-minute BTC markets: discipline over emotion, practical sizing, and drawdown control
+- [[quant desk simulation requires eight layers from Monte Carlo through copulas and agent-based models]] — complete simulation stack: Monte Carlo, importance sampling, particle filters, variance reduction, copula dependency modeling, agent-based simulation, and a five-layer production architecture
 
 ## LLMs
 
