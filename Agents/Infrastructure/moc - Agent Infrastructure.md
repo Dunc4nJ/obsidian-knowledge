@@ -15,3 +15,4 @@ Patterns and pitfalls for running AI agents in production: storage, isolation, p
 - [[isolating the entire agent in a sandbox is more secure than isolating just the tool]] — full-agent sandboxing vs tool-level isolation tradeoffs
 - [[seven runtime failures emerge when demo agents meet production distributed systems]] — common failure modes when scaling agent demos to production
 - [[the Codex App Server turns a CLI agent harness into a stable bidirectional JSON-RPC protocol for any client]] — turning CLI agents into stable protocol-based services
+- [[agentic software engineering requires six pillars beyond the agent itself to survive production]] — durability, isolation, governance, persistence, scale, and composability as the engineering foundation for production agents
