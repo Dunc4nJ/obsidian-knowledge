@@ -218,5 +218,5 @@ This study investigates the impact of query reformulation on agent-based workflo
 ## Figures
 
 ### Figure 1: Agentic Workflow
-![Figure 1](../../../../_media/query-reformulation-fig1-agent-flow.png)
+![Figure 1](../../../_media/query-reformulation-fig1-agent-flow.png)
 *The agentic workflow. At every step, outputs are validated, and the model is asked to correct invalid outputs.*

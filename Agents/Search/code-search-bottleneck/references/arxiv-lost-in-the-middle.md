@@ -242,69 +242,69 @@ Have an idea for a project that will add value for arXiv's community? [**Learn m
 ## Figures
 
 ### Figure 1: U-Shaped Performance Curve (Key Result)
-![Figure 1](../../../../_media/lost-in-middle-fig1.png)
+![Figure 1](../../../_media/lost-in-middle-fig1.png)
 *Changing the location of relevant information within the language model's input context results in a U-shaped performance curve.*
 
 ### Figure 2: Multi-Document QA Task Example
-![Figure 2](../../../../_media/lost-in-middle-fig2.png)
+![Figure 2](../../../_media/lost-in-middle-fig2.png)
 *Example of the multi-document question answering task, with an input context and the desired model answer.*
 
 ### Figure 3: Modulating Input Context Length
-![Figure 3](../../../../_media/lost-in-middle-fig3.png)
+![Figure 3](../../../_media/lost-in-middle-fig3.png)
 *Adding additional documents that do not contain the answer increases the length of the input context.*
 
 ### Figure 4: Modulating Position of Relevant Information
-![Figure 4](../../../../_media/lost-in-middle-fig4.png)
+![Figure 4](../../../_media/lost-in-middle-fig4.png)
 *Re-ordering the documents in the input context changes the position of relevant information.*
 
 ### Figure 5: Position Effect on Multi-Doc QA
-![Figure 5](../../../../_media/lost-in-middle-fig5.png)
+![Figure 5](../../../_media/lost-in-middle-fig5.png)
 *The effect of changing the position of relevant information on multi-document question answering performance.*
 
 ### Figure 6: Performance vs Context Length
-![Figure 6](../../../../_media/lost-in-middle-fig6.png)
+![Figure 6](../../../_media/lost-in-middle-fig6.png)
 *Language model performance (averaged across position) on the multi-document QA task decreases as context grows longer.*
 
 ### Figure 7: Key-Value Retrieval Task Example
-![Figure 7](../../../../_media/lost-in-middle-fig7.png)
+![Figure 7](../../../_media/lost-in-middle-fig7.png)
 *Example of the key-value retrieval task with 128-bit UUID keys and values.*
 
 ### Figure 8: Key-Value Context Length Modulation
-![Figure 8](../../../../_media/lost-in-middle-fig8.png)
+![Figure 8](../../../_media/lost-in-middle-fig8.png)
 *Adding random key-value pairs increases length of the input context.*
 
 ### Figure 9: Key-Value Position Modulation
-![Figure 9](../../../../_media/lost-in-middle-fig9.png)
+![Figure 9](../../../_media/lost-in-middle-fig9.png)
 *Re-ordering the key-value pairs does not affect the desired output.*
 
 ### Figure 10: Key-Value Retrieval Results
-![Figure 10](../../../../_media/lost-in-middle-fig10.png)
+![Figure 10](../../../_media/lost-in-middle-fig10.png)
 *The effect of changing the input context length and the position of relevant information on key-value retrieval performance.*
 
 ### Figure 11: Encoder-Decoder Model Robustness
-![Figure 11](../../../../_media/lost-in-middle-fig11.png)
+![Figure 11](../../../_media/lost-in-middle-fig11.png)
 *Encoder-decoder models (Flan-UL2 and Flan-T5-XXL) are relatively robust to changes in the position of relevant information.*
 
 ### Figure 12: Query-Aware Contextualization
-![Figure 12](../../../../_media/lost-in-middle-fig12.png)
+![Figure 12](../../../_media/lost-in-middle-fig12.png)
 *Query-aware contextualization (placing the question before and after the documents) improves multi-document QA performance.*
 
 ### Figure 13: Instruction Fine-Tuning Effect
-![Figure 13](../../../../_media/lost-in-middle-fig13.png)
+![Figure 13](../../../_media/lost-in-middle-fig13.png)
 *MPT-30B-Instruct compared against its base model. Both have a U-shaped curve.*
 
 ### Figure 14: Retriever Recall vs Model Performance
-![Figure 14](../../../../_media/lost-in-middle-fig14.png)
+![Figure 14](../../../_media/lost-in-middle-fig14.png)
 *Model performance saturates long before retriever recall saturates, indicating models have difficulty using all retrieved information.*
 
 ### Figure 15: Unambiguous Questions Subset
-![Figure 15](../../../../_media/lost-in-middle-fig15.png)
+![Figure 15](../../../_media/lost-in-middle-fig15.png)
 *Language model performance on an unambiguous subset of questions.*
 
 ### Figure 16: Randomized Distractor Order
-![Figure 16](../../../../_media/lost-in-middle-fig16.png)
+![Figure 16](../../../_media/lost-in-middle-fig16.png)
 *Language model performance when randomizing the order of the distractors.*
 
 ### Figure 17: GPT-4 Performance
-![Figure 17](../../../../_media/lost-in-middle-fig17.png)
+![Figure 17](../../../_media/lost-in-middle-fig17.png)
 *Although GPT-4 has higher absolute performance, its performance still degrades when relevant information occurs in the middle.*

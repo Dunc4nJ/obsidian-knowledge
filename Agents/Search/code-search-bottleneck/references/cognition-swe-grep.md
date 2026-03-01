@@ -27,9 +27,9 @@ Context retrieval has been historically done in 2 ways:
 
 This **speed-intelligence tradeoff** seemed inescapable — until we trained **SWE-grep** and **SWE-grep-mini:** models which match the retrieval capabilities of frontier coding models, while taking an order of magnitude less time. These models now power **Fast Context**, a subagent that helps you stay in flow.
 
-![Context Retrieval Capability vs Speed — SWE-grep dominates the Pareto frontier](../../../../_media/cognition-swe-grep-00-og-social-preview.png)
+![Context Retrieval Capability vs Speed — SWE-grep dominates the Pareto frontier](../../../_media/cognition-swe-grep-00-og-social-preview.png)
 
-![Fast Context speed comparison](../../../../_media/cognition-swe-grep-01-fast-context-speed-comparison.png)
+![Fast Context speed comparison](../../../_media/cognition-swe-grep-01-fast-context-speed-comparison.png)
 
 [Where to try Fast Context](https://cognition.ai/blog/swe-grep#where-to-try-fast-context)
 -----------------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ Check out how Fast Context reduces the time it takes to understand large codebas
 
 You can try it out in our playground now at [https://playground.cognition.ai/](https://playground.cognition.ai/).
 
-![SWE-grep playground screenshot](../../../../_media/cognition-swe-grep-02-playground-screenshot.png)
+![SWE-grep playground screenshot](../../../_media/cognition-swe-grep-02-playground-screenshot.png)
 
 Since we are offering direct comparisons between our agent and alternative agents, we should mention what is going on here and our attempts to make it a fair comparison. We host the two agents - a Fast Context Agent stripped out of Windsurf and stock Claude Code - in their own Modal containers and pipe the inputs/outputs through stdin/stdout. This is meant to reflect the experience of using each agent locally. This is not meant to be an extremely rigorous benchmark, just a demo experience we cooked up on the side to answer the obvious question of “how does Fast Context compare to what I’m used to outside of Windsurf?” You should run these tests in your own environment (with Fast Context in Windsurf) for best fidelity to your actual experience.
 
@@ -68,7 +68,7 @@ Most coding agents take so long to fetch context because they only issue one (or
 
 While many models technically support parallel tool calls, it’s difficult to get them to use them effectively. Models are getting better than this—Sonnet in particular has improved greatly from 3.6 to 4.5—but we felt that models didn’t exploit them optimally. Here is a rough sketch of the model design space that we targeted for `SWE-grep`:
 
-![Model design space - parallelism vs serial turns](../../../../_media/cognition-swe-grep-03-model-design-space-parallelism.gif)
+![Model design space - parallelism vs serial turns](../../../_media/cognition-swe-grep-03-model-design-space-parallelism.gif)
 
 Increasing parallelism also lets us use fewer tool calls. Across our ablations, we discovered that, by increasing the amount of parallelism from 4 to 8 searches per turn, we could reduce the number of turns spent searching from 6 to 4 while retaining the same performance.
 
@@ -76,7 +76,7 @@ We thus trained the `SWE-grep` models to natively issue up to 8 parallel tool ca
 
 We train `SWE-grep` directly with [multi-turn](https://cognition.ai/blog/kevin-32b) reinforcement learning. Then we distill `SWE-grep` into `SWE-grep-mini` and perform additional reinforcement learning to boost the model’s performance on the task. Our reward function is an average of weighted F1 scores over file retrieval and line retrieval tasks, with respect to our ground truth dataset. This objective was sufficient for `SWE-grep` to naturally learn to make more tool calls to its advantage over the course of training, without us explicitly incentivizing this behavior:
 
-![Tool calls naturally increase during RL training](../../../../_media/cognition-swe-grep-04-tool-calls-increase-during-training.png)
+![Tool calls naturally increase during RL training](../../../_media/cognition-swe-grep-04-tool-calls-increase-during-training.png)
 
 We’ll explain some details about our training algorithm, a modified version of the policy gradient, and some tweaks that helped us keep training stable.
 
@@ -84,15 +84,15 @@ We’ll explain some details about our training algorithm, a modified version of
 
 Given an LLM policy and outcome reward R, the policy gradient is given by
 
-![Policy gradient formula](../../../../_media/cognition-swe-grep-05-policy-gradient-formula.png)
+![Policy gradient formula](../../../_media/cognition-swe-grep-05-policy-gradient-formula.png)
 
 where the sum is over the tokens in a single trajectory. If we are able to sample from the training policy, we can use a simple Monte Carlo estimate for the gradient, which is unbiased when the data is on-policy. However, standard training and inference libraries have [different numerics](https://thinkingmachines.ai/blog/defeating-nondeterminism-in-llm-inference/), which effectively turns the sampled data into off-policy data. This is amplified when using low-precision rollouts, a common optimization in RL frameworks. The solution is to apply importance sampling. Recent works have proposed using [per-token importance sampling](https://fengyao.notion.site/off-policy-rl) ratios. Per-token ratios, though, do not fully remove the bias. Indeed, at step t we have an action-choice mismatch, a state-distribution mismatch, and a reward-signal mismatch. A per-token ratio corrects only the action-choice mismatch. To derive an unbiased estimate, we apply per-sequence importance sampling
 
-![Per-sequence importance sampling formula](../../../../_media/cognition-swe-grep-06-importance-sampling-formula.png)
+![Per-sequence importance sampling formula](../../../_media/cognition-swe-grep-06-importance-sampling-formula.png)
 
 We expand at the token-level, subtract a leave-one-out baseline to reduce the variance, and rescale by a constant factor (absorbed in the learning rate), obtaining a surrogate loss (for a given prompt) that gives the correct gradient estimation (the notation []_∇ denotes a stop gradient):
 
-![Surrogate loss formula with leave-one-out baseline](../../../../_media/cognition-swe-grep-07-surrogate-loss-formula.png)
+![Surrogate loss formula with leave-one-out baseline](../../../_media/cognition-swe-grep-07-surrogate-loss-formula.png)
 
 where we sample _g_ completions from the same prompt for the Monte Carlo estimate, Aⱼ = Rⱼ - mean(R₁, ... ,R₉) and T_max is the maximum number of sampled tokens allowed during training (like [Dr. GRPO](https://arxiv.org/pdf/2503.20783)).
 
@@ -120,7 +120,7 @@ We use a _weighted_ F1 score, where precision is prioritized over recall, precis
 
 Our results on our evaluation set demonstrate that SWE-grep and SWE-grep-mini are an order of magnitude faster than frontier models, while matching or outperforming them at context retrieval.
 
-![Cognition CodeSearch Eval - F1 score vs latency scatter plot](../../../../_media/cognition-swe-grep-08-codesearch-eval-results.png)
+![Cognition CodeSearch Eval - F1 score vs latency scatter plot](../../../_media/cognition-swe-grep-08-codesearch-eval-results.png)
 
 ### Downstream analysis
 
@@ -128,7 +128,7 @@ We also evaluated how well the SWE-grep models work when used as a subagent in l
 
 **Coding tasks.** To evaluate how well it works in Windsurf’s Cascade agent, we use an randomly selected subset of difficult SWE-Bench Verified tasks. When using the Fast Context subagent, the agent (using Sonnet 4.5 as the main model) accomplishes the same number of tasks in significantly lower end-to-end time.
 
-![SWE-Bench downstream results - Fast Context vs baseline](../../../../_media/cognition-swe-grep-09-swe-bench-downstream-results.png)
+![SWE-Bench downstream results - Fast Context vs baseline](../../../_media/cognition-swe-grep-09-swe-bench-downstream-results.png)
 
 *_on internal runners_
 
@@ -136,7 +136,7 @@ We also evaluated how well the SWE-grep models work when used as a subagent in l
 
 **Codebase Q&A.** We show the end-to-end latency on some example queries over open-source repositories. As with our playground setup, we benchmark the Fast Context agent—as it would be used in Windsurf—against Claude Code and Cursor CLI by measuring end-to-end latency.
 
-![Codebase Q&A end-to-end latency comparison table](../../../../_media/cognition-swe-grep-10-codebase-qa-latency-comparison.png)
+![Codebase Q&A end-to-end latency comparison table](../../../_media/cognition-swe-grep-10-codebase-qa-latency-comparison.png)
 
 [Fast Context as the first step to Fast Agents](https://cognition.ai/blog/swe-grep#fast-context-as-the-first-step-to-fast-agents)
 ---------------------------------------------------------------------------------------------------------------------------------
@@ -149,7 +149,7 @@ The goal of Windsurf is to keep you in flow, which [Mihaly Csikszentmihalyi](htt
 
 Our ultimate goal at the combined Cognition+Windsurf is to maximize your software engineering productivity, and we are simultaneously researching both the directions of pushing the frontier of coding agent autonomy -AND- making them faster given a “good enough” bar. The best mental model we’ve found is the one we’ve arrived at below - avoid the Semi-Async Valley of Death at all costs!
 
-![Semi-Async Valley of Death diagram](../../../../_media/cognition-swe-grep-11-semi-async-valley-of-death.png)
+![Semi-Async Valley of Death diagram](../../../_media/cognition-swe-grep-11-semi-async-valley-of-death.png)
 
 ## Images
 
@@ -157,15 +157,15 @@ All images downloaded from the [original blog post](https://cognition.ai/blog/sw
 
 | # | File | Description |
 |---|------|-------------|
-| 00 | [cognition-swe-grep-00-og-social-preview.png](../../../../_media/cognition-swe-grep-00-og-social-preview.png) | Open Graph / social media preview image for the blog post |
-| 01 | [cognition-swe-grep-01-fast-context-speed-comparison.png](../../../../_media/cognition-swe-grep-01-fast-context-speed-comparison.png) | Fast Context speed comparison showing retrieval time improvements |
-| 02 | [cognition-swe-grep-02-playground-screenshot.png](../../../../_media/cognition-swe-grep-02-playground-screenshot.png) | SWE-grep playground at playground.cognition.ai comparing Fast Context Agent vs Claude Code |
-| 03 | [cognition-swe-grep-03-model-design-space-parallelism.gif](../../../../_media/cognition-swe-grep-03-model-design-space-parallelism.gif) | Animated diagram of the model design space showing parallelism vs serial turns tradeoff |
-| 04 | [cognition-swe-grep-04-tool-calls-increase-during-training.png](../../../../_media/cognition-swe-grep-04-tool-calls-increase-during-training.png) | Chart showing tool calls naturally increasing during RL training without explicit incentivization |
-| 05 | [cognition-swe-grep-05-policy-gradient-formula.png](../../../../_media/cognition-swe-grep-05-policy-gradient-formula.png) | Mathematical formula for the policy gradient with outcome reward R |
-| 06 | [cognition-swe-grep-06-importance-sampling-formula.png](../../../../_media/cognition-swe-grep-06-importance-sampling-formula.png) | Per-sequence importance sampling formula for unbiased gradient estimation |
-| 07 | [cognition-swe-grep-07-surrogate-loss-formula.png](../../../../_media/cognition-swe-grep-07-surrogate-loss-formula.png) | Surrogate loss formula with leave-one-out baseline for variance reduction |
-| 08 | [cognition-swe-grep-08-codesearch-eval-results.png](../../../../_media/cognition-swe-grep-08-codesearch-eval-results.png) | Cognition CodeSearch Eval results: scatter plot of weighted F1 score vs end-to-end latency across models |
-| 09 | [cognition-swe-grep-09-swe-bench-downstream-results.png](../../../../_media/cognition-swe-grep-09-swe-bench-downstream-results.png) | SWE-Bench Verified downstream results showing Fast Context reduces end-to-end time while maintaining solve rate |
-| 10 | [cognition-swe-grep-10-codebase-qa-latency-comparison.png](../../../../_media/cognition-swe-grep-10-codebase-qa-latency-comparison.png) | Codebase Q&A latency comparison table: Fast Context Agent vs Claude Code vs Cursor CLI |
-| 11 | [cognition-swe-grep-11-semi-async-valley-of-death.png](../../../../_media/cognition-swe-grep-11-semi-async-valley-of-death.png) | Semi-Async Valley of Death diagram showing the tradeoff between agent autonomy duration and user productivity |
+| 00 | [cognition-swe-grep-00-og-social-preview.png](../../../_media/cognition-swe-grep-00-og-social-preview.png) | Open Graph / social media preview image for the blog post |
+| 01 | [cognition-swe-grep-01-fast-context-speed-comparison.png](../../../_media/cognition-swe-grep-01-fast-context-speed-comparison.png) | Fast Context speed comparison showing retrieval time improvements |
+| 02 | [cognition-swe-grep-02-playground-screenshot.png](../../../_media/cognition-swe-grep-02-playground-screenshot.png) | SWE-grep playground at playground.cognition.ai comparing Fast Context Agent vs Claude Code |
+| 03 | [cognition-swe-grep-03-model-design-space-parallelism.gif](../../../_media/cognition-swe-grep-03-model-design-space-parallelism.gif) | Animated diagram of the model design space showing parallelism vs serial turns tradeoff |
+| 04 | [cognition-swe-grep-04-tool-calls-increase-during-training.png](../../../_media/cognition-swe-grep-04-tool-calls-increase-during-training.png) | Chart showing tool calls naturally increasing during RL training without explicit incentivization |
+| 05 | [cognition-swe-grep-05-policy-gradient-formula.png](../../../_media/cognition-swe-grep-05-policy-gradient-formula.png) | Mathematical formula for the policy gradient with outcome reward R |
+| 06 | [cognition-swe-grep-06-importance-sampling-formula.png](../../../_media/cognition-swe-grep-06-importance-sampling-formula.png) | Per-sequence importance sampling formula for unbiased gradient estimation |
+| 07 | [cognition-swe-grep-07-surrogate-loss-formula.png](../../../_media/cognition-swe-grep-07-surrogate-loss-formula.png) | Surrogate loss formula with leave-one-out baseline for variance reduction |
+| 08 | [cognition-swe-grep-08-codesearch-eval-results.png](../../../_media/cognition-swe-grep-08-codesearch-eval-results.png) | Cognition CodeSearch Eval results: scatter plot of weighted F1 score vs end-to-end latency across models |
+| 09 | [cognition-swe-grep-09-swe-bench-downstream-results.png](../../../_media/cognition-swe-grep-09-swe-bench-downstream-results.png) | SWE-Bench Verified downstream results showing Fast Context reduces end-to-end time while maintaining solve rate |
+| 10 | [cognition-swe-grep-10-codebase-qa-latency-comparison.png](../../../_media/cognition-swe-grep-10-codebase-qa-latency-comparison.png) | Codebase Q&A latency comparison table: Fast Context Agent vs Claude Code vs Cursor CLI |
+| 11 | [cognition-swe-grep-11-semi-async-valley-of-death.png](../../../_media/cognition-swe-grep-11-semi-async-valley-of-death.png) | Semi-Async Valley of Death diagram showing the tradeoff between agent autonomy duration and user productivity |

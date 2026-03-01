@@ -203,4 +203,4 @@ Note: This article is text-only (no inline images or diagrams). The only image i
 
 | # | File | Source URL | Description |
 |---|------|-----------|-------------|
-| 01 | [augment-grep-01-social-card.png](../../../../_media/augment-grep-01-social-card.png) | `assets/images/social/writing/.../why-grep-beat-embeddings-...augment.png` | OpenGraph social card / preview image |
+| 01 | [augment-grep-01-social-card.png](../../../_media/augment-grep-01-social-card.png) | `assets/images/social/writing/.../why-grep-beat-embeddings-...augment.png` | OpenGraph social card / preview image |

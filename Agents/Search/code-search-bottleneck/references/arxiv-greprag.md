@@ -542,34 +542,34 @@ References
 ## Figures
 
 ### Figure 1: Research Framework Overview
-![Figure 1](../../../../_media/greprag-fig1.png)
+![Figure 1](../../../_media/greprag-fig1.png)
 *Overview of the research framework. Evaluates Naive GrepRAG (RQ1), analyzes success factors (RQ2), identifies limitations (RQ3), and proposes optimizations (RQ4).*
 
 ### Figure 2: GraphCoder vs Grep Comparison
-![Figure 2](../../../../_media/greprag-fig2.png)
+![Figure 2](../../../_media/greprag-fig2.png)
 *Comparison of GraphCoder and Grep in a method invocation scenario. GraphCoder retrieves irrelevant chunks; Grep locates the precise definition via lexical retrieval.*
 
 ### Figure 3: Naive GrepRAG Framework
-![Figure 3](../../../../_media/greprag-fig3.png)
+![Figure 3](../../../_media/greprag-fig3.png)
 *Overview of the Naive GrepRAG framework.*
 
 ### Figure 4: Distinct Solved Cases Comparison
-![Figure 4](../../../../_media/greprag-fig4.png)
+![Figure 4](../../../_media/greprag-fig4.png)
 *Comparison of distinct solved cases across systems in the CrossCodeEval dataset.*
 
 ### Figure 5: Redundancy and Context Fragmentation
-![Figure 5](../../../../_media/greprag-fig5.png)
+![Figure 5](../../../_media/greprag-fig5.png)
 *Redundancy and Context Fragmentation. Two independent grep queries hit adjacent regions within the same file.*
 
 ### Figure 6: Post-Processing Pipeline
-![Figure 6](../../../../_media/greprag-fig6.png)
+![Figure 6](../../../_media/greprag-fig6.png)
 *Post-processing pipeline built upon the Naive GrepRAG framework.*
 
 ### Figure 7: De-duplication Pool Size Sensitivity
-![Figure 7](../../../../_media/greprag-fig7.png)
+![Figure 7](../../../_media/greprag-fig7.png)
 *Sensitivity analysis of the de-duplication candidate pool size (N) on RepoEval_Updated. N approximately 50% achieves optimal balance.*
 
 ### Figure 8-9: Additional Analysis
-![Figure 8](../../../../_media/greprag-fig8.png)
-![Figure 9](../../../../_media/greprag-fig9.png)
+![Figure 8](../../../_media/greprag-fig8.png)
+![Figure 9](../../../_media/greprag-fig9.png)
 *Additional analysis figures from the paper.*

@@ -340,13 +340,13 @@ Downloaded from https://ragflow.io/blog/rag-review-2025-from-rag-to-context
 
 | # | File | Source URL | Description |
 |---|------|-----------|-------------|
-| 01 | [ragflow-01-overview.png](../../../../_media/ragflow-01-overview.png) | `1-f4082244d0...420723.PNG` | Overview / intro graphic |
-| 02 | [ragflow-02-2025-recap.png](../../../../_media/ragflow-02-2025-recap.png) | `2025racap-5215bb0...d334b2.PNG` | 2025 RAG recap banner |
-| 03 | [ragflow-03-agent-retrieval.png](../../../../_media/ragflow-03-agent-retrieval.png) | `agent_retrieval-048b66...b29e.png` | Agent retrieval architecture |
-| 04 | [ragflow-04-context-engineering.png](../../../../_media/ragflow-04-context-engineering.png) | `context_engineering-3904e6...0b80.png` | Context engineering diagram |
-| 05 | [ragflow-05-doc-retrieval.png](../../../../_media/ragflow-05-doc-retrieval.png) | `doc_retrieval-ac3627...c833.png` | Document retrieval pipeline |
-| 06 | [ragflow-06-etl-vs.png](../../../../_media/ragflow-06-etl-vs.png) | `etl_vs-18ee60c...e49e3a.png` | ETL comparison diagram |
-| 07 | [ragflow-07-long-context-rag.png](../../../../_media/ragflow-07-long-context-rag.png) | `long_context_rag-ce3571...cebca.PNG` | Long context RAG architecture |
-| 08 | [ragflow-08-memory-infra.png](../../../../_media/ragflow-08-memory-infra.png) | `memory_infra-54646...ad8b6f.png` | Memory infrastructure diagram |
-| 09 | [ragflow-09-multimodal-path.png](../../../../_media/ragflow-09-multimodal-path.png) | `multimodal_path-99f59e...357ea.png` | Multimodal processing path |
-| 10 | [ragflow-10-tool-retrieval.png](../../../../_media/ragflow-10-tool-retrieval.png) | `tool_retrieval-32f59e...62607.png` | Tool retrieval diagram |
+| 01 | [ragflow-01-overview.png](../../../_media/ragflow-01-overview.png) | `1-f4082244d0...420723.PNG` | Overview / intro graphic |
+| 02 | [ragflow-02-2025-recap.png](../../../_media/ragflow-02-2025-recap.png) | `2025racap-5215bb0...d334b2.PNG` | 2025 RAG recap banner |
+| 03 | [ragflow-03-agent-retrieval.png](../../../_media/ragflow-03-agent-retrieval.png) | `agent_retrieval-048b66...b29e.png` | Agent retrieval architecture |
+| 04 | [ragflow-04-context-engineering.png](../../../_media/ragflow-04-context-engineering.png) | `context_engineering-3904e6...0b80.png` | Context engineering diagram |
+| 05 | [ragflow-05-doc-retrieval.png](../../../_media/ragflow-05-doc-retrieval.png) | `doc_retrieval-ac3627...c833.png` | Document retrieval pipeline |
+| 06 | [ragflow-06-etl-vs.png](../../../_media/ragflow-06-etl-vs.png) | `etl_vs-18ee60c...e49e3a.png` | ETL comparison diagram |
+| 07 | [ragflow-07-long-context-rag.png](../../../_media/ragflow-07-long-context-rag.png) | `long_context_rag-ce3571...cebca.PNG` | Long context RAG architecture |
+| 08 | [ragflow-08-memory-infra.png](../../../_media/ragflow-08-memory-infra.png) | `memory_infra-54646...ad8b6f.png` | Memory infrastructure diagram |
+| 09 | [ragflow-09-multimodal-path.png](../../../_media/ragflow-09-multimodal-path.png) | `multimodal_path-99f59e...357ea.png` | Multimodal processing path |
+| 10 | [ragflow-10-tool-retrieval.png](../../../_media/ragflow-10-tool-retrieval.png) | `tool_retrieval-32f59e...62607.png` | Tool retrieval diagram |

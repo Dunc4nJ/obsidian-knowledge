@@ -15,7 +15,7 @@ Recent developments in LLMs show a trend toward longer context windows, with the
 
 However, NIAH is fundamentally a simple retrieval task, in which a known sentence (the “needle”) is placed in a long document of unrelated text (the “haystack”), and the model is prompted to retrieve it. While scalable, this benchmark typically assesses direct lexical matching, which may not be representative of flexible, semantically oriented tasks.
 
-![Image 1](../../../../_media/chroma-context-rot-niah_lexical.png)
+![Image 1](../../../_media/chroma-context-rot-niah_lexical.png)
 
 Example Needle in a Haystack (NIAH) Setup
 
@@ -71,7 +71,7 @@ The classic Needle in a Haystack task involves placing a random fact (the 'needl
 
 The original implementation of this task uses a needle-question pair with lexical matches. However, usage of long context in practice often requires semantic understanding of ambiguous tasks.
 
-![Image 2](../../../../_media/chroma-context-rot-niah-lexical_2.png)
+![Image 2](../../../_media/chroma-context-rot-niah-lexical_2.png)
 
 Example Needle in a Haystack (NIAH) Setup with Lexical Matching
 
@@ -92,7 +92,7 @@ Models often have to deal with distractors as well, which has been shown to degr
 
 Throughout this report, we distinguish between distractors and irrelevant content:
 
-![Image 3](../../../../_media/chroma-context-rot-niah-distractor_irrelevance.png)
+![Image 3](../../../_media/chroma-context-rot-niah-distractor_irrelevance.png)
 
 Comparison - Distractor vs. Irrelevant Context
 
@@ -217,7 +217,7 @@ Results[#](https://research.trychroma.com/context-rot)
 
 We observe a clear pattern that performance degrades more quickly in input length with lower similarity needle-question pairs.
 
-![Image 4](../../../../_media/chroma-context-rot-longmemeval-needle_question_sim_arxiv.png)
+![Image 4](../../../_media/chroma-context-rot-longmemeval-needle_question_sim_arxiv.png)
 
 NIAH: Needle-Question Similarity (thinking/non-thinking modes of the same model are treated separately) - arXiv haystack/arXiv needles High Performance: upper 33% performance Blue: high-similarity needles (upper 50% similarity) Red: low-similarity needles (lower 50% similarity)
 
@@ -266,7 +266,7 @@ We run three test conditions:
 *   Single distractor: Needle + one distractor (randomly positioned)
 *   Multiple distractors: Needle + all four distractors, randomly positioned throughout the haystack
 
-![Image 5](../../../../_media/chroma-context-rot-niah-distractors_var.png)
+![Image 5](../../../_media/chroma-context-rot-niah-distractors_var.png)
 
 Impact of Distractors - Three Conditions
 
@@ -275,19 +275,19 @@ Results[#](https://research.trychroma.com/context-rot)
 
 Even a single distractor reduces performance relative to the baseline (needle only), and adding four distractors compounds this degradation further.
 
-![Image 6](../../../../_media/chroma-context-rot-niah-distractors_num.png)
+![Image 6](../../../_media/chroma-context-rot-niah-distractors_num.png)
 
 Impact of Distractors: Performance by Number of Distractors - arXiv haystack/PG essay needles
 
 We are also able to see that distractors do not have uniform impact. For example, in our arXiv haystack and PG essay needle combination, we can see that distractor 3 (red) causes greater performance decline relative to the other distractors.
 
-![Image 7](../../../../_media/chroma-context-rot-niah-distractors_ind.png)
+![Image 7](../../../_media/chroma-context-rot-niah-distractors_ind.png)
 
 Impact of Distractors: Performance by Individual Distractors - arXiv haystack/PG essay needles
 
 To further investigate this non-uniform impact, we analyze the failed attempts of various models in the 4-distractor condition. For the arXiv haystack and PG essay needle combination, we see that distractors 2 and 3 appear most frequently in hallucinated responses across models.
 
-![Image 8](../../../../_media/chroma-context-rot-niah-hallucinations.png)
+![Image 8](../../../_media/chroma-context-rot-niah-hallucinations.png)
 
 Impact of Distractors: Failure Analysis - arXiv haystack/PG essay needles
 
@@ -313,7 +313,7 @@ In the PG essay haystack, PG essay needles have an average needle-haystack simil
 
 On each haystack, we test semantically similar needles against unrelated needles. For instance, we place both PG essay and arXiv needles within a Paul Graham essay haystack to compare the two conditions:
 
-![Image 9](../../../../_media/chroma-context-rot-niah-needle_haystack.png)
+![Image 9](../../../_media/chroma-context-rot-niah-needle_haystack.png)
 
 Needle-Haystack Similarity: Experimental Setup
 
@@ -322,7 +322,7 @@ Results[#](https://research.trychroma.com/context-rot)
 
 We test both PG essay and arXiv needles in two haystack types: Paul Graham essays and arXiv papers. In the Paul Graham essay haystack, arXiv needles perform significantly better relative to the PG essay needles; in other words, models perform better when the needle does not semantically blend in with its haystack. In the arXiv haystack, however, we observe only minimal performance differences between our arXiv and PG essay needles.
 
-![Image 10](../../../../_media/chroma-context-rot-niah-needle_haystack_2.png)
+![Image 10](../../../_media/chroma-context-rot-niah-needle_haystack_2.png)
 
 Needle-Haystack Similarity Results
 
@@ -347,7 +347,7 @@ To assess the impact of haystack structure, we create two variants:
 1.   Original: preserves the natural flow of ideas within each excerpt
 2.   Shuffled: sentences are randomly reordered throughout the haystack to maintain the same overall topic but without logical continuity
 
-![Image 11](../../../../_media/chroma-context-rot-niah-nh2.png)
+![Image 11](../../../_media/chroma-context-rot-niah-nh2.png)
 
 Haystack Structure: Sample Experimental Setup
 
@@ -356,7 +356,7 @@ Results[#](https://research.trychroma.com/context-rot)
 
 Across all 18 models and needle-haystack configurations, we observe a consistent pattern that models perform better on shuffled haystacks than on logically structured ones.
 
-![Image 12](../../../../_media/chroma-context-rot-niah-structure_2.png)
+![Image 12](../../../_media/chroma-context-rot-niah-structure_2.png)
 
 Haystack Structure: Averaged Performance Across 18 Models for Original vs Shuffled Haystacks
 
@@ -386,7 +386,7 @@ Experiment[#](https://research.trychroma.com/context-rot)
 
 Given a chat history between a user and assistant, the model’s task is to answer a question relating to part of that chat history.
 
-![Image 13](../../../../_media/chroma-context-rot-longmemeval-ex.png)
+![Image 13](../../../_media/chroma-context-rot-longmemeval-ex.png)
 
 LongMemEval - Examples by Question Type [[2](https://research.trychroma.com/context-rot#longmemeval-source)]
 
@@ -403,7 +403,7 @@ Results[#](https://research.trychroma.com/context-rot)
 
 Across all models, we see significantly higher performance on focused prompts compared to full prompts.
 
-![Image 14](../../../../_media/chroma-context-rot-longmemeval-claude.png)
+![Image 14](../../../_media/chroma-context-rot-longmemeval-claude.png)
 
 LongMemEval Results - Claude Family
 
@@ -421,21 +421,21 @@ LongMemEval - Claude Sonnet 4 (non-thinking) on full prompt containing the dates
 
 The trend of stronger performance on focused prompts holds across the GPT, Gemini, and Qwen model families as well. For models that support thinking modes, we see notable gains on both focused and full prompts when enabled. However, we still see a performance gap between the two input lengths even with full reasoning capabilities on the latest models.
 
-![Image 15](../../../../_media/chroma-context-rot-longmemeval-gpt.png)
+![Image 15](../../../_media/chroma-context-rot-longmemeval-gpt.png)
 
 LongMemEval Results - GPT Family
 
-![Image 16](../../../../_media/chroma-context-rot-longmemeval-gemini.png)
+![Image 16](../../../_media/chroma-context-rot-longmemeval-gemini.png)
 
 LongMemEval Results - Gemini Family
 
-![Image 17](../../../../_media/chroma-context-rot-longmemeval-qwen.png)
+![Image 17](../../../_media/chroma-context-rot-longmemeval-qwen.png)
 
 LongMemEval Results - Qwen Family
 
 We also observe patterns among specific question types. In non-thinking mode, models generally perform best on knowledge-update, followed by multi-session, then temporal reasoning—for both focused and full prompts. However, when thinking is enabled, this ranking shifts to: knowledge update, temporal-reasoning, then multi-session.
 
-![Image 18](../../../../_media/chroma-context-rot-longmemeval-claude_comparison.png)
+![Image 18](../../../_media/chroma-context-rot-longmemeval-claude_comparison.png)
 
 LongMemEval Results by Question Type - Claude Opus 4
 
@@ -548,7 +548,7 @@ As context length increases, performance consistently degrades across all models
 
 We also observe patterns where models do not attempt the task, which appears across all model families.
 
-![Image 19](../../../../_media/chroma-context-rot-repeated_words-claude_line_plot.png)
+![Image 19](../../../_media/chroma-context-rot-repeated_words-claude_line_plot.png)
 
 Repeated Words - Claude Family
 
@@ -578,7 +578,7 @@ Repeated Words - Claude Opus 4 output
 
 We also measure the position accuracy: whether the unique word appears in the correct position. Accuracy is highest when the unique word is placed near the beginning of the sequence, especially as input length increases.
 
-![Image 20](../../../../_media/chroma-context-rot-repeated_words-claude_position_accuracy.png)
+![Image 20](../../../_media/chroma-context-rot-repeated_words-claude_position_accuracy.png)
 
 Repeated Words: Position Accuracy - Claude Family
 
@@ -587,19 +587,19 @@ Additionally, as context length increases, models often generate the repeated wo
 *   Positive = model under-generated
 *   Negative = model over-generated
 
-![Image 21](../../../../_media/chroma-context-rot-repeated_words-claude_num_words.png)
+![Image 21](../../../_media/chroma-context-rot-repeated_words-claude_num_words.png)
 
 Repeated Words: Word Count Difference - Claude Family
 
 In the GPT model family, we observe a refusal rate of 2.55% for GPT-4.1. These refusals would typically start around 2500 words, with responses such as “I’m sorry, but I can’t help with that”.
 
-![Image 22](../../../../_media/chroma-context-rot-repeated_words-gpt_line_plot.png)
+![Image 22](../../../_media/chroma-context-rot-repeated_words-gpt_line_plot.png)
 
 Repeated Words - GPT Family
 
 We also observe a local performance peak around 500 words for GPT-4 turbo. Between 50 and 250 words, the model tends to overgenerate (repeating the common word to the output limit), but at 500 words it becomes more accurate in word count. Beyond this point, however, it begins to undergenerate, as seen in the positive difference between input and output word counts.
 
-![Image 23](../../../../_media/chroma-context-rot-repeated_words-gpt_4_turbo.png)
+![Image 23](../../../_media/chroma-context-rot-repeated_words-gpt_4_turbo.png)
 
 Repeated Words: Word Count Difference - GPT-4 Turbo
 
@@ -632,7 +632,7 @@ With these random words, we notice hints of structure with regards to position. 
 
 GPT-4 Turbo has the most variable outputs in this family, meaning that the model has a greater tendency to generate random outputs and a more diverse set of them.
 
-![Image 24](../../../../_media/chroma-context-rot-repeated_words-gemini_line_plot.png)
+![Image 24](../../../_media/chroma-context-rot-repeated_words-gemini_line_plot.png)
 
 Repeated Words - Gemini Family
 
@@ -653,7 +653,7 @@ Across all word combinations and models in this family—except Gemini 2.5 Flash
 
 Repeated Words - Gemini 2.5 Pro Sample Outputs
 
-![Image 25](../../../../_media/chroma-context-rot-repeated_words-qwen_line_plot.png)
+![Image 25](../../../_media/chroma-context-rot-repeated_words-qwen_line_plot.png)
 
 Repeated Words - Qwen Family
 
@@ -790,15 +790,15 @@ Needle-Question Similarity[#](https://research.trychroma.com/context-rot)
 
 Note: thinking/non-thinking modes of the same model are treated separately
 
-![Image 26](../../../../_media/chroma-context-rot-appendix-arxiv_pg_nq_sim.png)
+![Image 26](../../../_media/chroma-context-rot-appendix-arxiv_pg_nq_sim.png)
 
 Needle-Question Similarity - arXiv haystack/PG essay needles
 
-![Image 27](../../../../_media/chroma-context-rot-appendix-pg_pg_nq_sim.png)
+![Image 27](../../../_media/chroma-context-rot-appendix-pg_pg_nq_sim.png)
 
 Needle-Question Similarity - PG essay haystack/PG essay needles
 
-![Image 28](../../../../_media/chroma-context-rot-appendix-pg_arxiv_nq_sim.png)
+![Image 28](../../../_media/chroma-context-rot-appendix-pg_arxiv_nq_sim.png)
 
 Needle-Question Similarity - PG essay haystack/arXiv needles
 
@@ -807,66 +807,66 @@ As mentioned in our Needle-Haystack Similarity results, we note this one occuran
 Impact of Distractors[#](https://research.trychroma.com/context-rot)
 --------------------------------------------------------------------
 
-![Image 29](../../../../_media/chroma-context-rot-appendix-distractors_num_arxiv.png)
+![Image 29](../../../_media/chroma-context-rot-appendix-distractors_num_arxiv.png)
 
 Impact of Distractors: Performance by Number of Distractors - arXiv haystack/arXiv needles
 
-![Image 30](../../../../_media/chroma-context-rot-appendix-distractors_ind_arxiv.png)
+![Image 30](../../../_media/chroma-context-rot-appendix-distractors_ind_arxiv.png)
 
 Impact of Distractors: Performance by Individual Distractors - arXiv haystack/arXiv needles
 
-![Image 31](../../../../_media/chroma-context-rot-appendix-distractors_num_pg.png)
+![Image 31](../../../_media/chroma-context-rot-appendix-distractors_num_pg.png)
 
 Impact of Distractors: Performance by Number of Distractors - PG essay haystack/PG essay needles
 
-![Image 32](../../../../_media/chroma-context-rot-appendix-distractors_ind_pg.png)
+![Image 32](../../../_media/chroma-context-rot-appendix-distractors_ind_pg.png)
 
 Impact of Distractors: Performance by Individual Distractors - PG essay haystack/PG essay needles
 
-![Image 33](../../../../_media/chroma-context-rot-appendix-distractors_num_pg_arxiv.png)
+![Image 33](../../../_media/chroma-context-rot-appendix-distractors_num_pg_arxiv.png)
 
 Impact of Distractors: Performance by Number of Distractors - PG essay haystack/arXiv needles
 
-![Image 34](../../../../_media/chroma-context-rot-appendix-distractors_ind_pg_arxiv.png)
+![Image 34](../../../_media/chroma-context-rot-appendix-distractors_ind_pg_arxiv.png)
 
 Impact of Distractors: Performance by Individual Distractors - PG essay haystack/arXiv needles
 
-![Image 35](../../../../_media/chroma-context-rot-appendix-failures_arxiv.png)
+![Image 35](../../../_media/chroma-context-rot-appendix-failures_arxiv.png)
 
 Impact of Distractors: Failure Analysis - arXiv haystack/arXiv needles
 
-![Image 36](../../../../_media/chroma-context-rot-appendix-failures_writing.png)
+![Image 36](../../../_media/chroma-context-rot-appendix-failures_writing.png)
 
 Impact of Distractors: Failure Analysis - PG essay haystack/PG essay needles
 
-![Image 37](../../../../_media/chroma-context-rot-appendix-failures_writing_arxiv.png)
+![Image 37](../../../_media/chroma-context-rot-appendix-failures_writing_arxiv.png)
 
 Impact of Distractors: Failure Analysis - PG essay haystack/arXiv needles
 
 Repeated Words[#](https://research.trychroma.com/context-rot)
 -------------------------------------------------------------
 
-![Image 38](../../../../_media/chroma-context-rot-appendix-gpt_position_accuracy.png)
+![Image 38](../../../_media/chroma-context-rot-appendix-gpt_position_accuracy.png)
 
 Repeated Words: Position Accuracy - GPT Family
 
-![Image 39](../../../../_media/chroma-context-rot-appendix-gemini_position_accuracy.png)
+![Image 39](../../../_media/chroma-context-rot-appendix-gemini_position_accuracy.png)
 
 Repeated Words: Position Accuracy - Gemini Family
 
-![Image 40](../../../../_media/chroma-context-rot-appendix-qwen_position_accuracy.png)
+![Image 40](../../../_media/chroma-context-rot-appendix-qwen_position_accuracy.png)
 
 Repeated Words: Position Accuracy - Qwen Family
 
-![Image 41](../../../../_media/chroma-context-rot-appendix-wc_gpt.png)
+![Image 41](../../../_media/chroma-context-rot-appendix-wc_gpt.png)
 
 Repeated Words: Word Count Difference - GPT Family
 
-![Image 42](../../../../_media/chroma-context-rot-appendix-wc_gemini.png)
+![Image 42](../../../_media/chroma-context-rot-appendix-wc_gemini.png)
 
 Repeated Words: Word Count Difference - Gemini Family
 
-![Image 43](../../../../_media/chroma-context-rot-appendix-wc_qwen.png)
+![Image 43](../../../_media/chroma-context-rot-appendix-wc_qwen.png)
 
 Repeated Words: Word Count Difference - Qwen Family
 
@@ -876,62 +876,62 @@ Local copies of all figures from the [Chroma Context Rot research page](https://
 
 ### Main
 
-- ![Card](../../../../_media/chroma-context-rot-card.png) (838 KB)
-- ![Header Plot](../../../../_media/chroma-context-rot-header_plot.png) (1042 KB)
-- ![Hero Plot](../../../../_media/chroma-context-rot-hero_plot.png) (100 KB)
-- ![Niah Lexical](../../../../_media/chroma-context-rot-niah_lexical.png) (136 KB)
-- ![Video Thumbnail](../../../../_media/chroma-context-rot-video_thumbnail.jpeg) (50 KB)
+- ![Card](../../../_media/chroma-context-rot-card.png) (838 KB)
+- ![Header Plot](../../../_media/chroma-context-rot-header_plot.png) (1042 KB)
+- ![Hero Plot](../../../_media/chroma-context-rot-hero_plot.png) (100 KB)
+- ![Niah Lexical](../../../_media/chroma-context-rot-niah_lexical.png) (136 KB)
+- ![Video Thumbnail](../../../_media/chroma-context-rot-video_thumbnail.jpeg) (50 KB)
 
 ### NIAH (Needle in a Haystack)
 
-- ![Niah Distractor Irrelevance](../../../../_media/chroma-context-rot-niah-distractor_irrelevance.png) (215 KB)
-- ![Niah Distractors Ind](../../../../_media/chroma-context-rot-niah-distractors_ind.png) (552 KB)
-- ![Niah Distractors Num](../../../../_media/chroma-context-rot-niah-distractors_num.png) (471 KB)
-- ![Niah Distractors Var](../../../../_media/chroma-context-rot-niah-distractors_var.png) (112 KB)
-- ![Niah Hallucinations](../../../../_media/chroma-context-rot-niah-hallucinations.png) (1351 KB)
-- ![Niah Lexical 2](../../../../_media/chroma-context-rot-niah-lexical_2.png) (113 KB)
-- ![Niah Needle Haystack](../../../../_media/chroma-context-rot-niah-needle_haystack.png) (221 KB)
-- ![Niah Needle Haystack 2](../../../../_media/chroma-context-rot-niah-needle_haystack_2.png) (246 KB)
-- ![Niah Nh2](../../../../_media/chroma-context-rot-niah-nh2.png) (214 KB)
-- ![Niah Structure 2](../../../../_media/chroma-context-rot-niah-structure_2.png) (498 KB)
+- ![Niah Distractor Irrelevance](../../../_media/chroma-context-rot-niah-distractor_irrelevance.png) (215 KB)
+- ![Niah Distractors Ind](../../../_media/chroma-context-rot-niah-distractors_ind.png) (552 KB)
+- ![Niah Distractors Num](../../../_media/chroma-context-rot-niah-distractors_num.png) (471 KB)
+- ![Niah Distractors Var](../../../_media/chroma-context-rot-niah-distractors_var.png) (112 KB)
+- ![Niah Hallucinations](../../../_media/chroma-context-rot-niah-hallucinations.png) (1351 KB)
+- ![Niah Lexical 2](../../../_media/chroma-context-rot-niah-lexical_2.png) (113 KB)
+- ![Niah Needle Haystack](../../../_media/chroma-context-rot-niah-needle_haystack.png) (221 KB)
+- ![Niah Needle Haystack 2](../../../_media/chroma-context-rot-niah-needle_haystack_2.png) (246 KB)
+- ![Niah Nh2](../../../_media/chroma-context-rot-niah-nh2.png) (214 KB)
+- ![Niah Structure 2](../../../_media/chroma-context-rot-niah-structure_2.png) (498 KB)
 
 ### Repeated Words
 
-- ![Repeated Words Claude Line Plot](../../../../_media/chroma-context-rot-repeated_words-claude_line_plot.png) (93 KB)
-- ![Repeated Words Claude Num Words](../../../../_media/chroma-context-rot-repeated_words-claude_num_words.png) (1994 KB)
-- ![Repeated Words Claude Position Accuracy](../../../../_media/chroma-context-rot-repeated_words-claude_position_accuracy.png) (1039 KB)
-- ![Repeated Words Gemini Line Plot](../../../../_media/chroma-context-rot-repeated_words-gemini_line_plot.png) (93 KB)
-- ![Repeated Words Gpt 4 Turbo](../../../../_media/chroma-context-rot-repeated_words-gpt_4_turbo.png) (362 KB)
-- ![Repeated Words Gpt Line Plot](../../../../_media/chroma-context-rot-repeated_words-gpt_line_plot.png) (115 KB)
-- ![Repeated Words Qwen Line Plot](../../../../_media/chroma-context-rot-repeated_words-qwen_line_plot.png) (87 KB)
+- ![Repeated Words Claude Line Plot](../../../_media/chroma-context-rot-repeated_words-claude_line_plot.png) (93 KB)
+- ![Repeated Words Claude Num Words](../../../_media/chroma-context-rot-repeated_words-claude_num_words.png) (1994 KB)
+- ![Repeated Words Claude Position Accuracy](../../../_media/chroma-context-rot-repeated_words-claude_position_accuracy.png) (1039 KB)
+- ![Repeated Words Gemini Line Plot](../../../_media/chroma-context-rot-repeated_words-gemini_line_plot.png) (93 KB)
+- ![Repeated Words Gpt 4 Turbo](../../../_media/chroma-context-rot-repeated_words-gpt_4_turbo.png) (362 KB)
+- ![Repeated Words Gpt Line Plot](../../../_media/chroma-context-rot-repeated_words-gpt_line_plot.png) (115 KB)
+- ![Repeated Words Qwen Line Plot](../../../_media/chroma-context-rot-repeated_words-qwen_line_plot.png) (87 KB)
 
 ### LongMemEval
 
-- ![Longmemeval Claude](../../../../_media/chroma-context-rot-longmemeval-claude.png) (49 KB)
-- ![Longmemeval Claude Comparison](../../../../_media/chroma-context-rot-longmemeval-claude_comparison.png) (144 KB)
-- ![Longmemeval Ex](../../../../_media/chroma-context-rot-longmemeval-ex.png) (208 KB)
-- ![Longmemeval Gemini](../../../../_media/chroma-context-rot-longmemeval-gemini.png) (45 KB)
-- ![Longmemeval Gpt](../../../../_media/chroma-context-rot-longmemeval-gpt.png) (45 KB)
-- ![Longmemeval Needle Question Sim Arxiv](../../../../_media/chroma-context-rot-longmemeval-needle_question_sim_arxiv.png) (419 KB)
-- ![Longmemeval Qwen](../../../../_media/chroma-context-rot-longmemeval-qwen.png) (48 KB)
+- ![Longmemeval Claude](../../../_media/chroma-context-rot-longmemeval-claude.png) (49 KB)
+- ![Longmemeval Claude Comparison](../../../_media/chroma-context-rot-longmemeval-claude_comparison.png) (144 KB)
+- ![Longmemeval Ex](../../../_media/chroma-context-rot-longmemeval-ex.png) (208 KB)
+- ![Longmemeval Gemini](../../../_media/chroma-context-rot-longmemeval-gemini.png) (45 KB)
+- ![Longmemeval Gpt](../../../_media/chroma-context-rot-longmemeval-gpt.png) (45 KB)
+- ![Longmemeval Needle Question Sim Arxiv](../../../_media/chroma-context-rot-longmemeval-needle_question_sim_arxiv.png) (419 KB)
+- ![Longmemeval Qwen](../../../_media/chroma-context-rot-longmemeval-qwen.png) (48 KB)
 
 ### Appendix
 
-- ![Appendix Arxiv Pg Nq Sim](../../../../_media/chroma-context-rot-appendix-arxiv_pg_nq_sim.png) (330 KB)
-- ![Appendix Distractors Ind Arxiv](../../../../_media/chroma-context-rot-appendix-distractors_ind_arxiv.png) (518 KB)
-- ![Appendix Distractors Ind Pg](../../../../_media/chroma-context-rot-appendix-distractors_ind_pg.png) (530 KB)
-- ![Appendix Distractors Ind Pg Arxiv](../../../../_media/chroma-context-rot-appendix-distractors_ind_pg_arxiv.png) (385 KB)
-- ![Appendix Distractors Num Arxiv](../../../../_media/chroma-context-rot-appendix-distractors_num_arxiv.png) (479 KB)
-- ![Appendix Distractors Num Pg](../../../../_media/chroma-context-rot-appendix-distractors_num_pg.png) (446 KB)
-- ![Appendix Distractors Num Pg Arxiv](../../../../_media/chroma-context-rot-appendix-distractors_num_pg_arxiv.png) (360 KB)
-- ![Appendix Failures Arxiv](../../../../_media/chroma-context-rot-appendix-failures_arxiv.png) (1347 KB)
-- ![Appendix Failures Writing](../../../../_media/chroma-context-rot-appendix-failures_writing.png) (1349 KB)
-- ![Appendix Failures Writing Arxiv](../../../../_media/chroma-context-rot-appendix-failures_writing_arxiv.png) (1283 KB)
-- ![Appendix Gemini Position Accuracy](../../../../_media/chroma-context-rot-appendix-gemini_position_accuracy.png) (592 KB)
-- ![Appendix Gpt Position Accuracy](../../../../_media/chroma-context-rot-appendix-gpt_position_accuracy.png) (1124 KB)
-- ![Appendix Pg Arxiv Nq Sim](../../../../_media/chroma-context-rot-appendix-pg_arxiv_nq_sim.png) (286 KB)
-- ![Appendix Pg Pg Nq Sim](../../../../_media/chroma-context-rot-appendix-pg_pg_nq_sim.png) (320 KB)
-- ![Appendix Qwen Position Accuracy](../../../../_media/chroma-context-rot-appendix-qwen_position_accuracy.png) (437 KB)
-- ![Appendix Wc Gemini](../../../../_media/chroma-context-rot-appendix-wc_gemini.png) (1426 KB)
-- ![Appendix Wc Gpt](../../../../_media/chroma-context-rot-appendix-wc_gpt.png) (2747 KB)
-- ![Appendix Wc Qwen](../../../../_media/chroma-context-rot-appendix-wc_qwen.png) (1307 KB)
+- ![Appendix Arxiv Pg Nq Sim](../../../_media/chroma-context-rot-appendix-arxiv_pg_nq_sim.png) (330 KB)
+- ![Appendix Distractors Ind Arxiv](../../../_media/chroma-context-rot-appendix-distractors_ind_arxiv.png) (518 KB)
+- ![Appendix Distractors Ind Pg](../../../_media/chroma-context-rot-appendix-distractors_ind_pg.png) (530 KB)
+- ![Appendix Distractors Ind Pg Arxiv](../../../_media/chroma-context-rot-appendix-distractors_ind_pg_arxiv.png) (385 KB)
+- ![Appendix Distractors Num Arxiv](../../../_media/chroma-context-rot-appendix-distractors_num_arxiv.png) (479 KB)
+- ![Appendix Distractors Num Pg](../../../_media/chroma-context-rot-appendix-distractors_num_pg.png) (446 KB)
+- ![Appendix Distractors Num Pg Arxiv](../../../_media/chroma-context-rot-appendix-distractors_num_pg_arxiv.png) (360 KB)
+- ![Appendix Failures Arxiv](../../../_media/chroma-context-rot-appendix-failures_arxiv.png) (1347 KB)
+- ![Appendix Failures Writing](../../../_media/chroma-context-rot-appendix-failures_writing.png) (1349 KB)
+- ![Appendix Failures Writing Arxiv](../../../_media/chroma-context-rot-appendix-failures_writing_arxiv.png) (1283 KB)
+- ![Appendix Gemini Position Accuracy](../../../_media/chroma-context-rot-appendix-gemini_position_accuracy.png) (592 KB)
+- ![Appendix Gpt Position Accuracy](../../../_media/chroma-context-rot-appendix-gpt_position_accuracy.png) (1124 KB)
+- ![Appendix Pg Arxiv Nq Sim](../../../_media/chroma-context-rot-appendix-pg_arxiv_nq_sim.png) (286 KB)
+- ![Appendix Pg Pg Nq Sim](../../../_media/chroma-context-rot-appendix-pg_pg_nq_sim.png) (320 KB)
+- ![Appendix Qwen Position Accuracy](../../../_media/chroma-context-rot-appendix-qwen_position_accuracy.png) (437 KB)
+- ![Appendix Wc Gemini](../../../_media/chroma-context-rot-appendix-wc_gemini.png) (1426 KB)
+- ![Appendix Wc Gpt](../../../_media/chroma-context-rot-appendix-wc_gpt.png) (2747 KB)
+- ![Appendix Wc Qwen](../../../_media/chroma-context-rot-appendix-wc_qwen.png) (1307 KB)

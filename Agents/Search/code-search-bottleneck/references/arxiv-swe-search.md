@@ -244,37 +244,37 @@ Have an idea for a project that will add value for arXiv's community? [**Learn m
 ## Figures
 
 ### Figure 1: SWE-Search Overview
-![Figure 1](../../../../_media/swe-search-fig1.png)
+![Figure 1](../../../_media/swe-search-fig1.png)
 *SWE-Search Overview. Tree search where each state is a node and each action is an edge, with value-based evaluation.*
 
 ### Figure 2: Hindsight Feedback Error Correction
-![Figure 2](../../../../_media/swe-search-fig2.png)
+![Figure 2](../../../_media/swe-search-fig2.png)
 *Hindsight feedback error correction. The agent initially performs edits and runs tests which pass, but prematurely finishes. The value function identifies the error.*
 
 ### Figure 3: SWE-bench Results
-![Figure 3](../../../../_media/swe-search-fig3.png)
+![Figure 3](../../../_media/swe-search-fig3.png)
 *SWE-bench SWE-Search results.*
 
 ### Figure 4: State-Specific Value Prompts
-![Figure 4](../../../../_media/swe-search-fig4.png)
+![Figure 4](../../../_media/swe-search-fig4.png)
 *Importance of state-specific value prompts. Comparison of value agents' outputs with and without state-specific prompts.*
 
 ### Figure 5: Value Function vs Discriminator
-![Figure 5](../../../../_media/swe-search-fig5.png)
+![Figure 5](../../../_media/swe-search-fig5.png)
 *Value Function vs. Discriminator Comparison. Comparison of value function vs. discriminator ability to identify the final solution.*
 
 ### Figure 6: Avoiding Repetitive Actions
-![Figure 6](../../../../_media/swe-search-fig6.png)
+![Figure 6](../../../_media/swe-search-fig6.png)
 *Avoiding Repetitive Actions. The base agent can get stuck performing repetitive actions; the tree search helps escape these loops.*
 
 ### Figure 7: Unique Issue Resolution Patterns
-![Figure 7](../../../../_media/swe-search-fig7.png)
+![Figure 7](../../../_media/swe-search-fig7.png)
 *Unique Issue Resolution Patterns Across Models and Libraries. Different models resolve different issues.*
 
 ### Figure 8: Average State Reward Comparison
-![Figure 8](../../../../_media/swe-search-fig8.png)
+![Figure 8](../../../_media/swe-search-fig8.png)
 *Average State Reward Comparison Across Models for resolved (green) and unresolved (red) issues.*
 
 ### Figure 9: Additional Analysis
-![Figure 9](../../../../_media/swe-search-fig9.png)
+![Figure 9](../../../_media/swe-search-fig9.png)
 *Additional analysis from the paper.*

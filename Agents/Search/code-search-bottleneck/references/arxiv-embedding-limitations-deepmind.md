@@ -453,29 +453,29 @@ Table 7: BEIR vs LIMIT results. See Figure[7](https://arxiv.org/html/2508.21038v
 ## Figures
 
 ### Figure 1: LIMIT Dataset Creation Process
-![Figure 1](../../../../_media/embedding-limitations-fig1.png)
+![Figure 1](../../../_media/embedding-limitations-fig1.png)
 *A depiction of the LIMIT dataset creation process, based on theoretical limitations. Tests all combinations of relevance for N documents.*
 
 ### Figure 2: Critical-n Values
-![Figure 2](../../../../_media/embedding-limitations-fig2.png)
+![Figure 2](../../../_media/embedding-limitations-fig2.png)
 *The critical-n value where the dimensionality is too small to successfully represent all the top-2 combinations. Trend line as a polynomial function.*
 
 ### Figure 3: LIMIT Task Scores
-![Figure 3](../../../../_media/embedding-limitations-fig3.png)
+![Figure 3](../../../_media/embedding-limitations-fig3.png)
 *Scores on the LIMIT task. SOTA models struggle despite task simplicity. Dimensionality is a limiting factor.*
 
 ### Figure 4: LIMIT Small Task Results
-![Figure 4](../../../../_media/embedding-limitations-fig4.png)
+![Figure 4](../../../_media/embedding-limitations-fig4.png)
 *Scores on the LIMIT small task (N=46). Models struggle even with recall@10 and cannot solve the task even with recall@20 despite having just 46 documents.*
 
 ### Figure 5: Fine-Tuning Results
-![Figure 5](../../../../_media/embedding-limitations-fig5.png)
+![Figure 5](../../../_media/embedding-limitations-fig5.png)
 *Training on LIMIT train does not significantly help, indicating the issue is not domain shift. But models can solve it if they overfit to the test set.*
 
 ### Figure 6: Different Qrel Patterns
-![Figure 6](../../../../_media/embedding-limitations-fig6.png)
+![Figure 6](../../../_media/embedding-limitations-fig6.png)
 *Model results from LIMIT datasets created with different qrel patterns. The dense pattern is significantly harder.*
 
 ### Figure 7: BEIR vs LIMIT Correlation
-![Figure 7](../../../../_media/embedding-limitations-fig7.png)
+![Figure 7](../../../_media/embedding-limitations-fig7.png)
 *No obvious correlation between BEIR vs LIMIT. Standard benchmarks don't predict embedding limitations.*

@@ -274,21 +274,21 @@ References
 ## Figures
 
 ### Figure 1a: Resolved Issues Venn Diagram (SWE-bench Lite)
-![Figure 1a](../../../../_media/agent-trajectories-fig1-lite-venn.png)
+![Figure 1a](../../../_media/agent-trajectories-fig1-lite-venn.png)
 *Resolved issues overlap across agents on SWE-bench Lite. Different agents solve different subsets.*
 
 ### Figure 1b: Resolved Issues Venn Diagram (SWE-bench Verified)
-![Figure 1b](../../../../_media/agent-trajectories-fig2-verified-venn.png)
+![Figure 1b](../../../_media/agent-trajectories-fig2-verified-venn.png)
 *Resolved issues overlap across agents on SWE-bench Verified.*
 
 ### Figure 2: Trajectory Step Counts (SWE-bench Lite)
-![Figure 2](../../../../_media/agent-trajectories-fig3-violin-lite.png)
+![Figure 2](../../../_media/agent-trajectories-fig3-violin-lite.png)
 *Violin plots of trajectory step counts in SWE-bench Lite, comparing successful and failed trajectories.*
 
 ### Figure 3: Trajectory Step Counts (SWE-bench Verified)
-![Figure 3](../../../../_media/agent-trajectories-fig4-violin-verified.png)
+![Figure 3](../../../_media/agent-trajectories-fig4-violin-verified.png)
 *Violin plots of trajectory step counts in SWE-bench Verified.*
 
 ### Figure 4: Fault Localization Combination Outcomes
-![Figure 4](../../../../_media/agent-trajectories-fig5-faultloc.png)
+![Figure 4](../../../_media/agent-trajectories-fig5-faultloc.png)
 *Proportion of fault localization combination outcomes across file, function, and hunk levels.*
