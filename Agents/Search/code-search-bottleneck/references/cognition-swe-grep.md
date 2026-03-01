@@ -27,6 +27,8 @@ Context retrieval has been historically done in 2 ways:
 
 This **speed-intelligence tradeoff** seemed inescapable — until we trained **SWE-grep** and **SWE-grep-mini:** models which match the retrieval capabilities of frontier coding models, while taking an order of magnitude less time. These models now power **Fast Context**, a subagent that helps you stay in flow.
 
+![Context Retrieval Capability vs Speed — SWE-grep dominates the Pareto frontier](../../../../_media/cognition-swe-grep-00-og-social-preview.png)
+
 ![Fast Context speed comparison](../../../../_media/cognition-swe-grep-01-fast-context-speed-comparison.png)
 
 [Where to try Fast Context](https://cognition.ai/blog/swe-grep#where-to-try-fast-context)

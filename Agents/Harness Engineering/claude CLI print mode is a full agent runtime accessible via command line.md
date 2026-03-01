@@ -11,7 +11,9 @@ The core insight is that `claude -p` (print mode) isn't just a convenience flag 
 *The state machine: `claude -p` branches into input-format and output-format, each with distinct modes*
 ![[dhasandev-555506-002.png]]
 
-The article was written in response to Anthropic locking down Claude Code's oauth tokens to prevent third-party apps from piggybacking on subscriptions. Tools like OpenCode and OpenClaw got hit with "This credential is only authorized for use with Claude Code" errors. The workaround: wrap the CLI itself instead of using the token directly. This is a pragmatic solution but also reveals print mode's power as an interface.
+The article was written in response to Anthropic locking down Claude Code's oauth tokens to prevent third-party apps from piggybacking on subscriptions. Tools like OpenCode and OpenClaw got hit with the credential restriction error:
+
+![[dhasandev-555506-001.jpg]] The workaround: wrap the CLI itself instead of using the token directly. This is a pragmatic solution but also reveals print mode's power as an interface.
 
 *Input/output format compatibility matrix — stream-json input requires stream-json output*
 ![[dhasandev-555506-003.jpg]]
