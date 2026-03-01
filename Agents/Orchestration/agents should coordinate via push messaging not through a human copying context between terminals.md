@@ -14,6 +14,8 @@ Cross-provider support is the other big differentiator. You can spawn a Claude a
 
 The SDK is minimal — `npm install @agent-relay/sdk`, spawn agents with `relay.claude.spawn()` or `relay.codex.spawn()`, put them on named channels, and let them go. You can observe and interject but don't have to be the runtime. Currently supports Claude and Codex CLIs.
 
+See also: [[resources/Agent Relay|Agent Relay]] resource note.
+
 ## External Resources
 
 - [Agent Relay GitHub](https://github.com/AgentWorkforce/relay) — open source, Apache-2.0
