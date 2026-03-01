@@ -4,6 +4,7 @@ source: https://github.com/peteromallet/desloppify
 type: resource
 tags: [code-quality, agent-harness, tree-sitter, static-analysis, linting, refactoring]
 status: unread
+description: Agent harness that combines mechanical detection and LLM-powered subjective review to systematically improve codebase quality with anti-gaming scoring.
 ---
 
 ## What it is
