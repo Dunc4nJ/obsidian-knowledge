@@ -13,3 +13,4 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[claude CLI print mode is a full agent runtime accessible via command line]]
 - [[designing agent tools is an iterative art shaped by model capabilities not fixed engineering rules]]
 - [[harness engineering improved a coding agent 13 points by changing only system prompts tools and middleware]]
+- [[letting the LLM critique its own tool APIs produces faster optimization than manual log analysis]]
