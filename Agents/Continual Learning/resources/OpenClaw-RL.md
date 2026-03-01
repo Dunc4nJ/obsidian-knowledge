@@ -1,6 +1,8 @@
 ---
 created: 2026-02-27
 source: https://github.com/Gen-Verse/OpenClaw-RL
+description: Fully asynchronous RL framework that turns live conversations into personalized training signals
+description: Fully asynchronous RL framework that turns live conversations into personalized training signals
 type: resource
 tags: [reinforcement-learning, personalization, continual-learning, self-hosted]
 status: unread

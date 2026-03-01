@@ -1,6 +1,8 @@
 ---
 created: 2026-02-27
 source: https://github.com/steipete/mcporter
+description: TypeScript toolkit that auto-discovers MCP servers and generates typed clients and CLIs
+description: TypeScript toolkit that auto-discovers MCP servers and generates typed clients and CLIs
 type: resource
 tags: [mcp, typescript, cli, code-generation]
 status: unread

@@ -1,6 +1,8 @@
 ---
 created: 2026-02-27
 source: https://github.com/HKUDS/FastCode
+description: Token-efficient code understanding framework using structural graphs and signature-level navigation
+description: Token-efficient code understanding framework using structural graphs and signature-level navigation
 type: resource
 tags: [code-understanding, token-efficiency, mcp, graph-navigation]
 status: unread

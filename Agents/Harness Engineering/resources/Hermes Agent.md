@@ -1,6 +1,8 @@
 ---
 created: 2026-02-27
 source: https://github.com/NousResearch/hermes-agent
+description: Open-source persistent agent runtime by Nous Research with multi-platform messaging and skill system
+description: Open-source persistent agent runtime by Nous Research with multi-platform messaging and skill system
 type: resource
 tags: [agent-harness, persistent-agent, open-source, nous-research]
 status: unread

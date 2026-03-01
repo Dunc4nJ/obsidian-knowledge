@@ -1,6 +1,8 @@
 ---
 created: 2026-02-27
 source: https://github.com/openclaw/lobster
+description: OpenClaw-native typed workflow shell with JSON pipelines, approval gates, and composable macros
+description: OpenClaw-native typed workflow shell with JSON pipelines, approval gates, and composable macros
 type: resource
 tags: [openclaw, workflows, pipelines, automation]
 status: unread

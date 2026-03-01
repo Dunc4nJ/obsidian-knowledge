@@ -1,6 +1,8 @@
 ---
 created: 2026-02-28
 source: https://github.com/ForLoopCodes/contextplus
+description: MCP server combining tree-sitter AST, spectral clustering, and semantic embeddings for codebase search
+description: MCP server combining tree-sitter AST, spectral clustering, and semantic embeddings for codebase search
 type: resource
 tags: [code-search, mcp, tree-sitter, spectral-clustering, semantic-search, ast]
 status: unread

@@ -1,6 +1,7 @@
 ---
 created: 2026-03-01
 source: https://github.com/alibaba/OpenSandbox
+description: General-purpose sandbox platform from Alibaba with multi-language SDKs and Docker/K8s runtimes
 type: resource
 tags: [sandboxing, agent-infrastructure, code-execution, alibaba]
 status: unread

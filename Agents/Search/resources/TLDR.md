@@ -1,6 +1,8 @@
 ---
 created: 2026-02-28
 source: https://github.com/parcadei/llm-tldr
+description: Python CLI building 5-layer static analysis index for token-efficient LLM code queries
+description: Python CLI building 5-layer static analysis index for token-efficient LLM code queries
 type: resource
 tags: [code-search, context-window, static-analysis, semantic-search, tree-sitter]
 status: unread
