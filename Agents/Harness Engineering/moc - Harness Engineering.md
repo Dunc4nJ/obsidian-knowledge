@@ -27,6 +27,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[Factory Droid achieves state-of-the-art on Terminal-Bench through agent design not model choice]]
 - [[Factory droid-action wraps agent execution into a GitHub Actions contract with structured inputs MCP tools and STRIDE security skills]]
 - [[Factory positions Droid as an agent-native platform spanning CLI web Slack Linear and mobile with a community-driven plugin ecosystem]]
+- [[Factory treats context as a scarce resource that must be budgeted and curated across layered scaffolding]]
 
 ## Context Engineering Strategies
 
