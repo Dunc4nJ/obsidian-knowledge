@@ -177,6 +177,7 @@ Prediction market arbitrage, quantitative trading, and market microstructure.
 - [[polymarket copy trading exploits on-chain transparency to follow proven whale wallets]] — complete copy trading system: whale wallet scoring, topic-based baskets, Kelly sizing, and 1.2s latency pipeline
 - [[fractional kelly turns 5-minute polymarket bitcoin markets from gambling into a system]] — fractional Kelly (k=0.25) applied to 5-minute BTC markets: discipline over emotion, practical sizing, and drawdown control
 - [[quant desk simulation requires eight layers from Monte Carlo through copulas and agent-based models]] — complete simulation stack: Monte Carlo, importance sampling, particle filters, variance reduction, copula dependency modeling, agent-based simulation, and a five-layer production architecture
+- [[MIT quantitative finance maps directly onto prediction market trading through eight mathematical phases]] — MIT Financial Mathematics course decoded for Polymarket: linear algebra, probability, stochastic processes, regression, VaR, GARCH, portfolio theory, and factor models
 
 ## LLMs
 

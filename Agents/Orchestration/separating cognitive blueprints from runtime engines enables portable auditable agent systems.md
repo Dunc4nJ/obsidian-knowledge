@@ -15,7 +15,7 @@ arxiv: "2602.23720"
 
 ## Abstract
 
-The field of Artificial Intelligence is undergoing a transition from Generative AI—probabilistic generation of text and images—to Agentic AI, in which autonomous systems execute actions within external environments on behalf of users. This transition exposes a fundamental architectural mismatch: Large Language Models (LLMs) produce stochastic, unstructured outputs, whereas the backend infrastructure they must control—databases, APIs, cloud services—requires deterministic, schema-conformant inputs. The present paper describes the Auton Agentic AI Framework, a principled architecture for standardizing the creation, execution, and governance of autonomous agent systems. The framework is organized around a strict separation between the Cognitive Blueprint, a declarative, language-agnostic specification of agent identity and capabilities, and the Runtime Engine, the platform-specific execution substrate that instantiates and runs the agent.
+The field of Artificial Intelligence is undergoing a transition from Generative AI — probabilistic generation of text and images — to Agentic AI, in which autonomous systems execute actions within external environments on behalf of users. This transition exposes a fundamental architectural mismatch: Large Language Models (LLMs) produce stochastic, unstructured outputs, whereas the backend infrastructure they must control — databases, APIs, cloud services — requires deterministic, schema-conformant inputs. The present paper describes the Auton Agentic AI Framework, a principled architecture for standardizing the creation, execution, and governance of autonomous agent systems. The framework is organized around a strict separation between the Cognitive Blueprint, a declarative, language-agnostic specification of agent identity and capabilities, and the Runtime Engine, the platform-specific execution substrate that instantiates and runs the agent.
 
 ## Key Takeaways
 
@@ -25,38 +25,35 @@ The "Integration Paradox" framing — LLMs produce probabilistic text but downst
 
 Tool integration adopts MCP as the standard wire protocol, with a clean division: MCP defines *how* agents connect to tools, AgenticFormat defines *who* uses them and with what permissions. This composability means swapping a Salesforce CRM connector for HubSpot requires changing one line in the blueprint, not rewriting agent logic. The approach aligns with [[code-execution-with-mcp-cuts-tool-token-overhead-98-percent by presenting servers as filesystem APIs instead of upfront definitions]] and the broader [[MCP Best Practices]] emerging in the ecosystem — treat tool connectivity as a pluggable, standardized layer rather than bespoke glue code per integration.
 
-Safety enforcement via the Constraint Manifold is the most theoretically interesting contribution. Instead of post-hoc output filtering (generate-then-check), the framework projects the agent's policy onto a safe subspace *during* generation by masking logits of tokens that would produce unsafe action completions. Unsafe actions receive zero probability — they're never generated, not generated-and-caught. This is a fundamentally different safety posture: construction-time guarantees rather than detection-time hopes. The KKT-conditions formalism for token budget enforcement is elegant too — the shadow price of an additional token rises as the budget depletes, automatically shifting the reasoning policy from expansive exploration to terse directness.
+Safety enforcement via the Constraint Manifold is the most theoretically interesting contribution. Instead of post-hoc output filtering (generate-then-check), the framework projects the agent's policy onto a safe subspace *during* generation by masking logits of tokens that would produce unsafe action completions. Unsafe actions receive zero probability — they're never generated, not generated-and-caught. The formal projection $\pi_{\text{safe}}(a|s) = \pi_{\text{raw}}(a|s) \cdot \mathbb{I}[a \in \mathcal{C}] / Z$ re-normalizes the policy over the constraint manifold, preserving relative preferences among safe actions while eliminating unsafe ones by construction. The KKT-conditions formalism for token budget enforcement is elegant too — the shadow price λ* of an additional token rises as the budget depletes, automatically shifting the reasoning policy from expansive exploration to terse directness.
 
-The hierarchical memory architecture draws explicitly from neuroscience's hippocampal replay model. A Reflector Agent performs consolidation when sessions end: segmenting event streams into episodes, extracting high-utility insights, vectorizing them for retrieval, and compressing the active context. The three-tier long-term store (semantic, episodic, procedural) maps cleanly to the patterns explored in [[mem0-knowledge-graph]] — stable world facts, specific experience records indexed by embedding similarity, and compiled multi-step procedures that encode validated expertise. The information-theoretic framing — maximize mutual information between compressed memory and future tasks — gives a principled criterion for what to keep versus discard.
+The hierarchical memory architecture draws explicitly from neuroscience's hippocampal replay model. A Reflector Agent performs consolidation when sessions end: segmenting event streams into episodes, extracting high-utility insights, vectorizing them for retrieval, and compressing the active context. The three-tier long-term store (semantic, episodic, procedural) maps cleanly to the patterns explored in [[mem0-knowledge-graph]] — stable world facts, specific experience records indexed by embedding similarity, and compiled multi-step procedures that encode validated expertise. The information-theoretic framing — maximize mutual information $I(m; \text{future\_task})$ between compressed memory and future tasks — gives a principled criterion for what to keep versus discard.
 
-The three-level self-evolution framework (in-context lessons, STaR-based fine-tuning on successful trajectories, and RL-based exploration via GRPO/PPO) creates a compounding improvement cycle where operational experience becomes training data. Level 1 is immediate and lightweight (store textual lessons in memory), Level 2 internalizes proven reasoning patterns into model weights, and Level 3 discovers genuinely novel strategies beyond the training distribution. The key insight is that each level generates data for the next, creating a flywheel from deployed agent experience to progressively specialized models.
-
-Runtime efficiency through "Cognitive Map-Reduce" — analyzing execution plans as DAGs and parallelizing independent steps — bounds latency to the critical path rather than the sum of all steps. Combined with speculative execution (predict tool outputs and compute ahead, commit or rollback when actuals arrive) and attention-guided context pruning (evict low-attention tokens from KV cache instead of FIFO), these optimizations address the practical reality that latency, not capability, is usually the binding constraint on agent utility in production.
+The three-level self-evolution framework (in-context learning → STaR fine-tuning → agentic RL) provides a concrete path from frozen agents to continuously improving systems. Each level feeds data to the next: Level 1 accumulates domain-specific lessons in memory, Level 2 distills successful reasoning traces into model weights via SFT, and Level 3 uses reinforcement learning to discover novel strategies beyond the training distribution. The compounding data accumulation loop means operational experience translates directly into progressively more capable behavior — the agent literally gets better at its specific enterprise tasks over time without manual prompt engineering.
 
 ## External Resources
 
-- [Auton Framework Paper](https://arxiv.org/abs/2602.23720) — the full paper on arXiv
-- [Model Context Protocol](https://www.anthropic.com/engineering/code-execution-with-mcp) — Anthropic's MCP reference, cited as the tool integration standard
-- [Open Agent Specification](https://arxiv.org/abs/2510.04173v3) — related work on standardizing agent definitions
-- [STaR: Self-Taught Reasoner](https://openreview.net/pdf?id=_3ELRdg2sgI) — the self-taught reasoning framework underlying Level 2 evolution
-- [DeepSeek-R1](https://arxiv.org/abs/2501.12948) — GRPO-based RL training referenced for Level 3 evolution
+- [arXiv Paper](https://arxiv.org/abs/2602.23720) — full text of "The Auton Agentic AI Framework"
+- [Open Agent Specification](https://arxiv.org/abs/2510.04173v3) — related work on framework-independent agent standards
+- [Anthropic: Code Execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp) — MCP efficiency patterns referenced in the paper
+- [ReAct: Synergizing Reasoning and Acting](https://arxiv.org/abs/2210.03629) — foundational work on the factorized policy architecture
+- [DeepSeek-R1](https://arxiv.org/abs/2501.12948) — GRPO method used in Level 3 agentic RL
 
 ## Original Content
 
+
 > [!quote]- Full Paper Text
-> # The Auton Agentic AI Framework
-> 
+> Title: The Auton Agentic AI Framework
 > A Declarative Architecture for Specification, Governance, and Runtime Execution of Autonomous Agent Systems
 > 
-> Sheng Cao Zhao Chang Chang Li Hannan Li Liyao Fu Ji Tang
-> 
+> Sheng Cao, Zhao Chang, Chang Li, Hannan Li, Liyao Fu, Ji Tang
 > {rcao, zchang, chang.li, hli5, lfu, jtang}@snapchat.com
 > 
-> #### Abstract
+> ## Abstract
 > 
 > The field of Artificial Intelligence is undergoing a transition from Generative AI—probabilistic generation of text and images—to Agentic AI, in which autonomous systems execute actions within external environments on behalf of users. This transition exposes a fundamental architectural mismatch: Large Language Models (LLMs) produce stochastic, unstructured outputs, whereas the backend infrastructure they must control—databases, APIs, cloud services—requires deterministic, schema-conformant inputs. The present paper describes the Auton Agentic AI Framework, a principled architecture for standardizing the creation, execution, and governance of autonomous agent systems. The framework is organized around a strict separation between the Cognitive Blueprint, a declarative, language-agnostic specification of agent identity and capabilities, and the Runtime Engine, the platform-specific execution substrate that instantiates and runs the agent. This separation enables cross-language portability, formal auditability, and modular tool integration via the Model Context Protocol (MCP). The paper formalizes the agent execution model as an augmented Partially Observable Markov Decision Process (POMDP) with a latent reasoning space, introduces a hierarchical memory consolidation architecture inspired by biological episodic memory systems, defines a constraint manifold formalism for safety enforcement via policy projection rather than post-hoc filtering, presents a three-level self-evolution framework spanning in-context adaptation through reinforcement learning, and describes runtime optimizations—including parallel graph execution, speculative inference, and dynamic context pruning—that reduce end-to-end latency for multi-step agent workflows.
 > 
-> ### 1 Introduction
+> ## 1 Introduction
 > 
 > Large Language Models (LLMs) operate as stochastic inference engines: given an input token sequence, they produce a probability distribution over the next token and sample from it autoregressively [1]. In their default configuration, LLMs lack persistent memory across sessions, provide no deterministic execution guarantees, and impose no structural constraints on multi-step workflows. While these models exhibit facility with natural language, semantic fluency alone does not ensure syntactic or schema compliance in generated outputs. Enterprise deployment demands systems that produce syntactically valid outputs adhering to safety schemas and business logic [2].
 > 
@@ -68,23 +65,21 @@ Runtime efficiency through "Cognitive Map-Reduce" — analyzing execution plans 
 > 
 > The framework is organized around four principal architectural pillars, each addressing a distinct challenge in the deployment of autonomous agent systems.
 > 
-> The AgenticFormat Standard. AgenticFormat is a language-agnostic, declarative schema that adopts a configuration-over-code philosophy for agent definition. The schema specifies an agent's interface, tool bindings, memory configuration, and safety constraints in a structured format (YAML or JSON). Because the definition is decoupled from any particular runtime, an agent specified in a Python development environment can be executed in a high-performance Java runtime without refactoring the agent specification itself.
+> **The AgenticFormat Standard.** AgenticFormat is a language-agnostic, declarative schema that adopts a configuration-over-code philosophy for agent definition. The schema specifies an agent's interface, tool bindings, memory configuration, and safety constraints in a structured format (YAML or JSON). Because the definition is decoupled from any particular runtime, an agent specified in a Python development environment can be executed in a high-performance Java runtime without refactoring the agent specification itself.
 > 
-> Deterministic Governance. Safety enforcement in the framework is not delegated to prompt engineering or post-hoc output filtering. Instead, the framework introduces a Constraint Manifold—a formally defined subspace of the action space onto which the agent's policy is projected prior to action emission. Policy constraints are expressed as code-level specifications, ensuring that privilege escalation and unsafe operations are excluded by construction rather than detected after the fact.
+> **Deterministic Governance.** Safety enforcement in the framework is not delegated to prompt engineering or post-hoc output filtering. Instead, the framework introduces a Constraint Manifold—a formally defined subspace of the action space onto which the agent's policy is projected prior to action emission. Policy constraints are expressed as code-level specifications, ensuring that privilege escalation and unsafe operations are excluded by construction rather than detected after the fact.
 > 
-> Cognitive Persistence. LLMs are stateless across sessions: when a session terminates or the context window is exhausted, all session-specific experience is lost. The framework addresses this limitation through a hierarchical memory architecture. A Reflector-Driven Consolidation Protocol, drawing on principles from biological memory consolidation, compresses raw event streams into semantic insights. These consolidated memories persist across sessions, enabling agents to incorporate experience from prior interactions without model retraining.
+> **Cognitive Persistence.** LLMs are stateless across sessions: when a session terminates or the context window is exhausted, all session-specific experience is lost. The framework addresses this limitation through a hierarchical memory architecture. A Reflector-Driven Consolidation Protocol, drawing on principles from biological memory consolidation, compresses raw event streams into semantic insights. These consolidated memories persist across sessions, enabling agents to incorporate experience from prior interactions without model retraining.
 > 
-> Agentic Efficiency. Latency constrains the utility of autonomous agents in interactive and real-time settings. The framework introduces runtime optimizations centered on Cognitive Map-Reduce: the runtime analyzes dependency graphs within agent execution plans and parallelizes independent reasoning and tool-invocation steps, bounding total execution time by the critical path length rather than the sum of all step latencies.
-> 
-> The remainder of this paper is structured as follows. Section 2 characterizes the Integration Paradox and the fragmentation of the current agent development ecosystem. Section 3 presents the AgenticFormat Standard and its design principles. Section 4 develops the formal agent execution model. Section 5 describes the cognitive memory architecture. Section 6 treats safety and governance via the constraint manifold formalism. Section 7 introduces the three-level self-evolution framework. Section 8 addresses runtime efficiency optimizations. Section 9 discusses strategic impact and the open-source roadmap. Section 10 concludes.
+> **Agentic Efficiency.** Latency constrains the utility of autonomous agents in interactive and real-time settings. The framework introduces runtime optimizations centered on Cognitive Map-Reduce: the runtime analyzes dependency graphs within agent execution plans and parallelizes independent reasoning and tool-invocation steps, bounding total execution time by the critical path length rather than the sum of all step latencies.
 > 
 > ## 2 The Integration Paradox and Ecosystem Fragmentation
 > 
 > ### 2.1 The Integration Paradox
 > 
-> The principal obstacle to enterprise adoption of Agentic AI is not model capability per se, but rather a structural mismatch between the output interfaces of LLMs and the input requirements of backend systems. LLMs are probabilistic generators: they produce unstructured or semi-structured text drafts, summaries, natural-language descriptions—with no formal guarantees on output format. The infrastructure these models must control—relational databases, RPC protocols, cloud APIs, message queues—is deterministic and schema-bound. A single syntax error, type mismatch, or schema violation in an agent-generated command can cause downstream failure. These systems do not accept ambiguous, malformed, or informally specified input.
+> The principal obstacle to enterprise adoption of Agentic AI is not model capability per se, but rather a structural mismatch between the output interfaces of LLMs and the input requirements of backend systems. LLMs are probabilistic generators: they produce unstructured or semi-structured text—drafts, summaries, natural-language descriptions—with no formal guarantees on output format. The infrastructure these models must control—relational databases, RPC protocols, cloud APIs, message queues—is deterministic and schema-bound. A single syntax error, type mismatch, or schema violation in an agent-generated command can cause downstream failure. These systems do not accept ambiguous, malformed, or informally specified input.
 > 
-> Consider an autonomous data analyst implemented atop an LLM. When tasked with querying a database, the model may emit a natural-language description of the intended SQL query, or it may produce a query that is semantically plausible but syntactically invalid for the target SQL dialect. The downstream database engine, however, requires a syntactically valid statement executed against a defined schema, authenticated with valid credentials, and subject to safety constraints such as readonly access or row-level security policies. Unstructured or invalid output is not consumable by the database engine and results in a hard failure.
+> Consider an autonomous data analyst implemented atop an LLM. When tasked with querying a database, the model may emit a natural-language description of the intended SQL query, or it may produce a query that is semantically plausible but syntactically invalid for the target SQL dialect. The downstream database engine, however, requires a syntactically valid statement executed against a defined schema, authenticated with valid credentials, and subject to safety constraints such as read-only access or row-level security policies. Unstructured or invalid output is not consumable by the database engine and results in a hard failure.
 > 
 > This gap forces developers to introduce layers of ad hoc glue code: regex-based output parsers, retry logic with backoff, format-specific validation layers, and type-coercion routines—all designed to bridge the divide between stochastic model output and the deterministic input contracts of downstream services. The resulting reliability ceiling limits the applicability of agents in mission-critical workflows, where even infrequent failures may be unacceptable.
 > 
@@ -93,7 +88,8 @@ Runtime efficiency through "Cognitive Map-Reduce" — analyzing execution plans 
 > The integration challenge is compounded by fragmentation of the agent development ecosystem into mutually incompatible implementations. In the absence of a unified standard for agent definition, developers face a binary choice, both branches of which incur substantial technical debt:
 > 
 > 1. Rigid, Hard-Coded Workflows. Agent logic is directly embedded in application code as imperative control flow. Such workflows are brittle: they do not generalize to edge cases, resist modification, and couple agent behavior to the specifics of a single deployment context.
-> 2. Opaque Agent Frameworks. Frameworks such as LangChain or AutoGen provide higher-level abstractions but conflate the definition of an agent—its identity, capabilities, and constraints with its runtime execution logic [3]. The agent's specification is inseparable from the framework's internal APIs and execution model.
+> 
+> 2. Opaque Agent Frameworks. Frameworks such as LangChain or AutoGen provide higher-level abstractions but conflate the definition of an agent—its identity, capabilities, and constraints—with its runtime execution logic [3]. The agent's specification is inseparable from the framework's internal APIs and execution model.
 > 
 > Coupling agent definition to a specific runtime entails vendor lock-in: an agent defined within a Python-centric framework cannot be ported to a different language or execution environment without substantial reimplementation. An agent prototyped in a Python notebook, for instance, cannot be deployed to a Java microservice handling low-latency ad bidding or infrastructure management without rewriting the agent logic in the target language and adapting it to a different runtime model.
 > 
@@ -116,17 +112,20 @@ Runtime efficiency through "Cognitive Map-Reduce" — analyzing execution plans 
 > This fragmentation—termed here Agent Configuration Balkanization—produces three concrete consequences for enterprise adoption:
 > 
 > 1. Vendor Lock-in. Agent definitions are bound to a specific library's API surface. If the library is deprecated, undergoes breaking API changes, or ceases maintenance, all agents defined against that library become difficult or impossible to maintain without rewriting.
+> 
 > 2. Auditability Gaps. When safety logic, prompt templates, and tool definitions are distributed across imperative code paths, compliance review cannot straightforwardly verify agent boundaries, permitted actions, or data access policies. The agent's effective behavior is an emergent property of the code rather than a declared specification.
+> 
 > 3. The Polyglot Barrier. An agent defined in Python cannot execute within a Java microservice environment—or vice versa—without complete reimplementation, forcing organizations to maintain parallel toolchains and duplicated logic across language boundaries.
 > 
 > ### 3.2 Configuration Over Code
 > 
-> The Auton Agentic AI Framework treats agents as data rather than code. The AgenticFormat Standard is a language-agnostic, declarative schema (expressible in YAML or JSON) that defines what is termed the "Agentic Class" and establishes a clean separation between the Cognitive Blueprint—the agent's identity, interface, capabilities, and constraints—and the Runtime Engine—the platformspecific execution substrate.
+> The Auton Agentic AI Framework treats agents as data rather than code. The AgenticFormat Standard is a language-agnostic, declarative schema (expressible in YAML or JSON) that defines what is termed the "Agentic Class" and establishes a clean separation between the Cognitive Blueprint—the agent's identity, interface, capabilities, and constraints—and the Runtime Engine—the platform-specific execution substrate.
 > 
 > - The Blueprint (AgenticFormat): A static, versionable, machine-readable and human-readable specification of the agent's interface, tool bindings, memory constraints, output contracts, and safety manifold. The blueprint is a data artifact; it contains no executable code.
+> 
 > - The Runtime (Agentic AI Platform SDK): A platform-specific SDK—agentic-py for Python, agentic-java for Java—that reads a blueprint file and instantiates the corresponding agent within the target execution environment. The SDK is decoupled from the AgenticFormat Standard: the standard defines what an agent is, while the SDK provides the runtime machinery to hydrate and execute that definition. The same blueprint can be consumed by any compliant SDK implementation without modification.
 > 
-> The design follows the same architectural pattern as Terraform and Kubernetes: as Infrastructureas-Code describes the desired state of cloud infrastructure in declarative configuration files, Agentas-Configuration describes the desired state of an autonomous agent. The runtime's responsibility is to reconcile the actual agent state with the declared specification.
+> The design follows the same architectural pattern as Terraform and Kubernetes: as Infrastructure-as-Code describes the desired state of cloud infrastructure in declarative configuration files, Agent-as-Configuration describes the desired state of an autonomous agent. The runtime's responsibility is to reconcile the actual agent state with the declared specification.
 > 
 > ### 3.3 Contract-Driven Development
 > 
@@ -134,50 +133,49 @@ Runtime efficiency through "Cognitive Map-Reduce" — analyzing execution plans 
 > 
 > In AgenticFormat, every agent's output is bound to a formal schema—expressed, for instance, as a YAML inline schema, a Pydantic model, or a JSON Schema definition—rather than an untyped string. Consider a Code Reviewer agent whose task is to review pull requests for correctness, style, and security issues:
 > 
-> ```
-> 1 # AgenticFormat Definition ( Snippet )
-> 2 metadata :
-> 3 id : code_reviewer
-> 4 name : Code Reviewer
-> 5 version : 1.2.0
-> 6 authors : [" eng - productivity@org . com "]
-> 7 tags : [ code - quality , automated ]
-> 8
-> 9 interface :
-> 10 input :
-> 11 inline_schema : { type : object , properties : { pr_url : { type : string } } }
-> 12 output :
-> 13 inline_schema : { type : object , properties : { code_ptr_url : { type : string } ,
->       review : { type : string } } }
-> 14
-> 15 constraints :
-> 16 tighten_only_invariant : true
-> 17 budget :
-> 18 max_token_usage : 50000
-> 19
-> 20 action_space :
-> 21 mcp_servers :
-> 22 - alias : github
-> 23 url : https :// mcp - github . com
-> 24 allow_tools : [ get_pr_diff , post_review_comment ]
-> 25 local_agents :
-> 26 - alias : style_checker
-> 27 source : ./ style - checker . agf . yaml
-> 28
-> 29 execution_policy :
-> 30 id : x - runtime . react
-> 31 config :
-> 32 provider : google
-> 33 model : gemini -3 - pro - preview
-> 34 instructions : " Review the PR for correctness , style , and security issues ."
-> 35 max_steps : 10
-> 36 temperature : 0.3
-> 37 tool_choice : auto
+> ```yaml
+> # AgenticFormat Definition (Snippet)
+> metadata:
+>   id: code_reviewer
+>   name: Code Reviewer
+>   version: 1.2.0
+>   authors: ["eng-productivity@org.com"]
+>   tags: [code-quality, automated]
+> 
+> interface:
+>   input:
+>     inline_schema: { type: object, properties: { pr_url: { type: string } } }
+>   output:
+>     inline_schema: { type: object, properties: { code_ptr_url: { type: string }, review: { type: string } } }
+> 
+> constraints:
+>   tighten_only_invariant: true
+>   budget:
+>     max_token_usage: 50000
+> 
+> action_space:
+>   mcp_servers:
+>     - alias: github
+>       url: https://mcp-github.com
+>       allow_tools: [get_pr_diff, post_review_comment]
+>   local_agents:
+>     - alias: style_checker
+>       source: ./style-checker.agf.yaml
+> 
+> execution_policy:
+>   id: x-runtime.react
+>   config:
+>     provider: google
+>     model: gemini-3-pro-preview
+>     instructions: "Review the PR for correctness, style, and security issues."
+>     max_steps: 10
+>     temperature: 0.3
+>     tool_choice: auto
 > ```
 > 
 > Listing 1: AgenticFormat Output Contract Definition (Snippet)
 > 
-> With this contract in place, the Runtime Engine interposes a validation layer at the agent's output boundary. If the underlying LLM emits unstructured text or output that violates the declared schema, the runtime detects the violation prior to any downstream propagation and either applies corrective parsing or triggers a retry cycle. The downstream consumer—e.g., a CI/CD pipeline or a review dashboard—receives only valid, schema-conformant output (e.g., {"code ptr url": "org/repo/code.py#L1-L10", "review": "Potential null dereference...", ...}). The contract thus transforms what would otherwise be a probabilistic, best-effort output channel into a deterministic, typed interface.
+> With this contract in place, the Runtime Engine interposes a validation layer at the agent's output boundary. If the underlying LLM emits unstructured text or output that violates the declared schema, the runtime detects the violation prior to any downstream propagation and either applies corrective parsing or triggers a retry cycle. The downstream consumer—e.g., a CI/CD pipeline or a review dashboard—receives only valid, schema-conformant output (e.g., {"code_ptr_url": "org/repo/code.py#L1-L10", "review": "Potential null dereference...", ...}). The contract thus transforms what would otherwise be a probabilistic, best-effort output channel into a deterministic, typed interface.
 > 
 > ### 3.4 Integration with the Model Context Protocol
 > 
@@ -186,6 +184,7 @@ Runtime efficiency through "Cognitive Map-Reduce" — analyzing execution plans 
 > The division of responsibilities between the two standards is as follows:
 > 
 > - MCP standardizes how an agent connects to external services. A tool connector implemented to the MCP specification—e.g., a Google Drive connector or a Slack connector—is usable by any MCP-compatible agent, regardless of the agent's definition framework.
+> 
 > - AgenticFormat standardizes who uses the tools: the agent's identity, permission scope, allowed tool set, and the specific MCP servers to which the agent is bound.
 > 
 > The combination of these two standards supports modular, composable system design. A Customer Support Agent can be defined in AgenticFormat and bound to a SalesforceMCP server for CRM access. Migrating from Salesforce to HubSpot requires only substituting the MCP server binding in the agent's blueprint; the agent's cognitive specification—its reasoning strategy, memory configuration, output contracts, and safety constraints—remains unchanged.
@@ -194,63 +193,67 @@ Runtime efficiency through "Cognitive Map-Reduce" — analyzing execution plans 
 > 
 > ### 4.1 The Agent as a Control System
 > 
-> Anthropomorphic characterizations of autonomous agents—"digital employees," "AI assistants" obscure the stochastic nature of the underlying inference process and impede rigorous analysis of system behavior. The Auton Agentic AI Framework instead models an agent as a decision-making system operating within a Partially Observable Markov Decision Process (POMDP) [7, 8], augmented with a latent reasoning mechanism that decouples internal computation from external action [9].
+> Anthropomorphic characterizations of autonomous agents—"digital employees," "AI assistants"—obscure the stochastic nature of the underlying inference process and impede rigorous analysis of system behavior. The Auton Agentic AI Framework instead models an agent as a decision-making system operating within a Partially Observable Markov Decision Process (POMDP) [7, 8], augmented with a latent reasoning mechanism that decouples internal computation from external action [9].
 > 
-> A standard reinforcement learning (RL) agent implements a reactive mapping from observations to actions (O → A). An Agentic System, as formalized here, interposes a Latent Reasoning Space (Z) between observation and action. Within Z, the system can plan, reflect, and verify candidate action sequences without altering the external environment state. This architectural choice separates internal deliberation from externally visible side effects and provides a formal basis for the "think-before-act" execution discipline described below.
+> A standard reinforcement learning (RL) agent implements a reactive mapping from observations to actions (O→A / $O \rightarrow A$). An Agentic System, as formalized here, interposes a Latent Reasoning Space (𝒵 / $\mathcal{Z}$) between observation and action. Within 𝒵, the system can plan, reflect, and verify candidate action sequences without altering the external environment state. This architectural choice separates internal deliberation from externally visible side effects and provides a formal basis for the "think-before-act" execution discipline described below.
 > 
 > ### 4.2 The Augmented POMDP Formulation
 > 
-> Definition 4.1 (Agentic System Tuple). An Agentic System is defined by the augmented tuple T :
+> **Definition 4.1 (Agentic System Tuple).** An Agentic System is defined by the augmented tuple 𝒯 / $\mathcal{T}$:
 > 
+> **(1)** 𝒯 = ⟨𝒮, Ω, 𝒜, 𝒵, ℳ, 𝒫, ℛ⟩
 > $$\mathcal{T} = \langle \mathcal{S}, \Omega, \mathcal{A}, \mathcal{Z}, \mathcal{M}, \mathcal{P}, \mathcal{R} \rangle$$
 > 
 > where each component is defined as follows.
 > 
-> Latent World State (S). The set of all possible true environment states. The world state s ∈ S encompasses the full configuration of external systems—database contents, server load, network state, user session state—and is not directly observable by the agent. The agent must infer a belief distribution over S from partial observations.
+> **Latent World State (𝒮 / $\mathcal{S}$).** The set of all possible true environment states. The world state s ∈ 𝒮 encompasses the full configuration of external systems—database contents, server load, network state, user session state—and is not directly observable by the agent. The agent must infer a belief distribution over 𝒮 from partial observations.
 > 
-> Observation Space (Ω). The set of partial views available to the agent at each timestep: API responses, search results, error messages, sensor readings, and other environment signals. Given true state s^t, the agent receives observation o^t ∼ O(o^t|s^t), where O is the observation function. The agent uses its observation history to maintain a state estimate—a belief distribution over S—that approximates the unobservable true state.
+> **Observation Space (Ω / $\Omega$).** The set of partial views available to the agent at each timestep: API responses, search results, error messages, sensor readings, and other environment signals. Given true state sₜ, the agent receives observation oₜ ∼ O(oₜ|sₜ), where O is the observation function. The agent uses its observation history to maintain a state estimate—a belief distribution over 𝒮—that approximates the unobservable true state.
 > 
-> External Action Space (A). The set of actions that produce side effects in the external environment: database mutations, API calls, file system operations, message transmissions. Actions in A are subject to the safety constraints imposed by the Constraint Manifold (Section 6). Each external action a ∈ A transitions the environment from state s to a successor state s' according to the transition kernel P.
+> **External Action Space (𝒜 / $\mathcal{A}$).** The set of actions that produce side effects in the external environment: database mutations, API calls, file system operations, message transmissions. Actions in 𝒜 are subject to the safety constraints imposed by the Constraint Manifold (Section 6). Each external action a ∈ 𝒜 transitions the environment from state s to a successor state s′ according to the transition kernel 𝒫.
 > 
-> Latent Reasoning Space (Z). The set of internal cognitive operations: planning, reflection, self-verification, hypothesis generation. Actions in Z consume computational resources (tokens, wall-clock time) but do not alter the external state S. The existence of Z as a formally distinct component of the tuple enforces the separation between deliberation and action at the architectural level.
+> **Latent Reasoning Space (𝒵 / $\mathcal{Z}$).** The set of internal cognitive operations: planning, reflection, self-verification, hypothesis generation. Actions in 𝒵 consume computational resources (tokens, wall-clock time) but do not alter the external state 𝒮. The existence of 𝒵 as a formally distinct component of the tuple enforces the separation between deliberation and action at the architectural level.
 > 
-> Memory Context (M). The agent's internal state, comprising the current observation history H^t = (o0, a0, z0, . . . , ot) together with consolidated knowledge retrieved from long-term storage. The memory context m^t ∈ M serves as the sufficient statistic upon which the agent conditions its reasoning and action policies at each timestep.
+> **Memory Context (ℳ / $\mathcal{M}$).** The agent's internal state, comprising the current observation history ℋₜ = (o₀, a₀, z₀, …, oₜ) / $\mathcal{H}_t = (o_0, a_0, z_0, \ldots, o_t)$ together with consolidated knowledge retrieved from long-term storage. The memory context mₜ ∈ ℳ serves as the sufficient statistic upon which the agent conditions its reasoning and action policies at each timestep.
 > 
-> Transition Kernel (P). The environment dynamics function T(s'|s, a), specifying the probability of transitioning to state s' given current state s and action a ∈ A. Internal reasoning actions z ∈ Z do not induce state transitions: T(s'|s, z) = δ(s' − s) for all z ∈ Z.
+> **Transition Kernel (𝒫 / $\mathcal{P}$).** The environment dynamics function T(s′|s, a), specifying the probability of transitioning to state s′ given current state s and action a ∈ 𝒜. Internal reasoning actions z ∈ 𝒵 do not induce state transitions: T(s′|s, z) = δ(s′ − s) for all z ∈ 𝒵.
 > 
-> Reward Function (R). A function R : S × A × Z → R assigning scalar feedback to state-action-reasoning triples. Sparse rewards evaluate outcomes (e.g., binary task success or failure at the terminal state), while dense rewards provide step-level process feedback (e.g., intermediate correctness checks on reasoning steps). The reward function may also penalize inefficient reasoning: excessive token expenditure, repetitive computation, or looping behavior within Z.
+> **Reward Function (ℛ / $\mathcal{R}$).** A function ℛ: 𝒮 × 𝒜 × 𝒵 → ℝ / $\mathcal{R}: \mathcal{S} \times \mathcal{A} \times \mathcal{Z} \rightarrow \mathbb{R}$ assigning scalar feedback to state-action-reasoning triples. Sparse rewards evaluate outcomes (e.g., binary task success or failure at the terminal state), while dense rewards provide step-level process feedback (e.g., intermediate correctness checks on reasoning steps). The reward function may also penalize inefficient reasoning: excessive token expenditure, repetitive computation, or looping behavior within 𝒵.
 > 
 > ### 4.3 Factorized Policy Architecture
 > 
-> In standard RL formulations and in direct LLM-to-action pipelines, the policy π(a|s) implements a reactive mapping from observation to action. This reflexive architecture is computationally efficient but error-prone: the agent has no mechanism to evaluate, compare, or verify candidate actions before committing to one.
+> In standard RL formulations and in direct LLM-to-action pipelines, the policy π(a|s) / $\pi(a|s)$ implements a reactive mapping from observation to action. This reflexive architecture is computationally efficient but error-prone: the agent has no mechanism to evaluate, compare, or verify candidate actions before committing to one.
 > 
 > The Auton Agentic AI Framework replaces the monolithic policy with a Factorized Policy Architecture [10] that decomposes agent behavior into two coupled sub-policies, thereby enforcing a think-before-act invariant at the architectural level. At each timestep t, the agent's execution proceeds in two stages.
 > 
-> #### 4.3.1 The Reasoning Policy (πreason)
+> #### 4.3.1 The Reasoning Policy (π_reason / $\pi_{\text{reason}}$)
 > 
-> The agent first samples a reasoning trace z^t from the latent space Z, conditioned on the current memory context m^t:
+> The agent first samples a reasoning trace zₜ from the latent space 𝒵, conditioned on the current memory context mₜ:
 > 
+> **(2)** zₜ ∼ π_reason(zₜ | mₜ; θ)
 > $$z_t \sim \pi_{\text{reason}}(z_t \mid m_t; \theta)$$
 > 
-> where θ parameterizes the reasoning policy. The reasoning trace z^t may take the form of a chain-of-thought decomposition [11], a planning step, a self-critique, or a verification check against known constraints. Execution of πreason updates the memory context m^t but produces no external side effects. This stage enables test-time compute scaling: the agent can sample multiple candidate reasoning paths, evaluate them against internal criteria, and select a plan before committing to an external action.
+> where θ parameterizes the reasoning policy. The reasoning trace zₜ may take the form of a chain-of-thought decomposition [11], a planning step, a self-critique, or a verification check against known constraints. Execution of π_reason updates the memory context mₜ but produces no external side effects. This stage enables test-time compute scaling: the agent can sample multiple candidate reasoning paths, evaluate them against internal criteria, and select a plan before committing to an external action.
 > 
-> #### 4.3.2 The Action Policy (πaction)
+> #### 4.3.2 The Action Policy (π_action / $\pi_{\text{action}}$)
 > 
-> Conditioned on both the current memory context m^t and the generated reasoning trace z^t, the agent samples an external action a^t:
+> Conditioned on both the current memory context mₜ and the generated reasoning trace zₜ, the agent samples an external action aₜ:
 > 
+> **(3)** aₜ ∼ π_action(aₜ | mₜ, zₜ; ϕ)
 > $$a_t \sim \pi_{\text{action}}(a_t \mid m_t, z_t; \phi)$$
 > 
-> where ϕ parameterizes the action policy. The conditioning on z^t ensures that no external action is taken without a preceding deliberation step. By construction, the action is informed by the reasoning trace, which reduces the incidence of impulsive or poorly considered actions relative to a monolithic policy that maps directly from observation to action.
+> where ϕ parameterizes the action policy. The conditioning on zₜ ensures that no external action is taken without a preceding deliberation step. By construction, the action is informed by the reasoning trace, which reduces the incidence of impulsive or poorly considered actions relative to a monolithic policy that maps directly from observation to action.
 > 
-> Remark 4.1. The factorized architecture does not require two separate neural networks; in practice, both πreason and πaction may be implemented by the same LLM, with the factorization enforced by the runtime's execution protocol rather than by model architecture.
+> **Remark 4.1.** The factorized architecture does not require two separate neural networks; in practice, both π_reason and π_action may be implemented by the same LLM, with the factorization enforced by the runtime's execution protocol rather than by model architecture.
 > 
 > ### 4.4 Objective Function
 > 
-> The agent maximizes expected discounted return over joint trajectories of latent reasoning traces and external actions. Let τ = (o0, z0, a0, r0, o1, z1, a1, r1, . . .) denote a trajectory generated under the joint policy (πreason, πaction). The optimization objective J(θ, ϕ) is:
+> The agent maximizes expected discounted return over joint trajectories of latent reasoning traces and external actions. Let τ = (o₀, z₀, a₀, r₀, o₁, z₁, a₁, r₁, …) denote a trajectory generated under the joint policy (π_reason, π_action). The optimization objective J(θ, ϕ) is:
 > 
+> **(4)** J(θ, ϕ) = 𝔼_{τ∼(π_reason, π_action)} [∑ₜ₌₀ᵀ γᵗ R(sₜ, aₜ, zₜ)]
 > $$J(\theta, \phi) = \mathbb{E}_{\tau \sim (\pi_{\text{reason}}, \pi_{\text{action}})} \left[ \sum_{t=0}^{T} \gamma^t R(s_t, a_t, z_t) \right]$$
 > 
-> where γ ∈ [0, 1) is the discount factor and T is the episode horizon. The reward function R(s^t, a^t, z^t) decomposes into a task-completion component R(s^t, a^t) and a reasoning-efficiency component R(z^t). The latter can penalize inefficient reasoning patterns—repetitive traces, circular logic, or excessive token expenditure—thereby incentivizing concise, goal-directed deliberation.
+> where γ ∈ [0, 1) is the discount factor and T is the episode horizon. The reward function R(sₜ, aₜ, zₜ) decomposes into a task-completion component R(sₜ, aₜ) and a reasoning-efficiency component R(zₜ). The latter can penalize inefficient reasoning patterns—repetitive traces, circular logic, or excessive token expenditure—thereby incentivizing concise, goal-directed deliberation.
 > 
 > ## 5 Cognitive Memory Architecture
 > 
@@ -262,7 +265,7 @@ Runtime efficiency through "Cognitive Map-Reduce" — analyzing execution plans 
 > 
 > ### 5.2 Hierarchical Memory Structure
 > 
-> The agent's memory M is organized into two coupled layers, distinguished by temporal scope, fidelity, and access characteristics.
+> The agent's memory ℳ is organized into two coupled layers, distinguished by temporal scope, fidelity, and access characteristics.
 > 
 > #### 5.2.1 Short-Term Memory (Event Stream)
 > 
@@ -286,8 +289,11 @@ Runtime efficiency through "Cognitive Map-Reduce" — analyzing execution plans 
 > When a session terminates or the context window approaches capacity, the Reflector Agent—a dedicated background process—executes the following consolidation procedure:
 > 
 > 1. Event Segmentation. The Reflector partitions the raw event stream into coherent logical episodes, where each episode corresponds to a self-contained sub-task or interaction phase (e.g., "Attempting to query the production database," "Handling an authentication timeout error").
-> 2. Insight Extraction. For each identified episode, the Reflector extracts salient insights observations, outcomes, and causal relationships judged to have high utility for future tasks. Low-utility content (e.g., conversational greetings, boilerplate acknowledgments, redundant intermediate outputs) is discarded. The extraction criterion is estimated future informativeness: content is retained in proportion to its expected contribution to future task performance.
+> 
+> 2. Insight Extraction. For each identified episode, the Reflector extracts salient insights—observations, outcomes, and causal relationships judged to have high utility for future tasks. Low-utility content (e.g., conversational greetings, boilerplate acknowledgments, redundant intermediate outputs) is discarded. The extraction criterion is estimated future informativeness: content is retained in proportion to its expected contribution to future task performance.
+> 
 > 3. Vectorization and Storage. Extracted insights are embedded into a vector representation and stored in either a long-term knowledge graph or a vector store configured for semantic similarity retrieval. The embedding allows efficient retrieval based on semantic proximity to the agent's current context at query time.
+> 
 > 4. Context Compression. The raw event stream in the active context window is replaced by a compressed summary that preserves the essential information content of the discarded entries. This operation frees token budget within the context window while retaining sufficient information for long-horizon coherence in the agent's reasoning.
 > 
 > ### 5.4 Formal Characterization
@@ -296,7 +302,8 @@ Runtime efficiency through "Cognitive Map-Reduce" — analyzing execution plans 
 > 
 > Equivalently, the consolidation objective can be stated as maximizing the mutual information between the compressed memory m and future tasks:
 > 
-> $$\max_{m} I(m; \text{future\_task})$$
+> **(5)** max_m I(m; future_task)
+> $$\max_m \; I(m; \text{future\_task})$$
 > 
 > subject to a constraint on the size of m. Under this formulation, the memory system is optimized to retain precisely the information that maximizes the agent's expected success probability on future, unseen tasks. Content that is predictable from the agent's parametric knowledge or that has low variance across tasks contributes little mutual information and is preferentially compressed or discarded.
 > 
@@ -310,21 +317,23 @@ Runtime efficiency through "Cognitive Map-Reduce" — analyzing execution plans 
 > 
 > ### 6.2 The Constraint Manifold
 > 
-> Let the full external action space be A (e.g., the set of all syntactically valid SQL statements). The safe sub-manifold C ⊂ A is defined as the subset of actions that satisfy all applicable enterprise invariants—for example, read-only access restrictions, row-level security policies, data residency requirements, or prohibitions on personally identifiable information (PII) egress [19].
+> Let the full external action space be 𝒜 (e.g., the set of all syntactically valid SQL statements). The safe sub-manifold 𝒞 ⊂ 𝒜 / $\mathcal{C} \subset \mathcal{A}$ is defined as the subset of actions that satisfy all applicable enterprise invariants—for example, read-only access restrictions, row-level security policies, data residency requirements, or prohibitions on personally identifiable information (PII) egress [19].
 > 
-> Definition 6.1 (Constraint Manifold). Given an action space A and a set of safety predicates {c_1, c_2, . . . , c_k} where each c_i : A → {0, 1}, the constraint manifold C is the intersection:
+> **Definition 6.1 (Constraint Manifold).** Given an action space 𝒜 and a set of safety predicates {c₁, c₂, …, cₖ} where each cᵢ: 𝒜 → {0, 1}, the constraint manifold 𝒞 is the intersection:
 > 
-> $$C = \{ a \in \mathcal{A} \mid c_i(a) = 1 \ \forall i \in \{1, \dots, k\} \}$$
+> **(6)** 𝒞 = {a ∈ 𝒜 | cᵢ(a) = 1  ∀ i ∈ {1, …, k}}
+> $$\mathcal{C} = \{a \in \mathcal{A} \mid c_i(a) = 1 \;\; \forall \, i \in \{1, \ldots, k\}\}$$
 > 
-> Rather than sampling from the unconstrained ("raw") policy π_raw and then validating the sample, the framework projects π_raw onto C to obtain a safe policy π_safe. The projection is defined by renormalizing π_raw over C:
+> Rather than sampling from the unconstrained ("raw") policy π_raw and then validating the sample, the framework projects π_raw onto 𝒞 to obtain a safe policy π_safe. The projection is defined by re-normalizing π_raw over 𝒞:
 > 
-> $$\pi_{\text{safe}}(a|s) = \frac{\pi_{\text{raw}}(a|s) \cdot \mathbb{I}[a \in \mathcal{C}]}{\int_{A} \pi_{\text{raw}}(x|s) \cdot \mathbb{I}[x \in \mathcal{C}] \, dx}$$
+> **(7)** π_safe(a|s) = π_raw(a|s) · 𝕀[a ∈ 𝒞] / ∫_𝒜 π_raw(x|s) · 𝕀[x ∈ 𝒞] dx
+> $$\pi_{\text{safe}}(a|s) = \frac{\pi_{\text{raw}}(a|s) \cdot \mathbb{I}[a \in \mathcal{C}]}{\int_{\mathcal{A}} \pi_{\text{raw}}(x|s) \cdot \mathbb{I}[x \in \mathcal{C}] \, dx}$$
 > 
-> where I[·] is the indicator function. The denominator is the total probability mass that π_raw assigns to safe actions; re-normalization ensures that π_safe is a valid probability distribution concentrated entirely on C.
+> where 𝕀[·] is the indicator function. The denominator is the total probability mass that π_raw assigns to safe actions; re-normalization ensures that π_safe is a valid probability distribution concentrated entirely on 𝒞.
 > 
-> Remark 6.1. The projection preserves the relative likelihood ordering among safe actions: if π_raw assigns higher probability to action a than to action a' within C, then π_safe preserves this ordering. The projection removes probability mass from unsafe actions without distorting preferences among safe alternatives.
+> **Remark 6.1.** The projection preserves the relative likelihood ordering among safe actions: if π_raw assigns higher probability to action a than to action a′ within 𝒞, then π_safe preserves this ordering. The projection removes probability mass from unsafe actions without distorting preferences among safe alternatives.
 > 
-> Implementation. In the AgenticFormat runtime, the constraint manifold C is enforced through a masking function M(s,a) applied during autoregressive token generation. The masking function sets the logits of tokens that would lead to unsafe action completions to −∞, ensuring that after the softmax operation, unsafe token sequences receive zero probability. This constrained decoding mechanism operates at the token level during generation, not as a post-hoc check on completed outputs, and guarantees that all emitted actions lie within C by construction.
+> **Implementation.** In the AgenticFormat runtime, the constraint manifold 𝒞 is enforced through a masking function M(s, a) applied during autoregressive token generation. The masking function sets the logits of tokens that would lead to unsafe action completions to −∞, ensuring that after the softmax operation, unsafe token sequences receive zero probability. This constrained decoding mechanism operates at the token level during generation, not as a post-hoc check on completed outputs, and guarantees that all emitted actions lie within 𝒞 by construction.
 > 
 > ### 6.3 Economic Constraints via KKT Conditions
 > 
@@ -332,24 +341,28 @@ Runtime efficiency through "Cognitive Map-Reduce" — analyzing execution plans 
 > 
 > The agent operates under a token budget B, which constitutes a hard constraint on total token expenditure per task or session. The optimization objective is to maximize task reward J(θ) subject to the constraint that total token cost C(θ) does not exceed B.
 > 
-> This is a constrained optimization problem. Introducing a Lagrange multiplier λ ≥ 0 yields the Lagrangian L:
+> This is a constrained optimization problem. Introducing a Lagrange multiplier λ ≥ 0 yields the Lagrangian ℒ:
 > 
-> $$\mathcal{L}(\theta, \lambda) = J(\theta) - \lambda (C(\theta) - B)$$
+> **(8)** ℒ(θ, λ) = J(θ) − λ(C(θ) − B)
+> $$\mathcal{L}(\theta, \lambda) = J(\theta) - \lambda \big( C(\theta) - B \big)$$
 > 
 > The optimal policy θ* and the associated multiplier λ* satisfy the Karush-Kuhn-Tucker (KKT) conditions:
 > 
 > 1. Stationarity: ∇_θ J(θ*) = λ* ∇_θ C(θ*). At the optimum, the marginal increase in task reward per unit of policy change equals λ* times the marginal increase in token cost. The multiplier λ* thus quantifies the marginal value (shadow price) of an additional token.
+> 
 > 2. Primal Feasibility: C(θ*) ≤ B. The optimal policy does not exceed the token budget.
+> 
 > 3. Dual Feasibility: λ* ≥ 0. The shadow price of tokens is non-negative.
+> 
 > 4. Complementary Slackness: λ*(C(θ*) − B) = 0. If the budget is not fully consumed (C(θ*) < B), then λ* = 0 and the budget constraint is inactive—additional tokens have zero marginal cost. If the budget is exactly consumed (C(θ*) = B), then λ* > 0 and each additional token consumed must be justified by a commensurate increase in task reward.
 > 
-> Implementation. The runtime's Budget Controller operationalizes this formalism. When token consumption is low relative to task progress—i.e., the budget constraint is slack—the effective λ is near zero, and the reasoning policy πreason is permitted to generate expansive chains of thought, explore multiple reasoning paths, and perform thorough verification. As token consumption C(θ) approaches the budget B, the effective λ increases, and the reasoning policy is biased toward brevity, directness, and immediate action. This adaptive mechanism balances reasoning depth against resource consumption without requiring manual tuning of reasoning length.
+> **Implementation.** The runtime's Budget Controller operationalizes this formalism. When token consumption is low relative to task progress—i.e., the budget constraint is slack—the effective λ is near zero, and the reasoning policy π_reason is permitted to generate expansive chains of thought, explore multiple reasoning paths, and perform thorough verification. As token consumption C(θ) approaches the budget B, the effective λ increases, and the reasoning policy is biased toward brevity, directness, and immediate action. This adaptive mechanism balances reasoning depth against resource consumption without requiring manual tuning of reasoning length.
 > 
 > ## 7 Self-Evolving Agents and End-to-End Optimization
 > 
 > ### 7.1 Limitations of Static Agent Configurations
 > 
-> Current deployment practice relies predominantly on "frozen" agents: the underlying LLM is pre-trained offline, and agent behavior is determined by static prompts, fixed tool configurations, and handcrafted decision logic. When such a statically configured agent fails on a task, a human operator must manually diagnose the failure, adjust the prompt or tool configuration, and redeploy. This human-in-the-loop optimization process is labor-intensive and does not scale to large agent deployments or rapidly changing environments.
+> Current deployment practice relies predominantly on "frozen" agents: the underlying LLM is pre-trained offline, and agent behavior is determined by static prompts, fixed tool configurations, and hand-crafted decision logic. When such a statically configured agent fails on a task, a human operator must manually diagnose the failure, adjust the prompt or tool configuration, and redeploy. This human-in-the-loop optimization process is labor-intensive and does not scale to large agent deployments or rapidly changing environments.
 > 
 > The Auton Agentic AI Framework treats deployed agents as learnable control systems rather than static configurations [20, 21]. End-to-End (E2E) Agentic Training is proposed: the agent updates its effective policy through structured interaction with its environment, closing the feedback loop between reasoning, action, and observed outcomes [22].
 > 
@@ -359,12 +372,15 @@ Runtime efficiency through "Cognitive Map-Reduce" — analyzing execution plans 
 > 
 > The E2E agentic training loop comprises three stages:
 > 
-> - Trajectory Generation. The agent attempts a task T within its environment, generating a complete trajectory τ = (o0, z0, a0, o1, z1, a1, . . . , s^T) that records the full sequence of observations, reasoning traces, and actions through task completion or failure.
-> - Outcome Evaluation (Sparse Reward). A verifier module evaluates the terminal state s^T of the trajectory and assigns a reward signal R_outcome ∈ {0, 1} (or a scalar value in the continuous case). The verifier may be a deterministic unit test, a compiler, a database constraint checker, or a stronger "Teacher" LLM that grades the outcome against a rubric.
-> - Process Supervision (Dense Reward). For credit assignment in long-horizon tasks—where the sparse terminal reward provides insufficient signal to identify which intermediate steps contributed to success or failure—Process Reward Models (PRMs) [23] or a Reflector Agent evaluate individual reasoning steps z^t, producing a dense reward signal R_process(z^t) that enables fine-grained attribution [24].
+> - Trajectory Generation. The agent attempts a task 𝒯 within its environment, generating a complete trajectory τ = (o₀, z₀, a₀, o₁, z₁, a₁, …, sₜ) that records the full sequence of observations, reasoning traces, and actions through task completion or failure.
+> 
+> - Outcome Evaluation (Sparse Reward). A verifier module evaluates the terminal state sₜ of the trajectory and assigns a reward signal R_outcome ∈ {0, 1} (or a scalar value in the continuous case). The verifier may be a deterministic unit test, a compiler, a database constraint checker, or a stronger "Teacher" LLM that grades the outcome against a rubric.
+> 
+> - Process Supervision (Dense Reward). For credit assignment in long-horizon tasks—where the sparse terminal reward provides insufficient signal to identify which intermediate steps contributed to success or failure—Process Reward Models (PRMs) [23] or a Reflector Agent evaluate individual reasoning steps zₜ, producing a dense reward signal R_process(zₜ) that enables fine-grained attribution [24].
 > 
 > The composite reward function R(τ) over a full trajectory is a weighted combination of outcome and process rewards:
 > 
+> **(9)** R(τ) = R_outcome(τ) + λ ∑ₜ₌₀ᵀ R_process(zₜ)
 > $$R(\tau) = R_{\text{outcome}}(\tau) + \lambda \sum_{t=0}^{T} R_{\text{process}}(z_t)$$
 > 
 > where λ controls the relative contribution of process supervision to the total training signal.
@@ -375,45 +391,52 @@ Runtime efficiency through "Cognitive Map-Reduce" — analyzing execution plans 
 > 
 > #### 7.3.1 Level 1: In-Context Evolution
 > 
-> Mechanism. At this level, the agent adapts without any modification to its model weights [25, 26]. When the agent fails a task (generating a failed trajectory τ_fail), the Reflector Agent analyzes the execution trace, identifies the root cause of the failure (e.g., "incorrect date format used in API call"), and generates a textual "Lesson" L that encodes the corrective insight.
+> **Mechanism.** At this level, the agent adapts without any modification to its model weights [25, 26]. When the agent fails a task (generating a failed trajectory τ_fail), the Reflector Agent analyzes the execution trace, identifies the root cause of the failure (e.g., "incorrect date format used in API call"), and generates a textual "Lesson" L that encodes the corrective insight.
 > 
-> Storage and Retrieval. The lesson L is stored in Long-Term Memory (Section 5). When the agent subsequently encounters a task with similar characteristics—as determined by embedding-based similarity search—it retrieves L and prepends it to its active context window, effectively conditioning its behavior on prior experience.
+> **Storage and Retrieval.** The lesson L is stored in Long-Term Memory (Section 5). When the agent subsequently encounters a task with similar characteristics—as determined by embedding-based similarity search—it retrieves L and prepends it to its active context window, effectively conditioning its behavior on prior experience.
 > 
-> Formal Characterization. The effective policy under in-context evolution is conditioned on retrieved lessons:
+> **Formal Characterization.** The effective policy under in-context evolution is conditioned on retrieved lessons:
 > 
+> **(10)** π_effective(a|s) = π_θ(a | s, m, L)
 > $$\pi_{\text{effective}}(a|s) = \pi_{\theta}(a \mid s, m, L)$$
 > 
 > Behavior is modified through the memory mechanism rather than through gradient-based parameter updates. This is analogous to one-shot or few-shot in-context learning, where the model's behavior shifts in response to contextual examples without weight modification.
 > 
 > #### 7.3.2 Level 2: Self-Taught Reasoning (STaR)
 > 
-> Mechanism. Level 2 internalizes successful reasoning patterns into the model weights via Supervised Fine-Tuning (SFT). The procedure, based on the Self-Taught Reasoner (STaR) framework [27], operates as follows:
+> **Mechanism.** Level 2 internalizes successful reasoning patterns into the model weights via Supervised Fine-Tuning (SFT). The procedure, based on the Self-Taught Reasoner (STaR) framework [27], operates as follows:
 > 
-> 1. The agent generates multiple reasoning trajectories {τ1, τ2, . . . , τk} for a dataset of training tasks.
+> 1. The agent generates multiple reasoning trajectories {τ₁, τ₂, …, τₖ} for a dataset of training tasks.
+> 
 > 2. Filtering: A ground-truth oracle (e.g., unit tests, formal verifiers) evaluates each trajectory. Only trajectories that produce correct outcomes are retained [28]. This filtering step creates a "self-purified" dataset of (Problem, Rationale, Solution) triplets generated by the agent itself.
+> 
 > 3. Fine-Tuning: The model is fine-tuned on its own successful reasoning traces, minimizing the negative log-likelihood:
 > 
-> $$\mathcal{L}_{SFT} = -\sum_{(s,z,a) \in \tau_{success}} \log \pi_{\theta}(z, a \mid s)$$
+> **(11)** ℒ_SFT = −∑_{(s,z,a) ∈ τ_success} log π_θ(z, a | s)
+> $$\mathcal{L}_{\text{SFT}} = -\sum_{(s,z,a) \in \tau_{\text{success}}} \log \pi_{\theta}(z, a \mid s)$$
 > 
 > This procedure converts slow, deliberative reasoning processes—those requiring extended search, backtracking, or multiple attempts—into fast, single-pass heuristics encoded in the model weights. Over successive iterations, complex multi-step reasoning patterns that initially required exhaustive exploration become directly accessible as learned routines.
 > 
 > #### 7.3.3 Level 3: Agentic Reinforcement Learning
 > 
-> Mechanism. Level 3 employs on-policy Reinforcement Learning—specifically Group Relative Policy Optimization (GRPO) [29, 30] or Proximal Policy Optimization (PPO) [31] adapted for multi-turn POMDPs [32]—to discover execution strategies that may not appear in any existing training data. Whereas SFT at Level 2 distills and compresses known-good trajectories, RL at Level 3 enables exploration beyond the support of the training distribution. The agent can discover novel strategies (e.g., checking a cache before issuing a database query, or parallelizing independent API calls) that maximize expected reward.
+> **Mechanism.** Level 3 employs on-policy Reinforcement Learning—specifically Group Relative Policy Optimization (GRPO) [29, 30] or Proximal Policy Optimization (PPO) [31] adapted for multi-turn POMDPs [32]—to discover execution strategies that may not appear in any existing training data. Whereas SFT at Level 2 distills and compresses known-good trajectories, RL at Level 3 enables exploration beyond the support of the training distribution. The agent can discover novel strategies (e.g., checking a cache before issuing a database query, or parallelizing independent API calls) that maximize expected reward.
 > 
-> Formal Characterization. The policy gradient update for the reasoning policy π_θ maximizes the expected advantage A_t of each reasoning step:
+> **Formal Characterization.** The policy gradient update for the reasoning policy π_θ maximizes the expected advantage Âₜ of each reasoning step:
 > 
-> $$\nabla_{\theta} J \approx \frac{1}{N} \sum_{i=1}^{N} \sum_{t=1}^{T} \nabla_{\theta} \log \pi_{\theta}(z_{t}^{(i)} | h_{t}^{(i)}) \hat{A}_{t}^{(i)}$$
+> **(12)** ∇_θ J ≈ (1/N) ∑ᵢ₌₁ᴺ ∑ₜ₌₁ᵀ ∇_θ log π_θ(zₜ⁽ⁱ⁾ | hₜ⁽ⁱ⁾) Âₜ⁽ⁱ⁾
+> $$\nabla_{\theta} J \approx \frac{1}{N} \sum_{i=1}^{N} \sum_{t=1}^{T} \nabla_{\theta} \log \pi_{\theta}(z_t^{(i)} | h_t^{(i)}) \hat{A}_t^{(i)}$$
 > 
-> where N is the number of sampled trajectories, h_t^(i) is the history at timestep t in trajectory i, and A_t^(i) is the estimated advantage at that timestep. The resulting agent can discover execution strategies that are more efficient than any trajectory present in the supervised training set.
+> where N is the number of sampled trajectories, hₜ⁽ⁱ⁾ is the history at timestep t in trajectory i, and Âₜ⁽ⁱ⁾ is the estimated advantage at that timestep. The resulting agent can discover execution strategies that are more efficient than any trajectory present in the supervised training set.
 > 
 > ### 7.4 Compounding Improvement and Data Accumulation
 > 
 > The three-level framework produces a compounding improvement cycle through progressive data accumulation.
 > 
 > - Stage 1: The agent operates at Level 1, using the Reflector to accumulate a proprietary database of "Lessons Learned" and "Edge Cases" specific to the enterprise's data, systems, and workflows.
+> 
 > - Stage 2: This accumulated database serves as training data for Level 2 (STaR), producing a fine-tuned specialist model that outperforms generic frontier models on company-specific tasks by virtue of its internalized domain knowledge.
-> - Stage 3: Continuous Level 3 (RL) optimization ensures that the agent adapts to evolving business logic, API schema changes, and shifting data distributions, reducing ongoing maintenance costs
+> 
+> - Stage 3: Continuous Level 3 (RL) optimization ensures that the agent adapts to evolving business logic, API schema changes, and shifting data distributions, reducing ongoing maintenance costs.
 > 
 > Each stage generates data that feeds subsequent stages, creating a self-reinforcing loop in which operational experience translates into progressively more capable and specialized agent behavior.
 > 
@@ -425,6 +448,7 @@ Runtime efficiency through "Cognitive Map-Reduce" — analyzing execution plans 
 > 
 > In a synchronous execution loop, each of k sequential steps (reasoning → tool invocation → observation → reasoning) contributes additively to total end-to-end latency:
 > 
+> **(13)** L_total = ∑ᵢ₌₁ᵏ (L_inference,i + L_network,i)
 > $$L_{\text{total}} = \sum_{i=1}^{k} \left( L_{\text{inference},i} + L_{\text{network},i} \right)$$
 > 
 > where L_inference,i is the model inference latency at step i and L_network,i is the network round-trip time for the tool call at step i. For workflows involving slow external APIs, large database queries, or deep reasoning chains, total latency can reach minutes—far beyond acceptable thresholds for real-time or near-real-time applications.
@@ -439,6 +463,7 @@ Runtime efficiency through "Cognitive Map-Reduce" — analyzing execution plans 
 > 
 > Under this execution model, total wall-clock time is bounded by the critical path—the longest chain of sequentially dependent steps—rather than by the sum of all step latencies:
 > 
+> **(14)** L_total = max_{path ∈ DAG} (∑_{node ∈ path} L_node)
 > $$L_{\text{total}} = \max_{\text{path} \in \text{DAG}} \left( \sum_{\text{node} \in \text{path}} L_{\text{node}} \right)$$
 > 
 > For wide, shallow task graphs—e.g., researching multiple entities in parallel, querying multiple data sources concurrently—the critical path length may be substantially shorter than the total sum of all node latencies, yielding proportional reductions in wall-clock execution time.
@@ -457,7 +482,7 @@ Runtime efficiency through "Cognitive Map-Reduce" — analyzing execution plans 
 > 
 > ### 8.4 Dynamic Context Pruning
 > 
-> Self-attention cost scales quadratically, O(N^2), in the context length N. Retaining every log entry, error trace, intermediate reasoning step, and tool output in the active context saturates the context window and imposes increasing cost and latency as the session progresses.
+> Self-attention cost scales quadratically, O(N²), in the context length N. Retaining every log entry, error trace, intermediate reasoning step, and tool output in the active context saturates the context window and imposes increasing cost and latency as the session progresses.
 > 
 > The framework employs a dynamic KV-cache eviction policy driven by attention-score analysis to maintain a bounded active context size:
 > 
@@ -514,7 +539,7 @@ Runtime efficiency through "Cognitive Map-Reduce" — analyzing execution plans 
 > 
 > [6] "What is MCP? (Model Context Protocol)." Video Resource, Accessed Jan 26, 2026. https://www.youtube.com/watch?v=pieK0dog66Q
 > 
-> [7] Kaelbling, L. P., Littman, M. L., and Cassandra, A. R., "Planning and Acting in Partially Observable Stochastic Domains," Artificial Intelligence, vol. 101, no. 1–2, pp. 99–134, 1998.
+> [7] Kaelbling, L. P., Littman, M. L., and Cassandra, A. R., "Planning and Acting in Partially Observable Stochastic Domains," Artificial Intelligence, vol. 101, no. 1-2, pp. 99-134, 1998.
 > 
 > [8] "LLM-Guided Probabilistic Program Induction for POMDP Model Estimation," arXiv:2505.02216v1. https://arxiv.org/html/2505.02216v1
 > 
@@ -565,5 +590,5 @@ Runtime efficiency through "Cognitive Map-Reduce" — analyzing execution plans 
 > [31] Schulman, J., Wolski, F., Dhariwal, P., Radford, A., and Klimov, O., "Proximal Policy Optimization Algorithms," arXiv:1707.06347, 2017. https://arxiv.org/abs/1707.06347
 > 
 > [32] "K-Level Policy Gradients for Multi-Agent Reinforcement Learning," arXiv:2509.12117v1. https://arxiv.org/html/2509.12117v1
-> 
+>
 > [Source: The Auton Agentic AI Framework](https://arxiv.org/abs/2602.23720)
