@@ -10,7 +10,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 
 ## Deep Dives
 
-- [[agent-harness-is-the-real-product/blog|Agent Harness is the Real Product]] — synthesis of how Claude Code, Cursor, Manus, Devin, and SWE-Agent converge on the same architecture, with 17 reference notes
+- [[agent harness is the real product]] — synthesis of how Claude Code, Cursor, Manus, Devin, and SWE-Agent converge on the same architecture, with 17 reference notes
 
 ## Notes
 

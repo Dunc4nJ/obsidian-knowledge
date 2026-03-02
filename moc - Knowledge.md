@@ -122,7 +122,7 @@ How agents learn and improve over time — memory-first architectures, persisten
 Agent code search, semantic retrieval, and the bottleneck between code generation and code retrieval.
 
 - [[Knowledge/Agents/codebase_search_agents/index|Semantic Code Search — Morph Documentation]] — two approaches to AI-powered code search via the Morph MCP server
-- [[Knowledge/Agents/codebase_search_agents/code-search-bottleneck/blog|Coding agents are bottlenecked by search not coding ability]] — survey of recent research on why AI coding agents fail at retrieval, not generation
+- [[coding agents are bottlenecked by search not coding ability]] — survey of recent research on why AI coding agents fail at retrieval, not generation
 
 ### Learnings
 
