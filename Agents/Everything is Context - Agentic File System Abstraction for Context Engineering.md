@@ -30,11 +30,11 @@ Generative AI (GenAI) has reshaped software system design by introducing foundat
 ## Original Content
 
 > [!quote]- Full Paper Text
-> > # Everything is Context: Agentic File System Abstraction for Context Engineering
+> # Everything is Context: Agentic File System Abstraction for Context Engineering
 >
 > Xiwei Xu *CSIRO's Data61*, NSW Australia *University of New South Wales*, NSW Australia xiwei.xu@data61.csiro.au
 >
-> > Xuewu Gu *ArcBlock, Inc* Seattle, USA nate@arcblock.io
+> Xuewu Gu *ArcBlock, Inc* Seattle, USA nate@arcblock.io
 >
 > Robert Mao *ArcBlock, Inc* Seattle, USA rob@arcblock.io
 >

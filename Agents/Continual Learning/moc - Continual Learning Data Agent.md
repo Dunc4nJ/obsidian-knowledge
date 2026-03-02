@@ -11,8 +11,8 @@ Research and frameworks for building AI agents that persistently learn, remember
 
 ## Research Papers
 
-- **MemSkill** — Learning and Evolving Memory Skills for Self-Evolving Agents (PDF)
-- **ProcMEM** — Learning Reusable Procedural Memory from Experience via Non-Parametric PPO for LLM Agents (PDF)
+- [[MemSkill - Learning and Evolving Memory Skills for Self-Evolving Agents]] — Learning and Evolving Memory Skills for Self-Evolving Agents
+- [[ProcMEM - Learning Reusable Procedural Memory from Experience via Non-Parametric PPO for LLM Agents]] — Learning Reusable Procedural Memory from Experience via Non-Parametric PPO for LLM Agents
 
 ## Frameworks
 
