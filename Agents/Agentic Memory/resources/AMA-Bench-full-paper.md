@@ -1,3 +1,10 @@
+---
+created: 2026-03-01
+description: Full paper extraction of AMA-Bench, a benchmark for evaluating long-horizon memory in agentic applications using real and synthetic trajectories.
+source: https://arxiv.org/abs/2502.xxxxx
+type: resource
+---
+
 # **AMA-Bench: Evaluating Long-Horizon Memory for Agentic Applications**
 
 Yujie Zhao <sup>1</sup> Boqin Yuan <sup>1</sup> Junbo Huang <sup>1</sup> Haocheng Yuan <sup>1</sup> Zhongming Yu <sup>1</sup> Haozhou Xu <sup>1</sup> Lanxiang Hu <sup>1</sup> Abhilash Shankarampeta <sup>1</sup> Zimeng Huang <sup>1</sup> Wentao Ni <sup>1</sup> Yuandong Tian <sup>2</sup> Jishen Zhao <sup>1</sup>

@@ -1,5 +1,6 @@
 ---
 created: 2026-03-01
+description: Claude Code hooks-based linting and code quality enforcement tool that runs at write time.
 source: https://github.com/alexfazio/plankton
 type: resource
 tags: [claude-code, hooks, linting, code-quality, write-time-enforcement]

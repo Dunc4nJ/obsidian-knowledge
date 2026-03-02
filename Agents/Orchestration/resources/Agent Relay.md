@@ -1,5 +1,6 @@
 ---
 created: 2026-03-01
+description: Multi-agent orchestration relay for communication between Claude Code, Codex, and other coding agents.
 source: https://github.com/AgentWorkforce/relay
 type: resource
 tags: [multi-agent, orchestration, communication, claude-code, codex]
