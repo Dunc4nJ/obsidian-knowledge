@@ -8,6 +8,10 @@ type: moc
 
 Designing the scaffolding around agents — system prompts, AGENTS.md patterns, soul files, tool descriptions, prompt engineering, and middleware between the model and the world.
 
+## Deep Dives
+
+- [[agent-harness-is-the-real-product/blog|Agent Harness is the Real Product]] — synthesis of how Claude Code, Cursor, Manus, Devin, and SWE-Agent converge on the same architecture, with 17 reference notes
+
 ## Notes
 
 - [[claude CLI print mode is a full agent runtime accessible via command line]]
