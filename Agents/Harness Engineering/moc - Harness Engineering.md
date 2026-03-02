@@ -21,6 +21,12 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[llm-tool-api-architecture-optimizing-roundtrips-tokens-and-context-like-gpu-cache-hierarchies|SebAaltonen's LLM Tool API Architecture — optimizing roundtrips, tokens, and context like GPU cache hierarchies]]
 - [[code evolution harnesses multiply LLM reasoning performance 2-3x on ARC-AGI-2 without changing the model]]
 
+## Factory Droid
+
+- [[Factory Code Droid combines multi-model sampling and codebase-aware retrieval to achieve state-of-the-art SWE-bench performance]]
+- [[Factory Droid achieves state-of-the-art on Terminal-Bench through agent design not model choice]]
+- [[Factory droid-action wraps agent execution into a GitHub Actions contract with structured inputs MCP tools and STRIDE security skills]]
+
 ## Context Engineering Strategies
 
 - [[langchain-filesystem-context|Filesystems give agents a single interface for storing, retrieving, and updating unlimited context]]
