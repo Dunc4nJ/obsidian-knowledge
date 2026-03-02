@@ -28,6 +28,8 @@ Roundups, digests, survey notes, and multi-topic captures that don't fit cleanly
 ### Harness Engineering
 Designing the scaffolding around agents — system prompts, AGENTS.md patterns, soul files, tool descriptions, prompt engineering techniques, middleware between the model and the world. If the note is about *shaping agent behavior through its harness*, it goes here.
 
+- [[agents need a harness not a framework because durable event-driven infrastructure already solves retry routing and state]]
+
 ### Infrastructure
 Production engineering for agents — security, reliability, sandboxing, deployment, distributed systems patterns, authentication, cost management. If the note is about *keeping agents running safely in production*, it goes here.
 
