@@ -40,6 +40,8 @@ Notes specific to the OpenClaw platform — architecture, features, configuratio
 ### Orchestration
 Multi-agent coordination — delegation patterns, lead/worker ratios, communication between agents, state machines, planning-based orchestration, squad architectures. If the note is about *how multiple agents work together*, it goes here. Single-agent architecture decisions usually belong in Harness Engineering or Infrastructure.
 
+- [[separating cognitive blueprints from runtime engines enables portable auditable agent systems]]
+
 ### Tooling
 Agent tool design, context engineering, prompt caching, skill architectures, search strategies, progressive disclosure, and general patterns for how agents interact with tools and manage context. The broadest subfolder — if a note is about *how agents use tools or manage their context window*, it goes here.
 
