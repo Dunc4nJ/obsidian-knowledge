@@ -1,7 +1,7 @@
 ---
 created: 2026-03-03
 description: ProcMEM reframes experience reuse as non-parametric procedural memory via Skill-MDPs, semantic-gradients, and a PPO-style gating mechanism.
-source: ProcMEM- Learning Reusable Procedural Memory from Experience via Non-Parametric PPO for LLM Agents.pdf
+source: https://arxiv.org/abs/2602.01869
 type: paper
 ---
 
@@ -9,7 +9,7 @@ type: paper
 
 ## Abstract
 
-LLM-driven agents demonstrate strong performance in sequential decision-making but often rely on on-the-fly reasoning, re-deriving solutions even in recurring scenarios. This insufficient experience reuse leads to computational redundancy and execution instability. To bridge this gap, we propose ProcMEM, a framework that enables agents to autonomously learn procedural memory from interaction experiences without parameter updates. By formalizing a **Skill-MDP**, ProcMEM transforms passive episodic narratives into executable Skills defined by activation, execution, and termination conditions to ensure executability. To achieve reliable reusability without capability degradation, we introduce Non-Parametric **PPO**, which leverages semantic gradients for high-quality candidate generation and a PPO Gate for robust Skill verification. Through score-based maintenance, ProcMEM sustains compact, highquality procedural memory. Experimental results across in-domain, cross-task, and cross-agent scenarios demonstrate that ProcMEM achieves superior reuse rates and significant performance gains with extreme memory compression. Visualized evolutionary trajectories and Skill distributions further reveal how ProcMEM transparently accumulates, refines, and reuses procedural knowledge to facilitate long-term autonomy.
+LLM-driven agents demonstrate strong performance in sequential decision-making but often rely on on-the-fly reasoning, re-deriving solutions even in recurring scenarios. This insufficient experience reuse leads to computational redundancy and execution instability. To bridge this gap, we propose ProcMEM, a framework that enables agents to autonomously learn procedural memory from interaction experiences without parameter updates. By formalizing a **Skill-MDP**, ProcMEM transforms passive episodic narratives into executable Skills defined by activation, execution, and termination conditions to ensure executability. To achieve reliable reusability without capability degradation, we introduce Non-Parametric **PPO**, which leverages semantic gradients for high-quality candidate generation and a PPO Gate for robust Skill verification. Through score-based maintenance, ProcMEM sustains compact, high-quality procedural memory. Experimental results across in-domain, cross-task, and cross-agent scenarios demonstrate that ProcMEM achieves superior reuse rates and significant performance gains with extreme memory compression. Visualized evolutionary trajectories and Skill distributions further reveal how ProcMEM transparently accumulates, refines, and reuses procedural knowledge to facilitate long-term autonomy.
 
 ## Key Takeaways
 
@@ -247,7 +247,7 @@ LLM-driven agents demonstrate strong performance in sequential decision-making b
 > Online score update. For each Skill ω, we maintain a cumulative gain Gb(ω) and an invocation count Nb(ω). After processing a batch T (b) , we update the online score:
 >
 > $$G_{b+1} = G_b + \sum G(\omega; \tau), \quad N_{b+1} = N_b + \sum c(\omega; \tau),$$
->  
+>
 > $$Score_{b+1} = \frac{G_{b+1}}{\max(1, N_{b+1})}.$$
 >
 > Online Score-Based Pruning. To enforce the fixed pool capacity, we maintain the Skill pool using online scores. Specifically, we remove (i) Skills with non-positive online score, i.e., Score(ω) ≤ 0, which indicates no expected advantage over existing Skills, and (ii) duplicate or semantically redundant Skills. If the pool still exceeds capacity, we further prune Skills in ascending order of online score. As the baseline improves over time, this rule imposes evolutionary pressure, phasing out obsolete Skills while retaining those with consistently positive gains.
@@ -849,6 +849,5 @@ LLM-driven agents demonstrate strong performance in sequential decision-making b
 >
 > A natural direction for future work is to move beyond explicit representations toward genuinely implicit or directly executable Skills. One possible approach is to progressively compress frequently reused Skills into more compact forms, such as executable code modules, parameterized procedures, or latent control policies that can be invoked without natural-language mediation. Another direction is to decouple Skill execution from language generation entirely, allowing mature Skills to be executed directly while retaining explicit representations for learning, evaluation, and debugging. Through such mechanisms, explicit Skills may serve as an intermediate stage in skill acquisition, with long-term evolution yielding more implicit procedural representations that more closely resemble human procedural memory.
 
-## External Resources
 
-- https://github.com/diffusion-xxx/ProcMEM
+**Source URL:** https://arxiv.org/abs/2602.01869
