@@ -11,6 +11,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 ## Deep Dives
 
 - [[agent harness is the real product]] — synthesis of how Claude Code, Cursor, Manus, Devin, and SWE-Agent converge on the same architecture, with 17 reference notes
+- [[how top ai companies handle context engineering]] — compendium of six-company context-engineering strategies, tradeoffs, and technique matrix
 
 ## Notes
 
@@ -19,3 +20,11 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[harness engineering improved a coding agent 13 points by changing only system prompts tools and middleware]]
 - [[llm-tool-api-architecture-optimizing-roundtrips-tokens-and-context-like-gpu-cache-hierarchies|SebAaltonen's LLM Tool API Architecture — optimizing roundtrips, tokens, and context like GPU cache hierarchies]]
 - [[code evolution harnesses multiply LLM reasoning performance 2-3x on ARC-AGI-2 without changing the model]]
+
+## Context Engineering Strategies
+
+- [[langchain-filesystem-context|Filesystems give agents a single interface for storing, retrieving, and updating unlimited context]]
+- [[langchain-rise-of-context-engineering|Context engineering supersedes prompt engineering as the core skill for AI engineers]]
+- [[openai-session-memory|OpenAI Agents SDK Session object enables trimming and summarization for multi-turn context management]]
+- [[openai-context-personalization|State-based memory with distillation and consolidation enables persistent agent personalization]]
+- [[anthropic-mcp-code-execution|Agents that write code to call MCP tools reduce context overhead by 98.7 percent]]

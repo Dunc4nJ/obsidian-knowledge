@@ -1,40 +1,38 @@
 ---
-created: 2025-11-04
-description: Anthropic demonstrates how agents can interact with MCP servers via code execution rather than direct tool calls, reducing token consumption by up to 98.7% through progressive tool discovery and in-environment data processing.
+created: 2026-03-02
+description: Agents that write code to call MCP tools instead of using direct tool calls can reduce context overhead by up to 98.7 percent while gaining privacy, state persistence, and progressive disclosure benefits.
 source: https://www.anthropic.com/engineering/code-execution-with-mcp
+type: reference
 ---
-
-# Code execution with MCP - building more efficient AI agents
 
 ## Key Takeaways
 
-Anthropic identifies two scaling bottlenecks when agents connect to many MCP servers: tool definitions bloating the context window, and intermediate results flowing through the model unnecessarily. Their solution reframes MCP tools as code APIs on a filesystem, letting agents discover and invoke tools through code execution rather than direct tool calls. This is a concrete implementation of [[progressive disclosure filters force agent selectivity over what enters context]] — the agent explores a file tree of tool definitions and loads only what it needs.
+The central argument is that direct MCP tool calls don't scale — loading thousands of tool definitions upfront and routing every intermediate result through the context window creates a combinatorial tax on tokens. The solution is to let agents write code that calls tools via generated TypeScript wrappers, so data flows through an execution environment rather than through the model. This is the same insight behind [[progressive disclosure filters force agent selectivity over what enters context]] — the agent should encounter tool definitions only when it needs them, not all at once.
 
-The approach yields a reported 98.7% reduction in token usage (150,000 tokens down to 2,000) for multi-tool workflows. This directly addresses the constraints described in [[prompt caching is the foundational constraint for building long-running agents]] — fewer tokens means lower latency and cost at every turn.
+The article introduces a concrete architecture: auto-generate a filesystem of typed wrappers (one `.ts` file per MCP tool, organized by server), then let the agent explore the tree with `ls` and `cat` to discover tools on demand. This progressive disclosure pattern mirrors what [[MCP Best Practices]] recommends for server design and what Honra describes in [[honra-progressive-disclosure]] — layered, on-demand context loading outperforms upfront context dumps. The claimed savings (150k tokens down to 2k) are dramatic but plausible when most tools go unused per turn.
 
-A key architectural insight is that intermediate data stays in the execution environment. When an agent copies a document from Google Drive to Salesforce, the content never enters the model's context — it flows through code. This mirrors the pattern in [[CLIs are the agent-native interface because legacy tooling is already machine-readable]], where structured tool outputs bypass the model's reasoning loop entirely.
+Beyond token savings, code execution enables privacy-preserving data pipelines where PII never enters the model's context. The harness tokenizes sensitive fields (emails, phone numbers) before they reach the model and untokenizes them on the way out to downstream tools. This is a harness-level concern that fits neatly into the [[agent harness is the real product]] framing — the harness mediates what the model sees, not just what it can do.
 
-The privacy angle is practical: PII tokenization in the MCP client means sensitive data flows between tools without the model ever seeing real values. The harness intercepts and replaces PII with tokens, then untokenizes on outbound MCP calls.
-
-The article connects code execution to the Skills concept — agents can persist working code as reusable functions with SKILL.md files, building a toolbox that compounds over time. This is the same pattern used in [[coding agents are bottlenecked by search not coding ability]] where retrieval and reuse of existing solutions matters more than generation.
-
-Cloudflare independently validated this approach, calling it "Code Mode" — suggesting this is becoming a consensus architecture for tool-heavy agents.
+The skills persistence angle is also notable: agents save working code as reusable functions (a `./skills/` directory with `SKILL.md` files), building a growing library of higher-level capabilities. This connects to Anthropic's broader [[anthropic-effective-harnesses|effective harnesses]] guidance and the idea that agents should evolve their own scaffolding over time. Cloudflare independently validated this pattern under the name "Code Mode."
 
 ## External Resources
 
-- [Model Context Protocol](https://modelcontextprotocol.io/) — the open standard for agent-tool integration
+- [Model Context Protocol](https://modelcontextprotocol.io/) — the open standard for connecting agents to external tools and data
 - [MCP Servers repository](https://github.com/modelcontextprotocol/servers) — community-built MCP server implementations
-- [MCP SDKs](https://modelcontextprotocol.io/docs/sdk) — official SDKs for all major languages
-- [Cloudflare Code Mode](https://blog.cloudflare.com/code-mode/) — Cloudflare's independent findings on code execution with MCP
-- [Claude Agent Skills](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview) — reusable instruction/script folders for specialized agent tasks
-- [Claude Code Sandboxing](https://www.anthropic.com/engineering/claude-code-sandboxing) — secure execution environments for agent-generated code
-- [MCP Community](https://modelcontextprotocol.io/community/communication) — community hub for sharing implementations
+- [MCP SDKs](https://modelcontextprotocol.io/docs/sdk) — official SDKs for all major programming languages
+- [Cloudflare Code Mode](https://blog.cloudflare.com/code-mode/) — Cloudflare's independent implementation of the same pattern
+- [Claude Skills documentation](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview) — reusable instruction folders for specialized agent tasks
+- [Claude Code sandboxing](https://www.anthropic.com/engineering/claude-code-sandboxing) — secure execution environment design for agent-generated code
+- [MCP Community](https://modelcontextprotocol.io/community/communication) — community channels for sharing MCP implementations
 
 ## Original Content
 
 > [!quote]- Source Material
+> # Code execution with MCP: Building more efficient agents
 > 
-> *Source: [Code execution with MCP: building more efficient AI agents](https://www.anthropic.com/engineering/code-execution-with-mcp) — Adam Jones and Conor Kelly, Anthropic Engineering, November 4, 2025*
+> Published Nov 04, 2025
+> 
+> Direct tool calls consume context for each definition and result. Agents scale better by writing code to call tools instead. Here's how it works with MCP.
 > 
 > [The Model Context Protocol (MCP)](https://modelcontextprotocol.io/) is an open standard for connecting AI agents to external systems. Connecting agents to tools and data traditionally requires a custom integration for each pairing, creating fragmentation and duplicated effort that makes it difficult to scale truly connected systems. MCP provides a universal protocol—developers implement MCP once in their agent and it unlocks an entire ecosystem of integrations.
 > 
@@ -44,14 +42,14 @@ Cloudflare independently validated this approach, calling it "Code Mode" — sug
 > 
 > In this blog we'll explore how code execution can enable agents to interact with MCP servers more efficiently, handling more tools while using fewer tokens.
 > 
-> ### Excessive token consumption from tools makes agents less efficient
+> ## Excessive token consumption from tools makes agents less efficient
 > 
 > As MCP usage scales, there are two common patterns that can increase agent cost and latency:
 > 
-> - Tool definitions overload the context window;
-> - Intermediate tool results consume additional tokens.
+> 1. Tool definitions overload the context window;
+> 2. Intermediate tool results consume additional tokens.
 > 
-> #### 1. Tool definitions overload the context window
+> ### 1. Tool definitions overload the context window
 > 
 > Most MCP clients load all tool definitions upfront directly into context, exposing them to the model using a direct tool-calling syntax. These tool definitions might look like:
 > 
@@ -76,7 +74,7 @@ Cloudflare independently validated this approach, calling it "Code Mode" — sug
 > 
 > Tool descriptions occupy more context window space, increasing response time and costs. In cases where agents are connected to thousands of tools, they'll need to process hundreds of thousands of tokens before reading a request.
 > 
-> #### 2. Intermediate tool results consume additional tokens
+> ### 2. Intermediate tool results consume additional tokens
 > 
 > Most MCP clients allow models to directly call MCP tools. For example, you might ask your agent: "Download my meeting transcript from Google Drive and attach it to the Salesforce lead."
 > 
@@ -99,12 +97,12 @@ Cloudflare independently validated this approach, calling it "Code Mode" — sug
 > 
 > With large documents or complex data structures, models may be more likely to make mistakes when copying data between tool calls.
 > 
-> *MCP client architecture: tool definitions and results flow through the model*
-> ![[anthropic-mcp-exec-001.png]]
+> *How the MCP client works with the MCP server and LLM*
+> ![[anthropic-mcp-code-exec-001.png]]
 > 
 > The MCP client loads tool definitions into the model's context window and orchestrates a message loop where each tool call and result passes through the model between operations.
 > 
-> ### Code execution with MCP improves context efficiency
+> ## Code execution with MCP improves context efficiency
 > 
 > With code execution environments becoming more common for agents, a solution is to present MCP servers as code APIs rather than direct tool calls. The agent can then write code to interact with MCP servers. This approach addresses both challenges: agents can load only the tools they need and process data in the execution environment before passing results back to the model.
 > 
@@ -162,17 +160,17 @@ Cloudflare independently validated this approach, calling it "Code Mode" — sug
 > 
 > Cloudflare [published similar findings](https://blog.cloudflare.com/code-mode/), referring to code execution with MCP as "Code Mode." The core insight is the same: LLMs are adept at writing code and developers should take advantage of this strength to build agents that interact with MCP servers more efficiently.
 > 
-> ### Benefits of code execution with MCP
+> ## Benefits of code execution with MCP
 > 
 > Code execution with MCP enables agents to use context more efficiently by loading tools on demand, filtering data before it reaches the model, and executing complex logic in a single step. There are also security and state management benefits to using this approach.
 > 
-> #### Progressive disclosure
+> ### Progressive disclosure
 > 
 > Models are great at navigating filesystems. Presenting tools as code on a filesystem allows models to read tool definitions on-demand, rather than reading them all up-front.
 > 
 > Alternatively, a `search_tools` tool can be added to the server to find relevant definitions. For example, when working with the hypothetical Salesforce server used above, the agent searches for "salesforce" and loads only those tools that it needs for the current task. Including a detail level parameter in the `search_tools` tool that allows the agent to select the level of detail required (such as name only, name and description, or the full definition with schemas) also helps the agent conserve context and find tools efficiently.
 > 
-> #### Context efficient tool results
+> ### Context efficient tool results
 > 
 > When working with large datasets, agents can filter and transform results in code before returning them. Consider fetching a 10,000-row spreadsheet:
 > 
@@ -210,7 +208,7 @@ Cloudflare independently validated this approach, calling it "Code Mode" — sug
 > 
 > Additionally, being able to write out a conditional tree that gets executed also saves on "time to first token" latency: rather than having to wait for a model to evaluate an if-statement, the agent can let the code execution environment do this.
 > 
-> #### Privacy-preserving operations
+> ### Privacy-preserving operations
 > 
 > When agents use code execution with MCP, intermediate results stay in the execution environment by default. This way, the agent only sees what you explicitly log or return, meaning data you don't wish to share with the model can flow through your workflow without ever entering the model's context.
 > 
@@ -245,7 +243,7 @@ Cloudflare independently validated this approach, calling it "Code Mode" — sug
 > 
 > Then, when the data is shared in another MCP tool call, it is untokenized via a lookup in the MCP client. The real email addresses, phone numbers, and names flow from Google Sheets to Salesforce, but never through the model. This prevents the agent from accidentally logging or processing sensitive data. You can also use this to define deterministic security rules, choosing where data can flow to and from.
 > 
-> #### State persistence and skills
+> ### State persistence and skills
 > 
 > Code execution with filesystem access allows agents to maintain state across operations. Agents can write intermediate results to files, enabling them to resume work and track progress:
 > 
@@ -281,12 +279,14 @@ Cloudflare independently validated this approach, calling it "Code Mode" — sug
 > 
 > Note that code execution introduces its own complexity. Running agent-generated code requires a secure execution environment with appropriate [sandboxing](https://www.anthropic.com/engineering/claude-code-sandboxing), resource limits, and monitoring. These infrastructure requirements add operational overhead and security considerations that direct tool calls avoid. The benefits of code execution—reduced token costs, lower latency, and improved tool composition—should be weighed against these implementation costs.
 > 
-> ### Summary
+> ## Summary
 > 
 > MCP provides a foundational protocol for agents to connect to many tools and systems. However, once too many servers are connected, tool definitions and results can consume excessive tokens, reducing agent efficiency.
 > 
 > Although many of the problems here feel novel—context management, tool composition, state persistence—they have known solutions from software engineering. Code execution applies these established patterns to agents, letting them use familiar programming constructs to interact with MCP servers more efficiently. If you implement this approach, we encourage you to share your findings with the [MCP community](https://modelcontextprotocol.io/community/communication).
 > 
-> #### Acknowledgments
+> ### Acknowledgments
 > 
 > *This article was written by Adam Jones and Conor Kelly. Thanks to Jeremy Fox, Jerome Swannack, Stuart Ritchie, Molly Vorwerck, Matt Samuels, and Maggie Vo for feedback on drafts of this post.*
+> 
+> [Original article](https://www.anthropic.com/engineering/code-execution-with-mcp)
