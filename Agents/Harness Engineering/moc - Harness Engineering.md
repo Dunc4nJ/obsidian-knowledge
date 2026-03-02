@@ -15,6 +15,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 
 ## Notes
 
+- [[lessons from building AI agents for financial services — sandbox skills streaming and eval at Fintool]] — Bustamante's full architecture breakdown: sandboxed execution, S3-first storage, markdown skills, Temporal orchestration, domain evals
 - [[claude CLI print mode is a full agent runtime accessible via command line]]
 - [[designing agent tools is an iterative art shaped by model capabilities not fixed engineering rules]]
 - [[harness engineering improved a coding agent 13 points by changing only system prompts tools and middleware]]
