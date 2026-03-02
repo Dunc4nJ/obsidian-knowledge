@@ -23,11 +23,26 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 
 ## Factory Droid
 
+### Architecture & Performance
 - [[Factory Code Droid combines multi-model sampling and codebase-aware retrieval to achieve state-of-the-art SWE-bench performance]]
 - [[Factory Droid achieves state-of-the-art on Terminal-Bench through agent design not model choice]]
-- [[Factory droid-action wraps agent execution into a GitHub Actions contract with structured inputs MCP tools and STRIDE security skills]]
 - [[Factory positions Droid as an agent-native platform spanning CLI web Slack Linear and mobile with a community-driven plugin ecosystem]]
+
+### Execution & Configuration
+- [[Factory droid exec uses tiered autonomy levels to gate agent permissions from read-only to full system access]]
+- [[AGENTS.md is a cross-agent convention for injecting repo-level context via proximity-based file discovery]]
+- [[Factory Droid plugins bundle skills commands hooks and MCP servers into distributable packages with marketplace-based discovery]]
+- [[Factory plugins marketplace uses a git-native catalog with SKILL.md files as the primary distribution unit for agent capabilities]]
+
+### CI & Review Integration
+- [[Factory droid-action wraps agent execution into a GitHub Actions contract with structured inputs MCP tools and STRIDE security skills]]
+- [[Factory droid-code-review reveals how prompt-driven agents map LLM outputs to GitHub-native review primitives through position-based inline commenting and stateful deduplication]]
+- [[Terminal-Bench leaderboard requires five full runs with raw logs to enforce reproducibility over cherry-picked results]]
+
+### Context & Compaction
 - [[Factory treats context as a scarce resource that must be budgeted and curated across layered scaffolding]]
+- [[factory uses incremental anchored summaries to compress agent context]]
+- [[structured summarization preserves more agent context than opaque compression]]
 
 ## Context Engineering Strategies
 
