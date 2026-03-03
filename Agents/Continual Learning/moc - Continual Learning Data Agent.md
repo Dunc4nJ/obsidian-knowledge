@@ -11,6 +11,7 @@ Research and frameworks for building AI agents that persistently learn, remember
 
 ## Research Papers
 
+- [[parametric memory encoding cross-sample reflection patterns into weights produces more diverse and effective self-improvement than retrieval]] — ParamMem: lightweight LoRA module that encodes cross-sample reflection patterns, enabling diverse reflection generation via temperature sampling for self-improving agents
 - [[MemSkill - Learning and Evolving Memory Skills for Self-Evolving Agents]] — Learning and Evolving Memory Skills for Self-Evolving Agents
 - [[ProcMEM - Learning Reusable Procedural Memory from Experience via Non-Parametric PPO for LLM Agents]] — Learning Reusable Procedural Memory from Experience via Non-Parametric PPO for LLM Agents
 
