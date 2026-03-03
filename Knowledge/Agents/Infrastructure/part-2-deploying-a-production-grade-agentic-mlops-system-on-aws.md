@@ -7,6 +7,10 @@ type: deployment
 
 # Part 2: Deploying a Production-Grade Agentic MLOps System on AWS
 
+## Part 1
+
+This is part two; start here: [[part-1-designing-a-production-grade-agentic-mlops-system|Part 1: Designing a Production-Grade Agentic MLOps System]].
+
 ## Key Takeaways
 
 This article is a pragmatic deployment playbook for moving a local Agentic MLOps stack to AWS using managed cloud services. The main operational pattern is:

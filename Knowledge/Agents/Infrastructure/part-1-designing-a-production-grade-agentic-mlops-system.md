@@ -7,6 +7,10 @@ source_author: K-Means Karan
 published: 2026-01-04
 ---
 
+## Part 2
+
+Continue the series here: [[part-2-deploying-a-production-grade-agentic-mlops-system-on-aws|Part 2: Deploying a Production-Grade Agentic MLOps System on AWS]].
+
 ## Summary
 
 This is a practical production-oriented architecture post describing how to build an end-to-end stock forecasting + reporting system using a dedicated LSTM model for time-series prediction and a separate Agentic AI layer for report synthesis, with attention to modular APIs, caching, drift handling, observability, and deployment concerns.
