@@ -1,0 +1,66 @@
+# Context Manifest — TableClay
+# Implements the Scored Context Loading pattern from:
+# [[skill architecture beats skill writing when memory contracts and learning loops connect the system]]
+#
+# Defines which pipeline stage / agent gets which brand files.
+# "full" = load complete file | "summary" = first 20 lines or TL;DR | "exclude" = don't load
+#
+# TTL rules (default):
+#   < 7 days: pass as-is
+#   7-30 days: flag age in output
+#   30-90 days: summary only regardless of manifest
+#   > 90 days: exclude regardless of manifest
+
+consumers:
+  # Pipeline stages (code workers)
+  ideation:
+    full: [audience.md, creative-kit.md, learnings-log.md]
+    summary: [positioning.md]
+    exclude: [assets-registry.md]
+    ttl_override:
+      learnings-log.md: 30d
+
+  draft:
+    full: [voice-profile.md]
+    summary: [audience.md, creative-kit.md]
+    exclude: [assets-registry.md, learnings-log.md]
+
+  compose:
+    full: [creative-kit.md, product-catalog.md]
+    summary: [voice-profile.md]
+    exclude: [audience.md, positioning.md, learnings-log.md]
+
+  validate:
+    full: [voice-profile.md, product-catalog.md]
+    summary: [positioning.md]
+    exclude: [creative-kit.md, learnings-log.md, assets-registry.md]
+
+  judge:
+    full: [voice-profile.md, positioning.md, audience.md]
+    summary: [creative-kit.md]
+    exclude: [assets-registry.md]
+
+  finalize:
+    full: [product-catalog.md]
+    summary: []
+    exclude: [audience.md, positioning.md, learnings-log.md]
+
+  measurement:
+    full: [assets-registry.md, learnings-log.md, creative-kit.md]
+    summary: [audience.md]
+    exclude: [voice-profile.md, positioning.md]
+
+  # Agents
+  bananabanker:
+    full: [creative-kit.md, learnings-log.md]
+    summary: [audience.md, positioning.md, voice-profile.md]
+    exclude: []
+
+  tableclay-manager:
+    full: [voice-profile.md, positioning.md, audience.md, product-catalog.md]
+    summary: [learnings-log.md, creative-kit.md]
+    exclude: []
+
+  athena:
+    summary: [voice-profile.md, positioning.md]
+    exclude: [learnings-log.md, assets-registry.md, creative-kit.md]

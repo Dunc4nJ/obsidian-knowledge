@@ -1,0 +1,129 @@
+{
+  "title": "Table Clay Ad Asset Tag Dictionary (v2)",
+  "type": "object",
+  "required": [
+    "asset_id",
+    "product_line",
+    "format",
+    "ratio",
+    "funnel_intent",
+    "angle",
+    "hook_style",
+    "proof_types",
+    "status",
+    "version"
+  ],
+  "properties": {
+    "asset_id": {"type": "string", "description": "Stable ID (UUID or slug)."},
+    "product_line": {
+      "type": "string",
+      "enum": ["mini_wheel", "travel_mug", "aesthetic_mugs"],
+      "description": "High-level product group." 
+    },
+    "product_sku": {"type": "string", "description": "Optional SKU or variant label."},
+
+    "format": {"type": "string", "enum": ["video", "static", "carousel"]},
+    "ratio": {"type": "string", "enum": ["9x16", "4x5", "1x1"]},
+    "placement": {
+      "type": "array",
+      "items": {"type": "string", "enum": ["reels", "stories", "feed", "explore", "audience_network"]},
+      "description": "Where it is intended to run." 
+    },
+
+    "funnel_intent": {
+      "type": "string",
+      "enum": ["discover", "validate", "decide", "commit"],
+      "description": "Intent stages used in the Table Clay content framework." 
+    },
+    "funnel_stage": {
+      "type": "string",
+      "enum": ["tof", "mof", "bof", "rt"],
+      "description": "Optional shorthand stage label." 
+    },
+
+    "angle": {"type": "string", "description": "Angle name (testable persuasion hypothesis)."},
+    "persona": {
+      "type": "string",
+      "enum": ["apartment_adult", "beginner_maker", "parent", "gift_seeker", "coffee_commuter", "aesthetic_home"],
+      "description": "Primary audience persona." 
+    },
+    "intent_context": {
+      "type": "string",
+      "enum": ["stress_reset", "screen_free_time", "coffee_ritual", "commute", "gift", "home_decor"],
+      "description": "User situation / job-to-be-done context." 
+    },
+
+    "objection_targets": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["space", "mess", "learning_curve", "quality_real", "time", "price", "gift_risk", "durability", "care"]
+      }
+    },
+
+    "hook_style": {
+      "type": "string",
+      "enum": [
+        "pattern_interrupt",
+        "pov_confession",
+        "question",
+        "asmr",
+        "before_after",
+        "myth_bust",
+        "fast_demo",
+        "aesthetic_loop"
+      ]
+    },
+
+    "proof_types": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": ["demo", "outcome", "objection_kill", "specs", "social_proof", "comparison", "risk_reversal", "ugc_testimonial"]
+      },
+      "description": "Which proof categories are present." 
+    },
+
+    "offer_type": {
+      "type": "string",
+      "enum": ["none", "bundle", "free_shipping", "limited_drop", "giftable", "discount"],
+      "description": "How the offer is framed (if at all)." 
+    },
+
+    "creative_type": {
+      "type": "string",
+      "enum": ["paid_ugc", "native_demo", "product_cinematic", "static_graphic", "carousel_micro_lp", "long_form"],
+      "description": "Creative family/type." 
+    },
+
+    "module_stack": {
+      "type": "array",
+      "description": "Ordered modules used to assemble the asset.",
+      "items": {
+        "type": "object",
+        "required": ["role", "module_id"],
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": ["hook", "mechanism", "proof", "outcome", "cleanup", "unboxing", "offer", "cta", "end_card"]
+          },
+          "module_id": {"type": "string"},
+          "notes": {"type": "string"}
+        }
+      }
+    },
+
+    "production": {
+      "type": "object",
+      "properties": {
+        "source": {"type": "string", "enum": ["shot", "ai_generated", "mixed"]},
+        "a_roll": {"type": "string", "enum": ["human_on_camera", "voiceover", "avatar", "none"]},
+        "b_roll": {"type": "string", "enum": ["product_closeups", "in_use", "lifestyle", "ugc_style", "studio"]}
+      }
+    },
+
+    "status": {"type": "string", "enum": ["draft", "qa_failed", "approved", "live", "winner", "stale", "retired"]},
+    "version": {"type": "string", "description": "Example: v1, v2, v3 or semver."}
+  }
+}

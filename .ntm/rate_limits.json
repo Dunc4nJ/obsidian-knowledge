@@ -1,0 +1,61 @@
+{
+  "state": {
+    "anthropic": {
+      "current_delay": 170859375000,
+      "consecutive_success": 1,
+      "last_rate_limit": "2026-02-23T11:00:52.327028877+01:00",
+      "cooldown_until": "2026-02-23T11:03:43.186403877+01:00",
+      "total_rate_limits": 6,
+      "total_successes": 6
+    },
+    "openai": {
+      "current_delay": 15000000000,
+      "consecutive_success": 0,
+      "last_rate_limit": "2026-02-14T11:00:46.421677192+01:00",
+      "cooldown_until": "2026-02-14T11:01:01.421677192+01:00",
+      "total_rate_limits": 1,
+      "total_successes": 1
+    }
+  },
+  "history": {
+    "anthropic": [
+      {
+        "time": "2026-02-23T04:27:52.29941579+01:00",
+        "provider": "anthropic",
+        "action": "send"
+      },
+      {
+        "time": "2026-02-23T04:36:22.322908558+01:00",
+        "provider": "anthropic",
+        "action": "send"
+      },
+      {
+        "time": "2026-02-23T05:45:42.392238284+01:00",
+        "provider": "anthropic",
+        "action": "send"
+      },
+      {
+        "time": "2026-02-23T05:51:52.315352248+01:00",
+        "provider": "anthropic",
+        "action": "send"
+      },
+      {
+        "time": "2026-02-23T05:52:32.309947387+01:00",
+        "provider": "anthropic",
+        "action": "send"
+      },
+      {
+        "time": "2026-02-23T11:00:52.327028877+01:00",
+        "provider": "anthropic",
+        "action": "send"
+      }
+    ],
+    "openai": [
+      {
+        "time": "2026-02-14T11:00:46.421677192+01:00",
+        "provider": "openai",
+        "action": "send"
+      }
+    ]
+  }
+}
