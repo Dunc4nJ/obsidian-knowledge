@@ -1,9 +1,0 @@
-{
-  "editor.formatOnSave": true,
-  "editor.rulers": [100],
-  "files.trimTrailingWhitespace": true,
-  "files.insertFinalNewline": true,
-  "files.trimFinalNewlines": true,
-  "editor.tabSize": 2,
-  "editor.detectIndentation": true
-}
