@@ -1,0 +1,21 @@
+{
+  "generated_at": null,
+  "brand": "TableClay",
+  "concept_name": "Kitchen Counter Cloud Mugs",
+  "content_type": "lifestyle-in-use",
+  "inspired_by": ["product-catalog: cloud mug pair + morning ritual angle", "creative-kit: pour shot visual concept"],
+  "product_described": "Cloud Mug Blue (#87CEEB) and Cloud Mug Pink (#FFB6C1) — hand-thrown ceramic, cloud-shaped silhouette with organic rounded bulges, ~10oz capacity, ~9cm tall, curved handle, subtle glaze variation.",
+  "prompt_used": "See REMAINING_PROMPTS.md — Concept 2",
+  "aspect_ratio": "4:5",
+  "platform_target": "instagram-feed",
+  "score": 22,
+  "status": "pending-generation",
+  "tags": ["morning-coffee", "kitchen", "pour-shot", "cloud-mug-pair", "bright-airy"],
+  "trend_signals_used": ["bright colors trend", "functional pottery engagement"],
+  "refiner_notes": {
+    "product_location": "center frame, blue mug left-forward, pink mug right-back",
+    "product_scale": "both mugs together occupy ~35% of frame",
+    "lighting_direction": "bright natural light from right window, cool-neutral",
+    "background_complexity": "low — clean white tile"
+  }
+}
