@@ -4,6 +4,7 @@ title: Part 1: Designing a Production-Grade Agentic MLOps System
 source: https://kmeanskaran.substack.com/p/part-1-designing-an-agentic-mlops
 source_type: substack
 source_author: K-Means Karan
+description: Architecture for production agentic MLOps covering orchestration, feedback loops, and deployment patterns
 published: 2026-01-04
 ---
 

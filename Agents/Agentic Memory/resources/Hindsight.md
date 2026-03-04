@@ -1,6 +1,7 @@
 ---
 created: 2026-03-02
 source: https://github.com/vectorize-io/hindsight
+description: Biomimetic long-term memory system for AI agents that learns from past interactions
 type: resource
 tags: [agent-memory, learning, biomimetic, long-term-memory]
 status: unread
