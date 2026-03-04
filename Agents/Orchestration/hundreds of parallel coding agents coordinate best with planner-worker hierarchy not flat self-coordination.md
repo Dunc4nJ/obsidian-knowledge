@@ -77,6 +77,9 @@ A surprising amount of behavior comes down to prompting. Getting agents to coord
 >
 > Another experiment was doing an in-place migration of Solid to React in the Cursor codebase. It took over three weeks with +266K/-193K edits. It still needs careful review, but was passing our CI and early checks.
 >
+> *Solid to React migration PR: +266K/-193K edits over three weeks of autonomous agent work*
+> ![[cursor-scaling-agents-001.png]]
+>
 > Another experiment was to improve an upcoming product. A long-running agent made video rendering 25x faster with an efficient Rust version. It also added support to zoom and pan smoothly with natural spring transitions and motion blurs, following the cursor. This code was merged and will be in production soon.
 >
 > We have a few other interesting examples still running:
