@@ -18,4 +18,5 @@ Multi-agent coordination — delegation patterns, lead/worker ratios, communicat
 - [[intelligent AI delegation requires trust accountability and adaptive monitoring not just task decomposition]]
 - [[multi-agent squads work when independent sessions share a mission control system]]
 - [[orchestration architecture determines multi-agent investment quality]]
+- [[planner-worker hierarchies outperform flat coordination for scaling multi-agent coding]]
 - [[simple financial agents outperform complex ones when tool routing is tight]]
