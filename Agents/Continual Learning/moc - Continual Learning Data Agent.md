@@ -31,3 +31,4 @@ Research and frameworks for building AI agents that persistently learn, remember
 ## Analysis
 
 - [[agent-continual-learning-impl]] — deep implementation comparison of continual learning in letta-code, scout, and serena
+  - [[stable agentic RL requires sequence-level clipping and environment-aware advantages to prevent training collapse]]
