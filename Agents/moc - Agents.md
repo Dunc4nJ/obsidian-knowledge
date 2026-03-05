@@ -52,6 +52,7 @@ Multi-agent coordination — delegation patterns, lead/worker ratios, communicat
 Agent skill design, authoring, testing, and lifecycle management. SKILL.md patterns, eval frameworks for skills, skill triggering and description optimization, capability uplift vs. encoded preference, and the skill-as-specification thesis. If the note is about *how skills are built, tested, or managed*, it goes here.
 
 - [[skill-creator now brings software testing rigor to agent skill authoring without requiring code]]
+- [[agent skills need eval harnesses not vibe checks to ship reliably]]
 
 ### Tooling
 Agent tool design, context engineering, prompt caching, skill architectures, search strategies, progressive disclosure, and general patterns for how agents interact with tools and manage context. The broadest subfolder — if a note is about *how agents use tools or manage their context window*, it goes here.
