@@ -19,6 +19,7 @@ Agentic search strategies — code search, semantic retrieval, embedding-based i
 ### Continual Learning
 
 - [[Letta Code agents can move across machines without losing memory]]
+- [[stable agentic RL requires sequence-level clipping and environment-aware advantages to prevent training collapse]]
 
 Agents that improve over time — RL from conversations, self-improvement loops, memory systems that compound knowledge across sessions, skill acquisition. The key test: *does the agent get better at its job over time?* If yes, it belongs here. If it just has good static context architecture, that's Tooling.
 
