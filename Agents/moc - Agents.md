@@ -26,6 +26,8 @@ Agents that improve over time — RL from conversations, self-improvement loops,
 ### Evaluation & Monitoring
 Measuring agent quality, observability, regression testing, LLM-as-judge, eval pipelines, drift detection, production monitoring. If the note is about *knowing whether the agent is doing well*, it goes here.
 
+- [[Agno native tracing keeps agent observability data in your own database]]
+
 ### Extra
 Roundups, digests, survey notes, and multi-topic captures that don't fit cleanly into one subfolder. Use sparingly — prefer placing notes in a specific subfolder when possible.
 
