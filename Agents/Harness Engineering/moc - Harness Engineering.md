@@ -21,6 +21,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[harness engineering improved a coding agent 13 points by changing only system prompts tools and middleware]]
 - [[llm-tool-api-architecture-optimizing-roundtrips-tokens-and-context-like-gpu-cache-hierarchies|SebAaltonen's LLM Tool API Architecture — optimizing roundtrips, tokens, and context like GPU cache hierarchies]]
 - [[code evolution harnesses multiply LLM reasoning performance 2-3x on ARC-AGI-2 without changing the model]]
+- [[LLMs can synthesize their own code harness via tree search eliminating illegal actions and outperforming larger models]]
 
 ## Factory Droid
 

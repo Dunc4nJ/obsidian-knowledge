@@ -32,4 +32,5 @@ Research and frameworks for building AI agents that persistently learn, remember
 ## Analysis
 
 - [[agent-continual-learning-impl]] — deep implementation comparison of continual learning in letta-code, scout, and serena
+- [[reproducing KARL requires a closed-corpus rollout stack with synthetic frontier tasks and compression-aware RL]] — implementation blueprint for an open KARL-style grounded-reasoning agent stack, including figure-by-figure image analysis, environment design, and phased build plan
   - [[stable agentic RL requires sequence-level clipping and environment-aware advantages to prevent training collapse]]
