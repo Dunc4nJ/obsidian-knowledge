@@ -19,10 +19,18 @@ Agentic search strategies — code search, semantic retrieval, embedding-based i
 ### Continual Learning
 
 - [[Letta Code agents can move across machines without losing memory]]
-- [[context management replaces the semantic layer for data agents because it adapts from corrections]]
 - [[stable agentic RL requires sequence-level clipping and environment-aware advantages to prevent training collapse]]
 
 Agents that improve over time — RL from conversations, self-improvement loops, memory systems that compound knowledge across sessions, skill acquisition. The key test: *does the agent get better at its job over time?* If yes, it belongs here. If it just has good static context architecture, that's Tooling.
+
+### Data Agent
+AI agents that query databases, write SQL, answer data questions, and do data analysis. Text-to-SQL, discovery and context layers over warehouses, data assistant architectures, RL for SQL tool use. If the note is about *agents interacting with structured data to answer questions*, it goes here.
+
+- [[OpenAI internal data agent succeeds through six layers of context not model capability alone]]
+- [[context management replaces the semantic layer for data agents because it adapts from corrections]]
+- [[the hard problem in text-to-SQL is discovery not generation and hybrid search over existing metadata solves it]]
+- [[Prime Intellect duckdb-qa - RL reward shaping for SQL tool use]]
+- [[multi-task RL on heterogeneous search behaviors produces knowledge agents that generalize across grounded reasoning tasks]]
 
 ### Evaluation & Monitoring
 Measuring agent quality, observability, regression testing, LLM-as-judge, eval pipelines, drift detection, production monitoring. If the note is about *knowing whether the agent is doing well*, it goes here.

@@ -11,7 +11,6 @@ Research and frameworks for building AI agents that persistently learn, remember
 
 ## Research Papers
 
-- [[multi-task RL on heterogeneous search behaviors produces knowledge agents that generalize across grounded reasoning tasks]] — KARL: multi-task off-policy RL on heterogeneous search behaviors yields Pareto-optimal knowledge agents that generalize across grounded reasoning tasks (Databricks, Mar 2026)
 - [[parametric memory encoding cross-sample reflection patterns into weights produces more diverse and effective self-improvement than retrieval]] — ParamMem: lightweight LoRA module that encodes cross-sample reflection patterns, enabling diverse reflection generation via temperature sampling for self-improving agents
 - [[MemSkill - Learning and Evolving Memory Skills for Self-Evolving Agents]] — Learning and Evolving Memory Skills for Self-Evolving Agents
 - [[ProcMEM - Learning Reusable Procedural Memory from Experience via Non-Parametric PPO for LLM Agents]] — Learning Reusable Procedural Memory from Experience via Non-Parametric PPO for LLM Agents
@@ -20,7 +19,6 @@ Research and frameworks for building AI agents that persistently learn, remember
 
 - [[file-based personal OS gives AI agents persistent identity and judgment across sessions]] — file-based operating system using markdown, YAML, and JSONL in Git for persistent agent context, episodic memory, and voice encoding
 - [[recursive self-improvement works when LLM judges detect friction patterns and the agent implements its own fixes]] — Factory's Signals system: LLM-as-judge session analysis, self-evolving friction taxonomy via embedding clusters, closed-loop ticket filing and agent self-patching
-- [[OpenAI internal data agent succeeds through six layers of context not model capability alone]] — six stacked context layers over 600PB across 70k datasets, architecture over raw model capability
 - [[async RL from real conversations lets agents continuously improve without blocking inference]] — OpenClaw-RL async RL framework turning real conversations into training signals
 - [[learning machines turn agents from stateless tools into systems that compound knowledge across users and sessions]] — extensible Learning Stores enabling cross-user knowledge continuity
 - [[letta-code-blog]] — Letta Code: memory-first coding agent architecture, top model-agnostic OSS harness on TerminalBench
@@ -32,5 +30,4 @@ Research and frameworks for building AI agents that persistently learn, remember
 ## Analysis
 
 - [[agent-continual-learning-impl]] — deep implementation comparison of continual learning in letta-code, scout, and serena
-- [[reproducing KARL requires a closed-corpus rollout stack with synthetic frontier tasks and compression-aware RL]] — implementation blueprint for an open KARL-style grounded-reasoning agent stack, including figure-by-figure image analysis, environment design, and phased build plan
   - [[stable agentic RL requires sequence-level clipping and environment-aware advantages to prevent training collapse]]
