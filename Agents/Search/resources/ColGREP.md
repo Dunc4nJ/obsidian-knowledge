@@ -36,3 +36,4 @@ Bridges the gap between dumb grep and full-blown code intelligence servers. The 
 - Could be worth installing on the VPS for coding agent workflows — the Claude Code integration hook is particularly interesting since it auto-injects into system prompts.
 - Model is only 17M params so CPU inference should be fast even on the VPS.
 - Competes with [[resources/sem|sem]] in the local semantic code search space but takes a different approach (ColBERT multi-vector vs single-vector embeddings).
+- See [[ColBERT-style semantic search beats grep 70 percent of the time for coding agents while using fewer tokens]] for the full announcement thread with benchmarks and context.
