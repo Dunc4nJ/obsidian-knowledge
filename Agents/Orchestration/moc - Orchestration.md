@@ -19,4 +19,5 @@ Multi-agent coordination — delegation patterns, lead/worker ratios, communicat
 - [[multi-agent squads work when independent sessions share a mission control system]]
 - [[orchestration architecture determines multi-agent investment quality]]
 - [[planner-worker hierarchies outperform flat coordination for scaling multi-agent coding]]
+- [[multi-agent coordination benefits are task-contingent not universal and predictable from measurable task properties]]
 - [[simple financial agents outperform complex ones when tool routing is tight]]
