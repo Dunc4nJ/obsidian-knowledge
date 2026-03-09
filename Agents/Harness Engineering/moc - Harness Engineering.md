@@ -22,6 +22,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[llm-tool-api-architecture-optimizing-roundtrips-tokens-and-context-like-gpu-cache-hierarchies|SebAaltonen's LLM Tool API Architecture — optimizing roundtrips, tokens, and context like GPU cache hierarchies]]
 - [[code evolution harnesses multiply LLM reasoning performance 2-3x on ARC-AGI-2 without changing the model]]
 - [[LLMs can synthesize their own code harness via tree search eliminating illegal actions and outperforming larger models]]
+- [[terminal-native coding agents need scaffolding-harness separation and context engineering as first-class concerns]] — OpenDev technical report: compound AI architecture, adaptive context compaction, defense-in-depth safety, five transferable design lessons (81-page paper)
 
 ## Factory Droid
 
