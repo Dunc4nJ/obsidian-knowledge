@@ -20,3 +20,4 @@ How agents store, retrieve, and evolve knowledge across sessions. Memory archite
 - [[progressive disclosure filters force agent selectivity over what enters context]]
 - [[transcript mining turns meetings into captured decisions and extracted knowledge]]
 - [[AMA-Bench evaluates long-horizon memory for agentic applications using real and synthetic trajectories]]
+- [[indexed experience memory compresses LLM agent context without discarding evidence by pairing summaries with a dereferenceable archive]]
