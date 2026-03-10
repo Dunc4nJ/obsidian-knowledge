@@ -66,6 +66,7 @@ Agent skill design, authoring, testing, and lifecycle management. SKILL.md patte
 
 - [[skill-creator now brings software testing rigor to agent skill authoring without requiring code]]
 - [[agent skills need eval harnesses not vibe checks to ship reliably]]
+- [[repo-local skills and AGENTS.md turn recurring engineering work into repeatable agent workflows]]
 
 ### Tooling
 Agent tool design, context engineering, prompt caching, skill architectures, search strategies, progressive disclosure, and general patterns for how agents interact with tools and manage context. The broadest subfolder — if a note is about *how agents use tools or manage their context window*, it goes here.
