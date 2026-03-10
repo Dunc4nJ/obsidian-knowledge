@@ -9,6 +9,10 @@ type: moc
 
 AI agents that interact with structured data to answer questions — text-to-SQL, discovery layers, context architectures over warehouses, and RL for SQL tool use.
 
+## Market Analysis
+
+- [[data agents are useless without a context layer that captures business definitions and tribal knowledge]] — a16z's Jason Cui on why the modern data stack → agent frenzy → wall pattern demands a living context layer as superset of semantic layers
+
 ## Case Studies
 
 - [[OpenAI internal data agent succeeds through six layers of context not model capability alone]] — six stacked context layers over 600PB across 70k datasets; architecture over raw model capability
