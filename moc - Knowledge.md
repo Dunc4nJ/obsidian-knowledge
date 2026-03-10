@@ -185,6 +185,7 @@ Prediction market arbitrage, quantitative trading, and market microstructure.
 Foundational architecture, training, scaling, and interpretability of large language models.
 
 - [[twenty-six papers capture ninety percent of the alpha behind modern LLMs from attention through reasoning and mixture of experts]] — curated reading order from Transformers through scaling laws, alignment, reasoning, and MoE architectures
+- [[distributed research swarms close the feedback loop that single-agent autoresearch leaves open]] — PoC extending Karpathy's autoresearch into a coordinator-guided swarm with ShinkaEvolve-inspired guidance pipeline
 
 ## Thinking
 
