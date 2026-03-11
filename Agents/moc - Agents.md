@@ -46,6 +46,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[agents need a harness not a framework because durable event-driven infrastructure already solves retry routing and state]]
 - [[OpenAI built a million-line product with zero manually-written code by making the repo legible to agents]]
 - [[LLM agents need a typed execution layer beyond bash]]
+- [[autonomous context compression lets agents choose when to compact rather than hitting fixed token limits]]
 
 ### Infrastructure
 Production engineering for agents — security, reliability, sandboxing, deployment, distributed systems patterns, authentication, cost management. If the note is about *keeping agents running safely in production*, it goes here.
