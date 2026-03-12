@@ -3,7 +3,7 @@ created: 2026-03-11
 source: https://github.com/Hawksight-AI/semantica
 type: resource
 tags: [memory, knowledge-graph, provenance, decision-intelligence, reasoning]
-status: unread
+status: exploring
 ---
 
 ## What it is
@@ -37,3 +37,4 @@ Addresses the "agents have no audit trail" problem head-on. Every decision becom
 - Positions itself as a layer *on top* of existing agent frameworks, not a replacement
 - The PROV-O compliance could matter for enterprise/regulated use cases
 - Worth comparing against [[cognee-knowledge-engine-for-ai-agent-memory|Cognee]] which tackles similar "structured memory for agents" territory
+- Deep comparison: [[Semantica and Cognee solve agent memory differently - Semantica adds accountability while Cognee builds the knowledge engine]]
