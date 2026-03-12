@@ -4,7 +4,7 @@ description: Navigation hub for agent evaluation and monitoring — measuring qu
 type: moc
 ---
 
-# Evaluation & Monitoring
+# Evaluation and Monitoring
 
 Measuring agent quality, observability, regression testing, production monitoring, and drift detection.
 
@@ -14,3 +14,13 @@ Measuring agent quality, observability, regression testing, production monitorin
 - [[AI generated code repos gain credibility by shipping verification artifacts not hiding authorship]]
 - [[coding agent skills need dedicated evaluation benchmarks not vibes to measure real performance]]
 - [[deep agent evals need bespoke per-datapoint test logic not uniform evaluators]]
+- [[trajectory eyeballing is the irreplaceable skill for debugging RL-trained agents]]
+- [[effective agent evals combine deterministic graders model judges and human review across the full development lifecycle]]
+- [[Agno native tracing keeps agent observability data in your own database]]
+
+- [[a working offline eval turns vibes into repeatable measurement in 10 steps]]
+
+## Resources
+
+- [[Langfuse]]
+- [[OpenLLMetry]]
