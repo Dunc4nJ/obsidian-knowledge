@@ -21,3 +21,4 @@ Multi-agent coordination — delegation patterns, lead/worker ratios, communicat
 - [[planner-worker hierarchies outperform flat coordination for scaling multi-agent coding]]
 - [[multi-agent coordination benefits are task-contingent not universal and predictable from measurable task properties]]
 - [[simple financial agents outperform complex ones when tool routing is tight]]
+- [[every agentic system needs three sub-agent patterns sync async and scheduled]]
