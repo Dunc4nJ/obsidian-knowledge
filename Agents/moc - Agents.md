@@ -71,6 +71,7 @@ Agent skill design, authoring, testing, and lifecycle management. SKILL.md patte
 - [[agent skills need eval harnesses not vibe checks to ship reliably]]
 - [[repo-local skills and AGENTS.md turn recurring engineering work into repeatable agent workflows]]
 - [[LLMs can discover and reuse compositional tool skills via MCP primitives reducing token usage up to 80 percent]]
+- [[agent skills should self-improve through observed failures not stay as static prompt files]]
 
 ### Tooling
 Agent tool design, context engineering, prompt caching, skill architectures, search strategies, progressive disclosure, and general patterns for how agents interact with tools and manage context. The broadest subfolder — if a note is about *how agents use tools or manage their context window*, it goes here.
