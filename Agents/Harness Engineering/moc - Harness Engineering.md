@@ -26,6 +26,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[terminal-native coding agents need scaffolding-harness separation and context engineering as first-class concerns]] — OpenDev technical report: compound AI architecture, adaptive context compaction, defense-in-depth safety, five transferable design lessons (81-page paper)
 - [[the harness is the product because model capability is commoditizing while accumulated context is not]] — four-pillar harness framework (context architecture, agent specialization, persistent memory, structured execution) with guardrail hierarchy and production checklist
 - [[agent harness components can be derived from first principles by working backwards from desired agent behavior]] — LangChain's Viv Trivedy derives harness components (filesystem, bash, sandbox, memory, context management, long-horizon execution) from model limitations, plus model-harness co-evolution dynamics
+- [[the agent harness is the RL training environment not deployment infrastructure bolted on after]] — comprehensive survey of how Cursor, Cognition, OpenAI, and Windsurf train inside production harnesses, with six research papers confirming environment quality sets the ceiling on model capability
 
 ## Factory Droid
 
