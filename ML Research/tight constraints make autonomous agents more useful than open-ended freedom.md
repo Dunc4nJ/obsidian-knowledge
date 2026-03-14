@@ -21,6 +21,8 @@ The core argument is that [[autoresearch lets an AI agent run ML experiments aut
 
 The meta-lesson: don't start by asking how to make the agent more autonomous — start by asking how to make the harness more reliable.
 
+**Memory is the missing harness layer for multi-agent systems.** [@omarsar0](https://x.com/omarsar0/status/2032465974159618452) highlights that once you get memory right for proactive agents, reasoning, skills, and tool usage all improve significantly. He points to a [paper](https://t.co/k8hdSuZY0F) that frames multi-agent memory as a computer architecture problem — proposing a three-layer hierarchy (I/O, cache, memory), distinguishing shared vs distributed memory paradigms, and identifying two critical protocol gaps: cache sharing across agents and structured memory access control. The biggest open challenge is multi-agent memory consistency: multiple agents reading from and writing to shared memory concurrently raises classical problems of visibility, ordering, and conflict resolution. Context is no longer a static prompt — it's a dynamic memory system with bandwidth, caching, and coherence constraints. This connects directly to the harness principles above: memory is infrastructure that needs the same disciplined design as the experiment loop itself.
+
 ## External Resources
 
 - [Karpathy's Autoresearch repo](https://github.com/karpathy/autoresearch)
