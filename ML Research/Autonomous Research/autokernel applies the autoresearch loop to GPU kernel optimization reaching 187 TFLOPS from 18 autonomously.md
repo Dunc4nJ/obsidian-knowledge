@@ -22,7 +22,7 @@ This fits into the broader [[distributed research swarms close the feedback loop
 ## External Resources
 
 - [autokernel](https://github.com/RightNow-AI/autokernel) — the open-source repo
-- [KernelAgent](https://github.com/TuliMathieu/kernelagent) — related project mentioned in replies
+- [KernelAgent](https://github.com/meta-pytorch/KernelAgent) — related project mentioned in replies
 
 ## Original Content
 
