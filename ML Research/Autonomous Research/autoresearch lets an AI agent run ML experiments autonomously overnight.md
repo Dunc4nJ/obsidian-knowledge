@@ -1,29 +1,29 @@
 ---
 created: 2026-03-08
-description: Karpathy's autoresearch project uses an AI coding agent (Claude Code or Cursor) to autonomously modify train.py, run 5-minute GPU experiments in a loop, and keep only improvements — yielding ~100 experiments overnight with zero human intervention.
+description: Karpathy's autoresearch project uses an AI coding agent (Claude Code or Cursor) to autonomously modify train.py, run 5-minute GPU experiments in a loop, and keep only improvements - yielding ~100 experiments overnight with zero human intervention.
 source: https://x.com/hooeem/status/2030720614752039185
 type: learning
 ---
 
 ## Key Takeaways
 
-Autoresearch inverts the traditional ML research loop: instead of a human tweaking hyperparameters and architecture, an [[Claude Code's single-threaded master loop delivers controllable autonomy through radical simplicity|AI coding agent]] reads a plain-English instruction file (`program.md`), modifies `train.py`, runs a fixed 5-minute training budget, evaluates `val_bpb`, and commits improvements via git — roughly 12 experiments per hour, ~100 overnight. The human's job reduces to writing better meta-prompts in `program.md`.
+Autoresearch inverts the traditional ML research loop: instead of a human tweaking hyperparameters and architecture, an [[Claude Code's single-threaded master loop delivers controllable autonomy through radical simplicity|AI coding agent]] reads a plain-English instruction file (`program.md`), modifies `train.py`, runs a fixed 5-minute training budget, evaluates `val_bpb`, and commits improvements via git - roughly 12 experiments per hour, ~100 overnight. The human's job reduces to writing better meta-prompts in `program.md`.
 
-The fixed time budget per experiment is a clever design choice. By giving every run exactly 5 minutes regardless of model size, all experiments become directly comparable on the same hardware. This forces the agent to optimize for efficiency, not just raw performance — a constraint that produces more practical results than uncapped training runs.
+The fixed time budget per experiment is a clever design choice. By giving every run exactly 5 minutes regardless of model size, all experiments become directly comparable on the same hardware. This forces the agent to optimize for efficiency, not just raw performance - a constraint that produces more practical results than uncapped training runs.
 
-The community fork pattern worked well here. Within hours of Karpathy's release, Artem Andreenko published a Mac/Apple Silicon fork swapping NVIDIA-only FlashAttention-3 for PyTorch's built-in equivalent plus Metal/MPS adjustments. Karpathy linked it from the official README, making it semi-official. The entire codebase is ~630 lines — small enough that any developer can audit it in 20 minutes, which is exactly the kind of [[harness engineering improved a coding agent 13 points by changing only system prompts tools and middleware|harness engineering]] that makes autonomous agents practical.
+The community fork pattern worked well here. Within hours of Karpathy's release, Artem Andreenko published a Mac/Apple Silicon fork swapping NVIDIA-only FlashAttention-3 for PyTorch's built-in equivalent plus Metal/MPS adjustments. Karpathy linked it from the official README, making it semi-official. The entire codebase is ~630 lines - small enough that any developer can audit it in 20 minutes, which is exactly the kind of [[harness engineering improved a coding agent 13 points by changing only system prompts tools and middleware|harness engineering]] that makes autonomous agents practical.
 
-The setup stack is notably minimal: `uv` (handles Python + all deps automatically), `git` (tracks experiment save-points), and an AI agent (Claude Code, Cursor, or even manual Claude.ai chat). No containers, no cloud infra, no complex orchestration. This accessibility is part of what makes it significant — anyone with a GPU (NVIDIA or Apple Silicon) and $20/month for Claude Pro can run autonomous ML research.
+The setup stack is notably minimal: `uv` (handles Python + all deps automatically), `git` (tracks experiment save-points), and an AI agent (Claude Code, Cursor, or even manual Claude.ai chat). No containers, no cloud infra, no complex orchestration. This accessibility is part of what makes it significant - anyone with a GPU (NVIDIA or Apple Silicon) and $20/month for Claude Pro can run autonomous ML research.
 
 ## External Resources
 
-- [autoresearch (original)](https://github.com/karpathy/autoresearch) — Karpathy's original repo for Windows/Linux with NVIDIA GPU
-- [autoresearch-macos](https://github.com/miolini/autoresearch-macos) — Apple Silicon fork by Artem Andreenko (miolini)
-- [Karpathy's announcement](https://x.com/karpathy/status/2030371219518931079) — Original tweet announcing the project
-- [Mac fork announcement](https://x.com/miolini/status/2030402705374728218) — Andreenko's fork announcement (70k+ views)
-- [uv](https://astral.sh/uv) — Python package manager that handles the entire dependency chain
-- [Cursor](https://cursor.com) — Free AI code editor alternative to Claude Code
-- [Claude Code](https://code.claude.com) — Anthropic's CLI agent tool used for the autonomous loop
+- [autoresearch (original)](https://github.com/karpathy/autoresearch) - Karpathy's original repo for Windows/Linux with NVIDIA GPU
+- [autoresearch-macos](https://github.com/miolini/autoresearch-macos) - Apple Silicon fork by Artem Andreenko (miolini)
+- [Karpathy's announcement](https://x.com/karpathy/status/2030371219518931079) - Original tweet announcing the project
+- [Mac fork announcement](https://x.com/miolini/status/2030402705374728218) - Andreenko's fork announcement (70k+ views)
+- [uv](https://astral.sh/uv) - Python package manager that handles the entire dependency chain
+- [Cursor](https://cursor.com) - Free AI code editor alternative to Claude Code
+- [Claude Code](https://code.claude.com) - Anthropic's CLI agent tool used for the autonomous loop
 
 ## Original Content
 
@@ -33,17 +33,19 @@ The setup stack is notably minimal: `uv` (handles Python + all deps automaticall
 > @hooeem (hoeem):
 > Article: How to deploy autoresearch:
 >
-> You want to deploy Andrew Karpathy’s autoresearch that lets you have agents run research experiments whilst you sleep with any prompt but you don’t know how, read this.
+> You want to deploy Andrew Karpathy's autoresearch that lets you have agents run research experiments whilst you sleep with any prompt but you don't know how, read this.
 >
-> So, here’s the thing, Karpathy (@karpathy) released something awesome:
+> So, here's the thing, Karpathy (@karpathy) released something awesome:
 >
 > [Embedded Tweet: https://x.com/i/status/2030371219518931079]
 >
-> Now, myself, like 18 thousand others who bookmarked this post and whilst there’s instructions on the [github](https://github.com/karpathy/autoresearch) link ([here](https://github.com/karpathy/autoresearch)):
+> Now, myself, like 18 thousand others who bookmarked this post and whilst there's instructions on the [github](https://github.com/karpathy/autoresearch) link ([here](https://github.com/karpathy/autoresearch)):
 >
-> I need that information distilled with clear step-by-step instructions to follow and also, I don’t have an NVIDIA GPU, I have a Mac, I needed help, so I asked supergrok, opus 4.6, and GPT 5.4 to HELP A BROTHER OUT…
+> I need that information distilled with clear step-by-step instructions to follow and also, I don't have an NVIDIA GPU, I have a Mac, I needed help, so I asked supergrok, opus 4.6, and GPT 5.4 to HELP A BROTHER OUT…
 >
-> I thought (as there’s 18 thousand others that bookmarked the article) that others feel the exact same (if you don't, don't read this article), so I thought I’d at least share that here:
+> I thought (as there's 18 thousand others that bookmarked the article) that others feel the exact same (if you don't, don't read this article), so I thought I'd at least share that here:
+>
+> ![[hooeem-039185-001.jpg]]
 >
 > ## PART 1: What Is This and Why Should You Care?
 >
@@ -71,6 +73,8 @@ The setup stack is notably minimal: `uv` (handles Python + all deps automaticall
 >
 > Karpathy describes it as "part code, part sci-fi, and a pinch of psychosis."  Every dot in his progress chart is one complete 5-minute experiment, and the model steadily gets better as the dots accumulate.
 >
+> ![[hooeem-039185-002.jpg]]
+>
 > Why this matters beyond the experiment itself: This is a glimpse of where AI research is heading. Instead of humans manually tweaking settings, AI agents run the experiments autonomously. You're not just running a cool demo, you're experiencing what automated AI research looks like in practice.
 >
 > Okay, so the rest of this article (Part 2,3,4,5,6,7,8,9,10,11,12,13) will give you everything with a lot of detail, I also wanted to give you the stripped down version which I'm going to put inside this markdown code which you can copy and paste which gets straight to the point. You can scroll down to part 2 but I wanted to give you the option here:
@@ -93,7 +97,7 @@ The setup stack is notably minimal: `uv` (handles Python + all deps automaticall
 >
 > **To check on Mac:** Click the Apple menu → About This Mac. Look for "Chip." If it says M1, M2, M3, or M4 (or any variant like M2 Pro, M3 Max), you're good. If it says Intel, this won't work.
 >
-> **If you don't have either of these, stop here** — this project requires a powerful GPU to run.
+> **If you don't have either of these, stop here** - this project requires a powerful GPU to run.
 >
 > ---
 >
@@ -123,7 +127,7 @@ The setup stack is notably minimal: `uv` (handles Python + all deps automaticall
 > powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 >
 >
-> **Install Claude Code** (the AI agent that runs experiments for you — requires a Claude Pro or Max subscription at $20–100/month):
+> **Install Claude Code** (the AI agent that runs experiments for you - requires a Claude Pro or Max subscription at $20-100/month):
 >
 > Mac/Linux:
 >
@@ -135,9 +139,9 @@ The setup stack is notably minimal: `uv` (handles Python + all deps automaticall
 > irm https://claude.ai/install.ps1 | iex
 >
 >
-> **Now close your Terminal and open a fresh one.** This is essential — skip it and the next steps will fail.
+> **Now close your Terminal and open a fresh one.** This is essential - skip it and the next steps will fail.
 >
-> > **Don't want to pay for Claude Code?** Download Cursor for free from cursor.com instead. It does the same job but with a visual interface rather than the Terminal. The rest of this guide still applies — you'll just use Cursor's chat panel instead of Claude Code.
+> > **Don't want to pay for Claude Code?** Download Cursor for free from cursor.com instead. It does the same job but with a visual interface rather than the Terminal. The rest of this guide still applies - you'll just use Cursor's chat panel instead of Claude Code.
 >
 > ---
 >
@@ -151,7 +155,7 @@ The setup stack is notably minimal: `uv` (handles Python + all deps automaticall
 >
 > If you see a version number, skip ahead. If not:
 >
-> - **Mac:** It will prompt you to install Xcode Command Line Tools — click Install
+> - **Mac:** It will prompt you to install Xcode Command Line Tools - click Install
 > - **Windows:** Download from https://git-scm.com/download/win and run the installer (accept all defaults)
 > - **Linux:** `sudo apt install git`
 >
@@ -159,14 +163,14 @@ The setup stack is notably minimal: `uv` (handles Python + all deps automaticall
 >
 > ## Step 4: Download the Project
 >
-> **Mac users** — you need the Mac-compatible version:
+> **Mac users** - you need the Mac-compatible version:
 >
 > cd ~/Desktop
 > git clone https://github.com/miolini/autoresearch-macos.git
 > cd autoresearch-macos
 >
 >
-> **Windows/Linux users** — you need the original:
+> **Windows/Linux users** - you need the original:
 >
 > cd ~/Desktop
 > git clone https://github.com/karpathy/autoresearch.git
@@ -194,7 +198,7 @@ The setup stack is notably minimal: `uv` (handles Python + all deps automaticall
 >
 > uv run train.py
 >
-> *(Runs one 5-minute test. If it finishes and shows a number next to "val_bpb" — you're ready.)*
+> *(Runs one 5-minute test. If it finishes and shows a number next to "val_bpb" - you're ready.)*
 >
 > **If you get a red error:** Copy the entire error message, paste it into claude.ai, and ask "What does this mean and how do I fix it?" You'll get a direct answer.
 >
@@ -208,7 +212,7 @@ The setup stack is notably minimal: `uv` (handles Python + all deps automaticall
 > claude
 >
 >
-> It will ask you to log in the first time — follow the browser prompt.
+> It will ask you to log in the first time - follow the browser prompt.
 >
 > Once you see the Claude Code prompt, type this:
 >
@@ -230,13 +234,13 @@ The setup stack is notably minimal: `uv` (handles Python + all deps automaticall
 >
 > **What is train.py?** The single file containing all the AI training code. The AI agent modifies this file during experiments.
 >
-> **What is program.md?** Your instruction file for the AI agent. This is the only file you ever need to edit — it tells the agent what to try.
+> **What is program.md?** Your instruction file for the AI agent. This is the only file you ever need to edit - it tells the agent what to try.
 >
-> **Is the Mac version safe?** Yes. Karpathy links to it from his own project page. The developer (Artem Andreenko) has 167 public projects on GitHub and a years-long public track record. The fork announcement got 70,000+ views on X. The entire codebase is about 630 lines — you can read the whole thing in 20 minutes.
+> **Is the Mac version safe?** Yes. Karpathy links to it from his own project page. The developer (Artem Andreenko) has 167 public projects on GitHub and a years-long public track record. The fork announcement got 70,000+ views on X. The entire codebase is about 630 lines - you can read the whole thing in 20 minutes.
 >
 > **How many experiments will it run overnight?** About 100 (roughly 12 per hour).
 >
-> **Do most experiments succeed?** No. Most fail. That's normal. The agent automatically keeps the wins and throws away the losses. Out of 100 experiments, maybe 10–20 will be improvements.
+> **Do most experiments succeed?** No. Most fail. That's normal. The agent automatically keeps the wins and throws away the losses. Out of 100 experiments, maybe 10-20 will be improvements.
 >
 > **What does it cost?** The code is free. Claude Code requires Claude Pro ($20/month) or Max ($100/month). Cursor has a free tier if you run experiments manually.
 >
@@ -276,7 +280,7 @@ The setup stack is notably minimal: `uv` (handles Python + all deps automaticall
 >
 > - An NVIDIA graphics card (GPU): examples: RTX 3060, RTX 3070, RTX 4070, RTX 4090, or any NVIDIA card from the last few years
 >
-> - At least 10–20 GB of free disk space
+> - At least 10-20 GB of free disk space
 >
 > - An internet connection
 >
@@ -306,7 +310,7 @@ The setup stack is notably minimal: `uv` (handles Python + all deps automaticall
 >
 > - 16 GB of memory minimum (32 GB or more is better for larger experiments)
 >
-> - At least 10–20 GB of free disk space
+> - At least 10-20 GB of free disk space
 >
 > - An internet connection
 >
@@ -325,6 +329,8 @@ The setup stack is notably minimal: `uv` (handles Python + all deps automaticall
 > Important: On Mac, you download from a different link (the macOS fork) instead of Karpathy's original. The setup commands are nearly identical, only the download source changes.
 >
 > Quick Reference Table
+>
+> ![[hooeem-039185-004.jpg]]
 >
 > ## PART 3: "Is the Mac Version Safe?"
 >
@@ -514,6 +520,8 @@ The setup stack is notably minimal: `uv` (handles Python + all deps automaticall
 >
 > Press Cmd + Space, type Terminal, press Enter.
 >
+> ![[hooeem-039185-003.jpg]]
+>
 > Step 2: Download the Mac version of autoresearch
 >
 > Type these commands one at a time, pressing Enter after each:
@@ -558,7 +566,7 @@ The setup stack is notably minimal: `uv` (handles Python + all deps automaticall
 >
 > - Numbers scrolling by (this is normal, it's showing training progress)
 >
-> - After about 5–7 minutes (including startup time), it finishes
+> - After about 5-7 minutes (including startup time), it finishes
 >
 > - It displays a val_bpb score at the end
 >
@@ -622,7 +630,7 @@ The setup stack is notably minimal: `uv` (handles Python + all deps automaticall
 > cd autoresearch
 > ```
 >
-> Step 3–5: Same as Windows
+> Step 3-5: Same as Windows
 >
 > ```markdown
 > uv sync
@@ -766,9 +774,9 @@ The setup stack is notably minimal: `uv` (handles Python + all deps automaticall
 >
 > Your one job is to improve program.md. This is the leverage point. Add instructions like: "Try small improvements first. Focus on making val_bpb go down. Think step by step and explain every change before making it. If an experiment direction hasn't worked after 3 attempts, try something completely different."
 >
-> Don't panic when experiments fail. Most experiments will not improve the score. Out of 100 overnight experiments, maybe 10–20 will be keepers. This is completely normal, it's how research works. The agent discards failures and keeps successes automatically.
+> Don't panic when experiments fail. Most experiments will not improve the score. Out of 100 overnight experiments, maybe 10-20 will be keepers. This is completely normal, it's how research works. The agent discards failures and keeps successes automatically.
 >
-> Check in periodically at first. Before trusting the full overnight run, watch the first 3–4 experiments to make sure the loop is working. If the agent is stuck or confused, adjust your program.md instructions and restart.
+> Check in periodically at first. Before trusting the full overnight run, watch the first 3-4 experiments to make sure the loop is working. If the agent is stuck or confused, adjust your program.md instructions and restart.
 >
 > More memory helps. If you have a Mac with 32 GB or 64 GB of unified memory, or a GPU with lots of VRAM (like the RTX 4090 with 24 GB), the agent can explore larger models and more complex architectures within each 5-minute window.
 >
@@ -793,6 +801,8 @@ The setup stack is notably minimal: `uv` (handles Python + all deps automaticall
 > "Permission denied" errors On Mac/Linux, you might need to make files executable. Try: chmod +x train.py prepare.py. On Windows, make sure you're running PowerShell or Command Prompt normally (not as Administrator unless specifically needed).
 >
 > ## PART 12: What Everything Costs
+>
+> ![[hooeem-039185-005.png]]
 >
 > Minimum cost to run full autopilot: $20/month for a Claude Pro subscription (for Claude Code).
 >

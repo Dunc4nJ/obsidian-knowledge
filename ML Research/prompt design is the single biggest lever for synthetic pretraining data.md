@@ -1065,13 +1065,13 @@ The infrastructure contribution is equally significant. They open-sourced everyt
 >
 > We want you to be able to just press a button, let the GPUs go brrrr, and check back in to the finished dataset. DataTrove continuously uploads data to your specified Hugging Face dataset repo whenever a chunk is finished, using `ParquetWriter` with `hf://` paths so data appears on the Hub within minutes of generation, not after the full run completes. At the end, the `InferenceDatasetCardGenerator` pipeline step checks the logs directory, collects information about the throughput, and uploads a dataset card to document your new synthetic dataset. Here’s an example of the auto-generated dataset card:
 >
-> ![Auto-generated dataset card on the Hugging Face Hub](/_astro/auto-dataset-card.KIuaxpb3_1xYEzE.webp) 
+> ![[finephrase-auto-dataset-card.webp]]
 >
 > Example of an auto-generated dataset card with throughput metrics, uploaded to the Hugging Face Hub after inference completes.
 >
 > For long-running inference jobs like FinePhrase (which runs for about two weeks), the `InferenceProgressMonitor` runs as a separate Slurm job alongside the inference workers. It periodically scans the output directory, counts completed chunks across all 100 tasks, and updates the dataset card on the Hub with a progress bar and ETA for each prompt template. Here’s the live progress dashboard during the FinePhrase generation run:
 >
-> ![Live progress monitoring of the FinePhrase generation run](/_astro/finephrase-progress.DSTtdi2P_Z1btDdb.webp) 
+> ![[finephrase-progress.webp]]
 >
 > Live progress dashboard for FinePhrase, showing per-prompt completion status, document counts, and ETAs. The monitor runs as a separate Slurm job and updates the dataset card hourly.
 >
