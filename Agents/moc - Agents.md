@@ -50,6 +50,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[the harness layer is the next hundred billion dollar AI infrastructure market not the model]]
 - [[Slate's thread-based episodic memory solves long-horizon agent tasks]]
 - [[context files beat MCP schemas for internal agents because they encode how your team actually uses each tool]]
+- [[training beats prompting so use runtime guards not instructions]]
 
 ### Infrastructure
 Production engineering for agents — security, reliability, sandboxing, deployment, distributed systems patterns, authentication, cost management. If the note is about *keeping agents running safely in production*, it goes here.
