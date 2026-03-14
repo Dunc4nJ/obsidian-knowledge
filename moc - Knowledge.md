@@ -186,6 +186,7 @@ Foundational architecture, training, scaling, and interpretability of large lang
 
 - [[twenty-six papers capture ninety percent of the alpha behind modern LLMs from attention through reasoning and mixture of experts]] — curated reading order from Transformers through scaling laws, alignment, reasoning, and MoE architectures
 - [[distributed research swarms close the feedback loop that single-agent autoresearch leaves open]] — PoC extending Karpathy's autoresearch into a coordinator-guided swarm with ShinkaEvolve-inspired guidance pipeline
+- [[rl environment creation is becoming a distributed marketplace that could 10x cost efficiency over contracting firms]] — the hidden RL environment contracting industry, verifier design challenges, and a distributed bounty model with LLM-adversarial verification
 
 ## Thinking
 
