@@ -73,6 +73,7 @@ Agent skill design, authoring, testing, and lifecycle management. SKILL.md patte
 - [[skill-creator now brings software testing rigor to agent skill authoring without requiring code]]
 - [[agent skills need eval harnesses not vibe checks to ship reliably]]
 - [[repo-local skills and AGENTS.md turn recurring engineering work into repeatable agent workflows]]
+- [[dual-stream experience and skill accumulation enables multimodal agents to continually improve tool use without parameter updates]]
 - [[LLMs can discover and reuse compositional tool skills via MCP primitives reducing token usage up to 80 percent]]
 - [[agent skills should self-improve through observed failures not stay as static prompt files]]
 - [[EvoSkill discovers reusable agent skills through iterative failure analysis outperforming static prompts and transferring zero-shot]]
