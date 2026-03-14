@@ -23,3 +23,4 @@ How agents store, retrieve, and evolve knowledge across sessions. Memory archite
 - [[indexed experience memory compresses LLM agent context without discarding evidence by pairing summaries with a dereferenceable archive]]
 - [[a file system is not all you need - databases beat markdown for agent context provenance and governance]]
 - [[every app that avoids a database ends up rebuilding one badly]]
+- [[multi-agent memory needs computer architecture style hierarchy and consistency models]]
