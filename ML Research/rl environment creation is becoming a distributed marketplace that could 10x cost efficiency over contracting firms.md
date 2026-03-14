@@ -7,9 +7,13 @@ type: synthesis
 
 ## Key Takeaways
 
+![[unsloth-rl-env-001.png]]
+
 The RL environment business is a hidden infrastructure layer behind every frontier model improvement. When Claude gets better at coding or GPT improves at math, someone had to build the training environments — task + verifier combinations — that made those gains possible. Right now this is handled by a handful of small, mostly stealth contracting firms, which creates a severe scaling bottleneck. This connects directly to [[stable agentic RL requires sequence-level clipping and environment-aware advantages to prevent training collapse|the broader challenge of making RL training stable]] — good environments are a prerequisite for any RL approach to work.
 
 The core technical challenge is building **non-reward-hackable verifiers**. A verifier that can be gamed trains the model to cheat rather than learn. Arledge draws from his experience building KernelBench v3 (GPU kernel benchmarks) to illustrate that even deterministic domains like CUDA kernel correctness require careful edge-case coverage and numerical tolerance calibration. Open-ended domains like Minecraft or creative writing remain largely out of scope because reliable automated verification doesn't exist yet — echoing the same insight from [[tight constraints make autonomous agents more useful than open-ended freedom|tight constraints research]] that reducing the search space is what makes autonomous iteration tractable.
+
+![[unsloth-rl-env-002.png]]
 
 The proposed distributed model is compelling: post bounties for domain-specific RL environments, attract thousands of domain experts (doctors who code, competitive programmers, game theorists), and verify submissions through a three-tier pipeline — automated structural checks, LLM adversarial attacks on the verifier, then human expert review. The napkin math suggests ~$117/environment vs ~$750-1500/environment from contracting firms, a 6-10x improvement. This mirrors the broader trend of [[self-serve post-training infrastructure is emerging as the key layer between foundation models and enterprise adoption|post-training infrastructure democratization]].
 
