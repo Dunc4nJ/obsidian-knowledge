@@ -15,6 +15,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 
 ## Notes
 
+- [[most popular CLAUDE.md files add noise not signal with a 556 to 1 copy-to-contribution ratio]] — Augment Code's analysis: ETH Zurich found context files reduce success rates, 556:1 copy ratio on agent rules repos, pruning rubric for failure-driven instructions
 - [[lessons from building AI agents for financial services — sandbox skills streaming and eval at Fintool]] — Bustamante's full architecture breakdown: sandboxed execution, S3-first storage, markdown skills, Temporal orchestration, domain evals
 - [[claude CLI print mode is a full agent runtime accessible via command line]]
 - [[designing agent tools is an iterative art shaped by model capabilities not fixed engineering rules]]

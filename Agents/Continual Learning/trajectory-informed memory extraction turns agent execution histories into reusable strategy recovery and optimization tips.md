@@ -21,6 +21,13 @@ A practical finding: retrieval strategy matters differently for different metric
 
 The tip consolidation pipeline (generalize → cluster → merge) addresses a real problem with [[async RL from real conversations lets agents continuously improve without blocking inference|experience accumulation systems]]: without curation, memory grows linearly, near-duplicates compete for prompt space, and contradictory tips from different trajectories confuse the agent. The framework being applied to IBM's CUGA enterprise agent platform suggests production viability.
 
+### Community Reception
+
+DAIR.AI [highlighted this paper](https://x.com/dair_ai/status/2032459951306866714) (196 likes, 26 retweets), emphasizing the core insight: agents that learn from their own execution traces can systematically improve without manual prompt engineering. They frame the self-reinforcing cycle — better tips → better trajectories → better tips — as a practical path toward self-improving agent systems.
+
+*DAIR.AI summary infographic*
+![[ibm-trajectory-memory-2603-10600-dairai.png]]
+
 ## External Resources
 
 - [AppWorld benchmark](https://github.com/stonybrookNLP/appworld) — evaluation suite for LLM agents across e-commerce, email, calendar, file management
