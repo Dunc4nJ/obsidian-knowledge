@@ -50,6 +50,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[the harness layer is the next hundred billion dollar AI infrastructure market not the model]]
 - [[Slate's thread-based episodic memory solves long-horizon agent tasks]]
 - [[context files beat MCP schemas for internal agents because they encode how your team actually uses each tool]]
+- [[structured compaction and CLAUDE.md hierarchy prevent context drift in million-token agent sessions]]
 - [[training beats prompting so use runtime guards not instructions]]
 - [[repository-level context files reduce coding agent task success and increase inference costs by over 20 percent]]
 
