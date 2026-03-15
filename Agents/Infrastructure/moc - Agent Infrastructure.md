@@ -16,3 +16,4 @@ Patterns and pitfalls for running AI agents in production: storage, isolation, p
 - [[seven runtime failures emerge when demo agents meet production distributed systems]] — common failure modes when scaling agent demos to production
 - [[the Codex App Server turns a CLI agent harness into a stable bidirectional JSON-RPC protocol for any client]] — turning CLI agents into stable protocol-based services
 - [[agentic software engineering requires six pillars beyond the agent itself to survive production]] — durability, isolation, governance, persistence, scale, and composability as the engineering foundation for production agents
+- [[production AI agents require five security dimensions from model access to runtime observability]] — Palantir's framework for securing agents: model access, orchestration isolation, memory policy enforcement, governed tools with provenance-based security, and observability
