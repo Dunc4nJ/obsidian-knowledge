@@ -78,6 +78,7 @@ Multi-agent coordination — delegation patterns, lead/worker ratios, communicat
 Agent skill design, authoring, testing, and lifecycle management. SKILL.md patterns, eval frameworks for skills, skill triggering and description optimization, capability uplift vs. encoded preference, and the skill-as-specification thesis. If the note is about *how skills are built, tested, or managed*, it goes here.
 
 - [[skill-creator now brings software testing rigor to agent skill authoring without requiring code]]
+- [[static agent skills rot silently because the codebase model and task distribution change around them]]
 - [[agent skills need eval harnesses not vibe checks to ship reliably]]
 - [[repo-local skills and AGENTS.md turn recurring engineering work into repeatable agent workflows]]
 - [[dual-stream experience and skill accumulation enables multimodal agents to continually improve tool use without parameter updates]]
