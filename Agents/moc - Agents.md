@@ -91,6 +91,7 @@ Agent skill design, authoring, testing, and lifecycle management. SKILL.md patte
 Agent tool design, context engineering, prompt caching, skill architectures, search strategies, progressive disclosure, and general patterns for how agents interact with tools and manage context. The broadest subfolder — if a note is about *how agents use tools or manage their context window*, it goes here.
 
 - [[Everything is Context: Agentic File System Abstraction for Context Engineering]]
+- [[Slate's terminal UX solves multi-agent observability by separating orchestration search and execution into visible parallel threads]]
 
 ## Placement Rules
 
