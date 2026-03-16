@@ -64,6 +64,11 @@ Model Context Protocol — servers, tool definitions, transport patterns, and th
 ### OpenClaw
 Notes specific to the OpenClaw platform — architecture, features, configuration, skills, and resources related to OpenClaw itself.
 
+### Pi
+Notes about the Pi coding agent by @badlogicgames — its extension system, theming engine, community ecosystem, and what it reveals about personalizable agent architectures.
+
+- [[coding agents should be personal canvases not uniform tools]]
+
 ### Orchestration
 Multi-agent coordination — delegation patterns, lead/worker ratios, communication between agents, state machines, planning-based orchestration, squad architectures. If the note is about *how multiple agents work together*, it goes here. Single-agent architecture decisions usually belong in Harness Engineering or Infrastructure.
 
