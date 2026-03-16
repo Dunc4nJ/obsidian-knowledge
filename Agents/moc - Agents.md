@@ -54,6 +54,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[structured compaction and CLAUDE.md hierarchy prevent context drift in million-token agent sessions]]
 - [[training beats prompting so use runtime guards not instructions]]
 - [[repository-level context files reduce coding agent task success and increase inference costs by over 20 percent]]
+- [[memory-first agents should dispatch stateless subagents for focused task execution]]
 
 ### Infrastructure
 Production engineering for agents — security, reliability, sandboxing, deployment, distributed systems patterns, authentication, cost management. If the note is about *keeping agents running safely in production*, it goes here.
