@@ -74,6 +74,7 @@ Notes about the Pi coding agent by @badlogicgames — its extension system, them
 Multi-agent coordination — delegation patterns, lead/worker ratios, communication between agents, state machines, planning-based orchestration, squad architectures. If the note is about *how multiple agents work together*, it goes here. Single-agent architecture decisions usually belong in Harness Engineering or Infrastructure.
 
 - [[separating cognitive blueprints from runtime engines enables portable auditable agent systems]]
+- [[peer-to-peer world models create collective intelligence that scales superlinearly with network size]]
 
 ### Skills
 Agent skill design, authoring, testing, and lifecycle management. SKILL.md patterns, eval frameworks for skills, skill triggering and description optimization, capability uplift vs. encoded preference, and the skill-as-specification thesis. If the note is about *how skills are built, tested, or managed*, it goes here.
