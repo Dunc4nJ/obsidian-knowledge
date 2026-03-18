@@ -87,6 +87,7 @@ Agent skill design, authoring, testing, and lifecycle management. SKILL.md patte
 - [[agent skills should self-improve through observed failures not stay as static prompt files]]
 - [[EvoSkill discovers reusable agent skills through iterative failure analysis outperforming static prompts and transferring zero-shot]]
 - [[systematic mining of open-source repos can automate agent skill acquisition at scale]]
+- [[the best agent skills fit one category and grow from gotchas not upfront design]]
 
 ### Tooling
 Agent tool design, context engineering, prompt caching, skill architectures, search strategies, progressive disclosure, and general patterns for how agents interact with tools and manage context. The broadest subfolder — if a note is about *how agents use tools or manage their context window*, it goes here.
