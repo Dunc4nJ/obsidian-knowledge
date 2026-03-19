@@ -22,3 +22,4 @@ Multi-agent coordination — delegation patterns, lead/worker ratios, communicat
 - [[multi-agent coordination benefits are task-contingent not universal and predictable from measurable task properties]]
 - [[simple financial agents outperform complex ones when tool routing is tight]]
 - [[every agentic system needs three sub-agent patterns sync async and scheduled]]
+- [[structured multi-agent disagreement surfaces hidden trade-offs that single-model reasoning averages away]]
