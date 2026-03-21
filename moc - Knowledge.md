@@ -180,6 +180,13 @@ Prediction market arbitrage, quantitative trading, and market microstructure.
 - [[quant desk simulation requires eight layers from Monte Carlo through copulas and agent-based models]] — complete simulation stack: Monte Carlo, importance sampling, particle filters, variance reduction, copula dependency modeling, agent-based simulation, and a five-layer production architecture
 - [[MIT quantitative finance maps directly onto prediction market trading through eight mathematical phases]] — MIT Financial Mathematics course decoded for Polymarket: linear algebra, probability, stochastic processes, regression, VaR, GARCH, portfolio theory, and factor models
 
+## Embeddings
+
+Embedding models, retrieval architectures, and vector search.
+
+- [[scaling embedding models requires LLM-labeled deduplication to fix the fake negative problem]] — LLM-labeled deduplication fixes false negatives that poison contrastive training at scale
+- [[ColBERT MaxSim is a submodular facility location objective and that is why it generalizes]] — MaxSim scoring is a facility location objective with diminishing returns, explaining ColBERT's cross-domain generalization over single-vector models
+
 ## LLMs
 
 Foundational architecture, training, scaling, and interpretability of large language models.
