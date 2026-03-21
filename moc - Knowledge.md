@@ -195,6 +195,7 @@ Foundational architecture, training, scaling, and interpretability of large lang
 - [[distributed research swarms close the feedback loop that single-agent autoresearch leaves open]] — PoC extending Karpathy's autoresearch into a coordinator-guided swarm with ShinkaEvolve-inspired guidance pipeline
 - [[autoresearch loops cheat when guardrails are loose but converge on real findings when tightly scoped]] — 71 experiments across training and model compression showing proposal quality and environment design trump model intelligence
 - [[rl environment creation is becoming a distributed marketplace that could 10x cost efficiency over contracting firms]] — the hidden RL environment contracting industry, verifier design challenges, and a distributed bounty model with LLM-adversarial verification
+- [[automating AI skill improvement fails without manual comprehension of outputs]] — Three Gulfs framework: autoresearch optimizes against wrong criteria when you skip manual error analysis and jump straight to automated evals
 
 ## Thinking
 
