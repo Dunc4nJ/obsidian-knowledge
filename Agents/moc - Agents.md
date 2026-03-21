@@ -18,12 +18,6 @@ Agentic search strategies — code search, semantic retrieval, embedding-based i
 
 - [[CodeScout trains small models via RL to outperform 18x larger LLMs at code search using only terminal commands]]
 
-### Autonomous Research
-
-- [[autoresearchclaw is a 23-stage autonomous pipeline that turns a research idea into a conference-ready paper]]
-
-Agents that autonomously conduct research — running experiments, verifying citations, and producing papers. Distinct from ML Research/Autonomous Research which covers the autoresearch *pattern*; this subfolder covers *tools and frameworks* that implement it.
-
 ### Continual Learning
 
 - [[Letta Code agents can move across machines without losing memory]]
