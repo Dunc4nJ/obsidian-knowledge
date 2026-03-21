@@ -1,6 +1,6 @@
 ---
 created: 2026-03-21
-description: A content-hash-based edit format called hashline matches or beats str_replace and apply_patch across 16 models, yielding up to tenfold accuracy gains and cutting output tokens by 61% without any model retraining.
+description: Hashline is a content-hash-based edit format that tags every line with a 2-3 character hash, giving models stable anchors for expressing edits without whitespace recall failures — benchmarks show it matches or beats str_replace and apply_patch across 16 models.
 source: https://x.com/_can1357/status/2021828033640911196
 ---
 
