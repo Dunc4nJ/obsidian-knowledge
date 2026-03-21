@@ -58,6 +58,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[repository-level context files reduce coding agent task success and increase inference costs by over 20 percent]]
 - [[memory-first agents should dispatch stateless subagents for focused task execution]]
 - [[the harness is everything and agent performance comes from environment design not model capability]]
+- [[hashline edit format improves LLM coding accuracy more than model upgrades at zero training cost]]
 - [[training compaction into the model through RL produces better summaries than prompted compaction at one-fifth the tokens]]
 
 ### Infrastructure
