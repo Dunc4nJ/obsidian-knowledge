@@ -3,6 +3,7 @@ created: 2026-03-22
 description: Math-Shepherd demonstrates that Monte Carlo completion-based automatic process annotation can train process reward models that match or exceed human-annotated PRM800K, enabling scalable step-level verification without manual labeling.
 source: https://arxiv.org/abs/2312.08935
 type: paper
+aliases: [Math-Shepherd]
 ---
 
 ## Key Takeaways

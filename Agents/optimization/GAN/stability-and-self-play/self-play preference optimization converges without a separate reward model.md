@@ -3,6 +3,7 @@ created: 2026-03-22
 description: Self-play against a previous policy iteration, using multiplicative weight updates to approximate Nash equilibrium, aligns LLMs without requiring a separate reward model or pairwise loss.
 source: https://arxiv.org/abs/2405.00675
 type: paper
+aliases: [SPPO, Self-Play Preference Optimization]
 ---
 
 ## Key Takeaways

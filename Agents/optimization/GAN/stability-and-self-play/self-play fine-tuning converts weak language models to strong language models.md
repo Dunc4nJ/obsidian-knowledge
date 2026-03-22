@@ -3,6 +3,7 @@ created: 2026-03-22
 description: An LLM can bootstrap from weak to strong by iteratively distinguishing its own prior outputs from human demonstrations, converging only when its distribution matches the training data.
 source: https://arxiv.org/abs/2401.01335
 type: paper
+aliases: [SPIN]
 ---
 
 ## Key Takeaways

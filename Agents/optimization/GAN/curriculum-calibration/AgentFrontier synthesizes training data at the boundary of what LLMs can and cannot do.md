@@ -3,6 +3,7 @@ created: 2026-03-22
 description: AgentFrontier operationalizes the Zone of Proximal Development for LLM training by using an LKP-MKO adversarial calibration pipeline to synthesize frontier-level reasoning data that maximally improves agent capabilities.
 source: https://arxiv.org/abs/2507.16530
 type: paper
+aliases: [AgentFrontier]
 ---
 
 ## Key Takeaways

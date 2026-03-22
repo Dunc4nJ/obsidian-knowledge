@@ -3,6 +3,7 @@ created: 2026-03-22
 description: Ensemble-based conservative optimization (worst-case and uncertainty-weighted) practically eliminates reward model overoptimization in RLHF, improving performance up to 70% for best-of-N sampling while being orthogonal to model and data scaling.
 source: https://arxiv.org/abs/2310.02743
 type: paper
+aliases: [RM Ensembles]
 ---
 
 ## Key Takeaways

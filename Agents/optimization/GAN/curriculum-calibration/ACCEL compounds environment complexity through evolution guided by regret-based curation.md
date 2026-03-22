@@ -3,6 +3,7 @@ created: 2026-03-22
 description: ACCEL combines evolutionary level editing with regret-based curation to produce curricula that start simple and compound in complexity, achieving POET-level environment difficulty on a single GPU.
 source: https://arxiv.org/abs/2203.01302
 type: paper
+aliases: [ACCEL]
 ---
 
 ## Key Takeaways

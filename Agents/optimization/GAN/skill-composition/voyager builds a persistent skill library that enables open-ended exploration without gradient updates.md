@@ -3,6 +3,7 @@ created: 2026-03-22
 description: An LLM-powered embodied agent builds a persistent, composable skill library through automatic curriculum and iterative prompting, enabling open-ended lifelong learning without gradient updates.
 source: https://arxiv.org/abs/2305.16291
 type: paper
+aliases: [Voyager]
 ---
 
 ## Key Takeaways

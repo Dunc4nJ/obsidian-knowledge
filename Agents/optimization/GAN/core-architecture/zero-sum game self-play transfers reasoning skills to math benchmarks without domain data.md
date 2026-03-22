@@ -3,6 +3,7 @@ created: 2026-03-22
 description: Self-play on zero-sum language games (TicTacToe, Kuhn Poker, negotiation) improves reasoning benchmarks by up to 10% through transferable cognitive patterns, without any domain-specific training data.
 source: https://arxiv.org/abs/2506.24119
 type: paper
+aliases: [STP, Self-play Theorem Proving]
 ---
 
 ## Key Takeaways

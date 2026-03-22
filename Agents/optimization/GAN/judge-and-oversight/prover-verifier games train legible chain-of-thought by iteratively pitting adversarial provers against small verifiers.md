@@ -3,6 +3,7 @@ created: 2026-03-22
 description: Iteratively training helpful provers, sneaky provers, and small verifiers in a game-theoretic framework produces both increasingly correct and human-legible chain-of-thought solutions, with legibility to small models transferring to legibility to humans.
 source: https://arxiv.org/abs/2407.13692
 type: paper
+aliases: [Prover-Verifier Games, Prover-Verifier]
 ---
 
 ## Key Takeaways

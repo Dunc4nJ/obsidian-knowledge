@@ -3,6 +3,7 @@ created: 2026-03-22
 description: Process supervision of intermediate reasoning steps trains substantially more reliable reward models than outcome-only supervision, with active learning improving data efficiency 2.6x.
 source: https://arxiv.org/abs/2305.20050
 type: paper
+aliases: [PRM800K, PRM800k]
 ---
 
 ## Key Takeaways

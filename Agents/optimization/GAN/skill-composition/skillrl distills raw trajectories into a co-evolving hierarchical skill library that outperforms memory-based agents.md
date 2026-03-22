@@ -3,6 +3,7 @@ created: 2026-03-22
 description: A framework that distills raw agent trajectories into a hierarchical skill library and co-evolves it with the agent's policy through recursive reinforcement learning, achieving state-of-the-art on embodied and search-augmented tasks.
 source: https://arxiv.org/abs/2602.03665
 type: paper
+aliases: [SkillRL]
 ---
 
 ## Key Takeaways

@@ -3,6 +3,7 @@ created: 2026-03-22
 description: AgentGen uses LLMs to automatically generate diverse environments from an inspiration corpus and creates smoothly difficulty-graded planning tasks via bidirectional evolution, enabling scalable agent training data synthesis.
 source: https://arxiv.org/abs/2408.00764
 type: paper
+aliases: [AgentGen]
 ---
 
 ## Key Takeaways

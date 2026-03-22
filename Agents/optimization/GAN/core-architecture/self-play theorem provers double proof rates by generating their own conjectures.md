@@ -3,6 +3,7 @@ created: 2026-03-22
 description: A self-play framework where an LLM simultaneously acts as conjecturer and prover doubles the pass rate on LeanWorkbook by generating progressively harder conjectures that provide dense training signal.
 source: https://arxiv.org/abs/2502.00212
 type: paper
+aliases: [SPIRAL]
 ---
 
 ## Key Takeaways

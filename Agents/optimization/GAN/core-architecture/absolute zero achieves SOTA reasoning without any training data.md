@@ -3,6 +3,7 @@ created: 2026-03-22
 description: A single model learns to both propose and solve code reasoning tasks through self-play, achieving SOTA performance on math and coding benchmarks without any external training data.
 source: https://arxiv.org/abs/2505.03335
 type: paper
+aliases: [Absolute Zero, AZR, Absolute Zero Reasoner]
 ---
 
 ## Key Takeaways

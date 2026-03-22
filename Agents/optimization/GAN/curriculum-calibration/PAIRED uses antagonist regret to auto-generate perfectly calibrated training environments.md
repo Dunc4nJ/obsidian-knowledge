@@ -3,6 +3,7 @@ created: 2026-03-22
 description: PAIRED introduces an antagonist agent whose regret signal drives an environment adversary to generate challenging-but-solvable tasks, producing emergent curricula and strong zero-shot transfer.
 source: https://arxiv.org/abs/2012.02096
 type: paper
+aliases: [PAIRED]
 ---
 
 ## Key Takeaways

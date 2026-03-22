@@ -3,6 +3,7 @@ created: 2026-03-22
 description: Converting coding problems into interactive multi-turn tool-use environments enables RL training that generalizes out-of-distribution, with Qwen2.5-32B gaining 8.7 points on tau-Bench.
 source: https://arxiv.org/abs/2506.08261
 type: paper
+aliases: [CodeGym]
 ---
 
 ## Key Takeaways

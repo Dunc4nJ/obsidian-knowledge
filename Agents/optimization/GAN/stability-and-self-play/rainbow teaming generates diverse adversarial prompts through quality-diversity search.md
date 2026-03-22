@@ -3,6 +3,7 @@ created: 2026-03-22
 description: Casting adversarial prompt generation as quality-diversity search via MAP-Elites produces diverse, effective attacks across predefined feature dimensions without fine-tuning an attacker model.
 source: https://arxiv.org/abs/2402.16822
 type: paper
+aliases: [Rainbow Teaming]
 ---
 
 ## Key Takeaways

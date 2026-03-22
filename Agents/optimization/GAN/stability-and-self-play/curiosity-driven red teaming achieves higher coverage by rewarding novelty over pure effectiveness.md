@@ -3,6 +3,7 @@ created: 2026-03-22
 description: Adding curiosity-driven novelty rewards to RL-based red teaming increases both the diversity and effectiveness of discovered adversarial test cases against LLMs.
 source: https://arxiv.org/abs/2402.19464
 type: paper
+aliases: [Curiosity-Driven Red Teaming, CRT]
 ---
 
 ## Key Takeaways

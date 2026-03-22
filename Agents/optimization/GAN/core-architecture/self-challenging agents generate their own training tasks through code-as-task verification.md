@@ -3,6 +3,7 @@ created: 2026-03-22
 description: LLM agents that play both challenger and executor roles can generate verified training tasks through a Code-as-Task formalism, doubling success rates on tool-use benchmarks without human-curated data.
 source: https://arxiv.org/abs/2508.02406
 type: paper
+aliases: [Self-Challenging, Self-Challenging Improves Self-Reasoning]
 ---
 
 ## Key Takeaways

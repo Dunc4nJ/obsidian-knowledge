@@ -3,6 +3,7 @@ created: 2026-03-22
 description: Prioritized Level Replay uses TD-error-based scoring to selectively sample training levels with the highest estimated future learning potential, inducing emergent curricula that significantly improve generalization.
 source: https://arxiv.org/abs/2010.03934
 type: paper
+aliases: [PLR, Prioritized Level Replay]
 ---
 
 ## Key Takeaways

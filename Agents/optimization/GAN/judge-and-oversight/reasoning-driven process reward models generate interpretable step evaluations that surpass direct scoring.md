@@ -3,6 +3,7 @@ created: 2026-03-22
 description: R-PRM demonstrates that having process reward models generate explicit reasoning analyses before judging step correctness produces more accurate, generalizable, and interpretable evaluations than direct scoring approaches.
 source: https://arxiv.org/abs/2503.21295
 type: paper
+aliases: [R-PRM]
 ---
 
 ## Key Takeaways
