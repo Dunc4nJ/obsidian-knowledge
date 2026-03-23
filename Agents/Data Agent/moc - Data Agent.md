@@ -23,6 +23,10 @@ AI agents that interact with structured data to answer questions — text-to-SQL
 
 - [[semantic SQL parsing makes data transformations programmatically validatable which is what data agents need underneath them]] — SQLMesh parses SQL via SQLGlot for compile-time validation, column-level lineage, and cross-engine transpilation; now owned by Fivetran alongside dbt
 
+## Frameworks
+
+- [[RLMs inline intelligence into data pipelines by giving LLMs symbolic access to DataFrames in a persistent REPL]] — DSPy's SandboxSerializable protocol lets RLMs iteratively explore DataFrames in a Pyodide REPL, hitting 87% on DABench with a 15-line generic solver
+
 ## Research
 
 - [[multi-task RL on heterogeneous search behaviors produces knowledge agents that generalize across grounded reasoning tasks]] — KARL (Databricks): multi-task off-policy RL yields Pareto-optimal knowledge agents across grounded reasoning tasks

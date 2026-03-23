@@ -53,6 +53,7 @@ AI agents that query databases, write SQL, answer data questions, and do data an
 - [[the hard problem in text-to-SQL is discovery not generation and hybrid search over existing metadata solves it]]
 - [[Prime Intellect duckdb-qa - RL reward shaping for SQL tool use]]
 - [[multi-task RL on heterogeneous search behaviors produces knowledge agents that generalize across grounded reasoning tasks]]
+- [[RLMs inline intelligence into data pipelines by giving LLMs symbolic access to DataFrames in a persistent REPL]]
 
 ### Evaluation and Monitoring
 Measuring agent quality, observability, regression testing, LLM-as-judge, eval pipelines, drift detection, production monitoring. If the note is about *knowing whether the agent is doing well*, it goes here.
