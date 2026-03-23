@@ -13,7 +13,25 @@ Knowledge about building, running, and improving AI agents. Each subfolder cover
 ### Agentic Memory
 How agents store, retrieve, and evolve knowledge across sessions. Memory architectures, vault-as-memory patterns, state persistence, context survival across compaction. If the note is about *what agents remember and how*, it goes here. If it's about *how agents selectively load context into a prompt*, that's Tooling (context engineering).
 
+- [[most agent bottlenecks are actually memory problems not model or orchestration problems]]
+- [[multi-agent memory needs computer architecture style hierarchy and consistency models]]
+- [[four memory layers serve different knowledge types]]
+- [[indexed experience memory compresses LLM agent context without discarding evidence by pairing summaries with a dereferenceable archive]]
+- [[Hermes Agent prioritizes prompt caching stability by keeping hot memory tiny and pushing everything else to tool-based retrieval]]
+- [[progressive disclosure filters force agent selectivity over what enters context]]
 - [[agentic search agents replace vector databases for long-term memory achieving 99 percent on LongMemEval]]
+- [[AMA-Bench evaluates long-horizon memory for agentic applications using real and synthetic trajectories]]
+- [[Semantica and Cognee solve agent memory differently - Semantica adds accountability while Cognee builds the knowledge engine]]
+- [[a file system is not all you need - databases beat markdown for agent context provenance and governance]]
+- [[every app that avoids a database ends up rebuilding one badly]]
+- [[PARA and atomic facts give AI agents durable structured memory]]
+- [[obsidian vaults become memory graphs when agents traverse wikilinked notes with claim-based titles and layered orientation]]
+- [[Obsidian as Agentic Memory]]
+- [[Obsidian wikilink resolution can be replicated on plain filesystems with an index and atomic rename tool]]
+- [[inline annotations beat copy-paste editing by keeping instructions where they belong]]
+- [[git hooks as thinking journal let you time-travel through note evolution]]
+- [[transcript mining turns meetings into captured decisions and extracted knowledge]]
+- [[How Obsidian Graph View Works]]
 
 ### Search
 Agentic search strategies — code search, semantic retrieval, embedding-based indexing, grep-vs-RAG tradeoffs, long-horizon search behavior, search-vs-reasoning tradeoffs, and tools that help agents find information in codebases or broader environments. The overlap with Tooling is tight — place it here if the core topic is *search strategy or retrieval*, in Tooling if it's about *general agent tool design*.
