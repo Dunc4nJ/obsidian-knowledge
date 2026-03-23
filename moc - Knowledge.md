@@ -186,6 +186,7 @@ Embedding models, retrieval architectures, and vector search.
 
 - [[scaling embedding models requires LLM-labeled deduplication to fix the fake negative problem]] — LLM-labeled deduplication fixes false negatives that poison contrastive training at scale
 - [[ColBERT MaxSim is a submodular facility location objective and that is why it generalizes]] — MaxSim scoring is a facility location objective with diminishing returns, explaining ColBERT's cross-domain generalization over single-vector models
+- [[late interaction lets a 150M ColBERT model outperform 7B dense retrievers on reasoning-intensive retrieval]] — Reason-ModernColBERT (150M) beats all dense models up to 7B on BRIGHT benchmark, with controlled experiments showing late interaction doubles performance over single-vector on identical data
 
 ## LLMs
 
