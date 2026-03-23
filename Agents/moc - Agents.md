@@ -23,8 +23,6 @@ Agentic search strategies — code search, semantic retrieval, embedding-based i
 - [[Letta Code agents can move across machines without losing memory]]
 - [[stable agentic RL requires sequence-level clipping and environment-aware advantages to prevent training collapse]]
 - [[the autoresearch loop generalizes beyond ML training into a universal pattern for autonomous agent research]]
-- [[memento-skills turns executable skill folders into evolving non-parametric memory that lets frozen LLMs learn continuously from deployment]]
-
 Agents that improve over time — RL from conversations, self-improvement loops, memory systems that compound knowledge across sessions, skill acquisition. The key test: *does the agent get better at its job over time?* If yes, it belongs here. If it just has good static context architecture, that's Tooling.
 
 ### Data Agent
@@ -92,6 +90,7 @@ Agent skill design, authoring, testing, and lifecycle management. SKILL.md patte
 - [[dual-stream experience and skill accumulation enables multimodal agents to continually improve tool use without parameter updates]]
 - [[LLMs can discover and reuse compositional tool skills via MCP primitives reducing token usage up to 80 percent]]
 - [[agent skills should self-improve through observed failures not stay as static prompt files]]
+- [[memento-skills turns executable skill folders into evolving non-parametric memory that lets frozen LLMs learn continuously from deployment]]
 - [[EvoSkill discovers reusable agent skills through iterative failure analysis outperforming static prompts and transferring zero-shot]]
 - [[systematic mining of open-source repos can automate agent skill acquisition at scale]]
 - [[the best agent skills fit one category and grow from gotchas not upfront design]]
