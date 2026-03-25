@@ -85,6 +85,8 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 ### Infrastructure
 Production engineering for agents — security, reliability, sandboxing, deployment, distributed systems patterns, authentication, cost management. If the note is about *keeping agents running safely in production*, it goes here.
 
+- [[sandboxing ai agents can be 100x faster with dynamic workers]]
+
 ### MCP
 Model Context Protocol — servers, tool definitions, transport patterns, and the MCP ecosystem specifically. If it's about MCP as a protocol or MCP-based tools, it goes here. General tool design goes in Tooling.
 
