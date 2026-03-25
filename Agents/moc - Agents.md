@@ -46,6 +46,11 @@ Agentic search strategies — code search, semantic retrieval, embedding-based i
 - [[the autoresearch loop generalizes beyond ML training into a universal pattern for autonomous agent research]]
 Agents that improve over time — RL from conversations, self-improvement loops, memory systems that compound knowledge across sessions, skill acquisition. The key test: *does the agent get better at its job over time?* If yes, it belongs here. If it just has good static context architecture, that's Tooling.
 
+### CLI
+Patterns for designing command-line interfaces that AI agents can use effectively — non-interactive flags, progressive help discovery, idempotency, structured output, and the CLI-as-agent-interface thesis.
+
+- [[agent-friendly CLIs need flags not prompts and examples not descriptions]]
+
 ### Data Agent
 AI agents that query databases, write SQL, answer data questions, and do data analysis. Text-to-SQL, discovery and context layers over warehouses, data assistant architectures, RL for SQL tool use. If the note is about *agents interacting with structured data to answer questions*, it goes here.
 
