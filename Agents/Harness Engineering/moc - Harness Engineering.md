@@ -30,6 +30,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[Open SWE distills enterprise coding agent patterns into a composable open-source framework]] — LangChain's open-source framework capturing converging patterns from Stripe Minions, Ramp Inspect, and Coinbase Cloudbot: pluggable sandboxes, curated tools, subagent orchestration, middleware hooks, Slack-first invocation
 
 - [[build vs buy for coding agent orchestration depends on stack complexity and appetite for maintenance]] — Zach Lloyd (Warp) on build-vs-buy for cloud agent orchestration: 12 infrastructure primitives, MVP trap, and when to own vs. buy the stack
+- [[GAN-inspired generator-evaluator harness improves long-running coding agents]] — Anthropic Labs: GAN-inspired planner/generator/evaluator architecture produces full-stack apps over multi-hour autonomous sessions, with sprint contracts and Playwright-based QA
 
 ## Factory Droid
 
