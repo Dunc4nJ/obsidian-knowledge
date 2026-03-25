@@ -4,7 +4,7 @@ description: Zach Lloyd (Warp) breaks down the build-vs-buy decision for cloud c
 source: https://x.com/zachlloydtweets/status/2036509756404158559
 ---
 
-# Deploying coding agents at scale is mostly an orchestration and governance problem not a model problem
+# Build vs buy for coding agent orchestration depends on stack complexity and appetite for maintenance
 
 ## Key Takeaways
 

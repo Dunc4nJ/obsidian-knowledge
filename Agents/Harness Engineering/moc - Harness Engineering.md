@@ -29,7 +29,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[the agent harness is the RL training environment not deployment infrastructure bolted on after]] — comprehensive survey of how Cursor, Cognition, OpenAI, and Windsurf train inside production harnesses, with six research papers confirming environment quality sets the ceiling on model capability
 - [[Open SWE distills enterprise coding agent patterns into a composable open-source framework]] — LangChain's open-source framework capturing converging patterns from Stripe Minions, Ramp Inspect, and Coinbase Cloudbot: pluggable sandboxes, curated tools, subagent orchestration, middleware hooks, Slack-first invocation
 
-- [[deploying coding agents at scale is mostly an orchestration and governance problem not a model problem]] — Zach Lloyd (Warp) on build-vs-buy for cloud agent orchestration: 12 infrastructure primitives, MVP trap, and when to own vs. buy the stack
+- [[build vs buy for coding agent orchestration depends on stack complexity and appetite for maintenance]] — Zach Lloyd (Warp) on build-vs-buy for cloud agent orchestration: 12 infrastructure primitives, MVP trap, and when to own vs. buy the stack
 
 ## Factory Droid
 
