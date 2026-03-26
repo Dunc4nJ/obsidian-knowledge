@@ -22,3 +22,4 @@ How to design, describe, and orchestrate tools that agents actually use well.
 - [[rewriting tool descriptions with curriculum learning improves agent tool use without execution traces]] — curriculum-based tool description optimization
 - [[skill graphs outperform single skill files by letting agents traverse linked domain knowledge on demand]] — graph-structured skills vs flat skill files
 - [[skill workflows]] — workflow patterns for agent skills
+- [[dev-browser lets agents write Playwright code in a sandboxed QuickJS VM for fast browser automation]]
