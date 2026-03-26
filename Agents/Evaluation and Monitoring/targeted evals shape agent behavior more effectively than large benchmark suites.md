@@ -2,6 +2,7 @@
 created: 2026-03-26
 description: LangChain's Deep Agents team argues that fewer, behavior-targeted evals outperform massive test suites because each eval applies directional pressure on the agent system, and untargeted volume creates false confidence.
 source: https://x.com/Vtrivedy10/status/2037203679997018362
+original_title: "How we build evals for Deep Agents"
 type: learning
 ---
 

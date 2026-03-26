@@ -2,6 +2,7 @@
 created: 2026-03-26
 description: LangChain's AgentMiddleware exposes six lifecycle hooks (before/after agent, before/after model, wrap model/tool calls) that let builders inject PII redaction, dynamic tool selection, summarization, retries, and human-in-the-loop without modifying the core agent loop.
 source: https://x.com/sydneyrunkle/status/2037184580143243751
+original_title: "How Middleware Lets You Customize Your Agent Harness"
 type: learning
 ---
 
