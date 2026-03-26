@@ -66,3 +66,4 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[anthropic-mcp-code-execution|Agents that write code to call MCP tools reduce context overhead by 98.7 percent]]
 - [[CLAUDE.md is the highest-leverage harness config but hits a 150-200 instruction ceiling before compliance decays linearly]]
   - [[agent harnesses are the product not the model]]
+  - [[Databricks coSTAR closes the agent testing gap with coupled judge-alignment and agent-refinement loops]]
