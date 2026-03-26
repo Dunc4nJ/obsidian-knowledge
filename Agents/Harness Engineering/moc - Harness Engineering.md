@@ -15,6 +15,8 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 
 ## Notes
 
+- [[PostHog learned your agent harness is not your moat and switched to the Claude Agent SDK after three iterations]] — PostHog's three harness iterations (coordinator → single loop with 44 tools → Claude Agent SDK + MCP + sandbox), plus lessons on MCP-first architecture, context engineering, observability, and user-centric priorities
+
 - [[most popular CLAUDE.md files add noise not signal with a 556 to 1 copy-to-contribution ratio]] — Augment Code's analysis: ETH Zurich found context files reduce success rates, 556:1 copy ratio on agent rules repos, pruning rubric for failure-driven instructions
 - [[lessons from building AI agents for financial services — sandbox skills streaming and eval at Fintool]] — Bustamante's full architecture breakdown: sandboxed execution, S3-first storage, markdown skills, Temporal orchestration, domain evals
 - [[claude CLI print mode is a full agent runtime accessible via command line]]
