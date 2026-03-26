@@ -20,6 +20,7 @@ Measuring agent quality, observability, regression testing, production monitorin
 - [[VictoriaMetrics is becoming the default observability stack for AI agent systems]]
 
 - [[a working offline eval turns vibes into repeatable measurement in 10 steps]]
+- [[targeted evals shape agent behavior more effectively than large benchmark suites]]
 
 ## Resources
 
