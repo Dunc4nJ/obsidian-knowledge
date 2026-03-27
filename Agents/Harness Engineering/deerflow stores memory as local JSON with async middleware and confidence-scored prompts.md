@@ -7,15 +7,15 @@ type: learning
 
 ## Key Takeaways
 
-DeerFlow treats memory as a first-class middleware concern inside its LangGraph execution graph, not a sidecar service. It updates JSON memory asynchronously on a 30-second debounce and injects selected, budgeted memory facts into prompts on every turn. This maps closely to the [[agent middleware hooks decouple business logic from the core agent loop enabling composable customization|middleware-first memory pattern]] and avoids adding recovery work to the critical response path.
+DeerFlow treats memory as a first-class middleware concern inside its LangGraph execution graph, not a sidecar service. It updates JSON memory asynchronously on a 30-second debounce and injects selected, budgeted memory facts into prompts on every turn. That reduces critical-path recovery work and makes memory behavior easier to reason about operationally.
 
-The system uses a confidence-scored fact store with an explicit threshold and a 100-fact cap, so noisy utterances do not immediately become durable state. Facts are sorted by confidence and injected until the `2,000-token` budget is filled, which is a concrete operationalization of memory under limited context pressure and connects directly to [[prompt caching is the foundational constraint for building long-running agents|token-budgeted memory injection]].
+The system uses a confidence-scored fact store with an explicit threshold and a 100-fact cap, so noisy utterances do not immediately become durable state. Facts are sorted by confidence and injected until the `2,000-token` budget is filled, which is a concrete operationalization of memory under limited context pressure.
 
 Persistence is intentionally simple: a local `memory.json` file with atomic write-then-rename semantics means operators can inspect and even patch memory directly. Combined with thread-aware async de-dup replacement in the queue, this gives transparency and resilience that many opaque vector-memory systems miss, including in the sense that memory design needs deterministic orchestration more than retrieval complexity.
 
-The design demonstrates two important failure modes that matter in production: no semantic search and no semantic deduplication. That means retrieval remains confidence-first instead of relevance-first, and paraphrase-level duplicates can leak into the budget as context grows. In a [[Obsidian as Agentic Memory]] pipeline, this tradeoff is cleaner than full semantic pipelines but still can degrade quality as the fact store grows.
+The design demonstrates two important failure modes that matter in production: no semantic search and no semantic deduplication. That means retrieval remains confidence-first instead of relevance-first, and paraphrase-level duplicates can leak into the budget as context grows. In an [[Obsidian as Agentic Memory]] setup, this tradeoff is cleaner than full semantic pipelines but still can degrade quality as the fact store grows.
 
-DeerFlow’s approach is a strong reminder that durable memory can be engineered as a deterministic runtime layer while leaving models to work on orchestration and action. The memory layer can remain local and deterministic, while model choice can be optimized for cost on extraction and quality where it matters most, aligning with [[over 40 percent of agentic AI projects fail due to poor architecture not model limitations]] rather than model-only tuning.
+DeerFlow’s approach is a strong reminder that durable memory can be engineered as a deterministic runtime layer while leaving models to work on orchestration and action. The memory layer can remain local and deterministic, while model choice can be optimized for cost on extraction and quality where it matters most, rather than spending that complexity on model-only tuning.
 
 ## External Resources
 
