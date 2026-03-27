@@ -40,6 +40,7 @@ Financial and investment-focused multi-agent systems.
 Vault philosophy and agent integration patterns.
 
 - [[Obsidian as Agentic Memory]] — architectural pillars for building agent knowledge systems (synthesizes vibe note-taking patterns and tools-for-thought lineage)
+- [[deerflow stores memory as local JSON with async middleware and confidence-scored prompts]] — DeerFlow’s JSON-based, confidence-gated, token-budgeted memory middleware pattern for practical agent memory
 - [[four memory layers serve different knowledge types]] — CASS, CM, ms, and the vault as a unified memory system
 - [[progressive disclosure filters force agent selectivity over what enters context]] — progressive disclosure for agent context curation
 - [[inline annotations beat copy-paste editing by keeping instructions where they belong]] — spatial editing with inline annotations
