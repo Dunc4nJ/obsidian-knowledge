@@ -39,6 +39,7 @@ Agentic search strategies — code search, semantic retrieval, embedding-based i
 - [[CodeScout trains small models via RL to outperform 18x larger LLMs at code search using only terminal commands]]
 - [[indexing text with sparse n-grams and bloom filters eliminates 15-second ripgrep waits in large monorepos]] — Cursor's Vicent Marti surveys four generations of regex search indexing (trigrams, suffix arrays, bloom-filter trigrams, sparse n-grams) and explains their client-side index architecture for instant agent grep
 - [[a purpose-trained 20B search agent matches frontier models at 10x less cost by self-editing its context]] — Chroma Context-1: 20B agentic search model trained via SFT+RL with self-editing context management, synthetic multi-hop tasks, and staged recall-to-precision curriculum
+- [[hierarchical tree navigation can replace vector embeddings for RAG retrieval]] — PageIndex builds a document tree and uses LLM reasoning to navigate it level-by-level, eliminating embeddings and vector databases entirely
 
 ### Continual Learning
 
