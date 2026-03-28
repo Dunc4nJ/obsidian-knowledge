@@ -21,6 +21,7 @@ Measuring agent quality, observability, regression testing, production monitorin
 
 - [[a working offline eval turns vibes into repeatable measurement in 10 steps]]
 - [[targeted evals shape agent behavior more effectively than large benchmark suites]]
+- [[agent eval readiness starts with error analysis and simple end-to-end tests not sophisticated infrastructure]]
 
 ## Resources
 
