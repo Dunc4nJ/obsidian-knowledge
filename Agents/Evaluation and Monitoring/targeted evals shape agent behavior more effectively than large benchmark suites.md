@@ -18,6 +18,8 @@ The eval taxonomy groups tests by *what they measure* (tool use, file operations
 
 Their model selection workflow is sequential: correctness first (which models can reliably do the tasks?), then efficiency (among passing models, which has the best latency/cost tradeoff?). This avoids the common trap of optimizing for speed on a model that can't actually do the work.
 
+A useful mental model from the same author frames agent eval as [constrained optimization](https://x.com/vtrivedy10/status/2037924832453530004) — analogous to the knapsack problem. The agent performs "intelligent search" over the space of all possible programs, and evals act as constraints that shrink that space toward useful solutions. Some evals are hard/blocking (the agent won't ship if they fail), others are soft objectives that guide hill-climbing toward better overall behavior. This makes evals function like training data for self-improving agents: they define the gradient. As agents become more autonomous and self-building, the quality of eval constraints directly determines the quality of solutions they converge on.
+
 ## External Resources
 
 - [Deep Agents repo (open source)](https://github.com/langchain-ai/deepagents) — the agent harness with open-sourced eval architecture
