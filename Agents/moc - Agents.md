@@ -67,6 +67,7 @@ AI agents that query databases, write SQL, answer data questions, and do data an
 Measuring agent quality, observability, regression testing, LLM-as-judge, eval pipelines, drift detection, production monitoring. If the note is about *knowing whether the agent is doing well*, it goes here.
 
 - [[Agno native tracing keeps agent observability data in your own database]]
+- [[sandboxed CI is the missing infrastructure for agent evals at scale]]
 
 ### Extra
 Roundups, digests, survey notes, and multi-topic captures that don't fit cleanly into one subfolder. Use sparingly — prefer placing notes in a specific subfolder when possible.

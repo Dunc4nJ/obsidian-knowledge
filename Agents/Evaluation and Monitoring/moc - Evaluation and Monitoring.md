@@ -23,6 +23,8 @@ Measuring agent quality, observability, regression testing, production monitorin
 - [[targeted evals shape agent behavior more effectively than large benchmark suites]]
 - [[agent eval readiness starts with error analysis and simple end-to-end tests not sophisticated infrastructure]]
 
+- [[sandboxed CI is the missing infrastructure for agent evals at scale]]
+
 ## Resources
 
 - [[Langfuse]]
