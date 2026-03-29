@@ -23,3 +23,4 @@ How to design, describe, and orchestrate tools that agents actually use well.
 - [[skill graphs outperform single skill files by letting agents traverse linked domain knowledge on demand]] — graph-structured skills vs flat skill files
 - [[skill workflows]] — workflow patterns for agent skills
 - [[dev-browser lets agents write Playwright code in a sandboxed QuickJS VM for fast browser automation]]
+- [[LightOnOCR-2 outscores proprietary models at table extraction with 1B parameters]] — 1B open-source model beats GPT-5 mini, Claude Sonnet 4.6, and Mathpix on independent table extraction benchmark
