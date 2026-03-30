@@ -68,6 +68,7 @@ Measuring agent quality, observability, regression testing, LLM-as-judge, eval p
 
 - [[Agno native tracing keeps agent observability data in your own database]]
 - [[sandboxed CI is the missing infrastructure for agent evals at scale]]
+- [[Offload parallelizes agent CI test suites across Modal sandboxes removing the integration testing bottleneck]]
 
 ### Extra
 Roundups, digests, survey notes, and multi-topic captures that don't fit cleanly into one subfolder. Use sparingly — prefer placing notes in a specific subfolder when possible.
