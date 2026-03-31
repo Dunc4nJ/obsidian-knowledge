@@ -1,0 +1,376 @@
+{
+  "query": "RAPTOR recursive abstractive processing tree organized retrieval Sarthi",
+  "source": "hf",
+  "limit": 10,
+  "timestamp": 1774925710.2338865,
+  "papers": [
+    {
+      "paper_id": "hf:2401.18059",
+      "title": "RAPTOR: Recursive Abstractive Processing for Tree-Organized Retrieval",
+      "authors": [
+        {
+          "name": "Parth Sarthi",
+          "affiliation": ""
+        },
+        {
+          "name": "Salman Abdullah",
+          "affiliation": ""
+        },
+        {
+          "name": "Aditi Tuli",
+          "affiliation": ""
+        },
+        {
+          "name": "Shubh Khanna",
+          "affiliation": ""
+        },
+        {
+          "name": "Anna Goldie",
+          "affiliation": ""
+        },
+        {
+          "name": "Christopher D. Manning",
+          "affiliation": ""
+        }
+      ],
+      "year": 2024,
+      "abstract": "Retrieval-augmented language models can better adapt to changes in world\nstate and incorporate long-tail knowledge. However, most existing methods\nretrieve only short contiguous chunks from a retrieval corpus, limiting\nholistic understanding of the overall document context. We introduce the novel\napproach of recursively embedding, clustering, and summarizing chunks of text,\nconstructing a tree with differing levels of summarization from the bottom up.\nAt inference time, our RAPTOR model retrieves from this tree, integrating\ninformation across lengthy documents at different levels of abstraction.\nControlled experiments show that retrieval with recursive summaries offers\nsignificant improvements over traditional retrieval-augmented LMs on several\ntasks. On question-answering tasks that involve complex, multi-step reasoning,\nwe show state-of-the-art results; for example, by coupling RAPTOR retrieval\nwith the use of GPT-4, we can improve the best performance on the QuALITY\nbenchmark by 20% in absolute accuracy.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2401.18059",
+      "url": "https://huggingface.co/papers/2401.18059",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2411.01030",
+      "title": "Birdie: Advancing State Space Models with Reward-Driven Objectives and\n  Curricula",
+      "authors": [
+        {
+          "name": "Sam Blouir",
+          "affiliation": ""
+        },
+        {
+          "name": "Jimmy T. H. Smith",
+          "affiliation": ""
+        },
+        {
+          "name": "Antonios Anastasopoulos",
+          "affiliation": ""
+        },
+        {
+          "name": "Amarda Shehu",
+          "affiliation": ""
+        }
+      ],
+      "year": 2024,
+      "abstract": "Efficient state space models (SSMs), such as linear recurrent neural networks\nand linear attention variants, offer computational advantages over Transformers\nbut struggle with tasks requiring long-range in-context retrieval-like text\ncopying, associative recall, and question answering over long contexts.\nPrevious efforts to address these challenges have focused on architectural\nmodifications, often reintroducing computational inefficiencies. In this paper,\nwe propose a novel training procedure, Birdie, that significantly enhances the\nin-context retrieval capabilities of SSMs without altering their architecture.\nOur approach combines bidirectional input processing with dynamic mixtures of\nspecialized pre-training objectives, optimized via reinforcement learning. We\nintroduce a new bidirectional SSM architecture that seamlessly transitions from\nbidirectional context processing to causal generation. Experimental evaluations\ndemonstrate that Birdie markedly improves performance on retrieval-intensive\ntasks such as multi-number phone book lookup, long paragraph\nquestion-answering, and infilling. This narrows the performance gap with\nTransformers, while retaining computational efficiency. Our findings highlight\nthe importance of training procedures in leveraging the fixed-state capacity of\nSSMs, offering a new direction to advance their capabilities. All code and\npre-trained models are available at https://www.github.com/samblouir/birdie,\nwith support for JAX and PyTorch.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2411.01030",
+      "url": "https://huggingface.co/papers/2411.01030",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2508.18190",
+      "title": "ST-Raptor: LLM-Powered Semi-Structured Table Question Answering",
+      "authors": [
+        {
+          "name": "Zirui Tang",
+          "affiliation": ""
+        },
+        {
+          "name": "Boyu Niu",
+          "affiliation": ""
+        },
+        {
+          "name": "Xuanhe Zhou",
+          "affiliation": ""
+        },
+        {
+          "name": "Boxiu Li",
+          "affiliation": ""
+        },
+        {
+          "name": "Wei Zhou",
+          "affiliation": ""
+        },
+        {
+          "name": "Jiannan Wang",
+          "affiliation": ""
+        },
+        {
+          "name": "Guoliang Li",
+          "affiliation": ""
+        },
+        {
+          "name": "Xinyi Zhang",
+          "affiliation": ""
+        },
+        {
+          "name": "Fan Wu",
+          "affiliation": ""
+        }
+      ],
+      "year": 2025,
+      "abstract": "Semi-structured tables, widely used in real-world applications (e.g.,\nfinancial reports, medical records, transactional orders), often involve\nflexible and complex layouts (e.g., hierarchical headers and merged cells).\nThese tables generally rely on human analysts to interpret table layouts and\nanswer relevant natural language questions, which is costly and inefficient. To\nautomate the procedure, existing methods face significant challenges. First,\nmethods like NL2SQL require converting semi-structured tables into structured\nones, which often causes substantial information loss. Second, methods like\nNL2Code and multi-modal LLM QA struggle to understand the complex layouts of\nsemi-structured tables and cannot accurately answer corresponding questions. To\nthis end, we propose ST-Raptor, a tree-based framework for semi-structured\ntable question answering using large language models. First, we introduce the\nHierarchical Orthogonal Tree (HO-Tree), a structural model that captures\ncomplex semi-structured table layouts, along with an effective algorithm for\nconstructing the tree. Second, we define a set of basic tree operations to\nguide LLMs in executing common QA tasks. Given a user question, ST-Raptor\ndecomposes it into simpler sub-questions, generates corresponding tree\noperation pipelines, and conducts operation-table alignment for accurate\npipeline execution. Third, we incorporate a two-stage verification mechanism:\nforward validation checks the correctness of execution steps, while backward\nvalidation evaluates answer reliability by reconstructing queries from\npredicted answers. To benchmark the performance, we present SSTQA, a dataset of\n764 questions over 102 real-world semi-structured tables. Experiments show that\nST-Raptor outperforms nine baselines by up to 20% in answer accuracy. The code\nis available at https://github.com/weAIDB/ST-Raptor.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2508.18190",
+      "url": "https://huggingface.co/papers/2508.18190",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2501.15098",
+      "title": "CFT-RAG: An Entity Tree Based Retrieval Augmented Generation Algorithm\n  With Cuckoo Filter",
+      "authors": [
+        {
+          "name": "Zihang Li",
+          "affiliation": ""
+        },
+        {
+          "name": "Yangdong Ruan",
+          "affiliation": ""
+        },
+        {
+          "name": "Wenjun Liu",
+          "affiliation": ""
+        },
+        {
+          "name": "Zhengyang Wang",
+          "affiliation": ""
+        },
+        {
+          "name": "Tong Yang",
+          "affiliation": ""
+        }
+      ],
+      "year": 2025,
+      "abstract": "Although retrieval-augmented generation(RAG) significantly improves\ngeneration quality by retrieving external knowledge bases and integrating\ngenerated content, it faces computational efficiency bottlenecks, particularly\nin knowledge retrieval tasks involving hierarchical structures for Tree-RAG.\nThis paper proposes a Tree-RAG acceleration method based on the improved Cuckoo\nFilter, which optimizes entity localization during the retrieval process to\nachieve significant performance improvements. Tree-RAG effectively organizes\nentities through the introduction of a hierarchical tree structure, while the\nCuckoo Filter serves as an efficient data structure that supports rapid\nmembership queries and dynamic updates. The experiment results demonstrate that\nour method is much faster than naive Tree-RAG while maintaining high levels of\ngenerative quality. When the number of trees is large, our method is hundreds\nof times faster than naive Tree-RAG. Our work is available at\nhttps://github.com/TUPYP7180/CFT-RAG-2025.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2501.15098",
+      "url": "https://huggingface.co/papers/2501.15098",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:1503.04881",
+      "title": "Long Short-Term Memory Over Tree Structures",
+      "authors": [
+        {
+          "name": "Xiaodan Zhu",
+          "affiliation": ""
+        },
+        {
+          "name": "Parinaz Sobhani",
+          "affiliation": ""
+        },
+        {
+          "name": "Hongyu Guo",
+          "affiliation": ""
+        }
+      ],
+      "year": 2015,
+      "abstract": "The chain-structured long short-term memory (LSTM) has showed to be effective\nin a wide range of problems such as speech recognition and machine translation.\nIn this paper, we propose to extend it to tree structures, in which a memory\ncell can reflect the history memories of multiple child cells or multiple\ndescendant cells in a recursive process. We call the model S-LSTM, which\nprovides a principled way of considering long-distance interaction over\nhierarchies, e.g., language or image parse structures. We leverage the models\nfor semantic composition to understand the meaning of text, a fundamental\nproblem in natural language understanding, and show that it outperforms a\nstate-of-the-art recursive model by replacing its composition layers with the\nS-LSTM memory blocks. We also show that utilizing the given structures is\nhelpful in achieving a performance better than that without considering the\nstructures.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "1503.04881",
+      "url": "https://huggingface.co/papers/1503.04881",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2007.14271",
+      "title": "Declarative Experimentation in Information Retrieval using PyTerrier",
+      "authors": [
+        {
+          "name": "Craig Macdonald",
+          "affiliation": ""
+        },
+        {
+          "name": "Nicola Tonellotto",
+          "affiliation": ""
+        }
+      ],
+      "year": 2020,
+      "abstract": "The advent of deep machine learning platforms such as Tensorflow and Pytorch,\ndeveloped in expressive high-level languages such as Python, have allowed more\nexpressive representations of deep neural network architectures. We argue that\nsuch a powerful formalism is missing in information retrieval (IR), and propose\na framework called PyTerrier that allows advanced retrieval pipelines to be\nexpressed, and evaluated, in a declarative manner close to their conceptual\ndesign. Like the aforementioned frameworks that compile deep learning\nexperiments into primitive GPU operations, our framework targets IR platforms\nas backends in order to execute and evaluate retrieval pipelines. Further, we\ncan automatically optimise the retrieval pipelines to increase their efficiency\nto suite a particular IR platform backend. Our experiments, conducted on TREC\nRobust and ClueWeb09 test collections, demonstrate the efficiency benefits of\nthese optimisations for retrieval pipelines involving both the Anserini and\nTerrier IR platforms.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2007.14271",
+      "url": "https://huggingface.co/papers/2007.14271",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2502.07971",
+      "title": "ReTreever: Tree-based Coarse-to-Fine Representations for Retrieval",
+      "authors": [
+        {
+          "name": "Shubham Gupta",
+          "affiliation": ""
+        },
+        {
+          "name": "Zichao Li",
+          "affiliation": ""
+        },
+        {
+          "name": "Tianyi Chen",
+          "affiliation": ""
+        },
+        {
+          "name": "Cem Subakan",
+          "affiliation": ""
+        },
+        {
+          "name": "Siva Reddy",
+          "affiliation": ""
+        },
+        {
+          "name": "Perouz Taslakian",
+          "affiliation": ""
+        },
+        {
+          "name": "Valentina Zantedeschi",
+          "affiliation": ""
+        }
+      ],
+      "year": 2025,
+      "abstract": "Document retrieval is a core component of question-answering systems, as it\nenables conditioning answer generation on new and large-scale corpora. While\neffective, the standard practice of encoding documents into high-dimensional\nembeddings for similarity search entails large memory and compute footprints,\nand also makes it hard to inspect the inner workings of the system. In this\npaper, we propose a tree-based method for organizing and representing reference\ndocuments at various granular levels, which offers the flexibility to balance\ncost and utility, and eases the inspection of the corpus content and retrieval\noperations. Our method, called ReTreever, jointly learns a routing function per\ninternal node of a binary tree such that query and reference documents are\nassigned to similar tree branches, hence directly optimizing for retrieval\nperformance. Our evaluations show that ReTreever generally preserves full\nrepresentation accuracy. Its hierarchical structure further provides strong\ncoarse representations and enhances transparency by indirectly learning\nmeaningful semantic groupings. Among hierarchical retrieval methods, ReTreever\nachieves the best retrieval accuracy at the lowest latency, proving that this\nfamily of techniques can be viable in practical applications.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2502.07971",
+      "url": "https://huggingface.co/papers/2502.07971",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2405.16755",
+      "title": "CHESS: Contextual Harnessing for Efficient SQL Synthesis",
+      "authors": [
+        {
+          "name": "Shayan Talaei",
+          "affiliation": ""
+        },
+        {
+          "name": "Mohammadreza Pourreza",
+          "affiliation": ""
+        },
+        {
+          "name": "Yu-Chen Chang",
+          "affiliation": ""
+        },
+        {
+          "name": "Azalia Mirhoseini",
+          "affiliation": ""
+        },
+        {
+          "name": "Amin Saberi",
+          "affiliation": ""
+        }
+      ],
+      "year": 2024,
+      "abstract": "Utilizing large language models (LLMs) for transforming natural language\nquestions into SQL queries (text-to-SQL) is a promising yet challenging\napproach, particularly when applied to real-world databases with complex and\nextensive schemas. In particular, effectively incorporating data catalogs and\ndatabase values for SQL generation remains an obstacle, leading to suboptimal\nsolutions. We address this problem by proposing a new pipeline that effectively\nretrieves relevant data and context, selects an efficient schema, and\nsynthesizes correct and efficient SQL queries. To increase retrieval precision,\nour pipeline introduces a hierarchical retrieval method leveraging\nmodel-generated keywords, locality-sensitive hashing indexing, and vector\ndatabases. Additionally, we have developed an adaptive schema pruning technique\nthat adjusts based on the complexity of the problem and the model's context\nsize. Our approach generalizes to both frontier proprietary models like GPT-4\nand open-source models such as Llama-3-70B. Through a series of ablation\nstudies, we demonstrate the effectiveness of each component of our pipeline and\nits impact on the end-to-end performance. Our method achieves new\nstate-of-the-art performance on the cross-domain challenging BIRD dataset.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2405.16755",
+      "url": "https://huggingface.co/papers/2405.16755",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2308.07107",
+      "title": "Large Language Models for Information Retrieval: A Survey",
+      "authors": [
+        {
+          "name": "Yutao Zhu",
+          "affiliation": ""
+        },
+        {
+          "name": "Huaying Yuan",
+          "affiliation": ""
+        },
+        {
+          "name": "Shuting Wang",
+          "affiliation": ""
+        },
+        {
+          "name": "Jiongnan Liu",
+          "affiliation": ""
+        },
+        {
+          "name": "Wenhan Liu",
+          "affiliation": ""
+        },
+        {
+          "name": "Chenlong Deng",
+          "affiliation": ""
+        },
+        {
+          "name": "Zhicheng Dou",
+          "affiliation": ""
+        },
+        {
+          "name": "Ji-Rong Wen",
+          "affiliation": ""
+        }
+      ],
+      "year": 2023,
+      "abstract": "As a primary means of information acquisition, information retrieval (IR)\nsystems, such as search engines, have integrated themselves into our daily\nlives. These systems also serve as components of dialogue, question-answering,\nand recommender systems. The trajectory of IR has evolved dynamically from its\norigins in term-based methods to its integration with advanced neural models.\nWhile the neural models excel at capturing complex contextual signals and\nsemantic nuances, thereby reshaping the IR landscape, they still face\nchallenges such as data scarcity, interpretability, and the generation of\ncontextually plausible yet potentially inaccurate responses. This evolution\nrequires a combination of both traditional methods (such as term-based sparse\nretrieval methods with rapid response) and modern neural architectures (such as\nlanguage models with powerful language understanding capacity). Meanwhile, the\nemergence of large language models (LLMs), typified by ChatGPT and GPT-4, has\nrevolutionized natural language processing due to their remarkable language\nunderstanding, generation, generalization, and reasoning abilities.\nConsequently, recent research has sought to leverage LLMs to improve IR\nsystems. Given the rapid evolution of this research trajectory, it is necessary\nto consolidate existing methodologies and provide nuanced insights through a\ncomprehensive overview. In this survey, we delve into the confluence of LLMs\nand IR systems, including crucial aspects such as query rewriters, retrievers,\nrerankers, and readers. Additionally, we explore promising directions within\nthis expanding field.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2308.07107",
+      "url": "https://huggingface.co/papers/2308.07107",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2506.08364",
+      "title": "Structure-Augmented Reasoning Generation",
+      "authors": [
+        {
+          "name": "Jash Rajesh Parekh",
+          "affiliation": ""
+        },
+        {
+          "name": "Pengcheng Jiang",
+          "affiliation": ""
+        },
+        {
+          "name": "Jiawei Han",
+          "affiliation": ""
+        }
+      ],
+      "year": 2025,
+      "abstract": "Recent advances in Large Language Models (LLMs) have significantly improved complex reasoning capabilities. Retrieval-Augmented Generation (RAG) has further extended these capabilities by grounding generation in dynamically retrieved evidence, enabling access to information beyond the model's training parameters. However, while RAG addresses knowledge availability, standard pipelines treat retrieved documents as independent, unstructured text chunks, forcing models to implicitly connect information across fragmented context. This limitation becomes critical for multi-hop queries, where answering correctly requires synthesizing information scattered across different documents. We present Structure-Augmented Reasoning Generation (SARG), a post-retrieval framework that addresses this gap by materializing explicit reasoning structures from retrieved context. SARG operates in three stages: extracting relational triples from retrieved documents via few-shot prompting, organizing these triples into a domain-adaptive knowledge graph, and performing multi-hop traversal to identify relevant reasoning chains. These chains, along with their associated text chunks, are then integrated into the generation prompt to explicitly guide the model's reasoning process. Importantly, SARG doesn't require custom retrievers or domain-specific fine-tuning. Instead, it functions as a modular layer compatible with all existing RAG pipelines. Extensive experiments on open-domain QA benchmarks and specialized reasoning datasets in finance and medicine demonstrate that SARG significantly outperforms state-of-the-art flat-context RAG baselines in both factual accuracy and reasoning coherence. Furthermore, by surfacing the exact traversal paths used during generation, SARG provides fully traceable and interpretable inference.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2506.08364",
+      "url": "https://huggingface.co/papers/2506.08364",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    }
+  ]
+}

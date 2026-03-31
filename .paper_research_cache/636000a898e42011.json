@@ -1,0 +1,44 @@
+{
+  "query": "vectorless RAG tree search hierarchical indexing reasoning-based retrieval",
+  "source": "openalex",
+  "limit": 15,
+  "timestamp": 1774925671.2214203,
+  "papers": [
+    {
+      "paper_id": "oalex-W7140346275",
+      "title": "Toward a Theory of Hierarchical Memory for Language Agents",
+      "authors": [
+        {
+          "name": "Yashar Talebirad",
+          "affiliation": "University of Alberta"
+        },
+        {
+          "name": "Ali Parsaee",
+          "affiliation": "University of Alberta"
+        },
+        {
+          "name": "Csongor Y. Szepesvari",
+          "affiliation": "University of Alberta"
+        },
+        {
+          "name": "Amirhossein Nadiri",
+          "affiliation": "University of Alberta"
+        },
+        {
+          "name": "Osmar R. Zaiane",
+          "affiliation": "University of Alberta"
+        }
+      ],
+      "year": 2026,
+      "abstract": "Many recent long-context and agentic systems address context-length limitations by adding hierarchical memory: they extract atomic units from raw data, build multi-level representatives by grouping and compression, and traverse this structure to retrieve content under a token budget. Despite recurring implementations, there is no shared formalism for comparing design choices. We propose a unifying theory in terms of three operators. Extraction ($\u03b1$) maps raw data to atomic information units; coarsening ($C = (\u03c0, \u03c1)$) partitions units and assigns a representative to each group; and traversal ($\u03c4$) selects which units to include in context given a query and budget. We identify a self-sufficiency spectrum for the representative function $\u03c1$ and show how it constrains viable retrieval strategies (a coarsening-traversal coupling). Finally, we instantiate the decomposition on eleven existing systems spanning document hierarchies, conversational memory, and agent execution traces, showcasing its generality.",
+      "venue": "ArXiv.org",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "",
+      "url": "https://openalex.org/W7140346275",
+      "source": "openalex",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    }
+  ]
+}
