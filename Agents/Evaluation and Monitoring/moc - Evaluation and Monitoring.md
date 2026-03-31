@@ -24,6 +24,7 @@ Measuring agent quality, observability, regression testing, production monitorin
 - [[agent eval readiness starts with error analysis and simple end-to-end tests not sophisticated infrastructure]]
 
 - [[sandboxed CI is the missing infrastructure for agent evals at scale]]
+- [[the agent improvement loop is traces enriched with evals and human feedback converted into validated fixes]]
 
 ## Resources
 

@@ -1,0 +1,540 @@
+{
+  "query": "RAPTOR recursive abstractive processing tree organized retrieval hierarchical summarization",
+  "source": "hf",
+  "limit": 15,
+  "timestamp": 1774925641.2092116,
+  "papers": [
+    {
+      "paper_id": "hf:2401.18059",
+      "title": "RAPTOR: Recursive Abstractive Processing for Tree-Organized Retrieval",
+      "authors": [
+        {
+          "name": "Parth Sarthi",
+          "affiliation": ""
+        },
+        {
+          "name": "Salman Abdullah",
+          "affiliation": ""
+        },
+        {
+          "name": "Aditi Tuli",
+          "affiliation": ""
+        },
+        {
+          "name": "Shubh Khanna",
+          "affiliation": ""
+        },
+        {
+          "name": "Anna Goldie",
+          "affiliation": ""
+        },
+        {
+          "name": "Christopher D. Manning",
+          "affiliation": ""
+        }
+      ],
+      "year": 2024,
+      "abstract": "Retrieval-augmented language models can better adapt to changes in world\nstate and incorporate long-tail knowledge. However, most existing methods\nretrieve only short contiguous chunks from a retrieval corpus, limiting\nholistic understanding of the overall document context. We introduce the novel\napproach of recursively embedding, clustering, and summarizing chunks of text,\nconstructing a tree with differing levels of summarization from the bottom up.\nAt inference time, our RAPTOR model retrieves from this tree, integrating\ninformation across lengthy documents at different levels of abstraction.\nControlled experiments show that retrieval with recursive summaries offers\nsignificant improvements over traditional retrieval-augmented LMs on several\ntasks. On question-answering tasks that involve complex, multi-step reasoning,\nwe show state-of-the-art results; for example, by coupling RAPTOR retrieval\nwith the use of GPT-4, we can improve the best performance on the QuALITY\nbenchmark by 20% in absolute accuracy.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2401.18059",
+      "url": "https://huggingface.co/papers/2401.18059",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:1804.05685",
+      "title": "A Discourse-Aware Attention Model for Abstractive Summarization of Long\n  Documents",
+      "authors": [
+        {
+          "name": "Arman Cohan",
+          "affiliation": ""
+        },
+        {
+          "name": "Franck Dernoncourt",
+          "affiliation": ""
+        },
+        {
+          "name": "Doo Soon Kim",
+          "affiliation": ""
+        },
+        {
+          "name": "Trung Bui",
+          "affiliation": ""
+        },
+        {
+          "name": "Seokhwan Kim",
+          "affiliation": ""
+        },
+        {
+          "name": "Walter Chang",
+          "affiliation": ""
+        },
+        {
+          "name": "Nazli Goharian",
+          "affiliation": ""
+        }
+      ],
+      "year": 2018,
+      "abstract": "Neural abstractive summarization models have led to promising results in\nsummarizing relatively short documents. We propose the first model for\nabstractive summarization of single, longer-form documents (e.g., research\npapers). Our approach consists of a new hierarchical encoder that models the\ndiscourse structure of a document, and an attentive discourse-aware decoder to\ngenerate the summary. Empirical results on two large-scale datasets of\nscientific papers show that our model significantly outperforms\nstate-of-the-art models.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "1804.05685",
+      "url": "https://huggingface.co/papers/1804.05685",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:1602.06023",
+      "title": "Abstractive Text Summarization Using Sequence-to-Sequence RNNs and\n  Beyond",
+      "authors": [
+        {
+          "name": "Ramesh Nallapati",
+          "affiliation": ""
+        },
+        {
+          "name": "Bowen Zhou",
+          "affiliation": ""
+        },
+        {
+          "name": "Cicero Nogueira dos santos",
+          "affiliation": ""
+        },
+        {
+          "name": "Caglar Gulcehre",
+          "affiliation": ""
+        },
+        {
+          "name": "Bing Xiang",
+          "affiliation": ""
+        }
+      ],
+      "year": 2016,
+      "abstract": "In this work, we model abstractive text summarization using Attentional\nEncoder-Decoder Recurrent Neural Networks, and show that they achieve\nstate-of-the-art performance on two different corpora. We propose several novel\nmodels that address critical problems in summarization that are not adequately\nmodeled by the basic architecture, such as modeling key-words, capturing the\nhierarchy of sentence-to-word structure, and emitting words that are rare or\nunseen at training time. Our work shows that many of our proposed models\ncontribute to further improvement in performance. We also propose a new dataset\nconsisting of multi-sentence summaries, and establish performance benchmarks\nfor further research.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "1602.06023",
+      "url": "https://huggingface.co/papers/1602.06023",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2502.07971",
+      "title": "ReTreever: Tree-based Coarse-to-Fine Representations for Retrieval",
+      "authors": [
+        {
+          "name": "Shubham Gupta",
+          "affiliation": ""
+        },
+        {
+          "name": "Zichao Li",
+          "affiliation": ""
+        },
+        {
+          "name": "Tianyi Chen",
+          "affiliation": ""
+        },
+        {
+          "name": "Cem Subakan",
+          "affiliation": ""
+        },
+        {
+          "name": "Siva Reddy",
+          "affiliation": ""
+        },
+        {
+          "name": "Perouz Taslakian",
+          "affiliation": ""
+        },
+        {
+          "name": "Valentina Zantedeschi",
+          "affiliation": ""
+        }
+      ],
+      "year": 2025,
+      "abstract": "Document retrieval is a core component of question-answering systems, as it\nenables conditioning answer generation on new and large-scale corpora. While\neffective, the standard practice of encoding documents into high-dimensional\nembeddings for similarity search entails large memory and compute footprints,\nand also makes it hard to inspect the inner workings of the system. In this\npaper, we propose a tree-based method for organizing and representing reference\ndocuments at various granular levels, which offers the flexibility to balance\ncost and utility, and eases the inspection of the corpus content and retrieval\noperations. Our method, called ReTreever, jointly learns a routing function per\ninternal node of a binary tree such that query and reference documents are\nassigned to similar tree branches, hence directly optimizing for retrieval\nperformance. Our evaluations show that ReTreever generally preserves full\nrepresentation accuracy. Its hierarchical structure further provides strong\ncoarse representations and enhances transparency by indirectly learning\nmeaningful semantic groupings. Among hierarchical retrieval methods, ReTreever\nachieves the best retrieval accuracy at the lowest latency, proving that this\nfamily of techniques can be viable in practical applications.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2502.07971",
+      "url": "https://huggingface.co/papers/2502.07971",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:1910.03177",
+      "title": "Read, Highlight and Summarize: A Hierarchical Neural Semantic\n  Encoder-based Approach",
+      "authors": [
+        {
+          "name": "Rajeev Bhatt Ambati",
+          "affiliation": ""
+        },
+        {
+          "name": "Saptarashmi Bandyopadhyay",
+          "affiliation": ""
+        },
+        {
+          "name": "Prasenjit Mitra",
+          "affiliation": ""
+        }
+      ],
+      "year": 2019,
+      "abstract": "Traditional sequence-to-sequence (seq2seq) models and other variations of the\nattention-mechanism such as hierarchical attention have been applied to the\ntext summarization problem. Though there is a hierarchy in the way humans use\nlanguage by forming paragraphs from sentences and sentences from words,\nhierarchical models have usually not worked that much better than their\ntraditional seq2seq counterparts. This effect is mainly because either the\nhierarchical attention mechanisms are too sparse using hard attention or noisy\nusing soft attention. In this paper, we propose a method based on extracting\nthe highlights of a document; a key concept that is conveyed in a few\nsentences. In a typical text summarization dataset consisting of documents that\nare 800 tokens in length (average), capturing long-term dependencies is very\nimportant, e.g., the last sentence can be grouped with the first sentence of a\ndocument to form a summary. LSTMs (Long Short-Term Memory) proved useful for\nmachine translation. However, they often fail to capture long-term dependencies\nwhile modeling long sequences. To address these issues, we have adapted Neural\nSemantic Encoders (NSE) to text summarization, a class of memory-augmented\nneural networks by improving its functionalities and proposed a novel\nhierarchical NSE that outperforms similar previous models significantly. The\nquality of summarization was improved by augmenting linguistic factors, namely\nlemma, and Part-of-Speech (PoS) tags, to each word in the dataset for improved\nvocabulary coverage and generalization. The hierarchical NSE model on factored\ndataset outperformed the state-of-the-art by nearly 4 ROUGE points. We further\ndesigned and used the first GPU-based self-critical Reinforcement Learning\nmodel.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "1910.03177",
+      "url": "https://huggingface.co/papers/1910.03177",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2109.10862",
+      "title": "Recursively Summarizing Books with Human Feedback",
+      "authors": [
+        {
+          "name": "Jeff Wu",
+          "affiliation": ""
+        },
+        {
+          "name": "Long Ouyang",
+          "affiliation": ""
+        },
+        {
+          "name": "Daniel M. Ziegler",
+          "affiliation": ""
+        },
+        {
+          "name": "Nisan Stiennon",
+          "affiliation": ""
+        },
+        {
+          "name": "Ryan Lowe",
+          "affiliation": ""
+        },
+        {
+          "name": "Jan Leike",
+          "affiliation": ""
+        },
+        {
+          "name": "Paul Christiano",
+          "affiliation": ""
+        }
+      ],
+      "year": 2021,
+      "abstract": "A major challenge for scaling machine learning is training models to perform\ntasks that are very difficult or time-consuming for humans to evaluate. We\npresent progress on this problem on the task of abstractive summarization of\nentire fiction novels. Our method combines learning from human feedback with\nrecursive task decomposition: we use models trained on smaller parts of the\ntask to assist humans in giving feedback on the broader task. We collect a\nlarge volume of demonstrations and comparisons from human labelers, and\nfine-tune GPT-3 using behavioral cloning and reward modeling to do\nsummarization recursively. At inference time, the model first summarizes small\nsections of the book and then recursively summarizes these summaries to produce\na summary of the entire book. Our human labelers are able to supervise and\nevaluate the models quickly, despite not having read the entire books\nthemselves. Our resulting model generates sensible summaries of entire books,\neven matching the quality of human-written summaries in a few cases (sim5%\nof books). We achieve state-of-the-art results on the recent BookSum dataset\nfor book-length summarization. A zero-shot question-answering model using these\nsummaries achieves state-of-the-art results on the challenging NarrativeQA\nbenchmark for answering questions about books and movie scripts. We release\ndatasets of samples from our model.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2109.10862",
+      "url": "https://huggingface.co/papers/2109.10862",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2512.03413",
+      "title": "BookRAG: A Hierarchical Structure-aware Index-based Approach for Retrieval-Augmented Generation on Complex Documents",
+      "authors": [
+        {
+          "name": "Shu Wang",
+          "affiliation": ""
+        },
+        {
+          "name": "Yingli Zhou",
+          "affiliation": ""
+        },
+        {
+          "name": "Yixiang Fang",
+          "affiliation": ""
+        }
+      ],
+      "year": 2025,
+      "abstract": "As an effective method to boost the performance of Large Language Models (LLMs) on the question answering (QA) task, Retrieval-Augmented Generation (RAG), which queries highly relevant information from external complex documents, has attracted tremendous attention from both industry and academia. Existing RAG approaches often focus on general documents, and they overlook the fact that many real-world documents (such as books, booklets, handbooks, etc.) have a hierarchical structure, which organizes their content from different granularity levels, leading to poor performance for the QA task. To address these limitations, we introduce BookRAG, a novel RAG approach targeted for documents with a hierarchical structure, which exploits logical hierarchies and traces entity relations to query the highly relevant information. Specifically, we build a novel index structure, called BookIndex, by extracting a hierarchical tree from the document, which serves as the role of its table of contents, using a graph to capture the intricate relationships between entities, and mapping entities to tree nodes. Leveraging the BookIndex, we then propose an agent-based query method inspired by the Information Foraging Theory, which dynamically classifies queries and employs a tailored retrieval workflow. Extensive experiments on three widely adopted benchmarks demonstrate that BookRAG achieves state-of-the-art performance, significantly outperforming baselines in both retrieval recall and QA accuracy while maintaining competitive efficiency.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2512.03413",
+      "url": "https://huggingface.co/papers/2512.03413",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2010.03722",
+      "title": "A Cascade Approach to Neural Abstractive Summarization with Content\n  Selection and Fusion",
+      "authors": [
+        {
+          "name": "Logan Lebanoff",
+          "affiliation": ""
+        },
+        {
+          "name": "Franck Dernoncourt",
+          "affiliation": ""
+        },
+        {
+          "name": "Doo Soon Kim",
+          "affiliation": ""
+        },
+        {
+          "name": "Walter Chang",
+          "affiliation": ""
+        },
+        {
+          "name": "Fei Liu",
+          "affiliation": ""
+        }
+      ],
+      "year": 2020,
+      "abstract": "We present an empirical study in favor of a cascade architecture to neural\ntext summarization. Summarization practices vary widely but few other than news\nsummarization can provide a sufficient amount of training data enough to meet\nthe requirement of end-to-end neural abstractive systems which perform content\nselection and surface realization jointly to generate abstracts. Such systems\nalso pose a challenge to summarization evaluation, as they force content\nselection to be evaluated along with text generation, yet evaluation of the\nlatter remains an unsolved problem. In this paper, we present empirical results\nshowing that the performance of a cascaded pipeline that separately identifies\nimportant content pieces and stitches them together into a coherent text is\ncomparable to or outranks that of end-to-end systems, whereas a pipeline\narchitecture allows for flexible content selection. We finally discuss how we\ncan take advantage of a cascaded pipeline in neural text summarization and shed\nlight on important directions for future research.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2010.03722",
+      "url": "https://huggingface.co/papers/2010.03722",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2501.15098",
+      "title": "CFT-RAG: An Entity Tree Based Retrieval Augmented Generation Algorithm\n  With Cuckoo Filter",
+      "authors": [
+        {
+          "name": "Zihang Li",
+          "affiliation": ""
+        },
+        {
+          "name": "Yangdong Ruan",
+          "affiliation": ""
+        },
+        {
+          "name": "Wenjun Liu",
+          "affiliation": ""
+        },
+        {
+          "name": "Zhengyang Wang",
+          "affiliation": ""
+        },
+        {
+          "name": "Tong Yang",
+          "affiliation": ""
+        }
+      ],
+      "year": 2025,
+      "abstract": "Although retrieval-augmented generation(RAG) significantly improves\ngeneration quality by retrieving external knowledge bases and integrating\ngenerated content, it faces computational efficiency bottlenecks, particularly\nin knowledge retrieval tasks involving hierarchical structures for Tree-RAG.\nThis paper proposes a Tree-RAG acceleration method based on the improved Cuckoo\nFilter, which optimizes entity localization during the retrieval process to\nachieve significant performance improvements. Tree-RAG effectively organizes\nentities through the introduction of a hierarchical tree structure, while the\nCuckoo Filter serves as an efficient data structure that supports rapid\nmembership queries and dynamic updates. The experiment results demonstrate that\nour method is much faster than naive Tree-RAG while maintaining high levels of\ngenerative quality. When the number of trees is large, our method is hundreds\nof times faster than naive Tree-RAG. Our work is available at\nhttps://github.com/TUPYP7180/CFT-RAG-2025.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2501.15098",
+      "url": "https://huggingface.co/papers/2501.15098",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2210.15553",
+      "title": "Improving abstractive summarization with energy-based re-ranking",
+      "authors": [
+        {
+          "name": "Diogo Pernes",
+          "affiliation": ""
+        },
+        {
+          "name": "Afonso Mendes",
+          "affiliation": ""
+        },
+        {
+          "name": "Andr\u00e9 F. T. Martins",
+          "affiliation": ""
+        }
+      ],
+      "year": 2022,
+      "abstract": "Current abstractive summarization systems present important weaknesses which\nprevent their deployment in real-world applications, such as the omission of\nrelevant information and the generation of factual inconsistencies (also known\nas hallucinations). At the same time, automatic evaluation metrics such as CTC\nscores have been recently proposed that exhibit a higher correlation with human\njudgments than traditional lexical-overlap metrics such as ROUGE. In this work,\nwe intend to close the loop by leveraging the recent advances in summarization\nmetrics to create quality-aware abstractive summarizers. Namely, we propose an\nenergy-based model that learns to re-rank summaries according to one or a\ncombination of these metrics. We experiment using several metrics to train our\nenergy-based re-ranker and show that it consistently improves the scores\nachieved by the predicted summaries. Nonetheless, human evaluation results show\nthat the re-ranking approach should be used with care for highly abstractive\nsummaries, as the available metrics are not yet sufficiently reliable for this\npurpose.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2210.15553",
+      "url": "https://huggingface.co/papers/2210.15553",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2601.18116",
+      "title": "FABLE: Forest-Based Adaptive Bi-Path LLM-Enhanced Retrieval for Multi-Document Reasoning",
+      "authors": [
+        {
+          "name": "Lin Sun",
+          "affiliation": ""
+        },
+        {
+          "name": "Linglin Zhang",
+          "affiliation": ""
+        },
+        {
+          "name": "Jingang Huang",
+          "affiliation": ""
+        },
+        {
+          "name": "Change Jia",
+          "affiliation": ""
+        },
+        {
+          "name": "Zhengwei Cheng",
+          "affiliation": ""
+        },
+        {
+          "name": "Xiangzheng Zhang",
+          "affiliation": ""
+        }
+      ],
+      "year": 2026,
+      "abstract": "The rapid expansion of long-context Large Language Models (LLMs) has reignited debate on whether Retrieval-Augmented Generation (RAG) remains necessary. However, empirical evidence reveals persistent limitations of long-context inference, including the lost-in-the-middle phenomenon, high computational cost, and poor scalability for multi-document reasoning. Conversely, traditional RAG systems, while efficient, are constrained by flat chunk-level retrieval that introduces semantic noise and fails to support structured cross-document synthesis.\n  We present FABLE, a Forest-based Adaptive Bi-path LLM-Enhanced retrieval framework that integrates LLMs into both knowledge organization and retrieval. FABLE constructs LLM-enhanced hierarchical forest indexes with multi-granularity semantic structures, then employs a bi-path strategy combining LLM-guided hierarchical traversal with structure-aware propagation for fine-grained evidence acquisition, with explicit budget control for adaptive efficiency trade-offs.\n  Extensive experiments demonstrate that FABLE consistently outperforms SOTA RAG methods and achieves comparable accuracy to full-context LLM inference with up to 94\\% token reduction, showing that long-context LLMs amplify rather than fully replace the need for structured retrieval.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2601.18116",
+      "url": "https://huggingface.co/papers/2601.18116",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:1509.00685",
+      "title": "A Neural Attention Model for Abstractive Sentence Summarization",
+      "authors": [
+        {
+          "name": "Alexander M. Rush",
+          "affiliation": ""
+        },
+        {
+          "name": "Sumit Chopra",
+          "affiliation": ""
+        },
+        {
+          "name": "Jason Weston",
+          "affiliation": ""
+        }
+      ],
+      "year": 2015,
+      "abstract": "Summarization based on text extraction is inherently limited, but\ngeneration-style abstractive methods have proven challenging to build. In this\nwork, we propose a fully data-driven approach to abstractive sentence\nsummarization. Our method utilizes a local attention-based model that generates\neach word of the summary conditioned on the input sentence. While the model is\nstructurally simple, it can easily be trained end-to-end and scales to a large\namount of training data. The model shows significant performance gains on the\nDUC-2004 shared task compared with several strong baselines.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "1509.00685",
+      "url": "https://huggingface.co/papers/1509.00685",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2407.04855",
+      "title": "Towards Enhancing Coherence in Extractive Summarization: Dataset and\n  Experiments with LLMs",
+      "authors": [
+        {
+          "name": "Mihir Parmar",
+          "affiliation": ""
+        },
+        {
+          "name": "Hanieh Deilamsalehy",
+          "affiliation": ""
+        },
+        {
+          "name": "Franck Dernoncourt",
+          "affiliation": ""
+        },
+        {
+          "name": "Seunghyun Yoon",
+          "affiliation": ""
+        },
+        {
+          "name": "Ryan A. Rossi",
+          "affiliation": ""
+        },
+        {
+          "name": "Trung Bui",
+          "affiliation": ""
+        }
+      ],
+      "year": 2024,
+      "abstract": "Extractive summarization plays a pivotal role in natural language processing\ndue to its wide-range applications in summarizing diverse content efficiently,\nwhile also being faithful to the original content. Despite significant\nadvancement achieved in extractive summarization by Large Language Models\n(LLMs), these summaries frequently exhibit incoherence. An important aspect of\nthe coherent summary is its readability for intended users. Although there have\nbeen many datasets and benchmarks proposed for creating coherent extractive\nsummaries, none of them currently incorporate user intent to improve coherence\nin extractive summarization. Motivated by this, we propose a systematically\ncreated human-annotated dataset consisting of coherent summaries for five\npublicly available datasets and natural language user feedback, offering\nvaluable insights into how to improve coherence in extractive summaries. We\nutilize this dataset for aligning LLMs through supervised fine-tuning with\nnatural language human feedback to enhance the coherence of their generated\nsummaries. Preliminary experiments with Falcon-40B and Llama-2-13B show\nsignificant performance improvements (~10% Rouge-L) in terms of producing\ncoherent summaries. We further utilize human feedback to benchmark results over\ninstruction-tuned models such as FLAN-T5 which resulted in several interesting\nfindings. Data and source code are available at\nhttps://github.com/Mihir3009/Extract-AI.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2407.04855",
+      "url": "https://huggingface.co/papers/2407.04855",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2311.10760",
+      "title": "Non-Parametric Memory Guidance for Multi-Document Summarization",
+      "authors": [
+        {
+          "name": "Florian Baud",
+          "affiliation": ""
+        },
+        {
+          "name": "Alex Aussem",
+          "affiliation": ""
+        }
+      ],
+      "year": 2023,
+      "abstract": "Multi-document summarization (MDS) is a difficult task in Natural Language\nProcessing, aiming to summarize information from several documents. However,\nthe source documents are often insufficient to obtain a qualitative summary. We\npropose a retriever-guided model combined with non-parametric memory for\nsummary generation. This model retrieves relevant candidates from a database\nand then generates the summary considering the candidates with a copy mechanism\nand the source documents. The retriever is implemented with Approximate Nearest\nNeighbor Search (ANN) to search large databases. Our method is evaluated on the\nMultiXScience dataset which includes scientific articles. Finally, we discuss\nour results and possible directions for future work.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2311.10760",
+      "url": "https://huggingface.co/papers/2311.10760",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2407.12982",
+      "title": "Retrieval-Enhanced Machine Learning: Synthesis and Opportunities",
+      "authors": [
+        {
+          "name": "To Eun Kim",
+          "affiliation": ""
+        },
+        {
+          "name": "Alireza Salemi",
+          "affiliation": ""
+        },
+        {
+          "name": "Andrew Drozdov",
+          "affiliation": ""
+        },
+        {
+          "name": "Fernando Diaz",
+          "affiliation": ""
+        },
+        {
+          "name": "Hamed Zamani",
+          "affiliation": ""
+        }
+      ],
+      "year": 2024,
+      "abstract": "In the field of language modeling, models augmented with retrieval components\nhave emerged as a promising solution to address several challenges faced in the\nnatural language processing (NLP) field, including knowledge grounding,\ninterpretability, and scalability. Despite the primary focus on NLP, we posit\nthat the paradigm of retrieval-enhancement can be extended to a broader\nspectrum of machine learning (ML) such as computer vision, time series\nprediction, and computational biology. Therefore, this work introduces a formal\nframework of this paradigm, Retrieval-Enhanced Machine Learning (REML), by\nsynthesizing the literature in various domains in ML with consistent notations\nwhich is missing from the current literature. Also, we found that while a\nnumber of studies employ retrieval components to augment their models, there is\na lack of integration with foundational Information Retrieval (IR) research. We\nbridge this gap between the seminal IR research and contemporary REML studies\nby investigating each component that comprises the REML framework. Ultimately,\nthe goal of this work is to equip researchers across various disciplines with a\ncomprehensive, formally structured framework of retrieval-enhanced models,\nthereby fostering interdisciplinary future research.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2407.12982",
+      "url": "https://huggingface.co/papers/2407.12982",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    }
+  ]
+}

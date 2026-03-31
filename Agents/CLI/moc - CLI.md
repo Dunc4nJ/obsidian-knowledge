@@ -11,3 +11,4 @@ Patterns for designing command-line interfaces that AI agents can use effectivel
 ## Notes
 
 - [[agent-friendly CLIs need flags not prompts and examples not descriptions]]
+- [[dual-audience CLIs decouple data from presentation so agents get JSON while humans get TUIs]]

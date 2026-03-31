@@ -1,0 +1,392 @@
+{
+  "query": "ReTreever tree coarse-to-fine retrieval beam search document",
+  "source": "hf",
+  "limit": 10,
+  "timestamp": 1774925725.3817215,
+  "papers": [
+    {
+      "paper_id": "hf:2502.07971",
+      "title": "ReTreever: Tree-based Coarse-to-Fine Representations for Retrieval",
+      "authors": [
+        {
+          "name": "Shubham Gupta",
+          "affiliation": ""
+        },
+        {
+          "name": "Zichao Li",
+          "affiliation": ""
+        },
+        {
+          "name": "Tianyi Chen",
+          "affiliation": ""
+        },
+        {
+          "name": "Cem Subakan",
+          "affiliation": ""
+        },
+        {
+          "name": "Siva Reddy",
+          "affiliation": ""
+        },
+        {
+          "name": "Perouz Taslakian",
+          "affiliation": ""
+        },
+        {
+          "name": "Valentina Zantedeschi",
+          "affiliation": ""
+        }
+      ],
+      "year": 2025,
+      "abstract": "Document retrieval is a core component of question-answering systems, as it\nenables conditioning answer generation on new and large-scale corpora. While\neffective, the standard practice of encoding documents into high-dimensional\nembeddings for similarity search entails large memory and compute footprints,\nand also makes it hard to inspect the inner workings of the system. In this\npaper, we propose a tree-based method for organizing and representing reference\ndocuments at various granular levels, which offers the flexibility to balance\ncost and utility, and eases the inspection of the corpus content and retrieval\noperations. Our method, called ReTreever, jointly learns a routing function per\ninternal node of a binary tree such that query and reference documents are\nassigned to similar tree branches, hence directly optimizing for retrieval\nperformance. Our evaluations show that ReTreever generally preserves full\nrepresentation accuracy. Its hierarchical structure further provides strong\ncoarse representations and enhances transparency by indirectly learning\nmeaningful semantic groupings. Among hierarchical retrieval methods, ReTreever\nachieves the best retrieval accuracy at the lowest latency, proving that this\nfamily of techniques can be viable in practical applications.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2502.07971",
+      "url": "https://huggingface.co/papers/2502.07971",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2007.03909",
+      "title": "Best-First Beam Search",
+      "authors": [
+        {
+          "name": "Clara Meister",
+          "affiliation": ""
+        },
+        {
+          "name": "Tim Vieira",
+          "affiliation": ""
+        },
+        {
+          "name": "Ryan Cotterell",
+          "affiliation": ""
+        }
+      ],
+      "year": 2020,
+      "abstract": "Decoding for many NLP tasks requires an effective heuristic algorithm for\napproximating exact search since the problem of searching the full output space\nis often intractable, or impractical in many settings. The default algorithm\nfor this job is beam search -- a pruned version of breadth-first search. Quite\nsurprisingly, beam search often returns better results than exact inference due\nto beneficial search bias for NLP tasks. In this work, we show that the\nstandard implementation of beam search can be made up to 10x faster in\npractice. Our method assumes that the scoring function is monotonic in the\nsequence length, which allows us to safely prune hypotheses that cannot be in\nthe final set of hypotheses early on. We devise effective monotonic\napproximations to popular nonmonontic scoring functions, including length\nnormalization and mutual information decoding. Lastly, we propose a\nmemory-reduced variant of Best-First Beam Search, which has a similar\nbeneficial search bias in terms of downstream performance, but runs in a\nfraction of the time.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2007.03909",
+      "url": "https://huggingface.co/papers/2007.03909",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2401.10487",
+      "title": "Generative Dense Retrieval: Memory Can Be a Burden",
+      "authors": [
+        {
+          "name": "Peiwen Yuan",
+          "affiliation": ""
+        },
+        {
+          "name": "Xinglin Wang",
+          "affiliation": ""
+        },
+        {
+          "name": "Shaoxiong Feng",
+          "affiliation": ""
+        },
+        {
+          "name": "Boyuan Pan",
+          "affiliation": ""
+        },
+        {
+          "name": "Yiwei Li",
+          "affiliation": ""
+        },
+        {
+          "name": "Heda Wang",
+          "affiliation": ""
+        },
+        {
+          "name": "Xupeng Miao",
+          "affiliation": ""
+        },
+        {
+          "name": "Kan Li",
+          "affiliation": ""
+        }
+      ],
+      "year": 2024,
+      "abstract": "Generative Retrieval (GR), autoregressively decoding relevant document\nidentifiers given a query, has been shown to perform well under the setting of\nsmall-scale corpora. By memorizing the document corpus with model parameters,\nGR implicitly achieves deep interaction between query and document. However,\nsuch a memorizing mechanism faces three drawbacks: (1) Poor memory accuracy for\nfine-grained features of documents; (2) Memory confusion gets worse as the\ncorpus size increases; (3) Huge memory update costs for new documents. To\nalleviate these problems, we propose the Generative Dense Retrieval (GDR)\nparadigm. Specifically, GDR first uses the limited memory volume to achieve\ninter-cluster matching from query to relevant document clusters.\nMemorizing-free matching mechanism from Dense Retrieval (DR) is then introduced\nto conduct fine-grained intra-cluster matching from clusters to relevant\ndocuments. The coarse-to-fine process maximizes the advantages of GR's deep\ninteraction and DR's scalability. Besides, we design a cluster identifier\nconstructing strategy to facilitate corpus memory and a cluster-adaptive\nnegative sampling strategy to enhance the intra-cluster mapping ability.\nEmpirical results show that GDR obtains an average of 3.0 R@100 improvement on\nNQ dataset under multiple settings and has better scalability.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2401.10487",
+      "url": "https://huggingface.co/papers/2401.10487",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2510.13217",
+      "title": "LLM-guided Hierarchical Retrieval",
+      "authors": [
+        {
+          "name": "Nilesh Gupta",
+          "affiliation": ""
+        },
+        {
+          "name": "Wei-Cheng Chang",
+          "affiliation": ""
+        },
+        {
+          "name": "Ngot Bui",
+          "affiliation": ""
+        },
+        {
+          "name": "Cho-Jui Hsieh",
+          "affiliation": ""
+        },
+        {
+          "name": "Inderjit S. Dhillon",
+          "affiliation": ""
+        }
+      ],
+      "year": 2025,
+      "abstract": "Modern IR systems are increasingly tasked with answering complex,\nmulti-faceted queries that require deep reasoning rather than simple keyword or\nsemantic matching. While LLM-based IR has shown great promise, the prevailing\nretrieve-then-rerank paradigm inherits the limitations of embedding-based\nretrieval; parametric generative approaches are difficult to update with new\ninformation; and long-context methods that place the entire corpus in context\nare computationally infeasible for large document collections. To address these\nchallenges, we introduce LATTICE, a hierarchical retrieval framework that\nenables an LLM to reason over and navigate large corpora with logarithmic\nsearch complexity by imposing a semantic tree structure on the corpus. Our\napproach consists of two stages: (1) an offline phase that organizes the corpus\ninto a semantic hierarchy via either a bottom-up agglomerative strategy or a\ntop-down divisive strategy using multi-level summaries and (2) an online\ntraversal phase where a search LLM navigates this tree. A central challenge in\nsuch LLM-guided search is that the model's relevance judgments are noisy,\ncontext-dependent, and unaware of the hierarchy, making cross-branch and\ncross-level comparisons difficult. To overcome this, we propose a traversal\nalgorithm that estimates calibrated latent relevance scores from local LLM\noutputs and aggregates them into a global path relevance metric. Our\ntraining-free framework achieves state-of-the-art zero-shot performance on the\nreasoning-intensive BRIGHT benchmark, demonstrating up to 9% improvement in\nRecall@100 and 5% in nDCG@10 over the next best zero-shot baseline.\nFurthermore, compared to the fine-tuned SOTA method DIVER-v2, LATTICE attains\ncomparable results on BRIGHT subsets that use a static corpus for evaluation.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2510.13217",
+      "url": "https://huggingface.co/papers/2510.13217",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2305.19999",
+      "title": "Beam Tree Recursive Cells",
+      "authors": [
+        {
+          "name": "Jishnu Ray Chowdhury",
+          "affiliation": ""
+        },
+        {
+          "name": "Cornelia Caragea",
+          "affiliation": ""
+        }
+      ],
+      "year": 2023,
+      "abstract": "We propose Beam Tree Recursive Cell (BT-Cell) - a backpropagation-friendly\nframework to extend Recursive Neural Networks (RvNNs) with beam search for\nlatent structure induction. We further extend this framework by proposing a\nrelaxation of the hard top-k operators in beam search for better propagation of\ngradient signals. We evaluate our proposed models in different\nout-of-distribution splits in both synthetic and realistic data. Our\nexperiments show that BTCell achieves near-perfect performance on several\nchallenging structure-sensitive synthetic tasks like ListOps and logical\ninference while maintaining comparable performance in realistic data against\nother RvNN-based models. Additionally, we identify a previously unknown failure\ncase for neural models in generalization to unseen number of arguments in\nListOps. The code is available at:\nhttps://github.com/JRC1995/BeamTreeRecursiveCells.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2305.19999",
+      "url": "https://huggingface.co/papers/2305.19999",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2508.11116",
+      "title": "PaperRegister: Boosting Flexible-grained Paper Search via Hierarchical\n  Register Indexing",
+      "authors": [
+        {
+          "name": "Zhuoqun Li",
+          "affiliation": ""
+        },
+        {
+          "name": "Xuanang Chen",
+          "affiliation": ""
+        },
+        {
+          "name": "Hongyu Lin",
+          "affiliation": ""
+        },
+        {
+          "name": "Yaojie Lu",
+          "affiliation": ""
+        },
+        {
+          "name": "Xianpei Han",
+          "affiliation": ""
+        },
+        {
+          "name": "Le Sun",
+          "affiliation": ""
+        }
+      ],
+      "year": 2025,
+      "abstract": "Paper search is an important activity for researchers, typically involving\nusing a query with description of a topic to find relevant papers. As research\ndeepens, paper search requirements may become more flexible, sometimes\ninvolving specific details such as module configuration rather than being\nlimited to coarse-grained topics. However, previous paper search systems are\nunable to meet these flexible-grained requirements, as these systems mainly\ncollect paper abstracts to construct index of corpus, which lack detailed\ninformation to support retrieval by finer-grained queries. In this work, we\npropose PaperRegister, consisted of offline hierarchical indexing and online\nadaptive retrieval, transforming traditional abstract-based index into\nhierarchical index tree for paper search, thereby supporting queries at\nflexible granularity. Experiments on paper search tasks across a range of\ngranularity demonstrate that PaperRegister achieves the state-of-the-art\nperformance, and particularly excels in fine-grained scenarios, highlighting\nthe good potential as an effective solution for flexible-grained paper search\nin real-world applications. Code for this work is in\nhttps://github.com/Li-Z-Q/PaperRegister.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2508.11116",
+      "url": "https://huggingface.co/papers/2508.11116",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2505.22584",
+      "title": "DocReRank: Single-Page Hard Negative Query Generation for Training\n  Multi-Modal RAG Rerankers",
+      "authors": [
+        {
+          "name": "Navve Wasserman",
+          "affiliation": ""
+        },
+        {
+          "name": "Oliver Heinimann",
+          "affiliation": ""
+        },
+        {
+          "name": "Yuval Golbari",
+          "affiliation": ""
+        },
+        {
+          "name": "Tal Zimbalist",
+          "affiliation": ""
+        },
+        {
+          "name": "Eli Schwartz",
+          "affiliation": ""
+        },
+        {
+          "name": "Michal Irani",
+          "affiliation": ""
+        }
+      ],
+      "year": 2025,
+      "abstract": "Rerankers play a critical role in multimodal Retrieval-Augmented Generation\n(RAG) by refining ranking of an initial set of retrieved documents. Rerankers\nare typically trained using hard negative mining, whose goal is to select pages\nfor each query which rank high, but are actually irrelevant. However, this\nselection process is typically passive and restricted to what the retriever can\nfind in the available corpus, leading to several inherent limitations. These\ninclude: limited diversity, negative examples which are often not hard enough,\nlow controllability, and frequent false negatives which harm training. Our\npaper proposes an alternative approach: Single-Page Hard Negative Query\nGeneration, which goes the other way around. Instead of retrieving negative\npages per query, we generate hard negative queries per page. Using an automated\nLLM-VLM pipeline, and given a page and its positive query, we create hard\nnegatives by rephrasing the query to be as similar as possible in form and\ncontext, yet not answerable from the page. This paradigm enables fine-grained\ncontrol over the generated queries, resulting in diverse, hard, and targeted\nnegatives. It also supports efficient false negative verification. Our\nexperiments show that rerankers trained with data generated using our approach\noutperform existing models and significantly improve retrieval performance.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2505.22584",
+      "url": "https://huggingface.co/papers/2505.22584",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2506.03487",
+      "title": "ProRank: Prompt Warmup via Reinforcement Learning for Small Language\n  Models Reranking",
+      "authors": [
+        {
+          "name": "Xianming Li",
+          "affiliation": ""
+        },
+        {
+          "name": "Aamir Shakir",
+          "affiliation": ""
+        },
+        {
+          "name": "Rui Huang",
+          "affiliation": ""
+        },
+        {
+          "name": "Julius Lipp",
+          "affiliation": ""
+        },
+        {
+          "name": "Jing Li",
+          "affiliation": ""
+        }
+      ],
+      "year": 2025,
+      "abstract": "Reranking is fundamental to information retrieval and retrieval-augmented\ngeneration, with recent Large Language Models (LLMs) significantly advancing\nreranking quality. While recent advances with LLMs have significantly improved\ndocument reranking quality, current approaches primarily rely on large-scale\nLLMs (>7B parameters) through zero-shot prompting, presenting high\ncomputational costs. Small Language Models (SLMs) offer a promising alternative\nbecause of their efficiency, but our preliminary quantitative analysis reveals\nthey struggle with understanding task prompts without fine-tuning. This limits\ntheir effectiveness for document reranking tasks. To address this issue, we\nintroduce a novel two-stage training approach, ProRank, for SLM-based document\nreranking. First, we propose a prompt warmup stage using reinforcement learning\nGRPO to steer SLMs to understand task prompts and generate more accurate\ncoarse-grained binary relevance scores for document reranking. Then, we\ncontinuously fine-tune the SLMs with a fine-grained score learning stage\nwithout introducing additional layers to further improve the reranking quality.\nComprehensive experimental results demonstrate that the proposed ProRank\nconsistently outperforms both the most advanced open-source and proprietary\nreranking models. Notably, our lightweight ProRank-0.5B model even surpasses\nthe powerful 32B LLM reranking model on the BEIR benchmark, establishing that\nproperly trained SLMs can achieve superior document reranking performance while\nmaintaining computational efficiency.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2506.03487",
+      "url": "https://huggingface.co/papers/2506.03487",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2506.12364",
+      "title": "MM-R5: MultiModal Reasoning-Enhanced ReRanker via Reinforcement Learning\n  for Document Retrieval",
+      "authors": [
+        {
+          "name": "Mingjun Xu",
+          "affiliation": ""
+        },
+        {
+          "name": "Jinhan Dong",
+          "affiliation": ""
+        },
+        {
+          "name": "Jue Hou",
+          "affiliation": ""
+        },
+        {
+          "name": "Zehui Wang",
+          "affiliation": ""
+        },
+        {
+          "name": "Sihang Li",
+          "affiliation": ""
+        },
+        {
+          "name": "Zhifeng Gao",
+          "affiliation": ""
+        },
+        {
+          "name": "Renxin Zhong",
+          "affiliation": ""
+        },
+        {
+          "name": "Hengxing Cai",
+          "affiliation": ""
+        }
+      ],
+      "year": 2025,
+      "abstract": "Multimodal document retrieval systems enable information access across text,\nimages, and layouts, benefiting various domains like document-based question\nanswering, report analysis, and interactive content summarization. Rerankers\nimprove retrieval precision by reordering retrieved candidates. However,\ncurrent multimodal reranking methods remain underexplored, with significant\nroom for improvement in both training strategies and overall effectiveness.\nMoreover, the lack of explicit reasoning makes it difficult to analyze and\noptimize these methods further. In this paper, We propose MM-R5, a MultiModal\nReasoning-Enhanced ReRanker via Reinforcement Learning for Document Retrieval,\naiming to provide a more effective and reliable solution for multimodal\nreranking tasks. MM-R5 is trained in two stages: supervised fine-tuning (SFT)\nand reinforcement learning (RL). In the SFT stage, we focus on improving\ninstruction-following and guiding the model to generate complete and\nhigh-quality reasoning chains. To support this, we introduce a novel data\nconstruction strategy that produces rich, high-quality reasoning data. In the\nRL stage, we design a task-specific reward framework, including a reranking\nreward tailored for multimodal candidates and a composite template-based reward\nto further refine reasoning quality. We conduct extensive experiments on\nMMDocIR, a challenging public benchmark spanning multiple domains. MM-R5\nachieves state-of-the-art performance on most metrics and delivers comparable\nresults to much larger models on the remaining ones. Moreover, compared to the\nbest retrieval-only method, MM-R5 improves recall@1 by over 4%. These results\nvalidate the effectiveness of our reasoning-enhanced training pipeline.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2506.12364",
+      "url": "https://huggingface.co/papers/2506.12364",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    },
+    {
+      "paper_id": "hf:2509.00520",
+      "title": "ERank: Fusing Supervised Fine-Tuning and Reinforcement Learning for\n  Effective and Efficient Text Reranking",
+      "authors": [
+        {
+          "name": "Yuzheng Cai",
+          "affiliation": ""
+        },
+        {
+          "name": "Yanzhao Zhang",
+          "affiliation": ""
+        },
+        {
+          "name": "Dingkun Long",
+          "affiliation": ""
+        },
+        {
+          "name": "Mingxin Li",
+          "affiliation": ""
+        },
+        {
+          "name": "Pengjun Xie",
+          "affiliation": ""
+        },
+        {
+          "name": "Weiguo Zheng",
+          "affiliation": ""
+        }
+      ],
+      "year": 2025,
+      "abstract": "Text reranking models are a crucial component in modern systems like\nRetrieval-Augmented Generation, tasked with selecting the most relevant\ndocuments prior to generation. However, current Large Language Models (LLMs)\npowered rerankers often face a fundamental trade-off. On one hand, Supervised\nFine-Tuning based pointwise methods that frame relevance as a binary\nclassification task lack the necessary scoring discrimination, particularly for\nthose built on reasoning LLMs. On the other hand, approaches designed for\ncomplex reasoning often employ powerful yet inefficient listwise formulations,\nrendering them impractical for low latency applications. To resolve this\ndilemma, we introduce ERank, a highly effective and efficient pointwise\nreranker built from a reasoning LLM that excels across diverse relevance\nscenarios. We propose a novel two-stage training pipeline that begins with\nSupervised Fine-Tuning (SFT). In this stage, we move beyond binary labels and\ntrain the model generatively to output fine grained integer scores, which\nsignificantly enhances relevance discrimination. The model is then further\nrefined using Reinforcement Learning (RL) with a novel, listwise derived\nreward. This technique instills global ranking awareness into the efficient\npointwise architecture. We evaluate the ERank reranker on the BRIGHT, FollowIR,\nTREC DL, and BEIR benchmarks, demonstrating superior effectiveness and\nrobustness compared to existing approaches. On the reasoning-intensive BRIGHT\nbenchmark, our ERank-4B achieves an nDCG@10 of 38.7, while a larger 32B variant\nreaches a state of the art nDCG@10 of 40.2.",
+      "venue": "",
+      "citation_count": 0,
+      "doi": "",
+      "arxiv_id": "2509.00520",
+      "url": "https://huggingface.co/papers/2509.00520",
+      "source": "hf",
+      "hf_metadata": null,
+      "_bibtex_override": ""
+    }
+  ]
+}
