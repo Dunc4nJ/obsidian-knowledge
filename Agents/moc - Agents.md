@@ -41,6 +41,7 @@ Agentic search strategies — code search, semantic retrieval, embedding-based i
 - [[a purpose-trained 20B search agent matches frontier models at 10x less cost by self-editing its context]] — Chroma Context-1: 20B agentic search model trained via SFT+RL with self-editing context management, synthetic multi-hop tasks, and staged recall-to-precision curriculum
 - [[hierarchical tree navigation can replace vector embeddings for RAG retrieval]] — PageIndex builds a document tree and uses LLM reasoning to navigate it level-by-level, eliminating embeddings and vector databases entirely
 - [[recursive tree retrieval with hierarchical summarization improves multi-hop QA by 20 percent over flat chunk retrieval]] — RAPTOR: recursively cluster and summarize document chunks into a tree, then retrieve across abstraction levels; collapsed tree search with GPT-4 achieves 82.6% on QuALITY (20% over prior SOTA)
+- [[MCTS-RAG enables 7B models to match GPT-4o on knowledge-intensive reasoning by interleaving Monte Carlo tree search with adaptive retrieval]] — Interleaves retrieval actions into MCTS reasoning tree at inference time; Llama 3.1-8B outperforms GPT-4o on ComplexWebQA and GPQA with only 2.8x RAG latency
 
 ### Continual Learning
 
