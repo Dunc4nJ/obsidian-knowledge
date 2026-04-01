@@ -24,3 +24,4 @@ How to design, describe, and orchestrate tools that agents actually use well.
 - [[skill workflows]] — workflow patterns for agent skills
 - [[dev-browser lets agents write Playwright code in a sandboxed QuickJS VM for fast browser automation]]
 - [[LightOnOCR-2 outscores proprietary models at table extraction with 1B parameters]] — 1B open-source model beats GPT-5 mini, Claude Sonnet 4.6, and Mathpix on independent table extraction benchmark
+- [[one tmux session per project with directory-named sessions eliminates session management friction]] — directory-named tmux sessions with shell helpers and vim keybindings
