@@ -136,6 +136,7 @@ Agent skill design, authoring, testing, and lifecycle management. SKILL.md patte
 - [[systematic mining of open-source repos can automate agent skill acquisition at scale]]
 - [[the best agent skills fit one category and grow from gotchas not upfront design]]
 - [[skills are living folders not markdown files and building them is the new developer setup]]
+- [[agent skills should be contextual actions not static prompts and chaining them requires forking as a primitive]]
 
 ### Tooling
 Agent tool design, context engineering, prompt caching, skill architectures, search strategies, progressive disclosure, and general patterns for how agents interact with tools and manage context. The broadest subfolder — if a note is about *how agents use tools or manage their context window*, it goes here.
