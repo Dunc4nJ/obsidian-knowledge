@@ -27,6 +27,7 @@ Measuring agent quality, observability, regression testing, production monitorin
 - [[the agent improvement loop is traces enriched with evals and human feedback converted into validated fixes]]
 
 - [[trace learning turns agent execution history into reusable strategies that compound performance over time]]
+- [[agent trace data should live in your data lake not a 30-day SaaS retention window]]
 
 ## Resources
 
