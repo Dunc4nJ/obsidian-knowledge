@@ -17,7 +17,6 @@ How to design, describe, and orchestrate tools that agents actually use well.
 - [[capturing internal APIs can replace most agent browser automation]] — API capture as a faster alternative to browser agents
 - [[context tax compounds through cache misses bloated tools and unbudgeted output tokens]] — hidden costs of poor context management
 - [[prompt caching is the foundational constraint for building long-running agents]] — caching as the key architectural constraint
-- [[Claude Code's edge comes from its software harness not the model]] — leaked source analysis: caching, LSP tools, session memory, subagent forks
 - [[six cache-friendly patterns from Claude Code make prompt caching practical for production agents]] — static-first ordering, frozen tools, subagent isolation, cache-safe compaction
 - [[auto-caching with Claude eliminates manual breakpoint management for multi-turn agents]] — auto-caching API mechanics and the economic case for cached tokens
 - [[rewriting tool descriptions with curriculum learning improves agent tool use without execution traces]] — curriculum-based tool description optimization
