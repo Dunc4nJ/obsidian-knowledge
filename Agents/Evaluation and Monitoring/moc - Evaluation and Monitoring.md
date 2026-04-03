@@ -28,7 +28,7 @@ Measuring agent quality, observability, regression testing, production monitorin
 
 - [[trace learning turns agent execution history into reusable strategies that compound performance over time]]
 - [[agent trace data should live in your data lake not a 30-day SaaS retention window]]
-- [[a self-healing deploy pipeline uses Poisson testing and a triage agent to auto-fix regressions before users notice]]
+- [[every deploy should trigger a monitor-triage-fix loop that dispatches a coding agent to fix regressions before users notice]]
 
 ## Resources
 
