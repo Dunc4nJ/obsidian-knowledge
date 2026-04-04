@@ -18,6 +18,11 @@ Deep Agents' harness absorbs model differences through runtime adaptations: mode
 
 The per-category breakdown reveals that conversation handling remains the weakest eval category across all models (Opus scores 0.05, GLM-5 scores 0.38), while file ops and unit tests are essentially solved. This suggests [[autonomous context compression lets agents choose when to compact rather than hitting fixed token limits|context management and conversational state]] is the current frontier for harness improvement, not raw tool-calling reliability.
 
+LangChain's Viv Trivedy frames this as the start of a **model-harness training loop**: teams pick a niche, build a harness that engineers around current model failure modes, collect traces at scale (via LangSmith), then fine-tune open models on that data to build vertical data moats. The cycle of harness engineering → fine-tuning with open models should produce an explosion of task-specific frontier-level performance at a fraction of the cost. This is enabled by four converging trends: [[agent harness components can be derived from first principles by working backwards from desired agent behavior|democratized harness engineering]], open models crossing the intelligence threshold, scalable trace analysis, and accessible fine-tuning infrastructure like [Prime Intellect](https://www.primeintellect.ai/). ([source](https://x.com/Vtrivedy10/status/2039872562662941118))
+
+*Viv Trivedy's model-harness training loop diagram*
+![[vtrivedy-941118-001.jpg]]
+
 ## External Resources
 
 - [Deep Agents repo](https://github.com/langchain-ai/deepagents) — LangChain's open-source agentic harness and coding agent CLI
