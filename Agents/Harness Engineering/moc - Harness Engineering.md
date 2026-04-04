@@ -71,3 +71,4 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
   - [[Databricks coSTAR closes the agent testing gap with coupled judge-alignment and agent-refinement loops]]
   - [[Open models now match closed frontier models on core agent harness tasks at a fraction of the cost]]
   - [[Omarsar and Karpathy converge on Obsidian-backed LLM knowledge bases as the critical layer for agent effectiveness]]
+  - [[Karpathy's LLM knowledge base architecture compiles raw sources into agent-maintained Obsidian wikis that beat RAG at small scale]]
