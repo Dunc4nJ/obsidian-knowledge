@@ -27,4 +27,6 @@ How agents store, retrieve, and evolve knowledge across sessions. Memory archite
 - [[most agent bottlenecks are actually memory problems not model or orchestration problems]]
 - [[Hermes Agent prioritizes prompt caching stability by keeping hot memory tiny and pushing everything else to tool-based retrieval]]
 - [[Claude Code memory has a silent 200-line index cap that drops old memories without warning]]
-  - [[Karpathy and Omarsar converge on Obsidian-backed LLM knowledge bases as the critical layer for agent effectiveness]]
+- [[Karpathy and Omarsar converge on Obsidian-backed LLM knowledge bases as the critical layer for agent effectiveness]]
+- [[context graphs let agents build verifiable, cross-agent memory instead of isolated notes]]
+  
