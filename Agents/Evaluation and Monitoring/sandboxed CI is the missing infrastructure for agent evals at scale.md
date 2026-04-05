@@ -101,3 +101,7 @@ Viv's stack uses Harbor for environment mocking (file system contents) and LangS
 > @ivanburazin big fan of y'all as you know from prev experiments!  will reach out on Slack as we get stuff cleaned up, hope it's helpful for y'all to see our problem setup at the very least
 >
 > [Reply](https://x.com/Vtrivedy10/status/2038364409270075667)
+
+---
+
+> [Reply](https://x.com/vtrivedy10/status/2040485254075695335)
