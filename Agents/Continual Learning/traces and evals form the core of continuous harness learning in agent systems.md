@@ -19,6 +19,9 @@ A core practical takeaway is that humans remain the best arbiters of behavior qu
 - targeted evals,
 - and feedback loops that convert judgments into harness/system changes.
 
+Additional reply-level takeaway (from this thread):
+- Human oversight is still the best immediate judge of desired behavior, but it is not scalable; teams should preserve that judgment by codifying it into runnable artifacts (evals) that can be executed consistently at scale.
+
 This framing aligns with the broader continuous-learning theme in the vault: stable agents improve through repeatable capture of failures, structured traces, and controlled context injection, not by one-off prompt nudges.
 
 ## Source Threads
