@@ -29,6 +29,7 @@ Research and frameworks for building AI agents that persistently learn, remember
 ## Infrastructure
 
 - [[self-serve post-training infrastructure is emerging as the key layer between foundation models and enterprise adoption]] — survey of emerging self-serve post-training tools (Prime Intellect Lab, Tinker, Harbor RL, CGFT) for enterprise RL/fine-tuning loops
+- [[traces and evals form the core of continuous harness learning in agent systems]] — thread synthesis on situational/hierarchical memory and trace-driven continuous behavior updates
 
 ## Analysis
 
