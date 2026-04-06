@@ -45,6 +45,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 ### Execution & Configuration
 - [[Factory droid exec uses tiered autonomy levels to gate agent permissions from read-only to full system access]]
 - [[AGENTS.md is a cross-agent convention for injecting repo-level context via proximity-based file discovery]]
+- [[model + System outlasts Harness, production agents need database-backed memory, RBAC, and isolation]]
 - [[Factory Droid plugins bundle skills commands hooks and MCP servers into distributable packages with marketplace-based discovery]]
 - [[Factory plugins marketplace uses a git-native catalog with SKILL.md files as the primary distribution unit for agent capabilities]]
 
