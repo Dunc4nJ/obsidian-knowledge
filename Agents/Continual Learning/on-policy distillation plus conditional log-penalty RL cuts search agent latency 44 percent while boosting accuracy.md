@@ -21,7 +21,7 @@ The key result: a trained Fast planner (50.1% at 13s) matches an untrained Stron
 
 - [BrowseComp-Plus](https://github.com/texttron/BrowseComp-Plus) — ~100K human-verified documents with QA pairs derived from OpenAI's BrowseComp
 - [Wiki-DPR](https://huggingface.co/datasets/facebook/wiki%5Fdpr) — ~21M passage index for training and OOD evaluation
-- [Search-R1](https://arxiv.org/abs/2503.09516) — RL training for search agents with binary outcome reward
+- [[Search-R1 proves RL-only training teaches multi-turn search without supervised fine-tuning warmup|Search-R1]] ([arxiv](https://arxiv.org/abs/2503.09516)) — RL training for search agents with binary outcome reward
 - [GRPO](https://arxiv.org/pdf/2402.03300) — Group Relative Policy Optimization
 - [On-policy distillation](https://thinkingmachines.ai/blog/on-policy-distillation/) — student learns from teacher on its own policy distribution
 - [Tinker](https://tinker-docs.thinkingmachines.ai/) — training framework used for all runs
