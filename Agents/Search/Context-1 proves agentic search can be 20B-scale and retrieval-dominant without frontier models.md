@@ -138,7 +138,22 @@ The synthetic data pipeline uses extraction-based verification rather than opini
 > 4. _Optionally_, collect distractors — documents that satisfy some criteria but point to a different answer.
 > 5. _Optionally_, recursively chain — bridge the answer of an existing task to a new task with a new final answer, controlling the number of hops required.
 >
-> Task Generation Pipelineweb domain example
+> **Task Generation Pipeline** *(interactive 5-tab walkthrough on source page — web domain example)*
+>
+> **Tab 1: Gather Docs** — Given a seed topic (random Wikipedia title, e.g. "Brussels synagogues"), an agent explores the web and collects documents containing unique, verifiable facts. Example docs: Grande Synagogue de Bruxelles (jguideeurope.org) with facts like "Inaugurated on 20 September 1878"; Belgian Jewish Community (wikipedia.org) with "Belgium's independence in 1830"; SS Vaderland (wikipedia.org) with "Belgian ocean liner launched from an English shipyard."
+> ![[chroma-context1-pipeline-tab1.png]]
+>
+> **Tab 2: Generate Task** — Facts from collected documents are obfuscated into clues. Highlighted spans trace back to source documents. Clues: "A sacred structure in a western European capital was designed in a style combining two ancient architectural traditions..." Question: "On what date was this building formally inaugurated?" Answer: September 20, 1878.
+> ![[chroma-context1-pipeline-tab2.png]]
+>
+> **Tab 3: Verify** — For each supporting document, extract verbatim quotes and match them to clue spans. Confirm the answer appears in source text. E.g. "Brussels, the capital of the European institutions" maps to "sacred structure in a western European capital." contains_truth = True. All quotes grounded, task retained.
+> ![[chroma-context1-pipeline-tab3.png]]
+>
+> **Tab 4: Distractors** — Collect documents that satisfy some criteria but point to a different answer. Filter out any that inadvertently contain the answer. E.g. Antwerp Diamond Synagogue (retained: wrong city), Dohány Street Synagogue (retained: correct style but Budapest), Brussels City Timeline (filtered: contains the answer verbatim).
+> ![[chroma-context1-pipeline-tab4.png]]
+>
+> **Tab 5: Chain** — The answer of one task becomes the seed for a new task, controlling the number of reasoning hops required. Task 1 answer "September 20, 1878" bridges via "1878" to "during that same year" into Task 2: "A conflict that began in a southwestern territory during that same year inspired a late twentieth-century ensemble action picture..." Answer: Young Guns. This 2-hop task requires bridging through the date.
+> ![[chroma-context1-pipeline-tab5.png]]
 >
 > 1. Gather Docs2. Generate Task3. Verify4. Distractors5. Chain
 >
@@ -232,6 +247,25 @@ The synthetic data pipeline uses extraction-based verification rather than opini
 > When the model calls prune\_chunks, the harness removes the specified chunks from the model's view but preserves the full unpruned trajectory for reward computation. This is critical for the reward described below, which credits the agent for documents it encountered during search even if they were later pruned.
 >
 > As the token budget fills, the agent's action space narrows: early turns allow unrestricted search, the soft threshold introduces pressure to prune, and the hard cutoff restricts the agent to pruning or concluding. This creates pressure to be selective: past the soft threshold, retrieving new evidence requires freeing space by discarding existing results.
+>
+> **Context Window Management** *(interactive 8-step animation on source page — shows how the context window fills, hits soft limit, triggers pruning, and frees space for further search)*
+>
+> *Step 1: Initial search fills context with 3 docs (11.6k / 32.8k tokens)*
+> ![[chroma-context1-harness-step1.png]]
+> *Step 2: Second search adds more docs, approaching soft limit*
+> ![[chroma-context1-harness-step2.png]]
+> *Step 3: Context grows past soft threshold, pressure to prune begins*
+> ![[chroma-context1-harness-step3.png]]
+> *Step 4: Agent prunes noisy chunks to free capacity*
+> ![[chroma-context1-harness-step4.png]]
+> *Step 5: Freed space allows new targeted search*
+> ![[chroma-context1-harness-step5.png]]
+> *Step 6: Further refinement of context*
+> ![[chroma-context1-harness-step6.png]]
+> *Step 7: Near hard cutoff, only prune or conclude allowed*
+> ![[chroma-context1-harness-step7.png]]
+> *Step 8: Agent concludes with curated set of relevant documents*
+> ![[chroma-context1-harness-step8.png]]
 >
 > CONTEXT WINDOW
 >
