@@ -100,6 +100,7 @@ Agent tooling patterns, CLI design, and infrastructure.
 - [[top AI papers week of Feb 16-22 2026 reveal that agents consume skills better than they create them]] — ten papers: SkillsBench (curated skills +16pp, self-generated 0pp), LCM beats Claude Code, MemoryArena exposes recall-vs-action gap, delegation frameworks
 - [[CLIs are the agent-native interface because legacy tooling is already machine-readable]] — Karpathy: CLIs are the ideal agent surface because agents natively compose terminal tools into pipelines; product builders must offer CLI/MCP/markdown docs
 - [[rewriting tool descriptions with curriculum learning improves agent tool use without execution traces]] — Trace-Free+ curriculum learning trains LLMs to rewrite tool descriptions for better selection and execution, generalizing to unseen tools at scale
+- [[NIA Docs turns web documentation into a filesystem that agents can grep, cat, and code against]] — agent-first docs access via mounted API/web documentation filesystem, trading RAG fragmentation for Unix-like commands and fresher API context
 ### MCP
 
 Model Context Protocol — servers, best practices, and efficient tool integration patterns.
