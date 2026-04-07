@@ -18,6 +18,7 @@ Measuring agent quality, observability, regression testing, production monitorin
 - [[effective agent evals combine deterministic graders model judges and human review across the full development lifecycle]]
 - [[Agno native tracing keeps agent observability data in your own database]]
 - [[VictoriaMetrics is becoming the default observability stack for AI agent systems]]
+- [[Brainstore turns AI observability into database-native trace architecture for long-horizon agents]]
 
 - [[a working offline eval turns vibes into repeatable measurement in 10 steps]]
 - [[targeted evals shape agent behavior more effectively than large benchmark suites]]
