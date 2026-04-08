@@ -101,6 +101,8 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[hashline edit format improves LLM coding accuracy more than model upgrades at zero training cost]]
 - [[training compaction into the model through RL produces better summaries than prompted compaction at one-fifth the tokens]]
 
+- [[Systems Engineering Makes Agentic Software Work - The Five-Layer Pattern]]
+
 ### Infrastructure
 Production engineering for agents — security, reliability, sandboxing, deployment, distributed systems patterns, authentication, cost management. If the note is about *keeping agents running safely in production*, it goes here.
 
