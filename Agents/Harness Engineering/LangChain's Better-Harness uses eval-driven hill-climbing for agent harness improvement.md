@@ -148,3 +148,12 @@ type: framework
 > date: Wed Apr 08 17:13:45 +0000 2026
 > url: https://x.com/Vtrivedy10/status/2041927488918413589
 > likes: 117  retweets: 20  replies: 4
+
+## Extracted Images
+
+*Carousel images from the referenced X post*  
+![[vtrivedy10-413589-001.jpg]]
+![[vtrivedy10-413589-002.jpg]]
+![[vtrivedy10-413589-003.jpg]]
+![[vtrivedy10-413589-004.jpg]]
+![[vtrivedy10-413589-005.jpg]]
