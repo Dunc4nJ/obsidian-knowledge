@@ -22,6 +22,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[claude CLI print mode is a full agent runtime accessible via command line]]
 - [[designing agent tools is an iterative art shaped by model capabilities not fixed engineering rules]]
 - [[harness engineering improved a coding agent 13 points by changing only system prompts tools and middleware]]
+- [[LangChain's Better-Harness uses eval-driven hill-climbing for agent harness improvement]]
 - [[agent middleware hooks decouple business logic from the core agent loop enabling composable customization]]
 - [[llm-tool-api-architecture-optimizing-roundtrips-tokens-and-context-like-gpu-cache-hierarchies|SebAaltonen's LLM Tool API Architecture — optimizing roundtrips, tokens, and context like GPU cache hierarchies]]
 - [[code evolution harnesses multiply LLM reasoning performance 2-3x on ARC-AGI-2 without changing the model]]
