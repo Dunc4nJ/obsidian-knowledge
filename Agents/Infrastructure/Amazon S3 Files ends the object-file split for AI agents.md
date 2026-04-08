@@ -17,6 +17,8 @@ Where teams previously had to engineer extra download/sync stages for context wi
 
 For multi-agent orchestration, the promise is not just convenience but coordination: shared project directories, notes, and summaries become naturally discoverable for pipelines, including RAG paths like [[production AI agents require five security dimensions from model access to runtime observability]] if the boundaries are enforced consistently.
 
+For operational teams, the most useful clarification is in AWS community commentary: [[a virtual filesystem over Chroma replaces sandboxes for agent doc exploration at 100ms instead of 46 seconds]]–style workflows get a direct analog here, with near-instant bootstrap and teardown because the mount behaves like durable local state. That shifts multi-agent runtime design toward predictable, shared workspace patterns (close-to-open consistency, shared scratch, and bidirectional sync semantics) instead of explicit data-copy orchestration.
+
 ## External Resources
 
 - [Amazon S3 Files for AI and multi-agent workflows (VentureBeat)](https://venturebeat.com/data/amazon-s3-files-gives-ai-agents-a-native-file-system-workspace-ending-the/) — launch context, architecture overview, and interview framing.
