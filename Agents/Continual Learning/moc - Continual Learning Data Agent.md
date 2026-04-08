@@ -20,6 +20,7 @@ Research and frameworks for building AI agents that persistently learn, remember
 
 ## Frameworks
 
+- [[Defining Continual Learning in LLMs requires efficient adaptation under sequential distribution shifts]] — Principled criteria for continual learning in foundation models: preserve general competence while learning from distribution shifts efficiently and compositionally.
 - [[file-based personal OS gives AI agents persistent identity and judgment across sessions]] — file-based operating system using markdown, YAML, and JSONL in Git for persistent agent context, episodic memory, and voice encoding
 - [[recursive self-improvement works when LLM judges detect friction patterns and the agent implements its own fixes]] — Factory's Signals system: LLM-as-judge session analysis, self-evolving friction taxonomy via embedding clusters, closed-loop ticket filing and agent self-patching
 - [[async RL from real conversations lets agents continuously improve without blocking inference]] — OpenClaw-RL async RL framework turning real conversations into training signals
