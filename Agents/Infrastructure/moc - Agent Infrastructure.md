@@ -21,3 +21,5 @@ Patterns and pitfalls for running AI agents in production: storage, isolation, p
 - [[Cloudflare Dynamic Workers sandbox AI-generated code in V8 isolates 100x faster than containers]]
 - [[LangChain deep agents require persistent memory scoped sandboxes and guardrails to move from prototype to production]] — production checklist covering memory scoping, sandbox lifecycle, middleware guardrails, and frontend streaming for LangChain Deep Agents — V8 isolate-based sandboxing with millisecond startup for AI-generated code execution, plus Code Mode libraries for TypeScript-native agent tool APIs
 - [[a virtual filesystem over Chroma replaces sandboxes for agent doc exploration at 100ms instead of 46 seconds]]
+
+- [[Amazon S3 Files ends the object-file split for AI agents]] — turns S3 buckets into a shared file-system workspace for AI agents, removing local/object synchronization layers in multi-agent pipelines.
