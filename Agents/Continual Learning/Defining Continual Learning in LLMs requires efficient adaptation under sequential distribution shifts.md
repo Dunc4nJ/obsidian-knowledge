@@ -7,11 +7,11 @@ type: framework
 
 ## Key Takeaways
 
-A useful definition of continual learning for LLMs must be grounded in what *works* in the real world, not just benchmark tricks: a model should preserve broad competencies while learning new, differently distributed information streams and remain compositionally useful as capabilities arrive over time. That framing is most aligned with [[stable agentic RL requires sequence-level clipping and environment-aware advantages to prevent training collapse]], which emphasizes robust behavior under changing regimes rather than overfit sequential wins.
-
-The post’s five desiderata map nicely to the standard failure modes of sequential learning: forgetting, specialization collapse, poor generalization across stages, and compute inefficiency. In practice, this means methods that replay everything or rely on near-identical distributions are not true continual learning, only temporary engineering shortcuts. In that sense, the argument extends the direction of [[parametric memory encoding cross-sample reflection patterns into weights produces more diverse and effective self-improvement than retrieval]] by pushing weight-space improvement as a scalability path, not just a retrieval workaround.
-
-The piece is also a strong pushback against “harness-only” memory strategies, noting that while in-context/contextual memory is powerful, compounding intelligence at scale depends on in-weights learning that can automate cross-domain recombination. That debate shows up in [[traces and evals form the core of continuous harness learning in agent systems]], where the boundary between retrieval workflows and parametric adaptation is treated as the critical lever for durable skill growth.
+- **Operational definition of CL:** [[stable agentic RL requires sequence-level clipping and environment-aware advantages to prevent training collapse]] and the thread agree that continual learning should mean the model can learn new capabilities from sequential streams **without** collapsing prior general competence.
+- **Five-pronged criterion:** [[traces and evals form the core of continuous harness learning in agent systems]] summarizes the same pressure points: sequential learning, distribution shifts, sparse data, efficiency, and compositional generalization across time.
+- **Forget-replay is not enough:** replay-heavy approaches can look good only in favorable settings; true CL needs to work when new data is limited and distributed differently from what was seen before.
+- **Harness vs. parametric learning:** the thread accepts that retrieval/context is useful but argues in-weights adaptation is necessary for long-horizon compounding and automaticity.
+- **Open problems remain practical and hard:** scaling model growth, handling contradictory signals over time, and making updates sample-efficient are the current bottlenecks for real-world CL.
 
 ## External Resources
 
