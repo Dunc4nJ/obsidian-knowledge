@@ -157,3 +157,31 @@ type: framework
 ![[vtrivedy10-413589-003.jpg]]
 ![[vtrivedy10-413589-004.jpg]]
 ![[vtrivedy10-413589-005.jpg]]
+
+
+## High-Signal Thread Follow-up (Signal-Only)
+
+> Removed praise/comments and unresolved side threads to keep only actionable author responses with direct technical guidance.
+
+### 1) Variance in eval runs
+**Q (Avid / @Av1dlive)**: "How much does run to run variance of evals affect the harness quality ? has there been a case when successive eval runs improved the harness exponentially"
+
+**A (Viv / @Vtrivedy10)**: "potentially a lot if you have tasks that are very noisy in success rate.  storing a history of Traces of previous runs is one way to mitigate variance, basically the outer loop agent can see if/why an eval flipped and use that info to hopefully fix it on the next go around
+it's not fully solved at all, but giving the outer agent access to history is a good way to mitigate
+another interesting direction is designing eval curricula so the agent should get harder examples later in the harness opt cycle when it may be better able to use previously learned strategies baked into the harness"
+
+### 2) Cost/efficiency as a missing objective
+**Q (Daniel / @dankalski)**: "The real drift came from orchestration layer... finding shortcuts for faster completion time..."
+
+**A (Viv / @Vtrivedy10)**: "the blog def focuses more heavily on “correctness” as the hill climbing metric but I like your point on “faster"
+
+lots of dimensions to hill climbing including cost which roughly maps to more efficient tool use and output token generation"
+
+### 3) Eval category labeling strategy
+**Q (Rahul / @rahuldave)**: "how do you disambiguate eval categories, do you multi-tag, and who labels the traces (LLM?)?"
+
+**A (Viv / @Vtrivedy10)**: "not all tasks fall cleanly into one category but that’s fine (ex: good multi-hop local retrieval requires good tool calling with fs-ops)
+
+we mainly mine traces for errors, we could mine every trace that went well for good cases too but we often have enough of those, and that already works
+
+LLM + tons of human review"
