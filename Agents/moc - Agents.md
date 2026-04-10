@@ -28,6 +28,7 @@ How agents store, retrieve, and evolve knowledge across sessions. Memory archite
 - [[obsidian vaults become memory graphs when agents traverse wikilinked notes with claim-based titles and layered orientation]]
 - [[Obsidian as Agentic Memory]]
 - [[Obsidian wikilink resolution can be replicated on plain filesystems with an index and atomic rename tool]]
+- [[Ramp Labs Latent Briefing compacts KV caches for efficient cross-agent memory sharing]]
 - [[inline annotations beat copy-paste editing by keeping instructions where they belong]]
 - [[git hooks as thinking journal let you time-travel through note evolution]]
 - [[transcript mining turns meetings into captured decisions and extracted knowledge]]
