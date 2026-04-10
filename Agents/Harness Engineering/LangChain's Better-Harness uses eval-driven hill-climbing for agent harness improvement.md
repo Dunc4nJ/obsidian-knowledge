@@ -185,3 +185,35 @@ lots of dimensions to hill climbing including cost which roughly maps to more ef
 we mainly mine traces for errors, we could mine every trace that went well for good cases too but we often have enough of those, and that already works
 
 LLM + tons of human review"
+
+## Related Operator Thought
+
+- See practical follow-up commentary linked from this thread in a companion post below the core article body.
+
+> @Vtrivedy10 — 2026-04-09
+> a useful mental model on how teams can think about good data design to improve their models/agents:
+> 
+> Evals ~= Training Data ~= Environments
+> 
+> - in Classical Deep Learning, we learn from each training example to compute an edit to the weights and “improve our model”.  Bad Data = Bad Model, we spent tons of hours (and money) on data curation like labeling data and sourcing diverse data.
+> - Evals are the currency of improvement for agents.  We design tasks for agents across domains and capabilities like reasoning and retrieval.  Evals encode the behaviors we want agents to follow in production.  Every eval nudges the agent definition to make sure it passes.  Evals also provide a signal for the agent designer (human or another agent) on how to adjust the agent definition to make that eval pass.  The same behaviors encoded in the eval set will appear in the agent
+> - “Environments rhyme with evals” - an environment is a place for agents to do work and then it specifies a reward by evaluating that work.  this might be a rubric of things the agent did.  Often environments are synonymous with RL, but many more gradient-free methods (hill climb the harness) will build environments for the agent to work in and another agent will review the trace to see what to adjust. For example if you’re testing an agent’s ability to navigate your app and do work, you’ll want to build that environment for your agent to test it on evals
+> - I bet evals will predominantly shift to be sandboxed environments as agents take on more complex work
+> 
+> ![[vtrivedy10-744729-001.jpg]]
+> 
+> QT @Vtrivedy10:
+> > Article: Better Harness: A Recipe for Harness Hill-Climbing with Evals
+> > https://x.com/Vtrivedy10/status/2041927488918413589
+> >
+> date: Thu Apr 09 03:59:06 +0000 2026
+> url: https://x.com/vtrivedy10/status/2042089899415744729
+> likes: 78  retweets: 12  replies: 2
+> 
+> ----------------------------------------
+> 
+> @justic_hot (tang | AI Product Maker):
+> @Vtrivedy10 the trap i keep hitting is my evals test happy paths of each skill in isolation, not the interactions when a dozen tools share the same context. agent fails when tool B's output format confuses tool A's parser — that failure mode never shows up in single-tool evals
+> date: Thu Apr 09 12:47:10 +0000 2026
+> url: https://x.com/justic_hot/status/2042222788170436900
+> ----------------------------------------
