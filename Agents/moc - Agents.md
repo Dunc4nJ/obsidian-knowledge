@@ -101,6 +101,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[hashline edit format improves LLM coding accuracy more than model upgrades at zero training cost]]
 - [[training compaction into the model through RL produces better summaries than prompted compaction at one-fifth the tokens]]
 - [[LangChain Deep Agents Deploy offers open harness to avoid Claude Managed Agents memory lock-in]]
+- [[Anthropic Managed Agents virtualizes agent components into OS-style interfaces that decouple the brain from the hands]]
 
 - [[Systems Engineering Makes Agentic Software Work - The Five-Layer Pattern]]
 

@@ -9,7 +9,7 @@ type: framework
 
 - Memory is the real lock-in vector, not the model. Switching LLM providers is trivial (adjust prompts), but switching harnesses means abandoning accumulated short-term and long-term memory that lives behind a proprietary API. LangChain's core argument against [[Agent Harnesses are the Product, Not the Model|closed harnesses]] is that memory ownership is what actually matters for portability.
 
-- `deepagents deploy` collapses the harness-to-production gap into a single CLI command, bundling multi-tenant orchestration, sandbox provisioning, and 30+ endpoints (MCP, A2A, Agent Protocol, HITL, memory) into a LangSmith Deployment server. This directly competes with Claude Managed Agents, which offers the same architecture but as a walled garden.
+- `deepagents deploy` collapses the harness-to-production gap into a single CLI command, bundling multi-tenant orchestration, sandbox provisioning, and 30+ endpoints (MCP, A2A, Agent Protocol, HITL, memory) into a LangSmith Deployment server. This directly competes with [[Anthropic Managed Agents virtualizes agent components into OS-style interfaces that decouple the brain from the hands|Claude Managed Agents]], which offers the same architecture (session + harness + sandbox) but as a walled garden.
 
 - The open ecosystem bet stacks open standards at every layer: AGENTS.md for instructions, Agent Skills for specialized knowledge, MCP/A2A/Agent Protocol for interop, and any model provider or sandbox. This is a deliberate counter-positioning to Anthropic's vertically integrated approach, echoing [[The Rise of Context Engineering|context engineering]] as an open discipline rather than a platform feature.
 
