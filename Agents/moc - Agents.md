@@ -29,6 +29,7 @@ How agents store, retrieve, and evolve knowledge across sessions. Memory archite
 - [[Obsidian as Agentic Memory]]
 - [[Obsidian wikilink resolution can be replicated on plain filesystems with an index and atomic rename tool]]
 - [[Ramp Labs Latent Briefing compacts KV caches for efficient cross-agent memory sharing]]
+- [[The Price of Meaning prescribes coupling semantic retrieval with exact episodic grounding as the only escape from interference]] — Sentra's formal no-escape theorem: any semantic memory system forgets as it grows because natural language has only ~10–50 effective dimensions; the only principled exit is pairing semantic retrieval with an exact episodic verification layer
 - [[inline annotations beat copy-paste editing by keeping instructions where they belong]]
 - [[git hooks as thinking journal let you time-travel through note evolution]]
 - [[transcript mining turns meetings into captured decisions and extracted knowledge]]
@@ -103,6 +104,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[training compaction into the model through RL produces better summaries than prompted compaction at one-fifth the tokens]]
 - [[LangChain Deep Agents Deploy offers open harness to avoid Claude Managed Agents memory lock-in]]
 - [[Anthropic Managed Agents virtualizes agent components into OS-style interfaces that decouple the brain from the hands]]
+- [[The Mismanaged Geniuses Hypothesis argues the next AI leap comes from training LMs to decompose not from scaling]] — Alex Zhang, Zhening Li, Omar Khattab: frontier LMs are capable enough; the bottleneck is hand-engineered scaffolds, and training models to decompose (with RLMs as the more expressive scaffold) beats further scaling — a 4B RLM trained on 32k/1-needle RL hits 100% on MRCRv2 1M/8-needle
 
 - [[Systems Engineering Makes Agentic Software Work - The Five-Layer Pattern]]
 

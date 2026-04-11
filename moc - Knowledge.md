@@ -48,6 +48,7 @@ Vault philosophy and agent integration patterns.
 - [[git hooks as thinking journal let you time-travel through note evolution]] — git as thinking journal via async hooks
 - [[obsidian vaults become memory graphs when agents traverse wikilinked notes with claim-based titles and layered orientation]] — arscontexta's comprehensive guide: vault philosophy, 3-layer orientation (tree/index/MOCs), composable claim-titled notes, agent breadcrumbs, CLAUDE.md as system philosophy
 - [[PARA and atomic facts give AI agents durable structured memory]] — three-layer memory architecture with PARA directories, atomic facts, memory decay, and QMD search
+- [[The Price of Meaning prescribes coupling semantic retrieval with exact episodic grounding as the only escape from interference]] — Sentra's formal no-escape theorem: any semantic memory system must forget because natural language has only ~10–50 effective dimensions; only principled exit is semantic retrieval coupled to an external episodic verification layer
 
 ### Background Agents
 
@@ -84,6 +85,7 @@ Agent runtime, scaling, persistence, and production deployment.
 Agent harness design — system prompts, tools, middleware, and execution flow that shape model behavior.
 
 - [[harness engineering improved a coding agent 13 points by changing only system prompts tools and middleware]] — LangChain's deepagents-cli: self-verification middleware, trace-based improvement loops, reasoning budget sandwiches, loop detection
+- [[The Mismanaged Geniuses Hypothesis argues the next AI leap comes from training LMs to decompose not from scaling]] — Alex Zhang, Zhening Li, Omar Khattab: scaffolds are the bottleneck, not model size; define the space of decompositions first, then train the compose-operator — RLM(Qwen3-4B) trained on 32k/1-needle jumps from ~0% to 100% on MRCRv2 1M/8-needle, beating Gemini 3 Pro and Opus 4.6
 
 ### Tooling
 
