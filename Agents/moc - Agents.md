@@ -19,6 +19,7 @@ How agents store, retrieve, and evolve knowledge across sessions. Memory archite
 - [[indexed experience memory compresses LLM agent context without discarding evidence by pairing summaries with a dereferenceable archive]]
 - [[Hermes Agent prioritizes prompt caching stability by keeping hot memory tiny and pushing everything else to tool-based retrieval]]
 - [[progressive disclosure filters force agent selectivity over what enters context]]
+- [[Letta Context Constitution frames context as the substrate of agent identity memory and continuity beyond model weights]] — Letta's foundational doctrine: context management is the mechanism by which experiential agents build identity, memory, and continuity in token-space; prescribes system prompt learning, progressive disclosure, and index-over-record discipline
 - [[agentic search agents replace vector databases for long-term memory achieving 99 percent on LongMemEval]]
 - [[AMA-Bench evaluates long-horizon memory for agentic applications using real and synthetic trajectories]]
 - [[Semantica and Cognee solve agent memory differently - Semantica adds accountability while Cognee builds the knowledge engine]]
