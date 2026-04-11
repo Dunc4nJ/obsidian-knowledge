@@ -7,6 +7,8 @@ type: framework
 
 ## Key Takeaways
 
+- **This is the product launch; the accompanying strategic manifesto is [[Memory ownership follows harness ownership - Harrison Chase argues picking a closed harness is picking a permanent owner for your agent's data flywheel|Chase's "Your harness, your memory"]], published 24 hours later.** The thesis piece formalizes the three-tier lock-in taxonomy (stateful APIs → closed harnesses → closed harnesses with server-side long-term memory) that this product launch is designed to address, and makes the explicit argument that even open-source Codex emits encrypted compaction summaries — so open source alone isn't sufficient, the harness memory artifacts themselves have to be portable. Read these two notes together: this one is "here's what we shipped," the companion is "here's why it had to exist."
+
 - Memory is the real lock-in vector, not the model. Switching LLM providers is trivial (adjust prompts), but switching harnesses means abandoning accumulated short-term and long-term memory that lives behind a proprietary API. LangChain's core argument against [[Agent Harnesses are the Product, Not the Model|closed harnesses]] is that memory ownership is what actually matters for portability.
 
 - `deepagents deploy` collapses the harness-to-production gap into a single CLI command, bundling multi-tenant orchestration, sandbox provisioning, and 30+ endpoints (MCP, A2A, Agent Protocol, HITL, memory) into a LangSmith Deployment server. This directly competes with [[Anthropic Managed Agents virtualizes agent components into OS-style interfaces that decouple the brain from the hands|Claude Managed Agents]], which offers the same architecture (session + harness + sandbox) but as a walled garden.

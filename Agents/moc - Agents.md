@@ -102,7 +102,8 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[the harness is everything and agent performance comes from environment design not model capability]]
 - [[hashline edit format improves LLM coding accuracy more than model upgrades at zero training cost]]
 - [[training compaction into the model through RL produces better summaries than prompted compaction at one-fifth the tokens]]
-- [[LangChain Deep Agents Deploy offers open harness to avoid Claude Managed Agents memory lock-in]]
+- [[LangChain Deep Agents Deploy offers open harness to avoid Claude Managed Agents memory lock-in]] — the product launch, paired with Chase's thesis below
+- [[Memory ownership follows harness ownership - Harrison Chase argues picking a closed harness is picking a permanent owner for your agent's data flywheel]] — Chase's strategic manifesto formalizing the three-tier memory lock-in taxonomy (stateful API → closed harness → closed harness with server-side long-term memory), the thesis that underwrites the Deep Agents Deploy launch
 - [[Anthropic Managed Agents virtualizes agent components into OS-style interfaces that decouple the brain from the hands]]
 - [[The Mismanaged Geniuses Hypothesis argues the next AI leap comes from training LMs to decompose not from scaling]] — Alex Zhang, Zhening Li, Omar Khattab: frontier LMs are capable enough; the bottleneck is hand-engineered scaffolds, and training models to decompose (with RLMs as the more expressive scaffold) beats further scaling — a 4B RLM trained on 32k/1-needle RL hits 100% on MRCRv2 1M/8-needle
 
