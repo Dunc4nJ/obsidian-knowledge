@@ -29,5 +29,6 @@ How agents store, retrieve, and evolve knowledge across sessions. Memory archite
 - [[Claude Code memory has a silent 200-line index cap that drops old memories without warning]]
 - [[Karpathy and Omarsar converge on Obsidian-backed LLM knowledge bases as the critical layer for agent effectiveness]]
 - [[context graphs let agents build verifiable, cross-agent memory instead of isolated notes]]
+- [[Everything Is Connected - knowledge graphs encode entities as directed-labeled triples that support multi-hop traversal and ontology-driven inference]]
 - [[How to Make Knowledge Graphs Fast - query optimization combines triple indexing, adjacency compression, and partitioning to tame exponential traversal fan-out]]
   

@@ -24,7 +24,7 @@ type: framework
 - [Wikidata Query Service](https://query.wikidata.org/) — Hosted SPARQL endpoint for the world's largest open knowledge graph; useful for testing query patterns and federated SPARQL.
 - [PyKEEN](https://pykeen.readthedocs.io/) — Python library for training KG embedding models (TransE, ComplEx, RotatE, etc.) and running link prediction benchmarks.
 - [BSBM](http://wbsg.informatik.uni-mannheim.de/bizer/berlinsparqlbenchmark/) and [LUBM](http://swat.cse.lehigh.edu/projects/lubm/) — Standard benchmarks for evaluating KG query engines.
-- [Previous article in the series](https://x.com/techwith_ram/status/2042933925832724538) — @techwith_ram's prior post, linked as prerequisite reading.
+- [[Everything Is Connected - knowledge graphs encode entities as directed-labeled triples that support multi-hop traversal and ontology-driven inference]] — @techwith_ram's prior article, linked by the author as prerequisite reading; covers what KGs are, triples, ontology, and inference before this article gets into query optimization. [Original post](https://x.com/techwith_ram/status/2042933925832724538).
 
 ## Original Content
 
