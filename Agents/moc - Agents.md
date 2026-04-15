@@ -111,10 +111,11 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[Systems Engineering Makes Agentic Software Work - The Five-Layer Pattern]]
 
 ### Infrastructure
-Production engineering for agents — security, reliability, sandboxing, deployment, distributed systems patterns, authentication, cost management. If the note is about *keeping agents running safely in production*, it goes here.
+Production engineering for agents — security, reliability, sandboxing, deployment, distributed systems patterns, authentication, cost management. If the note is about *keeping agents running safely in production*, it goes here. The **File Systems** sub-area covers file systems as agent infrastructure: virtual filesystems, storage-as-compute, and embedding compute into the storage layer.
 
 - [[sandboxing ai agents can be 100x faster with dynamic workers]]
 - [[Harvey Spectre makes durable runs the core primitive while workers stay ephemeral and sandboxes enforce explicit boundaries]] — Harvey's internal cloud coding agent platform: durable runs as the stable object, disposable sandboxed workers, explicit capability injection at run start, Slack/web/CLI as unified surfaces over one run record
+- [[Bash is the SQL for file systems and Archil proves it with serverless execution that sends instructions not data]] — Archil embeds bash execution into file systems so clients send instructions not bytes, eliminating egress and making file systems queryable like databases
 
 ### MCP
 Model Context Protocol — servers, tool definitions, transport patterns, and the MCP ecosystem specifically. If it's about MCP as a protocol or MCP-based tools, it goes here. General tool design goes in Tooling.

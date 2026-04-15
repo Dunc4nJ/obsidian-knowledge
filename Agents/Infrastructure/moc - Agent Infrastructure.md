@@ -1,6 +1,6 @@
 ---
 created: 2026-02-27
-description: Navigation hub for agent infrastructure — databases, sandboxing, runtime failures, and protocol design for production AI agents.
+description: Navigation hub for agent infrastructure — databases, sandboxing, file systems, runtime failures, and protocol design for production AI agents.
 source: internal
 type: moc
 ---
@@ -17,9 +17,15 @@ Patterns and pitfalls for running AI agents in production: storage, isolation, p
 - [[the Codex App Server turns a CLI agent harness into a stable bidirectional JSON-RPC protocol for any client]] — turning CLI agents into stable protocol-based services
 - [[agentic software engineering requires six pillars beyond the agent itself to survive production]] — durability, isolation, governance, persistence, scale, and composability as the engineering foundation for production agents
 - [[production AI agents require five security dimensions from model access to runtime observability]]
-- [[databases are becoming the runtime layer for AI agents as application logic collapses into the data layer]] — as agents bypass application layers and operate directly on data, databases evolve from storage into the execution substrate for intelligence — Palantir's framework for securing agents: model access, orchestration isolation, memory policy enforcement, governed tools with provenance-based security, and observability
+- [[databases are becoming the runtime layer for AI agents as application logic collapses into the data layer]] — as agents bypass application layers and operate directly on data, databases evolve from storage into the execution substrate for intelligence
 - [[Cloudflare Dynamic Workers sandbox AI-generated code in V8 isolates 100x faster than containers]]
-- [[LangChain deep agents require persistent memory scoped sandboxes and guardrails to move from prototype to production]] — production checklist covering memory scoping, sandbox lifecycle, middleware guardrails, and frontend streaming for LangChain Deep Agents — V8 isolate-based sandboxing with millisecond startup for AI-generated code execution, plus Code Mode libraries for TypeScript-native agent tool APIs
-- [[a virtual filesystem over Chroma replaces sandboxes for agent doc exploration at 100ms instead of 46 seconds]]
-- [[Amazon S3 Files ends the object-file split for AI agents]] — turns S3 buckets into a shared file-system workspace for AI agents, removing local/object synchronization layers in multi-agent pipelines.
+- [[LangChain deep agents require persistent memory scoped sandboxes and guardrails to move from prototype to production]] — production checklist covering memory scoping, sandbox lifecycle, middleware guardrails, and frontend streaming for LangChain Deep Agents
 - [[Harvey Spectre makes durable runs the core primitive while workers stay ephemeral and sandboxes enforce explicit boundaries]] — Harvey's internal cloud coding agent platform treats the run record (not the worker process) as the durable object, enforces explicit capability injection at run start, and unifies Slack/web/CLI surfaces over a single run
+
+## File Systems
+
+File systems as agent infrastructure — virtual filesystems, storage-as-compute, file semantics over object stores, and the emerging pattern of embedding compute into the storage layer.
+
+- [[Bash is the SQL for file systems and Archil proves it with serverless execution that sends instructions not data]] — Archil embeds bash execution into the file system so clients send instructions instead of transferring raw data, eliminating egress costs and positioning file systems as queryable substrates for agent state
+- [[Amazon S3 Files ends the object-file split for AI agents]] — turns S3 buckets into a shared file-system workspace for AI agents, removing local/object synchronization layers in multi-agent pipelines
+- [[a virtual filesystem over Chroma replaces sandboxes for agent doc exploration at 100ms instead of 46 seconds]] — ChromaFS layers Unix file semantics over a vector database, giving agents grep/cat/ls access to document collections at 100ms session creation
