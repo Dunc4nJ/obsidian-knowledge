@@ -23,5 +23,11 @@ How to design, describe, and orchestrate tools that agents actually use well.
 - [[skill graphs outperform single skill files by letting agents traverse linked domain knowledge on demand]] — graph-structured skills vs flat skill files
 - [[skill workflows]] — workflow patterns for agent skills
 - [[dev-browser lets agents write Playwright code in a sandboxed QuickJS VM for fast browser automation]]
-- [[LightOnOCR-2 outscores proprietary models at table extraction with 1B parameters]] — 1B open-source model beats GPT-5 mini, Claude Sonnet 4.6, and Mathpix on independent table extraction benchmark
 - [[one tmux session per project with directory-named sessions eliminates session management friction]] — directory-named tmux sessions with shell helpers and vim keybindings
+
+## OCR
+
+Document OCR models, benchmarks, and large-scale processing pipelines.
+
+- [[LightOnOCR-2 outscores proprietary models at table extraction with 1B parameters]] — 1B open-source model beats GPT-5 mini, Claude Sonnet 4.6, and Mathpix on independent table extraction benchmark
+- [[HuggingFace OCRed 30K arXiv papers with Chandra-OCR 2 on parallel L40S GPU jobs for 850 dollars]] — end-to-end playbook: Chandra-OCR 2 via vLLM on 16 parallel L40S jobs, orchestrated by Codex, ~$850 for 27K papers
