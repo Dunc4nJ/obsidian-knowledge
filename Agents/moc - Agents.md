@@ -110,6 +110,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[Browserbase's bb agent generalizes knowledge work through four building blocks - sandbox, credential-brokering proxy, loadable skills, and Slack]] — Kyle Jeong's full architecture writeup: one OpenCode loop, ephemeral sandbox with pre-warmed snapshot, serverless integration proxy that holds real credentials and enforces scoped RBAC+ABAC, `.opencode/skills/*.md` as loadable playbooks, Slack thread as persistent workspace; webhooks carry intent and get hard-scoped permissions at dispatch
 
 - [[Systems Engineering Makes Agentic Software Work - The Five-Layer Pattern]]
+- [[Claude Code's source reveals agent systems need infrastructure as a fourth layer beyond weights context and harness]] — Rohit's 331-module teardown: async-generator loops, streaming tool executor, cache-boundary prompts, cost-ordered compaction, seven-stage permissions, 823-line retry state machine; argues infrastructure (multi-tenancy/RBAC/isolation/coordination) is a distinct fourth layer where production agents die
 
 ### Infrastructure
 Production engineering for agents — security, reliability, sandboxing, deployment, distributed systems patterns, authentication, cost management. If the note is about *keeping agents running safely in production*, it goes here. The **File Systems** sub-area covers file systems as agent infrastructure: virtual filesystems, storage-as-compute, and embedding compute into the storage layer.
