@@ -117,6 +117,7 @@ Production engineering for agents — security, reliability, sandboxing, deploym
 
 - [[sandboxing ai agents can be 100x faster with dynamic workers]]
 - [[Harvey Spectre makes durable runs the core primitive while workers stay ephemeral and sandboxes enforce explicit boundaries]] — Harvey's internal cloud coding agent platform: durable runs as the stable object, disposable sandboxed workers, explicit capability injection at run start, Slack/web/CLI as unified surfaces over one run record
+- [[LangChain Deep Agents runtime builds ten production capabilities on one primitive - durable super-step checkpointing to PostgreSQL]] — comprehensive runtime architecture guide: harness/runtime split, checkpointed super-steps as the single foundation for memory, HITL, time travel, streaming, cron, sandboxes, and open protocol integration (MCP/A2A)
 - [[Bash is the SQL for file systems and Archil proves it with serverless execution that sends instructions not data]] — Archil embeds bash execution into file systems so clients send instructions not bytes, eliminating egress and making file systems queryable like databases
 
 ### MCP
