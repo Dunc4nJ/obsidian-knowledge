@@ -141,6 +141,7 @@ Multi-agent coordination — delegation patterns, lead/worker ratios, communicat
 
 - [[separating cognitive blueprints from runtime engines enables portable auditable agent systems]]
 - [[peer-to-peer world models create collective intelligence that scales superlinearly with network size]]
+- [[Cognition finds multi-agent systems work only when writes stay single-threaded and additional agents contribute intelligence not actions]]
 
 ### Skills
 Agent skill design, authoring, testing, and lifecycle management. SKILL.md patterns, eval frameworks for skills, skill triggering and description optimization, capability uplift vs. encoded preference, and the skill-as-specification thesis. If the note is about *how skills are built, tested, or managed*, it goes here.
