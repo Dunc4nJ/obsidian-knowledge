@@ -104,6 +104,7 @@ Agent tooling patterns, CLI design, and infrastructure.
 - [[CLIs are the agent-native interface because legacy tooling is already machine-readable]] — Karpathy: CLIs are the ideal agent surface because agents natively compose terminal tools into pipelines; product builders must offer CLI/MCP/markdown docs
 - [[rewriting tool descriptions with curriculum learning improves agent tool use without execution traces]] — Trace-Free+ curriculum learning trains LLMs to rewrite tool descriptions for better selection and execution, generalizing to unseen tools at scale
 - [[NIA Docs turns web documentation into a filesystem that agents can grep, cat, and code against]] — agent-first docs access via mounted API/web documentation filesystem, trading RAG fragmentation for Unix-like commands and fresher API context
+- [[Harness engineering widens the expert-novice gap instead of closing it — Junghwan NA's OMX + Ouroboros pipeline merged PRs at 100+ OSS repos before GitHub suspended him]] — 13-stage tmux + OMX + Ouroboros pipeline, 500+ commits across 100+ repos in 72 hours; local reproduction and merge-pattern matching did 80% of the work; attestation (CLA, merge approvals) is the new scarce OSS resource
 ### MCP
 
 Model Context Protocol — servers, best practices, and efficient tool integration patterns.
