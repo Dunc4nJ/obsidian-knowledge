@@ -162,6 +162,7 @@ Agent skill design, authoring, testing, and lifecycle management. SKILL.md patte
 - [[skills are living folders not markdown files and building them is the new developer setup]]
 - [[agent skills should be contextual actions not static prompts and chaining them requires forking as a primitive]]
 - [[The bitter lesson of agent harnesses is your helpers are abstractions too - Browser-Use ships a 600-line CDP + SKILL.md harness]] — Gregor Zunic: delete even the `click()/type()/scroll()` wrappers; a 600-line harness of raw CDP + `SKILL.md` that the agent edits at runtime is enough, because RL-tuned models were trained on millions of tokens of `Page.navigate`/`DOM.querySelector`/`Runtime.evaluate`
+- [[predict-RLM uses GEPA to recursively optimize agent skills reaching SpreadsheetBench top-5 as open source]]
 
 ### Tooling
 Agent tool design, context engineering, prompt caching, skill architectures, search strategies, progressive disclosure, and general patterns for how agents interact with tools and manage context. The broadest subfolder — if a note is about *how agents use tools or manage their context window*, it goes here.
