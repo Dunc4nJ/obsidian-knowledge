@@ -130,6 +130,7 @@ Agent code search, semantic retrieval, and the bottleneck between code generatio
 
 - [[Knowledge/Agents/codebase_search_agents/index|Semantic Code Search — Morph Documentation]] — two approaches to AI-powered code search via the Morph MCP server
 - [[coding agents are bottlenecked by search not coding ability]] — survey of recent research on why AI coding agents fail at retrieval, not generation
+- [[Neo4j's Stephen Chin on agentic graph RAG - vector search finds entry points and graph traversal supplies grounded context]] — Stephen Chin's AI Engineer talk: vector-then-graph beats text-to-Cypher and beats baseline vector RAG; embeddings live as properties on graph nodes; CLA uses this for 250k internal queries
 
 ### Learnings
 

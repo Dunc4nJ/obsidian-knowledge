@@ -53,6 +53,7 @@ Agentic search strategies — code search, semantic retrieval, embedding-based i
 - [[recursive tree retrieval with hierarchical summarization improves multi-hop QA by 20 percent over flat chunk retrieval]] — RAPTOR: recursively cluster and summarize document chunks into a tree, then retrieve across abstraction levels; collapsed tree search with GPT-4 achieves 82.6% on QuALITY (20% over prior SOTA)
 - [[MCTS-RAG enables 7B models to match GPT-4o on knowledge-intensive reasoning by interleaving Monte Carlo tree search with adaptive retrieval]] — Interleaves retrieval actions into MCTS reasoning tree at inference time; Llama 3.1-8B outperforms GPT-4o on ComplexWebQA and GPQA with only 2.8x RAG latency
 - [[LATTICE uses LLM-guided semantic tree traversal with calibrated scoring to achieve logarithmic-complexity retrieval that outperforms reranking on reasoning-intensive benchmarks]] — LLM navigates a semantic corpus tree at query time with calibrated path relevance scores; zero-shot SOTA on BRIGHT with log-scale search over 420K documents
+- [[Neo4j's Stephen Chin on agentic graph RAG - vector search finds entry points and graph traversal supplies grounded context]] — recommends vector-then-graph as the starter graph RAG pattern (not text-to-Cypher); embeddings live as properties on graph nodes so chunks and nodes are the same object; CLA replaced their internal SaaS stack with this pattern
 
 ### Continual Learning
 
