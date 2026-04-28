@@ -169,6 +169,7 @@ Agent tool design, context engineering, prompt caching, skill architectures, sea
 
 - [[Everything is Context: Agentic File System Abstraction for Context Engineering]]
 - [[Slate's terminal UX solves multi-agent observability by separating orchestration search and execution into visible parallel threads]]
+- [[Agno Context Providers collapse the multi-source tool surface to 2N tools by hiding each source behind a query and update sub-agent]] — Ashpreet Bedi: each source (Slack, Drive, GitHub) gets wrapped in a sub-agent exposing only `query_<source>` and `update_<source>`; main agent's tool surface stays linear at 2N regardless of how many tools each source has, source-specific quirks live in the sub-agent
 
 ## Placement Rules
 
