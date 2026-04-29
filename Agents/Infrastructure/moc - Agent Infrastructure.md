@@ -21,6 +21,7 @@ Patterns and pitfalls for running AI agents in production: storage, isolation, p
 - [[Cloudflare Dynamic Workers sandbox AI-generated code in V8 isolates 100x faster than containers]]
 - [[LangChain deep agents require persistent memory scoped sandboxes and guardrails to move from prototype to production]] — production checklist covering memory scoping, sandbox lifecycle, middleware guardrails, and frontend streaming for LangChain Deep Agents
 - [[Harvey Spectre makes durable runs the core primitive while workers stay ephemeral and sandboxes enforce explicit boundaries]] — Harvey's internal cloud coding agent platform treats the run record (not the worker process) as the durable object, enforces explicit capability injection at run start, and unifies Slack/web/CLI surfaces over a single run
+- [[Palantir Ontology gives enterprise agents a decision-centric substrate by surfacing data logic and action as tools governed by one security model]] — Palantir's platform thesis: enterprise agents need a decision-centric (not data-centric) substrate that fuses Data, Logic, Action, and Security into one Ontology so agents call ML models/optimizers/business logic as tools, stage writebacks as scenarios, and learn from full decision lineage; Onyx supplier-disruption walkthrough shows the four-layer (data → logic → action → learning) decision loop in practice
 
 ## File Systems
 
