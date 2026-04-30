@@ -22,6 +22,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[claude CLI print mode is a full agent runtime accessible via command line]]
 - [[designing agent tools is an iterative art shaped by model capabilities not fixed engineering rules]]
 - [[harness engineering improved a coding agent 13 points by changing only system prompts tools and middleware]]
+- [[Cursor strips guardrails and adds dynamic context as models improve, inverting the harness's job]] — Stefan Heule & Jediah Katz (Apr 2026): Cursor's late-2024 guardrails (lint surfacing, file-read rewriting, tool-call caps, static context dumps) are mostly gone, replaced with dynamic context the agent fetches itself; introduces Keep Rate and stack-trace-paste as zero-instrumentation quality signals; per-tool/per-model anomaly baselines; provisions each model with the tool format from its training distribution; mid-chat switch handling
 - [[LangChain's Better-Harness uses eval-driven hill-climbing for agent harness improvement]]
 - [[agent middleware hooks decouple business logic from the core agent loop enabling composable customization]]
 - [[llm-tool-api-architecture-optimizing-roundtrips-tokens-and-context-like-gpu-cache-hierarchies|SebAaltonen's LLM Tool API Architecture — optimizing roundtrips, tokens, and context like GPU cache hierarchies]]

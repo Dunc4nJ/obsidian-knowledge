@@ -92,6 +92,7 @@ Roundups, digests, survey notes, and multi-topic captures that don't fit cleanly
 Designing the scaffolding around agents — system prompts, AGENTS.md patterns, soul files, tool descriptions, prompt engineering techniques, middleware between the model and the world. If the note is about *shaping agent behavior through its harness*, it goes here.
 
 - [[agents need a harness not a framework because durable event-driven infrastructure already solves retry routing and state]]
+- [[Cursor strips guardrails and adds dynamic context as models improve, inverting the harness's job]] — Stefan Heule & Jediah Katz: Cursor's harness work in 2026 is mostly *removing* the lint/file-read/tool-cap guardrails and static-context dumps it shipped in 2024, replacing them with dynamic context the model pulls itself; introduces Keep Rate and stack-trace-paste as durable quality signals, per-tool/per-model error baselines, and per-model tool-format provisioning
 - [[OpenAI built a million-line product with zero manually-written code by making the repo legible to agents]]
 - [[LLM agents need a typed execution layer beyond bash]]
 - [[autonomous context compression lets agents choose when to compact rather than hitting fixed token limits]]
