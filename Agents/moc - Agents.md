@@ -167,6 +167,7 @@ Agent skill design, authoring, testing, and lifecycle management. SKILL.md patte
 - [[agent skills should be contextual actions not static prompts and chaining them requires forking as a primitive]]
 - [[The bitter lesson of agent harnesses is your helpers are abstractions too - Browser-Use ships a 600-line CDP + SKILL.md harness]] — Gregor Zunic: delete even the `click()/type()/scroll()` wrappers; a 600-line harness of raw CDP + `SKILL.md` that the agent edits at runtime is enough, because RL-tuned models were trained on millions of tokens of `Page.navigate`/`DOM.querySelector`/`Runtime.evaluate`
 - [[predict-RLM uses GEPA to recursively optimize agent skills reaching SpreadsheetBench top-5 as open source]]
+- [[GEPA prompt optimizer beats reinforcement learning with 35x fewer rollouts by reflecting on natural-language execution traces]] — Agrawal/Khattab et al. (arXiv:2507.19457): reflective Genetic-Pareto prompt evolution; outperforms GRPO by up to 20% with up to 35× fewer rollouts and beats MIPROv2 by 10pp; Pareto-front candidate sampling, cross-model prompt transfer, instruction-only optimization beating few-shot
 
 ### Tooling
 Agent tool design, context engineering, prompt caching, skill architectures, search strategies, progressive disclosure, and general patterns for how agents interact with tools and manage context. The broadest subfolder — if a note is about *how agents use tools or manage their context window*, it goes here.
