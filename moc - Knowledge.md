@@ -124,6 +124,7 @@ How agents learn and improve over time — memory-first architectures, persisten
 - [[learning machines turn agents from stateless tools into systems that compound knowledge across users and sessions]] — extensible Learning Stores protocol: cross-user knowledge continuity, custom domain stores, roadmap from learning to decision logging to self-improvement
 - [[async RL from real conversations lets agents continuously improve without blocking inference]] — OpenClaw-RL: fully async RL framework turning real conversations into training signals via PRM judging and on-policy distillation, self-hosted and open source
 - [[on-policy distillation plus conditional log-penalty RL cuts search agent latency 44 percent while boosting accuracy]] — Contextual AI: two-axis search agent optimization (retrieval tool + planner training via distillation + CLP reward), 44% latency reduction, proposes CER-C efficiency metric
+- [[Grey Haven autocontext runs five-role recursive improvement loops with persistent playbooks and traces that next runs inherit]] — autocontext 0.5.0: Competitor/Analyst/Coach/Architect/Curator pipeline with tournament gating and SQLite-indexed playbook snapshots inherited by scenario name; Pi/Hermes/MCP integration paths
 
 ### Search
 

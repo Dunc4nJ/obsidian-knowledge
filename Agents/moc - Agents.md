@@ -61,6 +61,7 @@ Agentic search strategies — code search, semantic retrieval, embedding-based i
 - [[stable agentic RL requires sequence-level clipping and environment-aware advantages to prevent training collapse]]
 - [[the autoresearch loop generalizes beyond ML training into a universal pattern for autonomous agent research]]
 - [[LangChain's Harrison Chase argues continual learning for AI agents extends beyond model fine-tuning to harness engineering and context updates]] — Three-layer framework (model/harness/context) with comparison table showing context is cheapest lever; traces as shared substrate
+- [[Grey Haven autocontext runs five-role recursive improvement loops with persistent playbooks and traces that next runs inherit]] — autocontext 0.5.0: Competitor/Analyst/Coach/Architect/Curator pipeline; tournament+curator gating; versioned `playbook.md` + SQLite snapshots restored by scenario name; per-role provider/model env knobs; Pi via `pi --print` subprocess, Hermes skill export, MCP server
 Agents that improve over time — RL from conversations, self-improvement loops, memory systems that compound knowledge across sessions, skill acquisition. The key test: *does the agent get better at its job over time?* If yes, it belongs here. If it just has good static context architecture, that's Tooling.
 
 ### CLI
