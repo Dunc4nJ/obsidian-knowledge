@@ -10,8 +10,16 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 
 ## Companies
 
-_(populated as ticker folders are created)_
+- [[Applied Optoelectronics (AAOI)]]
+- [[Broadcom (AVGO)]]
+- [[Ciena (CIEN)]]
+- [[Coherent (COHR)]]
+- [[Furukawa Electric (FUWAY)]]
+- [[Lumentum (LITE)]]
+- [[Mitsubishi Electric (MIELY)]]
+- [[Sumitomo Electric (SMTOY)]]
+- [[Viavi (VIAV)]]
 
 ## Research
 
-_(populated as cross-ticker research notes are added under `Research/`)_
+- [[Goldman 2026 AI optical cheat sheet maps EPS upside across lasers PCBs and CCL manufacturers]]

@@ -10,8 +10,8 @@ Companies and research covering minerals designated as critical for energy, defe
 
 ## Companies
 
-_(populated as ticker folders are created)_
+_(none yet)_
 
 ## Research
 
-_(populated as cross-ticker research notes are added under `Research/`)_
+_(none yet)_

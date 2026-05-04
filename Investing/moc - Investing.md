@@ -17,7 +17,7 @@ For shorter-horizon systematic trading content see `Trading/`. For prediction-ma
 
 ## Sectors
 
-- [[moc - Photonics]]
-- [[moc - Drones]]
-- [[moc - Critical Minerals]]
 - [[moc - Compute]]
+- [[moc - Critical Minerals]]
+- [[moc - Drones]]
+- [[moc - Photonics]]

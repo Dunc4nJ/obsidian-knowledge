@@ -85,17 +85,46 @@ on the radar. Web-searched at folder creation time.>
 _(populated as notes are added to this folder)_
 ```
 
-### Hub upkeep — MANDATORY
+### Hub upkeep — handled by `invest sync`
 
-When you add ANY new note inside a ticker folder, you MUST also append a wiki link to that note in the ticker hub MOC under `## Notes`. Every capture is a 2-file edit (the new note + the hub MOC).
+After adding any note inside a ticker folder (or anywhere in `Investing/`), run `invest sync`. This regenerates the ticker hub's `## Notes` section, the sector MOC's `## Companies` and `## Research` sections, and the root MOC's `## Frameworks` and `## Sectors` sections — all from folder reality. Do NOT manually edit those managed sections; they get rewritten on the next sync.
 
-For multi-sector names, also update the secondary sector's MOC under a `## Cross-sector` section with a wiki link to the ticker hub.
+For multi-sector names, manually add a wiki link in the secondary sector's MOC under a `## Cross-sector` section. (Cross-sector references are not auto-managed in v1.)
+
+## Tooling: `invest` CLI
+
+The deterministic mechanics of this folder are automated by the `invest` CLI (source: `/data/projects/obsidian-invest-cli/`, install: `uv tool install -e /data/projects/obsidian-invest-cli/`).
+
+Two subcommands:
+
+- `invest add-ticker` — atomic ticker folder + hub MOC creation + sector MOC update. Idempotent (no-op if folder exists; will repair a missing hub).
+  - Single: `invest add-ticker LITE --name "Lumentum" --sector Photonics --description "US-listed; lasers + transceivers."`
+  - Batch: pipe a JSON array on stdin: `echo '[{"ticker":"LITE","name":"Lumentum","sector":"Photonics","description":"..."}]' | invest add-ticker --batch`
+- `invest sync` — regenerate managed sections of all MOCs from folder reality. Run after any capture. Sector-scoped: `invest sync --sector Photonics`.
+
+The CLI does NO web search, NO sector disambiguation, NO ticker validity check. The agent is responsible for: canonical company name lookup, sector inference, deciding what is/isn't a real ticker. Once the agent has those, it passes a JSON spec to `invest add-ticker --batch` and the CLI executes the file mechanics atomically.
+
+Vault auto-detection: the CLI walks up from cwd looking for `Investing/CLAUDE.md`. Run from anywhere inside the vault and it Just Works. Override with `--vault PATH` or `INVEST_VAULT` env var.
+
+Always available flags: `--dry-run` (print plan, write nothing), `--json` (machine-readable result, on `add-ticker`).
 
 ## Auto-creating ticker folders from mentions
 
-When a note (especially a sector `Research/` note) mentions a ticker that doesn't have a folder yet, **auto-create the folder + hub MOC**. Do not interrupt the user for each ticker — these decisions should be made at capture time using the disambiguation rules below.
+When a note (especially a sector `Research/` note) mentions a ticker that doesn't have a folder yet, **auto-create the folder + hub MOC** via `invest add-ticker --batch`. Do not interrupt the user for each ticker — disambiguation decisions are made at capture time using the rules below.
 
-The Goldman-cheat-sheet pattern (one note mentions ~30 tickers) should result in: 1 research note saved + ~30 ticker folders + hubs auto-created + each hub wiki-linked from the research note + each new ticker added to the sector MOC under `## Companies`.
+The Goldman-cheat-sheet pattern (one note mentions ~30 tickers) should result in: 1 research note saved + 1 batch invocation of `invest add-ticker --batch` creating ~30 folders + hubs in one shot + the source note edited to wiki-link each new ticker.
+
+### Workflow
+
+1. Save the captured note via `url-to-obsidian` to its destination (typically `<Sector>/Research/<title>.md`).
+2. Identify mentioned tickers in the note. For each:
+   - Skip if private/non-tradeable (e.g., "Source Photonics — Private").
+   - Skip if already has a folder (check `<Sector>/<Name (TICKER)>/`).
+   - Web-search canonical short name if unknown.
+   - Determine sector. Default = the source note's containing sector. For multi-sector names (e.g., AVGO is Photonics + Compute), pause and ask the user which is canonical.
+3. Build a JSON spec list and pipe to `invest add-ticker --batch`.
+4. Edit the source note to wiki-link each new ticker as `[[Name (TICKER)]]`.
+5. Done — `add-ticker --batch` runs sync internally for affected sectors. Run `invest sync` separately only if you've also added research notes or made manual edits elsewhere.
 
 ### Disambiguation
 
@@ -131,12 +160,13 @@ Applies to: `Research/` notes, sector overviews, cross-ticker analyses, and tick
 
 Start with **flat files** alongside the hub MOC. Use the maximally-informative title convention for content notes. Once a name accumulates 5+ notes spanning multiple categories, allow subfolders like `Earnings/`, `Theses/`, `Risk/`. Discuss with the user before introducing the first subfolder for a ticker.
 
-## MOC update rule (consolidated)
+## MOC update rule
 
-- **New ticker folder created** → update the parent sector's `moc - <Sector>.md` with `[[Name (TICKER)]]` under `## Companies`. For multi-sector names, also update the secondary sector's MOC under `## Cross-sector`.
-- **New `Research/` note added** → update the parent sector's MOC under `## Research` with the wiki link.
-- **New note inside a ticker folder** → update that ticker's hub MOC under `## Notes` with the wiki link. (See "Hub upkeep — MANDATORY".)
-- **New sector folder created** → update root `moc - Investing.md` under `## Sectors`.
+All MOC managed sections (`## Notes` in hub MOCs, `## Companies` and `## Research` in sector MOCs, `## Frameworks` and `## Sectors` in the root MOC) are auto-managed by `invest sync`. Do not edit them manually — they get regenerated from folder reality on the next sync.
+
+The ONE exception: `## Cross-sector` sections in sector MOCs (used to surface multi-sector tickers in their non-canonical sector) are not auto-managed in v1; edit those by hand.
+
+When you create a new sector folder (after discussing with the user), `invest sync` will pick it up automatically and add it to the root MOC's `## Sectors`.
 
 ## Frontmatter
 
