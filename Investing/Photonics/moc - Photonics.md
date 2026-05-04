@@ -2,6 +2,13 @@
 created: 2026-05-04
 description: Navigation hub for photonics — optical components, lasers, transceivers, silicon photonics, and the AI-datacenter optical supply chain.
 type: moc
+subsectors:
+- Substrates & epi-wafers
+- Foundries
+- Lasers
+- Optical components & engines
+- Networking systems
+- Equipment & test
 ---
 
 # Photonics
@@ -10,22 +17,45 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 
 ## Companies
 
+### Substrates & epi-wafers
+
 - [[AXT (AXTI)]]
-- [[Aehr Test Systems (AEHR)]]
-- [[Aixtron (AIXA.DE)]]
+- [[IQE (IQE.L)]]
+- [[Soitec (SOI.PA)]]
+
+### Foundries
+
+- [[Tower Semiconductor (TSEM)]]
+
+### Lasers
+
+- [[Coherent (COHR)]]
+- [[Furukawa Electric (FUWAY)]]
+- [[Lumentum (LITE)]]
+- [[Mitsubishi Electric (MIELY)]]
+- [[Sivers Semiconductors (SIVE.ST)]]
+- [[Sumitomo Electric (SMTOY)]]
+
+### Optical components & engines
+
 - [[Applied Optoelectronics (AAOI)]]
 - [[Ciena (CIEN)]]
 - [[Coherent (COHR)]]
 - [[Enablence Technologies (ENA.V)]]
 - [[Furukawa Electric (FUWAY)]]
-- [[IQE (IQE.L)]]
-- [[LPKF Laser (LPK.DE)]]
 - [[Lumentum (LITE)]]
-- [[Mitsubishi Electric (MIELY)]]
-- [[Sivers Semiconductors (SIVE.ST)]]
-- [[Soitec (SOI.PA)]]
 - [[Sumitomo Electric (SMTOY)]]
-- [[Tower Semiconductor (TSEM)]]
+- [[Viavi (VIAV)]]
+
+### Networking systems
+
+- [[Ciena (CIEN)]]
+
+### Equipment & test
+
+- [[Aehr Test Systems (AEHR)]]
+- [[Aixtron (AIXA.DE)]]
+- [[LPKF Laser (LPK.DE)]]
 - [[Viavi (VIAV)]]
 
 ## Research

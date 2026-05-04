@@ -2,6 +2,8 @@
 created: 2026-05-04
 description: Enablence Technologies (ENA.V) — TSX Venture; in-house PLC (Planar Lightwave Circuit) fab in Fremont, CA. Supplies Star Couplers and splitters for CPO; small-cap; key Sivers ecosystem partner.
 type: moc
+subsectors:
+- Optical components & engines
 ---
 
 # Enablence Technologies (ENA.V)
