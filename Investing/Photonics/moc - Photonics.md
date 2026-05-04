@@ -11,15 +11,21 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 ## Companies
 
 - [[AXT (AXTI)]]
+- [[Aehr Test Systems (AEHR)]]
+- [[Aixtron (AIXA.DE)]]
 - [[Applied Optoelectronics (AAOI)]]
 - [[Ciena (CIEN)]]
 - [[Coherent (COHR)]]
 - [[Enablence Technologies (ENA.V)]]
 - [[Furukawa Electric (FUWAY)]]
+- [[IQE (IQE.L)]]
+- [[LPKF Laser (LPK.DE)]]
 - [[Lumentum (LITE)]]
 - [[Mitsubishi Electric (MIELY)]]
 - [[Sivers Semiconductors (SIVE.ST)]]
+- [[Soitec (SOI.PA)]]
 - [[Sumitomo Electric (SMTOY)]]
+- [[Tower Semiconductor (TSEM)]]
 - [[Viavi (VIAV)]]
 
 ## Research

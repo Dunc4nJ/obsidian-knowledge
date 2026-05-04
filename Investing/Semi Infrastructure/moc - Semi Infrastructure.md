@@ -1,22 +1,16 @@
 ---
 created: 2026-05-04
-description: Navigation hub for semi infrastructure — foundries, wafer substrates, semiconductor equipment, and test gear that supply every chip designer regardless of end market.
+description: Navigation hub for semi infrastructure — TRULY horizontal foundries and equipment with no single dominant end market.
 type: moc
 ---
 
 # Semi Infrastructure
 
-Companies and research covering the manufacturing layer that sits beneath every chip designer: pure-play foundries (logic and specialty), wafer substrate makers (silicon, SOI, compound-semi epitaxy), semiconductor equipment (lithography, MOCVD, deposition, etch), and wafer-level test/burn-in. Horizontal infrastructure — these names enable Chips, Photonics, Compute, and any other silicon-using sector equally. Distinguished from `Chips/` (fabless designers who BUY from this layer) and `Compute/` (downstream operators who rent finished compute capacity).
+Companies and research covering the **truly horizontal** semiconductor manufacturing layer — names whose business serves multiple end-market sectors with no single dominant thesis driver. Pure-play logic foundries (TSMC), lithography (ASML), wafer-fab equipment (Applied Materials, Lam Research), and other "everyone uses them" infrastructure. Distinguished from supply-chain names tied to one end market (those live in their served sector — e.g., a substrate maker whose customers are ~all laser companies belongs in `Photonics/`, not here).
 
 ## Companies
 
-- [[Aehr Test Systems (AEHR)]]
-- [[Aixtron (AIXA.DE)]]
-- [[IQE (IQE.L)]]
-- [[LPKF Laser (LPK.DE)]]
-- [[Soitec (SOI.PA)]]
 - [[TSMC (TSM)]]
-- [[Tower Semiconductor (TSEM)]]
 
 ## Research
 
