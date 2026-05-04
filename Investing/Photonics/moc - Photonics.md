@@ -12,7 +12,6 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 
 - [[AXT (AXTI)]]
 - [[Applied Optoelectronics (AAOI)]]
-- [[Broadcom (AVGO)]]
 - [[Ciena (CIEN)]]
 - [[Coherent (COHR)]]
 - [[Enablence Technologies (ENA.V)]]
@@ -26,3 +25,10 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 ## Research
 
 - [[Goldman 2026 AI optical cheat sheet maps EPS upside across lasers PCBs and CCL manufacturers]]
+- [[Sancet 2026 - Goldman optical cheat sheet omits substrate epi equipment and laser layers (IQE Soitec Tower Aixtron AEHR LPKF SIVE)]]
+
+## Cross-sector
+
+Companies whose canonical home is in another sector but that have meaningful photonics exposure:
+
+- [[Broadcom (AVGO)]] — fabless chip designer; canonical home `Chips/`. Networking ASICs + custom AI silicon include silicon-photonics integration; surfaces in CPO and optical-interconnect theses.

@@ -1,5 +1,6 @@
 ---
 created: 2026-05-04
+published: 2026-05-03
 description: Sancet's late-night thesis that Enablence (ENA.V) is undervalued because its in-house PLC fab in Fremont supplies Star Couplers + splitters that Sivers needs for the AI CPO buildout.
 source: https://x.com/Million_Sancet/status/2050890536278519914
 type: thesis

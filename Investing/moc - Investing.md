@@ -17,8 +17,10 @@ For shorter-horizon systematic trading content see `Trading/`. For prediction-ma
 
 ## Sectors
 
+- [[moc - Chips]]
 - [[moc - Compute]]
 - [[moc - Critical Minerals]]
 - [[moc - Drones]]
 - [[moc - Energy]]
 - [[moc - Photonics]]
+- [[moc - Semi Infrastructure]]

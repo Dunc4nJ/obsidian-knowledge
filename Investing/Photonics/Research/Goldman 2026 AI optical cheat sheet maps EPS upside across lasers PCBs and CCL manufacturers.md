@@ -1,5 +1,6 @@
 ---
 created: 2026-05-04
+published: 2026-05-03
 description: Goldman Sachs 2026 cheat sheet identifying AI-datacenter optical names with significant EPS upside across lasers, optical modules, and PCB/CCL inputs.
 source: https://x.com/aleabitoreddit/status/2051028253130006901
 type: research
@@ -7,6 +8,8 @@ authors: ["Serenity (@aleabitoreddit)"]
 ---
 
 # Goldman 2026 AI optical cheat sheet
+
+> [!info] Sancet's rebuttal: see [[Sancet 2026 - Goldman optical cheat sheet omits substrate epi equipment and laser layers (IQE Soitec Tower Aixtron AEHR LPKF SIVE)]] — argues this map is "incomplete" because it omits substrates (Soitec, Tower), epi-wafers (IQE), equipment (Aixtron, AEHR, LPKF), and next-gen lasers (Sivers).
 
 Goldman Sachs flagged three pockets of "significant EPS upside" in the AI-optical buildout:
 1. Optical modules and engines

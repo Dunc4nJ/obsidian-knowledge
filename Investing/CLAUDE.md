@@ -7,27 +7,18 @@ This file governs where notes go inside `Investing/`. It is read by `url-to-obsi
 ```
 Investing/
 ├── CLAUDE.md                         (this file)
-├── moc - Investing.md                (root navigation)
+├── moc - Investing.md                (root navigation; canonical sector list)
 ├── Frameworks/                       (mental models, methodologies, playbooks)
-├── Photonics/
-│   ├── moc - Photonics.md
-│   ├── Research/                     (cross-ticker sector research)
-│   └── Lumentum (LITE)/              (per-company; auto-created on mention)
-│       ├── Lumentum (LITE).md        (hub MOC — wiki link target)
-│       └── <other notes about LITE>
-├── Drones/
-│   ├── moc - Drones.md
-│   └── Research/
-├── Critical Minerals/
-│   ├── moc - Critical Minerals.md
-│   └── Research/
-├── Compute/
-│   ├── moc - Compute.md
-│   └── Research/
-└── Energy/
-    ├── moc - Energy.md
-    └── Research/
+└── <Sector>/                         (one folder per sector; see moc - Investing.md)
+    ├── moc - <Sector>.md             (sector navigation; canonical ticker list for the sector)
+    ├── Research/                     (cross-ticker sector research notes)
+    ├── _media/                       (images for notes in this sector; created on first use)
+    └── <Name (TICKER)>/              (per-company; auto-created on mention)
+        ├── <Name (TICKER)>.md        (hub MOC — wiki link target)
+        └── <other notes about that ticker>
 ```
+
+**The canonical list of sectors is `moc - Investing.md` under `## Sectors`** (kept accurate by `invest sync` from filesystem reality). Don't hardcode sector names anywhere else — read the root MOC or `ls Investing/` instead.
 
 ## Asking the user
 
@@ -37,7 +28,7 @@ When this file tells you to "ASK USER" or "pause and ask the user" (e.g., new se
 
 The rules differ by folder type:
 
-- **New SECTOR folder** (anything beyond `Photonics/`, `Drones/`, `Critical Minerals/`, `Compute/`, `Energy/`): ALWAYS pause and ask the user via the AskUserQuestion tool. Discuss the sector name and scope. Examples: should a robotics name go under `Drones/`, or does it need a new `Robotics/`? Is `AI Infrastructure/` a separate sector or a slice of `Compute/`?
+- **New SECTOR folder** (any sector NOT already listed in `moc - Investing.md` under `## Sectors`): ALWAYS pause and ask the user via the AskUserQuestion tool. Discuss the sector name and scope. Examples: should a robotics name go under an existing sector, or does it need a new `Robotics/`? Is `AI Infrastructure/` a separate sector or a slice of an existing one? Read `moc - Investing.md` first to see what already exists, then decide.
 
 - **New TICKER folder inside an existing sector**: AUTO-CREATE without interruption. Use the disambiguation rules below to determine the canonical company name and the right sector. The ticker folder always includes a hub MOC named the same as the folder (see "Per-ticker hub MOC" below).
 
@@ -102,18 +93,21 @@ For multi-sector names, manually add a wiki link in the secondary sector's MOC u
 
 The deterministic mechanics of this folder are automated by the `invest` CLI (source: `/data/projects/obsidian-invest-cli/`, install: `uv tool install -e /data/projects/obsidian-invest-cli/`).
 
-Two subcommands:
+Three subcommands:
 
+- `invest add-sector` — atomic sector folder + sector MOC + `Research/` subfolder. Use after the user has approved a NEW sector via AskUserQuestion. Idempotent (no-op if complete; repairs missing MOC or Research/).
+  - Single: `invest add-sector Energy --description "Power generation, behind-the-meter, fuel cells."`
+  - Batch: `echo '[{"name":"Robotics","description":"…"},{"name":"Biotech"}]' | invest add-sector --batch`
 - `invest add-ticker` — atomic ticker folder + hub MOC creation + sector MOC update. Idempotent (no-op if folder exists; will repair a missing hub).
   - Single: `invest add-ticker LITE --name "Lumentum" --sector Photonics --description "US-listed; lasers + transceivers."`
   - Batch: pipe a JSON array on stdin: `echo '[{"ticker":"LITE","name":"Lumentum","sector":"Photonics","description":"..."}]' | invest add-ticker --batch`
-- `invest sync` — regenerate managed sections of all MOCs from folder reality. Run after any capture. Sector-scoped: `invest sync --sector Photonics`.
+- `invest sync` — regenerate managed sections of all MOCs from folder reality. Run after any capture. Sector-scoped: `invest sync --sector Photonics`. `--dry-run` prints unified diffs of every file that would change.
 
-The CLI does NO web search, NO sector disambiguation, NO ticker validity check. The agent is responsible for: canonical company name lookup, sector inference, deciding what is/isn't a real ticker. Once the agent has those, it passes a JSON spec to `invest add-ticker --batch` and the CLI executes the file mechanics atomically.
+The CLI does NO web search, NO sector disambiguation, NO ticker validity check. The agent is responsible for: canonical company name lookup, sector inference, deciding what is/isn't a real ticker. Once the agent has those, it passes a JSON spec to `invest add-ticker --batch` (or `invest add-sector --batch`) and the CLI executes the file mechanics atomically.
 
 Vault auto-detection: the CLI walks up from cwd looking for `Investing/CLAUDE.md`. Run from anywhere inside the vault and it Just Works. Override with `--vault PATH` or `INVEST_VAULT` env var.
 
-Always available flags: `--dry-run` (print plan, write nothing), `--json` (machine-readable result, on `add-ticker`).
+Always available flags: `--dry-run` (preview without writing; on `sync` and `add-*`, prints unified diffs), `--json` (machine-readable result, on `add-*`). Batch mode rejects duplicate specs before any writes.
 
 ## Auto-creating ticker folders from mentions
 
@@ -206,20 +200,26 @@ All MOC managed sections (`## Notes` in hub MOCs, `## Companies` and `## Researc
 
 The ONE exception: `## Cross-sector` sections in sector MOCs (used to surface multi-sector tickers in their non-canonical sector) are not auto-managed in v1; edit those by hand.
 
-When you create a new sector folder (after discussing with the user), `invest sync` will pick it up automatically and add it to the root MOC's `## Sectors`.
+When you create a new sector (after discussing with the user via AskUserQuestion), use `invest add-sector <Name>` — it atomically creates the folder + sector MOC + `Research/` subfolder and updates the root MOC's `## Sectors`.
 
 ## Frontmatter
 
-Follow `url-to-obsidian` defaults:
+Follow `url-to-obsidian` defaults, with the Investing-specific additions below:
 
 ```yaml
 ---
-created: YYYY-MM-DD
+created: YYYY-MM-DD          # date the note was added to the vault (today)
+published: YYYY-MM-DD        # date the SOURCE was originally published; required when source has one
 description: One sentence elaborating the title claim
 source: https://original-url   (or "internal" for synthesized notes)
 type: framework | research | earnings | thesis | analysis | moc
 ---
 ```
+
+### `created` vs `published`
+
+- **`created`** — date the note was added to the vault (today's date when you write the note). Always required.
+- **`published`** — date the SOURCE was originally published (tweet date, article date, paper date, video upload date). Required when source has one; omit for synthesized notes (`source: internal`). For investing this matters a lot — a thesis from 6 months ago is very different from yesterday's, and you shouldn't have to scroll into the Original Content blockquote to find out.
 
 ### Author capture (REQUIRED for opinion/source content)
 
@@ -237,7 +237,49 @@ authors: ["S&J Investments (@SJCapitalInvest)"]
 
 For multi-author posts (e.g., joint Substacks), list all authors. For news-org articles (Bloomberg, FT, Reuters) where the byline is incidental, the author field is optional but include it if prominent (e.g., a named columnist).
 
-No additional structured fields beyond `authors:` (no `ticker:`, no `sectors:`). Discoverability comes from folder structure + wiki links + maximally-informative filenames.
+No additional structured fields beyond `authors:` and `published:` (no `ticker:`, no `sectors:`). Discoverability comes from folder structure + wiki links + maximally-informative filenames.
+
+## Media (images, screenshots)
+
+Captured sources often include images: tweet attachments, article diagrams, PDF figures, video frames. These are part of the note's signal — capture them all.
+
+### Where they live
+
+`Investing/<Sector>/_media/` — one `_media/` folder per sector, holding images for any note in that sector (Research/ notes AND ticker-folder notes). Create the folder on first use; mirrors the existing `Knowledge/<Section>/_media/` convention used elsewhere in the vault.
+
+### Naming
+
+Use a consistent slug prefix per source so all images from one capture sort together:
+
+- **Tweets**: `<author-handle>-<last-6-of-tweet-id>-NNN.<ext>` — e.g., `million_sancet-579181-001.png` (matches the `extract-tweet-images.sh` script's output)
+- **Articles / blog posts**: `<domain-or-author>-<short-id>-NNN.<ext>` — e.g., `bloomberg-photonics-001.png`
+- **Research PDFs**: `<first-author-or-paper-slug>-NNN.<ext>` — e.g., `goldman-2026-optical-001.png`
+
+Numbering is 1-indexed in the order images appear in the source.
+
+### Mandatory extraction
+
+Image extraction is **not optional** for sources that have images. Every tweet, article, and figure-bearing PDF must go through extraction. Don't skip even if the fetched markdown looks "text-only" — the source may have images the text extraction missed.
+
+The `url-to-obsidian` skill provides `extract-tweet-images.sh` for tweets and per-source extraction for web/PDF. Run AFTER determining the destination sector so you target the right `_media/`.
+
+### Strict no-orphans rule
+
+Every image in any `Investing/<Sector>/_media/` MUST be embedded in at least one note. After extraction, review what got pulled:
+
+- **Embed every content image** in the relevant note's body via `![[filename.ext]]` with a brief italic caption above:
+  ```markdown
+  *Goldman 2026 optical supply-chain map (Sancet's annotations in red)*
+  ![[million_sancet-579181-001.png]]
+  ```
+- **Delete non-content artifacts** before commit: profile pics, OG/social cards, decorative icons, navigation elements, tracking pixels.
+- **Verify mechanically** after writing the note: every image with the slug prefix must appear in at least one `![[...]]` embed in the corresponding note.
+
+Orphan images are a quality bug — they signal the agent extracted images but didn't actually use them, or that source images were missed.
+
+### Embedding placement
+
+In the note's **Original Content** section, place embeds at their natural positions in the source's flow (where the image originally appeared). For images that contain key data (charts, tables-as-images), also reference them in **Key Takeaways** if their content isn't otherwise reflected in the prose.
 
 ## Wiki linking
 
