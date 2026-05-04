@@ -10,13 +10,16 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 
 ## Companies
 
+- [[AXT (AXTI)]]
 - [[Applied Optoelectronics (AAOI)]]
 - [[Broadcom (AVGO)]]
 - [[Ciena (CIEN)]]
 - [[Coherent (COHR)]]
+- [[Enablence Technologies (ENA.V)]]
 - [[Furukawa Electric (FUWAY)]]
 - [[Lumentum (LITE)]]
 - [[Mitsubishi Electric (MIELY)]]
+- [[Sivers Semiconductors (SIVE.ST)]]
 - [[Sumitomo Electric (SMTOY)]]
 - [[Viavi (VIAV)]]
 

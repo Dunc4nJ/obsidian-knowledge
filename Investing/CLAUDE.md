@@ -21,16 +21,23 @@ Investing/
 ├── Critical Minerals/
 │   ├── moc - Critical Minerals.md
 │   └── Research/
-└── Compute/
-    ├── moc - Compute.md
+├── Compute/
+│   ├── moc - Compute.md
+│   └── Research/
+└── Energy/
+    ├── moc - Energy.md
     └── Research/
 ```
+
+## Asking the user
+
+When this file tells you to "ASK USER" or "pause and ask the user" (e.g., new sector creation, multi-sector ticker disambiguation, first ticker subfolder), use the **AskUserQuestion** tool rather than free-form prose. Present the decision as discrete labeled options so the user can pick without writing a sentence. Free-form text is fine for follow-up clarification, but the initial decision prompt should go through AskUserQuestion.
 
 ## Folder creation policy
 
 The rules differ by folder type:
 
-- **New SECTOR folder** (anything beyond `Photonics/`, `Drones/`, `Critical Minerals/`, `Compute/`): ALWAYS pause and ask the user. Discuss the sector name and scope. Examples: should a robotics name go under `Drones/`, or does it need a new `Robotics/`? Is `AI Infrastructure/` a separate sector or a slice of `Compute/`?
+- **New SECTOR folder** (anything beyond `Photonics/`, `Drones/`, `Critical Minerals/`, `Compute/`, `Energy/`): ALWAYS pause and ask the user via the AskUserQuestion tool. Discuss the sector name and scope. Examples: should a robotics name go under `Drones/`, or does it need a new `Robotics/`? Is `AI Infrastructure/` a separate sector or a slice of `Compute/`?
 
 - **New TICKER folder inside an existing sector**: AUTO-CREATE without interruption. Use the disambiguation rules below to determine the canonical company name and the right sector. The ticker folder always includes a hub MOC named the same as the folder (see "Per-ticker hub MOC" below).
 
@@ -114,9 +121,20 @@ When a note (especially a sector `Research/` note) mentions a ticker that doesn'
 
 The Goldman-cheat-sheet pattern (one note mentions ~30 tickers) should result in: 1 research note saved + 1 batch invocation of `invest add-ticker --batch` creating ~30 folders + hubs in one shot + the source note edited to wiki-link each new ticker.
 
-### Workflow
+### Subject ticker vs mentioned ticker
 
-1. Save the captured note via `url-to-obsidian` to its destination (typically `<Sector>/Research/<title>.md`).
+Two roles a ticker can play in a captured note. The order of operations differs:
+
+- **Subject ticker** — the company the note is ABOUT. The note physically lives inside this ticker's folder (e.g., a thesis, an earnings recap). Order matters: the folder must exist before the note can be written to it.
+- **Mentioned ticker** — a peer / competitor / supply-chain reference. The note links to it via `[[Name (TICKER)]]` but doesn't live in its folder.
+
+Both kinds get auto-created via `invest add-ticker` if missing. The difference is only WHEN you create them relative to writing the note.
+
+### Workflow A — multi-ticker research note (Goldman cheat sheet pattern)
+
+The source note belongs in `<Sector>/Research/` and references many tickers as peers. No subject ticker; all are mentions.
+
+1. Save the captured note via `url-to-obsidian` to `<Sector>/Research/<title>.md`.
 2. Identify mentioned tickers in the note. For each:
    - Skip if private/non-tradeable (e.g., "Source Photonics — Private").
    - Skip if already has a folder (check `<Sector>/<Name (TICKER)>/`).
@@ -124,7 +142,29 @@ The Goldman-cheat-sheet pattern (one note mentions ~30 tickers) should result in
    - Determine sector. Default = the source note's containing sector. For multi-sector names (e.g., AVGO is Photonics + Compute), pause and ask the user which is canonical.
 3. Build a JSON spec list and pipe to `invest add-ticker --batch`.
 4. Edit the source note to wiki-link each new ticker as `[[Name (TICKER)]]`.
-5. Done — `add-ticker --batch` runs sync internally for affected sectors. Run `invest sync` separately only if you've also added research notes or made manual edits elsewhere.
+5. Run `invest sync` — adding the research note created a new file in `<Sector>/Research/` that the sector MOC needs to pick up. (`add-ticker --batch` only synced the `## Companies` section, not `## Research`.)
+
+### Workflow B — single-company thesis / earnings / analysis note
+
+The source note is ABOUT one company and physically lives inside that ticker's folder. May also mention peer tickers.
+
+1. Identify the **subject ticker**. If its folder doesn't exist yet, run `invest add-ticker SUBJECT --name "..." --sector ... --description "..."` FIRST. Folder + hub get created.
+2. Save the captured note via `url-to-obsidian` to `<Sector>/<Name (TICKER)>/<long-informative-title>.md`.
+3. Identify any mentioned (peer/supply-chain) tickers in the note. Apply the same skip / web-search / disambiguate rules as Workflow A.
+4. If any mentioned tickers need new folders, build a JSON spec and pipe to `invest add-ticker --batch`.
+5. Edit the note to wiki-link the subject AND every mentioned ticker as `[[Name (TICKER)]]`.
+6. Run `invest sync` — REQUIRED. Adding a note inside a ticker folder doesn't auto-trigger sync; only `add-ticker` does. Sync updates the subject ticker's hub `## Notes` to include the new file.
+
+### When `invest sync` is required
+
+`add-ticker` runs sync internally for the sectors it touched, so it covers `## Companies` updates from new ticker folders. Run `invest sync` ADDITIONALLY whenever you've:
+
+- Saved a note inside a `Research/` folder (Workflow A step 5)
+- Saved a note inside an existing ticker folder (Workflow B step 6)
+- Manually moved, renamed, or deleted any file under `Investing/`
+- Manually edited a ticker hub or sector MOC's managed sections (sync rewrites them; do not edit by hand)
+
+If you only ran `add-ticker --batch` and didn't write any notes afterward (pure folder scaffolding), no separate sync is needed.
 
 ### Disambiguation
 
