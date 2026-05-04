@@ -10,7 +10,7 @@ Companies and research covering unmanned aerial systems (UAS) across defense, co
 
 ## Companies
 
-_(none yet)_
+- [[Ondas (ONDS)]]
 
 ## Research
 
