@@ -59,7 +59,7 @@ Discoverability comes from folder structure + wiki links + maximally-informative
 
 ## Tooling: `invest` CLI
 
-Source: `/data/projects/obsidian-invest-cli/`. Install: `uv tool install -e /data/projects/obsidian-invest-cli/`. Auto-detects vault by walking up from cwd looking for `Investing/CLAUDE.md`; override with `--vault PATH` or `INVEST_VAULT` env var.
+Source: `/data/projects/obsidian-invest-cli/` (origin: <https://github.com/Dunc4nJ/obsidian-invest-cli>). Install: `uv tool install -e /data/projects/obsidian-invest-cli/`. Auto-detects vault by walking up from cwd looking for `Investing/CLAUDE.md`; override with `--vault PATH` or `INVEST_VAULT` env var.
 
 | Command | What | Key flags |
 |---|---|---|
