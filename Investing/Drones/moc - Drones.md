@@ -1,0 +1,17 @@
+---
+created: 2026-05-04
+description: Navigation hub for drones — unmanned aerial systems, defense and commercial UAS makers, components, and counter-drone tech.
+type: moc
+---
+
+# Drones
+
+Companies and research covering unmanned aerial systems (UAS) across defense, commercial logistics, and inspection, plus enabling components (motors, batteries, autopilots, sensors) and counter-drone systems.
+
+## Companies
+
+_(populated as ticker folders are created)_
+
+## Research
+
+_(populated as cross-ticker research notes are added under `Research/`)_
