@@ -34,6 +34,20 @@ The rules differ by folder type:
 
 - **New ticker subfolder** (e.g., `Earnings/`, `Theses/` inside a ticker folder): discuss with the user before introducing the first one for a ticker. Most ticker folders should stay flat.
 
+## Sector placement principle
+
+**Place by primary investment thesis, not product taxonomy.**
+
+A name belongs in the sector that captures *why you'd buy it* — the dominant end-market thesis driving its valuation. Supply-chain plays go with the sector they serve, not in an abstract "what they make" bucket.
+
+- **Intermediate-product companies** (substrates, equipment, test gear, components) go in their **dominant end-market** sector. Example: a compound-semi epitaxial wafer maker whose customers are ~all laser/photodiode manufacturers belongs in `Photonics/`, not in an abstract substrate sector. The investing thesis IS the photonics laser ramp; the substrate company rides that wave.
+
+- **Truly horizontal infrastructure** — names serving multiple sectors with no single dominant end market — goes in `Semi Infrastructure/`. Example: TSMC (logic foundry for compute, photonics, RF, mobile, automotive — all of it). If you can't pick a single dominant end market, it's horizontal.
+
+- **Cross-sector exposure**: even when a name's canonical home is clearly one sector, if it has material exposure to another, list it in the secondary sector's MOC under `## Cross-sector` (manually maintained — not auto-managed by `invest sync`).
+
+The test: ask "which sector's thesis breaking would tank this stock the most?" That's the canonical home.
+
 ## Placement decision tree
 
 ```
