@@ -12,7 +12,9 @@ Investing/
 ├── Photonics/
 │   ├── moc - Photonics.md
 │   ├── Research/                     (cross-ticker sector research)
-│   └── Name (TICKER)/                (per-company; created on demand)
+│   └── Lumentum (LITE)/              (per-company; auto-created on mention)
+│       ├── Lumentum (LITE).md        (hub MOC — wiki link target)
+│       └── <other notes about LITE>
 ├── Drones/
 │   ├── moc - Drones.md
 │   └── Research/
@@ -24,14 +26,15 @@ Investing/
     └── Research/
 ```
 
-## Discuss before creating new folders
+## Folder creation policy
 
-DO NOT silently create a new sector folder or a new ticker subfolder. If the placement decision tree below would require creating a folder that does not exist, **pause and ask the user to confirm**:
+The rules differ by folder type:
 
-- For a new **sector folder** (beyond the four scaffolded above): confirm the sector name and scope. Examples to discuss: should a robotics name go under `Drones/`, or does it need a new `Robotics/`? Is `AI Infrastructure/` a separate sector or a slice of `Compute/`?
-- For a new **ticker subfolder** inside an existing sector: confirm the canonical short name and the primary-sector fit. Examples to discuss: is it `Lumentum (LITE)/` or `Lumentum Holdings (LITE)/`? Does AVGO live under `Photonics/` or `Compute/`?
+- **New SECTOR folder** (anything beyond `Photonics/`, `Drones/`, `Critical Minerals/`, `Compute/`): ALWAYS pause and ask the user. Discuss the sector name and scope. Examples: should a robotics name go under `Drones/`, or does it need a new `Robotics/`? Is `AI Infrastructure/` a separate sector or a slice of `Compute/`?
 
-Only create the folder once the user confirms. This applies to both new sectors and new ticker folders inside existing sectors.
+- **New TICKER folder inside an existing sector**: AUTO-CREATE without interruption. Use the disambiguation rules below to determine the canonical company name and the right sector. The ticker folder always includes a hub MOC named the same as the folder (see "Per-ticker hub MOC" below).
+
+- **New ticker subfolder** (e.g., `Earnings/`, `Theses/` inside a ticker folder): discuss with the user before introducing the first one for a ticker. Most ticker folders should stay flat.
 
 ## Placement decision tree
 
@@ -41,19 +44,74 @@ If the note is a framework / methodology / mental model:
 
 If the note is about ONE specific company:
   → Investing/<Sector>/<Name (TICKER)>/
-  If the sector folder is missing → DISCUSS with user first (name + scope).
-  If the ticker folder is missing → DISCUSS with user first (canonical name).
+  If the sector folder is missing → ASK USER first (sector name + scope).
+  If the ticker folder is missing → AUTO-CREATE folder + hub MOC.
   For multi-sector names: pick the strongest-fit sector as canonical home;
-  update other sectors' MOCs to wiki-link to it.
+  add a wiki link in other sectors' MOCs under "Cross-sector".
 
 If the note spans multiple tickers within one sector
   (e.g., a sector-wide cheat sheet, regulatory analysis, supply-chain map):
   → Investing/<Sector>/Research/
+  Auto-create folders + hub MOCs for any mentioned tickers that don't have
+  one yet (see "Auto-creating ticker folders from mentions").
 
 If the note spans multiple sectors
   (broker access, macro thesis, cross-sector regulation):
   → defer / ask the user. No standard home yet.
 ```
+
+## Per-ticker hub MOC
+
+Every ticker folder contains a hub note named **exactly the same as the folder** (e.g., `Lumentum (LITE)/Lumentum (LITE).md`). This is what wiki links like `[[Lumentum (LITE)]]` resolve to.
+
+The hub is a **Map of Content** for the ticker — its purpose is to list every note in the folder so you can navigate from one entry point.
+
+### Hub stub (created with the folder)
+
+```yaml
+---
+created: YYYY-MM-DD
+description: <Company Name> (<TICKER>) — <one-line context: exchange, business line>
+type: moc
+---
+
+# <Company Name> (<TICKER>)
+
+<1–2 sentence context: exchange, sector(s), what the business does, why it's
+on the radar. Web-searched at folder creation time.>
+
+## Notes
+
+_(populated as notes are added to this folder)_
+```
+
+### Hub upkeep — MANDATORY
+
+When you add ANY new note inside a ticker folder, you MUST also append a wiki link to that note in the ticker hub MOC under `## Notes`. Every capture is a 2-file edit (the new note + the hub MOC).
+
+For multi-sector names, also update the secondary sector's MOC under a `## Cross-sector` section with a wiki link to the ticker hub.
+
+## Auto-creating ticker folders from mentions
+
+When a note (especially a sector `Research/` note) mentions a ticker that doesn't have a folder yet, **auto-create the folder + hub MOC**. Do not interrupt the user for each ticker — these decisions should be made at capture time using the disambiguation rules below.
+
+The Goldman-cheat-sheet pattern (one note mentions ~30 tickers) should result in: 1 research note saved + ~30 ticker folders + hubs auto-created + each hub wiki-linked from the research note + each new ticker added to the sector MOC under `## Companies`.
+
+### Disambiguation
+
+For each mentioned ticker, determine:
+
+1. **Canonical company name** for the folder — use the most common short name (e.g., `Lumentum`, not `Lumentum Holdings Inc.`). If you don't know it, do a quick web search. Format: `Name (TICKER)/`.
+
+2. **Sector** — inferred from the source note's containing folder. If the source note is in `Photonics/Research/`, all mentioned tickers default to `Photonics/`. If the ticker is genuinely multi-sector (e.g., AVGO is photonics AND compute), pause and ask the user which sector should be the canonical home.
+
+3. **Ticker format inside parens** — for non-US tickers include the exchange suffix if it disambiguates: `Sumitomo Electric (5802.T)/` (Tokyo) vs `Sumitomo Electric (SMTOY)/` (US OTC ADR). Pick the listing you would actually trade.
+
+4. **Skip non-tradeable mentions** — if a name is private (e.g., "Source Photonics — Private") or not a real ticker (a generic acronym in caps that isn't a stock), do NOT create a folder. Just don't wiki-link it.
+
+### Cross-sector wiki linking
+
+A wiki link `[[Lumentum (LITE)]]` resolves to the hub `.md` file regardless of which folder it lives in. So when a `Compute/Research/` note mentions LITE (whose canonical home is `Photonics/`), the link still works without duplication. Add LITE to `Compute/moc - Compute.md` under `## Cross-sector` so it's discoverable from both sector MOCs.
 
 ## Title convention for general / research notes
 
@@ -67,21 +125,18 @@ Titles must be **maximally informative** so future agents can triage by filename
 
 Rule of thumb: someone reading only the filename should know the WHAT, the SO-WHAT, and roughly WHEN. This matches the existing vault pattern (e.g., `SJ Investments asymmetric investing framework screens for compressed valuations with uncapped upside.md`).
 
-Applies to: `Research/` notes, sector overviews, cross-ticker analyses, and ticker-folder notes alike.
-
-## Ticker folder naming
-
-`Name (TICKER)/`. Use the most common short name (e.g., `Lumentum (LITE)/`, not `Lumentum Operations LLC (LITE)/`). For non-US tickers, include the exchange suffix in the ticker if it disambiguates (e.g., `Sumitomo Electric (5802.T)/` vs `Sumitomo Electric (SMTOY)/` if you're tracking the ADR).
+Applies to: `Research/` notes, sector overviews, cross-ticker analyses, and ticker-folder notes alike. **Exception**: ticker hub MOCs use the bare folder name as their filename (e.g., `Lumentum (LITE).md`), not a maximally-informative title — the hub is a navigation file, not a content note.
 
 ## Inside a ticker folder
 
-Start with **flat files**. Use the same maximally-informative title convention. Once a name accumulates 5+ notes spanning multiple categories, allow subfolders like `Earnings/`, `Theses/`, `Risk/`. Discuss with the user before introducing the first subfolder for a ticker.
+Start with **flat files** alongside the hub MOC. Use the maximally-informative title convention for content notes. Once a name accumulates 5+ notes spanning multiple categories, allow subfolders like `Earnings/`, `Theses/`, `Risk/`. Discuss with the user before introducing the first subfolder for a ticker.
 
-## MOC update rule
+## MOC update rule (consolidated)
 
-- When adding a **new ticker folder** or a notable **Research/ note**, update the parent sector's `moc - <Sector>.md` with a wiki link.
-- When adding a **new sector folder**, update root `moc - Investing.md`.
-- When a ticker is multi-sector, add the wiki link to the secondary sector's MOC (under a "Cross-sector" sub-section if needed) so the ticker is discoverable from both.
+- **New ticker folder created** → update the parent sector's `moc - <Sector>.md` with `[[Name (TICKER)]]` under `## Companies`. For multi-sector names, also update the secondary sector's MOC under `## Cross-sector`.
+- **New `Research/` note added** → update the parent sector's MOC under `## Research` with the wiki link.
+- **New note inside a ticker folder** → update that ticker's hub MOC under `## Notes` with the wiki link. (See "Hub upkeep — MANDATORY".)
+- **New sector folder created** → update root `moc - Investing.md` under `## Sectors`.
 
 ## Frontmatter
 
@@ -96,14 +151,31 @@ type: framework | research | earnings | thesis | analysis | moc
 ---
 ```
 
-No additional structured fields (no `ticker:`, no `sectors:`). Discoverability comes from folder structure + wiki links + maximally-informative filenames.
+### Author capture (REQUIRED for opinion/source content)
+
+When the captured content is from an attributable individual — **X (Twitter) posts, Substack articles, blog posts, podcast episodes, YouTube videos, newsletters** — include an `authors:` field with the source's display name and handle. This matters for investing notes because the credibility/track record of the author is part of the signal.
+
+```yaml
+---
+created: 2026-05-04
+description: ...
+source: https://x.com/SJCapitalInvest/status/...
+type: framework
+authors: ["S&J Investments (@SJCapitalInvest)"]
+---
+```
+
+For multi-author posts (e.g., joint Substacks), list all authors. For news-org articles (Bloomberg, FT, Reuters) where the byline is incidental, the author field is optional but include it if prominent (e.g., a named columnist).
+
+No additional structured fields beyond `authors:` (no `ticker:`, no `sectors:`). Discoverability comes from folder structure + wiki links + maximally-informative filenames.
 
 ## Wiki linking
 
 Cross-link liberally between ticker folders and sector `Research/` notes. Use inline `[[Note Name]]` style woven into prose (matches the rest of the vault). Examples:
 
-- A `Photonics/Research/` note discussing the Goldman cheat sheet should wiki-link to each ticker folder it mentions: `[[Lumentum (LITE)]]`, `[[Coherent (COHR)]]`, etc.
+- A `Photonics/Research/` note discussing the Goldman cheat sheet should wiki-link to each ticker mentioned: `[[Lumentum (LITE)]]`, `[[Coherent (COHR)]]`, etc. Each link resolves to that ticker's hub MOC.
 - A ticker folder note should wiki-link back to the sector `Research/` notes that contextualize its thesis.
+- The ticker hub MOC's `## Notes` section is itself a list of wiki links to every other note in the folder.
 
 ## What this folder is NOT for
 
