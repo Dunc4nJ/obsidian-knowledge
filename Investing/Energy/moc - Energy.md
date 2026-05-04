@@ -11,6 +11,8 @@ Companies and research covering electricity generation and behind-the-meter powe
 ## Companies
 
 - [[Bloom Energy (BE)]]
+- [[Capstone Power+ (CGEH)]]
+- [[GE Vernova (GEV)]]
 
 ## Research
 

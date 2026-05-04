@@ -10,7 +10,9 @@ Companies and research covering compute capacity providers — companies that ow
 
 ## Companies
 
-_(none yet)_
+- [[Eaton (ETN)]]
+- [[Oracle (ORCL)]]
+- [[Vertiv (VRT)]]
 
 ## Research
 
