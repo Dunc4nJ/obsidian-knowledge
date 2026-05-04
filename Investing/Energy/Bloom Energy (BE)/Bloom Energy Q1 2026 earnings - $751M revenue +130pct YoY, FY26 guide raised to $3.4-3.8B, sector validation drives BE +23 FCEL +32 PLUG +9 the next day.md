@@ -469,5 +469,3 @@ authors: ["Bloom Energy"]
 > Bloom Energy
 >
 > Source: Bloom Energy
-</content>
-</invoke>
