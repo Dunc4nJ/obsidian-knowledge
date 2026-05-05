@@ -1,0 +1,13 @@
+---
+created: 2026-05-05
+description: Ambarella (AMBA) — Low-power vision AI processors (SoCs) for cameras, drones, robots, automotive ADAS, and industrial edge devices. ~80% of fiscal 2026 revenue from edge AI, 42M+ SoCs shipped, 370+ AI products in production.
+type: moc
+---
+
+# Ambarella (AMBA)
+
+Low-power vision AI processors (SoCs) for cameras, drones, robots, automotive ADAS, and industrial edge devices. ~80% of fiscal 2026 revenue from edge AI, 42M+ SoCs shipped, 370+ AI products in production.
+
+## Notes
+
+_(none yet)_
