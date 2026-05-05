@@ -13,4 +13,5 @@ Penguin Solutions (NASDAQ: PENG, formerly SMART Global Holdings) — system inte
 ## Notes
 
 - [[PENG MemoryAI CXL KV Cache server ships with Tier-1 bank win, FY26 guide raised to 1.5-1.6B - Stockinger institutional brief]]
+- [[PENG SK Hynix HBF memory tier plus Celestial photonics at 1x sales 2x memory revenue - ThematicTrader bull thesis]]
 - [[Penguin Solutions (PENG) is the named chassis builder for the Marvell-Celestial AI photonic memory appliance shipping late 2026 - Pennycheck thesis]]
