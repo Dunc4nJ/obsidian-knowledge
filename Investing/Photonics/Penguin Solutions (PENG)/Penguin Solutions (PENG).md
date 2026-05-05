@@ -12,6 +12,7 @@ Penguin Solutions (NASDAQ: PENG, formerly SMART Global Holdings) — system inte
 
 ## Notes
 
+- [[ALAB Q1 2026 blowout (rev +93pct YoY beat by 5pct, EPS +85pct YoY beat by 13pct) is a positive CXL read-through to PENG MemoryAI - ThematicTrader]]
 - [[Gazettabyte 2025 - Marvell bets big on optical IO with $3.25B Celestial deal names Penguin Computing as 2RU chassis builder for the Photonic Fabric Appliance]]
 - [[PENG MemoryAI CXL KV Cache server ships with Tier-1 bank win, FY26 guide raised to 1.5-1.6B - Stockinger institutional brief]]
 - [[PENG Optical Memory Appliance unlocks 1000TB cluster pool vs 11TB copper KV cache, 70pct cost-per-query reduction - BryzonX thesis]]

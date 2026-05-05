@@ -10,6 +10,7 @@ Companies and research covering fabless chip designers — companies that design
 
 ## Companies
 
+- [[Astera Labs (ALAB)]]
 - [[Broadcom (AVGO)]]
 - [[Nvidia (NVDA)]]
 - [[Qualcomm (QCOM)]]
