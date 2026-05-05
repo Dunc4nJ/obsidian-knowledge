@@ -10,4 +10,4 @@ Low-power vision AI processors (SoCs) for cameras, drones, robots, automotive AD
 
 ## Notes
 
-_(none yet)_
+- [[Crux Capital opens AMBA position as #1 edge AI pick with $90-95 base case on CV72 CV75 CV7 N1 product cycle]]
