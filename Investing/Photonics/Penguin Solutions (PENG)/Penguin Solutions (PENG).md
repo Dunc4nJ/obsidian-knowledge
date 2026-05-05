@@ -18,4 +18,5 @@ Penguin Solutions (NASDAQ: PENG, formerly SMART Global Holdings) — system inte
 - [[PENG Q2 FY26 transcript - Shaikh confirms PMA development partnership with Celestial-now-Marvell, $32M disposition proceeds (mostly Marvell stock), $27.5M GAAP gain (April 1 2026)]]
 - [[PENG SK Hynix HBF memory tier plus Celestial photonics at 1x sales 2x memory revenue - ThematicTrader bull thesis]]
 - [[PENG forensic insider Form 4 audit Nov 2025 to May 2026 - 10b5-1 plans adopted at narrative inflection but $ scale is small relative to volume]]
+- [[PENG synthesized thesis - 600 of 1000 asymmetric rating with Q3 FY26 print July 7-8 as 8-week catalyst, 5x bull-bear payoff at 1.22x forward P S]]
 - [[Penguin Solutions (PENG) is the named chassis builder for the Marvell-Celestial AI photonic memory appliance shipping late 2026 - Pennycheck thesis]]
