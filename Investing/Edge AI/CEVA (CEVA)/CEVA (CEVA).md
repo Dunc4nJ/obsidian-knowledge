@@ -10,4 +10,4 @@ IP licensing — reusable chip building blocks (NPU, DSP, Bluetooth/Wi-Fi/cellul
 
 ## Notes
 
-_(none yet)_
+- [[UBS bulls CEVA on Apple modem content gains then edge AI and robotics ramp in 2027-2028]]
