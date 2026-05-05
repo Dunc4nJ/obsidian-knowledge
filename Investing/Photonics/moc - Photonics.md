@@ -26,6 +26,7 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 ### Foundries
 
 - [[Tower Semiconductor (TSEM)]]
+- [[Win Semi (3105.TWO)]]
 
 ### Lasers
 

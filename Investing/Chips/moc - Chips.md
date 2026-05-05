@@ -12,6 +12,7 @@ Companies and research covering fabless chip designers — companies that design
 
 - [[Broadcom (AVGO)]]
 - [[Nvidia (NVDA)]]
+- [[Qualcomm (QCOM)]]
 
 ## Research
 
