@@ -45,12 +45,14 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 - [[Enablence Technologies (ENA.V)]]
 - [[Furukawa Electric (FUWAY)]]
 - [[Lumentum (LITE)]]
+- [[Marvell Technology (MRVL)]]
 - [[Sumitomo Electric (SMTOY)]]
 - [[Viavi (VIAV)]]
 
 ### Networking systems
 
 - [[Ciena (CIEN)]]
+- [[Penguin Solutions (PENG)]]
 
 ### Equipment & test
 
