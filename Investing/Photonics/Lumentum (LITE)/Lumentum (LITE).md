@@ -13,4 +13,4 @@ US-listed; lasers and optical transceivers.
 
 ## Notes
 
-_(none yet)_
+- [[Crux Capital LITE Q2 FY26 readout - EML 25-30 pct supply gap, all capacity locked under LTAs through CY2027, OCS backlog past $400M, CPO and UHP into 1H 2027]]
