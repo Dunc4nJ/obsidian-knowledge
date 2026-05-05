@@ -12,4 +12,4 @@ Penguin Solutions (NASDAQ: PENG, formerly SMART Global Holdings) — system inte
 
 ## Notes
 
-_(none yet)_
+- [[Penguin Solutions (PENG) is the named chassis builder for the Marvell-Celestial AI photonic memory appliance shipping late 2026 - Pennycheck thesis]]
