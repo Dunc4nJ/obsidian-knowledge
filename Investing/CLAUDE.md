@@ -39,6 +39,14 @@ Every captured note from an external source — **tweets, articles, blog posts, 
 
 The skill handles fetching, URL classification, image extraction, frontmatter, verbatim Original Content preservation, and image embedding. This file then governs WHERE the saved note lands and what `invest` CLI mechanics run after. If you find yourself writing a `---\ncreated: ...\n---` block by hand for a captured source, stop and use the skill.
 
+## Primary sources before synthesis
+
+Deep research that draws on multiple primary sources MUST capture those sources as standalone notes BEFORE writing the synthesis. The synthesis then wiki-links to each capture instead of paraphrasing — every claim traces back to a verbatim original.
+
+**The bar**: capture-as-own-note if you'd cite it more than once OR want to re-read it in 6 months. Press releases, contract announcements, capital-raise filings, analyst notes, transcripts, regulatory filings all clear it. Point-in-time aggregator pages (current price, PT consensus, market-cap screens) do NOT — those stay inline as plain URLs.
+
+**Pattern**: delegate captures in parallel to subagents. Each subagent invokes `/url-to-obsidian` with explicit instructions to (a) place the note in the appropriate Investing folder per the placement matrix above (NOT `Knowledge/...`), and (b) skip git operations and `invest sync`. Parent runs `invest sync` once after all captures complete, then edits the synthesis to wiki-link each captured source, then batches one commit.
+
 ## Frontmatter
 
 All fields shown — only these are recognized (no `ticker:`, no `sectors:`):
