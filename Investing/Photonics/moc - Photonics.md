@@ -63,6 +63,7 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 
 ## Research
 
+- [[Celestial Photonic Fabric Platform for AI Accelerators - arXiv 2507.14000 specs 33TB unified memory and 115Tbps all-to-all switching across 16 XPUs (Ding Diep 2025)]]
 - [[Goldman 2026 AI optical cheat sheet maps EPS upside across lasers PCBs and CCL manufacturers]]
 - [[Sancet 2026 - Goldman optical cheat sheet omits substrate epi equipment and laser layers (IQE Soitec Tower Aixtron AEHR LPKF SIVE)]]
 

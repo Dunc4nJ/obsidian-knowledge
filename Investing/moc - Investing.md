@@ -25,5 +25,6 @@ For shorter-horizon systematic trading content see `Trading/`. For prediction-ma
 - [[moc - Edge AI]]
 - [[moc - Energy]]
 - [[moc - Industrials]]
+- [[moc - Memory]]
 - [[moc - Photonics]]
 - [[moc - Semi Infrastructure]]

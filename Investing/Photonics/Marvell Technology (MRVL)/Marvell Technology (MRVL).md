@@ -12,4 +12,4 @@ Marvell Technology (NASDAQ: MRVL) — fabless chip designer; DCI/AEC optical int
 
 ## Notes
 
-_(none yet)_
+- [[Marvell-Celestial AI acquisition - $3.25B upfront plus $2.25B earnout for photonic interconnect IP and scale-up connectivity (Dec 2 2025)]]
