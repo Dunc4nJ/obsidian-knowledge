@@ -16,3 +16,8 @@ Anchor catalysts: December 2025 prime contract for an autonomous border-protecti
 
 - [[ONDS 195M long-dated warrants drive 161M-share delta hedge that caps stock momentum per Spacanpanman]]
 - [[Ondas (ONDS) deep research - autonomous drone consolidator scaling from 50M to 375M with 195M-warrant overhang as structural cap]]
+- [[Ondas 2025-Q4 earnings - $30.1M Q4 (+629pct YoY), $50.7M FY (+605pct), 2026 guide raised to $375M+]]
+- [[Ondas 4M Defense receives $10M initial of $50M Israel eastern-border demining award under $1.7B MoD barrier initiative Apr 2026]]
+- [[Ondas prices 1B Jan 2026 offering above market - 60.8M CSE plus 121.6M warrants at 28 strike 7-year expiry]]
+- [[Ondas prices 425M Oct 2025 offering above market - 37.0M CSE plus 73.9M warrants at 20 strike 7-year expiry priced at 11.50 per unit]]
+- [[Ondas wins Dec 2025 prime government tender to deploy thousands of autonomous drones for full-scale border-protection system multi-year multi-phase]]

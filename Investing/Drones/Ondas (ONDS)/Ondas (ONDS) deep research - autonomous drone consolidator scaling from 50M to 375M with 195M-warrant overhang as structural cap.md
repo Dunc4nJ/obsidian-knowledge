@@ -60,9 +60,10 @@ This is where the [[ONDS 195M long-dated warrants drive 161M-share delta hedge t
 
 - **Common shares outstanding**: 489M
 - **Warrants outstanding**: 195.5M (7-year expiry, two tranches)
-  - **Tranche 1** (Oct 2025 $425M offering): 73.92M warrants @ **$20.00 strike**, exercisable upon stockholder approval to increase authorized shares
-  - **Tranche 2** (Jan 2026 $1B offering): 121.58M warrants @ **$28.00 strike**, immediately exercisable
-- **Fully diluted (if all warrants exercise)**: 684.5M shares (+40% dilution from current)
+  - **Tranche 1** ([[Ondas prices 425M Oct 2025 offering above market - 37.0M CSE plus 73.9M warrants at 20 strike 7-year expiry priced at 11.50 per unit|Oct 2025 $425M offering]]): 73.92M warrants @ **$20.00 strike**, exercisable upon stockholder approval to increase authorized shares. Per-unit price $11.50 (~65% premium to 1-month VWAP — institutional placement, not distressed).
+  - **Tranche 2** ([[Ondas prices 1B Jan 2026 offering above market - 60.8M CSE plus 121.6M warrants at 28 strike 7-year expiry|Jan 2026 $1B offering]]): 121.58M warrants @ **$28.00 strike**, immediately exercisable. Per-unit price $16.45 (17.5% premium to Jan 8 close); use-of-proceeds language explicitly M&A-only ("acquisitions, joint ventures, investments").
+- **Fully diluted (if all warrants exercise)**: 684.5M shares (+40% dilution from current). Full exercise would also generate ~$3.4B additional cash → theoretical $4.4B+ total raised from these two offerings combined.
+- **Cash-settlement contingency** (the actual structural cause of the delta hedge): per the Oct 2025 prospectus, the Tranche 1 warrants have **no reserved underlying shares** as of issuance and **may cash-settle after January 31, 2026** if stockholder authorization to increase authorized shares is delayed. You can't hedge with future shares that don't exist yet — so the hedge has to be in spot common. This is the mechanism the [[ONDS 195M long-dated warrants drive 161M-share delta hedge that caps stock momentum per Spacanpanman]] thread describes from the trader's view.
 
 The mechanical issue: warrant holders delta-hedge by shorting common, which puts persistent supply on the tape. At ~$10 stock price, total delta across both tranches is ~161M shares short; recorded short interest is 131M. As price rises toward the $20 / $28 strikes, deltas grow — at $13 the delta is 180M, requiring an additional ~19M shares of short supply per ~$3 of upside. That's a soft cap.
 
@@ -76,8 +77,8 @@ What it would take to break the cap: stock above $28+ with sustained momentum, a
 
 Ranked by near-term P&L impact:
 
-1. **December 2025 border-protection prime contract** — Ondas announced selection as prime for a "major governmental entity" multi-year program; "thousands of autonomous drones" for border ISR + swarm response + threat mitigation. Initial PO expected January 2026. Single largest line item in the 2026 guide; specifics undisclosed but likely Israeli MoD given subsidiary footprint and timing.
-2. **April 2026 4M Defense demining award** — $10M initial / $50M total order against Israel's $1.7B Eastern Border Security Barrier (500km Jordan border). Concrete, dollar-quantified, and announced. Demining is non-glamorous but high-margin and recurring as the barrier project advances through 2027+.
+1. **[[Ondas wins Dec 2025 prime government tender to deploy thousands of autonomous drones for full-scale border-protection system multi-year multi-phase|December 2025 border-protection prime contract]]** — Ondas announced selection as prime for a "major governmental entity" multi-year program; "thousands of autonomous drones" for border ISR + swarm response + threat mitigation. Initial PO expected January 2026. Single largest line item in the 2026 guide; specifics undisclosed but likely Israeli MoD given subsidiary footprint and timing. **OAS reportedly beat "leading global defense primes" on all evaluation criteria to win prime status** — a Tier-1 head-to-head competitive defeat, not a commercial pilot, which materially upgrades the credibility of the OAS roll-up thesis.
+2. **[[Ondas 4M Defense receives $10M initial of $50M Israel eastern-border demining award under $1.7B MoD barrier initiative Apr 2026|April 2026 4M Defense demining award]]** — $10M initial / $50M total order against Israel's $1.7B Eastern Border Security Barrier (500km Jordan border). Concrete, dollar-quantified, and announced. CEO Brock framed this and the border tender together as **"two active programs, ~$80M aggregate"** — the first time management has anchored 2026 commentary on contracted backlog rather than pipeline language. Demining is non-glamorous but high-margin and recurring as the barrier project advances through 2027+.
 3. **Q1 / Q2 2026 earnings cadence** — first prints under the new revenue scale. Watch (a) OAS organic growth rate (was 63% in 2025), (b) backlog conversion, (c) Networks attach (any rail wins?), (d) integration drag in gross margin from acquisitions.
 4. **Ondas Capital first deals** — when the Ukraine-bridge fund makes its first announced strategic investment, the market will rerate on the believability of that pipeline. Until announcements appear, it remains slideware.
 5. **Optimus FAA expansions** — every new use case approved (e.g., flight over people, BVLOS in new geographies) is a structural moat-deepener vs. competitors still applying for waivers.
@@ -94,6 +95,7 @@ Ranked by near-term P&L impact:
 
 - **Warrant gravity caps upside until 2027+.** Per the warrant math, every push toward $20 invites another ~10M shares of delta-hedged short supply per dollar. Patient holders win; momentum traders lose. This is not a discount — it's a structural drag baked into the cap table for 7 years.
 - **Valuation already prices flawless execution.** 94x trailing P/S, ~13x 2026 guide. Any miss against the $375M target — even a beat at $300M — risks a multiple compression. Morningstar's $4.83 fair value implies the market is wrong by ~50%. That spread is uncomfortably wide.
+- **2026 guide is M&A-contingent, not run-rate.** Per the [[Ondas 2025-Q4 earnings - $30.1M Q4 (+629pct YoY), $50.7M FY (+605pct), 2026 guide raised to $375M+|Q4 2025 release]], the $375M target was raised from $110M just two months earlier (January 2026 prior outlook) and is **explicitly tied to acquisitions not yet closed** — including a $175M Mistral deal expected to close Q2 2026. The guide isn't "what the existing business produces"; it's "what existing business plus 1-2 new acquisitions produces." If Mistral or another deal slips or breaks, the guide breaks with it. Watch deal closes more than organic prints.
 - **Customer concentration on Israeli MoD.** Both anchor 2026 catalysts (border tender, 4M demining) trace to Israel. A geopolitical shift, budget shift, or specific program slowdown would gap revenue meaningfully.
 - **Integration risk across six recent acquisitions.** Roboteam, Apeiro, Sentrycs, 4M Defense, plus older Airobotics/American Robotics. Each has its own engineering culture, ERP, gross-margin profile. Lookout for goodwill writedowns and gross-margin choppiness over the next 4-6 quarters.
 - **Roll-up multiples don't survive disappointment.** Defense-tech roll-ups rerate fast both directions. Compare: AeroVironment's compression after a single guide cut. Ondas is currently in the "everything-priced-in" regime.
@@ -131,13 +133,18 @@ Counter-UAS pure-plays for sentiment context: Anduril (private), Epirus (private
 
 ## Sources used
 
-- [Ondas Inc. Reports Record Q4 and Full Year 2025](https://ir.ondas.com/press-releases/detail/296/ondas-inc-reports-record-fourth-quarter-and-full-year-2025) — Q4 results, 2026 guide raise to $375M+
-- [Ondas Wins Strategic Government Tender](https://ir.ondas.com/press-releases/detail/261/ondas-wins-strategic-government-tender-to-develop-and) — December 2025 prime contract
-- [Ondas $10M Initial / $50M Demining Award](https://ir.ondas.com/press-releases/detail/303/ondas-receives-10-million-initial-order-part-of-a-50) — April 2026 4M Defense order
-- [Ondas $1B Stock and Warrant Sale Above Market](https://ir.ondas.com/press-releases/detail/271/ondas-holdings-inc-successfully-prices-1-billion-stock) — Jan 2026 capital raise, $28 strike warrants
-- [Ondas $425M Stock and Warrant Sale](https://ir.ondas.com/press-releases/detail/245/ondas-holdings-inc-successfully-prices-a-425-million) — Oct 2025 capital raise, $20 strike warrants
-- [Ondas Q4 2025 Earnings Call Highlights (GuruFocus)](https://www.gurufocus.com/news/8743470/ondas-inc-onds-q4-2025-earnings-call-highlights-record-revenue-growth-and-strategic-acquisitions-propel-future-outlook) — segment growth detail, backlog
+**Primary-source captures (verbatim notes in this folder, each linked above where cited):**
+
+- [[Ondas 2025-Q4 earnings - $30.1M Q4 (+629pct YoY), $50.7M FY (+605pct), 2026 guide raised to $375M+]] — anchor numbers for revenue / guide / segment / backlog; reveals the $375M is M&A-contingent including the $175M Mistral deal expected Q2 2026
+- [[Ondas wins Dec 2025 prime government tender to deploy thousands of autonomous drones for full-scale border-protection system multi-year multi-phase]] — December 2025 prime contract; OAS beat "leading global defense primes" on all evaluation criteria
+- [[Ondas 4M Defense receives $10M initial of $50M Israel eastern-border demining award under $1.7B MoD barrier initiative Apr 2026]] — April 2026 4M Defense order; CEO Brock's "two active programs, ~$80M aggregate" framing
+- [[Ondas prices 1B Jan 2026 offering above market - 60.8M CSE plus 121.6M warrants at 28 strike 7-year expiry]] — Jan 2026 capital raise; $16.45/unit (17.5% premium); $28 warrant strike (70% premium to offering); use-of-proceeds explicitly M&A-only
+- [[Ondas prices 425M Oct 2025 offering above market - 37.0M CSE plus 73.9M warrants at 20 strike 7-year expiry priced at 11.50 per unit]] — Oct 2025 capital raise; $11.50/unit at ~65% above 1-month VWAP; warrants have NO reserved underlying shares and may cash-settle after Jan 31, 2026 — the actual structural cause of the persistent delta-hedge shorting
+- [[ONDS 195M long-dated warrants drive 161M-share delta hedge that caps stock momentum per Spacanpanman]] — trader's-view thread that anchored the warrant analysis
+
+**External references (point-in-time, not captured to vault — drift daily):**
+
+- [Ondas Q4 2025 Earnings Call Highlights (GuruFocus)](https://www.gurufocus.com/news/8743470/ondas-inc-onds-q4-2025-earnings-call-highlights-record-revenue-growth-and-strategic-acquisitions-propel-future-outlook) — call commentary on segment growth and backlog
 - [Stock Analysis ONDS overview](https://stockanalysis.com/stocks/onds/) — current price, market cap, P/S
 - [TipRanks ONDS price target consensus](https://www.tipranks.com/stocks/onds/forecast) — 6-analyst Strong Buy consensus, $20 average PT
 - [Ondas Company Overview](https://www.ondas.com/company-overview) — segment architecture, OAS subsidiary list
-- [[ONDS 195M long-dated warrants drive 161M-share delta hedge that caps stock momentum per Spacanpanman]] — thread that anchored the warrant analysis
