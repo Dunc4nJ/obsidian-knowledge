@@ -203,7 +203,20 @@ Start with **flat files** alongside the hub MOC. Use the maximally-informative t
 
 Captured sources often include images — they're part of the signal, capture them all.
 
-**Where**: `Investing/<Sector>/_media/` — one `_media/` folder per sector, holding images for any note in that sector (Research/ AND ticker-folder notes). Create on first use.
+**Triage every image first** — not all images should be saved as files. Decide per image:
+
+| Image content | Action |
+|---|---|
+| Pure text (screenshot of article, transcript, tweet, slide, doc, code, post) | **Transcribe verbatim inline** at the image's natural position in Original Content. Do NOT save the file to `_media/`. Annotate with a short bracket header (e.g. `[Image — screenshot of LITE Q2 FY26 transcript; transcribed verbatim below]`) so the reader knows the text came from an image. |
+| Mixed (text + chart/diagram, slide with both) | Save the image AND transcribe the text portion. The visual is signal too. |
+| Table-as-image | Transcribe as a markdown table. Skip saving. |
+| Pure visual (chart, diagram, photo, schematic, infographic, supply-chain map) | Save to `_media/` and embed per the rules below. |
+
+**Why**: text-as-image is unsearchable, un-quotable by future agents, costs repo space, and depends on Obsidian image rendering. Transcribed text goes into qmd/grep, can be pulled into wiki-link context, and survives image link rot. Saving JPGs of paragraphs is the wrong default.
+
+**Preserve emphasis**: if the source highlights / underlines / selects a passage in a screenshot (common in annotation screenshots), bold the selected portion in the transcription so the author's emphasis survives. Example: if the author screenshotted a transcript and highlighted one sentence, the transcribed block should put that sentence in `**bold**` inside the surrounding plain-text context.
+
+**Where** (for images that pass triage): `Investing/<Sector>/_media/` — one `_media/` folder per sector, holding images for any note in that sector (Research/ AND ticker-folder notes). Create on first use.
 
 **Naming** (consistent slug prefix per source so all images from one capture sort together; 1-indexed in source order):
 
@@ -211,7 +224,7 @@ Captured sources often include images — they're part of the signal, capture th
 - Articles / blog posts: `<domain-or-author>-<short-id>-NNN.<ext>`
 - Research PDFs: `<first-author-or-paper-slug>-NNN.<ext>`
 
-**Mandatory extraction**: not optional for sources that have images. Don't skip even if fetched markdown looks text-only — text extraction may have missed images. The `url-to-obsidian` skill provides extractors. Run AFTER determining destination sector so you target the right `_media/`.
+**Mandatory extraction**: not optional for sources that have images. Don't skip even if fetched markdown looks text-only — text extraction may have missed images. The `url-to-obsidian` skill provides extractors. Run AFTER determining destination sector so you target the right `_media/`. Extracted images then go through triage above — text-only ones get transcribed inline and the file deleted; visual ones get saved.
 
 **Strict no-orphans**: every image in `Investing/<Sector>/_media/` MUST be embedded in at least one note. Embed via `![[filename.ext]]` with a brief italic caption above:
 ```markdown
