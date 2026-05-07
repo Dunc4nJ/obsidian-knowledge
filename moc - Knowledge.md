@@ -207,6 +207,13 @@ Foundational architecture, training, scaling, and interpretability of large lang
 - [[rl environment creation is becoming a distributed marketplace that could 10x cost efficiency over contracting firms]] — the hidden RL environment contracting industry, verifier design challenges, and a distributed bounty model with LLM-adversarial verification
 - [[automating AI skill improvement fails without manual comprehension of outputs]] — Three Gulfs framework: autoresearch optimizes against wrong criteria when you skip manual error analysis and jump straight to automated evals
 
+## Learning Resources
+
+Study guides, interview prep, and curated course material.
+
+- [[Claude Certified Architect exam covers five domains from agentic loops to context management]] — comprehensive self-study breakdown of all five exam domains with tutor prompts and build exercises
+- [[LLM optimization interview prep maps Flash Attention, ZeRO, speculative decoding, and MoE across training and inference]] — Gauri Gupta's AI lab interview notes spanning memory, compute, inference, and distributed-training optimization
+
 ## Thinking
 
 - [[genius thinking is the ability to keep thinking past threat reactions]]
