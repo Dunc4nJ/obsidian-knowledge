@@ -1,0 +1,118 @@
+<svg width="100%" viewBox="0 0 720 420" xmlns="http://www.w3.org/2000/svg" style="background:#0c0c0c">
+  <style>
+    text { font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace; }
+    .sans { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+
+    @keyframes fadeIn {
+      0%, 90% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+
+    .line1 { animation: fadeIn 0.5s 0.3s both; }
+    .line2 { animation: fadeIn 0.5s 1.2s both; }
+    .line3 { animation: fadeIn 0.5s 2.0s both; }
+    .line4 { animation: fadeIn 0.5s 2.8s both; }
+    .line5 { animation: fadeIn 0.5s 3.6s both; }
+    .line6 { animation: fadeIn 0.5s 4.4s both; }
+    .line7 { animation: fadeIn 0.5s 5.2s both; }
+    .line8 { animation: fadeIn 0.5s 6.0s both; }
+    .line9 { animation: fadeIn 0.5s 6.8s both; }
+    .line10 { animation: fadeIn 0.5s 7.6s both; }
+    .line11 { animation: fadeIn 0.5s 8.4s both; }
+    .line12 { animation: fadeIn 0.5s 9.2s both; }
+
+    .cursor {
+      animation: blink 1s step-end infinite;
+    }
+  </style>
+
+  <!-- Terminal chrome -->
+  <rect x="20" y="14" width="680" height="392" rx="8" fill="#121212" stroke="#3d3d3d" stroke-width="1"/>
+
+  <!-- Title bar -->
+  <rect x="20" y="14" width="680" height="32" rx="8" fill="#181818"/>
+  <rect x="20" y="38" width="680" height="8" fill="#181818"/>
+  <circle cx="42" cy="30" r="5" fill="#555555"/>
+  <circle cx="60" cy="30" r="5" fill="#555555"/>
+  <circle cx="78" cy="30" r="5" fill="#555555"/>
+  <text x="360" y="34" text-anchor="middle" font-size="11" fill="#717171" class="sans">Agent Trace — real checkpoint from entireio/cli</text>
+
+  <!-- Prompt -->
+  <g class="line1">
+    <text x="40" y="72" font-size="11" fill="#717171">$</text>
+    <text x="52" y="72" font-size="11" fill="#aeaeae">User: "Add retry logic to the API client"</text>
+  </g>
+
+  <!-- Tool call 1: Grep -->
+  <g class="line2">
+    <text x="40" y="98" font-size="10" fill="#60a5fa">&#9654; Grep</text>
+    <text x="100" y="98" font-size="10" fill="#717171">pattern="apiClient|api_client" path="src/"</text>
+  </g>
+  <g class="line3">
+    <text x="56" y="116" font-size="10" fill="#555555">&#8627; 12 matches in 5 files (14ms)</text>
+  </g>
+
+  <!-- Tool call 2: Grep -->
+  <g class="line4">
+    <text x="40" y="144" font-size="10" fill="#60a5fa">&#9654; Grep</text>
+    <text x="100" y="144" font-size="10" fill="#717171">pattern="fetch|request" path="src/lib/"</text>
+  </g>
+  <g class="line5">
+    <text x="56" y="162" font-size="10" fill="#555555">&#8627; 34 matches in 8 files (11ms)</text>
+  </g>
+
+  <!-- Tool call 3: Read -->
+  <g class="line6">
+    <text x="40" y="190" font-size="10" fill="#fb923c">&#9654; Read</text>
+    <text x="100" y="190" font-size="10" fill="#717171">src/lib/api/client.ts</text>
+  </g>
+  <g class="line7">
+    <text x="56" y="208" font-size="10" fill="#555555">&#8627; 142 lines</text>
+  </g>
+
+  <!-- Tool call 4: Grep again -->
+  <g class="line8">
+    <text x="40" y="236" font-size="10" fill="#60a5fa">&#9654; Grep</text>
+    <text x="100" y="236" font-size="10" fill="#717171">pattern="retry|backoff|attempt" path="src/"</text>
+  </g>
+  <g class="line9">
+    <text x="56" y="254" font-size="10" fill="#555555">&#8627; 3 matches in 2 files (9ms)</text>
+  </g>
+
+  <!-- Tool call 5: Read -->
+  <g class="line10">
+    <text x="40" y="282" font-size="10" fill="#fb923c">&#9654; Read</text>
+    <text x="100" y="282" font-size="10" fill="#717171">src/lib/api/request.ts</text>
+  </g>
+  <g class="line11">
+    <text x="56" y="300" font-size="10" fill="#555555">&#8627; 89 lines</text>
+  </g>
+
+  <!-- Tool call 6: Bash fallback -->
+  <g class="line12">
+    <text x="40" y="328" font-size="10" fill="#a78bfa">&#9654; Bash</text>
+    <text x="100" y="328" font-size="10" fill="#717171">find src/ -name "*.test.ts" | grep -i client</text>
+  </g>
+
+  <!-- Summary annotation -->
+  <g class="line12">
+    <rect x="40" y="356" width="460" height="36" rx="4" fill="#181818" stroke="#3d3d3d" stroke-width="0.5"/>
+    <text x="52" y="372" font-size="10" fill="#60a5fa" class="sans">2 searches</text>
+    <text x="130" y="372" font-size="10" fill="#717171" class="sans">&#8594;</text>
+    <text x="148" y="372" font-size="10" fill="#fb923c" class="sans">1 read</text>
+    <text x="196" y="372" font-size="10" fill="#717171" class="sans">&#8594;</text>
+    <text x="214" y="372" font-size="10" fill="#60a5fa" class="sans">1 search</text>
+    <text x="276" y="372" font-size="10" fill="#717171" class="sans">&#8594;</text>
+    <text x="294" y="372" font-size="10" fill="#fb923c" class="sans">1 read</text>
+    <text x="340" y="372" font-size="10" fill="#717171" class="sans">&#8594;</text>
+    <text x="358" y="372" font-size="10" fill="#a78bfa" class="sans">1 bash fallback</text>
+    <text x="52" y="386" font-size="9" fill="#555555" class="sans">typical pattern: search, narrow, read, search again, read again</text>
+  </g>
+
+  <!-- Blinking cursor -->
+  <rect x="40" y="342" width="7" height="2" fill="#60a5fa" class="cursor"/>
+</svg>

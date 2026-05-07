@@ -1,0 +1,84 @@
+<svg width="100%" viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" style="background:#0c0c0c">
+  <style>
+    text { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+    .mono { font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace; }
+  </style>
+
+  <!-- Title -->
+  <text x="360" y="28" text-anchor="middle" font-size="17" font-weight="600" fill="#ebebeb">First-Search Retrieval Quality</text>
+  <text x="360" y="46" text-anchor="middle" font-size="11" fill="#717171">50 first-search queries — higher is better</text>
+
+  <!-- Legend -->
+  <rect x="195" y="58" width="12" height="12" rx="2" fill="#60a5fa"/>
+  <text x="213" y="69" font-size="10" fill="#aeaeae">Baseline</text>
+  <rect x="280" y="58" width="12" height="12" rx="2" fill="#fb923c"/>
+  <text x="298" y="69" font-size="10" fill="#aeaeae">fff</text>
+  <rect x="340" y="58" width="12" height="12" rx="2" fill="#a78bfa"/>
+  <text x="358" y="69" font-size="10" fill="#aeaeae">pgr</text>
+
+  <!-- ============ LEFT: MRR Chart ============ -->
+  <text x="180" y="100" text-anchor="middle" font-size="13" font-weight="600" fill="#ebebeb">MRR</text>
+
+  <!-- Bar area: y=118 to y=248, height=130, max scale=0.5 -->
+  <!-- Grid -->
+  <line x1="60" y1="118" x2="300" y2="118" stroke="#222222" stroke-width="0.5"/>
+  <text x="52" y="122" text-anchor="end" font-size="8" fill="#555555" class="mono">0.50</text>
+  <line x1="60" y1="144" x2="300" y2="144" stroke="#222222" stroke-width="0.5"/>
+  <text x="52" y="148" text-anchor="end" font-size="8" fill="#555555" class="mono">0.40</text>
+  <line x1="60" y1="170" x2="300" y2="170" stroke="#222222" stroke-width="0.5"/>
+  <text x="52" y="174" text-anchor="end" font-size="8" fill="#555555" class="mono">0.30</text>
+  <line x1="60" y1="196" x2="300" y2="196" stroke="#222222" stroke-width="0.5"/>
+  <text x="52" y="200" text-anchor="end" font-size="8" fill="#555555" class="mono">0.20</text>
+  <line x1="60" y1="222" x2="300" y2="222" stroke="#222222" stroke-width="0.5"/>
+  <text x="52" y="226" text-anchor="end" font-size="8" fill="#555555" class="mono">0.10</text>
+  <line x1="60" y1="248" x2="300" y2="248" stroke="#3d3d3d" stroke-width="1"/>
+  <text x="52" y="252" text-anchor="end" font-size="8" fill="#555555" class="mono">0.00</text>
+
+  <!-- Baseline: 0.3177 / 0.5 * 130 = 82.6 -> top at 248-82.6=165.4 -->
+  <rect x="112" y="165" width="36" height="83" rx="3" fill="#60a5fa"/>
+  <text x="130" y="159" text-anchor="middle" font-size="9" font-weight="600" fill="#60a5fa" class="mono">.318</text>
+
+  <!-- fff: 0.3059 / 0.5 * 130 = 79.5 -> top at 248-79.5=168.5 -->
+  <rect x="162" y="169" width="36" height="79" rx="3" fill="#fb923c"/>
+  <text x="180" y="163" text-anchor="middle" font-size="9" font-weight="600" fill="#fb923c" class="mono">.306</text>
+
+  <!-- pgr: 0.4053 / 0.5 * 130 = 105.4 -> top at 248-105.4=142.6 -->
+  <rect x="212" y="143" width="36" height="105" rx="3" fill="#a78bfa"/>
+  <text x="230" y="137" text-anchor="middle" font-size="9" font-weight="600" fill="#a78bfa" class="mono">.405</text>
+
+  <!-- Delta -->
+  <text x="180" y="272" text-anchor="middle" font-size="10" fill="#aeaeae">pgr: +27.6% vs baseline</text>
+
+  <!-- ============ RIGHT: Hit@1 Chart ============ -->
+  <text x="540" y="100" text-anchor="middle" font-size="13" font-weight="600" fill="#ebebeb">Hit@1</text>
+
+  <!-- Bar area: y=118 to y=248, height=130, max scale=50% -->
+  <!-- Grid -->
+  <line x1="420" y1="118" x2="660" y2="118" stroke="#222222" stroke-width="0.5"/>
+  <text x="412" y="122" text-anchor="end" font-size="8" fill="#555555" class="mono">50%</text>
+  <line x1="420" y1="144" x2="660" y2="144" stroke="#222222" stroke-width="0.5"/>
+  <text x="412" y="148" text-anchor="end" font-size="8" fill="#555555" class="mono">40%</text>
+  <line x1="420" y1="170" x2="660" y2="170" stroke="#222222" stroke-width="0.5"/>
+  <text x="412" y="174" text-anchor="end" font-size="8" fill="#555555" class="mono">30%</text>
+  <line x1="420" y1="196" x2="660" y2="196" stroke="#222222" stroke-width="0.5"/>
+  <text x="412" y="200" text-anchor="end" font-size="8" fill="#555555" class="mono">20%</text>
+  <line x1="420" y1="222" x2="660" y2="222" stroke="#222222" stroke-width="0.5"/>
+  <text x="412" y="226" text-anchor="end" font-size="8" fill="#555555" class="mono">10%</text>
+  <line x1="420" y1="248" x2="660" y2="248" stroke="#3d3d3d" stroke-width="1"/>
+  <text x="412" y="252" text-anchor="end" font-size="8" fill="#555555" class="mono">0%</text>
+
+  <!-- Baseline: 26% / 50 * 130 = 67.6 -> top at 248-67.6=180.4 -->
+  <rect x="472" y="180" width="36" height="68" rx="3" fill="#60a5fa"/>
+  <text x="490" y="174" text-anchor="middle" font-size="9" font-weight="600" fill="#60a5fa" class="mono">26%</text>
+
+  <!-- fff: 18% / 50 * 130 = 46.8 -> top at 248-46.8=201.2 -->
+  <rect x="522" y="201" width="36" height="47" rx="3" fill="#fb923c"/>
+  <text x="540" y="195" text-anchor="middle" font-size="9" font-weight="600" fill="#fb923c" class="mono">18%</text>
+
+  <!-- pgr: 34% / 50 * 130 = 88.4 -> top at 248-88.4=159.6 -->
+  <rect x="572" y="160" width="36" height="88" rx="3" fill="#a78bfa"/>
+  <text x="590" y="154" text-anchor="middle" font-size="9" font-weight="600" fill="#a78bfa" class="mono">34%</text>
+
+  <!-- Delta -->
+  <text x="540" y="272" text-anchor="middle" font-size="10" fill="#aeaeae">pgr: +8 points vs baseline</text>
+</svg>

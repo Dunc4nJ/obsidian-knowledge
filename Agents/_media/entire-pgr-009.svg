@@ -1,0 +1,89 @@
+<svg width="100%" viewBox="0 0 720 310" xmlns="http://www.w3.org/2000/svg" style="background:#0c0c0c">
+  <style>
+    text { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+    .mono { font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace; }
+  </style>
+
+  <!-- Title -->
+  <text x="360" y="28" text-anchor="middle" font-size="17" font-weight="600" fill="#ebebeb">Gains by Task Type</text>
+  <text x="360" y="46" text-anchor="middle" font-size="11" fill="#717171">First-search replay — baseline vs pgr</text>
+
+  <!-- Legend -->
+  <rect x="240" y="58" width="12" height="12" rx="2" fill="#60a5fa"/>
+  <text x="258" y="69" font-size="10" fill="#aeaeae">Baseline</text>
+  <rect x="340" y="58" width="12" height="12" rx="2" fill="#a78bfa"/>
+  <text x="358" y="69" font-size="10" fill="#aeaeae">pgr</text>
+
+  <!-- ============ LEFT: MRR by task type ============ -->
+  <text x="180" y="100" text-anchor="middle" font-size="13" font-weight="600" fill="#ebebeb">MRR</text>
+
+  <!-- Bar area: y=118 to y=238, height=120, max scale=0.6 -->
+  <line x1="60" y1="118" x2="300" y2="118" stroke="#222222" stroke-width="0.5"/>
+  <text x="52" y="122" text-anchor="end" font-size="8" fill="#555555" class="mono">0.60</text>
+  <line x1="60" y1="148" x2="300" y2="148" stroke="#222222" stroke-width="0.5"/>
+  <text x="52" y="152" text-anchor="end" font-size="8" fill="#555555" class="mono">0.45</text>
+  <line x1="60" y1="178" x2="300" y2="178" stroke="#222222" stroke-width="0.5"/>
+  <text x="52" y="182" text-anchor="end" font-size="8" fill="#555555" class="mono">0.30</text>
+  <line x1="60" y1="208" x2="300" y2="208" stroke="#222222" stroke-width="0.5"/>
+  <text x="52" y="212" text-anchor="end" font-size="8" fill="#555555" class="mono">0.15</text>
+  <line x1="60" y1="238" x2="300" y2="238" stroke="#3d3d3d" stroke-width="1"/>
+  <text x="52" y="242" text-anchor="end" font-size="8" fill="#555555" class="mono">0.00</text>
+
+  <!-- Implementation: baseline 0.3061, pgr 0.5000 -->
+  <!-- baseline: 0.3061/0.6*120 = 61.2 -> top 238-61=177 -->
+  <rect x="82" y="177" width="32" height="61" rx="3" fill="#60a5fa"/>
+  <text x="98" y="171" text-anchor="middle" font-size="8" font-weight="600" fill="#60a5fa" class="mono">.306</text>
+  <!-- pgr: 0.5/0.6*120 = 100 -> top 238-100=138 -->
+  <rect x="118" y="138" width="32" height="100" rx="3" fill="#a78bfa"/>
+  <text x="134" y="132" text-anchor="middle" font-size="8" font-weight="600" fill="#a78bfa" class="mono">.500</text>
+
+  <text x="108" y="256" text-anchor="middle" font-size="9" fill="#aeaeae">implementation</text>
+
+  <!-- Code understanding: baseline 0.2760, pgr 0.3260 -->
+  <!-- baseline: 0.276/0.6*120 = 55.2 -> top 238-55=183 -->
+  <rect x="192" y="183" width="32" height="55" rx="3" fill="#60a5fa"/>
+  <text x="208" y="177" text-anchor="middle" font-size="8" font-weight="600" fill="#60a5fa" class="mono">.276</text>
+  <!-- pgr: 0.326/0.6*120 = 65.2 -> top 238-65=173 -->
+  <rect x="228" y="173" width="32" height="65" rx="3" fill="#a78bfa"/>
+  <text x="244" y="167" text-anchor="middle" font-size="8" font-weight="600" fill="#a78bfa" class="mono">.326</text>
+
+  <text x="220" y="256" text-anchor="middle" font-size="9" fill="#aeaeae">code understanding</text>
+
+  <!-- ============ RIGHT: Hit@1 by task type ============ -->
+  <text x="540" y="100" text-anchor="middle" font-size="13" font-weight="600" fill="#ebebeb">Hit@1</text>
+
+  <!-- Bar area: y=118 to y=238, height=120, max scale=50% -->
+  <line x1="420" y1="118" x2="660" y2="118" stroke="#222222" stroke-width="0.5"/>
+  <text x="412" y="122" text-anchor="end" font-size="8" fill="#555555" class="mono">50%</text>
+  <line x1="420" y1="148" x2="660" y2="148" stroke="#222222" stroke-width="0.5"/>
+  <text x="412" y="152" text-anchor="end" font-size="8" fill="#555555" class="mono">37.5%</text>
+  <line x1="420" y1="178" x2="660" y2="178" stroke="#222222" stroke-width="0.5"/>
+  <text x="412" y="182" text-anchor="end" font-size="8" fill="#555555" class="mono">25%</text>
+  <line x1="420" y1="208" x2="660" y2="208" stroke="#222222" stroke-width="0.5"/>
+  <text x="412" y="212" text-anchor="end" font-size="8" fill="#555555" class="mono">12.5%</text>
+  <line x1="420" y1="238" x2="660" y2="238" stroke="#3d3d3d" stroke-width="1"/>
+  <text x="412" y="242" text-anchor="end" font-size="8" fill="#555555" class="mono">0%</text>
+
+  <!-- Implementation: baseline 14.3%, pgr 42.9% -->
+  <!-- baseline: 14.3/50*120 = 34.3 -> top 238-34=204 -->
+  <rect x="442" y="204" width="32" height="34" rx="3" fill="#60a5fa"/>
+  <text x="458" y="198" text-anchor="middle" font-size="8" font-weight="600" fill="#60a5fa" class="mono">14.3%</text>
+  <!-- pgr: 42.9/50*120 = 103 -> top 238-103=135 -->
+  <rect x="478" y="135" width="32" height="103" rx="3" fill="#a78bfa"/>
+  <text x="494" y="129" text-anchor="middle" font-size="8" font-weight="600" fill="#a78bfa" class="mono">42.9%</text>
+
+  <text x="468" y="256" text-anchor="middle" font-size="9" fill="#aeaeae">implementation</text>
+
+  <!-- Code understanding: baseline 20%, pgr 24% -->
+  <!-- baseline: 20/50*120 = 48 -> top 238-48=190 -->
+  <rect x="552" y="190" width="32" height="48" rx="3" fill="#60a5fa"/>
+  <text x="568" y="184" text-anchor="middle" font-size="8" font-weight="600" fill="#60a5fa" class="mono">20%</text>
+  <!-- pgr: 24/50*120 = 57.6 -> top 238-58=180 -->
+  <rect x="588" y="180" width="32" height="58" rx="3" fill="#a78bfa"/>
+  <text x="604" y="174" text-anchor="middle" font-size="8" font-weight="600" fill="#a78bfa" class="mono">24%</text>
+
+  <text x="580" y="256" text-anchor="middle" font-size="9" fill="#aeaeae">code understanding</text>
+
+  <!-- Bottom annotation -->
+  <text x="360" y="286" text-anchor="middle" font-size="11" fill="#aeaeae">Gains are largest on implementation prompts where the right file is buried in noise</text>
+</svg>

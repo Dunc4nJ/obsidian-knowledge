@@ -1,0 +1,79 @@
+<svg width="100%" viewBox="0 0 720 355" xmlns="http://www.w3.org/2000/svg" style="background:#0c0c0c">
+  <style>
+    text { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+    .mono { font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace; }
+  </style>
+
+  <defs>
+    <marker id="takeawayArrow" markerWidth="6" markerHeight="4" refX="6" refY="2" orient="auto">
+      <polygon points="0,0 6,2 0,4" fill="#717171"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="360" y="30" text-anchor="middle" font-size="17" font-weight="600" fill="#ebebeb">Big Tool Speedup, Small End-to-End Change</text>
+  <text x="360" y="48" text-anchor="middle" font-size="11" fill="#717171">60-task benchmark: baseline (ripgrep) vs fff</text>
+
+  <!-- Legend -->
+  <rect x="240" y="62" width="12" height="12" rx="2" fill="#60a5fa"/>
+  <text x="258" y="73" font-size="11" fill="#aeaeae">Baseline (ripgrep)</text>
+  <rect x="390" y="62" width="12" height="12" rx="2" fill="#fb923c"/>
+  <text x="408" y="73" font-size="11" fill="#aeaeae">fff</text>
+
+  <!-- ============ LEFT CHART: Avg Wall Clock ============ -->
+  <text x="200" y="105" text-anchor="middle" font-size="13" font-weight="600" fill="#ebebeb">Avg Wall Clock per Run</text>
+
+  <!-- Bar area y=135 to y=275, height=140 -->
+  <!-- Grid lines -->
+  <line x1="80" y1="135" x2="320" y2="135" stroke="#222222" stroke-width="0.5"/>
+  <text x="72" y="139" text-anchor="end" font-size="9" fill="#555555" class="mono">40s</text>
+  <line x1="80" y1="170" x2="320" y2="170" stroke="#222222" stroke-width="0.5"/>
+  <text x="72" y="174" text-anchor="end" font-size="9" fill="#555555" class="mono">30s</text>
+  <line x1="80" y1="205" x2="320" y2="205" stroke="#222222" stroke-width="0.5"/>
+  <text x="72" y="209" text-anchor="end" font-size="9" fill="#555555" class="mono">20s</text>
+  <line x1="80" y1="240" x2="320" y2="240" stroke="#222222" stroke-width="0.5"/>
+  <text x="72" y="244" text-anchor="end" font-size="9" fill="#555555" class="mono">10s</text>
+  <line x1="80" y1="275" x2="320" y2="275" stroke="#3d3d3d" stroke-width="1"/>
+  <text x="72" y="279" text-anchor="end" font-size="9" fill="#555555" class="mono">0s</text>
+
+  <!-- Baseline bar: 38.57/40*140=134.9 -> top at 275-135=140 -->
+  <rect x="140" y="140" width="50" height="135" rx="3" fill="#60a5fa"/>
+  <text x="165" y="134" text-anchor="middle" font-size="10" font-weight="600" fill="#60a5fa" class="mono">38.57s</text>
+
+  <!-- fff bar: 36.99/40*140=129.5 -> top at 275-130=145 -->
+  <rect x="210" y="146" width="50" height="129" rx="3" fill="#fb923c"/>
+  <text x="235" y="140" text-anchor="middle" font-size="10" font-weight="600" fill="#fb923c" class="mono">36.99s</text>
+
+  <text x="200" y="298" text-anchor="middle" font-size="11" fill="#aeaeae">-4.1%</text>
+
+  <!-- ============ RIGHT CHART: Median search_code Duration ============ -->
+  <text x="530" y="105" text-anchor="middle" font-size="13" font-weight="600" fill="#ebebeb">Median search_code Duration</text>
+
+  <!-- Bar area y=135 to y=275, height=140 -->
+  <line x1="410" y1="135" x2="650" y2="135" stroke="#222222" stroke-width="0.5"/>
+  <text x="402" y="139" text-anchor="end" font-size="9" fill="#555555" class="mono">16ms</text>
+  <line x1="410" y1="170" x2="650" y2="170" stroke="#222222" stroke-width="0.5"/>
+  <text x="402" y="174" text-anchor="end" font-size="9" fill="#555555" class="mono">12ms</text>
+  <line x1="410" y1="205" x2="650" y2="205" stroke="#222222" stroke-width="0.5"/>
+  <text x="402" y="209" text-anchor="end" font-size="9" fill="#555555" class="mono">8ms</text>
+  <line x1="410" y1="240" x2="650" y2="240" stroke="#222222" stroke-width="0.5"/>
+  <text x="402" y="244" text-anchor="end" font-size="9" fill="#555555" class="mono">4ms</text>
+  <line x1="410" y1="275" x2="650" y2="275" stroke="#3d3d3d" stroke-width="1"/>
+  <text x="402" y="279" text-anchor="end" font-size="9" fill="#555555" class="mono">0ms</text>
+
+  <!-- Baseline bar: 14.7/16*140=128.6 -> top at 275-129=146 -->
+  <rect x="470" y="146" width="50" height="129" rx="3" fill="#60a5fa"/>
+  <text x="495" y="140" text-anchor="middle" font-size="10" font-weight="600" fill="#60a5fa" class="mono">14.7ms</text>
+
+  <!-- fff bar: 1.7/16*140=14.9 -> top at 275-15=260 -->
+  <rect x="540" y="260" width="50" height="15" rx="3" fill="#fb923c"/>
+  <text x="565" y="255" text-anchor="middle" font-size="10" font-weight="600" fill="#fb923c" class="mono">1.7ms</text>
+
+  <text x="530" y="298" text-anchor="middle" font-size="11" fill="#aeaeae">-88.4%</text>
+
+  <!-- ============ BOTTOM TAKEAWAY ============ -->
+  <rect x="100" y="316" width="520" height="30" rx="6" fill="#121212" stroke="#3d3d3d" stroke-width="1"/>
+  <text x="280" y="336" text-anchor="middle" font-size="11" fill="#aeaeae">8.6x faster search</text>
+  <line x1="340" y1="331" x2="370" y2="331" stroke="#717171" stroke-width="1.5" marker-end="url(#takeawayArrow)"/>
+  <text x="440" y="336" text-anchor="middle" font-size="11" fill="#aeaeae">4% faster end-to-end</text>
+</svg>
