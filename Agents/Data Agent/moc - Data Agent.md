@@ -18,6 +18,7 @@ AI agents that interact with structured data to answer questions — text-to-SQL
 - [[OpenAI internal data agent succeeds through six layers of context not model capability alone]] — six stacked context layers over 600PB across 70k datasets; architecture over raw model capability
 - [[context management replaces the semantic layer for data agents because it adapts from corrections]] — Jamie Quint's practitioner guide; dynamic context + correction-driven "quirks" replaced 4-5 analyst hires
 - [[the hard problem in text-to-SQL is discovery not generation and hybrid search over existing metadata solves it]] — Astronomer's Kepler: hybrid search (RRF) + discovery subagent over warehouse metadata
+- [[Databricks Genie pushes data agents past coding-agent baselines via specialized knowledge search, parallel thinking, and multi-LLM design]] — three-pronged architecture (specialized search + parallel sampling + per-stage Multi-LLM with GEPA) lifts Genie from 32% to 90%+ over a leading coding agent on internal benchmark
 
 ## Infrastructure
 
