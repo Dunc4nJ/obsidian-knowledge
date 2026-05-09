@@ -44,6 +44,7 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 - [[Coherent (COHR)]]
 - [[Enablence Technologies (ENA.V)]]
 - [[Furukawa Electric (FUWAY)]]
+- [[Jenoptik (JEN.DE)]]
 - [[Lumentum (LITE)]]
 - [[Marvell Technology (MRVL)]]
 - [[Sumitomo Electric (SMTOY)]]
@@ -58,6 +59,7 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 
 - [[Aehr Test Systems (AEHR)]]
 - [[Aixtron (AIXA.DE)]]
+- [[Jenoptik (JEN.DE)]]
 - [[LPKF Laser (LPK.DE)]]
 - [[Viavi (VIAV)]]
 
