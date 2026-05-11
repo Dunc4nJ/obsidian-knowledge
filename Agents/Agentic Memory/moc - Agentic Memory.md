@@ -32,4 +32,8 @@ How agents store, retrieve, and evolve knowledge across sessions. Memory archite
 - [[Everything Is Connected - knowledge graphs encode entities as directed-labeled triples that support multi-hop traversal and ontology-driven inference]]
 - [[How to Make Knowledge Graphs Fast - query optimization combines triple indexing, adjacency compression, and partitioning to tame exponential traversal fan-out]]
 - [[Hermes, Codex, and Claude Code converge on markdown plus filesystem tools because memory is a judgment problem not a data structure problem]]
+
+## Series
+
+- [[Company Brain (Ashwin Gopinath series)]] — 8-part Sentra thesis: layered organizational memory (factual + interaction + action) on one semantic substrate with ontologies as per-role lenses, positioned as the next AI infra layer beneath every app and agent
   
