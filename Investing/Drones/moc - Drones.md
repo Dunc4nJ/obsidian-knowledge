@@ -11,6 +11,7 @@ Companies and research covering unmanned aerial systems (UAS) across defense, co
 ## Companies
 
 - [[Ondas (ONDS)]]
+- [[Unusual Machines (UMAC)]]
 
 ## Research
 

@@ -21,6 +21,7 @@ For shorter-horizon systematic trading content see `Trading/`. For prediction-ma
 - [[moc - Compute]]
 - [[moc - Consumer Hardware]]
 - [[moc - Critical Minerals]]
+- [[moc - Defense]]
 - [[moc - Drones]]
 - [[moc - Edge AI]]
 - [[moc - Energy]]

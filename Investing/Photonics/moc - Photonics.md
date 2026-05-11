@@ -45,6 +45,7 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 - [[Enablence Technologies (ENA.V)]]
 - [[Furukawa Electric (FUWAY)]]
 - [[Jenoptik (JEN.DE)]]
+- [[LightPath (LPTH)]]
 - [[Lumentum (LITE)]]
 - [[Marvell Technology (MRVL)]]
 - [[Sumitomo Electric (SMTOY)]]
