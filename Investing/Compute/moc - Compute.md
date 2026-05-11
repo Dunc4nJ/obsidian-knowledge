@@ -11,6 +11,7 @@ Companies and research covering compute capacity providers — companies that ow
 ## Companies
 
 - [[Eaton (ETN)]]
+- [[Nebius (NBIS)]]
 - [[Oracle (ORCL)]]
 - [[Vertiv (VRT)]]
 

@@ -10,12 +10,15 @@ Memory IDMs (Micron, SK Hynix, Samsung, SanDisk, Western Digital, Kioxia) that d
 
 ## Companies
 
+- [[GigaDevice (603986.SS)]]
 - [[Kioxia (285A.T)]]
+- [[Macronix (2337.TW)]]
 - [[Micron (MU)]]
 - [[SK Hynix (000660.KS)]]
 - [[Samsung Electronics (005930.KS)]]
 - [[SanDisk (SNDK)]]
 - [[Western Digital (WDC)]]
+- [[Winbond (2344.TW)]]
 
 ## Research
 

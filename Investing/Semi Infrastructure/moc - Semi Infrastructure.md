@@ -10,8 +10,10 @@ Companies and research covering the **truly horizontal** semiconductor manufactu
 
 ## Companies
 
+- [[Intel (INTC)]]
+- [[SKC (011790.KS)]]
 - [[TSMC (TSM)]]
 
 ## Research
 
-_(none yet)_
+- [[Aleabit May 2026 semi roundup - CoPoS pulled in, Vera Rubin cooling shift, 2D NAND shortage spirals, mag7 offers to fund SK Hynix, glass substrates accelerate]]
