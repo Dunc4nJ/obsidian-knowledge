@@ -12,6 +12,7 @@ Edge AI / physical AI — running inference close to where data is created. Span
 
 - [[Ambarella (AMBA)]]
 - [[CEVA (CEVA)]]
+- [[Mobileye (MBLY)]]
 - [[One Stop Systems (OSS)]]
 - [[Ouster (OUST)]]
 

@@ -11,3 +11,4 @@ Low-power vision AI processors (SoCs) for cameras, drones, robots, automotive AD
 ## Notes
 
 - [[Crux Capital opens AMBA position as #1 edge AI pick with $90-95 base case on CV72 CV75 CV7 N1 product cycle]]
+- [[OptimusDelta AMBA bull thesis - FY27 is a bridge year before CV7 N1 and Cooper 200-model lock-in re-accelerate revenue 20pct in FY28]]
