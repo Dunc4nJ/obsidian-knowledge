@@ -11,6 +11,7 @@ Companies and research covering the **truly horizontal** semiconductor manufactu
 ## Companies
 
 - [[Adeia (ADEA)]]
+- [[Atomera (ATOM)]]
 - [[Ibiden (4062.T)]]
 - [[Intel (INTC)]]
 - [[SKC (011790.KS)]]
