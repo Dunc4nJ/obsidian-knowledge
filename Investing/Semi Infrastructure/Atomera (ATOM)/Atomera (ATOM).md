@@ -10,4 +10,4 @@ Atomera (ATOM) — Nasdaq IP licensor of MST (Mears Silicon Technology) thin-fil
 
 ## Notes
 
-_(none yet)_
+- [[ATOM imminent DOE Power America award per Joe Dab - 15-month Sandia GaN-on-Si testing validates MST at 350M mcap]]
