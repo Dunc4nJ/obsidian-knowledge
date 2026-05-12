@@ -10,7 +10,11 @@ Companies and research covering compute capacity providers — companies that ow
 
 ## Companies
 
+- [[Alphabet (GOOGL)]]
+- [[Amazon (AMZN)]]
 - [[Eaton (ETN)]]
+- [[Meta Platforms (META)]]
+- [[Microsoft (MSFT)]]
 - [[Nebius (NBIS)]]
 - [[Oracle (ORCL)]]
 - [[Vertiv (VRT)]]

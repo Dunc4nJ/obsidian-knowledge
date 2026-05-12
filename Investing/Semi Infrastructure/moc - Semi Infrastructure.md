@@ -10,6 +10,7 @@ Companies and research covering the **truly horizontal** semiconductor manufactu
 
 ## Companies
 
+- [[Adeia (ADEA)]]
 - [[Intel (INTC)]]
 - [[SKC (011790.KS)]]
 - [[TSMC (TSM)]]
