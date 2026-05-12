@@ -15,9 +15,11 @@ Companies and research covering compute capacity providers — companies that ow
 - [[Eaton (ETN)]]
 - [[Meta Platforms (META)]]
 - [[Microsoft (MSFT)]]
+- [[Monolithic Power (MPWR)]]
 - [[Nebius (NBIS)]]
 - [[Oracle (ORCL)]]
 - [[Vertiv (VRT)]]
+- [[Vicor (VICR)]]
 
 ## Research
 
