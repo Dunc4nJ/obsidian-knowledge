@@ -21,4 +21,4 @@ Companies and research covering compute capacity providers — companies that ow
 
 ## Research
 
-_(none yet)_
+- [[FundaAI 2026 - Google TPU vertical integration cuts rack TCO 2x vs NVIDIA GB200, redirecting hyperscaler CapEx toward optics and memory]]

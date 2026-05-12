@@ -11,9 +11,11 @@ Companies and research covering the **truly horizontal** semiconductor manufactu
 ## Companies
 
 - [[Adeia (ADEA)]]
+- [[Ibiden (4062.T)]]
 - [[Intel (INTC)]]
 - [[SKC (011790.KS)]]
 - [[TSMC (TSM)]]
+- [[Unimicron (3037.TW)]]
 
 ## Research
 
