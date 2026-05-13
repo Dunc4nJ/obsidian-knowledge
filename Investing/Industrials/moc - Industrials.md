@@ -12,6 +12,7 @@ Industrial conglomerates, capital goods, heavy machinery, engines, and gen-sets 
 
 - [[Caterpillar (CAT)]]
 - [[Cummins (CMI)]]
+- [[Sanmina (SANM)]]
 
 ## Research
 

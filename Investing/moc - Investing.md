@@ -12,8 +12,11 @@ For shorter-horizon systematic trading content see `Trading/`. For prediction-ma
 
 ## Frameworks
 
+- [[AI CAPEX 2026-Q1 hyperscaler reads bullish - $700B-plus 2026 spend funds optics, networking, and inference buildout per Crux]]
+- [[Crux Capital announces forthcoming 100-120-page photonics report covering 800G-1.6T transition CPO and 20 mapped companies (2026-02-17)]]
 - [[EML vs CW lasers - integrated vs modular optical transmitter architectures shape 400G 800G 1.6T module design]]
 - [[LPO NPO CPO optical placement architectures explain power latency and serviceability tradeoffs as optics migrate toward the ASIC - Crux Capital primer]]
+- [[OCS optical circuit switching - MEMS vs liquid crystal Coherent vs Lumentum and Google Jupiter validation (2026-04-01)]]
 - [[Photonics 101 - foundational primer on light-based data transmission lasers transceivers and the AI optical stack]]
 - [[Photonics solves AI datacenter bandwidth power heat latency and distance bottlenecks copper cannot - Crux Capital primer]]
 - [[SJ Investments asymmetric investing framework screens for compressed valuations with uncapped upside]]

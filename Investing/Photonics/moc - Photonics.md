@@ -39,16 +39,19 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 
 ### Optical components & engines
 
+- [[Aeluma (ALMU)]]
 - [[Applied Optoelectronics (AAOI)]]
 - [[Ciena (CIEN)]]
 - [[Coherent (COHR)]]
 - [[Corning (GLW)]]
+- [[Credo Technology (CRDO)]]
 - [[Enablence Technologies (ENA.V)]]
 - [[Furukawa Electric (FUWAY)]]
 - [[Jenoptik (JEN.DE)]]
 - [[LightPath (LPTH)]]
 - [[Lightwave Logic (LWLG)]]
 - [[Lumentum (LITE)]]
+- [[MACOM Technology (MTSI)]]
 - [[Marvell Technology (MRVL)]]
 - [[POET Technologies (POET)]]
 - [[Sumitomo Electric (SMTOY)]]
@@ -57,8 +60,10 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 ### Networking systems
 
 - [[Ciena (CIEN)]]
+- [[Fabrinet (FN)]]
 - [[Nokia (NOK)]]
 - [[Penguin Solutions (PENG)]]
+- [[Semtech (SMTC)]]
 
 ### Equipment & test
 
@@ -72,6 +77,10 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 - [[Riber (ALRIB.PA)]]
 - [[Veeco Instruments (VECO)]]
 - [[Viavi (VIAV)]]
+
+### Uncategorized
+
+- [[Smartoptics (SMOP.OL)]]
 
 ## Research
 

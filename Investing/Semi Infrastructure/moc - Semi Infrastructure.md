@@ -17,6 +17,7 @@ Companies and research covering the **truly horizontal** semiconductor manufactu
 - [[Atomera (ATOM)]]
 - [[BE Semiconductor Industries (BESI.AS)]]
 - [[Chroma ATE (2360.TW)]]
+- [[Cohu (COHU)]]
 - [[FormFactor (FORM)]]
 - [[GlobalFoundries (GFS)]]
 - [[Ibiden (4062.T)]]
