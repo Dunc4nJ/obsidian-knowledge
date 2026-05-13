@@ -58,10 +58,12 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 
 ### Equipment & test
 
+- [[ASMPT (0522.HK)]]
 - [[Aehr Test Systems (AEHR)]]
 - [[Aixtron (AIXA.DE)]]
 - [[Jenoptik (JEN.DE)]]
 - [[LPKF Laser (LPK.DE)]]
+- [[Mycronic (MYCR.ST)]]
 - [[Viavi (VIAV)]]
 
 ## Research
