@@ -12,4 +12,5 @@ Veeco Instruments (NASDAQ: VECO) — semiconductor deposition equipment; MOCVD (
 
 ## Notes
 
+- [[Crux Capital 2026-04-21 - Veeco Instruments VECO The Tool Maker - PTOR position with $664M FY25 revenue 72 pct semi mix, Lumina InP MOCVD plus IBD300 HBM plus Propel GaN, pending Axcelis merger creates $5.3B SAM and $1.7B combined revenue]]
 - [[PhotonCap May 2026 - VECO Q1 reframes SiPh thesis from MOCVD to Spector IBD facet coating with $250M+ InP laser orders and 10x IBD capacity expansion by early 2027]]

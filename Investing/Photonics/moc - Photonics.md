@@ -39,6 +39,7 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 
 ### Optical components & engines
 
+- [[Advanced Fiber Resources (300620.SZ)]]
 - [[Aeluma (ALMU)]]
 - [[Applied Optoelectronics (AAOI)]]
 - [[Ciena (CIEN)]]
@@ -54,13 +55,16 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 - [[MACOM Technology (MTSI)]]
 - [[Marvell Technology (MRVL)]]
 - [[POET Technologies (POET)]]
+- [[Santec (6777.T)]]
 - [[Sumitomo Electric (SMTOY)]]
 - [[Viavi (VIAV)]]
 
 ### Networking systems
 
 - [[Ciena (CIEN)]]
+- [[Eoptolink (300502.SZ)]]
 - [[Fabrinet (FN)]]
+- [[Huber+Suhner (HUBN.SW)]]
 - [[Nokia (NOK)]]
 - [[Penguin Solutions (PENG)]]
 - [[Semtech (SMTC)]]
@@ -76,6 +80,8 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 - [[Mycronic (MYCR.ST)]]
 - [[Oxford Instruments (OXIG.L)]]
 - [[Riber (ALRIB.PA)]]
+- [[RoboTechnik (300757.SZ)]]
+- [[Silex Microsystems (SILEX.SS)]]
 - [[Veeco Instruments (VECO)]]
 - [[Viavi (VIAV)]]
 
@@ -86,7 +92,13 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 ## Research
 
 - [[Celestial Photonic Fabric Platform for AI Accelerators - arXiv 2507.14000 specs 33TB unified memory and 115Tbps all-to-all switching across 16 XPUs (Ding Diep 2025)]]
+- [[Crux Capital 2026-01-08 - The InP Crisis - AXTI 40 pct of global InP supply, 60-day China export permits, $100M raise to double capacity in 9 months, POET ALMU LWLG TFLN as substrate disruptors]]
+- [[Crux Capital 2026-03-31 - Samsung CPO news reframed - silicon photonics foundry play hits GFS TSEM TSM first, lasers LITE COHR safe near-term unless Samsung internalizes light source]]
+- [[Crux Capital 2026-04-03 - CIEN and NOK bullish - Matthew Prince SXSW bots-over-humans by 2027 routes AI agent traffic through scale-across DCI MOFN, Hyper-Rail 32x density, NOK $13B-to-$24B SAM by 2030]]
+- [[Crux Capital 2026-04-07 - The Proof Layer in optics as CPO and optical IO push complexity downstream FORM AEHR earlier wafer-stage proof VIAV KEYS later system validation]]
+- [[Crux Capital 2026-04-15 - Signals from Upstream, epitaxy and deposition tools (AIXA VECO ALRIB) confirm photonics buildout breadth across InP and quantum-dot]]
 - [[Crux Capital 2026-05-01 - Q1 earnings roundup LPK AIXA AXTI COHU - AIXA 80-100 G10 tools-yr EUR300-400M opp, AXTI InP backlog $100M+ doubles 2026, LPK 80pct qualified, COHU $750M AI-HPC pipeline]]
+- [[Crux Capital 2026-05-10 - 12 ways to play OCS across 5 layers - LITE $400M backlog, COHR doubles TAM to $4B, HUBN Polatis hyperscaler PO, plus Eoptolink Silex Santec AFR Furukawa RoboTechnik FN VIAV KEYS supply chain]]
 - [[Goldman 2026 AI optical cheat sheet maps EPS upside across lasers PCBs and CCL manufacturers]]
 - [[PhotonCap 2026 - NVIDIAs 4 photonics bets put $2B each into COHR LITE MRVL transceiver layer and $500M Corning warrant on the GLW fiber connectivity layer]]
 - [[PhotonCap 2026 - POET -47 pct selloff explained by Marvell erasing optical engine slot one day after Polariton acquisition]]

@@ -12,4 +12,4 @@ Credo Technology (CRDO) — NASDAQ-listed high-speed connectivity supplier for A
 
 ## Notes
 
-_(none yet)_
+- [[Crux Capital 2026-04-14 - CRDO Big Optics Acquisition - DustPhotonics SiPho PIC deal adds 400G-800G-1.6T-3.2T PIC portfolio plus Hyperlume microLED plus CoMira IP make vertically integrated AI connectivity stack]]

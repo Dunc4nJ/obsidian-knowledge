@@ -13,3 +13,4 @@ Specialty glass and ceramics; optical fiber + ceramic cable solutions; one of NV
 ## Notes
 
 - [[Corning (GLW) 2026-Q1 earnings - two more Meta-template hyperscaler optical deals signed, Optical sales up 36 pct and net income up 93 pct, May 6 Springboard extension to 2030 and Photonics MAP teased per Crux]]
+- [[Crux Capital 2026-04-09 - A Physical Constraint, GLW fiber-density story - micro cable multicore hollow-core CPO, Meta $6B and similar size deals in negotiation]]

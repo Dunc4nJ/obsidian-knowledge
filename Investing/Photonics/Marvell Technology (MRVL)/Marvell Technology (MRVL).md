@@ -12,4 +12,7 @@ Marvell Technology (NASDAQ: MRVL) — fabless chip designer; DCI/AEC optical int
 
 ## Notes
 
+- [[Crux Capital 2026-04-09 - What Marvell wants from Celestial AI - Photonic Fabric scale-up at package system and rack, 16Tbps per chiplet 50m reach, complements UALink, AWS in announcement, $500M ARR Q4 FY28 $1B Q4 FY29 targets]]
+- [[Crux Capital 2026-04-20 - Marvell-Google news reframed - MPU+TPU two-chip structure puts Marvell on memory side of inference, XPU-attach $14.6B by 2028 (90 pct CAGR) thesis validated]]
+- [[Crux Capital 2026-04-24 - What is Marvell doing - 4 acquisitions Inphi Celestial XConn Polariton stitch a chip-to-data-center connectivity stack, NVIDIA $2B stake plus NVLink Fusion partnership validates the AI factory bet]]
 - [[Marvell-Celestial AI acquisition - $3.25B upfront plus $2.25B earnout for photonic interconnect IP and scale-up connectivity (Dec 2 2025)]]
