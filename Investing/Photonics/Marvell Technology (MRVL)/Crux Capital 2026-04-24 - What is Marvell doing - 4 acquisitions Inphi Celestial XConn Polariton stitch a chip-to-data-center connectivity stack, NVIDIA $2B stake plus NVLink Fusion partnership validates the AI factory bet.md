@@ -54,6 +54,52 @@ subsectors: [Optical components & engines, Networking systems]
 
 This is the *Marvell strategy in one page* — useful as a fast briefing for anyone trying to reason about MRVL's expected revenue from the AI infrastructure stack independently of Inphi's transceiver cycle. Pairs directly with the longer "What Marvell wants from Celestial AI" deep dive (Crux 2026-04-09, captured in the same folder) and the Polariton plasmonics acquisition note in [[Photonics]]/Research (PhotonCap 2026-04-22). The $2B NVDA stake plus the NVLink Fusion partnership is what flipped the market, and Crux's framing — "the breadcrumbs were there all along" — is the bull narrative the rally is now pricing. Useful counterweight to fear about MRVL being "just" a transceiver / DSP cyclical: the four-acquisition + NVDA partnership map argues for a *connectivity platform* re-rating instead.
 
+## Marvell-Google news context (per Crux 2026-04-20 — preserved here after consolidation)
+
+*Provenance: this section absorbs Crux Capital's 2026-04-20 post "Marvell/Google news: what's going on?" (https://cruxcapitalgroup.substack.com/p/marvell-google-news-is-it-time, authored by Crux Capital Group / @cruxcapitalgroup). That standalone note has been consolidated into this hub to keep the MRVL thesis in one place. The Google-news angle provides a **different analytical lens** than the 4-acquisitions framing above — where the 4-acquisitions view treats MRVL as a connectivity-stack assembler, the Crux Google-news view treats MRVL as the **memory-side-of-inference** play and uses the Reuters MPU+TPU report as architectural validation of the XPU-attach TAM thesis. Both lenses point at the same stock; preserve both.*
+
+### Crux's "memory side of inference" positioning lens (per Crux 2026-04-20)
+
+- **Reuters report (per Crux 2026-04-20 Marvell-Google news reframed)**: [[Alphabet (GOOGL)]] is in talks with [[Marvell Technology (MRVL)]] to develop **two new AI chips** — (1) a new TPU built for inference efficiency, and (2) an MPU (memory processing unit) designed to work with Google's TPU.
+- **Two-chip structure is the key technical detail (per Crux 2026-04-20)**: one chip handles the core AI processing job (next-gen TPU); the second chip is the MPU aimed at the **memory side of the system**. Reuters: Google aims to finalize the memory-chip design **as soon as next year** before handing off for test production.
+- **Crux's unique framing — "memory side of inference"** (per Crux 2026-04-20 Marvell-Google news reframed) — preserve verbatim: *"Google appears willing to invest serious engineering effort on the memory side of inference, and Marvell has already positioned itself around that exact pressure point."*
+- **Alpha angle (per Crux 2026-04-20)**: most coverage will frame this as "Google working with Marvell on a chip program." Crux's deeper read: Google may be evaluating Marvell for a **larger role in the architecture AROUND the chip** — memory, pooling, packaging, data movement. Opportunity sits in a **broader system layer than markets currently assign to MRVL**. *"Signal is architectural before revenue shows up."*
+- **Inference, not training (per Crux 2026-04-20)**: project targets AI **"inferencing"** — processing workloads, not training models like Gemini. Google's **Ironwood TPU** (April 2025, gen-7) was already framed as the **first TPU designed specifically for inference** and as Google's **most powerful, capable, and energy-efficient TPU yet**, scaling to **9,216 chips**, with explicit emphasis on HBM capacity, HBM bandwidth, and pod-scale system design. (Per Crux 2026-04-20, Google has been pushing TPUs as an alternative to Nvidia GPUs and Reuters noted TPU sales have become a key driver of Google Cloud growth.)
+- **Why memory becomes first-order in inference (per Crux 2026-04-20)**: training draws attention to raw compute; inference still needs compute but turns **memory and data movement into first-order constraints**. **KV-cache** (the model's stored working context during a conversation) grows with longer context windows and richer conversations — Marvell has highlighted exploding model sizes, expanding context windows, and growing KV-cache as major memory-demand drivers across AI infrastructure.
+
+### XPU-attach TAM thesis — Crux's valuation anchor (per Crux 2026-04-20)
+
+- **XPU vs XPU attach framing** (Marvell 2025 Custom AI event, per Crux 2026-04-20): **XPU = main AI processor**; **XPU attach = memory-related hardware, scale-up fabric, networking, host-management functions, memory poolers, expanders**. Accelerated custom compute = XPU + XPU attach.
+- **Custom silicon to 25% share** of the accelerated compute market by 2028 (per Crux 2026-04-20).
+- **Custom XPU attach TAM: $0.6B (2023) → $14.6B (2028), 90% CAGR** (per Crux 2026-04-20 Marvell-Google news reframed). This is the headline valuation anchor for the memory-side thesis.
+- **Data center TAM: $21B (2023) → $94B (2028)** (per Crux 2026-04-20); accelerated custom compute = fastest-growing category.
+
+### Marvell product proof-points cited by Crux (per Crux 2026-04-20)
+
+- **Custom HBM compute architecture** (December 2024 Marvell announcement, per Crux 2026-04-20): up to **25% more compute, 33% more memory, up to 70% lower memory-interface power** via redesigned HBM subsystem, interfaces, and packaging. Available to custom silicon customers to improve performance, efficiency, and TCO.
+- **Next-generation CXL switch** (March 2026 Marvell launch, per Crux 2026-04-20) — entire announcement built around the **AI memory wall**. CXL (Compute Express Link) allows processors and accelerators to access **pooled memory resources across the rack** rather than relying only on memory physically attached to a single server. Marvell's CXL switch enables true memory pooling across the rack, raising memory utilization, improving data-flow efficiency, lowering TCO. *(Note: this CXL-switch product complements the [[XConn]] acquisition's CXL switching work — Crux's Google-news note frames CXL as Marvell-organic; the 4-acquisitions note above frames XConn as adding additional PCIe/CXL/UALink scale-up switching.)*
+
+### Google multi-vendor custom-silicon strategy (per Crux 2026-04-20)
+
+- **Broadcom (AVGO) — Google long-term agreement through 2031** (signed earlier in April 2026, per Crux 2026-04-20): co-develop and supply future generations of custom AI chips for Google's next-generation AI racks.
+- **Pattern (per Crux 2026-04-20)**: one supplier on main accelerator path, another on memory-side bottlenecks, others elsewhere in rack. Multi-vendor, distributed custom silicon landscape — NOT a one-winner narrative. This Marvell/Google report fits neatly into that picture.
+
+### Supply-chain read-through (per Crux 2026-04-20)
+
+- Positive movement in MRVL can drive action in supply-chain names — though justification depends on the actual news. Crux flagged:
+  - **POET Technologies (POET)** — see Crux POET Tech Deep Dive (Apr 12, 2026): https://cruxcapitalgroup.substack.com/p/poet-tech-deep-dive
+  - **Sivers Semiconductors (SIVE.ST)** — see Crux $SIVE Deep Dive (Apr 6, 2026): https://cruxcapitalgroup.substack.com/p/sive-deep-dive
+
+### Reuters / Funda AI news clip — verbatim transcription (preserved from screenshot in source note, per Crux 2026-04-20)
+
+> Google-parent **Alphabet** (**GOOGL**) is in talks with **Marvell Technologies** (**MRVL**) to produce new versions of its artificial intelligence chips, according to reports. Wall Street analysts view sales of AI accelerator chips as a fast-growing business for Google stock.
+>
+> According to the **Information** and Funda AI, the Google/Marvell partnership would target AI "inferencing" — processing workloads, not training AI models such as Gemini. Also, Marvell would reportedly produce an AI memory chip designed to work with Google processors.
+
+### Key Crux quote — preserve verbatim (per Crux 2026-04-20)
+
+> "Reuters is describing a Google project centered on inference efficiency and memory architecture. Marvell has spent months telling us that a growing share of AI value will come from solving exactly that class of problem."
+
 ## Original Content
 
 Marvell is on an absolute tear lately.

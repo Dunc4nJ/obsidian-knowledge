@@ -332,3 +332,129 @@ For my own positioning, I am watching **$300** first. The **$280–$290** range 
 ---
 
 *Disclosure: I may hold a position in COHR at the time of publication. Positions can change at any time without notice. This report reflects my own research and opinion and is for informational and educational purposes only. Please make your own investment decisions and consult a qualified financial professional before making investment decisions.*
+
+---
+
+## Pre-earnings setup (per Crux 2026-05-06 — preserved here after consolidation)
+
+This section preserves the pre-print framing originally captured at https://cruxcapitalgroup.substack.com/p/coherent-pre-earnings (Crux Capital Group, 2026-05-06, the morning of the Q3 FY26 call), consolidated here to reduce note count. Original pre-print thesis questions retained verbatim; the rest of this note is the post-print Q3 FY26 breakdown. Useful as a retrospective check — did the thesis play out?
+
+### Pre-print framing (per Crux 2026-05-06 pre-earnings)
+
+Pre-print post subtitle: **"Demand Is Clear. Execution Is the Test."** (per Crux 2026-05-06 pre-earnings)
+
+Position context Crux disclosed pre-print: COHR is one of Crux's largest positions; after the prior earnings the stock dropped 20% immediately, Crux bought the dip "because I felt like the market was overlooking the real story," and was +100% from that add going into Q3. Author was holding a significant position into the print and not planning to be quick to add (similar approach to the LITE print the day prior).
+
+Coherent product stack as framed by Crux pre-print: 800G and 1.6T transceivers, EMLs, CW lasers, silicon photonics, photodiodes, ZR/ZR+ modules, DCI, OCS, CPO, external laser sources, industrial lasers, engineered materials, and early AI thermal-management materials. Crux's pre-print summary line: *"Less torque than Lumentum, but a wider rev base to support."*
+
+Crux's three pre-print thesis questions Crux said the print needed to answer (verbatim from the pre-earnings post):
+
+1. Can Coherent turn bookings into massive shipments?
+2. Can 6-inch indium phosphide show up in gross margin?
+3. Can 1.6T move from early ramp language into real revenue?
+
+### Q3 guide thresholds Crux drew pre-print (per Crux 2026-05-06 pre-earnings)
+
+Coherent guided fiscal Q3 to:
+
+- Revenue: $1.70B – $1.84B (midpoint ~$1.77B)
+- Non-GAAP gross margin: 38.5% – 40.5%
+- Non-GAAP OpEx: $320M – $340M
+- Non-GAAP EPS: $1.28 – $1.48 (midpoint ~$1.38)
+
+Crux's beat/miss bar going in:
+
+- **Clean beat** = revenue above ~**$1.82B**, gross margin above **40.5%**, EPS above **$1.45**, and a June-quarter guide showing another clear sequential step.
+- **Weaker print** = revenue near the low end, gross margin **<39%**, EPS below the midpoint, and cautious June-quarter language.
+
+Pre-print swing-factor note: *"The forward guide is the bigger swing factor. A high-end Q3 with a soft June guide could feel mixed. A mid-range Q3 with strong June guidance and better 1.6T, OCS, and 6-inch InP detail could still work."* (per Crux 2026-05-06 pre-earnings)
+
+### Demand backdrop Crux carried into the print (per Crux 2026-05-06 pre-earnings)
+
+- Last quarter: data center revenue +14% sequentially / +36% YoY
+- Last quarter: data-center book-to-bill **>4x**
+- Most of calendar 2026 already booked; calendar 2027 filling quickly; large customers providing detailed forecasts into calendar 2028
+- 800G still ramping; 1.6T starting to ramp; DCI and scale-across rising because AI workloads are spreading across facilities; CPO moving from architecture debate to capacity planning
+- Crux pre-print question: *"Tonight's question is whether that demand is turning into shipments, gross margin, and free cash flow."*
+
+### 6-inch InP — pre-print "center of the thesis" (per Crux 2026-05-06 pre-earnings)
+
+Crux flagged 6-inch indium phosphide as **the most important company-specific lever** going into the print. The pre-print framing — important to preserve as the retrospective benchmark for the post-print update above:
+
+- InP is used for critical optical devices including EMLs, CW lasers, photodiodes, and PICs. The industry is constrained; Coherent's answer is larger wafers.
+- Management's pre-print claims: 6-inch wafer produces **more than 4x as many chips as a 3-inch wafer at less than half the cost**; 6-inch yields already exceed 3-inch yields (supply advantage AND cost advantage in one of the tightest areas of the AI optical supply chain).
+- Pre-print ramp footprint: Sherman, Texas + Jarfälla, Sweden + added capacity in **Switzerland**.
+- Pre-print conversion math: wafer start → shipped transceiver takes roughly six months. Crux was listening for whether the **September and December wafer starts are flowing into March and June shipments**.
+- Pre-print margin tell: *"Gross margin above 40.5% would suggest the 6-inch ramp is beginning to hit the model. A strong demand print with weak gross margin would feel incomplete."*
+
+### 1.6T — pre-print watchpoints (per Crux 2026-05-06 pre-earnings)
+
+- 800G is still the larger base; 1.6T is the faster-growing driver. Both grew last quarter; 1.6T demand accelerated across multiple customers.
+- First phase of the 1.6T ramp = EML-based transceivers + silicon photonics. Coherent also plans a 1.6T **VCSEL-based** transceiver in H2 — VCSELs run on GaAs rather than InP, which could help offload short-reach demand while preserving scarce InP capacity for higher-value applications.
+- Pre-print language test: Crux wanted **production language** — *"1.6T generating revenue across multiple customers, orders extending into 2027, and the product gross-margin accretive."* Heavy use of **qualification / sampling / evaluation** language would be the weaker setup.
+
+### CPO — pre-print framing (per Crux 2026-05-06 pre-earnings)
+
+- Biggest CPO opportunity is **scale-up**. Scale-up links are largely electrical today; when those links move to optical, Coherent gets **new content rather than a format shift**.
+- NVIDIA agreement has real strategic value here: if NVIDIA is helping pull optical into scale-up, Coherent is exposed to a new layer of AI-cluster content.
+- Pre-print listen: Crux wanted to hear that **CPO scale-up revenue begins earlier than investors expect**. Scale-out CPO was already the consensus step Crux expected to hear discussed; scale-up was the upside listen.
+
+### OCS — pre-print framing (per Crux 2026-05-06 pre-earnings)
+
+- Coherent's approach uses **liquid crystal switching technology**, with fewer mechanical failure points and a software stack for control.
+- Pre-print engagement stats: **more than 10 OCS customer engagements**, multiple real data-center deployments. Demand appears strong; the **limiting factor is manufacturing capacity**.
+- Pre-print key question: *"Whether OCS can become a $100 million-per-quarter business and when."* If management starts giving revenue milestones, OCS becomes an estimate driver. If it stays in engagement/backlog language, Crux planned to continue treating it as optionality.
+
+### DCI and scale-across — pre-print (per Crux 2026-05-06 pre-earnings)
+
+- Communications business +44% YoY last quarter; DCI the fastest-growing area inside communications.
+- [[Lumentum (LITE)]] highlighted the same DCI strength on 2026-05-05 (day before COHR pre-earnings).
+- Coherent's content stack pre-print: ZR/ZR+ coherent transceivers, lasers, components, pump lasers, amplifiers, line cards, and systems.
+- Pre-print listen: *"If management confirms DCI growth remains faster than overall communications growth, the scale-across thesis gets another data point."*
+
+### Margin bridge — pre-print (per Crux 2026-05-06 pre-earnings)
+
+- Long-term gross margin target: **>42%**
+- Last Q NG GM: **39%**; Q3 guide midpoint: **39.5%**
+- Pre-print bridge accounting: GM improved ~**470 bps since FY24** via cost reduction (lower input costs, better yields, higher throughput, shorter cycle times, 6-inch InP) + pricing optimization (charging closer to the value of scarce products).
+- Pre-print pressure point: [[Lumentum (LITE)]] is printing much higher margins in the same AI optical cycle. Coherent has broader mix so the comparison is imperfect, but investors will still make it. The bridge for Coherent has to be **operating leverage** as 6-inch InP, 1.6T, OCS, and CPO scale.
+
+### Capex — pre-print discipline (per Crux 2026-05-06 pre-earnings)
+
+- Capacity expansion is Coherent's top capital-allocation priority.
+- NVIDIA deal adds fuel especially in Sherman.
+- Leverage was **1.7x** last quarter, below the company's <2x target, down materially from prior levels. Balance sheet cleaner than a year ago.
+- Pre-print investor framing: *"The market will reward growth capex tied to customer-backed demand and be much less forgiving toward open-ended capacity spending."* Crux wanted the next layer of disclosure — how much capex is required for NVIDIA, 1.6T, OCS, DCI, and 6-inch InP, how much is backed by firm commitments, and when free cash flow improves.
+
+### Pre-print Bull / Base / Bear (per Crux 2026-05-06 pre-earnings)
+
+- **Bull**: high-end Q3, GM >40.5%, strong June guide, clear 1.6T production language, evidence that 6-inch InP is helping margins, more NVIDIA model detail, OCS revenue growth, continued DCI strength → investors raise FY27 estimates.
+- **Base**: solid Q3 around the midpoint, GM ~39.5%, demand still strong, but limited upside detail. Thesis holds while market waits for more proof.
+- **Bear**: low-end print, GM <39%, cautious June guide, vague 1.6T language, delayed 6-inch cost benefit, slow OCS revenue, higher capex with limited FCF clarity → raises concerns that the demand opportunity is moving faster than the model.
+
+### "What I Care About Most" — Crux's pre-print priority list (per Crux 2026-05-06 pre-earnings)
+
+In order, the six things Crux said mattered most going into the print:
+
+1. Gross margin
+2. 6-Inch ramp
+3. 1.6T production language
+4. NVIDIA bridge
+5. OCS scale
+6. DCI and scale-across
+
+### Author's pre-print plan and levels (per Crux 2026-05-06 pre-earnings)
+
+- Holding a significant amount of Coherent shares into the print; not going to be quick to add (similar to LITE the day prior).
+- Recent earnings playbook observation: *"the market will sell off on the headline 10–15%, then either base there or return to flat. This is not a prediction of what is to come, just an observation of what has been happening."*
+- Watching **$275** for a dip add (conservative, low likelihood of being hit; OK with that).
+- **$300** seemed to be strong support (~11–12% drop).
+- Earnings call scheduled 4:30pm EST 2026-05-06; Crux planned to open a paid-subs live-notes thread at call time and publish a full report later that day with YE26 and YE27 financial modeling.
+
+### Pre-print closing line worth preserving (per Crux 2026-05-06 pre-earnings)
+
+> *"The burden is in focus now. A company this broad has to prove it can push capital into the highest-return parts of the portfolio and deliver the ideal product mix."*
+
+---
+
+*Pre-earnings disclosure (per Crux 2026-05-06): "I may hold a position in COHR at the time of publication. This report reflects my own research and commentary. It is intended for informational and educational purposes only and should not be interpreted as individualized investment advice. Every reader's financial situation is different. Do your own work and consult a qualified financial professional before making investment decisions. Nothing here should be read as a recommendation to buy, sell, or hold any security."*
