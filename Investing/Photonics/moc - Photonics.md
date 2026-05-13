@@ -64,6 +64,7 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 - [[Nokia (NOK)]]
 - [[Penguin Solutions (PENG)]]
 - [[Semtech (SMTC)]]
+- [[Volex (VLX.L)]]
 
 ### Equipment & test
 
@@ -85,6 +86,7 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 ## Research
 
 - [[Celestial Photonic Fabric Platform for AI Accelerators - arXiv 2507.14000 specs 33TB unified memory and 115Tbps all-to-all switching across 16 XPUs (Ding Diep 2025)]]
+- [[Crux Capital 2026-05-01 - Q1 earnings roundup LPK AIXA AXTI COHU - AIXA 80-100 G10 tools-yr EUR300-400M opp, AXTI InP backlog $100M+ doubles 2026, LPK 80pct qualified, COHU $750M AI-HPC pipeline]]
 - [[Goldman 2026 AI optical cheat sheet maps EPS upside across lasers PCBs and CCL manufacturers]]
 - [[PhotonCap 2026 - NVIDIAs 4 photonics bets put $2B each into COHR LITE MRVL transceiver layer and $500M Corning warrant on the GLW fiber connectivity layer]]
 - [[PhotonCap 2026 - POET -47 pct selloff explained by Marvell erasing optical engine slot one day after Polariton acquisition]]

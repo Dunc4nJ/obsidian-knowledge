@@ -12,4 +12,4 @@ MACOM (MTSI) — NASDAQ-listed RF/microwave + photonic ICs (lasers, PHY chips, d
 
 ## Notes
 
-_(none yet)_
+- [[Crux 2026-05-08 MTSI Q2 FY26 earnings - data center guide raised to 60+ pct YoY FY26 EPS upgraded to $5 FY27 base $325 bull $385]]

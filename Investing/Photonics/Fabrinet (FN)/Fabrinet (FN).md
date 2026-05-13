@@ -12,4 +12,5 @@ Fabrinet (FN) — NYSE-listed contract manufacturer for optical communications m
 
 ## Notes
 
-_(none yet)_
+- [[FN 2026-05-04 pre-earnings intro and watchlist - HPC ramp toward 150M per quarter, datacom EML-supply test, capacity pull-forward]]
+- [[FN 2026-Q3 earnings - $1.214B revenue +39 pct YoY, Datacom supply-constrained, DCI +38 pct QoQ, capacity build to $8.5-11.5B, CPO with 3 customers and Raytek stake]]

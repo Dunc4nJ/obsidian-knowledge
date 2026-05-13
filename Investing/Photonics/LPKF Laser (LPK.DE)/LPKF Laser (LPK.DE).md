@@ -12,4 +12,4 @@ XETRA; industrial laser equipment maker. Per Sancet, LIDE (Laser Induced Deep Et
 
 ## Notes
 
-_(none yet)_
+- [[Crux 2026-04-24 thesis - LPK (LPKF) starter on LIDE glass-substrate process for AI advanced packaging optionality]]

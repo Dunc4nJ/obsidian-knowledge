@@ -13,4 +13,4 @@ US-listed; optical filters and test equipment.
 
 ## Notes
 
-_(none yet)_
+- [[Crux Capital VIAV 2026-Q3 earnings recap - 43pc revenue growth NSE drives AI infra re-rate Spirent on track CPO becomes new test insertion point]]

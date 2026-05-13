@@ -10,4 +10,5 @@ Sanmina (SANM) — NASDAQ-listed integrated manufacturing services (EMS); manufa
 
 ## Notes
 
-_(none yet)_
+- [[SANM 2026-04-26 pre-earnings re-rate thesis - ZT-AMD deal positions Sanmina for AI rack and 1.6T optics ramp]]
+- [[SANM 2026-Q2 earnings - $4.01B revenue 2x guide, ZT $1.88B on AMD accelerated compute, mix 69 pct Cloud and AI, FY27 $16B+ guide]]
