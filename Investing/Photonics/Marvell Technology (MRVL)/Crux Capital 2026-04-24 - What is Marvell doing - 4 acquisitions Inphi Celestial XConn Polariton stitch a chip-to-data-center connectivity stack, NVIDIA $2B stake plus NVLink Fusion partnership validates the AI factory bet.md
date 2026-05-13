@@ -1,7 +1,7 @@
 ---
 created: 2026-05-13
 published: 2026-04-24
-description: Crux Capital's "talking to a buddy" framing of what [[Marvell Technology (MRVL)]] is actually building — four acquisitions (Inphi 2021 for DSP+silicon-photonics on the optical speed cycle; Celestial AI 2025 for scale-up optical fabric; XConn for PCIe/CXL/UALink scale-up switching; Polariton 2026 for plasmonic modulators to 3.2T+) plus the March 31 2026 NVIDIA $2B investment and NVLink Fusion partnership — stitching together a chip-to-memory-to-rack-to-DCI connectivity layer for AI factories; explains why MRVL is up ~100% in a month after sour sentiment.
+description: Crux Capital's "talking to a buddy" framing of what [[Marvell Technology (MRVL)]] is actually building — four acquisitions (Inphi 2021 for DSP+silicon-photonics on the optical speed cycle; Celestial AI 2025 for scale-up optical fabric; XConn for PCIe/CXL/UALink scale-up switching; Polariton 2026 for plasmonic modulators to 3.2T+) plus the March 31 2026 NVIDIA $2B investment and NVLink Fusion partnership — stitching together a chip-to-memory-to-rack-to-DCI connectivity layer for AI factories; explains why MRVL is up ~100% in a month after sour sentiment. Consolidated with Crux 2026-04-20 Marvell-Google news lens (MPU+TPU two-chip structure puts Marvell on the memory side of inference; XPU-attach $14.6B by 2028 / 90% CAGR thesis validated).
 source: https://cruxcapitalgroup.substack.com/p/what-is-marvell-doing
 type: analysis
 authors: ["Crux Capital Group (@cruxcapitalgroup)"]
