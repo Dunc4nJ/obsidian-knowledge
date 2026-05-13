@@ -12,4 +12,4 @@ US-listed; optical transceivers.
 
 ## Notes
 
-_(none yet)_
+- [[AAOI 2026-03 Crux deep dive - in-house InP laser fab Texas, 800G to 1.6T ramp, over 1B 2026 revenue guide]]

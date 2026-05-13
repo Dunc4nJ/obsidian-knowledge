@@ -12,8 +12,14 @@ For shorter-horizon systematic trading content see `Trading/`. For prediction-ma
 
 ## Frameworks
 
+- [[EML vs CW lasers - integrated vs modular optical transmitter architectures shape 400G 800G 1.6T module design]]
+- [[LPO NPO CPO optical placement architectures explain power latency and serviceability tradeoffs as optics migrate toward the ASIC - Crux Capital primer]]
+- [[Photonics 101 - foundational primer on light-based data transmission lasers transceivers and the AI optical stack]]
+- [[Photonics solves AI datacenter bandwidth power heat latency and distance bottlenecks copper cannot - Crux Capital primer]]
 - [[SJ Investments asymmetric investing framework screens for compressed valuations with uncapped upside]]
 - [[SJ Investments macro-to-bottleneck funnel identifies 10x investments through sector scarcity analysis]]
+- [[The Photonics Stack - layered map of where laser substrate transceiver DSP and switch companies sit and which layers are bottleneck vs commodity]]
+- [[Vertical integration in optical transceivers - AAOI deepest in light engines, Lumentum focused on optical core, Coherent broadest stack]]
 
 ## Sectors
 

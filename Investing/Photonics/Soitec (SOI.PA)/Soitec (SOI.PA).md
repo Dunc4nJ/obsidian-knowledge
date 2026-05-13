@@ -12,4 +12,4 @@ Euronext Paris; SOI (silicon-on-insulator) substrate wafers. Per Sancet, every p
 
 ## Notes
 
-_(none yet)_
+- [[Soitec (SOI.PA) deep dive — Photonics-SOI substrate monopoly behind AI silicon-photonics ramp, RF-SOI trough masks recovery; €100 base case (Crux 2026-04-26)]]

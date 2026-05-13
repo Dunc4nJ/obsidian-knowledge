@@ -12,4 +12,4 @@ Silicon photonics optical engine and CPO interposer designer; Toronto-listed (PO
 
 ## Notes
 
-_(none yet)_
+- [[Crux Capital 2026-04-12 - POET 2026 make-or-break inflection year - capital and product breadth in place but story hinges on initial large-order conversion and Optical Interposer proof]]

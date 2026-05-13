@@ -12,4 +12,4 @@ Nasdaq Stockholm; Swedish III-V semiconductor maker. Photonics segment supplies 
 
 ## Notes
 
-_(none yet)_
+- [[Sivers (SIVE.ST) deep dive - 290M cap InP laser array supplier inside Ayar SuperNova and Jabil 1.6T pluggables, 2027 timeline to CPO revenue]]

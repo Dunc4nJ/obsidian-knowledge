@@ -13,4 +13,4 @@ US-listed; photonics, optical components, materials.
 
 ## Notes
 
-_(none yet)_
+- [[Crux Capital 2026-03-19 - Coherent 6-inch InP wafer monopoly yields 4x devices and anchors $20B CPO-OCS-MultiRail-Thermal expansion]]

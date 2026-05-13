@@ -13,4 +13,4 @@ US-listed; optical networking systems and WDM.
 
 ## Notes
 
-_(none yet)_
+- [[Ciena (CIEN) deep dive — AI scale-across optical leader with $7B backlog and 3nm WaveLogic 6e lead (Crux 2026-03-24)]]
