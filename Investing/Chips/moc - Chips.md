@@ -18,7 +18,8 @@ Companies and research covering fabless chip designers — companies that design
 - [[MediaTek (2454.TW)]]
 - [[Nvidia (NVDA)]]
 - [[Qualcomm (QCOM)]]
+- [[Tesla (TSLA)]]
 
 ## Research
 
-_(none yet)_
+- [[PhotonCap 2026-04-28 - GTC 2026 Vera Rubin platform makes foundry stack multi-anchor across NVL72 + Groq LPX + DGX Rubin NVL8, bifurcating 14 stocks by training vs inference + agentic exposure]]

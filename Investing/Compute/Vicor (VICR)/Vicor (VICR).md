@@ -10,6 +10,8 @@ Vicor (VICR) — NASDAQ; designs and manufactures high-density vertical power-de
 
 ## Notes
 
+- [[PhotonCap 2026-04-21 - P=I²R physics drives Vicor VPD adoption as AI accelerators hit 0.7V x 2000A and last-inch PCB loss scales as current squared]]
+- [[PhotonCap 2026-04-22 - VICR Q1 2026 earnings - 3 A per mm2 plus 40x current multiplication plus 1.5mm package thickness define 2nd-gen VPD inflection]]
 - [[joedab12 2026-04-21 - VICR $400 this year and $1000+ long-term thesis as fab1 expands 50pct on demand from AMD-GOOG-NVDA with $600-800 acquisition range]]
 - [[joedab12 2026-04-21 - VICR customer reveal NVDA GOOG AMZN AMD all ramping vertical power delivery per founder-led management commentary]]
 - [[joedab12 2026-04-21 - VICR fab1 capacity expansion uses nearby satellite facility for simpler steps lifting capacity 50pct ahead of fab2 and third-party license deal]]

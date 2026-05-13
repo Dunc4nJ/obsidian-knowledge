@@ -24,3 +24,4 @@ Companies and research covering compute capacity providers — companies that ow
 ## Research
 
 - [[FundaAI 2026 - Google TPU vertical integration cuts rack TCO 2x vs NVIDIA GB200, redirecting hyperscaler CapEx toward optics and memory]]
+- [[PhotonCap 2026 - $580B hyperscaler capex maps to 4 hardware layers as GCP +63pct, Azure +40pct, AWS +28pct diverge in capex ROI velocity post Q1 earnings]]
