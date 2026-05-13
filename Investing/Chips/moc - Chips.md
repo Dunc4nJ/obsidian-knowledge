@@ -14,11 +14,10 @@ Companies and research covering fabless chip designers — companies that design
 - [[Astera Labs (ALAB)]]
 - [[Broadcom (AVGO)]]
 - [[Cerebras (CBRS)]]
-- [[Marvell (MRVL)]]
 - [[MediaTek (2454.TW)]]
+- [[Microchip Technology (MCHP)]]
 - [[Nvidia (NVDA)]]
 - [[Qualcomm (QCOM)]]
-- [[Tesla (TSLA)]]
 
 ## Research
 

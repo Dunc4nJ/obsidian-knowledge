@@ -12,6 +12,7 @@ Companies and research covering compute capacity providers — companies that ow
 
 - [[Alphabet (GOOGL)]]
 - [[Amazon (AMZN)]]
+- [[Arista Networks (ANET)]]
 - [[Eaton (ETN)]]
 - [[Meta Platforms (META)]]
 - [[Microsoft (MSFT)]]
