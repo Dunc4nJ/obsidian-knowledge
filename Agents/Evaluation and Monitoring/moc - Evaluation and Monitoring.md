@@ -19,6 +19,7 @@ Measuring agent quality, observability, regression testing, production monitorin
 - [[Agno native tracing keeps agent observability data in your own database]]
 - [[VictoriaMetrics is becoming the default observability stack for AI agent systems]]
 - [[Brainstore turns AI observability into database-native trace architecture for long-horizon agents]]
+- [[SmithDB makes LangSmith 12x faster by treating agent observability as an LSM problem on object storage]]
 - [[Laminar trace viewer reads agent runs as transcripts of LLM-tool loops not backend span trees]]
 
 - [[a working offline eval turns vibes into repeatable measurement in 10 steps]]
