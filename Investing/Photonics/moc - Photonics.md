@@ -63,6 +63,7 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 ### Networking systems
 
 - [[Ciena (CIEN)]]
+- [[Clearfield (CLFD)]]
 - [[Eoptolink (300502.SZ)]]
 - [[Fabrinet (FN)]]
 - [[Huber+Suhner (HUBN.SW)]]
