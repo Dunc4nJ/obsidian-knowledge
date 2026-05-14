@@ -87,6 +87,13 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 
 ### Uncategorized
 
+- [[AEye (LIDR)]]
+- [[Aeva Technologies (AEVA)]]
+- [[Hesai (HSAI)]]
+- [[Innoviz Technologies (INVZ)]]
+- [[Koito Manufacturing (7276.T)]]
+- [[MicroVision (MVIS)]]
+- [[Ouster (OUST)]]
 - [[Smartoptics (SMOP.OL)]]
 
 ## Research
