@@ -13,6 +13,7 @@ Penguin Solutions (NASDAQ: PENG, formerly SMART Global Holdings) — system inte
 ## Notes
 
 - [[ALAB Q1 2026 blowout (rev +93pct YoY beat by 5pct, EPS +85pct YoY beat by 13pct) is a positive CXL read-through to PENG MemoryAI - ThematicTrader]]
+- [[Crux Capital 2026-05-14 - PENG new X favorite check - thesis has legs as memory-led AI inference pivot at 1.7x fwd sales 22x EPS, CXL MemoryAI rerate path or PMA Marvell-Celestial moonshot]]
 - [[Gazettabyte 2025 - Marvell bets big on optical IO with $3.25B Celestial deal names Penguin Computing as 2RU chassis builder for the Photonic Fabric Appliance]]
 - [[PENG 10-K page 8 confirms SMART CXL Memory ships as AIC in Altus AMD EPYC servers, AMD pricing-power read-through and Zefr proprietary screening - quantLR]]
 - [[PENG MemoryAI CXL KV Cache server ships with Tier-1 bank win, FY26 guide raised to 1.5-1.6B - Stockinger institutional brief]]
