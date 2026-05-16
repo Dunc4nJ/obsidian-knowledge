@@ -33,6 +33,7 @@ Measuring agent quality, observability, regression testing, production monitorin
 - [[trace learning turns agent execution history into reusable strategies that compound performance over time]]
 - [[agent trace data should live in your data lake not a 30-day SaaS retention window]]
 - [[every deploy should trigger a monitor-triage-fix loop that dispatches a coding agent to fix regressions before users notice]]
+- [[Langfuse Academy primer argues tracing is the foundational primitive every step of the agent improvement loop operates on]]
 
 ## Resources
 
