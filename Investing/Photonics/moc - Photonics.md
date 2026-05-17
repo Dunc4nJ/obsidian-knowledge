@@ -21,6 +21,8 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 
 - [[AXT (AXTI)]]
 - [[IQE (IQE.L)]]
+- [[Nippon Chemical Industrial (4092.T)]]
+- [[Rasa Industries (4022.T)]]
 - [[Soitec (SOI.PA)]]
 
 ### Foundries
@@ -108,6 +110,7 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 - [[Crux Capital 2026-04-15 - Signals from Upstream, epitaxy and deposition tools (AIXA VECO ALRIB) confirm photonics buildout breadth across InP and quantum-dot]]
 - [[Crux Capital 2026-05-01 - Q1 earnings roundup LPK AIXA AXTI COHU - AIXA 80-100 G10 tools-yr EUR300-400M opp, AXTI InP backlog $100M+ doubles 2026, LPK 80pct qualified, COHU $750M AI-HPC pipeline]]
 - [[Crux Capital 2026-05-10 - 12 ways to play OCS across 5 layers - LITE $400M backlog, COHR doubles TAM to $4B, HUBN Polatis hyperscaler PO, plus Eoptolink Silex Santec AFR Furukawa RoboTechnik FN VIAV KEYS supply chain]]
+- [[GSR via jukan05 - InP bottleneck is 6N-7N red phosphorus not indium - Nippon Chemical 4092.T and Rasa 4022.T are Japanese feedstock choke points]]
 - [[Goldman 2026 AI optical cheat sheet maps EPS upside across lasers PCBs and CCL manufacturers]]
 - [[PhotonCap 2026 - NVIDIAs 4 photonics bets put $2B each into COHR LITE MRVL transceiver layer and $500M Corning warrant on the GLW fiber connectivity layer]]
 - [[PhotonCap 2026 - POET -47 pct selloff explained by Marvell erasing optical engine slot one day after Polariton acquisition]]
