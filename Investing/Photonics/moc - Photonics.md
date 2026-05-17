@@ -69,6 +69,7 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 - [[Eoptolink (300502.SZ)]]
 - [[Fabrinet (FN)]]
 - [[Huber+Suhner (HUBN.SW)]]
+- [[Jabil (JBL)]]
 - [[Nokia (NOK)]]
 - [[Penguin Solutions (PENG)]]
 - [[Semtech (SMTC)]]
