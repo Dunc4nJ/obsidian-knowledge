@@ -25,8 +25,10 @@ Companies and research covering the **truly horizontal** semiconductor manufactu
 - [[Ibiden (4062.T)]]
 - [[Intel (INTC)]]
 - [[Keysight (KEYS)]]
+- [[Kinsus Interconnect (3189.TW)]]
 - [[Kulicke & Soffa (KLIC)]]
 - [[Lam Research (LRCX)]]
+- [[Nan Ya PCB (8046.TW)]]
 - [[SKC (011790.KS)]]
 - [[TSMC (TSM)]]
 - [[Teradyne (TER)]]
@@ -34,6 +36,7 @@ Companies and research covering the **truly horizontal** semiconductor manufactu
 
 ## Research
 
+- [[@jukan05 May 2026 - Taiwanese media flags NVIDIA ABF substrate lock-up via LTAs and equity stakes after TSMC COUPE-on-Substrate 2H 2026 mass production - AI GPU substrates consume 5-10x more ABF than CPU - Unimicron Ibiden Nan Ya Kinsus as choke points]]
 - [[Aleabit May 2026 semi roundup - CoPoS pulled in, Vera Rubin cooling shift, 2D NAND shortage spirals, mag7 offers to fund SK Hynix, glass substrates accelerate]]
 - [[PhotonCap 2026-05 - LPKF up 255 pct YTD as LIDE TGV process becomes glass substrate chokepoint for EIC-to-CPO packaging shift]]
 - [[PhotonCap 2026-05 - bonding equipment is the AI chokepoint with BESI and KLIC at the HBM4 plus CPO bottleneck]]
