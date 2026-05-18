@@ -36,6 +36,7 @@ Companies and research covering the **truly horizontal** semiconductor manufactu
 
 ## Research
 
+- [[@insane_analyst 650V class SiC and GaN power device landscape - 15-vendor comparative table at 80C Vds 400V covering Rds-on Coss Eoss Qoss and pkg integrated-driver tradeoffs]]
 - [[@jukan05 May 2026 - Taiwanese media flags NVIDIA ABF substrate lock-up via LTAs and equity stakes after TSMC COUPE-on-Substrate 2H 2026 mass production - AI GPU substrates consume 5-10x more ABF than CPU - Unimicron Ibiden Nan Ya Kinsus as choke points]]
 - [[Aleabit May 2026 semi roundup - CoPoS pulled in, Vera Rubin cooling shift, 2D NAND shortage spirals, mag7 offers to fund SK Hynix, glass substrates accelerate]]
 - [[PhotonCap 2026-05 - LPKF up 255 pct YTD as LIDE TGV process becomes glass substrate chokepoint for EIC-to-CPO packaging shift]]
