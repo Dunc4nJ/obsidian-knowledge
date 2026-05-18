@@ -12,6 +12,7 @@ Penguin Solutions (NASDAQ: PENG, formerly SMART Global Holdings) — system inte
 
 ## Notes
 
+- [[@ThematicTrader PENG FY27 model - $2.00-2.13B rev at 32pct GM yields $5.58-5.95 EPS, 20-25x implies $120-150 PT, FY28-30 scenarios to $12.5-17.1 EPS, H2 FY26 inflection from 7 AI factory logos + SK Hynix allocation]]
 - [[ALAB Q1 2026 blowout (rev +93pct YoY beat by 5pct, EPS +85pct YoY beat by 13pct) is a positive CXL read-through to PENG MemoryAI - ThematicTrader]]
 - [[Crux Capital 2026-05-14 - PENG new X favorite check - thesis has legs as memory-led AI inference pivot at 1.7x fwd sales 22x EPS, CXL MemoryAI rerate path or PMA Marvell-Celestial moonshot]]
 - [[Gazettabyte 2025 - Marvell bets big on optical IO with $3.25B Celestial deal names Penguin Computing as 2RU chassis builder for the Photonic Fabric Appliance]]
