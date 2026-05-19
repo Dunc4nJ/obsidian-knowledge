@@ -27,6 +27,7 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 
 ### Foundries
 
+- [[Quantum Computing Inc (QUBT)]]
 - [[Tower Semiconductor (TSEM)]]
 - [[Win Semi (3105.TWO)]]
 
@@ -34,10 +35,14 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 
 - [[Coherent (COHR)]]
 - [[Furukawa Electric (FUWAY)]]
+- [[IPG Photonics (IPGP)]]
 - [[Lumentum (LITE)]]
 - [[Mitsubishi Electric (MIELY)]]
+- [[QD Laser (6613.T)]]
 - [[Sivers Semiconductors (SIVE.ST)]]
 - [[Sumitomo Electric (SMTOY)]]
+- [[Yuanjie Semiconductor (688498.SS)]]
+- [[nLIGHT (LASR)]]
 
 ### Optical components & engines
 
@@ -49,7 +54,9 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 - [[Corning (GLW)]]
 - [[Credo Technology (CRDO)]]
 - [[Enablence Technologies (ENA.V)]]
+- [[Fujikura (5803.T)]]
 - [[Furukawa Electric (FUWAY)]]
+- [[Innolight (300308.SZ)]]
 - [[Jenoptik (JEN.DE)]]
 - [[LightPath (LPTH)]]
 - [[Lightwave Logic (LWLG)]]
@@ -104,6 +111,7 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 
 ## Research
 
+- [[@damnang2 optical investment map v1.0 - 7 layers L1 Materials to L7 Test plus FRO LRO LPO NPO CPO axis with 50 names and 22-company vertical integration matrix]]
 - [[Celestial Photonic Fabric Platform for AI Accelerators - arXiv 2507.14000 specs 33TB unified memory and 115Tbps all-to-all switching across 16 XPUs (Ding Diep 2025)]]
 - [[Crux Capital 2026-01-08 - The InP Crisis - AXTI 40 pct of global InP supply, 60-day China export permits, $100M raise to double capacity in 9 months, POET ALMU LWLG TFLN as substrate disruptors]]
 - [[Crux Capital 2026-03-31 - Samsung CPO news reframed - silicon photonics foundry play hits GFS TSEM TSM first, lasers LITE COHR safe near-term unless Samsung internalizes light source]]

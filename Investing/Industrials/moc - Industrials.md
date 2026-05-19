@@ -10,10 +10,13 @@ Industrial conglomerates, capital goods, heavy machinery, engines, and gen-sets 
 
 ## Companies
 
+- [[Amphenol (APH)]]
 - [[Caterpillar (CAT)]]
 - [[Cummins (CMI)]]
+- [[Prysmian (PRY.MI)]]
 - [[Sanmina (SANM)]]
 - [[Sumitomo Heavy Industries (6302.T)]]
+- [[TE Connectivity (TEL)]]
 
 ## Research
 

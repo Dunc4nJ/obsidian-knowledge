@@ -32,6 +32,7 @@ Companies and research covering the **truly horizontal** semiconductor manufactu
 - [[SKC (011790.KS)]]
 - [[TSMC (TSM)]]
 - [[Teradyne (TER)]]
+- [[UMC (UMC)]]
 - [[Unimicron (3037.TW)]]
 
 ## Research
