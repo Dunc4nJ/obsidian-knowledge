@@ -69,29 +69,32 @@ All values at 80°C. Assume Vds = 400V. `?` cells preserved from source where au
 
 The thread tail picked up reader pushback on visual style — "It's even more painful that it is in comic sans" (@MajorOcelot45), "can you use easier fonts and paler colors? the chart is painful to read lol" (@mattmtxsc). Irrational Analyst replied with 😈 emoji, signaling intentional aesthetic. The substance is the dataset, not the rendering.
 
-## Vendor → ticker mapping (for future scaffolding)
+## Vendor → ticker mapping
 
-Vault folder status as of capture:
+All public-market vendors now have vault folders scaffolded under either `Power Electronics/` (canonical) or `Chips/` (cross-sector when broader analog/MCU thesis dominates):
 
-- **Infineon** (IFX.DE) — not yet scaffolded
-- **Novitas** — likely Navitas Semiconductor (NVTS); not yet scaffolded
-- **Renesas** (6723.T) — not yet scaffolded
-- **STM** (STM) — not yet scaffolded
-- **TI** (TXN) — not yet scaffolded
-- **Onsemi** (ON) — not yet scaffolded
-- **Wolfspeed** (WOLF) — not yet scaffolded
-- **Innoscience** (2577.HK Hong Kong) — not yet scaffolded
-- **Nexperia** — Wingtech subsidiary, complicated parent ownership
-- **ROHM** (6963.T) — not yet scaffolded
-- **Toshiba** (6502.T) — not yet scaffolded
-- **Fuji Electric** (6504.T) — not yet scaffolded
-- **Semiq** — private
-- **[[Microchip Technology (MCHP)]]** — EXISTS in vault
-- **Sanan** — likely Sanan Optoelectronics (600703.SH) — not yet scaffolded
-- **CGD** — Cambridge GaN Devices, private UK
-- **Power Integrations** (POWI) — not yet scaffolded
+**Power Electronics canonical home:**
+- [[Infineon Technologies (IFX.DE)]] — #1 in power semis; 2 GaN parts incl integrated-driver IMLT65R015SAD1
+- [[Navitas Semiconductor (NVTS)]] — pure-play GaN (the "Novitas" entries: NV6524 + G3FZ5MTOHL)
+- [[STMicroelectronics (STM)]] — analog + power; SiC SCT011T065G3 + GaN SGT03R7DFTP in development
+- [[Onsemi (ON)]] — SiC focus; LMG365xR025 GaN annotated "very smooth pkg"
+- [[Wolfspeed (WOLF)]] — pure-play SiC; only direct SiC TOLT in landscape (C4WV01506ST)
+- [[Innoscience (2577.HK)]] — Chinese pure-play GaN; 2 parts (NN650TA030AH + GANC035-650UTH)
+- [[ROHM (6963.T)]] — Japanese SiC + GaN; GNP2025TLR + SCT3017ALHR
+- [[Fuji Electric (6504.T)]] — Japanese power; vertical GaN R&D angle
+- [[Sanan Optoelectronics (600703.SH)]] — Chinese GaN foundry-style positioning
+- [[Power Integrations (POWI)]] — integrated power-conversion ICs (author flagged as opaque)
+- [[Toshiba (6502.T)]] — TW015N65C SiC; conglomerate post-Kioxia spinoff
 
-A dedicated `Power Electronics/` sector or batch-scaffold under existing `Chips/` (or a new `Compound Semi/` if differentiated) would unlock wiki-resolution for ~10 public tickers on the next power-electronics capture. Currently filed here as cross-vendor research per CLAUDE.md placement matrix.
+**Chips canonical home (cross-sector exposure to Power Electronics):**
+- [[Texas Instruments (TXN)]] — analog + embedded dominant; NV8GO15N065SC1 GaN
+- [[Renesas (6723.T)]] — MCU + analog + automotive dominant; TP65H03064PRS GaN
+- [[Microchip Technology (MCHP)]] — RF/comms GaN amplifiers (different class); SiC MSC015AAA070B
+
+**Private / not scaffolded:**
+- Nexperia — Wingtech subsidiary
+- Semiq — private foundry
+- CGD — Cambridge GaN Devices, private UK
 
 ## Methodology note (how this transcription was built)
 

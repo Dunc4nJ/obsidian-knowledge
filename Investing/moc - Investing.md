@@ -37,5 +37,7 @@ For shorter-horizon systematic trading content see `Trading/`. For prediction-ma
 - [[moc - Industrials]]
 - [[moc - Memory]]
 - [[moc - Photonics]]
+- [[moc - Power Electronics]]
+- [[moc - Robotics]]
 - [[moc - Semi Infrastructure]]
 - [[moc - Space]]

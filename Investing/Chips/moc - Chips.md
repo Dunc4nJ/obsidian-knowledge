@@ -18,6 +18,8 @@ Companies and research covering fabless chip designers — companies that design
 - [[Microchip Technology (MCHP)]]
 - [[Nvidia (NVDA)]]
 - [[Qualcomm (QCOM)]]
+- [[Renesas (6723.T)]]
+- [[Texas Instruments (TXN)]]
 
 ## Research
 
