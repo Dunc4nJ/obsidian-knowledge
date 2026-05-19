@@ -86,6 +86,7 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 - [[Oxford Instruments (OXIG.L)]]
 - [[Riber (ALRIB.PA)]]
 - [[RoboTechnik (300757.SZ)]]
+- [[SCHMID Group (SHMD)]]
 - [[Silex Microsystems (SILEX.SS)]]
 - [[Veeco Instruments (VECO)]]
 - [[Viavi (VIAV)]]
