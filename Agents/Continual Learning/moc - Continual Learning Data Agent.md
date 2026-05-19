@@ -11,6 +11,8 @@ Research and frameworks for building AI agents that persistently learn, remember
 
 ## Research Papers
 
+- [[ECHO teaches CLI agents a terminal world model for free by training on environment-response tokens during GRPO]] — Microsoft Research AI Frontiers: add a cross-entropy loss on terminal-output tokens to standard GRPO, nearly doubling TerminalBench-2.0 pass@1 at 8B/14B, recovering most of the expert-SFT gap, and enabling verifier-free self-improvement from environment prediction alone
+
 - [[self-improving agents independently invent memory systems when given permission to modify themselves]] — mem0 analysis of Meta's HyperAgents: DGM-H agents independently build performance trackers, synthesized insight stores, and causal hypothesis logs by generation 3 when given full self-modification permission
 
 - [[trajectory-informed memory extraction turns agent execution histories into reusable strategy recovery and optimization tips]] — IBM Research framework: four-component pipeline extracting strategy/recovery/optimization tips from agent trajectories via causal attribution, +14.3pp SGC on AppWorld
