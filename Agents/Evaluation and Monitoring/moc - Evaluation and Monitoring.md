@@ -34,6 +34,8 @@ Measuring agent quality, observability, regression testing, production monitorin
 - [[agent trace data should live in your data lake not a 30-day SaaS retention window]]
 - [[every deploy should trigger a monitor-triage-fix loop that dispatches a coding agent to fix regressions before users notice]]
 - [[Langfuse Academy primer argues tracing is the foundational primitive every step of the agent improvement loop operates on]]
+- [[Langfuse Academy frames eval datasets as production-mirroring test suites where item structure follows from evaluator choice]]
+- [[Langfuse Academy argues offline evaluation starts with manual review and automates only the failure modes worth checking repeatedly]]
 - [[LangSmith Engine turns production agent traces into issues evaluators and regression examples by separating screening from investigation]]
 
 ## Resources
