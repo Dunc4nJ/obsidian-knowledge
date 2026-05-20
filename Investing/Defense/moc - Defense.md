@@ -12,9 +12,12 @@ Defense primes (LMT/RTX/NOC/GD), tier-1 suppliers, defense-pure-play tech, defen
 
 - [[BAE Systems (BAESY)]]
 - [[CACI International (CACI)]]
+- [[General Dynamics (GD)]]
 - [[Lockheed Martin (LMT)]]
 - [[Motorola Solutions (MSI)]]
 - [[RTX (RTX)]]
+- [[Rheinmetall (RHM.DE)]]
+- [[Textron (TXT)]]
 
 ## Research
 

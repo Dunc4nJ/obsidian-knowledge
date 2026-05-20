@@ -11,3 +11,4 @@ Ouster (OUST) — NYSE-listed digital lidar / silicon-photonic sensing platform.
 ## Notes
 
 - [[@snmart OUST thesis Apr 2026 - digital-lidar architecture rides chip cost curve, Hesai licenses IP, Stereolabs acquisition extends into cameras + edge AI compute (Physical AI platform)]]
+- [[Pennycheck OUST defense applications OSINT May 2026 - LiDAR de facto standard across 17+ NATO defense integrators 5 platform classes UGV UAV USV counter-UAS directed-energy]]
