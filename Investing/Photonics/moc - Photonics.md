@@ -55,6 +55,7 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 - [[MACOM Technology (MTSI)]]
 - [[Marvell Technology (MRVL)]]
 - [[POET Technologies (POET)]]
+- [[Precision Optics (POCI)]]
 - [[Santec (6777.T)]]
 - [[Sumitomo Electric (SMTOY)]]
 - [[Viavi (VIAV)]]
