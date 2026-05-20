@@ -11,6 +11,7 @@ Companies and research covering fabless chip designers — companies that design
 ## Companies
 
 - [[Advanced Micro Devices (AMD)]]
+- [[Alphawave Semi (AWE.L)]]
 - [[Astera Labs (ALAB)]]
 - [[Broadcom (AVGO)]]
 - [[Cerebras (CBRS)]]

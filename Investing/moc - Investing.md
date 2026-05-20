@@ -16,6 +16,7 @@ For shorter-horizon systematic trading content see `Trading/`. For prediction-ma
 - [[Crux Capital announces forthcoming 100-120-page photonics report covering 800G-1.6T transition CPO and 20 mapped companies (2026-02-17)]]
 - [[EML vs CW lasers - integrated vs modular optical transmitter architectures shape 400G 800G 1.6T module design]]
 - [[LPO NPO CPO optical placement architectures explain power latency and serviceability tradeoffs as optics migrate toward the ASIC - Crux Capital primer]]
+- [[Modern Wireline Transceivers - JSSC Feb 2026 tutorial by Chan Carusone Dickson Palermo Shekhar Mansuri covering short-reach analog mixed-signal long-reach DSP ADC-DAC optical intra-DC links plus clocking and FEC architectures]]
 - [[OCS optical circuit switching - MEMS vs liquid crystal Coherent vs Lumentum and Google Jupiter validation (2026-04-01)]]
 - [[Photonics 101 - foundational primer on light-based data transmission lasers transceivers and the AI optical stack]]
 - [[Photonics solves AI datacenter bandwidth power heat latency and distance bottlenecks copper cannot - Crux Capital primer]]
