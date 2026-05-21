@@ -22,6 +22,7 @@ AI agents that interact with structured data to answer questions — text-to-SQL
 
 ## Infrastructure
 
+- [[dltHub Pro delivers a context graph for data engineering because agent-readable schemas and traces outcompete chat-box overlays when 91% of pipelines are agent-written]] — dltHub Pro launch: agents now write 91% of dlt pipelines (81k/month); execution-path context graphs beat chat-box overlays; Python-first architecture right for humans and agents alike
 - [[semantic SQL parsing makes data transformations programmatically validatable which is what data agents need underneath them]] — SQLMesh parses SQL via SQLGlot for compile-time validation, column-level lineage, and cross-engine transpilation; now owned by Fivetran alongside dbt
 
 ## Frameworks
