@@ -32,6 +32,7 @@ How agents store, retrieve, and evolve knowledge across sessions. Memory archite
 - [[Everything Is Connected - knowledge graphs encode entities as directed-labeled triples that support multi-hop traversal and ontology-driven inference]]
 - [[How to Make Knowledge Graphs Fast - query optimization combines triple indexing, adjacency compression, and partitioning to tame exponential traversal fan-out]]
 - [[Hermes, Codex, and Claude Code converge on markdown plus filesystem tools because memory is a judgment problem not a data structure problem]]
+- [[Auto-Dreamer learns offline region rewriting to shrink language-agent memory 12x while improving task success]]
 
 ## Series
 
