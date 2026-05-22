@@ -11,9 +11,7 @@ Companies and research covering unmanned aerial systems (UAS) across defense, co
 ## Companies
 
 - [[AeroVironment (AVAV)]]
-- [[Amprius Technologies (AMPX)]]
 - [[Ondas (ONDS)]]
-- [[SES AI Corporation (SES)]]
 - [[Unusual Machines (UMAC)]]
 
 ## Research
