@@ -10,4 +10,4 @@ Power Integrations (POWI, Nasdaq) — integrated power-conversion ICs. @insane_a
 
 ## Notes
 
-_(none yet)_
+- [[@bryzonx POWI 1700V InnoMux-2 thesis for VR200 800V data center - rack scaling 120kW to 600kW makes voltage survival bottleneck, NVTS 650V destroyed, NVIDIA co-design, rack power capex 36K to 398K]]
