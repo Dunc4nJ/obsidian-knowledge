@@ -11,6 +11,7 @@ Edge AI / physical AI — running inference close to where data is created. Span
 ## Companies
 
 - [[Ambarella (AMBA)]]
+- [[AmpliTech Group (AMPG)]]
 - [[Blaize (BZAI)]]
 - [[CEVA (CEVA)]]
 - [[Harmonic (HLIT)]]
