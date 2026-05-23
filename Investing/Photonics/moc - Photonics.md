@@ -111,6 +111,7 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 
 ## Research
 
+- [[@ParadisLabs 13-theme AI-infrastructure cheat sheet - 5 photonics layers from CW lasers to FAU plus HBM glass substrates SiC GaN fuel cells transformers and burn-in test with Physical AI imo as the next leg]]
 - [[@damnang2 optical investment map v1.0 - 7 layers L1 Materials to L7 Test plus FRO LRO LPO NPO CPO axis with 50 names and 22-company vertical integration matrix]]
 - [[Celestial Photonic Fabric Platform for AI Accelerators - arXiv 2507.14000 specs 33TB unified memory and 115Tbps all-to-all switching across 16 XPUs (Ding Diep 2025)]]
 - [[Crux Capital 2026-01-08 - The InP Crisis - AXTI 40 pct of global InP supply, 60-day China export permits, $100M raise to double capacity in 9 months, POET ALMU LWLG TFLN as substrate disruptors]]
