@@ -35,6 +35,7 @@ For shorter-horizon systematic trading content see `Trading/`. For prediction-ma
 - [[moc - Drones]]
 - [[moc - Edge AI]]
 - [[moc - Energy]]
+- [[moc - Healthcare]]
 - [[moc - Industrials]]
 - [[moc - Memory]]
 - [[moc - Photonics]]
