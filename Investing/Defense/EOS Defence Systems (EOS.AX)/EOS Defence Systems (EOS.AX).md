@@ -10,4 +10,6 @@ EOS Defence Systems Pty Ltd (EOS.AX, ASX) — Australian defense company. Per @t
 
 ## Notes
 
-_(none yet)_
+- [[@theobservercap 2026-05-01 - EOS.AX Part 1 RWS franchise - 2500 systems shipped, A$459m unconditional backlog +238pct YoY, A$108m Hanwha Redback subcontract, US$22m M1E3 Abrams first slice with US$3bn 15-year TAM]]
+- [[@theobservercap 2026-05-05 - EOS.AX Part 2 HELW Counter-Drone Franchise - Apollo 100kW world-first €71.4m Netherlands export contract, MARSS NiDAR+Interceptor acquisition, Grizzly Goldrone counterparty argument, only ITAR-free 100kW HELW]]
+- [[@theobservercap 2026-05-18 - EOS.AX investor call breakdown - A$726m combined book post-MARSS +58pct since YE25, NiDAR battle-proven against hundreds of Shahed drones, Apollo 6 months ahead schedule, MARSS earnout renegotiated to €140m on €700m]]
