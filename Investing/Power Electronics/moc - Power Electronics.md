@@ -10,6 +10,7 @@ Power discrete devices, modules, and conversion ICs — SiC and GaN FETs, integr
 
 ## Companies
 
+- [[CPS Technologies (CPSH)]]
 - [[Fuji Electric (6504.T)]]
 - [[Infineon Technologies (IFX.DE)]]
 - [[Innoscience (2577.HK)]]
