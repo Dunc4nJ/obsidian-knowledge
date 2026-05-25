@@ -218,6 +218,7 @@ Foundational architecture, training, scaling, and interpretability of large lang
 
 Physical compute layer enabling AI accelerators — semiconductor packaging, substrates, laser tools, and advanced chiplet integration.
 
+- [[Crux Capital's Gaetano maps Physical AI as a ten-layer supply chain from training to deployment claiming it rivals the optics super-cycle in investment magnitude]] — Gaetano (Crux Capital) frames Physical AI as the next investment supercycle: an eleven-layer stack from model training to end markets where "the robot is the headline but the stack is the opportunity"; he is launching it as a second coverage pillar alongside optics/photonics with the same early-cycle positioning thesis
 - [[LPKF LIDE holds 80% qualification share in glass via drilling, a quasi-monopolist hidden behind non-core segment losses on a $20B TAM ramp]] — LPKF's LIDE laser process dominates through-glass via drilling at Intel/Samsung/TSMC, hiding a quasi-monopoly position behind non-core Solar losses at 3x EV/Sales
 
 ## Learning Resources
