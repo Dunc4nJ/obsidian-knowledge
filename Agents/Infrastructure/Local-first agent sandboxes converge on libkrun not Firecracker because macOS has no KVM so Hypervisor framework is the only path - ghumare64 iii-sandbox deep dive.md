@@ -1,45 +1,50 @@
 ---
 created: 2026-05-16
-description: Rohit Ghumare argues that local-first coding agents like Claude Code and Codex force a Mac-capable microVM, leaving libkrun as the only open-source option — but the real load-bearing work is the PID 1 init binary, not the VMM.
+published: 2026-05-15
+description: Rohit Ghumare (iii.dev) argues Firecracker's KVM dependency disqualifies it for local-first coding agents on macOS, leaving libkrun — an in-process .dylib that dispatches to KVM on Linux or Hypervisor.framework on Apple Silicon — as the only open-source VMM that ships the same Firecracker-class isolation everywhere agents actually run, while making the case that the real load-bearing engineering is the custom PID 1 init binary, not the microVM monitor.
 source: https://x.com/ghumare64/status/2055329887431393309
-type: framework
+type: research
+authors: ["Rohit Ghumare (@ghumare64)"]
 ---
 
 ## Key Takeaways
 
-- Firecracker depends on `/dev/kvm` and there is no architectural path to KVM on macOS — so any sandbox shipped inside a local coding agent (Claude Code, Codex, OpenCode, Cursor agent mode) cannot use Firecracker without nested virtualization under UTM, which stacks boot times, disk images, and networking until the "boots in flow" property is dead. The cloud vs. local axis matters more than which VMM is "best" — see [[Firecracker microVMs became the convergent agent runtime because containers were never a security boundary]] which argues Firecracker won the *cloud-side* convergence for exactly the reasons it fails locally.
-- libkrun is the only open-source VMM that exposes one API across KVM (Linux) and Hypervisor.framework (macOS Apple Silicon), and it does so by deleting Firecracker's legacy block devices in favor of [virtio-fs](https://virtio-fs.gitlab.io/) passthrough — so you point it at an unpacked OCI directory and the guest reads those bytes directly, no `mkfs.ext4`, no loopback, no re-pack on cache-bust.
-- libkrun's host-to-guest network path is a [smoltcp](https://github.com/smoltcp-rs/smoltcp) userspace TCP/IP stack with shared-memory bridging instead of TAP devices — no `tuntap` kext, no `iptables` rules, no root prompt — and as a bonus the bridge rewrites guest `localhost` to the gateway IP so an agent hitting `localhost:3000` reaches the developer's actual dev server, which is the behavior agents almost always want.
-- The load-bearing piece is **not** the VMM but the PID 1 init binary (`iii-init`, ~6.4k lines of Rust musl) which does five things — pivot off the virtio-fs root, mount filesystems with bind-mounted overrides, raise `RLIMIT_NOFILE`, configure smoltcp networking, and exec the supervisor — each one motivated by a real bug like libkrun's root-directory `readdir` OOM crash on <1GB guests, or bun's `MemTotal` allocator ignoring cgroup v2. Choice of microVM monitor is a commodity decision; the init binary is where the work lives.
-- iii-sandbox treats the sandbox as one worker among many on the same WebSocket engine that hosts HTTP routes, queues, and crons — so trace IDs, observability, image allowlists, and lifecycle all share one ontology with the rest of the agent system, sidestepping the "correlate across vendor systems" failure mode of separate sandbox-as-a-service products. This generalizes the [[isolating the entire agent in a sandbox is more secure than isolating just the tool]] argument from "use a sandbox" to "compose with the sandbox as a peer worker" — closer in spirit to [[Harvey Spectre makes durable runs the core primitive while workers stay ephemeral and sandboxes enforce explicit boundaries]] than to standalone sandbox products like [[Opencomputer reframes harness-vs-sandbox debate as git branches for VMs via hibernation egress proxies and checkpoints]].
+- The market split is the thesis: Firecracker remains correct for hosted/cloud sandbox vendors because the agent and the sandbox both live in the vendor's data center, but the agent shape that's eating the world (Claude Code, Codex, OpenCode, Cursor's agent mode) runs as a native binary on a developer's MacBook — and Firecracker cannot architecturally boot there because `/dev/kvm` is a Linux kernel module with no macOS port (and never will be, since Hypervisor.framework already occupies that OS slot). This reframes the canonical microVM debate (cf. [[Firecracker microVMs became the convergent agent runtime because containers were never a security boundary]]) as a destination question: Firecracker wins the cloud, libkrun wins the laptop, and the laptop is where the agents actually live.
+- `libkrun` is hypervisor-agnostic by design — it ships as a `libkrun.so` on Linux and `libkrun.dylib` on macOS Apple Silicon, exposing the VMM as a function you link against rather than a process you exec, dispatching to KVM on Linux and to Hypervisor.framework directly on Apple Silicon through a single API and device model. Red Hat already proved this at scale by using libkrun to power `podman machine` on macOS, so the in-process VMM model isn't a research project — it's a shipping primitive that agent infra can adopt without inventing new plumbing.
+- libkrun deliberately throws out Firecracker's defaults that make sense for cloud but not local: legacy `virtio-block` (backed by ext4 disk images that have to be rebuilt on every change) becomes `virtio-fs` directory passthrough (the guest sees the host directory bytes-for-bytes with no `mkfs.ext4`/loopback/repack); host-side TAP devices (which on macOS need a deprecated kernel extension) become a `smoltcp` userspace TCP/IP stack on the host bridged to the guest's virtio-net through shared memory — so "network just works" with no root, no kexts, no iptables. The tradeoffs are virtio-fs quirks (a readdir bug at `/` that OOM-kills bun-style probes on <1GB guests, fixed by pivoting `/` to tmpfs and bind-mounting the real entries underneath) and the smoltcp footprint becoming the entire guest→host network attack surface.
+- Ghumare's load-bearing claim is that **the microVM monitor is a commodity; the init binary is the product**. iii-sandbox's PID 1 is 6.4k lines of Rust musl (`iii-init`) that does five things in order: pivot to tmpfs root (workaround for the libkrun readdir bug), mount filesystems + override `/proc/meminfo::MemTotal` (because bun's Zig `GeneralPurposeAllocator` ignores cgroup v2 `memory.max`), raise `RLIMIT_NOFILE` to 1M (because node `fs.promises` and Python `asyncio.open` blow through 1024 on parallel test runs), configure network from env-injected IP/GW/CIDR/DNS, and exec a supervisor loop that services `Restart/Shutdown/Ping/Status` RPC over a `virtio-console` named port. "Just use Firecracker" wouldn't have saved this work — same init effort either way, so the monitor became the easy axis to optimize for portability.
+- Underneath the microVM choice sits a composition-shape bet adjacent to [[Opencomputer reframes harness-vs-sandbox debate as git branches for VMs via hibernation egress proxies and checkpoints]], [[Harvey Spectre makes durable runs the core primitive while workers stay ephemeral and sandboxes enforce explicit boundaries]], and [[isolating the entire agent in a sandbox is more secure than isolating just the tool]]: iii treats the sandbox as just another **worker** registered against the same WebSocket engine that hosts HTTP routes, queues, and crons — same trace ID propagating through `agents::researcher` → `sandbox::create` → `sandbox::exec`, same image allowlist mechanism as a queue worker's topic subscriptions, same lifecycle the rest of the system uses. Sandbox-as-worker (not sandbox-as-separate-product) eliminates the "now correlate this across systems" failure mode that compounds quadratically with the number of agents in the loop. Other operational specifics worth tracking: warm-daemon boot of "a few hundred milliseconds" (cold path dominated by libkrunfw download + macOS codesign, cached via atomic `PROVISION_DONE` flag); choice of `virtio-console` named ports over `virtio-vsock` because vsock on macOS via Hypervisor.framework is half-implemented and not exposed through libkrun's public API; deliberate fork+exec separation between the iii-worker daemon and the `__vm-boot` hidden subcommand that actually links libkrun, so a guest kernel panic or libkrun segfault doesn't take the parent daemon down.
 
 ## External Resources
 
-- [libkrun](https://github.com/containers/libkrun) — Red Hat-originated dynamic-library VMM with KVM + Hypervisor.framework backends, used by `podman machine` on macOS.
-- [Firecracker](https://github.com/firecracker-microvm/firecracker) — AWS Lambda's KVM-only microVM monitor; Linux x86_64/aarch64 with KVM enabled, per its own getting-started doc.
-- [iii-hq/iii](https://github.com/iii-hq/iii) — open-source engine where every primitive (HTTP route, queue, cron, agent, sandbox) is a worker connecting over WebSocket.
-- [iii-sandbox crate](https://github.com/iii-hq/iii/tree/main/crates/iii-worker/src/sandbox_daemon) — the hardware-isolated execution layer this post describes.
-- [iii-init crate](https://github.com/iii-hq/iii/tree/main/crates/iii-init) — the in-guest PID 1 Rust binary; the actual product.
-- [vm_boot.rs](https://github.com/iii-hq/iii/blob/main/crates/iii-worker/src/cli/vm_boot.rs) — the forked subprocess that links libkrun directly.
-- [virtio-fs](https://virtio-fs.gitlab.io/) — directory-passthrough filesystem libkrun uses instead of virtio-block.
-- [smoltcp](https://github.com/smoltcp-rs/smoltcp) — bare-metal-oriented pure-Rust TCP/IP stack used as libkrun's network host-side bridge.
-- [Hypervisor.framework](https://developer.apple.com/documentation/hypervisor) — Apple's KVM-equivalent slot on macOS; what libkrun uses on Apple Silicon.
-- [tini](https://github.com/krallin/tini) — 12K reference PID 1 for containers; the wrong primitive for a microVM sandbox per the post.
+- [Claude Code](https://docs.claude.com/en/docs/claude-code), [Codex](https://github.com/openai/codex), [OpenCode](https://opencode.ai/), [Cursor](https://cursor.com/) — the local-first CLI/IDE coding agents that anchor the "agent shape that's eating the world" segment of the thesis
+- [libkrun (containers/libkrun)](https://github.com/containers/libkrun) — Red Hat-originated in-process VMM library, dispatches to KVM on Linux and Hypervisor.framework on Apple Silicon
+- [Firecracker (firecracker-microvm)](https://github.com/firecracker-microvm/firecracker) — AWS's KVM-only microVM monitor, by FAQ admission Linux x86_64/aarch64 with KVM enabled only
+- [KVM](https://linux-kvm.org/page/Main_Page) and [Apple Hypervisor.framework](https://developer.apple.com/documentation/hypervisor) — the two host-side hypervisors libkrun bridges across
+- [podman machine](https://podman.io/docs/installation#macos) — Red Hat's existence proof that libkrun's in-process VMM model works at scale on macOS
+- [virtio spec](https://docs.oasis-open.org/virtio/virtio/v1.2/virtio-v1.2.html), [virtio-fs](https://virtio-fs.gitlab.io/), [virtio-vsock](https://docs.kernel.org/virt/kvm/devices/vsock.html) — paravirtualized device stack libkrun uses (virtio-fs for rootfs passthrough; vsock notably absent on macOS, replaced by named virtio-console ports)
+- [smoltcp](https://github.com/smoltcp-rs/smoltcp) — pure-Rust no-heap userspace TCP/IP stack libkrun runs on the host as the guest→host network bridge; designed for bare-metal embedded use and the entire network attack surface
+- [tini](https://github.com/krallin/tini) — the standard 12K container PID 1 (reaps children, forwards signals); explicitly the wrong primitive for a sandbox because microVM PID 1 needs to do more than tini and less than systemd
+- [iii.dev](https://iii.dev/) and [iii-hq/iii (full engine)](https://github.com/iii-hq/iii) — Ghumare's open-source engine where every primitive (HTTP route, queue, cron, agent, sandbox) is the same worker shape over WebSocket
+- [iii-sandbox daemon source](https://github.com/iii-hq/iii/tree/main/crates/iii-worker/src/sandbox_daemon) — registry of live microVMs, rootfs cache, per-sandbox overlay tree, per-sandbox Unix shell socket
+- [iii-init source](https://github.com/iii-hq/iii/tree/main/crates/iii-init/src) — the 6.4k-line Rust musl PID 1 covering mount/root_pivot/network/rlimit/fs_handler/supervisor/shell_dispatcher
+- [iii vm_boot.rs](https://github.com/iii-hq/iii/blob/main/crates/iii-worker/src/cli/vm_boot.rs) — the `__vm-boot` hidden subcommand that fork+execs to actually link libkrun (crash isolation)
+- [Add a worker (iii blog)](https://github.com/iii-hq/iii/blob/main/blog/src/content/blog/add-a-worker.md) — how the sandbox-as-worker shape is the same as any other iii primitive
+- Adjacent tools surfaced in the reply thread (not in the article body):
+  - [microsandbox](https://github.com/microsandbox/microsandbox) — appcypher's microVM project; Ghumare confirmed in-thread that microsandbox helped them create the iii-sandbox version, and they use the `msb_krun` crate from that lineage
+  - [Cloud Hypervisor](https://github.com/cloud-hypervisor/cloud-hypervisor) — raised by @MassEternal as the unaddressed alternative VMM in the same Rust + KVM lineage as Firecracker; Ghumare's response deflects to his blog
+  - `boxlite` — mentioned by @d0r1an_polygala as another libkrun-based sandbox in the ecosystem
+  - Native Windows support: in-progress per Ghumare (in-thread response to @fourlightson); status link `https://t.co/CiQeU7BGzf`
 
 ## Original Content
 
-*Cover image — the article's hero card with the comparison framing*
-![[ghumare64-393309-002.jpg]]
-
-*Schematic from the article: sandbox stack levels, local-first agent surfaces, convergence lattice, and the cloud-only path crossed out*
-![[ghumare64-393309-001.png]]
-
-> [!quote]- Source Material — full article (post body + reply thread)
-> **@ghumare64 (Rohit Ghumare)** — 2026-05-15
-> Engagement: 243 likes | 18 retweets | 10 replies
-> [Original post](https://x.com/ghumare64/status/2055329887431393309)
+> [!quote]- Source Material
+> @ghumare64 (Rohit Ghumare) — 2026-05-15
 >
-> **Article: Why agent sandboxes are converging on `libkrun`, not Firecracker**
+> Article: Why agent sandboxes are converging on `libkrun`, not Firecracker
+>
+> *Cover banner: the article's central claim visualized — local-first agents feed into libkrun microVMs on KVM/Hypervisor.framework over macOS+Linux on a laptop, while the Firecracker / KVM / Linux-Cloud-first path is crossed out*
+> ![[ghumare64-393309-002.jpg]]
 >
 > Every coding agent that matters runs on your laptop now. [Claude Code](https://docs.claude.com/en/docs/claude-code), [Codex](https://github.com/openai/codex), [OpenCode](https://opencode.ai/), [Cursor's](https://cursor.com/) agent mode, the new wave of CLI-first harnesses. They install a binary, take over a directory, and start generating code that wants to actually run.
 >
@@ -71,6 +76,9 @@ type: framework
 >
 > There is exactly one open-source VMM that meets that bar right now. It's libkrun.
 >
+> *Author's "convergence lattice" diagram: sandbox stack (libkrun path at level 1, firecracker path at level 2, network broker at level 3, cloud-first agent at level 4) feeding into local-first agents, with the firecracker/cloud-only path explicitly crossed out as a non-default*
+> ![[ghumare64-393309-001.png]]
+>
 > ## What libkrun is
 >
 > [libkrun](https://github.com/containers/libkrun) started life as a Red Hat project to power [podman machine](https://podman.io/docs/installation#macos) on macOS. It's a dynamic library (libkrun.so on Linux, libkrun.dylib on macOS) that exposes a VMM as a function you link against, not a process you exec. You hand it a kernel (libkrunfw), a rootfs (any directory you want passthrough-mounted), an exec spec ("run /init with these args, this env, this rlimit"), and it boots a microVM in-process and waits for it to exit.
@@ -100,6 +108,7 @@ type: framework
 >     rootfs, workdir, shell_sock,
 >     cpus, memory_mb, env, network,
 > }).await?;
+>
 > ```
 >
 > The launcher is the indirection that makes the daemon testable: VmLauncher is a trait, and the production implementation forks the parent iii-worker binary as __vm-boot (a hidden subcommand) with the boot params as CLI flags. That subprocess is what actually links libkrun.
@@ -147,6 +156,7 @@ type: framework
 >                   .env("III_WORKER_CMD", &worker_cmd)
 >                   // ...
 > );
+>
 > ```
 >
 > A few things in there are worth pulling out, because each one is a place we had to make a non-obvious call.
@@ -167,12 +177,6 @@ type: framework
 >
 > ## The init binary is the actual product
 >
-> The piece of iii-sandbox that took the longest and matters the most isn't in libkrun. It's in [iii-init](https://github.com/iii-hq/iii/tree/main/crates/iii-init), the PID 1 binary we ship into every guest.
->
-> A microVM doesn't have systemd. It barely has a userspace. When the guest kernel starts, it execs whatever the VMM pointed init= at. That binary is PID 1. If PID 1 exits, the kernel panics. If PID 1 blocks on something, the whole VM blocks. If PID 1 leaks file descriptors or doesn't reap children, you get the world's worst process-table corruption.
->
-> You can use [systemd](https://systemd.io/) as PID 1. That's what real Linux distributions do. It's also 1.5M of binary and a feature set designed for booting laptops, and you don't need 95% of it for a sandbox that's going to live for 4 minutes and run six commands.
->
 > You can use [tini](https://github.com/krallin/tini) as PID 1. That's the standard for containers. It's 12K, reaps children, forwards signals, and does nothing else. It's also the wrong primitive for a sandbox, because what PID 1 actually has to do in a microVM is more than what tini does and less than what systemd does.
 >
 > The PID 1 binary inside an iii-sandbox guest does five things, in order:
@@ -189,6 +193,7 @@ type: framework
 >     iii_init::supervisor::exec_worker()?;
 >     Ok(())
 > }
+>
 > ```
 >
 > That's the whole boot. Each line is doing work that exists because we hit a real edge case.
@@ -243,6 +248,7 @@ type: framework
 >     })
 >   }
 > })
+>
 > ```
 >
 > There is no separate sandbox SDK. There is no separate identity surface. There is no "now connect your observability to the sandbox vendor's webhooks." The sandbox is reachable through the same trigger() call you use to enqueue a job or invoke any other worker function. When the agent worker fires sandbox::exec, the engine routes it to the sandbox worker the same way it would route a queue publish.
@@ -266,6 +272,11 @@ type: framework
 > The cloud-side agent infra answer was Firecracker, and it's right that it isn't going anywhere. The local-side agent infra answer is libkrun, plus an init binary you wrote yourself, plus a system that treats the sandbox as one worker among many instead of a separate product. That's what we built. That's what I'd build again.
 >
 > Check out: github.com/iii-hq/iii
+>
+> → Rohit Ghumare (@ghumare64)
+> date: Fri May 15 16:50:06 +0000 2026
+> url: https://x.com/ghumare64/status/2055329887431393309
+> likes: 243  retweets: 18  replies: 10
 >
 > ---
 >
@@ -320,5 +331,5 @@ type: framework
 >
 > **@d0r1an_polygala (Dorian)** — 2026-05-16
 > > @ghumare64 boxlite use libkrun too. but for me, simplicity is the key
-</content>
-</invoke>
+
+[Original article on X](https://x.com/ghumare64/status/2055329887431393309)
