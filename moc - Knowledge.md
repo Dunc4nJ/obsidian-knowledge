@@ -214,6 +214,12 @@ Foundational architecture, training, scaling, and interpretability of large lang
 - [[rl environment creation is becoming a distributed marketplace that could 10x cost efficiency over contracting firms]] — the hidden RL environment contracting industry, verifier design challenges, and a distributed bounty model with LLM-adversarial verification
 - [[automating AI skill improvement fails without manual comprehension of outputs]] — Three Gulfs framework: autoresearch optimizes against wrong criteria when you skip manual error analysis and jump straight to automated evals
 
+## AI Hardware Infrastructure
+
+Physical compute layer enabling AI accelerators — semiconductor packaging, substrates, laser tools, and advanced chiplet integration.
+
+- [[LPKF LIDE holds 80% qualification share in glass via drilling, a quasi-monopolist hidden behind non-core segment losses on a $20B TAM ramp]] — LPKF's LIDE laser process dominates through-glass via drilling at Intel/Samsung/TSMC, hiding a quasi-monopoly position behind non-core Solar losses at 3x EV/Sales
+
 ## Learning Resources
 
 Study guides, interview prep, and curated course material.
