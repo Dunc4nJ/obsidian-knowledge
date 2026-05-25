@@ -37,6 +37,7 @@ Measuring agent quality, observability, regression testing, production monitorin
 - [[Langfuse Academy frames eval datasets as production-mirroring test suites where item structure follows from evaluator choice]]
 - [[Langfuse Academy argues offline evaluation starts with manual review and automates only the failure modes worth checking repeatedly]]
 - [[LangSmith Engine turns production agent traces into issues evaluators and regression examples by separating screening from investigation]]
+- [[OpenAI macro evals cookbook turns population-level trace clustering into a ranked inspection queue for multi-agent systems]]
 - [[Phoebe Yao argues verifier engineering is the moat in RL post-training because verifiability bounds learnability]]
 
 ## Resources
