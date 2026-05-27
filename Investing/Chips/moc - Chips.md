@@ -12,6 +12,7 @@ Companies and research covering fabless chip designers — companies that design
 
 - [[Advanced Micro Devices (AMD)]]
 - [[Alphawave Semi (AWE.L)]]
+- [[Analog Devices (ADI)]]
 - [[Arm Holdings (ARM)]]
 - [[Astera Labs (ALAB)]]
 - [[Broadcom (AVGO)]]
