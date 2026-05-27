@@ -13,6 +13,7 @@ Industrial conglomerates, capital goods, heavy machinery, engines, and gen-sets 
 - [[Amphenol (APH)]]
 - [[Caterpillar (CAT)]]
 - [[Cummins (CMI)]]
+- [[Honeywell International (HON)]]
 - [[Prysmian (PRY.MI)]]
 - [[Sanmina (SANM)]]
 - [[Sumitomo Heavy Industries (6302.T)]]
