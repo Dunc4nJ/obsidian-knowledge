@@ -71,6 +71,7 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 
 ### Networking systems
 
+- [[ADTRAN Holdings (ADTN)]]
 - [[Ciena (CIEN)]]
 - [[Clearfield (CLFD)]]
 - [[Eoptolink (300502.SZ)]]
