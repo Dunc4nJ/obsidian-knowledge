@@ -220,6 +220,7 @@ Physical compute layer enabling AI accelerators — semiconductor packaging, sub
 
 - [[Crux Capital's Gaetano maps Physical AI as a ten-layer supply chain from training to deployment claiming it rivals the optics super-cycle in investment magnitude]] — Gaetano (Crux Capital) frames Physical AI as the next investment supercycle: an eleven-layer stack from model training to end markets where "the robot is the headline but the stack is the opportunity"; he is launching it as a second coverage pillar alongside optics/photonics with the same early-cycle positioning thesis
 - [[LPKF LIDE holds 80% qualification share in glass via drilling, a quasi-monopolist hidden behind non-core segment losses on a $20B TAM ramp]] — LPKF's LIDE laser process dominates through-glass via drilling at Intel/Samsung/TSMC, hiding a quasi-monopoly position behind non-core Solar losses at 3x EV/Sales
+- [[DELL earnings reveal memory supply crisis driving enterprises from buying more RAM to CXL pooling efficiency, creating tailwinds for Penguin Solutions]] — DELL Q1 2026 earnings quotes confirm memory uncertainty and component inflation are forcing enterprises toward CXL memory pooling efficiency over raw procurement; Penguin Solutions (5,000+ customers across neoclouds, sovereigns, enterprises) positioned as pre-engineered architecture provider
 
 ## Learning Resources
 
