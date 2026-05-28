@@ -102,6 +102,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[LLM agents need a typed execution layer beyond bash]]
 - [[autonomous context compression lets agents choose when to compact rather than hitting fixed token limits]]
 - [[the harness layer is the next hundred billion dollar AI infrastructure market not the model]]
+- [[iii engine decomposes the agent harness into fourteen swappable workers on a shared bus making thin-versus-thick a config slider not a framework fork]] — Mike Piccolo (iii): 14 harness jobs as independent workers on a WebSocket bus; replacing any layer = registering a worker with the same function IDs; thin-vs-thick is a config.yaml entry count, not a rewrite
 - [[Slate's thread-based episodic memory solves long-horizon agent tasks]]
 - [[context files beat MCP schemas for internal agents because they encode how your team actually uses each tool]]
 - [[structured compaction and CLAUDE.md hierarchy prevent context drift in million-token agent sessions]]
