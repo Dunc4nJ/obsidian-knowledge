@@ -27,6 +27,7 @@ Power discrete devices, modules, and conversion ICs — SiC and GaN FETs, integr
 
 ## Research
 
+- [[@NuttyCLD 2026-05-12 - MLCC + Passive Components Powering AI Data Centers - Same Wind 4 Sails framework, NVL72 440K MLCCs, SEMCO 10-15x AI, Murata FY26 DC ¥325B +84pct, SEMCO Q1 +17pct +40pct opprofit, paywalled deep-dive]]
 - [[@NuttyCLD May 2026 - Reading NVIDIA 800V 14-company list - 4-stage map SiC-SiCjFET-GaN-GaNSi, 1MW rack 25x growth Hopper 40kW to Rubin Ultra Kyber 1000kW 800VDC native, Schneider 400kW threshold breaks 54V, 9-co scope paywall]]
 - [[@insane_analyst 650V class SiC and GaN power device landscape - 15-vendor comparative table at 80C Vds 400V covering Rds-on Coss Eoss Qoss and pkg integrated-driver tradeoffs]]
 
