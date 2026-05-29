@@ -21,4 +21,5 @@ Edge AI / physical AI — running inference close to where data is created. Span
 
 ## Research
 
+- [[@damnang2 2026-05-29 - Edge AI Investing Guide - cloud has center Edge does not, 5-component teardown + 3 bottleneck axes (memory phones, safety cars, sensors factories), 2-4Q rev lag, watchlist paywalled]]
 - [[Crux Capital 2026 edge AI shortlist - Ambarella CEVA and Ouster as vision chip IP and lidar plays]]
