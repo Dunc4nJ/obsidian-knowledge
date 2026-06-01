@@ -14,12 +14,17 @@ Industrial conglomerates, capital goods, heavy machinery, engines, and gen-sets 
 - [[Caterpillar (CAT)]]
 - [[Cummins (CMI)]]
 - [[Honeywell International (HON)]]
+- [[KOA Corporation (6999.T)]]
+- [[Knowles (KN)]]
 - [[Murata Manufacturing (6981.T)]]
 - [[Prysmian (PRY.MI)]]
+- [[Sakai Chemical Industry (4078.T)]]
 - [[Samsung Electro-Mechanics (009150.KS)]]
 - [[Sanmina (SANM)]]
 - [[Sumitomo Heavy Industries (6302.T)]]
 - [[TE Connectivity (TEL)]]
+- [[Taiyo Yuden (6976.T)]]
+- [[Vishay Intertechnology (VSH)]]
 
 ## Research
 
