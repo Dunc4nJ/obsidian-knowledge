@@ -126,6 +126,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[DSPy frames AI engineering as five components and adapters are the most underappreciated lever]] — Maxime Rivest: DSPy's Optimizers/Signatures/LMs/Modules/Adapters map onto the general AI-engineering axes Evals/Interface/Inference/Call Graph/Rendering; adapters (rendering) are the under-noticed lever because structured output, reasoning, and tool calls are all rendering choices, not task decisions; empirical anchor is a 100M-publications/week classifier that ran at $50/wk on Llama 8B + vLLM + Qwen embeddings vs $400K/wk on ChatGPT
 
 - [[Systems Engineering Makes Agentic Software Work - The Five-Layer Pattern]]
+- [[Claude Code dynamic Workflows synthesize a per-task agent harness at runtime opening a third scaling axis]] — @necmttn: the model writes a full JS orchestration script fresh per task using agent()/parallel()/pipeline() globals; typed JSON schema output makes fleet results composable; adds a third scaling axis (generated-harness compute) on top of base model and thinking compute
 - [[Claude Code's source reveals agent systems need infrastructure as a fourth layer beyond weights context and harness]] — Rohit's 331-module teardown: async-generator loops, streaming tool executor, cache-boundary prompts, cost-ordered compaction, seven-stage permissions, 823-line retry state machine; argues infrastructure (multi-tenancy/RBAC/isolation/coordination) is a distinct fourth layer where production agents die
 
 ### Infrastructure
