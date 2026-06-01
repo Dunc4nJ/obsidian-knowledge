@@ -10,7 +10,7 @@ Companies and research covering minerals designated as critical for energy, defe
 
 ## Companies
 
-_(none yet)_
+- [[Brazil Potash Corp (GRO)]]
 
 ## Research
 
