@@ -10,4 +10,4 @@ Brazil Potash Corp (GRO, NYSE American) — development-stage fertilizer mining 
 
 ## Notes
 
-_(none yet)_
+- [[@victor_privin Fermion 2026-05-29 - GRO anonymous-to-reveal thesis - $1B EBITDA vs $150M mcap, 2.4M tons 75pct margin, 91pct offtake, Brazil 22pct demand 1pct supply, 71pct transport moat, Franco-Nevada $150M, Petrobras origin]]
