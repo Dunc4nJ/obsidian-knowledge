@@ -12,6 +12,7 @@ US-listed; optical transceivers.
 
 ## Notes
 
+- [[@HiCagr 2026-06-02 - AAOI Chokepoint to $525-$700 - InP laser moat silicon cannot lase 4 per 1.6T 350pct fab 4-to-6 inch by 2027, May 7 capacity-rationed $1.4-1.5B vs $1.1B guide, $26B 2026 TAM to $45B 2030]]
 - [[AAOI 2026-01 Crux setup - Sugar Land buildout, 800G 35k-mo today to 200k by mid-2026, 1.6T volume mfg June-July 2026]]
 - [[AAOI 2026-03 Crux deep dive - in-house InP laser fab Texas, 800G to 1.6T ramp, over 1B 2026 revenue guide]]
 - [[Crux Capital 2026-02-26 - AAOI Q4 call sets $378M-mo transceiver target by mid-2027, tripling Texas laser capacity, 95% AI lasers by EoY]]
