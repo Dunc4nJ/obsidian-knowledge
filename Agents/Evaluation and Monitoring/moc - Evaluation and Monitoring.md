@@ -40,6 +40,7 @@ Measuring agent quality, observability, regression testing, production monitorin
 - [[LangSmith Engine turns production agent traces into issues evaluators and regression examples by separating screening from investigation]]
 - [[OpenAI macro evals cookbook turns population-level trace clustering into a ranked inspection queue for multi-agent systems]]
 - [[Phoebe Yao argues verifier engineering is the moat in RL post-training because verifiability bounds learnability]]
+- [[LangChain and Harvey show DeepSeek batch verifiers reduce legal agent evaluation costs by three orders of magnitude at acceptable accuracy]]
 
 ## Resources
 
