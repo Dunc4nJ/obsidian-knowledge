@@ -33,3 +33,4 @@ AI agents that interact with structured data to answer questions — text-to-SQL
 
 - [[multi-task RL on heterogeneous search behaviors produces knowledge agents that generalize across grounded reasoning tasks]] — KARL (Databricks): multi-task off-policy RL yields Pareto-optimal knowledge agents across grounded reasoning tasks
 - [[Prime Intellect duckdb-qa - RL reward shaping for SQL tool use]] — RL environment for training LLMs as SQL data analysts; 578 QA pairs across 4 DuckDB schemas
+- [[DAB benchmark exposes frontier data agents at 38 percent pass at 1 with 85 percent of failures in planning or implementation]] — UC Berkeley + Hasura's Data Agent Benchmark: 54 queries across 12 datasets and 4 DBMSes; Gemini-3-Pro tops at 38% pass@1; failure breakdown of 1,147 trajectories puts the bottleneck on planning (40%) and implementation (45%), not data selection (15%); PromptQL semantic layer adds 7pp over ReAct on Claude-Opus-4.6
