@@ -10,4 +10,4 @@ TSE-listed Japanese pure-play NAND flash maker — IPO'd Dec 2025; legacy Toshib
 
 ## Notes
 
-_(none yet)_
+- [[@lithos_graphein 2026-06-02 - Kioxia Investor Day BiCS FLASH Gen10 4-slide capture - 332L 1Tb TLC samples Summer 2026, +59pct bit density and 4.8Gbps vs Gen8, 4-year CBA lead, PCIe Gen6 SSD, 245TB LC9 SSD via Gen9]]
