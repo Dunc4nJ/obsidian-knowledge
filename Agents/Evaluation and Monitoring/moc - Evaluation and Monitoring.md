@@ -41,6 +41,7 @@ Measuring agent quality, observability, regression testing, production monitorin
 - [[OpenAI macro evals cookbook turns population-level trace clustering into a ranked inspection queue for multi-agent systems]]
 - [[Phoebe Yao argues verifier engineering is the moat in RL post-training because verifiability bounds learnability]]
 - [[LangChain and Harvey show DeepSeek batch verifiers reduce legal agent evaluation costs by three orders of magnitude at acceptable accuracy]]
+- [[LLM Data Company experiments show explicit rubric criteria let gpt-oss-120b match Opus 4.7 at 100x lower cost and full-rubric grading beats per-criterion across every model]]
 
 ## Resources
 
