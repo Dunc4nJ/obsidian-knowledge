@@ -15,6 +15,7 @@ AI agents that interact with structured data to answer questions — text-to-SQL
 
 ## Case Studies
 
+- [[Anthropic's self-service analytics stack achieves 95% accuracy by treating the bottleneck as context and entity mapping not SQL generation]] — four-layer agentic stack (data foundations, sources of truth, skills, validation) that routes 95% of business queries through Claude; pairwise skills drive accuracy from 21% to 95%+; ablations showed raw SQL retrieval moves accuracy by <1 point
 - [[OpenAI internal data agent succeeds through six layers of context not model capability alone]] — six stacked context layers over 600PB across 70k datasets; architecture over raw model capability
 - [[context management replaces the semantic layer for data agents because it adapts from corrections]] — Jamie Quint's practitioner guide; dynamic context + correction-driven "quirks" replaced 4-5 analyst hires
 - [[the hard problem in text-to-SQL is discovery not generation and hybrid search over existing metadata solves it]] — Astronomer's Kepler: hybrid search (RRF) + discovery subagent over warehouse metadata
