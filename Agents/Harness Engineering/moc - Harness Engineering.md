@@ -13,6 +13,12 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[agent harness is the real product]] — synthesis of how Claude Code, Cursor, Manus, Devin, and SWE-Agent converge on the same architecture, with 17 reference notes
 - [[how top ai companies handle context engineering]] — compendium of six-company context-engineering strategies, tradeoffs, and technique matrix
 
+## Dynamic Workflows
+
+- [[Claude Code dynamic Workflows synthesize a per-task agent harness at runtime opening a third scaling axis]] — (@necmttn) the model writes the orchestration program on the fly using agent(), parallel(), pipeline(), and typed JSON schema output; adds generated-harness compute as a third scaling axis
+- [[Claude Code dynamic workflows write a custom JS harness per task to structurally prevent agentic laziness self-preferential bias and goal drift]] — (Thariq Shihipar, Anthropic) canonical launch post: six patterns, three failure modes, quarantine for untrusted input, workflows-as-skills
+- [[Claude Code Dynamic Workflows practical mastery maps failure modes to pattern compositions — fan-out for drift, adversarial for self-preference, tournament for taste, loop for open-ended work]] — (@0xCodez) 14-step practitioner guide: explicit failure-mode → pattern mapping, composition matrix per use case, /goal + token budget cost controls, eight anti-patterns
+
 ## Notes
 
 - [[PostHog learned your agent harness is not your moat and switched to the Claude Agent SDK after three iterations]] — PostHog's three harness iterations (coordinator → single loop with 44 tools → Claude Agent SDK + MCP + sandbox), plus lessons on MCP-first architecture, context engineering, observability, and user-centric priorities
