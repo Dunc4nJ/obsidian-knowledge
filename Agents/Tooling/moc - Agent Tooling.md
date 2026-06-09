@@ -24,6 +24,7 @@ How to design, describe, and orchestrate tools that agents actually use well.
 - [[skill workflows]] — workflow patterns for agent skills
 - [[dev-browser lets agents write Playwright code in a sandboxed QuickJS VM for fast browser automation]]
 - [[one tmux session per project with directory-named sessions eliminates session management friction]] — directory-named tmux sessions with shell helpers and vim keybindings
+- [[Printing Press CLI library prints agent-native CLIs for any API or website from a single prompt]] — one prompt prints a Go CLI + Claude Code skill + OpenClaw skill + MCP server; ships with a 200+ CLI library skill agents can browse
 
 ## OCR
 
