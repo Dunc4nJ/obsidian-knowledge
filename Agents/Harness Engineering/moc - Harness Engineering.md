@@ -18,6 +18,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[Claude Code dynamic Workflows synthesize a per-task agent harness at runtime opening a third scaling axis]] — (@necmttn) the model writes the orchestration program on the fly using agent(), parallel(), pipeline(), and typed JSON schema output; adds generated-harness compute as a third scaling axis
 - [[Claude Code dynamic workflows write a custom JS harness per task to structurally prevent agentic laziness self-preferential bias and goal drift]] — (Thariq Shihipar, Anthropic) canonical launch post: six patterns, three failure modes, quarantine for untrusted input, workflows-as-skills
 - [[Claude Code Dynamic Workflows practical mastery maps failure modes to pattern compositions — fan-out for drift, adversarial for self-preference, tournament for taste, loop for open-ended work]] — (@0xCodez) 14-step practitioner guide: explicit failure-mode → pattern mapping, composition matrix per use case, /goal + token budget cost controls, eight anti-patterns
+- [[samueljmcd argues Claude Code Dynamic Workflows earn their cost only when tasks are wide, independently verifiable, and have clear validation criteria — everything else is expensive theatre]] — (Samuel McDonnell) production AI engineer's honest accounting: adversarial clean-context verification layer is the real innovation; token costs compound to 50-100x at ultracode scale; decision rule is wide+independent+checkable; versioned JS orchestration scripts are infrastructure not chat history
 
 ## Notes
 
