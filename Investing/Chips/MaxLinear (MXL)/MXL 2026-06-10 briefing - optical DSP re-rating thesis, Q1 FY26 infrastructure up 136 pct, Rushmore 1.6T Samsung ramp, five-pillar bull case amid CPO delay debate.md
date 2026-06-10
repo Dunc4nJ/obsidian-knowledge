@@ -16,7 +16,7 @@ MaxLinear (NASDAQ: MXL) is a fabless analog/mixed-signal and RF semiconductor co
 Key product tracks in the AI interconnect story:
 
 - **Keystone** — 400G/800G PAM4 DSP family (Samsung 5nm), currently ramping at multiple hyperscalers in the US and Asia. This is what drove the Q1 FY26 inflection.
-- **Rushmore** — 1.6T (200G/lane) PAM4 DSP family on Samsung's leading-edge process (4nm per company materials), demoed at OFC 2025 and showcased live at OFC 2026; sub-25W 1.6T module target; production ramps slated to begin late 2026. Notable as the first major high-speed optical DSP fabbed entirely at Samsung — a deliberate second-source position vs. the TSMC-centric supply chains of MRVL/AVGO.
+- **Rushmore** — 1.6T (200G/lane) PAM4 DSP family on "Samsung's leading-edge CMOS" (NO node disclosed in any company material — the circulating "4nm"/"3nm GAA" claims are unsourced), demoed at OFC 2025 and showcased live at OFC 2026; sub-25W 1.6T module target; production ramps slated to begin late 2026. Notable as the first major high-speed optical DSP fabbed entirely at Samsung — a deliberate second-source position vs. the TSMC-centric supply chains of MRVL/AVGO.
 - **Washington** — 200G/lane transimpedance amplifier (TIA), 4-channel, SiGe BiCMOS, ~750mW typical for four channels, announced available 2026-04-30 with mass production scheduled 2H 2026. Supports fully retimed, LRO/LPO, NPO, and CPO architectures — i.e., it is the analog front-end that rides *every* optical architecture outcome.
 - **Panther** — storage accelerator (compression/checksum/crypto offload). On 2026-06-03, MaxLinear and Los Alamos National Laboratory announced hardware-accelerated OpenZFS integration: 57 GB/s reads and 47 GB/s writes with GZIP-L9 vs ~8.1/1.2 GB/s software baseline — ~7x read / ~39x write speedup with near-zero host CPU involvement.
 - **Legacy/diversified**: broadband, connectivity, 5G wireless infrastructure (including transport/backhaul), Ethernet PHY — stabilizing-to-recovering after a brutal 2023–2025 downcycle.
@@ -60,4 +60,4 @@ Each pillar, plus the counter-evidence (NVIDIA's dispute of the CPO-delay framin
 ## Companion notes
 
 - Claim-by-claim verdicts: [[MXL bull case evaluated claim-by-claim 2026-06 - extended pluggable window real but MXL-specific moats unsourced, 1.6T supplier count is 4 not 3, analog optionality genuine]]
-- Modes-of-reasoning analysis (asymmetric upside 6–12mo): _pending — this folder_
+- Modes-of-reasoning analysis (asymmetric upside 6–12mo): [[MXL asymmetric upside verdict 2026-06 - 10-mode swarm finds real inflection but no clean asymmetry at 69, window rent time-gated to late-2026 Rushmore binary, stage entry on Q2 print]]

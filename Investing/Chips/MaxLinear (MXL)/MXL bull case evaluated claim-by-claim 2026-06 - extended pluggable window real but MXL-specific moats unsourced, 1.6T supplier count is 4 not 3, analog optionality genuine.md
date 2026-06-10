@@ -78,4 +78,4 @@ Largely de-risked on the documents: the 8-K is a clean Item 4.01 (audit-committe
 
 ## Notes
 
-- Asymmetric-upside analysis (6–12mo, multi-perspective): _pending — this folder_
+- Asymmetric-upside analysis (6–12mo, multi-perspective): [[MXL asymmetric upside verdict 2026-06 - 10-mode swarm finds real inflection but no clean asymmetry at 69, window rent time-gated to late-2026 Rushmore binary, stage entry on Q2 print]]
