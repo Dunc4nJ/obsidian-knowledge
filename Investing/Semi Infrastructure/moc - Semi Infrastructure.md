@@ -29,11 +29,13 @@ Companies and research covering the **truly horizontal** semiconductor manufactu
 - [[Kulicke & Soffa (KLIC)]]
 - [[Lam Research (LRCX)]]
 - [[Nan Ya PCB (8046.TW)]]
+- [[Onto Innovation (ONTO)]]
 - [[SKC (011790.KS)]]
 - [[TSMC (TSM)]]
 - [[Teradyne (TER)]]
 - [[UMC (UMC)]]
 - [[Unimicron (3037.TW)]]
+- [[X-FAB Silicon Foundries (XFAB)]]
 
 ## Research
 

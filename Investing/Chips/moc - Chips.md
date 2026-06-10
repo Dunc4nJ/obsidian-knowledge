@@ -11,6 +11,7 @@ Companies and research covering fabless chip designers — companies that design
 ## Companies
 
 - [[Advanced Micro Devices (AMD)]]
+- [[Allegro MicroSystems (ALGM)]]
 - [[Alphawave Semi (AWE.L)]]
 - [[Analog Devices (ADI)]]
 - [[Arm Holdings (ARM)]]
@@ -20,7 +21,9 @@ Companies and research covering fabless chip designers — companies that design
 - [[MaxLinear (MXL)]]
 - [[MediaTek (2454.TW)]]
 - [[Microchip Technology (MCHP)]]
+- [[NXP Semiconductors (NXPI)]]
 - [[Nvidia (NVDA)]]
+- [[Qorvo (QRVO)]]
 - [[Qualcomm (QCOM)]]
 - [[Renesas (6723.T)]]
 - [[Texas Instruments (TXN)]]
