@@ -21,6 +21,7 @@ Measuring agent quality, observability, regression testing, production monitorin
 - [[Brainstore turns AI observability into database-native trace architecture for long-horizon agents]]
 - [[SmithDB makes LangSmith 12x faster by treating agent observability as an LSM problem on object storage]]
 - [[SmithDB's 12x agent observability speedup was built on top of Apache DataFusion and Vortex not instead of them]]
+- [[SmithDB builds a byte-budgeted FST inverted index to enable 400ms full-text search over enormous agent traces in object storage]]
 - [[Laminar trace viewer reads agent runs as transcripts of LLM-tool loops not backend span trees]]
 
 - [[a working offline eval turns vibes into repeatable measurement in 10 steps]]
