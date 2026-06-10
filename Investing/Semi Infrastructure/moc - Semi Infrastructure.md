@@ -31,6 +31,7 @@ Companies and research covering the **truly horizontal** semiconductor manufactu
 - [[Nan Ya PCB (8046.TW)]]
 - [[Onto Innovation (ONTO)]]
 - [[SKC (011790.KS)]]
+- [[Samsung Electronics (005930.KS)]]
 - [[TSMC (TSM)]]
 - [[Teradyne (TER)]]
 - [[UMC (UMC)]]

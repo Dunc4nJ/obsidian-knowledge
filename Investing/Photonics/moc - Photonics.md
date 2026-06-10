@@ -113,6 +113,7 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 
 ## Research
 
+- [[2026-06-09 CPO-delay dispute - SemiAnalysis report sinks optical names (AAOI -14pct COHR -11pct LITE -8pct) then NVIDIA Shainer rebuts Spectrum-X switch delays but leaves GPU-endpoint CPO thesis intact]]
 - [[@ParadisLabs 13-theme AI-infrastructure cheat sheet - 5 photonics layers from CW lasers to FAU plus HBM glass substrates SiC GaN fuel cells transformers and burn-in test with Physical AI imo as the next leg]]
 - [[@PhotonCap 2026-05-28 Third Signal MRVL Q1 FY27 confirms LITE COHR AI optical signal - NVDA $6B supply chain blueprint via 3 $2B commitments, interconnect FY27 +50pct to +70pct, FY28 $15B to $16.5B raise, scale-out scale-up scale-across]]
 - [[@RosannaInvests AEHR vs TRT positioning - proprietary FOX-XP wafer plus Sonoma package equipment vs consumable BIBs, $41M Sonoma hyperscaler order, AEHR 1Y +974pct vs TRT +434pct vs SPY +29pct]]
@@ -127,6 +128,7 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 - [[Crux Capital 2026-05-10 - 12 ways to play OCS across 5 layers - LITE $400M backlog, COHR doubles TAM to $4B, HUBN Polatis hyperscaler PO, plus Eoptolink Silex Santec AFR Furukawa RoboTechnik FN VIAV KEYS supply chain]]
 - [[GSR via jukan05 - InP bottleneck is 6N-7N red phosphorus not indium - Nippon Chemical 4092.T and Rasa 4022.T are Japanese feedstock choke points]]
 - [[Goldman 2026 AI optical cheat sheet maps EPS upside across lasers PCBs and CCL manufacturers]]
+- [[IEEE EPS 2026 Linear Pluggable Optics overview - LPO names MACOM Semtech MaxLinear as key proponents, low-power DSP-less but late at 800G and ceding 1.6T to LRO]]
 - [[PhotonCap 2026 - NVIDIAs 4 photonics bets put $2B each into COHR LITE MRVL transceiver layer and $500M Corning warrant on the GLW fiber connectivity layer]]
 - [[PhotonCap 2026 - POET -47 pct selloff explained by Marvell erasing optical engine slot one day after Polariton acquisition]]
 - [[PhotonCap 2026-04-22 - Marvell day-of acquires Polariton plasmonics ETH spinoff with LWLG Perkinamine inside the POH stack for 3.2T roadmap]]
@@ -135,6 +137,10 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 - [[PhotonCap March 2026 - NVDA's $4B COHR-LITE bet and Broadcom Hock Tan's copper-within-rack view solve different distance-time windows (0-2m 2026-27 vs cross-rack 2028-30) not opposite answers]]
 - [[PhotonCap May 2026 - Marvell-Polariton acquisition bought the POH slot not the chromophore which leaves LWLG as documented Perkinamine supplier with standalone Tower-GF-AMF foundry track]]
 - [[Sancet 2026 - Goldman optical cheat sheet omits substrate epi equipment and laser layers (IQE Soitec Tower Aixtron AEHR LPKF SIVE)]]
+- [[SemiAnalysis CPO book argues co-packaged optics is central to scale-up not scale-out, with Nvidia CPO endpoints injected at Feynman ~2028 not Rubin Ultra]]
+- [[TrendForce - 800G-plus transceiver shipment share climbs from 19.5 pct (2024) to over 60 pct by 2026 on Google Ironwood Apollo OCS architecture]]
+- [[TrendForce - 800G-plus transceiver shipments jump 2.6x to ~63M units in 2026 as NVIDIA EML lock-in extends laser lead times beyond 2027]]
+- [[TrendForce - AI optical transceiver market hits 26B USD in 2026 (+57 pct from 16.5B) with roadmaps accelerating toward LPO and silicon photonics over DSP]]
 
 ## Cross-sector
 

@@ -57,7 +57,7 @@ Each pillar, plus the counter-evidence (NVIDIA's dispute of the CPO-delay framin
 - Competitive response timing: MRVL (Ara/1.6T), AVGO (Sian3), CRDO at 1.6T.
 - Valuation: what is priced in at ~25–30x FY26 EV/S on the optical line vs. the legacy business's cyclicality.
 
-## Notes
+## Companion notes
 
-- Companion synthesis note (claim-by-claim verdicts): _pending — this folder_
+- Claim-by-claim verdicts: [[MXL bull case evaluated claim-by-claim 2026-06 - extended pluggable window real but MXL-specific moats unsourced, 1.6T supplier count is 4 not 3, analog optionality genuine]]
 - Modes-of-reasoning analysis (asymmetric upside 6–12mo): _pending — this folder_

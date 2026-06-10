@@ -10,4 +10,4 @@ NASDAQ; fabless chip designer. Core franchises: networking ASICs (Tomahawk 5/6 s
 
 ## Notes
 
-_(none yet)_
+- [[AVGO Sian3 3nm and Sian2M 5nm 200G-lane DSP PHYs - sub-23W 1.6T, sampling Mar 2025, Sian3 production ramp Q3 2025, no CoWoS mentioned]]
