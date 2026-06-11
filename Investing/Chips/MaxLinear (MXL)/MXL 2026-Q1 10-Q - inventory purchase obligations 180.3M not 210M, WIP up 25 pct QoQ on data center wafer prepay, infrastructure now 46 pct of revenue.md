@@ -18,6 +18,7 @@ MaxLinear Form 10-Q for the quarterly period ended March 31, 2026. Filed with th
 - **Liquidity is adequate but thin against the commitments.** Cash and cash equivalents **$61.077M** (down from $72.806M), plus $28.9M restricted cash; working capital $102.792M (up sharply from $62.821M); debt is a **$125.0M** term loan maturing June 2028 with a $100.0M revolver fully undrawn. Operating cash flow was **negative $8.9M** in the quarter (the wafer prepayment is the stated driver), and financing added $2.3M including **$6.0M of proceeds from a "funding arrangement."** Management asserts the $61.1M cash is sufficient for twelve months. Note: $61M cash against $129.6M of inventory purchases due within 2026 means the ramp must self-fund through collections.
 - **Samsung appears exactly once in the entire 10-Q — and not as a customer or foundry.** The sole mention is in risk factors, listing Samsung Electronics among Pay-TV OEMs ("Vantiva SA, Hitron Technologies Inc., Compal Broadband Networks, Inc., Humax Co., Ltd., and Samsung Electronics Co., Ltd."). The named manufacturing partners are [[TSMC (TSM)]] and [[UMC (UMC)]] (foundries in Taiwan, Singapore, China), with certain products supplied by [[Intel (INTC)]]; wafer supply origin includes South Korea but no Samsung Foundry agreement is disclosed. The Rushmore-on-Samsung-foundry leg of the bull thesis has **no corroboration in this filing**.
 - **Infrastructure is now the largest segment**: $62.814M, **+136% YoY**, 46% of net revenue (vs 28%), driven per MD&A by "increases in the volume of shipments of high-performance analog products, optical and wireless backhaul and access products." Total revenue $137.188M, +43% YoY.
+- **Uncovered tail risk: the Silicon Motion arbitration (added 2026-06-11, missed in original excerpting).** Note 15 discloses that Silicon Motion is pursuing MaxLinear in confidential SIAC (Singapore International Arbitration Centre) arbitration, seeking "payment of the termination fee, additional damages, fees, and costs" — and asserting MaxLinear is "liable for substantial monetary damages **in excess of** the termination fee." The termination fee under the May 2022 Merger Agreement was **$160M**. MaxLinear has recorded **NO accrual** ("no material loss contingencies have been accrued"), but concedes an unfavorable outcome "may be reasonably possible **in excess of recorded amounts**" while stating a "reasonable estimate of the amount or range of such loss cannot be made at this time." This is an entirely off-balance-sheet contingent liability of at least nine-figure scale sitting against just **$61.1M of unrestricted cash** (and $125M of term-loan debt already maturing June 2028) — a binary legal tail that, if it lands, dwarfs the company's cash and would force a draw on the revolver and/or dilutive financing. The bull case's liquidity math (above) does not net this out; management's twelve-month sufficiency assertion is conditioned on the contingency not crystallizing.
 
 ## Original Content
 
@@ -218,6 +219,30 @@ Foundry/supply-chain disclosure (risk factors):
 > In addition to a significant portion of our wafer supply coming from Taiwan, Singapore, China, and South Korea, substantially all of our products undergo packaging and final testing in Taiwan, Singapore, China, South Korea, and Malaysia.
 
 [Emphasis on Samsung added; all other text verbatim. No Samsung foundry agreement, long-term capacity agreement, or take-or-pay supply agreement is disclosed anywhere in the filing.]
+
+---
+
+## Addendum 2026-06-11 — Silicon Motion arbitration (Note 15, missed in original excerpting)
+
+The original excerpting of this 10-Q (sections 1-6 above) omitted the litigation/contingency disclosures in Note 15 ("Commitments and Contingencies") and Note 3 ("Terminated Silicon Motion Merger"). The Silicon Motion / SIAC arbitration is the single largest unaccrued contingent liability in the filing and is added here verbatim. All text below is transcribed verbatim from the same source document (MaxLinear Form 10-Q, quarterly period ended 2026-03-31, filed 2026-04-23; https://www.sec.gov/Archives/edgar/data/0001288469/000128846926000029/mxl-20260331.htm).
+
+**Note 15 — Legal Matters, "Dispute with Silicon Motion" (verbatim):**
+
+> **Dispute with Silicon Motion**
+>
+> As previously disclosed, on July 26, 2023, MaxLinear terminated the Merger Agreement on multiple grounds (Note 3). On August 16, 2023, Silicon Motion delivered to MaxLinear a notice, which Silicon Motion publicly disclosed, that it was purporting to terminate the Merger Agreement and that Silicon Motion would be commencing an arbitration before the Singapore International Arbitration Centre to seek damages from MaxLinear arising from MaxLinear's alleged breaches of the Merger Agreement. Silicon Motion's position is that MaxLinear's Willful and Material Breaches (as such term is defined in the Merger Agreement) of the Merger Agreement prevented the Merger from being completed by August 7, 2023, and that MaxLinear is consequently liable for substantial monetary damages in excess of the termination fee as provided in the Merger Agreement.
+>
+> On October 5, 2023, Silicon Motion filed a Notice of Arbitration with the Singapore International Arbitration Centre alleging that MaxLinear breached the Merger Agreement. Silicon Motion seeks payment of the termination fee, additional damages, fees, and costs. The arbitration is confidential.
+>
+> MaxLinear believes that it properly terminated the Merger Agreement. MaxLinear remains confident in its decision and will vigorously defend its right to terminate the Silicon Motion transaction without penalty.
+
+**Note 15 — loss-contingency accrual statement (verbatim):**
+
+> The Company records a provision for contingent losses when it is both probable that a liability has been incurred and the amount of the loss can be reasonably estimated. As of March 31, 2026, no material loss contingencies have been accrued for litigation and other legal claims in the consolidated financial statements, since the Company's management currently does not believe that the ultimate outcome of any of the matters described above is probable. An unfavorable outcome of these matters may be reasonably possible in excess of recorded amounts; however, a reasonable estimate of the amount or range of such loss cannot be made at this time.
+
+[Note on the dollar figure: the 10-Q text itself does not state the termination-fee amount — it refers only to "the termination fee as provided in the Merger Agreement." The termination fee under the May 5, 2022 Merger Agreement was **$160 million**. The 10-Q's operative disclosure is that Silicon Motion seeks that fee **plus** additional damages, fees, and costs — i.e., a claim explicitly exceeding $160M — with zero accrual recorded.]
+
+**Addendum takeaway:** This is an uncovered nine-figure tail risk. Silicon Motion seeks the ~$160M termination fee plus additional damages/fees/costs in confidential SIAC arbitration; MaxLinear has booked **no accrual** and states a loss "in excess of recorded amounts" is reasonably possible but not estimable. Set against just **$61.1M of unrestricted cash** (Note 7 / MD&A, above) and a $125M term loan, an adverse award would exceed total cash by a wide margin and force a revolver draw or dilutive raise — a binary legal contingency the bull-case liquidity analysis does not net out. The downstream stockholder/derivative suits ([[Water Island Event-Driven Fund v. MaxLinear]] dismissed; HBK and Steffens derivative matters) are secondary; the SIAC arbitration is the material exposure.
 
 ---
 

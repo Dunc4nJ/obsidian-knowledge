@@ -126,9 +126,11 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 - [[Crux Capital 2026-04-15 - Signals from Upstream, epitaxy and deposition tools (AIXA VECO ALRIB) confirm photonics buildout breadth across InP and quantum-dot]]
 - [[Crux Capital 2026-05-01 - Q1 earnings roundup LPK AIXA AXTI COHU - AIXA 80-100 G10 tools-yr EUR300-400M opp, AXTI InP backlog $100M+ doubles 2026, LPK 80pct qualified, COHU $750M AI-HPC pipeline]]
 - [[Crux Capital 2026-05-10 - 12 ways to play OCS across 5 layers - LITE $400M backlog, COHR doubles TAM to $4B, HUBN Polatis hyperscaler PO, plus Eoptolink Silex Santec AFR Furukawa RoboTechnik FN VIAV KEYS supply chain]]
+- [[GSR 2026-06-10 rebuttal - Co-Packaged Optics is NOT delayed, SemiAnalysis 0.95^32 yield math is a magic trick, NVIDIA CW laser orders 40M to 100M and TSMC COUPE ramp ahead refute the delay thesis]]
 - [[GSR via jukan05 - InP bottleneck is 6N-7N red phosphorus not indium - Nippon Chemical 4092.T and Rasa 4022.T are Japanese feedstock choke points]]
 - [[Goldman 2026 AI optical cheat sheet maps EPS upside across lasers PCBs and CCL manufacturers]]
 - [[IEEE EPS 2026 Linear Pluggable Optics overview - LPO names MACOM Semtech MaxLinear as key proponents, low-power DSP-less but late at 800G and ceding 1.6T to LRO]]
+- [[LightCounting May 2026 - 2026 is first year SiP transceivers exceed 50 pct of 40B market, optical-chip TAM 4x to 15B by 2031, only 10-15 pct of scale-up migrates to NPO-CPO by 2030-31]]
 - [[PhotonCap 2026 - NVIDIAs 4 photonics bets put $2B each into COHR LITE MRVL transceiver layer and $500M Corning warrant on the GLW fiber connectivity layer]]
 - [[PhotonCap 2026 - POET -47 pct selloff explained by Marvell erasing optical engine slot one day after Polariton acquisition]]
 - [[PhotonCap 2026-04-22 - Marvell day-of acquires Polariton plasmonics ETH spinoff with LWLG Perkinamine inside the POH stack for 3.2T roadmap]]
@@ -141,6 +143,7 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 - [[TrendForce - 800G-plus transceiver shipment share climbs from 19.5 pct (2024) to over 60 pct by 2026 on Google Ironwood Apollo OCS architecture]]
 - [[TrendForce - 800G-plus transceiver shipments jump 2.6x to ~63M units in 2026 as NVIDIA EML lock-in extends laser lead times beyond 2027]]
 - [[TrendForce - AI optical transceiver market hits 26B USD in 2026 (+57 pct from 16.5B) with roadmaps accelerating toward LPO and silicon photonics over DSP]]
+- [[TrendForce 2026-03-11 - CPO penetration in AI data centers rises from ~0.5 pct (2026) to ~35 pct (2030) on NVIDIA scale-up optical interconnects at Rubin Ultra-Feynman]]
 
 ## Cross-sector
 

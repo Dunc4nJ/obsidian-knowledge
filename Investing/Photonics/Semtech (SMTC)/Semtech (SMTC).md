@@ -18,3 +18,4 @@ Semtech (SMTC) — NASDAQ-listed analog/mixed-signal: optical IC for transceiver
 - [[SMTC 2026-Q4 earnings - record $1.05B sales, data center +58 pct, HieFo InP laser acquisition expands TAM toward 1.6T LPO and 3.2T NPO]]
 - [[SMTC CopperEdge linear-copper ACC portfolio claims sub-2W per cable end 90 pct below DSP AECs and sub-100ps latency for 800G-1.6T]]
 - [[SMTC FiberEdge DirectEdge LPO PMD page claims DirectEdge LPO modules run up to 40 pct lower power than DSP-based modules — no absolute watt figures disclosed]]
+- [[SMTC Q1 FY27 earnings 2026-05-26 - hyperscalers gain conviction on 1.6T LRO-LPO but initial ramp is FRO, linear hits ~25 pct transceiver mix in a year or 2]]

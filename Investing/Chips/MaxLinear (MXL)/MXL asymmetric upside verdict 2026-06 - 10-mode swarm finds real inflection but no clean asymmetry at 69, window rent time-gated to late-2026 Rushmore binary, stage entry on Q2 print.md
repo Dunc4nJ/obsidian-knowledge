@@ -9,6 +9,9 @@ type: analysis
 
 **Question**: Does MaxLinear have asymmetric upside over the next 6–12 months given CPO scale-up timing, photonics, the AI buildout, and the analog/LPO shift?
 
+> [!update] 2026-06-11 gap-fill
+> A second-pass workflow closed this note's open gaps — consensus/positioning, FY25 10-K (node ceiling 4nm), the Silicon Motion arbitration tail, peer 1.6T timing, and the CPO penetration curve. The verdict's structure stands; expectations tightened. See [[MXL gap-fill 2026-06-11 - Street already prices the ramp with consensus PT at spot, node ceiling 4nm per FY25 10-K, Silicon Motion arbitration tail uncovered, short-covering not retail drove the move]].
+
 **Method**: 10 agents (5 Claude, 5 Codex) in an NTM swarm, each applying one reasoning mode to the same closed evidence base — the 22 captured primary-source notes in this folder and [[moc - Photonics|Photonics]]/Research (see [[MXL bull case evaluated claim-by-claim 2026-06 - extended pluggable window real but MXL-specific moats unsourced, 1.6T supplier count is 4 not 3, analog optionality genuine|the claim-by-claim synthesis]]). Modes: Game-Theoretic (H1), Decision-Analysis (G1), Scenario-Simulation (F7), Sensemaking/Narrative (I5), Calibration/Debiasing (L2) on Claude; Reference-Class (B10), Bayesian (B3), Fermi (B11), Robust/Worst-Case (L3), Adversarial/Falsificationist (H2) on Codex. Axes spanned: uncertainty-representation, belief-vs-action, single-vs-multi-agent, truth-vs-adoption. Full mode outputs preserved at `/data/projects/mxl-modes-analysis/MODE_OUTPUT_*.md`. Top findings ground-truth spot-checked against the captured notes (all passed). Mode confidences ranged 0.56–0.84, honestly varied.
 
 ## Verdict (one paragraph)

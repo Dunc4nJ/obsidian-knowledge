@@ -10,4 +10,5 @@ NASDAQ; fabless chip designer. Core franchises: networking ASICs (Tomahawk 5/6 s
 
 ## Notes
 
+- [[AVGO Q2 FY2026 earnings - record $22.187B rev +48pct, AI semi $10.8B +143pct, Hock Tan calls AVGO de facto standard in CPO and 1.6T DSPs, Q3 AI guide $16B]]
 - [[AVGO Sian3 3nm and Sian2M 5nm 200G-lane DSP PHYs - sub-23W 1.6T, sampling Mar 2025, Sian3 production ramp Q3 2025, no CoWoS mentioned]]
