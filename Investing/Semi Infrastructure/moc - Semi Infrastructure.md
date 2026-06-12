@@ -13,6 +13,7 @@ Companies and research covering the **truly horizontal** semiconductor manufactu
 - [[ASML (ASML)]]
 - [[Adeia (ADEA)]]
 - [[Advantest (6857.T)]]
+- [[Amtech Systems (ASYS)]]
 - [[Applied Materials (AMAT)]]
 - [[Arteris (AIP)]]
 - [[Atomera (ATOM)]]
