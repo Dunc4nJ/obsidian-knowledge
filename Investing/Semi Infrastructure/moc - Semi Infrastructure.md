@@ -24,6 +24,7 @@ Companies and research covering the **truly horizontal** semiconductor manufactu
 - [[FormFactor (FORM)]]
 - [[GlobalFoundries (GFS)]]
 - [[Ibiden (4062.T)]]
+- [[Innolux (3481.TW)]]
 - [[Intel (INTC)]]
 - [[Keysight (KEYS)]]
 - [[Kinsus Interconnect (3189.TW)]]
