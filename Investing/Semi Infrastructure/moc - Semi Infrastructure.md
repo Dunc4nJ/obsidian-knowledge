@@ -47,6 +47,7 @@ Companies and research covering the **truly horizontal** semiconductor manufactu
 - [[@BlackPantherCap 2026-05-26 dual chokepoint thesis - COHU HBM 100pct inspection Neon $488M cash +163pct orders $80-100M HBM rev guide vs ALRIB ROSIE first 300mm SiPh MBE €15 vs €6 analyst PT]]
 - [[@damnang2 2026-06-16 - If CoPoS Arrives Who Makes Money First - 2-axis stock map CoPoS purity x path survival, 3-path uncertainty CoWoS-CoPoS-CoWoP, inspection at top of vertical axis, TSMC VisEra 2026 pilot, NVIDIA first customer, stock map paywalled]]
 - [[@jukan05 May 2026 - Taiwanese media flags NVIDIA ABF substrate lock-up via LTAs and equity stakes after TSMC COUPE-on-Substrate 2H 2026 mass production - AI GPU substrates consume 5-10x more ABF than CPU - Unimicron Ibiden Nan Ya Kinsus as choke points]]
+- [[@mingchikuo 2026-06-18 - Ming-Chi Kuo TSMC Glass Core Substrate slide breakdown - COP = Coplanarity, oS more important than CoP, PI is the real gold, MP 4Q28-1Q29 Nvidia cadence, 2 US customers beyond NVDA, Ajinomoto GL107]]
 - [[Aleabit May 2026 semi roundup - CoPoS pulled in, Vera Rubin cooling shift, 2D NAND shortage spirals, mag7 offers to fund SK Hynix, glass substrates accelerate]]
 - [[PhotonCap 2026-05 - LPKF up 255 pct YTD as LIDE TGV process becomes glass substrate chokepoint for EIC-to-CPO packaging shift]]
 - [[PhotonCap 2026-05 - bonding equipment is the AI chokepoint with BESI and KLIC at the HBM4 plus CPO bottleneck]]

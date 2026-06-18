@@ -10,6 +10,7 @@ Industrial conglomerates, capital goods, heavy machinery, engines, and gen-sets 
 
 ## Companies
 
+- [[Ajinomoto (2802.T)]]
 - [[Amphenol (APH)]]
 - [[Caterpillar (CAT)]]
 - [[Cummins (CMI)]]
