@@ -15,6 +15,10 @@ Study guides, courses, and certification materials.
 
 - [[Joe Barrow reviews Philip Kiely's Inference Engineering as the reference work he wishes he had in 2023, with a curated what-to-read-next list]] — breadth-first review of the LLM inference-stack reference (engine selection, quantization, speculative decoding, disaggregation, scaling-as-a-service) plus Barrow's curated reading map for training, GPUs, and per-technique deep dives
 
+## Explainers
+
+- [[Amit Shekhar explains how vLLM packs more LLM users onto one GPU through PagedAttention and continuous batching]] — beginner-friendly walkthrough of vLLM: serving as a memory game, KV-cache paging (PagedAttention) borrowed from OS virtual memory, prefix/beam sharing, continuous batching, and the OpenAI-compatible API
+
 ## Interview Prep
 
 - [[technmak's AI-ML Engineer Interview Guide for 2026 Part 1 spans classical ML, multimodal systems, and preference optimization across six domains]] — comprehensive Part 1 covering bias-variance, calibration, statistics, LLM fundamentals (FlashAttention, RoPE, long context), multimodal systems, LoRA/QLoRA, DPO/PPO/GRPO/KTO/ORPO, MoE, and prompting
