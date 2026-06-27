@@ -110,6 +110,7 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 - [[MicroVision (MVIS)]]
 - [[Ouster (OUST)]]
 - [[Smartoptics (SMOP.OL)]]
+- [[Syntec Optics Holdings (OPTX)]]
 
 ## Research
 
@@ -117,6 +118,7 @@ Companies and research covering optical modules and engines, lasers (CW, EML, VC
 - [[@ParadisLabs 13-theme AI-infrastructure cheat sheet - 5 photonics layers from CW lasers to FAU plus HBM glass substrates SiC GaN fuel cells transformers and burn-in test with Physical AI imo as the next leg]]
 - [[@PhotonCap 2026-05-28 Third Signal MRVL Q1 FY27 confirms LITE COHR AI optical signal - NVDA $6B supply chain blueprint via 3 $2B commitments, interconnect FY27 +50pct to +70pct, FY28 $15B to $16.5B raise, scale-out scale-up scale-across]]
 - [[@RosannaInvests AEHR vs TRT positioning - proprietary FOX-XP wafer plus Sonoma package equipment vs consumable BIBs, $41M Sonoma hyperscaler order, AEHR 1Y +974pct vs TRT +434pct vs SPY +29pct]]
+- [[@__Con_ 2026-06-11 - 3 stocks beat AAOI via mkfilko 7-criterion - OPTX Syntec Rochester founder 76-83pct on $28M rev + ASYS Amtech AI 30-35pct TPS Q2 +31pct YoY + SHMD SCHMID 25-30pct AI growth, SIVE-but-better framing]]
 - [[@damnang2 optical investment map v1.0 - 7 layers L1 Materials to L7 Test plus FRO LRO LPO NPO CPO axis with 50 names and 22-company vertical integration matrix]]
 - [[Celestial Photonic Fabric Platform for AI Accelerators - arXiv 2507.14000 specs 33TB unified memory and 115Tbps all-to-all switching across 16 XPUs (Ding Diep 2025)]]
 - [[Crux Capital 2026-01-08 - The InP Crisis - AXTI 40 pct of global InP supply, 60-day China export permits, $100M raise to double capacity in 9 months, POET ALMU LWLG TFLN as substrate disruptors]]
