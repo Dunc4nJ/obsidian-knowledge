@@ -20,6 +20,7 @@ Model serving and runtime: the engines, optimizations, and economics of running 
 
 - [[Modal argues speculative decoding is the only inference optimization that matters, and custom DFlash speculators turn acceptance length into 2-3x speedups]] — acceptance length, DFlash speculators, roofline modeling, SGLang/vLLM speedups
 - [[Rachel Rapp explains how Baseten trains speculative-decoding draft models live from inference hidden states, raising accept rates 20%+ with no offline data storage]] — Baseten's Speculation Engine: draft models trained live from serving hidden states
+- [[elie breaks down DeepSeek's DSpark, a semi-parallel speculative decoder that fuses DFlash's parallel head with an Eagle-style Markov step for +50% throughput and up to 80% lower latency in DeepSeek-V4 production]] — DeepSeek's DSpark: semi-parallel drafter (heavy parallel head + small t-1 Markov correction), confidence-driven adaptive verification budget, +50% throughput / up to 80% latency on dsv4
 
 ## KV cache
 
