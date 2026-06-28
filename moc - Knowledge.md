@@ -204,6 +204,16 @@ Embedding models, retrieval architectures, and vector search.
 - [[late interaction lets a 150M ColBERT model outperform 7B dense retrievers on reasoning-intensive retrieval]] — Reason-ModernColBERT (150M) beats all dense models up to 7B on BRIGHT benchmark, with controlled experiments showing late interaction doubles performance over single-vector on identical data
 - [[OBLIQ-Bench shows that scalable retrievers fail to surface oblique queries that reasoning LLMs can verify]] — MIT benchmark of five oblique IR tasks (descriptive, analogue, tip-of-tongue) where every dense, lexical, late-interaction, and agentic retriever scores near-zero NDCG@10 while a GPT-5.2 tournament reranker reaches 0.43–0.91
 
+## Inference
+
+Model serving and runtime — engines, KV cache, speculative decoding, quantization, and serving economics. Folder MOC: [[moc - Inference]] (9 notes).
+
+- [[paged attention applies OS virtual memory paging to KV cache and unlocks 2-4x LLM serving throughput]] — PagedAttention KV paging; the canonical serving-throughput result
+- [[Modal argues speculative decoding is the only inference optimization that matters, and custom DFlash speculators turn acceptance length into 2-3x speedups]] — speculative decoding as the dominant serving-engine optimization (DFlash speculators)
+- [[Philip Kiely details how Baseten built the world's fastest GLM-5.2 API by stacking NVFP4 quantization, KV-aware routing, prefill-decode disaggregation, and MTP speculation]] — production serving stack for SOTA TPS/TTFT
+- [[vLLM throughput benchmarking on H100 — tensor-parallel sizing, speculative decoding, and FP8 KV-cache economics]] — 18-model serving-parameter sweep + the $/H100-hour math
+- …+5 more in [[moc - Inference]] (Joe Barrow's *Inference Engineering* review, Amit Shekhar vLLM, Rachel Rapp Baseten draft models, Ramp Labs KV-cache compaction, Chandra-OCR batch economics)
+
 ## LLMs
 
 Foundational architecture, training, scaling, and interpretability of large language models.

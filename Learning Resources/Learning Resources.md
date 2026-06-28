@@ -11,13 +11,12 @@ Study guides, courses, and certification materials.
 
 - [[Claude Certified Architect exam covers five domains from agentic loops to context management]] — comprehensive self-study breakdown of all five exam domains with tutor prompts and build exercises
 
-## Book Reviews
+## Inference & serving → moved to ML Research/Inference/
 
-- [[Joe Barrow reviews Philip Kiely's Inference Engineering as the reference work he wishes he had in 2023, with a curated what-to-read-next list]] — breadth-first review of the LLM inference-stack reference (engine selection, quantization, speculative decoding, disaggregation, scaling-as-a-service) plus Barrow's curated reading map for training, GPUs, and per-technique deep dives
+These vLLM/inference explainers were re-homed to the inference folder — see [[moc - Inference]] (kept discoverable here):
 
-## Explainers
-
-- [[Amit Shekhar explains how vLLM packs more LLM users onto one GPU through PagedAttention and continuous batching]] — beginner-friendly walkthrough of vLLM: serving as a memory game, KV-cache paging (PagedAttention) borrowed from OS virtual memory, prefix/beam sharing, continuous batching, and the OpenAI-compatible API
+- [[Joe Barrow reviews Philip Kiely's Inference Engineering as the reference work he wishes he had in 2023, with a curated what-to-read-next list]] — breadth-first review of the LLM inference-stack reference (engine selection, quantization, speculative decoding, disaggregation) + curated reading map
+- [[Amit Shekhar explains how vLLM packs more LLM users onto one GPU through PagedAttention and continuous batching]] — beginner-friendly vLLM walkthrough (PagedAttention KV paging, prefix/beam sharing, continuous batching, OpenAI-compatible API)
 
 ## Interview Prep
 

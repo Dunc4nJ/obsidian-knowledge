@@ -31,4 +31,4 @@ How to design, describe, and orchestrate tools that agents actually use well.
 Document OCR models, benchmarks, and large-scale processing pipelines.
 
 - [[LightOnOCR-2 outscores proprietary models at table extraction with 1B parameters]] — 1B open-source model beats GPT-5 mini, Claude Sonnet 4.6, and Mathpix on independent table extraction benchmark
-- [[HuggingFace OCRed 30K arXiv papers with Chandra-OCR 2 on parallel L40S GPU jobs for 850 dollars]] — end-to-end playbook: Chandra-OCR 2 via vLLM on 16 parallel L40S jobs, orchestrated by Codex, ~$850 for 27K papers
+- [[HuggingFace OCRed 30K arXiv papers with Chandra-OCR 2 on parallel L40S GPU jobs for 850 dollars]] — Chandra-OCR 2 via vLLM on 16 parallel L40S jobs, orchestrated by Codex, ~$850 for 27K papers _(re-homed to [[moc - Inference|ML Research/Inference/]] as a batch-inference-economics exemplar; kept here for the OCR-pipeline angle)_

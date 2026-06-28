@@ -17,6 +17,8 @@ Template diversity matters more than template polish — a "messier" model (Smol
 
 The infrastructure contribution is equally significant. They open-sourced everything through DataTrove: rollout abstractions for flexible inference orchestration, tiered throughput optimization (801 configurations across 18 models), and production-hardened distributed generation with checkpoint-aware resume, Hub upload retry logic, and Xet cache isolation. FinePhrase achieves ~33M tokens per GPU-hour — 30x more efficient than REWIRE.
 
+> [!note] The vLLM/H100 throughput-tuning recipe from the Infrastructure → Throughput Benchmarking section is maintained as a standalone serving reference: [[vLLM throughput benchmarking on H100 — tensor-parallel sizing, speculative decoding, and FP8 KV-cache economics]].
+
 *Scale of synthetic data in recent LLM training runs*
 ![[finephrase-synthetic-data-scale.webp]]
 
