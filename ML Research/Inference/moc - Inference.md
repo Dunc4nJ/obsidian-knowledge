@@ -29,6 +29,7 @@ Model serving and runtime: the engines, optimizations, and economics of running 
 
 - [[paged attention applies OS virtual memory paging to KV cache and unlocks 2-4x LLM serving throughput]] — PagedAttention: OS-style virtual-memory paging of the KV cache; the canonical serving-throughput result
 - [[Ramp Labs Latent Briefing compacts KV caches for efficient cross-agent memory sharing]] — KV-cache compaction technique (Attention Matching, NNLS/ridge solves, batched CUDA kernels, prefix caching, GPU↔CPU offload)
+- [[Baseten's STILL perceiver amortizes KV cache compaction into one forward pass, compressing 8x at 85%+ factual retention]] — Baseten Research's STILL: a ~7M-param/layer perceiver bottleneck (learned latent queries cross-attending the full cache) that amortizes compaction into one forward pass — vs Attention Matching/Cartridges' per-context optimization; KL-distilled on a frozen Qwen3-4B, 8x compression at ~85-90% extractive MCQ accuracy, monotonic scaling unlocked by un-rotate/re-rotate RoPE + dropping the final norm + identity init; framed as a compressed working-memory layer toward continual learning
 
 ## Serving economics & throughput
 
