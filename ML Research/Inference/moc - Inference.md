@@ -35,6 +35,12 @@ Model serving and runtime: the engines, optimizations, and economics of running 
 - [[vLLM throughput benchmarking on H100 — tensor-parallel sizing, speculative decoding, and FP8 KV-cache economics]] — two-tier parameter sweep across 18 models; when `tp` vs speculative decoding pays off; the $/H100-hour math
 - [[HuggingFace OCRed 30K arXiv papers with Chandra-OCR 2 on parallel L40S GPU jobs for 850 dollars]] — batch-inference economics: vLLM on L40S vs A10G, papers/hr, $850 vs $1,841 API
 
+## GPU kernels & the hardware layer
+
+The layer beneath serving: how the kernels every note above treats as a black box are actually built.
+
+- [[MLC's Modern GPU Programming for MLSys is a Blackwell-era book that builds from the GPU execution model through TMA, tensor cores, and TMEM to a SOTA GEMM and Flash Attention 4 in the TIRx Python DSL]] — free MLC book/course; Blackwell execution & memory model, TMA, `tcgen05` tensor cores, TMEM, mbarriers, clusters, then a tiled→pipelined→warp-specialized GEMM and a full Flash Attention 4, all in the TIRx Python DSL
+
 ## Related / cross-linked elsewhere
 
 Notes whose primary subject lives in another folder but that carry a heavy inference theme — kept in place, surfaced here for the inference lens:
