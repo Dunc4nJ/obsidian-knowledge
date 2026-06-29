@@ -10,6 +10,8 @@ Model serving and runtime: the engines, optimizations, and economics of running 
 
 **Start here:** [[Joe Barrow reviews Philip Kiely's Inference Engineering as the reference work he wishes he had in 2023, with a curated what-to-read-next list]] — the orientation note: engine selection, quantization, speculative decoding, disaggregation, and a curated reading path into the rest of the folder.
 
+**Index of the territory:** [[Ashutosh Maheshwari's sub-second LLM study list catalogs sixteen inference optimizations from KV-caching and speculative decoding to tensor parallelism and memory offloading]] — a flat 16-technique study list (KV-caching, speculative/parallel/early-exit decoding, FlashAttention, PagedAttention, batching, mixed-precision/quantized kernels, tensor/pipeline/sequence parallelism, graph optimization, memory offloading, streaming) reorganized by bottleneck layer and cross-linked to every deep-dive below.
+
 ## Serving engines & runtimes
 
 - [[Amit Shekhar explains how vLLM packs more LLM users onto one GPU through PagedAttention and continuous batching]] — vLLM fundamentals: PagedAttention KV paging, prefix/beam sharing, continuous batching, OpenAI-compatible serving
