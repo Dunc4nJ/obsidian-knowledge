@@ -14,6 +14,7 @@ For shorter-horizon systematic trading content see `Trading/`. For prediction-ma
 
 - [[@babyfolio 2026-06-06 - The Game of Stocks framework - 3 win-rate boosters + 3 growth factors + 4 red flags, CEO 10pct ownership 4-10pct alpha, insider buys 22.2pct vs 14.4pct, LoL Dota macro analogy]]
 - [[AI CAPEX 2026-Q1 hyperscaler reads bullish - $700B-plus 2026 spend funds optics, networking, and inference buildout per Crux]]
+- [[Agentic equity research pipeline - 7-phase multi-agent workflow from claim primer to cited verdict via deep-research, parallel captures, and a 10-mode reasoning swarm]]
 - [[Crux Capital announces forthcoming 100-120-page photonics report covering 800G-1.6T transition CPO and 20 mapped companies (2026-02-17)]]
 - [[EML vs CW lasers - integrated vs modular optical transmitter architectures shape 400G 800G 1.6T module design]]
 - [[LPO NPO CPO optical placement architectures explain power latency and serviceability tradeoffs as optics migrate toward the ASIC - Crux Capital primer]]
