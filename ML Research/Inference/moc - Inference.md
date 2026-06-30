@@ -41,6 +41,7 @@ Model serving and runtime: the engines, optimizations, and economics of running 
 The layer beneath serving: how the kernels every note above treats as a black box are actually built.
 
 - [[MLC's Modern GPU Programming for MLSys is a Blackwell-era book that builds from the GPU execution model through TMA, tensor cores, and TMEM to a SOTA GEMM and Flash Attention 4 in the TIRx Python DSL]] — free MLC book/course; Blackwell execution & memory model, TMA, `tcgen05` tensor cores, TMEM, mbarriers, clusters, then a tiled→pipelined→warp-specialized GEMM and a full Flash Attention 4, all in the TIRx Python DSL
+- [[Modal's GPU Glossary is a browsable reference that maps the GPU stack from device hardware through the CUDA software layers to performance concepts in ~80 linked terms]] — **reference/lookup resource** (not a synthesis): Modal's hyperlinked glossary of ~80 GPU terms across four layers — device hardware (SMs, tensor cores, TMA, memory), device software (CUDA thread/execution model), host software (driver/runtime/library stack + tooling), and performance (roofline, compute/memory-bound, arithmetic intensity, occupancy). The companion to the MLC book above and the place to ground any GPU term the rest of this folder name-drops
 
 ## Related / cross-linked elsewhere
 
