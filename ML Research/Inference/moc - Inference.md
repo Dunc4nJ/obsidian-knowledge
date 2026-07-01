@@ -16,6 +16,7 @@ Model serving and runtime: the engines, optimizations, and economics of running 
 
 - [[Amit Shekhar explains how vLLM packs more LLM users onto one GPU through PagedAttention and continuous batching]] — vLLM fundamentals: PagedAttention KV paging, prefix/beam sharing, continuous batching, OpenAI-compatible serving
 - [[Philip Kiely details how Baseten built the world's fastest GLM-5.2 API by stacking NVFP4 quantization, KV-aware routing, prefill-decode disaggregation, and MTP speculation]] — production case study stacking four serving optimizations for SOTA TPS/TTFT
+- [[Red Hat frames prefill-decode disaggregation, KV-cache tiering, and speculative decoding as the three llm-d deployment levers for distributed AI inference]] — Part 2 of Red Hat's distributed-inference series: P/D disaggregation as a deployment *topology* (profile-driven decision rule, 1:3–1:5 pool sizing, KVConnector data path, cache-aware llm-d routing), the KV cache as a cluster-wide tiered resource (HBM/DRAM/NVMe, prefix sharing vs reuse, FP8/FP4, PagedAttention vs RadixAttention), and a speculative-decoding menu matched to traffic shape (EAGLE 3.1 / Medusa / MTP / n-gram; net-loss on saturated fleets)
 - [[Joe Barrow reviews Philip Kiely's Inference Engineering as the reference work he wishes he had in 2023, with a curated what-to-read-next list]] — review of the *Inference Engineering* reference + what-to-read-next list
 
 ## Speculative decoding
