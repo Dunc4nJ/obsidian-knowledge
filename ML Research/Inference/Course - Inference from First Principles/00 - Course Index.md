@@ -14,8 +14,8 @@ Related folder MOC: [[moc - Inference]].
 
 1. [[Step 01 - Decode is memory-bandwidth-bound (the roofline)]] — why one token reads the whole model; the two clocks; arithmetic intensity & the ridge point `B*≈295`; precision/bytes; the MAC; rate-capping.
 2. Step 02 — Continuous batching (spending the free compute along the *batch* axis) — _coming next_
-3. Step 03 — Speculative decoding core (guess-then-verify; why it's lossless)
-4. Step 04 — Draft models & the acceptance-rate lever (α = distributional overlap)
+3. [[Step 03 - Speculative decoding core (guess-then-verify, why it's lossless)]] — guess-then-verify; the accept/reject rule `min(1, p/q)`; the free parallel verify pass; resample the residual `max(0, p−q)`; why the output is provably the target's distribution (lossless).
+4. [[Step 04 - Draft models and the acceptance-rate lever (α = distributional overlap)]] — `α = 1 − TV(p,q)` = distributional overlap; total variation; maximal-coupling optimality; the bits/surprisal view; KL via Pinsker as the trainable surrogate → why draft models are distilled.
 5. Step 05 — The economics of speculation (the cost formula, the net-negative zone, the ceilings)
 6. Step 06 — EAGLE / MTP (drafter as an extra layer on the last hidden state)
 7. Step 07 — DFlash (diffusion: all N draft tokens in one pass)
