@@ -9,6 +9,10 @@ type: moc
 
 AI agents that interact with structured data to answer questions — text-to-SQL, discovery layers, context architectures over warehouses, and RL for SQL tool use.
 
+## Perspective & Vision
+
+- [[Berkeley's EPIC Data Lab argues near-free intelligence makes agents the dominant data-systems workload, needing data systems for, of, and by agents]] — the orienting frame for this folder: as inference cost approaches zero, agents (not humans/BI tools) become the dominant DB workload. A landscape survey + research agenda across three axes — **FOR agents** (agentic speculation: 1000s of SQL queries per request, 80-90% duplicate sub-plans, reuse/satisfice/proactive systems), **OF agents** (the agentic substrate: structured corrective memory beyond markdown files/KGs, concurrent-edit/CRDT/livelock problems, durable execution, agent negotiation), and **BY agents** (synthesizing disposable workload-specific engines — Bespoke OLAP, GenDB, custom KV stores — with verification agents + proof-carrying synthesis to earn trust). Parameswaran, Zaharia, Stoica, Hellerstein et al.
+
 ## Market Analysis
 
 - [[data agents are useless without a context layer that captures business definitions and tribal knowledge]] — a16z's Jason Cui on why the modern data stack → agent frenzy → wall pattern demands a living context layer as superset of semantic layers
