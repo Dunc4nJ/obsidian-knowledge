@@ -25,6 +25,12 @@ Frameworks and playbooks for finding and building profitable products.
 - [[domain-specific agents beat general-purpose ones by owning verification in boring industries]] — indie builder playbook: pick boring industries with expensive document workflows, compress domain learning with agents, build verification-first automation pipelines
 - [[model-market fit is the prerequisite layer beneath product-market fit for AI startups]] — MMF framework: the model must do the core job before the market can pull the product. Legal AI exploded post-GPT-4; finance stuck at 56% accuracy. The 80/99 gap is infinite in regulated verticals
 
+## AI Consulting
+
+Theses and playbooks for AI transformation and services businesses.
+
+- [[Varick Agents - AI's biggest winners are low-margin businesses where sub-1 percent cost cuts drive 25 percent profit gains]] — Daniel Kornum (Varick Agents): the largest addressable AI opportunity is low-margin, labor-heavy firms (logistics, manufacturing, staffing) where a <1% cost cut yields a >25% profit gain; win by attacking hidden coordination costs and selling AI as infrastructure embedded in existing workflows rather than software that requires employee adoption
+
 ## Agents
 
 Agent architecture, memory systems, background agents, and tooling.
