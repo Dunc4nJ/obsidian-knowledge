@@ -212,14 +212,14 @@ Embedding models, retrieval architectures, and vector search.
 
 ## Inference
 
-Model serving and runtime — engines, KV cache, speculative decoding, quantization, and serving economics. Folder MOC: [[moc - Inference]] (10 notes).
+Model serving and runtime — engines, KV cache, speculative decoding, quantization, and serving economics. Folder MOC: [[moc - Inference]] (11 notes).
 
 - [[NVIDIA's hardware-friendly LLM design guide - near-square tile-aligned dimensions, width over depth, NVFP4, and wide expert parallelism]] — NVIDIA's model-hardware co-design guidelines: near-square/tile-aligned linear layers, width over depth, NVFP4 quantization, and wide expert / chunked-pipeline / Helix parallelism on Blackwell
 - [[paged attention applies OS virtual memory paging to KV cache and unlocks 2-4x LLM serving throughput]] — PagedAttention KV paging; the canonical serving-throughput result
 - [[Modal argues speculative decoding is the only inference optimization that matters, and custom DFlash speculators turn acceptance length into 2-3x speedups]] — speculative decoding as the dominant serving-engine optimization (DFlash speculators)
 - [[Philip Kiely details how Baseten built the world's fastest GLM-5.2 API by stacking NVFP4 quantization, KV-aware routing, prefill-decode disaggregation, and MTP speculation]] — production serving stack for SOTA TPS/TTFT
 - [[vLLM throughput benchmarking on H100 — tensor-parallel sizing, speculative decoding, and FP8 KV-cache economics]] — 18-model serving-parameter sweep + the $/H100-hour math
-- …+5 more in [[moc - Inference]] (Joe Barrow's *Inference Engineering* review, Amit Shekhar vLLM, Rachel Rapp Baseten draft models, Ramp Labs KV-cache compaction, Chandra-OCR batch economics)
+- …+6 more in [[moc - Inference]] (Superlinked SIE multi-model serving, Joe Barrow's *Inference Engineering* review, Amit Shekhar vLLM, Rachel Rapp Baseten draft models, Ramp Labs KV-cache compaction, Chandra-OCR batch economics)
 
 ## LLMs
 
