@@ -240,6 +240,12 @@ Physical compute layer enabling AI accelerators — semiconductor packaging, sub
 - [[LPKF LIDE holds 80% qualification share in glass via drilling, a quasi-monopolist hidden behind non-core segment losses on a $20B TAM ramp]] — LPKF's LIDE laser process dominates through-glass via drilling at Intel/Samsung/TSMC, hiding a quasi-monopoly position behind non-core Solar losses at 3x EV/Sales
 - [[DELL earnings reveal memory supply crisis driving enterprises from buying more RAM to CXL pooling efficiency, creating tailwinds for Penguin Solutions]] — DELL Q1 2026 earnings quotes confirm memory uncertainty and component inflation are forcing enterprises toward CXL memory pooling efficiency over raw procurement; Penguin Solutions (5,000+ customers across neoclouds, sovereigns, enterprises) positioned as pre-engineered architecture provider
 
+## Graph Theory
+
+Network structure and graph algorithms — small-world/decentralized search, random graphs and expanders, diffusion/cascades, spectral methods, random walks, and link analysis.
+
+- [[Jon Kleinberg's CS 6850 The Structure of Information Networks (Cornell Fall 2024) - syllabus and reading list]] — Kleinberg's Cornell grad course + curated reading list, organized around three pillars: small-world properties & decentralized search (Milgram, navigable small-world), cascading behavior/diffusion (Granovetter thresholds, epidemic/gossip algorithms, influence maximization), and spectral analysis & random walks (graph partitioning, PageRank-style link analysis); anchored on the free *Networks, Crowds, and Markets* textbook
+
 ## Learning Resources
 
 Study guides, interview prep, and curated course material.
