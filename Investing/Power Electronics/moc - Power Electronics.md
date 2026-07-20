@@ -13,11 +13,13 @@ Power discrete devices, modules, and conversion ICs — SiC and GaN FETs, integr
 - [[Alpha & Omega Semiconductor (AOSL)]]
 - [[American Superconductor (AMSC)]]
 - [[CPS Technologies (CPSH)]]
+- [[Delta Electronics (2308.TW)]]
 - [[Diodes Incorporated (DIOD)]]
 - [[Fuji Electric (6504.T)]]
 - [[Infineon Technologies (IFX.DE)]]
 - [[Innoscience (2577.HK)]]
 - [[Littelfuse (LFUS)]]
+- [[Murata (MRAAY)]]
 - [[Navitas Semiconductor (NVTS)]]
 - [[Onsemi (ON)]]
 - [[Power Integrations (POWI)]]
@@ -27,6 +29,7 @@ Power discrete devices, modules, and conversion ICs — SiC and GaN FETs, integr
 - [[Sanan Optoelectronics (600703.SH)]]
 - [[Toshiba (6502.T)]]
 - [[Vicor (VICR)]]
+- [[Vishay (VSH)]]
 - [[Wolfspeed (WOLF)]]
 
 ## Research

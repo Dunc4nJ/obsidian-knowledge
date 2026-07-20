@@ -14,6 +14,7 @@ Memory IDMs (Micron, SK Hynix, Samsung, SanDisk, Western Digital, Kioxia) that d
 - [[Kioxia (285A.T)]]
 - [[Macronix (2337.TW)]]
 - [[Micron (MU)]]
+- [[Rambus (RMBS)]]
 - [[SK Hynix (000660.KS)]]
 - [[Samsung Electronics (005930.KS)]]
 - [[SanDisk (SNDK)]]
