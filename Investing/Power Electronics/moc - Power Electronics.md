@@ -26,6 +26,7 @@ Power discrete devices, modules, and conversion ICs — SiC and GaN FETs, integr
 - [[STMicroelectronics (STM)]]
 - [[Sanan Optoelectronics (600703.SH)]]
 - [[Toshiba (6502.T)]]
+- [[Vicor (VICR)]]
 - [[Wolfspeed (WOLF)]]
 
 ## Research
