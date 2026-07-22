@@ -90,6 +90,7 @@ Measuring agent quality, observability, regression testing, LLM-as-judge, eval p
 - [[Agno native tracing keeps agent observability data in your own database]]
 - [[sandboxed CI is the missing infrastructure for agent evals at scale]]
 - [[Offload parallelizes agent CI test suites across Modal sandboxes removing the integration testing bottleneck]]
+- [[LangChain's Eval Engineering Skill builds Harbor-format evals from repo context and agent traces by interviewing the user]] — Viv Trivedi (LangChain): a coding-agent skill (Codex/Claude Code) that maps the agent surface (prompts/models/tools/skills/hooks) + mines production traces (langsmith-cli) to propose abilities to test, interviews the user (which tools run live vs simulated) rather than one-shotting, and emits executable Harbor tasks (instruction + Dockerfile environment + verifier); verifier design is iterative — inspect both agent and verifier trajectories to catch reward hacking; containerized evals let you swap models/prompts/tools and compare; framed as continual-learning-as-data-mining (mine traces → build eval → improve agent → rerun)
 
 ### Extra
 Roundups, digests, survey notes, and multi-topic captures that don't fit cleanly into one subfolder. Use sparingly — prefer placing notes in a specific subfolder when possible.
