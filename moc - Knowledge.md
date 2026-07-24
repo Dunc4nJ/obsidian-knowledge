@@ -212,7 +212,7 @@ Embedding models, retrieval architectures, and vector search.
 
 ## Inference
 
-Model serving and runtime — engines, KV cache, speculative decoding, quantization, and serving economics. Folder MOC: [[moc - Inference]] (11 notes).
+Model serving and runtime — engines, KV cache, speculative decoding, quantization, and serving economics. Folder MOC: [[moc - Inference]] (12 notes).
 
 - [[NVIDIA's hardware-friendly LLM design guide - near-square tile-aligned dimensions, width over depth, NVFP4, and wide expert parallelism]] — NVIDIA's model-hardware co-design guidelines: near-square/tile-aligned linear layers, width over depth, NVFP4 quantization, and wide expert / chunked-pipeline / Helix parallelism on Blackwell
 - [[paged attention applies OS virtual memory paging to KV cache and unlocks 2-4x LLM serving throughput]] — PagedAttention KV paging; the canonical serving-throughput result
