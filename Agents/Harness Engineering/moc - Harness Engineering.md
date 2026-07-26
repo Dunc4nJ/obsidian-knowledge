@@ -10,6 +10,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 
 ## Deep Dives
 
+- [[Harrison Chase argues companies must own their intelligence by controlling the model-harness-context system its governance and the compounding feedback loop]] — Harrison Chase's (LangChain) flagship "own your intelligence" manifesto and the capstone that ties this whole folder together: generic model access is undifferentiated ("everyone else can call the same API"), so lasting advantage comes from owning the layer where it compounds. Three parts — **control the agent system** (model optionality/open-weights + harness + context & memory), **own the economics, quality & risk** (per-user cost lock-down, evals not assumptions, permission boundaries, trace-based observability), and **compound your intelligence** (a portable traces→feedback→improvements loop with an eval per change). Ends with a 10-question ownership checklist; 3 LangChain architecture diagrams
 - [[agent harness is the real product]] — synthesis of how Claude Code, Cursor, Manus, Devin, and SWE-Agent converge on the same architecture, with 17 reference notes
 - [[how top ai companies handle context engineering]] — compendium of six-company context-engineering strategies, tradeoffs, and technique matrix
 
