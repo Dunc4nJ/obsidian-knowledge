@@ -12,6 +12,12 @@ Model serving and runtime: the engines, optimizations, and economics of running 
 
 **Index of the territory:** [[Ashutosh Maheshwari's sub-second LLM study list catalogs sixteen inference optimizations from KV-caching and speculative decoding to tensor parallelism and memory offloading]] — a flat 16-technique study list (KV-caching, speculative/parallel/early-exit decoding, FlashAttention, PagedAttention, batching, mixed-precision/quantized kernels, tensor/pipeline/sequence parallelism, graph optimization, memory offloading, streaming) reorganized by bottleneck layer and cross-linked to every deep-dive below.
 
+## Model & attention architecture
+
+The layer *above* serving — how the model itself stores, updates, and retrieves state, which sets what the KV cache and every optimization below have to work with.
+
+- [[From GPT-2 to Kimi K3 - a visual worklog on how attention architecture evolved to fix the KV cache with linear attention, DeltaNet, gating, and hybrid retrieval]] — @waterloo_intern's illustrated worklog (22 figures) tracing GPT-2 (124M, 2019) → Kimi K3 (2.8T, 2026): the KV cache as an O(N) memory-bandwidth bottleneck → **linear attention** (ELU+1 feature map folds K/V into a constant D×D state) → **DeltaNet / Fast Weight Programmers** (read-then-write the delta to fix recoverability) → **chunked-parallel DeltaNet** (Householder reparameterization for hardware-efficient training) → **Gated DeltaNet** (Mamba-2 scalar decay + delta rule) → **Kimi Linear / KDA** (per-channel fine-grained gating, 6× decode throughput) → **Kimi K3** (23 macrocycles of 3 KDA + 1 MLA, latent-space MoE with 898 experts, SiTU, Gated MLA, blockwise AttnRes). Thesis: it's not scale — a fixed-capacity associative memory needs a learned eviction policy (gating/routing/decay) and attention is the best selective-read mechanism
+
 ## Serving engines & runtimes
 
 - [[Amit Shekhar explains how vLLM packs more LLM users onto one GPU through PagedAttention and continuous batching]] — vLLM fundamentals: PagedAttention KV paging, prefix/beam sharing, continuous batching, OpenAI-compatible serving
