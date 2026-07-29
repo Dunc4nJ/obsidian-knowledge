@@ -173,6 +173,12 @@ Marketing, creative testing, and automation learnings that apply across brands.
 - [[skill architecture beats skill writing when memory contracts and learning loops connect the system]] — five architectural patterns that turn isolated AI marketing skills into a compounding system
 - [[nine prompts turn Claude plus Higgsfield into a product video factory]] — nine-prompt pipeline from angle generation through retargeting sequences
 
+## X
+
+Growth, marketing, and distribution on the X (Twitter) platform — how its ranking promotes content and how to launch, go viral, and coordinate creators. See [[moc - X]].
+
+- [[Making a launch trend on X is a four-stage system - swipe-file research, a claim-and-comment-gate hook, tiered-creator breadth, and spike conversion]] — @0xfJuan's launch playbook: X promotes posts circle-by-circle and "trending" is when breadth reclassifies a post as a *subject*; three levers (speed, expensive signals over likes, conversation breadth) manufactured across four stages — Claude-built swipe file → video + claim-not-description hook + first-reply comment gate → tiered creators on a timed schedule (200+ posts in 4h) → convert the spike and stay visible
+
 ## Prediction Markets
 
 Prediction market arbitrage, quantitative trading, and market microstructure.
