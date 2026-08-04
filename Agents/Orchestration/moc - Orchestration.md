@@ -8,6 +8,11 @@ type: moc
 
 Multi-agent coordination — delegation patterns, lead/worker ratios, communication between agents, state machines, and squad architectures.
 
+## Canonical
+
+- [[Anthropic's multi-agent Research system - orchestrator-worker subagents scale token spend past one context window for a 90 percent lift over single-agent Opus]] — the June 2025 engineering post most of this folder argues with. Why multi-agent works (token spend explains 80% of BrowseComp variance; parallel subagent context windows scale it; Opus-lead + Sonnet-subs +90.2% over single Opus), when it doesn't (~15x chat tokens; shared-context/dependency-heavy tasks like coding), eight delegation-prompting principles (explicit effort-scaling rules, tool-testing agents that rewrite tool descriptions for a 40% speedup, start-wide-then-narrow, two-layer parallelism for up to 90% time cuts), outcome-not-path evals (~20 queries to start; one LLM judge with a five-axis rubric beats a judge panel), and production lessons (durable resume, rainbow deployments, decision-pattern tracing, subagent-outputs-to-filesystem to avoid the game of telephone); 3 diagrams
+- [[Cognition finds multi-agent systems work only when writes stay single-threaded and additional agents contribute intelligence not actions]] — the counterpoint pole of the 2025 multi-agent debate ("don't build multi-agents"): parallel *reads* fine, parallel *writes* conflict; context must flow through one authoritative thread
+
 ## Notes
 
 - [[2 to 5 worker agents per lead is the sweet spot for multi agent orchestration]]
