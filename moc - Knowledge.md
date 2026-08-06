@@ -180,6 +180,12 @@ Growth, marketing, and distribution on the X (Twitter) platform — how its rank
 
 - [[Making a launch trend on X is a four-stage system - swipe-file research, a claim-and-comment-gate hook, tiered-creator breadth, and spike conversion]] — @0xfJuan's launch playbook: X promotes posts circle-by-circle and "trending" is when breadth reclassifies a post as a *subject*; three levers (speed, expensive signals over likes, conversation breadth) manufactured across four stages — Claude-built swipe file → video + claim-not-description hook + first-reply comment gate → tiered creators on a timed schedule (200+ posts in 4h) → convert the spike and stay visible
 
+## Website
+
+Designing and generating websites with AI — immersive/animated sites, recreation-grade design specs, asset-first pipelines. See [[moc - Website]].
+
+- [[Immersive AI-built websites follow a four-phase pipeline - asset-first direction, a recreation-grade spec, iterative Fable 5 builds, and a compounding prompt library]] — the motionsites designer's full process, transcribed and frame-analyzed: Pinterest motif → Higgsfield hero video → four-block spec (assets/fonts/layer-structure/scroll-scrub) → Cursor + Fable 5 iterative build → convert every finished page back into an "exact recreation prompt" that compounds into a template library
+
 ## Prediction Markets
 
 Prediction market arbitrage, quantitative trading, and market microstructure.
