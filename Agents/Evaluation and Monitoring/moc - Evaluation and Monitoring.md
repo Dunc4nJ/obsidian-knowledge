@@ -13,6 +13,7 @@ Measuring agent quality, observability, regression testing, production monitorin
 - [[agent production monitoring requires observing inputs and outputs not just system metrics]]
 - [[AI generated code repos gain credibility by shipping verification artifacts not hiding authorship]]
 - [[coding agent skills need dedicated evaluation benchmarks not vibes to measure real performance]]
+- [[data-eng-bench shows a data-native harness beats generic coding agents on dbt tasks at up to 3.9x lower cost with equal or better quality]] — Snowflake AI Research + Bespoke Labs: an open-source repository-level data-engineering benchmark (103 dbt tasks over one 579-table warehouse; hidden 10-50 assertion verifier suites; strict all-assertions-pass task scoring; Pass@1 *and* Pass^3). Isolates harness from model across CoCo/Claude Code/Codex × Opus 5/Sonnet 5/GPT 5.6 Sol — the data-native CoCo harness matches or beats generic agents on quality at up to 3.9x lower cost via plan-then-execute (front-load exploration, write without look-back, verify once) vs generic explore-and-refine + needless DuckDB cross-validation; harness effect is model-dependent (Sonnet 5 ties on quality, wins only on cost). Best config CoCo+Opus 5 = 73.8% Pass@1 / 64.1% Pass^3; 3 figures
 - [[deep agent evals need bespoke per-datapoint test logic not uniform evaluators]]
 - [[trajectory eyeballing is the irreplaceable skill for debugging RL-trained agents]]
 - [[effective agent evals combine deterministic graders model judges and human review across the full development lifecycle]]
