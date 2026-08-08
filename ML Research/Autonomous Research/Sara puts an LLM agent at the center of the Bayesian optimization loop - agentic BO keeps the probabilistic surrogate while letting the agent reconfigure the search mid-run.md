@@ -31,6 +31,7 @@ tags: [autoresearch, bayesian-optimization, black-box-optimization, llm-agent, s
 - Paper: [Agentic Bayesian Optimization through Surrogate-Augmented Autoresearch (arXiv 2608.00316)](https://arxiv.org/abs/2608.00316) — Brunzema, Tiao, Le, De Angeli, Xuan, Gligorijevic (RWTH Aachen / Meta), Aug 2026
 - Systems: **Sara** (the agent) + **lenz** (modular BoTorch backend, single-CLI) · built on [BoTorch](https://botorch.org/)
 - Compared against: LLAMBO (Liu et al. 2024), Centaur (Ferreira et al. 2026, CMA-ES+LLM hybrid), classical BO/AutoML (Ax, TPE), CMA-ES
+- **Code: no official release as of 2026-08-08** — the paper contains no code-availability statement, and there's no arXiv code link or Papers With Code entry. (A same-week GitHub repo `Azhi-ss/agentic_bo` is empty/unaffiliated — ignore.) The full Sara system prompt (Appendix F) and lenz command reference (Appendices G-H) ARE in this note's Original Content, which is enough to reimplement the interface. Watch [Paul Brunzema's GitHub](https://github.com/brunzema) (active BO repos: vbll-botorch, les_botorch, bayesqp) for a future release.
 
 ## Original Content
 
