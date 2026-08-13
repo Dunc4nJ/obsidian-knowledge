@@ -25,6 +25,7 @@ Measuring agent quality, observability, regression testing, production monitorin
 - [[SmithDB builds a byte-budgeted FST inverted index to enable 400ms full-text search over enormous agent traces in object storage]]
 - [[Laminar trace viewer reads agent runs as transcripts of LLM-tool loops not backend span trees]]
 
+- [[benchmarks are measurement instruments not question collections - regulargio's first-principles guide to claims, graders, coverage, and uncertainty]] — Part I of a 3-part benchmarking-science series: the claim template ("System S can complete task family X for population Y under conditions Z"), the task→grader→metric anatomy (the grader is part of the instrument and can fail both ways), coverage ≠ difficulty (know which distribution you sampled — frontier-separating vs user-predicting), read-your-data as the highest-return practice (incl. metadata provenance and positionality), every average hides a weighting decision (micro vs macro, Simpson's paradox), scores need standard errors and reference points ("superhuman over five tired annotators is not the singularity"), and save-the-rows / aggregate late. Parts II (failure modes) and III (frontier/production evals) forthcoming; 6 figures
 - [[a working offline eval turns vibes into repeatable measurement in 10 steps]]
 - [[targeted evals shape agent behavior more effectively than large benchmark suites]]
 - [[agent eval readiness starts with error analysis and simple end-to-end tests not sophisticated infrastructure]]
