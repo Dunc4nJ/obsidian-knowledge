@@ -17,14 +17,6 @@ Frameworks and playbooks for finding and building profitable products.
 - [[domain-specific agents beat general-purpose ones by owning verification in boring industries]] — indie builder playbook: pick boring industries with expensive document workflows, compress domain learning with agents, build verification-first automation pipelines
 - [[model-market fit is the prerequisite layer beneath product-market fit for AI startups]] — MMF framework: the model must do the core job before the market can pull the product. Legal AI exploded post-GPT-4; finance stuck at 56% accuracy. The 80/99 gap is infinite in regulated verticals
 
-## Business Ideas
-
-Frameworks and playbooks for finding and building profitable products.
-
-- [[a16z argues AI systems of intelligence will eat the CRM by turning go-to-market databases into infrastructure consumed at the API layer]] — a16z thesis: just as the algorithmic newsfeed turned the friend graph into one input among many, the AI orchestration layer turns the CRM into a database consumed at the API layer; gravity shifts from data accumulation to multi-system orchestration, and the next decade of GTM enterprise value lives in the reasoning layer above the SoR
-- [[domain-specific agents beat general-purpose ones by owning verification in boring industries]] — indie builder playbook: pick boring industries with expensive document workflows, compress domain learning with agents, build verification-first automation pipelines
-- [[model-market fit is the prerequisite layer beneath product-market fit for AI startups]] — MMF framework: the model must do the core job before the market can pull the product. Legal AI exploded post-GPT-4; finance stuck at 56% accuracy. The 80/99 gap is infinite in regulated verticals
-
 ## AI Consulting
 
 Theses and playbooks for AI transformation and services businesses.
