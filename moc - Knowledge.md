@@ -270,6 +270,7 @@ Study guides, interview prep, and curated course material.
 
 - [[Claude Certified Architect exam covers five domains from agentic loops to context management]] — comprehensive self-study breakdown of all five exam domains with tutor prompts and build exercises
 - [[LLM optimization interview prep maps Flash Attention, ZeRO, speculative decoding, and MoE across training and inference]] — Gauri Gupta's AI lab interview notes spanning memory, compute, inference, and distributed-training optimization
+- [[Hamel's AI Product Engineering series - 13 sessions on evals, context, and systems, indexed]] — index of Hamel Husain's 13-session series and his improvement ladder (evals → retrieval/context → systems/harness → post-training last); 11 sessions captured as vault notes across Data Agent, Eval & Monitoring, Embeddings, Agentic Search, Inference, and Harness Engineering, 2 indexed-only (inference-latency basics, open-model economics incl. the Params×N×0.5 memory rule)
 
 ## Thinking
 

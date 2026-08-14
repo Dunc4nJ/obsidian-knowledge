@@ -46,6 +46,7 @@ The layer *above* serving — how the model itself stores, updates, and retrieve
 
 - [[vLLM throughput benchmarking on H100 — tensor-parallel sizing, speculative decoding, and FP8 KV-cache economics]] — two-tier parameter sweep across 18 models; when `tp` vs speculative decoding pays off; the $/H100-hour math
 - [[HuggingFace OCRed 30K arXiv papers with Chandra-OCR 2 on parallel L40S GPU jobs for 850 dollars]] — batch-inference economics: vLLM on L40S vs A10G, papers/hr, $850 vs $1,841 API
+- [[choosing an OCR model is a 2x2 of structure and hosting with seven PDF failure modes - and only 5 percent of teams should self-host]] — Hamel/Joe Barrow: the selection guide upstream of the batch-economics note above — price ladder (big-cloud $0.60-1.50/1k pages with word boxes → startups $5-20/1k feature-complete → open pipelines cheap-but-narrow → open VLMs GPU-bound near-complete), seven PDF failure modes (TeX no-space glyphs, column jumbling, Textract hallucinating "the" 100x, VLM blank-page boilerplate, license chains), and the 50-100-representative-pages bake-off process
 
 ## GPU kernels & the hardware layer
 
