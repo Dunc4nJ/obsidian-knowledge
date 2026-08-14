@@ -146,6 +146,7 @@ Agent code search, semantic retrieval, and the bottleneck between code generatio
 - [[Knowledge/Agents/codebase_search_agents/index|Semantic Code Search — Morph Documentation]] — two approaches to AI-powered code search via the Morph MCP server
 - [[coding agents are bottlenecked by search not coding ability]] — survey of recent research on why AI coding agents fail at retrieval, not generation
 - [[Neo4j's Stephen Chin on agentic graph RAG - vector search finds entry points and graph traversal supplies grounded context]] — Stephen Chin's AI Engineer talk: vector-then-graph beats text-to-Cypher and beats baseline vector RAG; embeddings live as properties on graph nodes; CLA uses this for 250k internal queries
+- [[BrowseComp-Plus isolates the search-agent ceiling - GPT-4.1 scores 14.6 percent finding documents with BM25 vs 93.5 percent when handed them]] — Hamel/Nandan Thakur: the retriever, not the model, is the ceiling (controlled BrowseComp variant); ORBIT synthetic eval pipeline (inverted question generation, triple verification, 20k free questions); Hawkeye trajectory analytics (correct runs need far fewer search rounds — sets your max-rounds threshold)
 
 ### Learnings
 
@@ -221,7 +222,9 @@ Embedding models, retrieval architectures, and vector search.
 - [[scaling embedding models requires LLM-labeled deduplication to fix the fake negative problem]] — LLM-labeled deduplication fixes false negatives that poison contrastive training at scale
 - [[ColBERT MaxSim is a submodular facility location objective and that is why it generalizes]] — MaxSim scoring is a facility location objective with diminishing returns, explaining ColBERT's cross-domain generalization over single-vector models
 - [[late interaction lets a 150M ColBERT model outperform 7B dense retrievers on reasoning-intensive retrieval]] — Reason-ModernColBERT (150M) beats all dense models up to 7B on BRIGHT benchmark, with controlled experiments showing late interaction doubles performance over single-vector on identical data
-- [[OBLIQ-Bench shows that scalable retrievers fail to surface oblique queries that reasoning LLMs can verify]] — MIT benchmark of five oblique IR tasks (descriptive, analogue, tip-of-tongue) where every dense, lexical, late-interaction, and agentic retriever scores near-zero NDCG@10 while a GPT-5.2 tournament reranker reaches 0.43–0.91
+- [[OBLIQ-Bench shows that scalable retrievers fail to surface oblique queries that reasoning LLMs can verify]]
+- [[SMVE makes billion-doc multivector retrieval practical - sparse random projections gate exact MaxSim to survivors at p99 under 100ms]] — Hamel/Marek Galovic: MaxSim costs ~2,000x a dot product and 10-100x storage; SMVE's sparse top-8 random-projection pre-filter runs exact MaxSim only on inverted-index survivors — p99 <100ms at 1B docs; plus Iso-ModernColBERT (~3x faster at bf16)
+- [[embedding model selection is a cost-quality tradeoff MTEB cannot see - and fine-tuning the embedder is the overlooked high-impact lever]] — Hamel/Radu Gheorghe: INT8 ≈3x CPU speedup, binary vectors = 32x storage cut, bfloat16 = 2x free, Matryoshka truncation, test-on-your-domain; VespaEmbed for no-code embedder fine-tuning — MIT benchmark of five oblique IR tasks (descriptive, analogue, tip-of-tongue) where every dense, lexical, late-interaction, and agentic retriever scores near-zero NDCG@10 while a GPT-5.2 tournament reranker reaches 0.43–0.91
 
 ## Inference
 
