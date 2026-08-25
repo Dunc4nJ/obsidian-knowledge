@@ -139,6 +139,7 @@ Running frontier-class models on hardware you own — builds, quantization/pruni
 - [[two DGX Sparks run a 304B model at 40 TPS - install Tailscale first and every other non-obvious gotcha]] — @vectal_labs' first-setup field notes: Tailscale-first so you finish over SSH, wired peripherals + USB-C hub, plug order, the cx7-hotplug file that fakes dead hardware after reboot, and use the MiaAI-Lab/Anemll recipes rather than building from scratch
 - [[EXL3 3-bit plus an 18.5 percent expert prune runs DeepSeek-V4-Flash 284B at 47 tok-s on 4.7K of hardware]] — @0xSero: stack quantization *and* MoE expert pruning (orthogonal levers) to fit 284B in 128GB VRAM at 47 tok/s, 400K context
 - [[a 100K DGX Station pays back in 19 months at 30 percent duty - but only if you can keep 64 requests concurrent]] — @digitalix: $2,778/mo amortized, $0.16-$1.59 per 1M output tokens by duty cycle, 19-month payback at 30% — all contingent on 64-way concurrency; at 8 concurrent it's ~4x the payback
+- [[LMCache offloads paged KV to system RAM and NVMe, cutting 128K-context time-to-first-token from 68 seconds to 1.4 on 4x DGX Spark]] — @0xSero: page KV out to host RAM/NVMe so long contexts reload rather than recompute — TTFT 68.1s → 1.4s at 128K context on 4x DGX Spark; the local fix for the fixed-prefix tax agents pay on every turn
 
 ### Search
 
