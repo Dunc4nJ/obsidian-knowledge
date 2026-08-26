@@ -26,12 +26,28 @@ tags: [autoresearch, experiment-design, bayesian, world-models, mechanistic-mode
 
 - **The discussion thread carries a real epistemological objection worth keeping.** Stella Biderman: you do *not* need a mechanistic model to predict interventions or build good theories — vaccines predate germ theory, the second law was found under the wrong model of heat, QM lacks a standard mechanistic model. Murphy's reply concedes the point and sharpens his actual claim: implicit what-if forecasting works, but an *explicit* model makes it easier to apply prior knowledge and do targeted experiment design — "both approaches have value." Also flagged by repliers: the LLM-proposer is "where all the leverage sits, and also all the risk" — the real test is a system whose law isn't anywhere in pretraining (the same leakage concern Sara's authors handled by shifting benchmark domains).
 
+## Update (2026-08-26)
+
+Murphy [posted three updates](https://x.com/sirbayes/status/2092417235264643284): a **significant new version of the paper** on arXiv, a **video of his U Toronto talk**, and the diagram below — a "cute picture of the (polyglot) MDA workflow." (The capture below is of the original v1 text; check arXiv for the revised version.)
+
+The workflow figure is the most informative addition, because it exposes the *implementation* the paper describes only abstractly — and it is deliberately polyglot, one language per job:
+
+- **Human ↔ Claude Code ↔ MDA** — the researcher drives the agent through a coding-agent interface; MDA itself runs on **Modal** (the sandbox pattern from [[don't build agents, build environments - Ramp bakes machine images every 30 minutes so agents go from cold to working in under a second|agent sandboxes]]).
+- **proposal (LLM)** via **OpenRouter** — the one LLM call in the loop is provider-agnostic, exactly the [[Harrison Chase argues companies must own their intelligence by controlling the model-harness-context system its governance and the compounding feedback loop|model-optionality]] posture, and consistent with the paper's ablation that MDA works across model families.
+- **models (numpyro, diffrax)** → **SMC³ (jax)** → **VoI (numpy)** → **env (Python, Julia, …)** → read back by MDA — the Bayesian machinery is ordinary scientific Python, not bespoke agent infrastructure. The LLM *generates* probabilistic programs that the existing PPL/ODE stack executes; the agent never does the inference itself.
+
+That division is the paper's thesis rendered as an architecture diagram: the LLM proposes, established numerics dispose.
+
+*The polyglot MDA workflow — human/Claude Code above, the proposal-to-experiment loop on Modal below, one toolchain per job:*
+![[mda-workflow-update-001.png]]
+
 ## External Resources
 
 - Paper: [Model Discovery Agent: LLM-assisted Bayesian experiment design for data-efficient discovery of mechanistic world models (arXiv 2608.09696)](https://arxiv.org/abs/2608.09696) — Kevin Murphy (sole author), 66pp
 - Author's takeaway thread: [@sirbayes, 2026-08-12](https://x.com/sirbayes/status/2087392620129796488) — preserved verbatim below
 - Code: [murphyk/neuronbench (GitHub)](https://github.com/murphyk/neuronbench) — the NeuronBench simulator/benchmark (deterministic + stochastic Fox-Lu forms, HH world zoo, intervention API under budget, evaluator, reference baseline LLM agent)
-- Talk: "RL in Big Worlds" workshop at RLC, Montreal, 2026-08-15
+- Talks: [U Toronto talk (YouTube)](https://www.youtube.com/watch?v=k5nzJ9Az5Tk) · "RL in Big Worlds" workshop at RLC, Montreal, 2026-08-15
+- Update thread: [@sirbayes, 2026-08-26](https://x.com/sirbayes/status/2092417235264643284) — new paper version, talk video, and the polyglot workflow diagram
 - Related: Richard Suwandi's world-models-for-scientific-discovery post (inspired by this work, linked in replies)
 
 ## Original Content
