@@ -10,6 +10,10 @@ Running frontier-class models on hardware you own or control: DGX Sparks and Sta
 
 **The cost ladder so far** — all four notes below run essentially the same DeepSeek-V4-Flash class of model at very different price points, and the deciding variable in every case is duty cycle and concurrency, not peak TPS: ~$4.7K single box → ~2x DGX Spark desk cluster → $100K DGX Station → rented multi-GPU (camelAI, in the Inference folder).
 
+## Buying & Comparison
+
+- [[at 15-20K with 512GB the real gap is bandwidth not compute - Mac Studio M5 Ultra vs 4x DGX Spark vs 4x Ryzen AI Halo]] — @tomgreenwald: three matched ~$15-20K/512GB builds compared. Mac M5 Ultra ~135 TFLOPS / **1.2 TB/s** / ~270W silent; 4x DGX Spark ~300 TFLOPS / 273 GB/s / ~960W (200GbE links fast enough to combine compute, native FP4); 4x Ryzen AI Halo ~100 TFLOPS / 256 GB/s / ~560W (10GbE too slow to share work). The trap: multi-box setups split the model and pass tokens sequentially, so **4 boxes still generate at 1 box's speed** — bandwidth, not aggregate compute or pooled memory, sets interactive speed. Next-gen won't change the ranking unless bandwidth does
+
 ## Builds & Setup
 
 - [[two DGX Sparks run a 304B model at 40 TPS - install Tailscale first and every other non-obvious gotcha]] — @vectal_labs' field notes from a first two-Spark setup: install Tailscale *before* anything else so you finish over SSH instead of at the desk (bootstrap the commands via a browser messenger + phone QR); wired keyboard/mouse and a USB-C hub or your Spark is "an expensive brick"; plug order (hub → internet → NAS → Spark-link last, same side on both boxes); the `/etc/nvidia/cx7-hotplug-enabled` file that makes fast ports vanish after a reboot and looks like dead hardware; same Linux login name on both; and use the MiaAI-Lab recipe + Anemll vLLM image rather than building the server from scratch
