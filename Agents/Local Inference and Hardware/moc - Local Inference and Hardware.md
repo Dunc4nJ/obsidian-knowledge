@@ -13,6 +13,7 @@ Running frontier-class models on hardware you own or control: DGX Sparks and Sta
 ## Buying & Comparison
 
 - [[at 15-20K with 512GB the real gap is bandwidth not compute - Mac Studio M5 Ultra vs 4x DGX Spark vs 4x Ryzen AI Halo]] — @tomgreenwald: three matched ~$15-20K/512GB builds compared. Mac M5 Ultra ~135 TFLOPS / **1.2 TB/s** / ~270W silent; 4x DGX Spark ~300 TFLOPS / 273 GB/s / ~960W (200GbE links fast enough to combine compute, native FP4); 4x Ryzen AI Halo ~100 TFLOPS / 256 GB/s / ~560W (10GbE too slow to share work). The trap: multi-box setups split the model and pass tokens sequentially, so **4 boxes still generate at 1 box's speed** — bandwidth, not aggregate compute or pooled memory, sets interactive speed. Next-gen won't change the ranking unless bandwidth does
+- [[buy 2x 256GB Mac Studios instead of one 512GB - two boxes give 2x 1.2 TB-s parallel instances and can still be linked, but a 512GB box can never be split]] — @MikeBradleyAI's counterpoint to the 512GB Studio: two 256GB boxes keep *two* full 1.2 TB/s buses, so you can multi-instance two models with genuine parallel throughput, and still link them for a single oversized model — while a 512GB box can never be split back. The asymmetry (two can become one; one can never become two) decides it whenever the configs cost about the same; the test is whether your biggest model fits in 256GB. His 25-50% per-GB price-hike claim is an unsourced forecast, flagged as such
 
 ## Builds & Setup
 
