@@ -1,0 +1,867 @@
+                                             VARIATIONS ON FIVE-DIMENSIONAL SPHERE PACKINGS
+
+
+                                                                   HENRY COHN AND ISAAC RAJAGOPAL
+
+
+                                                   Abstract. We analyze Szöllősi’s recent construction of a conjecturally optimal
+arXiv:2412.00937v3 [math.MG] 4 Mar 2026
+
+
+
+
+                                                   five-dimensional kissing configuration and produce a new such configuration,
+                                                   the fourth to be discovered. We construct five-dimensional sphere packings from
+                                                   these configurations, which augment Conway and Sloane’s list of conjecturally
+                                                   optimal packings. We also construct a new kissing configuration in nine
+                                                   dimensions. None of these constructions improves on the known records, but
+                                                   they provide geometrically distinct constructions achieving these records.
+
+
+
+
+                                                                               1. Introduction
+                                             The sphere packing and kissing problems are two closely related problems in
+                                          discrete geometry: the former asks how densely congruent spheres can be arranged
+                                          in Rn with disjoint interiors, while the latter asks how many such spheres can be
+                                          tangent to one central sphere (of the same size). Like many packing and coding
+                                          problems, the answers are known only in relatively low dimensions, while the
+                                          problems become increasingly mysterious in higher dimensions. The sphere packing
+                                          problem has been solved in one through three, eight, and twenty-four dimensions
+                                          [21, 8, 7, 22, 4], while the kissing problem has been solved in one through four, eight,
+                                          and twenty-four dimensions [19, 16, 17, 14].
+                                             In dimensions where no proof is known, it is natural to wonder how confidently
+                                          we can identify the optimal packings. Conway and Sloane [5] took a major step
+                                          in this direction by classifying how packings can be obtained by stacking layers,
+                                          and they gave a conjectural list of optimal sphere packings in dimensions up to
+                                          nine. (Above nine dimensions, this approach fails, which illustrates the increasing
+                                          complexity of the sphere packing problem.) Their list does not contain every possible
+                                          densest packing, because one can always make local perturbations without changing
+                                          the global density, but they conjectured that it contains all the “tight” packings.
+                                          Kuperberg [10] disproved their specific formulation of tightness and suggested a
+                                          replacement in terms of weak recurrence (Conjecture 15 in [10]). With this amended
+                                          formulation, Conway and Sloane’s list of packings seemed plausibly complete, as
+                                          did the analogous classification of kissing configurations by Cohn, Jiao, Kumar, and
+                                          Torquato [3]. However, in 2023 Szöllősi [20] found a new five-dimensional kissing
+                                          configuration, which could be extended to a new five-dimensional sphere packing
+                                          (see the acknowledgements in [20]). This example showed that even in as few as five
+                                          dimensions, our understanding of optimal sphere packings was incomplete.
+                                             In this paper, we put Szöllősi’s construction in a broader context. We construct
+                                          another five-dimensional kissing configuration, which brings the list of known
+                                          examples to four, and we extend these kissing configurations to a family of five-
+                                          dimensional sphere packings. It is conceivable that our list completes Conway and
+                                          Sloane’s list in five dimensions, but it is difficult to rule out further surprises. The
+                                          two most noteworthy sphere packings in the new family are uniform, which means
+                                                                                          1
+2                        HENRY COHN AND ISAAC RAJAGOPAL
+
+
+
+
+         Figure 1.1. The centers of the spheres in the face-centered cubic
+         kissing arrangement on the left, and the centers of the spheres in
+         the hexagonal close packing kissing arrangement on the right. To
+         produce the arrangement on the right from the one on the left, the
+         top layer is deleted and the bottom layer is reflected across the
+         central layer (the hexagon).
+
+
+
+their symmetry groups act transitively on the spheres. Only four such packings had
+previously been analyzed, namely the D5 root lattice and three packings constructed
+by Leech [11]. We prove that these six uniform packings are the only uniform
+packings that contain the known kissing configurations locally.
+    The unique uniform packing with Szöllősi’s kissing configuration was previously
+discovered by Andreanov and Kallus [1] as J5,5 in their classification of dense 2-
+periodic packings (i.e., unions of two translates of a lattice). In fact, their discovery
+predates Szöllősi’s, although they did not recognize that the kissing configuration
+was novel. The remaining uniform packing, with our new kissing configuration, is
+4-periodic. Viewing these uniform packings as m-periodic with m small makes it
+easier to analyze their symmetry groups.
+    We have had no luck applying our techniques to six or seven dimensions. We
+expect that further kissing configurations and packings remain to be discovered in
+these dimensions, but doing so may require a new idea. Instead, we construct a new
+example in nine dimensions, which again does not set a new record but provides a
+geometrically distinct way to achieve the known record.
+    All of these constructions can be understood through modifying layers in packings.
+We will describe kissing configurations and packings in terms of the locations of the
+sphere centers. In other words, a kissing configuration consists of an arrangement
+of points on the surface of a sphere such that each pair of distinct points forms an
+angle of at least π/3 with the center of the sphere, and a sphere packing consists
+of an arrangement of points in Euclidean space with a certain minimal distance
+(namely, twice the sphere radius). Our altered configurations will remove the points
+on a hyperplane and replace them with modified points. The simplest case is the
+three-dimensional kissing configuration of the face-centered cubic lattice, in which
+it is well known that one can replace a triangle of points as shown in Figure 1.1.
+    In the remainder of this paper, we analyze the five-dimensional kissing configura-
+tions and construct our new configuration (Section 2), examine what goes wrong in
+six dimensions (Section 3), extend these kissing configurations to sphere packings
+(Section 4), and conclude with our construction in nine dimensions (Section 5). We
+                VARIATIONS ON FIVE-DIMENSIONAL SPHERE PACKINGS                                             3
+
+
+also provide computer code for verifying certain assertions through DSpace@MIT
+at https://hdl.handle.net/1721.1/157699.
+
+                  2. Five-dimensional kissing configurations
+   The kissing number in five dimensions appears to be 40, although the best upper
+bound that has been proved is 44 (from [15]). The first construction achieving 40 is
+implicit in Korkine and Zolotareff’s 1873 paper [9], where they constructed the D5
+root lattice. Its root system achieves a kissing number of 40 as the permutations of
+the points (±1, ±1, 0, 0, 0); these points form a kissing configuration because they
+each have squared norm 2 and the inner product between distinct points is always
+at most 1.
+   In 1967, Leech [11] constructed a different kissing configuration of the same size,
+not isometric to the D5 root system. He split D5 into four-dimensional layers based
+on the fifth coordinate: there are 8 points with fifth coordinate 1, 24 with 0, and
+8 with −1. The top layer consists of the points
+                                              permute
+                                           z }| {
+                                          (±1, 0, 0, 0, 1),
+and Leech observed that replacing it with
+                                         odd # of − signs
+                                       z          }|           {
+                                      (± 12 , ± 12 , ± 12 , ± 21 , 1)
+yields a different kissing configuration L5 , which breaks the reflection symmetry
+across the central hyperplane with fifth coordinate 0. One could also use an even
+number of minus signs, or replace both the top and bottom layers, but these
+modifications are all isometric to D5 or L5 . For comparison, such a construction
+cannot be carried out in four dimensions, since the optimal kissing configuration is
+unique in four dimensions [6].
+   We can interpret Leech’s construction in terms of filling holes. The central cross
+section is the D4 root system
+                                              permute
+                                           z   }|     {
+                                          (±1, ±1, 0, 0, 0)
+or equivalently the vertices of a regular 24-cell. The holes in this spherical code
+form the dual 24-cell, which is the union of three cross polytopes, namely
+          permute              odd # of − signs                           even # of − signs
+         z }| {              z          }|           {                   z          }|           {
+        (±1, 0, 0, 0, 0),   (± 12 , ± 12 , ± 12 , ± 12 , 0),   and      (± 12 , ± 12 , ± 12 , ± 12 , 0).
+The other two layers lie directly above or below some of these points, so that they
+are nestled into the holes in the central cross section. The triality symmetry of the
+24-cell, i.e., the orthogonal transformation
+                                                     
+                                    1   1     1     1
+                               11     1 −1 −1      ,
+                               2   1 −1 1 −1
+                                   −1 1       1 −1
+cyclically permutes these cross polytopes in four dimensions, so they all play the
+same role. Up to isometry, there are only two kissing configurations that can be
+obtained in this way: D5 , which has reflection symmetry across the hyperplane,
+4                         HENRY COHN AND ISAAC RAJAGOPAL
+
+        Table 2.1. The inner products that occur in each of the five-
+        dimensional kissing configurations we study. The column labeled
+        t lists the number of unordered pairs of distinct points with inner
+        product t, if the points are all normalized to be unit vectors.
+
+    Configuration    −1    −4/5   −3/4    −1/2    −3/10    −1/4     0    1/5   1/2
+         D5          20      0       0     240       0        0    280     0   240
+         L5          12      0      32     192       0       32    272     0   240
+         Q5          10     30       0     180      60        0    250    10   240
+         R5          6      30      20     144      60       28    242    10   240
+
+
+and L5 , which does not. One can see that they are distinct by counting antipodal
+points: D5 is closed under multiplication by −1, while L5 is not. Instead, only 24
+of the points in L5 come in antipodal pairs, namely those in D4 .
+    In 2023, Szöllősi [20] found a new kissing configuration Q5 via a computer search.
+It can be described similarly to L5 , but using different cross sections: the D5 root
+system contains 20 vectors with a coordinate sum of 0 and 10 each with coordinate
+sums of ±2. Here the central cross section is the A4 root system. This cross section
+is suboptimal as a four-dimensional kissing configuration, but it nevertheless extends
+to a seemingly optimal configuration in five dimensions. The layer with coordinate
+sum 2 consists of the antipodes of the points with coordinate sum −2, but it is not
+the reflection of that layer across the hyperplane with coordinate sum 0. Reflection
+across this hyperplane consists of the map
+(2.1)                             v 7→ v − 2⟨v, w⟩w,
+                          √
+where w = (1, 1, 1, 1, 1)/ 5 and ⟨·, ·⟩ denotes the usual inner product. Equivalently,
+when applied to a vector with coordinate sum s, the reflection subtracts 2s/5 from
+each coordinate. The Q5 kissing configuration replaces the layer that has coordinate
+sum 2 with the reflection of the layer with coordinate sum −2. Only 20 points in
+Q5 come in antipodal pairs, namely those in A4 , and so it cannot be isometric to
+D5 or L5 .
+   Our new configuration, which we call R5 , can be obtained as follows by modifying
+L5 . The L5 configuration behaves similarly to D5 with respect to coordinate sums:
+there are 20 points with coordinate sum 0 and 10 each with ±2. The central cross
+section is no longer the A4 root system, but rather a modification that replaces four
+adjacent points with a different regular tetrahedron. Again we can replace one of
+the adjacent layers with the other’s reflection, to obtain R5 from L5 . Only 12 of
+the points in R5 come in antipodal pairs, and so it cannot be isometric to any of
+the three other configurations. This yields the following theorem:
+Theorem 2.1. There are at least four non-isometric kissing configurations of 40
+points in five dimensions, namely D5 , L5 , Q5 , and R5 .
+   Table 2.1 lists the inner products that occur in these configurations and their
+multiplicities, while Table 2.2 lists coordinates for the points themselves. The
+symmetry groups of D5 , L5 , Q5 , and R5 have orders 3840, 384, 240, and 48,
+respectively. Specifically, the symmetries of D5 are the signed permutations of the
+coordinates (equivalently, the 1920 elements of the D5 Weyl group times two Dynkin
+diagram automorphisms), and those of L5 are the signed permutations that fix the
+        VARIATIONS ON FIVE-DIMENSIONAL SPHERE PACKINGS                             5
+
+Table 2.2. The four five-dimensional kissing configurations with
+40 points. The subdivisions in the list are D5 , L5 , Q5 , and R5 ,
+respectively, and the points with fractional coordinates are the only
+ones that differ from those in D5 .
+
+       (1,0,0,0,1)              (−1,0,0,0,1)        (1,0,0,0,−1)   (−1,0,0,0,−1)
+       (0,1,0,0,1)              (0,−1,0,0,1)        (0,1,0,0,−1)   (0,−1,0,0,−1)
+       (0,0,1,0,1)              (0,0,−1,0,1)        (0,0,1,0,−1)   (0,0,−1,0,−1)
+       (0,0,0,1,1)              (0,0,0,−1,1)        (0,0,0,1,−1)   (0,0,0,−1,−1)
+       (1,1,0,0,0)              (−1,1,0,0,0)        (1,−1,0,0,0)   (−1,−1,0,0,0)
+       (1,0,1,0,0)              (−1,0,1,0,0)        (1,0,−1,0,0)   (−1,0,−1,0,0)
+       (1,0,0,1,0)              (−1,0,0,1,0)        (1,0,0,−1,0)   (−1,0,0,−1,0)
+       (0,1,1,0,0)              (0,−1,1,0,0)        (0,1,−1,0,0)   (0,−1,−1,0,0)
+       (0,1,0,1,0)              (0,−1,0,1,0)        (0,1,0,−1,0)   (0,−1,0,−1,0)
+       (0,0,1,1,0)              (0,0,−1,1,0)        (0,0,1,−1,0)   (0,0,−1,−1,0)
+
+  (−0.5,0.5,0.5,0.5,1)     (0.5,−0.5,−0.5,−0.5,1)   (1,0,0,0,−1)   (−1,0,0,0,−1)
+  (0.5,−0.5,0.5,0.5,1)     (−0.5,0.5,−0.5,−0.5,1)   (0,1,0,0,−1)   (0,−1,0,0,−1)
+  (0.5,0.5,−0.5,0.5,1)     (−0.5,−0.5,0.5,−0.5,1)   (0,0,1,0,−1)   (0,0,−1,0,−1)
+  (0.5,0.5,0.5,−0.5,1)     (−0.5,−0.5,−0.5,0.5,1)   (0,0,0,1,−1)   (0,0,0,−1,−1)
+       (1,1,0,0,0)              (−1,1,0,0,0)        (1,−1,0,0,0)   (−1,−1,0,0,0)
+       (1,0,1,0,0)              (−1,0,1,0,0)        (1,0,−1,0,0)   (−1,0,−1,0,0)
+       (1,0,0,1,0)              (−1,0,0,1,0)        (1,0,0,−1,0)   (−1,0,0,−1,0)
+       (0,1,1,0,0)              (0,−1,1,0,0)        (0,1,−1,0,0)   (0,−1,−1,0,0)
+       (0,1,0,1,0)              (0,−1,0,1,0)        (0,1,0,−1,0)   (0,−1,0,−1,0)
+       (0,0,1,1,0)              (0,0,−1,1,0)        (0,0,1,−1,0)   (0,0,−1,−1,0)
+
+ (−0.2,0.8,0.8,0.8,−0.2)        (−1,0,0,0,1)        (1,0,0,0,−1)   (−1,0,0,0,−1)
+ (0.8,−0.2,0.8,0.8,−0.2)        (0,−1,0,0,1)        (0,1,0,0,−1)   (0,−1,0,0,−1)
+ (0.8,0.8,−0.2,0.8,−0.2)        (0,0,−1,0,1)        (0,0,1,0,−1)   (0,0,−1,0,−1)
+ (0.8,0.8,0.8,−0.2,−0.2)        (0,0,0,−1,1)        (0,0,0,1,−1)   (0,0,0,−1,−1)
+ (−0.2,−0.2,0.8,0.8,0.8)        (−1,1,0,0,0)        (1,−1,0,0,0)   (−1,−1,0,0,0)
+ (−0.2,0.8,−0.2,0.8,0.8)        (−1,0,1,0,0)        (1,0,−1,0,0)   (−1,0,−1,0,0)
+ (−0.2,0.8,0.8,−0.2,0.8)        (−1,0,0,1,0)        (1,0,0,−1,0)   (−1,0,0,−1,0)
+ (0.8,−0.2,−0.2,0.8,0.8)        (0,−1,1,0,0)        (0,1,−1,0,0)   (0,−1,−1,0,0)
+ (0.8,−0.2,0.8,−0.2,0.8)        (0,−1,0,1,0)        (0,1,0,−1,0)   (0,−1,0,−1,0)
+ (0.8,0.8,−0.2,−0.2,0.8)        (0,0,−1,1,0)        (0,0,1,−1,0)   (0,0,−1,−1,0)
+
+ (−0.2,0.8,0.8,0.8,−0.2)   (0.5,−0.5,−0.5,−0.5,1)   (1,0,0,0,−1)   (−1,0,0,0,−1)
+ (0.8,−0.2,0.8,0.8,−0.2)   (−0.5,0.5,−0.5,−0.5,1)   (0,1,0,0,−1)   (0,−1,0,0,−1)
+ (0.8,0.8,−0.2,0.8,−0.2)   (−0.5,−0.5,0.5,−0.5,1)   (0,0,1,0,−1)   (0,0,−1,0,−1)
+ (0.8,0.8,0.8,−0.2,−0.2)   (−0.5,−0.5,−0.5,0.5,1)   (0,0,0,1,−1)   (0,0,0,−1,−1)
+ (−0.2,−0.2,0.8,0.8,0.8)        (−1,1,0,0,0)        (1,−1,0,0,0)   (−1,−1,0,0,0)
+ (−0.2,0.8,−0.2,0.8,0.8)        (−1,0,1,0,0)        (1,0,−1,0,0)   (−1,0,−1,0,0)
+ (−0.2,0.8,0.8,−0.2,0.8)        (−1,0,0,1,0)        (1,0,0,−1,0)   (−1,0,0,−1,0)
+ (0.8,−0.2,−0.2,0.8,0.8)        (0,−1,1,0,0)        (0,1,−1,0,0)   (0,−1,−1,0,0)
+ (0.8,−0.2,0.8,−0.2,0.8)        (0,−1,0,1,0)        (0,1,0,−1,0)   (0,−1,0,−1,0)
+ (0.8,0.8,−0.2,−0.2,0.8)        (0,0,−1,1,0)        (0,0,1,−1,0)   (0,0,−1,−1,0)
+6                       HENRY COHN AND ISAAC RAJAGOPAL
+
+
+fifth coordinate. The symmetries of Q5 are generated by the permutations of the
+coordinates and reflection across the hyperplane, and the symmetries of R5 are
+generated by the permutations of the coordinates that fix the fifth coordinate and
+reflection across the hyperplane.
+
+                 3. Six-dimensional kissing configurations
+   The D5 and L5 kissing configurations extend to seemingly optimal six-dimensional
+kissing configurations of 72 points, but we have been unable to extend Q5 and R5 .
+To see what goes wrong, we begin by reviewing what happens with D5 and L5 .
+   There are 32 deep holes in the D5 kissing configuration, namely the points
+                                  p             p
+                               (± 2/5, . . . , ± 2/5)
+if we use
+        p vectors with squared norm 2 as above. These holes have inner product at
+most 2 2/5 with the points in the D5 kissing configuration, and no other points
+can be so far away from D5 . We can partition them into two subsets Seven and Sodd
+of size 16, namely those with an even or odd number of minus signs, so that the
+maximal inner product within each of these subsets is 2/5. One can check that the
+E6 kissing configuration is the union
+           p               √                      p              √
+          ( 5/8 Seven × {− 3/2}) ∪ (D5 × {0}) ∪ ( 5/8 Sodd × { 3/2}),
+which has D5 as a central cross section and two parallel layers with 16 points nestled
+into the deep holes. If instead we form the union
+          p                 √                       p                √
+         ( 5/8 Seven × {− 3/2}) ∪ (D5 × {0}) ∪ ( 5/8 Seven × { 3/2}),
+which has reflection symmetry across the central hyperplane, then we obtain a
+kissing configuration discovered by Leech [12]. (The other two possibilities, odd-even
+and odd-odd, are isometric to these cases.)
+   A similar construction works if we start instead with L5 . For the construction of
+L5 from the previous section, the deep holes with negative fifth coordinate are the
+same as in D5 , while those with positive fifth coordinate are
+                r     permute                     r even # of − signs
+                  2 z }| {                           2 z       }|     {
+                    (±2, 0, 0, 0, 1)     and            (±1, ±1, ±1, ±1, 1).
+                  5                                  5
+Again we can partition these holes into two 16-element subsets with maximal inner
+product 2/5 within each subset, with one subset being the same set Seven from the
+D5 case and the other being its complement. Now, however, there is also a third
+16-element subset with maximal inner product 2/5, which combines the points
+                                     r     permute
+                                       2 z }| {
+                                         (±2, 0, 0, 0, 1)
+                                       5
+with the eight elements of Seven that have a negative fifth coordinate. We can
+imitate the D5 construction by using these 16-element sets to create parallel layers.
+If we choose the two complementary sets, we obtain Leech’s six-dimensional kissing
+configuration again. The other cases yield two distinct six-dimensional kissing
+configurations, which were discovered by Conway and Sloane [5]. Specifically, one of
+these configurations arises only if we use the third 16-element subset on both sides
+of L5 , and all the remaining cases give the other configuration.
+   If we start with Q5 or R5 , it initially seems that the same approach might
+produce an extension to six dimensions, but it cannot be fully carried out. These
+                 VARIATIONS ON FIVE-DIMENSIONAL SPHERE PACKINGS                           7
+
+
+configurations again have 32 deep holes: those on one side of the hyperplane with
+coordinate sum 0 are the same as in D5 or L5 , respectively, while those on the other
+side are the reflections across this hyperplane. However, continuing the construction
+requires a set of 16 holes with maximal inner product 2/5 between them, and one
+can check by depth-first search that no such set exists. We have not ruled out
+the possibility that some other construction might give a six-dimensional kissing
+configuration with Q5 or R5 as a cross section, but it seems unlikely:
+Conjecture 3.1. No six-dimensional kissing configuration with Q5 or R5 as a cross
+section can contain 72 or more points.
+   The existence of Q5 and R5 suggests that analogous kissing configurations may
+also exist in six or seven dimensions,1 but we have had no success in finding such
+configurations. While there are various ways to divide six- or seven-dimensional
+configurations into layers, we have not found any sufficiently close analogues of
+the A4 cross section of D5 that leads to Q5 . Perhaps this cross section is a
+special phenomenon in five dimensions, or perhaps some new insight is needed for a
+generalization.
+
+             4. From kissing configurations to sphere packings
+   To extend these kissing configurations to Euclidean sphere packings, we will imi-
+tate Conway and Sloane’s construction of tight packings [5]. Their five-dimensional
+packings were all formed by stacking four-dimensional layers, specifically translates
+of the D4 root lattice. Instead, we will stack three-dimensional layers given by
+translates of the D3 root lattice.
+
+4.1. Packings that fiber over D3 . Recall that D3 consists of the points (x, y, z)
+for which x, y, and z are integers with x + y + z even. Because D3 is an integral
+lattice, it is a sublattice of its dual lattice D3∗ , which consists of the translates of D3
+by the vectors
+                                     t0 = (0, 0, 0),
+                                     t1 = ( 21 , 12 , 12 ),
+                                     t2 = (0, 0, 1), and
+                                     t3 = ( 12 , 12 , − 12 ).
+In other words, D3 + t0 is the D3 root lattice itself, D3 + t2 consists of the deep
+holes in the lattice (the points furthest from the lattice, with distance 1), and the
+remaining two translates consist of the shallow
+                                             √ holes (local but not global maxima
+for distance from the lattice, with distance 3/2).
+   To form a five-dimensional packing, we will use a four-colored point configuration
+in R2 , by which we mean an infinite discrete point set in R2 in which each point
+is labeled with the color 0, 1, 2, or 3. We call two colors adjacent if they differ
+by 1 modulo 4, and opposite√if they differ by 2. If the point v is colored i, then
+we center spheres of radius 2/2 at the points in {v} × (D3 + ti ). In order for
+the spheres not to overlap, the four-colored point configuration must satisfy the
+following constraints:
+
+   1The eight-dimensional kissing problem has a unique solution [2].
+8                          HENRY COHN AND ISAAC RAJAGOPAL
+
+         Table 4.1. The kissing configurations at the points marked with
+         dots in Figure 4.1.
+
+        Local arrangement                Condition             Kissing configuration
+                   a               p and q same color                     R5
+                   a             p and q different colors                 Q5
+                   b               p and q same color                    L5
+                   b             p and q different colors                D5
+                   c                                                      L5
+                   d                                                     D5
+
+                                                                                    √
+     (1) Two distinct points with the same color must have distance at least 2
+         between them.                                                   √
+     (2) Two points with adjacent colors must have distance at least 5/2 between
+         them.
+     (3) Two points with opposite colors must have distance at least 1 between them.
+A valid coloring is one that satisfies these constraints. If a valid four-colored point
+configuration has δ points per unit area in R2 , then the corresponding sphere packing
+in R5 has packing density given by
+                                    √ !5                √
+                            π 5/2     2          1   π2 2
+                                           ·δ· =            δ.
+                           (5/2)!    2           2     30
+                                                             √
+Here, we are multiplying the volume of a sphere of radius 2/2 in R5 with the point
+densities of the four-colored point configuration in R2 and the D3 root lattice in
+R3 . In particular, matching the packing density of the D5 root lattice amounts to
+achieving δ = 1. Presumably it is impossible to achieve δ > 1:
+Conjecture 4.1. For every valid four-colored point configuration C in R2 ,
+                                       #{x ∈ C : |x| ≤ r}
+                             lim sup                      ≤ 1.
+                               r→∞           πr2
+   We do not have a proof of this conjecture, but because it is fundamentally two-
+dimensional, we expect it to be more tractable than the full optimality of D5 as a
+sphere packing.
+   To achieve δ = 1, we can √ tile√the plane with√ two types of triangles: isosceles
+triangles with side lengths 5/2, 5/2, 1 or 1, 1, 2, which we call ∆1 and ∆2 . Both
+of these triangles have area 1/2, and it follows that in every edge-to-edge tiling,
+there is one vertex per unit area.2 Our five-dimensional sphere packings are obtained
+from valid√ four-colorings of the vertices of these tilings.
+                                                     √       Specifically, vertices at
+distance 2 have the same color, those at distance 5/2 have adjacent colors, and
+those at distance 1 have opposite colors.
+   Figure 4.1 shows the triangles ∆1 and ∆2 , together with the four ways they can
+be arranged around a vertex, and Table 4.1 lists the resulting kissing configurations.
+   2The angles in a triangle add up to π, which means they account for half of the total angle
+surrounding a single vertex. Therefore there must be half a vertex per triangle on average in any
+edge-to-edge tiling.
+                VARIATIONS ON FIVE-DIMENSIONAL SPHERE PACKINGS                               9
+
+
+                                         length 1 (opposite colors)
+                                                √
+                                         length 5/2 (adjacent colors)
+                                                √
+                                         length 2 (same color)
+
+
+
+
+                                ∆1                              ∆2
+
+
+
+
+                    p                        q      p                        q
+
+
+                                a                               b
+
+
+
+
+                                c                               d
+
+        Figure 4.1. The four possible ways to arrange triangles ∆1 and
+        ∆2 around a point, labeled a through d. In arrangements a and b,
+        two of the neighboring points are labeled p and q.
+
+        0       1           2        3                  0       1        0           1
+
+            2           3       0        1                  2        3           2       3
+
+        0       1           2        3                  0       1        0           1
+
+            2           3       0        1                  2        3           2       3
+
+        0       1           2        3                  0       1        0           1
+
+        Figure 4.2. The uniform packings with kissing configuration Q5
+        (on the left) and R5 (on the right).
+
+Figure 4.2 shows two examples of valid four-colorings. In these packings, every
+local arrangement is of type a from Figure 4.1, the colorings are constant within
+each vertical column, and the colorings repeat horizontally with period four for the
+packing on the left and two for the packing on the right.
+   The local analysis from Figure 4.1 leads to a complete classification of edge-to-
+edge tilings with the tiles ∆1 and ∆2 . Among these possibilities, those shown in
+10                        HENRY COHN AND ISAAC RAJAGOPAL
+
+
+Figure 4.2 are the only ones that have kissing configuration Q5 everywhere or R5
+everywhere. However, other combinations of kissing configurations are possible, such
+as tilings that have layers of types a and b, in which case some spheres have kissing
+configuration Q5 or R5 and some have kissing configuration D5 or L5 . One can
+combine all four kissing configurations in a single packing by varying the coloring
+condition in Table 4.1 among the different spheres in a packing.
+   When a solid line segment from Figure 4.1 extends to a solid straight line of
+infinite length in both directions, that corresponds to a D4 cross section of the
+packing. In particular, tilings with layers of types b, c, and d (with the b layers
+rotated so all solid lines are parallel) are equivalent to stacking D4 layers as described
+by Conway and Sloane in Section 5 of [5]. Thus, these tilings can produce packings
+with kissing configurations of D5 or L5 or some mix of both, including the D5 root
+lattice and the three uniform packings with L5 kissing configuration.
+   As mentioned in the introduction, the existence of more general packings such as
+those in Figure 4.2 disproves conjectures of Conway and Sloane [5] and Kuperberg
+[10]. We propose the following conjecture as a salvage for Conjecture 15 in [10].
+Conjecture 4.2. Every weakly recurrent, optimally dense sphere packing in R5 can
+be obtained from a valid four-coloring of the vertices of an edge-to-edge tiling of R2
+with triangles congruent to ∆1 and ∆2 .
+  Of course Szöllősi’s discovery is cause for skepticism about any such classification.
+We have no great confidence in Conjecture 4.2, but it describes the current state of
+our knowledge.
+4.2. Uniform packings. The packings from Figure 4.2 are noteworthy because
+they are uniform. In other words, their automorphism groups act transitively on
+the spheres. In his 1967 paper [11], Leech found three uniform non-lattice packings
+with the same density as the D5 root lattice, and our construction adds two more.
+This list is in fact complete:
+Theorem 4.3. Up to isometry, there are only six uniform sphere packings in R5
+that have kissing configuration D5 , L5 , Q5 , or R5 , namely one with D5 , three with
+L5 , and one each with Q5 or R5 .
+Proof. Suppose K0 is one of these kissing configurations in a uniform packing, and v
+is a point in K0 . By uniformity, the kissing configuration Kv at v must be isometric
+to K0 , and it has some overlap with K0 , namely the points in K0 at squared
+distance 2 from v. If this overlap has a unique extension to a kissing configuration
+around v that is isometric to K0 , then Kv is uniquely determined by K0 . If the
+extension is unique for all v ∈ K0 , then that is enough to determine the entire
+uniform packing by induction. For example, one can check that this is the case
+for D5 , based on the observation that the D5 kissing configuration is closed under
+taking integer linear combinations that lie on the sphere. However, the other three
+kissing configurations are more subtle. To analyze them, we rely on a computer
+search.3
+   For each point v ∈ K0 , we can determine by depth-first search whether the overlap
+has a unique extension: we enumerate all the isometric embeddings of the overlap
+into K0 and check whether they are all equivalent modulo symmetries of K0 . Each
+   3Our implementation of this search is available through DSpace@MIT at https://hdl.handle.
+net/1721.1/157699.
+               VARIATIONS ON FIVE-DIMENSIONAL SPHERE PACKINGS                       11
+
+        Table 4.2. The two uniform packings from Figure 4.2, with the
+        left one expressed as a 2-periodic packing above and the right one
+        as a 4-periodic packing below.
+
+                        Lattice basis               Translation vectors
+                                   Q5 uniform packing
+             v0 = (1, −1, 0, 0, 0)                 x0 = (0, 0, 0, 0, 0)
+             v1 = (0, 1, −1, 0, 0)                 x1 = (0, 0, 0, −1, −1)
+             v2 = (0, 0, 1, −1, 0)
+             v3 = (0, 0, 0, 1, −1)
+             v4 = (0.8, 0.8, 0.8, 0.8, 0.8)
+                                   R5 uniform packing
+             v0 = (1, −1, 0, 0, 0)                 x0 = (0, 0, 0, 0, 0)
+             v1 = (0, 1, −1, 0, 0)                 x1 = (0, 0, 0, −1, −1)
+             v2 = (0, 0, 1, −1, 0)                 x2 = (0, 0, −1, −1, 0)
+             v3 = (−0.5, −0.5, −0.5, −0.5, 2)      x3 = (0, 0, 0, 1, −1)
+             v4 = (0.8, 0.8, 0.8, 0.8, 0.8)
+
+
+
+point v that has a uniquely determined kissing configuration provides additional
+points of overlap with the kissing configurations that are yet to be determined, which
+increases our ability to determine them. For Q5 and R5 , iterating this procedure
+determines Kv for every v ∈ K0 , and there is therefore at most one uniform packing.
+We have constructed one in both cases, as shown in Figure 4.2.
+   For L5 , this procedure cannot prove uniqueness, because it is not true. However,
+it shows that Kv is uniquely determined whenever v lies in the D4 cross section
+specified by v5 = 0. In other words, the uniform packing must be obtained from D4
+cross sections. This problem was analyzed by Conway and Sloane in Section 5 of
+[5], where they show that Leech’s uniform packings are the only ones that satisfy
+this condition.                                                                     □
+
+   Given the set P of sphere centers in a periodic sphere packing in Rn , let
+
+                             Λ = {y ∈ Rn : P = P + y}
+
+be its translational symmetry lattice. Then P is the union of finitely many translates
+of Λ. It is called m-periodic if it consists of m translates of Λ, and our choice of
+Λ ensures that it cannot be written as the union of fewer translates of any other
+lattice (i.e., m is minimal).
+   The uniform packing from Figure 4.2 with kissing configuration Q5 is 2-periodic,
+and the one with kissing configuration R5 is 4-periodic, with lattice bases and
+translation vectors shown in Table 4.2. Andreanov and Kallus [1] showed that no
+2-periodic sphere packing in R5 can be denser than the D5 root lattice, and they
+obtained a complete list of the densest such packings. In the process they discovered
+the Q5 uniform sphere packing, which also occurs in the acknowledgements of [20].
+No such optimality theorem or classification is known beyond 2-periodic packings.
+As for the remaining uniform packings, the D5 root lattice is of course 1-periodic,
+and the three L5 uniform packings are 2-periodic, 3-periodic, and 4-periodic (see [5]).
+12                      HENRY COHN AND ISAAC RAJAGOPAL
+
+
+4.3. Symmetries of uniform packings. We will show in this subsection that
+each symmetry of the Q5 or R5 kissing configuration extends to a symmetry of
+the corresponding uniform packing that fixes a point. The symmetry group of the
+kissing configuration is the stabilizer of a point, and the semidirect product of this
+group and the translational symmetry lattice has index m in the symmetry group of
+the uniform packing when the packing is m-periodic (i.e., m = 2 for Q5 and m = 4
+for R5 ).
+   We enumerate the symmetries as follows. Each symmetry of a subset P of Rn is
+an affine linear map x 7→ Ax + b with A orthogonal. If Λ = {y ∈ Rn : P = P + y}
+as in the previous subsection, then A must preserve Λ. To see why, note that if
+x 7→ Ax + b is a symmetry of P and y ∈ Λ, then
+
+{Ax + b : x ∈ P} = P = P + y = {A(x + y) + b : x ∈ P} = {Ax + b + Ay : x ∈ P},
+
+from which it follows that Ay ∈ Λ, as desired. Thus, determining the symmetries of
+P amounts to determining the symmetries of Λ and which translation vectors b are
+compatible with them.
+   For the Q5 uniform packing, the underlying lattice Λ is the orthogonal direct
+sum of the A4 root lattice and a one-dimensional lattice (see Table 4.2 for a lattice
+basis). The symmetry group G of Λ is isomorphic to S5 × C22 , where the symmetric
+group S5 permutes the five coordinates and the cyclic factors C2 are generated by
+scalar multiplication by −1 and the reflection s across the hyperplane perpendicular
+to the fifth lattice basis vector v4 shown in Table 4.2. The reflection s is the same
+reflection as in equation (2.1), and it corresponds to a reflection across a horizontal
+line in Figure 4.2. Let H be the subgroup of G generated by S5 and s (the symmetry
+group of the kissing configuration Q5 ), let H0 = H, and let H1 = (−1)H be the
+coset obtained through scalar multiplication by −1. Then a case analysis shows
+that the symmetry group of the Q5 uniform packing is
+
+                  {x 7→ Ax + xi + y : A ∈ Hi , i ∈ {0, 1}, y ∈ Λ},
+
+where the translation vectors x0 and x1 are specified in Table 4.2. Each symmetry
+of Λ corresponds to a unique translation vector, modulo Λ.
+   For the R5 uniform packing, the underlying lattice Λ is the orthogonal direct sum
+of the A3 root lattice and two differently scaled one-dimensional lattices (again see
+Table 4.2 for a lattice basis). The symmetry group G of Λ is isomorphic to S4 × C23 ,
+where the symmetric group S4 permutes the first four coordinates and the cyclic
+factors C2 are generated by scalar multiplication by −1 and the reflections r and s
+across the hyperplanes perpendicular to the fourth and fifth lattice basis vectors v3
+and v4 shown in Table 4.2. The reflections r and s correspond to reflections across
+vertical and horizontal lines in Figure 4.2, respectively. Let H be the subgroup of G
+generated by S4 and s (the symmetry group of the kissing configuration R5 ), and let
+H0 = H, H1 = (−1)H, H2 = rH, and H3 = (−r)H be its cosets, where as above
+(−1) denotes scalar multiplication by −1 and (−r) denotes the composition of (−1)
+and r. Then a case analysis shows that the symmetry group of the R5 uniform
+packing is
+                {x 7→ Ax + xi + y : A ∈ Hi , i ∈ {0, 1, 2, 3}, y ∈ Λ},
+where again the translation vectors xi are specified in Table 4.2. As in the case of
+Q5 , each symmetry of Λ corresponds to a unique translation vector, modulo Λ.
+               VARIATIONS ON FIVE-DIMENSIONAL SPHERE PACKINGS                       13
+
+
+
+
+        Figure 4.3. The irregular tetrahedron and octahedron with ∆1
+        facets, unfolded into nets.
+
+4.4. Higher dimensions. The four-coloring construction of five-dimensional pack-
+ings from Section 4.1 works equally well to produce six-dimensional sphere packings
+from valid four-colored point configurations in R3 . One can construct such con-
+figurations from face-to-face tilings of R3 with irregular tetrahedra and octahedra
+that have ∆1 faces, as shown in Figure 4.3. These polyhedra have many lovely
+properties. For example, one octahedron and four tetrahedra can be assembled
+to form a larger tetrahedron (with doubled edge lengths, and with the tetrahedra
+nestled in the corners of the larger tetrahedron), while six octahedra and eight
+tetrahedra can form a larger octahedron (again with doubled edge lengths and the
+octahedra nestled in the corners). Iterating this procedure yields a tiling of all of
+space, which can be colored to produce the E6 packing. Furthermore, other tilings
+yield all the six-dimensional sphere packings from Section 6 of [5]. However, we do
+not obtain any new six-dimensional sphere packings. Somehow the five-dimensional
+case has additional flexibility, which we have been unable to replicate in six or seven
+dimensions.
+   While the four-coloring construction reproduces the best packings known in up
+to eight dimensions, it does not work well in higher dimensions. For example, the
+Leech lattice in R24 cannot be obtained in this way. Given a valid four-colored point
+configuration in R21 with δ points per unit volume, the density of the resulting
+sphere packing in R24 is
+                                         π 12
+                                                 δ.
+                                       12! · 213
+Matching the density of the Leech lattice would amount to achieving δ = 213 = 8192,
+which turns out to be √ impossible because each of the four colors gives a sphere
+packing with radius 2/2, and achieving δ = 8192 would require impossibly dense
+sphere packings. Specifically, the Blichfeldt bound implies that each color has at
+most 788.5785 points per unit volume (see, for example, Theorem 6.1 in [23]), and
+four times that bound is still far below 8192.
+
+                 5. Nine-dimensional kissing configurations
+   Nine dimensions is the first case beyond five dimensions in which we have been
+able to produce a new kissing configuration by modifying layers. We do not obtain a
+corresponding dense sphere packing, and indeed the densest known nine-dimensional
+sphere packings all have suboptimal kissing configurations.
+   The record kissing configuration of size 306 in R9 was discovered by Leech and
+Sloane [13] in 1971, and it has been the only such configuration known since then [3],
+up to isometry. It is obtained from a binary error-correcting code of block length 9,
+constant weight 4, and minimal distance 4. Such a code is unique [18], and we can
+construct it as follows.
+14                       HENRY COHN AND ISAAC RAJAGOPAL
+
+
+   It is convenient to write the nine coordinates in three rows of three. Then the
+code consists of 18 codewords, obtained by arbitrarily permuting the rows and
+columns of
+                                                       
+                         0 0 0                   0 1 1
+                       0 1 1          and     1 0 0 .
+                         0 1 1                   1 0 0
+The kissing configuration contains 24 · 18 = 288 points that place arbitrary signs on
+the entries of the codewords, together with the 18 permutations of (±2, 0, . . . , 0), for
+a total of 306 points. A simple case analysis shows that no two distinct codewords
+overlap in more than two nonzero coordinates, which is exactly what is needed to
+obtain a valid kissing configuration.
+   Alternatively, we can construct the code using the finite field F9 , with the nine
+coordinates indexed by the elements of F9 . The codewords correspond to certain
+four-element subsets of F9 , specifically the nonzero squares in F9 , the non-squares
+in F9 , and the translates of these sets by elements of F9 . To see that this code is
+equivalent to the code from the previous paragraph, we can write F9 as F3 (i) with
+i2 = −1 and arrange the elements in a grid as
+                                                   
+                                  0      1      2
+                                 i 1 + i 2 + i ;
+                                 2i 1 + 2i 2 + 2i
+
+because 2 = i2 and i = (2 + i)2 , the elements 1, 2, i, and 2i are the nonzero
+squares, and we obtain the same code as before. The construction using F9 is more
+abstract, but it lets us see that the code is invariant under the affine semilinear
+group, which consists of the functions x 7→ ax + b and x 7→ ax3 + b with a, b ∈ F9
+and a ≠ 0. In fact, this group is the full automorphism group of the code. The
+automorphism group acts transitively on the codewords, since multiplying by a
+non-square interchanges the nonzero squares with the non-squares. By contrast, the
+subgroup generated by permuting the rows and columns and applying symmetries
+of the 3 × 3 square does not act transitively.
+   We will use the more concrete construction based on 3 × 3 squares of coordinates.
+In our calculations below, we will number the coordinates as
+                                              
+                                     1 2 3
+                                    4 5 6 .
+                                     7 8 9
+
+The binary code then contains the codewords shown in Table 5.1.
+    If we partition the kissing configuration into layers based on the first coordinate,
+we obtain layers of sizes 1, 64, 176, 64, and 1 at heights 2, 1, 0, −1, and −2,
+respectively. To create a new kissing configuration, we replace the layer that has
+first coordinate 1 with a modification. This mutation of an eight-dimensional layer is
+similar to how L5 , Q5 , and R5 were constructed by modifying one four-dimensional
+layer of another five-dimensional kissing configuration, or to Figure 1.1.
+    Each point in the eight-dimensional layer to be modified has a 1 in the first
+coordinate and three ±1’s in one of eight triples from among the remaining coor-
+dinates. One can check that there are exactly eight other triples that could be
+used instead while keeping the other layers unchanged, and we define the new
+                 VARIATIONS ON FIVE-DIMENSIONAL SPHERE PACKINGS                                15
+
+         Table 5.1. The binary code of block length 9, weight 4, and
+         minimal distance 4.
+
+                               1   1   0    1   1   0   0   0   0
+                               1   1   0    0   0   1   0   0   1
+                               1   1   0    0   0   0   1   1   0
+                               1   0   1    1   0   1   0   0   0
+                               1   0   1    0   1   0   0   1   0
+                               1   0   1    0   0   0   1   0   1
+                               1   0   0    1   0   0   0   1   1
+                               1   0   0    0   1   1   1   0   0
+                               0   1   1    1   0   0   1   0   0
+                               0   1   1    0   1   1   0   0   0
+                               0   1   1    0   0   0   0   1   1
+                               0   1   0    1   0   1   0   1   0
+                               0   1   0    0   1   0   1   0   1
+                               0   0   1    1   1   0   0   0   1
+                               0   0   1    0   0   1   1   1   0
+                               0   0   0    1   1   0   1   1   0
+                               0   0   0    1   0   1   1   0   1
+                               0   0   0    0   1   1   0   1   1
+
+                          Table 5.2. The modified codewords.
+
+                               1   0   1    0   1   0   1   0   0
+                               1   0   1    0   0   1   0   0   1
+                               1   0   1    1   0   0   0   1   0
+                               1   1   0    0   0   1   1   0   0
+                               1   1   0    0   1   0   0   1   0
+                               1   1   0    1   0   0   0   0   1
+                               1   0   0    0   0   0   1   1   1
+                               1   0   0    1   1   1   0   0   0
+
+
+kissing configuration by using them in this layer.4 Another description is that in
+the modified layer, we swap coordinate 2 with coordinate 3 and coordinate 4 with
+coordinate 7. The modified points with first coordinate 1 are therefore based on
+Table 5.2, rather than Table 5.1, by putting arbitrary signs on every coordinate
+except the first.5
+   The resulting kissing configuration is not isometric to the original, because we
+have broken the antipodal symmetry, and we obtain the following theorem:
+Theorem 5.1. There are at least two non-isometric kissing configurations of 306
+points in nine dimensions.
+
+   4Among the sixteen triples that are consistent with the central cross section, one can check
+that the original eight and their complement are the only sets of eight that avoid overlap in more
+than one coordinate, which would lead to overly large inner products.
+   5Coordinates for both kissing configurations are available through DSpace@MIT at https:
+//hdl.handle.net/1721.1/157699.
+16                         HENRY COHN AND ISAAC RAJAGOPAL
+
+         Table 5.3. The counts of inner products in the previously known
+         kissing configuration (first row) and the new configuration (second
+         row), as in Table 2.1.
+
+                    −1     −3/4      −1/2       −1/4          0        1/4       1/2
+                   153       0        8640       4608      20016 4608 8640
+                    89      384       7680       5888      19056 4992 8576
+
+
+   More generally, Table 5.3 compares the inner product counts for the two configu-
+rations. Note that there are fewer pairs of distinct points at the minimal distance
+(equivalently, maximal inner product) in the modified configuration. We can inter-
+pret this fact as follows. Suppose we wish to arrange 306 points v1 , . . . , v306 in R9
+so that they are as far from each other as possible while remaining confined to a
+sphere. One method is to minimize the Riesz energy
+                                   X           1
+                                          |vi − vj |s
+                                       1≤i<j≤306
+
+for large s; the global optimum for energy will achieve the largest possible minimal
+distance in the limit as s → ∞. Because our modified nine-dimensional kissing
+configuration has fewer pairs of points at the minimal distance, it has lower energy
+than the original for all sufficiently large s. Similarly, Table 2.1 shows that L5 has
+lower energy than D5 , Q5 , or R5 when s is large, although that comparison requires
+examining non-minimal distances.
+   Another way to distinguish these configurations is their symmetry groups. The
+original kissing configuration has 73728 symmetries, namely the semidirect product
+of the 144 coordinate permutations preserving the binary code with 29 sign changes,
+while the modified configuration has only 8192 symmetries. The group of order 8192
+is generated by the 16 coordinate permutations (among the 144) that fix the first
+coordinate, the 28 sign changes that fix the first coordinate, and the map
+                   (x1 , . . . , x9 ) 7→ (−x1 , x3 , x2 , x7 , x5 , x6 , x4 , x8 , x9 )
+that changes the sign of the first coordinate while swapping coordinate 2 with
+coordinate 3 and coordinate 4 with coordinate 7.
+
+                                    Acknowledgements
+   We are grateful to Yoav Kallus for pointing out that the kissing configuration
+identified by Szöllősi in [20] had previously occurred as the kissing configuration of
+a packing discovered in [1], and to the referees for helpful comments.
+
+                                           References
+ [1] A. Andreanov and Y. Kallus, Locally optimal 2-periodic sphere packings, Discrete Comput.
+     Geom. 63 (2020), no. 1, 182–208. arXiv:1704.08156 doi:10.1007/s00454-019-00150-6
+ [2] E. Bannai and N. J. A. Sloane, Uniqueness of certain spherical codes, Canadian J. Math. 33
+     (1981), no. 2, 437–449. doi:10.4153/CJM-1981-038-7
+ [3] H. Cohn, Y. Jiao, A. Kumar, and S. Torquato, Rigidity of spherical codes, Geom. Topol. 15
+     (2011), no. 4, 2235–2273. arXiv:1102.5060 doi:10.2140/gt.2011.15.2235
+ [4] H. Cohn, A. Kumar, S. D. Miller, D. Radchenko, and M. Viazovska, The sphere packing
+     problem in dimension 24, Ann. of Math. (2) 185 (2017), no. 3, 1017–1033. arXiv:1603.06518
+     doi:10.4007/annals.2017.185.3.8
+                  VARIATIONS ON FIVE-DIMENSIONAL SPHERE PACKINGS                                  17
+
+
+ [5] J. H. Conway and N. J. A. Sloane, What are all the best sphere packings in low dimensions?,
+     Discrete Comput. Geom. 13 (1995), no. 3-4, 383–403. doi:10.1007/BF02574051
+ [6] D. de Laat, N. M. Leijenhorst, and W. H. H. de Muinck Keizer, Optimality and uniqueness
+     of the D4 root system, preprint, 2024. arXiv:2404.18794
+ [7] T. Hales, M. Adams, G. Bauer, T. D. Dang, J. Harrison, L. T. Hoang, C. Kaliszyk, V. Magron,
+     S. McLaughlin, T. T. Nguyen, Q. T. Nguyen, T. Nipkow, S. Obua, J. Pleso, J. Rute,
+     A. Solovyev, T. H. A. Ta, N. T. Tran, T. D. Trieu, J. Urban, K. Vu, and R. Zumkeller, A
+     formal proof of the Kepler conjecture, Forum Math. Pi 5 (2017), e2, 29. arXiv:1501.02155
+     doi:10.1017/fmp.2017.1
+ [8] T. C. Hales, A proof of the Kepler conjecture, Ann. of Math. (2) 162 (2005), no. 3, 1065–1185.
+     doi:10.4007/annals.2005.162.1065
+ [9] A. Korkine and G. Zolotareff, Sur les formes quadratiques, Math. Ann. 6 (1873), no. 3,
+     366–389. doi:10.1007/BF01442795
+[10] G. Kuperberg, Notions of denseness, Geom. Topol. 4 (2000), 277–292. arXiv:math/9908003
+     doi:10.2140/gt.2000.4.277
+[11] J. Leech, Five dimensional non-lattice sphere packings, Canad. Math. Bull. 10 (1967), 387–393.
+     doi:10.4153/CMB-1967-037-5
+[12]         , Six and seven dimensional non-lattice sphere packings, Canad. Math. Bull. 12 (1969),
+     151–155. doi:10.4153/CMB-1969-014-1
+[13] J. Leech and N. J. A. Sloane, Sphere packings and error-correcting codes, Canadian J. Math.
+     23 (1971), 718–745. doi:10.4153/CJM-1971-081-3
+[14] V. I. Levenšteı̆n, On bounds for packings in n-dimensional Euclidean space, Dokl. Akad. Nauk
+     SSSR 245 (1979), no. 6, 1299–1303.
+[15] H. D. Mittelmann and F. Vallentin, High-accuracy semidefinite programming bounds
+     for kissing numbers, Experiment. Math. 19 (2010), no. 2, 175–179. arXiv:0902.1105
+     doi:10.1080/10586458.2010.10129070
+[16] O. R. Musin, The kissing number in four dimensions, Ann. of Math. (2) 168 (2008), no. 1,
+     1–32. arXiv:math/0309430 doi:10.4007/annals.2008.168.1
+[17] A. M. Odlyzko and N. J. A. Sloane, New bounds on the number of unit spheres that can
+     touch a unit sphere in n dimensions, J. Combin. Theory Ser. A 26 (1979), no. 2, 210–214.
+     doi:10.1016/0097-3165(79)90074-8
+[18] P. R. J. Östergård, Classification of binary constant weight codes, IEEE Trans. Inform. Theory
+     56 (2010), no. 8, 3779–3785. doi:10.1109/TIT.2010.2050922
+[19] K. Schütte and B. L. van der Waerden, Das Problem der dreizehn Kugeln, Math. Ann. 125
+     (1953), 325–334. doi:10.1007/BF01343127
+[20] F. Szöllősi, A note on five-dimensional kissing arrangements, Math. Res. Lett. 30 (2023),
+     no. 5, 1609–1615. arXiv:2301.08272 doi:10.4310/MRL.2023.v30.n5.a13
+[21] A. Thue, Om nogle geometrisk-taltheoretiske Theoremer, Forhandlingerne ved de Skandinaviske
+     Naturforskeres 14 (1892), 352–353.
+[22] M. S. Viazovska, The sphere packing problem in dimension 8, Ann. of Math. (2) 185 (2017),
+     no. 3, 991–1015. arXiv:1603.04246 doi:10.4007/annals.2017.185.3.7
+[23] C. Zong, Sphere packings, Universitext, Springer-Verlag, New York, 1999. doi:10.1007/b98975
+
+   Microsoft Research New England, One Memorial Drive, Cambridge, MA 02142, USA
+   Current address: Department of Mathematics, Massachusetts Institute of Technology, Cam-
+bridge, MA
+   Email address: cohn@mit.edu
+
+  Department of Mathematics, Massachusetts Institute of Technology, Cambridge,
+MA
+  Email address: isaacraj@mit.edu
+

@@ -1,0 +1,484 @@
+                                             55 Additions Suffice for 3 × 3 Matrix Multiplication at Rank 23
+                                                            Samurdhi Karunaratne       Anushka Idamekorala
+                                                                              Logical AI
+                                                                    Correspondence: sam@logical.io
+
+                                                                                       July 24, 2026
+
+
+                                                                                          Abstract
+                                                  We give a 55-addition realization of rank-23 multiplication of two arbitrary 3 × 3 matrices.
+                                              Together with its 23 bilinear products, the circuit uses 78 scalar operations. This improves the
+                                              previous state of the art of 56 additions, due to Sun. The construction starts from Perminov’s
+arXiv:2607.28676v1 [cs.CC] 28 Jul 2026
+
+
+
+
+                                              public 58-addition realization cr58_cn122 of a ternary tensor; the contribution is a shorter and,
+                                              for this fixed orientation of that tensor, provably optimal linear circuit: 13 additions on the left
+                                              input, 14 on the right input, and 28 at the output. The last circuit is obtained by transposing a
+                                              14-addition factor circuit. Because the coefficient alphabet is {−1, 0, 1} and the order of every
+                                              bilinear product is retained, the algorithm applies over every associative ring, commutative or not.
+                                              We print the full straight-line program and tensor factors and provide four exact computational
+                                              checks, including independent Python and Node.js implementations of all 729 Brent identities
+                                              over Z.
+                                               Keywords. Fast matrix multiplication; bilinear algorithms; tensor rank; additive complexity;
+                                               transposition principle; exact verification.
+
+
+                                         1    Introduction
+                                         Strassen’s algorithm showed that matrix multiplication can be accelerated by reducing the number
+                                         of bilinear products rather than evaluating the defining sums directly [13]. For 3 × 3 matrix
+                                         multiplication over noncommutative rings, Laderman found a rank-23 algorithm in 1976 [5]. Rank 23
+                                         remains the smallest known rank for general 3 × 3 multiplication, while recent work has substantially
+                                         reduced the number of additions required to realize rank-23 schemes [10, 4, 1, 6, 11, 7, 8, 12].
+                                             The sequence relevant here is 60 additions in Stapleton’s construction, 59 in Mårtensson–Wagner–
+                                         Stapleton, 58 in Perminov, and 56 in Sun [11, 7, 8, 12]. The present construction lowers the upper
+                                         bound by one more addition. It does not alter the multiplicative rank.
+                                             The underlying tensor is Perminov’s publicly released cr58_cn122 factorization [8, 9]. The tensor
+                                         itself is pre-existing; the contribution here is the 55-addition schedule and its exact fixed-tensor
+                                         optimality certificate in the binary x + y/x − y straight-line model.
+                                         Theorem 1. Two arbitrary 3 × 3 matrices over any associative ring can be multiplied with 23 scalar
+                                         multiplications and 55 additions/subtractions.
+                                             The count has a simple anatomy:
+                                             Section 2 fixes the algebraic and cost conventions. Section 3 explains why the three linear costs
+                                         are 13, 14, 28, including the matching lower bound for this tensor. Section 4 is the directly executable
+                                         algorithm. Section 5 prints the tensor certificate in two forms, and Section 6 records the exact audit
+                                         trail. Section 7 discloses the AI-assisted route by which the circuit was found.
+
+                                                                                               1
+                         Circuit component                        Map                     Additions
+                         Left preprocessing                   9 → 23                                13
+                         Right preprocessing                  9 → 23                                14
+                         Output reconstruction                23 → 9                                28
+                         Total linear work                                                     55
+                         Bilinear layer                     23 products        23 multiplications
+
+                             Table 1: Operation-count anatomy of the circuit.
+
+   We do not claim that 55 additions is globally optimal among all rank-23 decompositions, nor
+that it is optimal in a different circuit model allowing other primitive operations. To the best of our
+knowledge, 55 is the smallest addition count presently known for a rank-23 algorithm in this model.
+
+
+2     Algebraic and circuit conventions
+We use row-major coordinates:
+                                                                                                    
+                               C0 C1 C2      A0 A1 A2    B0 B1 B2
+                     C = AB = C3 C4 C5  = A3 A4 A5  B3 B4 B5  .
+                                                             
+                               C6 C7 C8      A6 A7 A8    B6 B7 B8
+Thus C0 = A0 B0 + A1 B3 + A2 B6 , and similarly for the other entries. Multiplication order is
+always a left input form in A times a right input form in B, so the construction is meaningful over
+noncommutative coefficient rings.
+   A rank-R bilinear algorithm is a decomposition
+                                                            R−1
+                                                            X
+                                            M⟨3,3,3⟩ =            Ur ⊗ Vr ⊗ Wr ,
+                                                            r=0
+
+where Ur , Vr , Wr are length-nine coefficient vectors. It computes
+                                    8
+                                                 ! 8         
+                                                                                      R−1
+                                    X               X                                 X
+                         Mr =             Ur,i Ai    Vr,j Bj  ,             Ck =           Wr,k Mr .
+                                    i=0               j=0                              r=0
+
+The displayed scheme has R = 23, and all entries of U, V, W belong to {−1, 0, 1}.
+    The addition count is measured in the standard three-stage bilinear straight-line-program model.
+A first linear SLP derives the 23 left forms from entries of A only, and an independent linear SLP
+derives the 23 right forms from entries of B only. Corresponding forms are then paired in the 23
+products Mr . A third linear SLP, whose inputs are those products, reconstructs the nine entries of
+C. Gates do not mix A-derived and B-derived wires, and the reported additive cost is the sum of
+the two preprocessing costs and the postprocessing cost. Within each linear SLP, inputs are free, a
+gate computing x + y or x − y from previously available quantities costs one, and copies and sign
+changes cost zero. The 23 bilinear products are counted separately.
+    Correctness is equivalent to the Brent identities [2]
+                           22
+                                 Ur,(i,k) Vr,(k′ ,j) Wr,(i′ ,j ′ ) = 1[i = i′ ]1[j = j ′ ]1[k = k ′ ]
+                           X
+                                                                                                             (1)
+                           r=0
+
+for all i, j, k, i′ , j ′ , k ′ ∈ {0, 1, 2}. There are 36 = 729 identities.
+
+                                                               2
+3     From a 58-addition realization to a 55-addition circuit
+Perminov’s cr58_cn122 factorization [8, 9]1 realizes its three linear sides with costs 14, 15, and 29,
+for a total of 58 additions. The third side is a 23-to-9 output map. Its transpose is therefore a
+9-to-23 factor map with a 15-addition realization.
+
+3.1    Exact synthesis of the factor maps
+We optimized each 9-to-23 factor map exactly in the binary addition/subtraction model. Identify
+nonzero forms that differ only by sign, and let d(F ) be the number of distinct non-basis output
+directions of a factor map F . Every such direction must be created by at least one gate, so
+C(F ) ≥ d(F ). If equality held, every gate would have to create one of the target directions: no
+auxiliary direction could occur.
+    For each factor, an exhaustive dependency search enumerated every way a target direction can
+be obtained as a signed sum or difference of two basis or previously available target directions. No
+topological schedule exists using only d(F ) gates. Hence C(F ) ≥ d(F ) + 1. The explicit schedules
+found at that bound establish Table 2.
+
+                    Factor map    Source cost    d(F )   d(F )-gate circuit?   Exact cost
+                    U : 9 → 23              14     12                   No            13
+                    V : 9 → 23              15     13                   No            14
+                    W : 9 → 23              15     13                   No            14
+
+Table 2: Exact costs of the three 9-to-23 factor maps. “No” in the fourth column means that
+exhaustive search found no circuit attaining the direction-count floor, and hence C(F ) ≥ d(F ) + 1.
+
+
+
+3.2    Transposing the output computation
+The 14-gate factor circuit for W is then transposed by reverse accumulation. The linear-circuit
+transposition principle [3] converts an n-input, m-output circuit of length L into a circuit for the
+transpose with
+                                             L+m−n
+additions. Here n = 9, m = 23, and L = 14, yielding a 28-gate 23-to-9 output circuit. A free
+permutation converts the source’s column-major output-pair convention to ordinary row-major
+coordinates; in zero-based notation the permutation is [0, 3, 6, 1, 4, 7, 2, 5, 8]. Consequently,
+
+                                            13 + 14 + 28 = 55.
+
+3.3    Why 55 is optimal for this oriented tensor
+
+Proposition 2. For the fixed oriented tensor displayed in this paper, the minimum sum of the three
+linear-stage costs in the model of Section 2 is 55.
+    The factor searches give C(U ) = 13, C(V ) = 14, and C(W ) = 14. For the output side, first
+prune any dead gates from a hypothetical L-gate circuit for W T . Every one of its 23 inputs is
+essential and all nine output forms are nonzero, as is also immediate from the factor array in
+   1
+     The   exact    source   is   3x3x3_m23_cr58_cn122_ZT_reduced.json         at     repository     commit
+98ba522db92b74f1f8c561a78038ff3091356d73; the companion repository contains a byte-identical copy.
+
+
+                                                     3
+Section 5. The transposition construction therefore applies to the pruned circuit with all inputs and
+outputs active, and gives a circuit for W of length at most L + 9 − 23 = L − 14. Since C(W ) = 14,
+necessarily L ≥ 28. Consequently
+
+                           C(U ) + C(V ) + C(W T ) ≥ 13 + 14 + 28 = 55,
+
+and the circuits constructed above attain equality.
+    The lower-bound calculation is deliberately narrow: it certifies the three linear maps in the
+displayed orientation, rather than all rank-23 tensors. Its benefit is that the 55 count is not an
+artifact of an unfinished heuristic rescheduling attempt.
+
+
+4     Complete straight-line program
+The straight-line program has three stages: form the input linear forms, multiply corresponding
+left and right forms, and assemble the output entries. All formulas are in implementation order. A
+leading minus sign is a free sign change.
+
+4.1    Input networks
+The input stage forms 13 left-side and 14 right-side intermediates:
+
+Left side                                            Right side
+u1 = −A5 + A2                                        v1 = B8 + B2
+u2 = −u1 + A0                                        v2 = B8 + B5
+u3 = u2 + A1                                         v3 = B2 + B0
+u4 = u3 − A5                                         v4 = v3 − B3
+u5 = u4 − A8                                         v5 = B6 + B0
+u6 = u5 − A1                                         v6 = −B3 + B0
+u7 = u5 + A7                                         v7 = v6 − v2
+u8 = u3 − A4                                         v8 = v4 − B5
+u9 = u8 − A3                                         v9 = v5 + B7
+u10 = u9 − A6                                        v10 = v9 − v7
+u11 = u10 − A7                                       v11 = v9 + B1
+u12 = −A4 + A1                                       v12 = v10 − B3
+u13 = −u12 + u10                                     v13 = v12 − B5
+                                                     v14 = v10 + B4
+
+
+4.2    Bilinear layer
+Compute the 23 bilinear products:
+
+
+
+
+                                                 4
+                                          Bilinear products
+M0 = u3 v10                                           M12 = A5 B7
+M1 = u10 v4                                           M13 = u9 v3
+M2 = A0 v1                                            M14 = A3 B1
+M3 = A7 B4                                            M15 = A6 B1
+M4 = A0 v11                                           M16 = A6 B2
+M5 = u6 v2                                            M17 = u1 v5
+M6 = u7 B5                                            M18 = u5 v12
+M7 = A8 B6                                            M19 = u13 v6
+M8 = u11 B3                                           M20 = A1 v14
+M9 = u2 v7                                            M21 = A4 B4
+M10 = A8 B7                                           M22 = u8 v8
+M11 = u4 v13
+
+
+4.3   Output network
+The output stage consists of the following 28 additions/subtractions. Read the left column from top
+to bottom, followed by the right column from top to bottom:
+
+                                     Output straight-line program
+w1 = −M18 − M10                                       w15 = −M8 + w2
+w2 = w1 + M5                                          w16 = w15 − w11
+w3 = −M7 + w2                                         w17 = M4 + M20
+w4 = M11 + w3                                         w18 = w17 − w7
+w5 = M0 − M12                                         w19 = M14 + M21
+w6 = w5 + M9                                          w20 = w19 + M12
+w7 = M17 + w6                                         w21 = M3 + M15
+w8 = M16 + w4                                         w22 = w21 + M10
+w9 = M1 + w8                                          w23 = M2 − w4
+w10 = −M13 − M11                                      w24 = M22 + M19
+w11 = w10 + w9                                        w25 = w24 − M9
+w12 = w3 + w7                                         w26 = w25 − w9
+w13 = −M19 + w6                                       w27 = M6 − M5
+w14 = w13 + w11                                       w28 = w27 + w8
+
+    The nine output entries are free aliases:
+
+                                 C0 = w12 , C1 = w18 , C2 = w23 ,
+                                 C3 = w14 , C4 = w20 , C5 = w26 ,
+                                 C6 = w16 , C7 = w22 , C8 = w28 .
+
+The input stage costs 13+14 = 27 additions, and the output stage costs 28, for a total of 27+28 = 55.
+The product stage contains exactly 23 multiplications.
+
+
+5     The rank-23 certificate
+This section gives two equivalent, fully explicit views of the tensor behind the circuit. The first
+favors readability of individual products; the second is the exact array representation consumed by
+the verification programs.
+
+
+
+
+                                                  5
+5.1     Expanded products and outputs
+The following is the same rank-23 decomposition written without shared input or output temporaries.
+It is included for comparison with the compact algorithm tables in the recent 58-, 59-, and 56-addition
+papers. This expanded presentation is not the 55-addition implementation; the implementation
+order is Section 4.
+     This section uses one-based matrix entries aij = A3(i−1)+(j−1) , bij = B3(i−1)+(j−1) , and cij =
+C3(i−1)+(j−1) . The expanded products satisfy pr+1 = Mr for r = 0, . . . , 22.
+p01 = (a11 + a12 - a13 + a23) * (b21 + b23 + b31 + b32 + b33)
+p02 = (a11 + a12 - a13 - a21 - a22 + a23 - a31) * (b11 + b13 - b21)
+p03 = (a11) * (b13 + b33)
+p04 = (a32) * (b22)
+p05 = (a11) * (b11 + b12 + b31 + b32)
+p06 = (a11 - a13 - a33) * (b23 + b33)
+p07 = (a11 + a12 - a13 + a32 - a33) * (b23)
+p08 = (a33) * (b31)
+p09 = (a11 + a12 - a13 - a21 - a22 + a23 - a31 - a32) * (b21)
+p10 = (a11 - a13 + a23) * (b11 - b21 - b23 - b33)
+p11 = (a33) * (b32)
+p12 = (a11 + a12 - a13) * (b31 + b32 + b33)
+p13 = (a23) * (b32)
+p14 = (a11 + a12 - a13 - a21 - a22 + a23) * (b11 + b13)
+p15 = (a21) * (b12)
+p16 = (a31) * (b12)
+p17 = (a31) * (b13)
+p18 = (a13 - a23) * (b11 + b31)
+p19 = (a11 + a12 - a13 - a33) * (b23 + b31 + b32 + b33)
+p20 = (a11 - a13 - a21 + a23 - a31) * (b11 - b21)
+p21 = (a12) * (b21 + b22 + b23 + b31 + b32 + b33)
+p22 = (a22) * (b22)
+p23 = (a11 + a12 - a13 - a22 + a23) * (b11 + b13 - b21 - b23)
+
+c11 = p01 + p06 - p08 + p10 - p11 - p13 + p18 - p19
+c12 = -p01 + p05 - p10 + p13 - p18 + p21
+c13 = p03 - p06 + p08 + p11 - p12 + p19
+c21 = p01 + p02 + p06 - p08 + p10 - p11 - p13 - p14 + p17 - p19 - p20
+c22 = p13 + p15 + p22
+c23 = -p02 - p06 + p08 - p10 + p11 - p12 - p17 + p19 + p20 + p23
+c31 = -p02 + p08 - p09 + p14 - p17
+c32 = p04 + p11 + p16
+c33 = p07 - p08 - p11 + p12 + p17 - p19
+
+
+
+5.2     Complete ternary factor arrays
+The following gives the tensor factors in compact form. The three blocks are U T , V T , and W T ,
+separated by a line containing #. In each block there are nine rows, one for each row-major coordinate
+0, . . . , 8, and each row contains the 23 coefficients for M0 , . . . , M22 .
+      Thus the first block gives the coefficients of A0 , . . . , A8 in the left factors, the second gives the
+coefficients of B0 , . . . , B8 in the right factors, and the third gives the coefficients of C0 , . . . , C8 in
+the output recombination.
+1 1 1 0 1 1 1 0 1 1 0 1 0 1 0 0 0 0 1 1 0 0 1
+1 1 0 0 0 0 1 0 1 0 0 1 0 1 0 0 0 0 1 0 1 0 1
+-1 -1 0 0 0 -1 -1 0 -1 -1 0 -1 0 -1 0 0 0 1 -1 -1 0 0 -1
+0 -1 0 0 0 0 0 0 -1 0 0 0 0 -1 1 0 0 0 0 -1 0 0 0
+0 -1 0 0 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 0 0 0 1 -1
+1 1 0 0 0 0 0 0 1 1 0 0 1 1 0 0 0 -1 0 1 0 0 1
+
+
+
+
+                                                           6
+0 -1 0 0 0 0 0 0 -1 0 0 0 0 0 0 1 1 0 0 -1 0 0 0
+0 0 0 1 0 0 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 -1 -1 1 0 0 1 0 0 0 0 0 0 0 -1 0 0 0 0
+#
+0 1 0 0 1 0 0 0 0 1 0 0 0 1 0 0 0 1 0 1 0 0 1
+0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0
+0 1 1 0 0 0 0 0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 1
+1 -1 0 0 0 0 0 0 1 -1 0 0 0 0 0 0 0 0 0 -1 1 0 -1
+0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0
+1 0 0 0 0 1 1 0 0 -1 0 0 0 0 0 0 0 0 1 0 1 0 -1
+1 0 0 0 1 0 0 1 0 0 0 1 0 0 0 0 0 1 1 0 1 0 0
+1 0 0 0 1 0 0 0 0 0 1 1 1 0 0 0 0 0 1 0 1 0 0
+1 0 1 0 0 1 0 0 0 -1 0 1 0 0 0 0 0 0 1 0 1 0 0
+#
+1 0 0 0 0 1 0 -1 0 1 -1 0 -1 0 0 0 0 1 -1 0 0 0 0
+-1 0 0 0 1 0 0 0 0 -1 0 0 1 0 0 0 0 -1 0 0 1 0 0
+0 0 1 0 0 -1 0 1 0 0 1 -1 0 0 0 0 0 0 1 0 0 0 0
+1 1 0 0 0 1 0 -1 0 1 -1 0 -1 -1 0 0 1 0 -1 -1 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 1 0
+0 -1 0 0 0 -1 0 1 0 -1 1 -1 0 0 0 0 -1 0 1 1 0 0 1
+0 -1 0 0 0 0 0 1 -1 0 0 0 0 1 0 0 -1 0 0 0 0 0 0
+0 0 0 1 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0
+0 0 0 0 0 0 1 -1 0 0 -1 1 0 0 0 0 1 0 -1 0 0 0 0
+
+
+
+
+6     Exact audit trail
+The paper’s companion repository is https://github.com/trylogical/cn122_add55. It contains
+the frozen certificate, the exact cr58_cn122 source data, a deterministic synthesis/replay program,
+two independently written Python verifiers, and an independent Node.js BigInt verifier. These
+artifacts are self-contained: the Python programs use only the standard library. The source JSON
+is retained under the relative path embedded in the frozen certificate so that regeneration preserves
+the certificate byte for byte.
+    From the repository root, run:
+python3 tools/synthesize_cn122_add55.py \
+  --output /tmp/cn122-add55-regenerated.json \
+  --summary
+
+cmp /tmp/cn122-add55-regenerated.json \
+  search_runs/cn122_add55/certificate.json
+
+python3 tools/verify_cn122_add55_certificate_independent.py \
+  search_runs/cn122_add55/certificate.json
+
+python3 search_runs/cn122_add55/verify_independent.py
+
+node search_runs/cn122_add55/verify_independent.js \
+  search_runs/cn122_add55/certificate.json
+
+    The synthesis/replay program is also the exhaustive lower-bound prover used in Section 3. For
+each factor map it enumerates every dependency among basis and target directions, rejects every
+topological schedule at the d(F )-gate floor, and constructs a matching d(F ) + 1-gate circuit. It
+then expands every gate as an integer coefficient vector, reconstructs U, V, W , verifies all 729 Brent
+identities in (1), and regenerates the frozen certificate byte for byte. The clean-room Python verifier
+imports no synthesis code; it independently decodes the public source tensor, verifies the source and
+factor hashes, replays the three task circuits, and checks all 729 identities. The second independent
+Python verifier separately audits the source’s output-coordinate permutation and the transposed
+output map. The Node.js verifier uses BigInt coefficient arithmetic and a separate implementation.
+    The exact outputs are:
+synthesis/replay:
+  factor-map optimality: U=13 (floor 12 impossible),
+
+
+                                                      7
+      V=14 (floor 13 impossible), W=14 (floor 13 impossible)
+    U=13, V=14, W=28, total=55
+    all 729 Brent identities pass
+
+clean-room Python:
+  task gate counts = [13,14,28]
+  unit identities = 27
+  zero identities = 702
+  Brent failures = 0
+
+independent Python:
+  U input = 13 PASS
+  V input = 14 PASS
+  W output task = 28 PASS
+  W raw transpose = 28 PASS
+  Brent identities checked = 729
+  failures = 0
+
+Node.js BigInt:
+  circuit maps match certificate = U:true, V:true, W:true
+  additions = {U:13,V:14,W:28}
+  identities checked = 729
+  failures = 0
+
+    The integer Brent check is the proof of correctness. Since the identities hold over Z, all products
+retain the order Lr (A)Rr (B), and the remaining operations are addition and additive inverse, the
+same program is valid over every associative ring, including noncommutative rings. Numerical or
+randomized tests are not needed for this conclusion.
+
+
+7     Statement on AI-assisted discovery
+This result arose from a human-directed investigation conducted by a primary AI agent using
+OpenAI GPT-5.6 Sol, with bounded search, verification, and review tasks delegated to additional
+agents. The original objective was to search for an exact rank-22 decomposition of the 3 × 3
+matrix-multiplication tensor. During that broader search, the Codex agents examined recent rank-23
+schemes and the mechanisms by which their additive costs had fallen. The human researcher then
+redirected the investigation toward lessons exposed by those experiments: first asking whether a
+sub-56 circuit could be obtained, and later asking about still lower additive targets under explicit
+time and compute budgets.
+    Within that direction, the primary AI agent selected and implemented the circuit searches,
+identified the opportunity in Perminov’s cr58_cn122 tensor, synthesized the 13- and 14-addition
+factor circuits, applied the transposition principle to obtain the 28-addition output circuit, generated
+the frozen certificate and independent verifiers, and prepared the initial manuscript. The human
+researcher supplied the mathematical objective and acceptance criteria, directed changes of emphasis,
+imposed resource limits, and evaluated the significance of intermediate results.
+    The tensor decomposition itself was already public and is credited above. The new claim is
+the linear schedule and its fixed-tensor optimality certificate. Because AI systems participated
+materially in discovery, programming, verification design, and drafting, every correctness claim
+is made reproducible through exact integer data and independently implemented checks. The
+disclosure is not offered as a substitute for those checks: the mathematical certificate is the 729
+exact identities, and the operation count follows from the printed straight-line program.
+
+
+
+                                                   8
+References
+ [1] Gal Beniamini, Nathan Cheng, Olga Holtz, Elaye Karstadt, and Oded Schwartz. “Sparsifying
+     the Operators of Fast Matrix Multiplication Algorithms.” arXiv:2008.03759, 2020.
+
+ [2] Richard P. Brent. Algorithms for Matrix Multiplication. Stanford Computer Science Report
+     STAN-CS-70-157, 1970.
+
+ [3] Peter Bürgisser, Michael Clausen, and M. Amin Shokrollahi. Algebraic Complexity Theory.
+     Springer, 1997.
+
+ [4] Elaye Karstadt and Oded Schwartz. “Matrix Multiplication, a Little Faster.” Journal of the
+     ACM 67(1):1–31, 2020.
+
+ [5] Julian D. Laderman. “A Noncommutative Algorithm for Multiplying 3 × 3 Matrices Using 23
+     Multiplications.” Bulletin of the American Mathematical Society 82(1):126–128, 1976.
+
+ [6] Erik Mårtensson and Paul Stankovski Wagner. “The Number of the Beast: Reducing Additions
+     in Fast Matrix Multiplication Algorithms for Dimensions up to 666.” In Proceedings of the
+     Conference on Applied and Computational Discrete Algorithms, pages 47–60. SIAM, 2025.
+     https://doi.org/10.1137/1.9781611979084.4.
+
+ [7] Erik Mårtensson, Paul Stankovski Wagner, and Joshua Stapleton. “A Rank 23 Algorithm for
+     Multiplying 3 × 3 Matrices with an Arithmetic Complexity of 59.” arXiv:2601.05272, 2025.
+
+ [8] Andrew I. Perminov. “A 58-Addition, Rank-23 Scheme for General 3 × 3 Matrix Multiplication.”
+     arXiv:2512.21980, 2025.
+
+ [9] Andrew    I.   Perminov.        FastMatrixMultiplication          repository,     https://
+     github.com/dronperminov/FastMatrixMultiplication,                   source         commit
+     98ba522db92b74f1f8c561a78038ff3091356d73.
+
+[10] Alexey V. Smirnov. “The Bilinear Complexity and Practical Algorithms for Matrix Multiplica-
+     tion.” Computational Mathematics and Mathematical Physics 53:1781–1795, 2013.
+
+[11] Joshua Stapleton. “A 60-Addition, Rank-23 Scheme for Exact 3 × 3 Matrix Multiplication.”
+     arXiv:2508.03857, 2025.
+
+[12] Yinqi Sun. “An Exact 56-Addition, Rank-23 Scheme for General 3 × 3 Matrix Multiplication.”
+     arXiv:2604.27645, 2026.
+
+[13] Volker Strassen. “Gaussian Elimination Is Not Optimal.” Numerische Mathematik 13:354–356,
+     1969.
+
+
+
+
+                                               9
+

@@ -1,0 +1,2407 @@
+Published as a conference paper at ICLR 2026
+
+
+
+
+T HE E FFECT OF ATTENTION H EAD C OUNT ON T RANS -
+FORMER A PPROXIMATION
+
+Penghao Yu                                            Haotian Jiang
+Department of Mathematics                             Institute for Functional Intelligent Materials
+National University of Singapore                      National University of Singapore
+penghaoyu@u.nus.edu                                   haotian@nus.edu.sg
+
+Zeyu Bao                                              Ruoxi Yu
+Department of Mathematics                             Center for Data Science
+National University of Singapore                      Peking University
+zeyu@u.nus.edu                                        yuruoxi@stu.pku.edu.cn
+
+Qianxiao Li
+Department of Mathematics
+Institute for Functional Intelligent Materials
+National University of Singapore
+qianxiao@nus.edu.sg
+
+
+
+                                            A BSTRACT
+         Transformer has become the dominant architecture for sequence modeling, yet a
+         detailed understanding of how its structural parameters influence expressive power
+         remains limited. In this work, we study the approximation properties of transform-
+         ers, with particular emphasis on the role of the number of attention heads. Our
+         analysis begins with the introduction of a generalized D-retrieval task, which we
+         prove to be dense in the space of continuous functions, thereby providing the basis
+         for our theoretical framework. We then establish both upper and lower bounds on
+         the parameter complexity required for ϵ-approximation. Specifically, we show that
+         transformers with sufficiently many heads admit efficient approximation, whereas
+         with too few heads, the number of parameters must scale at least as O(1/ϵcT ), for
+         some constant c and sequence length T . To the best of our knowledge, this con-
+         stitutes the first rigorous lower bound of this type in a nonlinear and practically
+         relevant setting. We further examine the single-head case and demonstrate that
+         an embedding dimension of order O(T ) allows complete memorization of the in-
+         put, where approximation is entirely achieved by the feed-forward block. Finally,
+         we validate our theoretical findings with experiments on both synthetic data and
+         real-world tasks, illustrating the practical relevance of our results.
+
+
+1   I NTRODUCTION
+The transformer architecture (Vaswani et al., 2017) has become the foundation of modern sequence
+modeling, driving progress in natural language processing (Devlin et al., 2019; Brown et al., 2020),
+computer vision (Dosovitskiy et al., 2021), and multi-modal learning (Radford et al., 2021). Its
+ability to scale has enabled breakthroughs such as BERT, GPT, and ViT, making it the dominant
+paradigm across domains. Despite this remarkable empirical success, the theoretical principles un-
+derlying transformer expressivity remain incomplete. In particular, while universal approximation
+results establish that transformers can approximate arbitrary sequence-to-sequence mappings (Yun
+et al., 2020a; Pérez et al., 2021), much less is known about how their structural hyperparameters
+influence approximation efficiency.
+Among transformer hyperparameters, the number of attention heads plays a central role. In practice,
+large models often adopt head counts such as 32, 64, or 128 (e.g., Devlin et al. (2019); Dosovitskiy
+et al. (2021); Touvron et al. (2023); Jiang et al. (2023); Grattafiori et al. (2024) see Table 10 for
+
+
+                                                 1
+Published as a conference paper at ICLR 2026
+
+
+
+
+more ), yet this choice is largely heuristic: there is no principled understanding of how many heads
+are needed for a given task, nor of the costs incurred when the head count is insufficient. Theoreti-
+cal progress on this question has so far been limited. Most existing results focus on upper bounds,
+showing that transformers with sufficiently many heads or with extremely large embedding dimen-
+sion in the single-head case can achieve universal approximation or good approximation rate, but
+offering little insight into the limitations that arise when the head count is insufficient. Moreover,
+many analyses rely on strong simplifications—such as restricting to linear embeddings, isolating the
+attention block, or linearizing the architecture. While these assumptions make the problem more
+tractable, they severely restrict the model’s expressive power and prevent the derivation of rigorous
+lower bounds in realistic nonlinear settings.
+In this work, we address this gap by analyzing single-layer transformers on sequence-to-vector tasks.
+To this end, we introduce a new function class, the generalized D-retrieval tasks, which we design
+as a structured but expressive family motivated by retrieval problems. Each coordinate is defined
+by z̄i (XT ) = mint∈Si fi (x(t)), i = 1, . . . , D for subsets Si ⊆ [T ], and the overall target takes
+the form H(XT ) = F0 (z̄1 (XT ), . . . , z̄D (XT )). By construction, this class extends retrieval-style
+problems while being dense in the space of continuous sequence-to-vector mappings, ensuring that
+results obtained in this setting reflect general approximation behavior.
+The central challenge arises when the number of heads h is smaller than the intrinsic dimension
+D of the target. In this case, multiple coordinates zi (XT ) must be represented by the same head,
+creating an information bottleneck: the attention layer maps distinct sequences to nearly indistin-
+guishable representations, forcing the feed-forward network to perform the separation. We show that
+overcoming this bottleneck requires parameter growth exponential in the sequence length T , namely
+O(1/ϵcT ) parameters for ϵ-accuracy, thus establishing the first rigorous lower bounds for transform-
+ers in nonlinear settings. In contrast, when h ≥ D, heads can specialize to distinct coordinates zi ,
+eliminating the bottleneck and enabling efficient approximation.
+Our results advance the theoretical understanding of attention by showing, that insufficient head
+count provably limits expressivity in realistic regimes. Experiments on both synthetic tasks and
+real-world retrieval data confirm that the predicted scaling laws persist in practice.
+
+Contributions.    Our main contributions are as follows:
+First, we establish the first rigorous lower bounds for transformers in nonlinear settings, showing
+that when h < D, parameter complexity grows exponentially with sequence length.
+Second, we provide constructive upper bounds, proving that h ≥ D enables efficient approximation
+with parameter growth independent of sequence length T .
+Third, in the memorization regime, single-head transformers with embedding dimension n ≥ T d
+approximate by memorizing sequences, with the complexity residing in the feed-forward block.
+
+
+2   R ELATED W ORK
+
+Several works have studied the approximation and expressivity properties of transformers. The uni-
+versal approximation property was first established in Yun et al. (2020a), and later extended to trans-
+formers with sparse attention matrices in Yun et al. (2020b). The approximation rate of single-layer
+transformers with one head was analyzed in Jiang & Li (2024). Amsel et al. (2024) investigated
+how the rank of the attention matrix influences expressivity for a specific nearest-neighbor target
+can be constructed. They showed that when the rank is insufficient, the number of heads required
+for approximation grows exponentially, independent of sequence length. In a related direction,
+Bhojanapalli et al. (2020) argued that setting the rank of the attention matrix equal to the sequence
+length enhances expressivity. Beyond finite-dimensional settings, Takakura & Suzuki (2023) consid-
+ered sequences of infinite dimension, characterizing approximation rates in terms of target function
+smoothness. Similarly, Wang et al. (2024) studied special classes of target functions and demon-
+strated that approximation error scales polynomially with the number of heads. In addition to these
+approximation-theoretic results, several works have investigated broader notions of expressivity.
+Dehghani et al. (2019); Pérez et al. (2021) established the Turing completeness of transformers,
+and Giannou et al. (2023) showed that transformers can represent arbitrary computer programs in
+
+
+                                                   2
+Published as a conference paper at ICLR 2026
+
+
+
+
+a looped setting. Finally, Mahdavi et al. (2023) examined memorization capacity, proving that the
+number of samples that can be stored scales linearly with the number of heads.
+
+3    P RELIMINARIES
+
+Input and Output      We consider the input space
+                               XT = x(s) ∈ [0, 1]d : s ∈ [T ] ,
+                                      
+                                                                                                   (1)
+where [T ] = {1, . . . , T }. We call T the length of the input sequence. The output is a single vector
+y ∈ Rl , where l is independent of T and specified by the task.
+For example, in a text retrieval task one may take d to be the max number of tokens per candidate,
+T the number of candidates, and l the size of the output representation.
+
+Input Representation.     Each token is mapped to an E-dimensional vector by a trainable encoder
+                         Pϕ : [0, 1]d × [T ] → RE ,         (x, s) 7→ Pϕ (x, s),
+which jointly incorporates the content x and its position s. Given XT = {x(s)}Ts=1 ∈ XT , the
+embedded sequence is
+
+                           X̂T = { x̂(s) = Pϕ (x(s), s) ∈ RE : s ∈ [T ] }.                         (2)
+This formulation subsumes common designs where Pϕ combines a content embedding with either
+learned or deterministic positional encoding.
+For example, if Emb(x) is a content embedding map and p(t) a positional code, then common
+schemes correspond to
+                          Pϕ (x(t), t) = Emb(x(t)) + p(t)         (additive PE),
+or                                                         
+                       Pϕ (x(t), t) = Emb(x(t)), p(t)          (concatenated PE).
+Following common practice, we append a trainable classification token ĉ0 ∈ RE to the sequence.
+The final input to the transformer is
+
+                            X̂[T ] = {x̂(1), . . . , x̂(T ), ĉ0 } ∈ RE×(T +1) ,                   (3)
+and the output ŷ is taken from the (T +1)-th position corresponding to ĉ0 .
+
+Transformer Hypothesis Class With the input space and embedding defined, we then formulate
+the transformer hypothesis space.
+We consider a single-layer transformer based on the standard architecture (Vaswani et al., 2017),
+with two modifications introduced for analytical simplicity. Firstly, we omit layer normalization
+to simplify the analysis, while acknowledging its practical importance, and we conjecture that our
+key lower bound (Theorem 2 (2)) still holds when layer normalization is present. Secondly, we
+exclude residual connections outside the feed-forward network. In the single-layer sequence-to-
+vector setting, where the output is read from a designated classification token, the residual branch
+can be merged into the feed-forward transformation by reparameterization, thus these likewise do
+not alter the expressive power of the architecture.
+For an h-head, single-layer transformer, let n denote the embedding dimension per head and E =
+nh the total embedding dimension. The output is
+                                             T
+                                             X                                     
+                                         h
+                                                σ (WQ,i ĉ0 )⊤ WK,i x̂(t) WV,i x̂(t) ,
+                                                                        
+     ŷ = Ĥ(X̂[T ]) = F̂ ĉ0 + WO Concati=1                                                       (4)
+                                                   t=1
+
+where for each head i, WQ,i , WK,i ∈ Rn×E are the query/key projection matrices, WV,i ∈ Rn×E
+is the value projection, WO ∈ RE×E is the output projection applied to the concatenated heads, and
+
+
+                                                     3
+Published as a conference paper at ICLR 2026
+
+
+
+
+F̂ : RE → Rl is a feed-forward network which we call it the feed-forward block. The softmax with
+scaling factor β is defined by
+                                                     
+                                          exp β ρ(t)
+                             σ[ρ](t) = PT                ,    β > 0.                        (5)
+                                                       ′
+                                        t′ =1 exp β ρ(t )
+and β > 0 may be chosen arbitrarily large in order to make the softmax attention mechanism
+approximate a hardmax.
+We denote this family by
+                                           H(h, n, d, T, M ),                                       (6)
+the class of single-layer transformers with h heads, per-head embedding dimension n, input dimen-
+sion d, sequence length T , and parameter count M . Each H ∈ H(h, n, d, T, M ) is a mapping
+                                           H : Rd×T → Rl ,
+implemented by the encoder Pϕ : [0, 1]d × [T ] → Rnh , concatenation of the classification token
+ĉ0 , a multi-head attention layer with projections {WQ,i , WK,i , WV,i }hi=1 , WO , and a feed-forward
+network F̂ : Rnh → Rl . Thus H has the form equation 4, with parameter count k referring to the
+weights and biases in FFNs (Pϕ , F̂ ).
+
+Approximation Problem With the hypothesis class specified, we now formalize the approxima-
+tion problem, which provides the framework for analyzing the expressive power of transformers.
+Definition 1 (ϵ-approximation). Let XT ⊂ Rd×T be a compact domain, and let F : XT → Rl be a
+target function. We say that the hypothesis class H(h, n, d, T, M ) ϵ-approximates F on XT if there
+exists Ĥ ∈ H(h, n, d, T, M ) such that
+                                  sup    ∥Ĥ(XT ) − F (XT )∥∞ < ϵ.
+                                XT ∈XT
+
+
+4   G ENERALIZED D-R ETRIEVAL TASKS
+Target functions.    To motivate our construction, consider a simple one-dimensional example:
+                         XT = { XT = (x(1), . . . , x(T )) : x(t) ∈ [0, 1] },
+with target
+                              H(XT ) = max x(t) + min x(t).                                        (7)
+                                           1≤t≤T           1≤t≤T
+This task requires the model to extract two distinct features from the sequence—the maximum and
+the minimum—before combining them. It can thus be viewed as a retrieval problem with two
+independent features being aggregated.
+This example illustrates the broader idea behind our target class: retrieval-style problems where mul-
+tiple salient features must be identified and combined. We now formalize this intuition by defining
+the family of generalized D-retrieval tasks.
+
+Mathematical Formulation Formally, for each i = 1, . . . , D, let fi : [0, 1]d → [0, 1] be C 2 and
+define
+                                                                                1
+                         z̄i (XT ) = min fi (x(t)),           Si ⊆ [T ], |Si | ≥ T,             (8)
+                                          t∈Si                                  4
+so that z̄(XT ) = (z̄1 (XT ), . . . , z̄D (XT )) ∈ [0, 1]D . The target is then
+                                                                    
+                                            H(XT ) = F0 z̄(XT ) ,                               (9)
+where F0 : [0, 1]D → R is C 1 . For vector-valued targets H : [0, 1]d×T → Rl defined with the same
+functions fi , subsets Si , and an outer map F0 : [0, 1]D → Rl , the extension is applied coordinate-
+wise, since each coordinate function of F0 can be approximated independently. Therefore, it suffices
+                                                     d,T
+to consider the scalar-valued case. We denote by FD      the class of all such functions H.
+Related sparse sequence-to-sequence retrieval tasks, such as the q-sparse token regression (qSTR)
+model of (Mousavi-Hosseini et al., 2025), where each output position depends on at most q relevant
+input tokens, can be viewed as sequence-to-sequence analogues of our formulation. Their results on
+the sample complexity of single-layer Transformers with at least q heads are complementary to our
+approximation-theoretic guarantees in the generalized D-retrieval setting.
+
+
+                                                   4
+Published as a conference paper at ICLR 2026
+
+
+
+
+Assumptions on the target class For the theoretical analysis to be tractable we impose the fol-
+lowing conditions:
+Assumption 1 (Model constraints). The model constraints are as follows:
+(1.1) The embedding Pϕ satisfies
+                             ∥Pϕ (x(s), s)∥2 ≤ 1,         ∀ s ∈ [T ], XT ∈ XT ,
+ensuring embedded inputs remain uniformly bounded.
+(1.2) The post-attention mapping F̂ is a two-layer feed-forward network with 1-Lipschitz activation,
+hence a universal approximator on compact domains.
+(1.3) All weights in F̂ and entries of the attention matrices {WQ,i , WK,i , WV,i }, WO are bounded
+in magnitude by 1, ensuring stability of the model.
+Assumption 2 (Target class constraint). The target functions defined in equation 9 satisfy the fol-
+lowing:
+(2.1) Each fi : [0, 1]d → [0, 1] attains its unique global minimum zi at a point x(i) ∈ [0, 1]d .
+(2.2) The minimizers {x(i) }D  i=1 are pairwise distinct.
+                        2    (i)
+(2.3) The Hessian ∇x fi (x ) is positive definite for all i = 1, . . . , D.
+(2.4) The gradient ∇z F0 (z1 , . . . , zD ) has all coordinates strictly nonzero.
+Remark. Assumption 2 excludes only degenerate cases while preserving broad generality for both
+the functions fi and the outer map F0 . More specifically: Assumptions (2.1) and (2.4) ensure that
+each fi behaves regularly around its minimizer. A degenerate example excluded by these assump-
+tions is fi (x) ≡ c0 for constant c0 , which is totally independent of the input; Assumption (2.2)
+requires distinct minimizers, which allows partitioning the space into D disjoint basins around each
+minimizer x(i) . A degenerate example excluded by this assumption is f1 = f2 = · · · = fD ; As-
+sumption (2.3) enforces sensitivity of the target to small perturbations near the minimizers, ruling
+out trivial flat cases (such as F0 ≡ c0 for constant c0 ) where no meaningful separation can be made.
+
+Having introduced the generalized D-retrieval tasks, it remains to ask whether this family is suffi-
+ciently expressive. To address this, we now establish the universality of the target class: the family
+is dense in the space of continuous sequence-to-vector mappings.
+Theorem 1 (Density of the target class). For fixed d, T , the family {FD }∞ D=1 is dense in C(XT ).
+That is, for every F ∈ C(XT ) and every ϵ > 0, there exists D and f ∈ FD such that
+                                     max |F (X) − f (X)| ≤ ϵ.
+                                      X∈XT
+
+The proof is deferred to Appendix A.1. This density property highlights that our specially designed
+target family is not overly restrictive; rather, it forms a sufficiently general class to capture arbitrary
+continuous sequence-to-vector mappings. Beyond density, we show that D is indeed the intrinsic
+dimension of this target, which means that it is the unique D ≪ T for which the target H can be
+represented in the generalized D-retrieval task form.
+Corollary 1 (Uniqueness of intrinsic dimension). If task H can be represented by ({fi , Si }D     i=1 , F0 )
+                                                                                                    1
+
+
+and ({f˜i , S̃i }i=1
+                 D 2                                                          1
+                     , F̃0 ), satisfying Assumption 1 and 2 with D12 + D22 ≤ 50 T , then D1 = D2 .
+This corollary justifies that D comes from the intrinsic property of the target and is invariant across
+its form of representation. The proof is deferred to Appendix A.2
+
+5    A PPROXIMATION RATE OF G ENERALIZED D-R ETRIEVAL TASKS
+Theorem 1 establishes that the generalized D-retrieval tasks form a dense family in the space of
+continuous sequence-to-vector functions. The next step is to analyze the efficiency with which trans-
+formers approximate these functions. To this end, we begin by stating two standard approximation
+assumptions regarding how well the fundamental building blocks of the target can be approximated.
+Assumption 3 (Approximation of components). We assume the following approximation properties
+hold.
+(A1) There exist constants C1 > 0 and γ > 0 such that for every δ > 0, the function F0 : [0, 1]D →
+R can be δ-approximated by a two-layer feed-forward network Φδ of width at most C1 /δ γ , i.e.,
+                                    sup |F0 (x) − Φδ (x)| ≤ δ.
+                                     x∈[0,1]D
+
+
+                                                     5
+Published as a conference paper at ICLR 2026
+
+
+
+
+(A2) There exist constants C2 > 0 and γ > 0 (possibly different from (A1)) such that for each
+i = 1, . . . , D and every δ > 0, the function fi : [0, 1]d → [0, 1] can be δ-approximated by a
+two-layer feed-forward network Ψi,δ of width at most C2 /δ γ , i.e.,
+                                    sup |fi (x) − Ψi,δ (x)| ≤ δ.
+                                   x∈[0,1]d
+
+These assumptions are reasonable: by the classical result of (Cybenko, 1989), two-layer networks
+can approximate continuous functions on compact domains. In particular, if the Barron norm is
+finite, one may take γ = 2 (Barron, 1993); even in the worst case, setting γ = max(d, D) yields
+approximation rates comparable to uniform grid discretizations, which still suffices for our analysis.
+We now present our main theoretical result. It establishes upper and lower bounds on the approxi-
+mation rates of transformers within the generalized D-retrieval framework. In particular, the lower
+bound in part (2) provides the first rigorous evidence that insufficient head count h < D leads to
+exponential parameter complexity, revealing a fundamental expressivity bottleneck.
+Theorem 2 (Approximation rates of transformers). Fix d, T . Under Assumption 3, the following
+                          d,T
+hold for any target H ∈ FD    :
+
+    (1) Sufficient expressivity with D heads. For h = D and embedding dimension n = 2 per
+                                                                C
+        head, there exists a constant Cd,D,T > 0 such that ∀M > d,D,T
+                                                                  ϵγ  . the hypothesis class
+        H(h, n, d, T, M ) ϵ-approximates H.
+    (2) Lower bound with s < D heads. For h = s < D, define
+                                       ( 1 T − s − D + 1)
+                                  k= 4                    − 1,
+                                           (n + 1)s + 1
+        then
+                                                                            = Ω ϵ1k .
+                                                                                  
+                    min M : H(h, n, d, T, M ) ϵ-approximates H
+     (3) Single-head large embedding dimension. For h = 1 and per-head embedding dimension
+         n ≥ T d, if the feed-forward block is a 5-layer ReLU neural network, then there exists a
+                                                      C
+         constant Cd,D,T > 0 such that for all M > ϵd,D,T
+                                                        1+γ , the hypothesis class H(h, n, d, T, M )
+         can ϵ-approximate H.
+Remark. We clarify the precise role of the assumptions and constants in Theorem 2.
+(1)Theorems 2 (1) and 2 (3) require only Assumption 3, while Theorem 2 (2) relies only on As-
+sumptions 1 and 2.
+(2) The constant in Theorem 2 can be made explicit as Cd,D,T = Cd,D (rT )−αd,D T ,where r > 0
+is determined by the local behavior of the functions fi around x(i) and of F0 , and αd,D depends
+only on d and D. This form is valid in the regime d, D ≪ T ≪ 1/ϵ.
+(3) The exponent coefficients in Theorems 2 (1) and 2 (3) differ because, in Theorem 2 (3), the
+network F̂ also needs Ω(T /ϵ) parameters to approximate the “max-like” operation. This yields a
+                              1
+bound of the form M ≤ ϵ max(1,γ)  , and for notational simplicity we write M ≤ 1/ϵ1+γ .
+We provide the detailed proof in Appendix A.2. We also justify the tightness of Theorem 2 (2) in
+Appendix A.2.2.
+Theorem 2 highlights how approximation efficiency depends on head count: enough heads allow
+specialization, too few force inefficient compression, and a single large head can rely on memoriza-
+tion. To illustrate these cases concretely, we now revisit the toy example from equation 7 and discuss
+how each part of the theorem works in that setting.
+
+Case (1): h ≥ D heads. Theorem 2 (1) shows that when the number of heads matches the intrinsic
+dimension D of the target, the transformer can allocate one head per component feature, allowing
+each head to specialize and leaving the feed-forward block to aggregate their outputs. This yields
+efficient approximation with O(M −1/γ ) error for parameter count M , independent of sequence
+length T .
+In the toy example with D = 2, one head naturally tracks the maximum and the other the minimum,
+so the task is solved directly without incurring inefficiency. This illustrates how having “enough
+heads” removes the unfavorable scaling in T and explains the practical advantage of multiple heads
+beyond universal approximation results (e.g., Kajitsuka & Sato (2023)).
+
+
+                                                  6
+Published as a conference paper at ICLR 2026
+
+
+
+
+Case (2): h < D heads. Theorem 2 (2) establishes that when the number of heads is smaller than
+the intrinsic dimension D, the parameter count required to achieve a given accuracy can grow expo-
+nentially in the sequence length T . This lower bound highlights why insufficient heads lead to severe
+inefficiency. Intuitively, each head can be viewed as specializing in one coordinate of the minima
+structure in equation 9. When h < D, a single head must encode multiple roles simultaneously.
+In the toy example with D = 2, one head is forced to capture both the maximum and the minimum
+across all T positions. Since softmax attention only produces weighted averages, the head must
+effectively encode information from multiple sequence elements simultaneously. As T increases,
+the number of relevant elements to distinguish grows linearly with T , yet they are compressed into
+an n-dimensional vector whose size does not scale with T . The feed-forward block must then
+disentangle these increasingly entangled representations, which requires parameters exponential in
+T . This explains why the parameter requirement scales as Ω(1/ϵcT ) and why the scaling improves
+dramatically once h ≥ D.
+Theorem 2 (2) is proved with the following idea: (i) each head selects its most responsive locations
+(yj , tj ) in D disjoint minima basins around x(i) ; (ii) because s < D, there is at least one segment
+Gi ⊂ B(x(i) , r) that no head focuses on. We then consider the segment Gi in it; (iii) along this
+segment (suppose it is G1 ), we construct many candidate subsequences and, by a pigeonhole ar-
+gument, obtain two subsequences Z1 , Z2 whose post-attention representations are almost identical
+but whose contribution to f1 differs; (iv) these subsequences are then embedded into full sequences
+W1 , W2 , which the target function separates by at least 3ϵ, while the attention block maps them
+within O(ϵk+1 ), forcing a large feed-forward network.
+The intuition by which we derive the large network is different from geometric arguments in existing
+works such as (Yehudai & Shamir, 2019). We directly made use of the fact that the network must be
+either large or have large parameters to approximate a function with large Lipschitz norm.
+
+Case (3): single head with large embedding. Theorem 2 (3) shows that when the embedding
+dimension scales with the sequence length, E = n ≥ T d, the model can encode the entire sequence
+into the classification token ĉ0 . Concretely, each input can be embedded as et ⊗ x(t) ∈ RT d , where
+et is the t-th standard basis vector, so that trivial attention aggregates to
+                                     1                               T
+                                     T (x(1), . . . , x(T )) ∈ [0, 1] ,
+
+which preserves the full sequence. The feed-forward block F̂ can then recover the target relation
+efficiently. Unlike memorization of training data (Mahdavi et al., 2023), this mechanism can gener-
+alize since it captures the relation itself. Moreover, approximating extrema functions such as max
+and min with a shallow ReLU network is straightforward (see Lemma 9), requiring width O(T /ϵ)
+for ϵ accuracy. However, this regime is impractical, as it demands embedding dimensions that grow
+linearly with T .
+As deeper transformer are more commonly used in practice, here we conjecture the extension of
+Theorem 2 (2) onto the L-layer case.
+Conjecture 1 (Multilayer transformer case). A necessary condition for efficient approximation is
+L · h ≥ D. When the head number is insufficient across layers, we conjecture the lower-bound
+scaling for some constants aL , bL > 0 depending only on depth L to be
+                                                                   
+                                                               T bL
+                            log(ParamCount) = Ω | log ϵ| · aLnh       ,
+
+Experiments on the synthetic dataset in Section 6.1 with 2-layer transformer with no positional
+encoding and no layer norm has also verified this transition at D = L · h. (See Table 5 in Appendix)
+
+6    E XPERIMENTS
+
+Theorem 2 provides theoretical insights into how the approximation ability of transformers depends
+on the number of heads. In this section, we illustrate these insights empirically. We begin with syn-
+thetic tasks that mirror the structure of the generalized D-retrieval tasks, and then turn to real datasets
+(MS MARCO and CIFAR-10) to examine whether similar scaling behaviors arise in practice.
+
+
+                                                     7
+  Published as a conference paper at ICLR 2026
+
+
+
+
+  6.1                          N UMERICAL VERIFICATION OF T HEOREM 2 WITH SYNTHETIC DATASET
+
+  We design a synthetic task aligned with the target class analyzed in Theorem 2. Given a sequence
+  X = {x(1), . . . , x(T )} of length T with x(t) ∈ R4 , the output is
+                                                                                             4
+                                                                                             X
+                                                                             y=                        max a⊤
+                                                                                                            i x(t),
+                                                                                                     1≤t≤T
+                                                                                             i=1
+                                                4
+  where a1 , . . . , a4 ∈ R are fixed. Inputs are sampled i.i.d. from x(t) ∼ N (0, I4 ). For T ∈
+  {8, 16, 32, 64, 128} we generate 8000 training and 2000 validation examples.
+  On this task, we evaluate single-layer transformers with head numbers h ∈ {1, 2, 3, 4, 5} and fixed
+  per-head embedding dimension. Each x(t) is embedded via a two-layer ReLU MLP and concate-
+  nated with a trainable classification token c0 , after which a single-layer multi-head attention block
+  (without residuals or normalization) processes the sequence. A two-layer GELU MLP then outputs
+  the scalar prediction. Both MLPs have the same hidden dimension N .
+  Then for each (h, T ), models are trained under multiple random seeds. We report the minimal
+  normalized mean squared error (NMSE) across seeds to reduce optimization noise and highlight
+  expressivity. NMSE, equivalent to 1 − R2 , corrects for the variance shrinkage of maxima as T
+  grows, thus enabling fair comparison across lengths. Further training details and explanations are
+  given in Appendix B.1.1.
+                        0.05
+                        0.04              Sequence Length (T)                                              H=3                                                            H=4
+Validation NMSE (Min)
+
+
+
+
+                                                    T=8
+                        0.03                        T=16
+                                                                                       4.0
+                                                                Log Hidden Dimension
+
+
+
+
+                                                                                                                               Log Hidden Dimension
+                        0.02                        T=32                                                                                              4.0
+                                                    T=64                                                                                                                                           T
+                        0.01                        T=128                              3.5                                                            3.5                                          T=8
+                                                                                                                                                                                                   T=16
+                                                                                                                                                                                                   T=32
+                                                                                       3.0                                                            3.0                                          T=64
+                                                                                                                                                                                                   T=128
+                    2e-4                                                               2.5                                                            2.5
+                    0.00        1    2     3        4       5
+                                    Number of Heads                                          3.8         3.6       3.4       3.2                            6.8     6.6   6.4    6.2   6.0   5.8
+                                                                                                   Log Min Validation NMSE                                        Log Min Validation NMSE
+         (a) NMSE vs. Number of Heads h.                                                                     (b) Log N vs. Log Accuracy (NMSE)
+
+  Figure 1: Results on the synthetic example. (a) NMSE vs. number of heads h for sequence lengths
+  T ∈ {8, 16, 32, 64, 128}, hidden dimension fixed at N = 32. Note that there is a transition at h = 4.
+  (A table of mean and variance values corresponding to these curves is provided in Table 2.) (b) Log
+  Hidden Dimension N vs. Log Accuracy for different sequence lengths T . The parameter count k
+  for the MLPs change linearly with N . (Plots for h = 1 and h = 2 are in Figure 4.)
+
+  Figure 1a shows minimal validation NMSE versus head number h across sequence lengths T . Per-
+  formance improves monotonically with h and exhibits a clear transition near the intrinsic dimension
+  D = 4. For h < D, NMSE grows with T , as limited heads must encode multiple extrema and
+  the FFN becomes inefficient. Once h ≥ D, curves flatten across T , indicating that heads special-
+  ize to different coordinates and the FFN aggregates them very effectively. Normalization by NMSE
+  ensures comparability across T , despite the increasing concentration of the max-of-Gaussians target.
+  Figure 1b highlights a phase transition between h = 3 and h = 4, with h = D = 4 equal to
+  the intrinsic dimension of the target. When h ≤ 3, the negative log NMSE scales approximately
+  linearly with the log parameter count (proportional to the MLP hidden dimension N ), in agreement
+  with Theorem 2 (2). Moreover, for a fixed parameter count, larger T yields higher NMSE (worse
+  approximation). Equivalently, as indicated by the fitted scaling lines, achieving the same error re-
+  quires larger parameter counts when T increases, in line with Theorem 2 (2). In contrast, for h = 4
+  these trends change qualitatively. Validation error reaches the order of 10−6 , indicating near-perfect
+  generalization, yet the slope with respect to parameter count reverses: larger MLPs yield slightly
+  higher validation NMSE, a signature of tiny overfitting. The dependence on T also changes in this
+  regime; see Remark B.1.1 in Appendix for details.
+  We also conducted experiments on synthetic data with the widely used scheme of fixing E = nh =
+  32 constant(For h = 3, 5, we choose per-head embedding dimension to be ⌈32/h⌉, and total embed-
+  ding dimension becomes E = 33, 35. See Table 3 in Appendix for details), as well as experiments
+
+
+                                                                                                         8
+Published as a conference paper at ICLR 2026
+
+
+
+
+on synthetic datasets with D = 3 (See Table 4 in Appendix for details). Both of the above ex-
+periments demonstrate similar trends to the D = 4 experiments, implying the robustness of our
+results.
+
+6.2   E XPERIMENTS ON R EAL DATASETS
+
+We conduct two additional experiments on real datasets to assess the practical relevance of our the-
+oretical findings. The first is a text retrieval task based on MS MARCO, and the second is an image
+classification task based on CIFAR-10. As there is no natural NMSE-like metric on retrieval tasks
+and accuracy is most widely used, we focus on training accuracy to isolate architectural expressivity
+from issues related to optimization or data scarcity. For completeness, we also report test accuracy
+for both experiments in Table 7 and 9 in Appendix. The experiments examine whether the phase
+transition around the intrinsic dimension D, predicted by Theorem 2, also manifests in practice.
+
+MS MARCO (text retrieval). We construct retrieval-style datasets from the MS MARCO passage
+ranking collection (Bajaj et al., 2016), where each query is paired with one positive passage and T −1
+mined hard negatives (T ∈ {8, 16, 32, 64}). We train a two-layer transformer encoder with per-head
+embedding dimension fixed at 32, varying the number of heads across {1, 2, 4, 6, 8, 10, 12, 14, 16}.
+Input text is tokenized using the BERT tokenizer, and word, positional, and segment embeddings
+from pretrained BERT (Devlin et al., 2019) are kept frozen. These 768-dimensional embeddings are
+linearly projected to the embedding size E = heads × 32, after which only the projection and trans-
+former layers are trained. Full dataset construction and training details are given in Appendix B.2.
+
+CIFAR-10 (image classification). We further evaluate on the CIFAR-10 dataset (Krizhevsky,
+2009) using a four-layer Vision transformer (ViT) (Dosovitskiy et al., 2021). Each image of size
+32 × 32 is divided into non-overlapping 8 × 8 patches (patch size = 8), which are linearly em-
+bedded. The transformer encoder has per-head embedding dimension fixed at 16, and we vary the
+number of heads across h ∈ {1, 2, 4, 8, 10, 11, 12, 13, 14, 16, 20, 24}. To vary the sequence length,
+we extend the border with interpolation around each image to enlarge its side length, after which the
+                                              2
+sequence length is given by image  side length
+                                patch size        + 1, including the classification token. Figure 6 shows
+some of the examples. Full dataset preprocessing and training details are provided in Appendix B.3.
+
+Result analysis. Both experiments exhibit the same qualitative trend as in the synthetic setting.
+Figure 2a shows that in the text retrieval experiment, when h < 12, accuracy declines as the se-
+quence length T increases, consistent with Theorem 2 (2). Once h > 12, this dependence on
+T disappears, and performance remains stable. Taking Err(h, T ) = 1 − Accuracy(h, T ) as er-
+ror, by using cT β exp(αh/T δ ) to approximate (Err(h, T )) in log scale under MAE and drop-outs
+(h = 1, 12, 14, 16 are dropped out as outliers, δ = 0.25 > 0, α = −1.40 < 0), figure 2b illustrates
+that when h < 12, − log(Err(h, T )) ∝ h/T δ , highly consistent with the order in Theorem 2 (2)
+under fixed parameter count M . The flattening of curves after h > 12 is also consistent with theory.
+
+                                                                           P at h = 10. Figures 2d
+Figure 2c shows similar trend in image classification, with intrinsic dimension
+and 2e illustrates weighted reversal score, calculated by R(h) = w1h T1 <T2 max((err(T1 ) −
+err(T2 )), 0) with normalization factor wh = maxT err(T ) − minT err(T ), detects the existence of
+longer T yielding smaller error for this head number h. Such phenomenon leads to positive R(h),
+and it also indicates phase transition as explained in remark B.1.1. Figure 2e further verified this.
+
+7     C ONCLUSION
+
+In this work we investigated the approximation properties of single-layer transformers. We first
+introduced a structured target family, the generalized D-retrieval task, that is broad enough to
+capture general sequence-to-vector mappings (Theorem 1). Within this setting, we analyzed
+how the approximation efficiency of transformers depends on architectural choices, especially
+the number of head. Our results indicate that having a sufficient number of heads leads to
+efficient approximation, while an insufficient number of heads forces the parameter count to
+grow exponentially with sequence length T . We also examined the single-head case, where large
+embedding dimension allows sequence memorization but shifts the complexity to the feed-forward
+
+
+                                                   9
+ Published as a conference paper at ICLR 2026
+
+
+
+
+                 100%                                                                                100
+Train Accuracy (%)   80%                                                                         10 1
+                                                                                                 10 2
+
+
+
+
+                                                                                         Log Error
+                     60%
+                                                          Seq Len (T)                            10 3 Seq Len (T)
+                     40%                                   T=8                                             T=8
+                                                           T=16                                  10 4
+                                                                                                           T=16
+                     20%                                   T=32                                  10 5      T=32
+                                                           T=64                                            T=64
+                      0%     2    4     6      8    10 12 14 16                                  10 6
+                                                                                                      1 2 4 6                     8    10 12 14 16
+                                      Number of Heads                                                                       Number of Heads
+ (a) Accuracy vs. Number of Heads for different                                            (b) Log(1-Accuracy) and its prediction (Text
+ T (Text Retrieval).                                                                       Retrieval)
+                     100
+Train Accuracy (%)
+
+
+
+
+                                                           Reversal Score                                               4
+
+
+
+
+                                                                                                           Reversal Score
+                                                                        4                                               3
+                     80                     Seq Len (T)
+                                                T=65
+                                                T=145                                                                   2
+                     60                         T=257                   2
+                                                T=577                                                                   1
+                     40                         T=1025
+                                                                        0                                               0
+                           24    8 10121416 20 24                           12 4   8 10121416 20 24                          1     2    3     4    5
+                            Number of Heads                                    Number of Heads                                   Number of Heads
+ (c) Train accuracy (%) vs. Number (d) Weighted Reversal score vs. (e) Weighted Reversal score vs.
+ of Heads (Image).                 Head Number (Image)             Head Number (Synthetic)
+
+ Figure 2: Experiments on real datasets. Training performance with different numbers of heads
+ h across different sequence lengths T . (a) Accuracy vs. number of heads for different T in text
+ retrieval; phase transition near h = 12. Mean and standard deviation see Table 6. MRR shows a
+ similar trend, see Fig. 5 in the appendix. (b) Phase transition for text retrieval. (c) Accuracy vs. num-
+ ber of heads for different T in image classification; phase transition near h = 10. Mean and standard
+ deviation see Table 8. (d) Weighted Reversal Score for Image Classification, err = 1 − Accuracy.
+ The plot becomes positive when h ≥ 10, indicating phase transition. (e) Weighted Reversal Score
+ for Synthetic Experiment, it becomes positive at h = 4, exactly the intrinsic dimension of the task.
+
+
+ block (Theorem 2). These findings clarify the roles played by head count in transformer expressivity.
+
+ Our experiments on both synthetic and real datasets reveal a non-trivial phase transition around the
+ intrinsic dimension D, consistent with theoretical analysis. When the number of heads is below
+ D, models exhibit higher error for the same parameter count as sequence length T increases. Once
+ the head count reaches or exceeds D, approximation rate becomes independent of sequence lengths
+ T . This transition is also observed in real-world datasets with deeper architectures, indicating that
+ the notion of intrinsic dimension is not only theoretical but also practically relevant. In particular,
+ beyond fully training models, analyzing head contributions early in training to estimate how many
+ heads meaningfully affect the output, or training multiple models with varying depths and head
+ counts while tracking how error scales with T are potential ways to probe the task’s intrinsic dimen-
+ sion. These experiments might demonstrate whether the inferred intrinsic dimension is stable across
+ architectures, thereby informing head-count selection and the head number to retain under pruning.
+
+ Limitations. We conclude by noting several limitations of this study. Firstly, although the ana-
+ lyzed target class is dense, the phenomena of interest are most naturally manifested in retrieval-style
+ tasks aligned with our setting. Secondly, our analysis is restricted to single-layer transformers;
+ while experiments on real datasets supports Conjecture 1 in deeper architectures, a rigorous multi-
+ layer theory remains open. Finally, the tradeoff between sequence memorization and pattern learn-
+ ing—observed for shorter sequences (cf. Remark B.1.1)—has not yet been established rigorously
+ and warrants further investigation.
+
+
+
+                                                                                    10
+Published as a conference paper at ICLR 2026
+
+
+
+
+ACKNOWLEDGMENTS
+
+This research is supported by the National Research Foundation, Singapore, under the NRF fel-
+lowship (project No. NRF-NRFF13-2021-0005). The computational work for this article was fully
+performed on resources of the National Supercomputing Centre, Singapore (https://www.nscc.sg).
+
+R EFERENCES
+Noah Amsel, Gilad Yehudai, and Joan Bruna. Quality over Quantity in Attention Layers: When
+  Adding More Heads Hurts. In The Thirteenth International Conference on Learning Representa-
+  tions, October 2024.
+Payal Bajaj, Daniel Campos, Nick Craswell, Li Deng, Jianfeng Gao, Xiaodong Liu, Rangan Ma-
+  jumder, Andrew McNamara, Bhaskar Mitra, Tri Nguyen, et al. Ms marco: A human generated
+  machine reading comprehension dataset. arXiv preprint arXiv:1611.09268, 2016.
+A.R. Barron. Universal approximation bounds for superpositions of a sigmoidal function. IEEE
+  Transactions on Information Theory, 39(3):930–945, May 1993. ISSN 1557-9654. doi: 10.1109/
+  18.256500.
+Srinadh Bhojanapalli, Chulhee Yun, Ankit Singh Rawat, Sashank Reddi, and Sanjiv Kumar. Low-
+  rank bottleneck in multi-head attention models. In International conference on machine learning,
+  pp. 864–873. PMLR, 2020.
+Tom Brown, Benjamin Mann, Nick Ryder, Melanie Subbiah, Jared D Kaplan, Prafulla Dhariwal,
+  Arvind Neelakantan, Pranav Shyam, Girish Sastry, Amanda Askell, et al. Language models are
+  few-shot learners. Advances in neural information processing systems, 33:1877–1901, 2020.
+G. Cybenko. Approximation by superpositions of a sigmoidal function. Mathematics of Con-
+  trol, Signals and Systems, 2(4):303–314, December 1989. ISSN 1435-568X. doi: 10.1007/
+  BF02551274.
+Mostafa Dehghani, Stephan Gouws, Oriol Vinyals, Jakob Uszkoreit, and Łukasz Kaiser. Universal
+ Transformers. In arXiv:1807.03819 [Cs, Stat], March 2019.
+Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova. BERT: Pre-training of Deep
+  Bidirectional Transformers for Language Understanding. arXiv:1810.04805 [cs], May 2019.
+Alexey Dosovitskiy, Lucas Beyer, Alexander Kolesnikov, Dirk Weissenborn, Xiaohua Zhai, Thomas
+  Unterthiner, Mostafa Dehghani, Matthias Minderer, Georg Heigold, Sylvain Gelly, Jakob Uszko-
+  reit, and Neil Houlsby. An Image is Worth 16x16 Words: Transformers for Image Recognition at
+  Scale. In International Conference on Learning Representations, 2021.
+Angeliki Giannou, Shashank Rajput, Jy-Yong Sohn, Kangwook Lee, Jason D. Lee, and Dimitris
+  Papailiopoulos. Looped Transformers as Programmable Computers. In Proceedings of the 40th
+  International Conference on Machine Learning, pp. 11398–11442. PMLR, July 2023.
+Aaron Grattafiori, Abhimanyu Dubey, Abhinav Jauhri, Abhinav Pandey, Abhishek Kadian, Ahmad
+  Al-Dahle, Aiesha Letman, Akhil Mathur, Alan Schelten, Alex Vaughan, et al. The llama 3 herd
+  of models. arXiv preprint arXiv:2407.21783, 2024.
+Albert Q. Jiang, Alexandre Sablayrolles, Arthur Mensch, Chris Bamford, Devendra Singh Chap-
+  lot, Diego de las Casas, Florian Bressand, Gianna Lengyel, Guillaume Lample, Lucile Saulnier,
+  Lélio Renard Lavaud, Marie-Anne Lachaux, Pierre Stock, Teven Le Scao, Thibaut Lavril, Thomas
+  Wang, Timothée Lacroix, and William El Sayed. Mistral 7b. arXiv preprint arXiv:2310.06825,
+  2023.
+Haotian Jiang and Qianxiao Li. Approximation Rate of the Transformer Architecture for Sequence
+  Modeling. In The Thirty-eighth Annual Conference on Neural Information Processing Systems,
+  2024.
+Jeff Johnson, Matthijs Douze, and Hervé Jégou. Billion-scale similarity search with gpus. IEEE
+   Transactions on Big Data, 7(3):535–547, 2019.
+
+
+                                               11
+Published as a conference paper at ICLR 2026
+
+
+
+
+Tokio Kajitsuka and Issei Sato. Are transformers with one layer self-attention using low-rank weight
+  matrices universal approximators? arXiv preprint arXiv:2307.14023, 2023.
+A. Krizhevsky. Learning Multiple Layers of Features from Tiny Images. In Technical Report 0,
+  2009.
+Sadegh Mahdavi, Renjie Liao, and Christos Thrampoulidis. Memorization capacity of multi-head
+  attention in transformers. arXiv preprint arXiv:2306.02010, 2023.
+Alireza Mousavi-Hosseini, Clayton Sanford, Denny Wu, and Murat A Erdogdu. When do trans-
+  formers outperform feedforward and recurrent networks? a statistical perspective. arXiv preprint
+  arXiv:2503.11272, 2025.
+Jorge Pérez, Pablo Barceló, and Javier Marinkovic. Attention is Turing-Complete. Journal of
+  Machine Learning Research, 22(75):1–35, 2021. ISSN 1533-7928.
+Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh, Sandhini Agarwal,
+  Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark, et al. Learning transferable visual
+  models from natural language supervision. In International conference on machine learning, pp.
+  8748–8763. PmLR, 2021.
+Stephen Robertson and Hugo Zaragoza. The Probabilistic Relevance Framework: BM25 and Be-
+  yond. Found. Trends Inf. Retr., 3(4):333–389, April 2009. ISSN 1554-0669. doi: 10.1561/
+  1500000019.
+Shokichi Takakura and Taiji Suzuki. Approximation and estimation ability of transformers for
+  sequence-to-sequence functions with infinite dimensional input. In International Conference on
+  Machine Learning, pp. 33416–33447. PMLR, 2023.
+Hugo Touvron, Thibaut Lavril, Gautier Izacard, Xavier Martinet, Marie-Anne Lachaux, Timothée
+  Lacroix, Baptiste Rozière, Naman Goyal, Eric Hambro, Faisal Azhar, et al. Llama: Open and
+  efficient foundation language models. arXiv preprint arXiv:2302.13971, 2023.
+Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N Gomez,
+  Łukasz Kaiser, and Illia Polosukhin. Attention is all you need. Advances in neural informa-
+  tion processing systems, 30, 2017.
+Mingze Wang et al. Understanding the expressive power and mechanisms of transformer for se-
+ quence modeling. Advances in Neural Information Processing Systems, 37:25781–25856, 2024.
+Gilad Yehudai and Ohad Shamir. On the power and limitations of random features for understanding
+  neural networks. Advances in neural information processing systems, 32, 2019.
+Chulhee Yun, Srinadh Bhojanapalli, Ankit Singh Rawat, Sashank J. Reddi, and Sanjiv Kumar. Are
+  Transformers universal approximators of sequence-to-sequence functions? In arXiv:1912.10077
+  [Cs, Stat], February 2020a.
+Chulhee Yun, Yin-Wen Chang, Srinadh Bhojanapalli, Ankit Singh Rawat, Sashank Reddi, and San-
+  jiv Kumar. O(n) Connections are Expressive Enough: Universal Approximability of Sparse Trans-
+  formers. In Advances in Neural Information Processing Systems, volume 33, pp. 13783–13794.
+  Curran Associates, Inc., 2020b.
+
+
+
+
+                                                12
+Published as a conference paper at ICLR 2026
+
+
+
+
+A     P ROOFS OF M AIN T HEOREMS
+A.1    P ROOF OF T HEOREM 1
+
+Proof Sketch. The proof proceeds in three steps. First, by Lemma 1, we approximate a broader
+function class that relaxes the smoothness requirements and the assumptions in Assumption 2. Sec-
+ond, Lemmas 2 and 3 show that by constructing appropriate Si , we can faithfully recover all in-
+formation from the original input sequence with simple fi . Finally, the outer function F0 can be
+applied to approximate an arbitrary sequence-to-vector target within this class. Together, these steps
+establish the result.
+
+Proof of Theorem 1. To prove Theorem 1, we first establish a few auxiliary lemmas.
+                                                                 d,T
+Lemma 1 (Relaxed target class and closure equivalence). Let FeD      be defined as in 9 but with only
+             d
+fi ∈ C([0, 1] , [0, 1]), i.e., we drop ”unique minimizer”, ”pairwise distinct”and ”PD Hessian”.Set
+                   d,T                         d,T
+F d,T := D≥1 FD         and Fed,T := D≥1 FeD
+        S                              S
+                                                   . Then
+                                              ∥·∥∞             ∥·∥∞
+                                      F d,T          = Fed,T          on XT .
+
+             e T ) = Fe0 ze1 (XT ), . . . , zeD (XT ) ∈ Fed,T with zei (XT ) = mint∈S fei (x(t)) and
+                                                     
+Proof. Fix H(X                                            D                              i
+
+fei ∈ C([0, 1]d , [0, 1]). Let ε > 0. We will construct H ∈ F d,T with ∥H − H∥   e ∞ ≤ ε. Firstly, by
+Stone–Weierstrass, choose pi ∈ C ∞ ([0, 1]d ) so that ∥pi − fei ∥∞ ≤ η, where η > 0 will be fixed
+later. Because the uniform approximation can slightly leave [0, 1], compose with a smooth strictly
+increasing squashing s : [−c, 1 + c] → [0, 1] with s(u) = u on [0, 1] and ∥s ◦ pi − pi ∥∞ ≤ η (for
+small enough c > 0), and replace pi by s ◦ pi . We still write pi and retain ∥pi − fei ∥∞ ≤ 2η.
+Secondly, let ξi ∈ arg minx∈[0,1]d pi (x) (nonempty by compactness). Pick r ∈ (0, 14 ) small and a
+C ∞ bump ϕi supported in B(ξi , 2r) ∩ [0, 1]d , with ϕi (ξi ) = 1, ∇ϕi (ξi ) = 0, and with ∇2 ϕi (ξi )
+negative definite.1 Define, for parameters δi,1 , δi,2 > 0 to be fixed,
+                        gi (x) := pi (x) − δi,1 ϕi (x) + δi,2 ϕi (x) ∥x − ξi ∥2 .
+(i) Since gi (ξi ) = pi (ξi ) − δi,1 while gi (x) ≥ pi (x) whenever ϕi (x) = 0 and gi (x) > pi (x) for
+x ∈ B(ξi , 2r) \ {ξi }, we get that ξi is the unique global minimizer of gi .
+(ii) At ξi , because ∇ϕi (ξi ) = 0,
+                          ∇2 gi (ξi ) = ∇2 pi (ξi ) − δi,1 ∇2 ϕi (ξi ) + 2δi,2 I.
+Here −∇2 ϕi (ξi ) ≻ 0, so choosing (δi,1 , δi,2 ) suitably makes ∇2 gi (ξi ) ≻ 0 (PD). Because ∥ϕi ∥∞ ≤
+1 and ∥ ∥x − ξi ∥2 ∥∞ ≤ d on [0, 1]d ,
+                                      ∥gi − pi ∥∞ ≤ δi,1 + δi,2 (2r)2 .
+Hence, by taking r small and then δi,1 , δi,2 small (using the r−2 scaling in ∇2 ϕi (ξi ) to keep the
+Hessian PD), we can ensure both PD at ξi and ∥gi − pi ∥∞ ≤ η.
+Thirdly, we use tiny translation to remove distinctiveness. It may happen that ξi = ξi′ for some i ̸=
+i′ . Choose pairwise distinct small vectors vi ∈ Rd and fix a smooth cutoff χ ∈ C ∞ ([0, 1]d , [0, 1])
+that equals 1 on [r, 1 − r]d and vanishes near the boundary. Define a C ∞ diffeomorphism of the
+cube,
+                         Φi (x) := x − εi χ(x) vi ,       with εi > 0 small.
+Then Φi is arbitrarily close to the identity in C 1 for small εi , maps [0, 1]d to itself, and hi := gi ◦ Φi
+has a (unique) minimizer at x(i) := Φ−1 i (ξi ). For different i, these points are distinct if the vi ’s are
+distinct and εi ’s are small but nonzero. Moreover, because ∇gi (ξi ) = 0, the Hessian at x(i) satisfies
+                        ∇2 hi (x(i) ) = DΦi (x(i) )⊤ ∇2 gi (ξi ) DΦi (x(i) ) ≻ 0,
+   1
+     For instance take ϕi (x) = ψ(∥x − ξi ∥2 /r2 ) with ψ(0) = 1, ψ ′ < 0 near 0, ψ ≡ 0 on [1, ∞); then
+∇2 ϕi (ξi ) ≺ 0 and its norm scales like r−2 .
+
+
+                                                         13
+Published as a conference paper at ICLR 2026
+
+
+
+
+so PD is preserved. Since gi is Lipschitz on the compact cube, ∥hi − gi ∥∞ ≤ Li εi for some Li ,
+hence by taking εi small we get ∥hi − gi ∥∞ ≤ η.
+Finally, if needed, compose with the same strictly increasing squashing s as in Step 1 and set
+                                   fi := s ◦ hi ∈ C 2 ([0, 1]d , [0, 1]).
+Because s is strictly increasing, it preserves the minimizer location and, at the minimizer x(i) , ∇2 (s◦
+              ′
+                          2
+hi )(x ) = s hi (x ) ∇ hi (x(i) ) ≻ 0. Also ∥fi − hi ∥∞ ≤ η by construction.
+      (i)            (i)
+
+Collecting the bounds from previous deduction:
+          ∥fi − fei ∥∞ ≤ ∥pi − fei ∥∞ + ∥gi − pi ∥∞ + ∥hi − gi ∥∞ + ∥fi − hi ∥∞ ≤ 5η.
+                         | {z } | {z } | {z } |                          {z   }
+                                ≤2η               ≤η             ≤η              ≤η
+
+For each i, the map u 7→ mint∈Si ut is 1-Lipschitz in ∥ · ∥∞ . Hence the corresponding features
+z̄i (XT ) := mint∈Si fi (x(t)) and zei (XT ) := mint∈Si fei (x(t)) satisfy ∥z̄i − zei ∥∞ ≤ 5η. Let ωFe0 be
+a modulus of continuity of Fe0 on [0, 1]D . Choose η so small that ω e (5η) ≤ ε/2. Then
+                                                                          F0
+                                                          
+                                  Fe0 z̄(XT ) − Fe0 ze(XT ) ∞ ≤ ε/2.
+
+Finally, approximate Fe0 uniformly on [0, 1]D by some F0 ∈ C 1 ([0, 1]D ) within ε/2 (Stone–
+Weierstrass). Setting
+                        H(XT ) := F0 z̄1 (XT ), . . . , z̄D (XT ) ∈ F d,T ,
+                                                                 
+
+we obtain
+                       e ∞ ≤ ∥F0 (z̄) − Fe0 (z̄)∥∞ + ∥Fe0 (z) − Fe0 (e
+                  ∥H − H∥                                            z )∥∞ ≤ ε.
+                             |        {z         } |          {z         }
+                                            ≤ε/2                       ≤ε/2
+                           ∥·∥∞
+This shows Fed,T ⊂ F d,T          . The reverse inclusion is simple, hence we have the lemma.
+
+
+Remark. Thus, we now focus on the relaxed class Fed,T and Lemma 1 lifts the result to the original
+class F d,T .
+Lemma 2 (Order-statistic in the relaxed class). Without loss of generation, suppose 4|T . Let m =
+T
+4 . For each j ∈ [d] and XT = {x(1), . . . , x(T )}, define
+                                      Uj (XT ) := max min x(u)j ,
+                                                   B⊆[T ] u∈B
+                                                   |B|=m
+
+and for each fixed t ∈ [T ],
+       Yt,j (XT ) :=     max        min x(u)j ,        Zt,j (XT ) :=     max     min(1 − x(u)j ).
+                          A⊆[T ]  u∈A                                     A⊆[T ]  u∈A
+                       |A|=m, t∈A                                      |A|=m, t∈A
+
+Let v1,j ≥ · · · ≥ vT,j be the sorted values of {x(1)j , . . . , x(T )j } and set Uj = vm,j . For the
+multi-set {x(u)j : u ∈ [T ]}, let v1,j ≥ · · · ≥ vT,j (nonincreasing) and w1,j ≤ · · · ≤ wT,j
+(nondecreasing). Then we have
+                   Yt,j = min{x(t)j , vm,j },          1 − Zt,j = max{x(t)j , wm,j }.
+In particular:
+             x(t)j ≤ vm,j ⇒ Yt,j = x(t)j ,              x(t)j ≥ wm,j ⇒ 1 − Zt,j = x(t)j .
+
+Proof. Among all m-subsets B, the maximum of minu∈B x(u)j is attained by picking the m largest
+coordinates, so Uj = vm,j . Forcing t ∈ A, the choice of the other m − 1 indices to maximize the
+minimum is the m − 1 largest among {x(u)j : u ̸= t}, hence Yt,j = min{x(t)j , vm,j }. For
+Zt,j , note that minu∈A (1 − x(u)j ) = 1 − maxu∈A x(u)j , so maximizing it over A is the same
+as minimizing maxu∈A x(u)j , which picks t plus the (m − 1) smallest leading to 1 − Zt,j . The
+particular statements follow immediately.
+
+
+                                                       14
+Published as a conference paper at ICLR 2026
+
+
+
+
+Lemma 3 (Smooth selector). For q > 0 define
+                                                   2                               2
+                                 eq( 1−Zt,j −wm,j ) (1 − Zt,j ) + eq( Yt,j −vm,j ) Yt,j
+                  x
+                  bq (t)j :=                              2                   2         .
+                                        eq( 1−Zt,j −wm,j ) + eq( Yt,j −vm,j )
+     bq (t)j → x(t)j uniformly on XT as q → ∞.
+Then x
+
+Proof. From Lemma 2, if x(t)j ≥ Uj , we have Yt,j = vm,j and (Yt,j −vm,j )2 = 0 while 1−Zt,j =
+x(t)j and (1 − Zt,j − wm,j )2 > 0. Thus, as q → ∞, the weight concentrates on (1 − Zt,j ) = x(t)j .
+If x(t)j ≤ Uj and wm,j ≥ x(t)j , we have (1 − Zt,j − wm,j )2 = 0 while Yt,j = x(t)j and
+(Yt,j − vm,j )2 > 0 concentrating on Yt,j = x(t)j . If wm,j ≤ x(t)j ≤ Uj , we have 1 − Zt,j =
+Yt,j = x(t)j , so either of three settings leads to x(t)j . The compactness of XT gives us the uniform
+property.
+
+Now, we begin our formal proof for Theorem 1.
+                                                                      e ∈ Fed,T with ∥F −H∥
+By Lemma 1, for any F ∈ C(XT ) and ε > 0, it suffices to construct an H                  e ∞≤
+ε/2, since the lemma 1 could lift it to F d,T with another ε/2.
+Fix m = T4 . For each coordinate j and each S ⊆ [T ] with |S| = m, include the relaxed primitives
+
+                  z (j,S) (XT ) := min x(t)j ,          z̄ (j,S) (XT ) := min(1 − x(t)j ).
+                                     t∈S                                t∈S
+
+To form the thresholds vm,j and wm,j needed in Lemma 2, additionally include:
+                           min x(t)j       for all S ⊆ [T ] \ {t} with |S| = m,
+                           t∈S
+
+and
+                     min(1 − x(t)j )       for all S ⊆ [T ] \ {t} with |S| = T − m,
+                     t∈S
+
+Using smooth log-sum-exp (softmax) in the outer function Fe0 , we can recover the subset-wise max-
+imum required to compute Uj , Yt,j , Zt,j , vm,j and wm,j from these primitives.
+By Lemma 3, for any δ > 0 there exists q such that
+                                 max        max        bq (t)j − x(t)j ≤ δ.
+                                                       x
+                               XT ∈XT t∈[T ], j∈[d]
+
+By uniform continuity of F on the compact XT , choose δ so that this implies |F (XT ) −
+F (Xbq (T ))| ≤ ε/4 for all XT , where X
+                                       bq (T ) stacks the coordinates x
+                                                                      bq (t)j . We approximate the con-
+tinuous map u 7→ F (u) on [0, 1]dT uniformly by a polynomial P within ε/4 (Stone–Weierstrass).
+Define                                                    
+                                    e T ) := P ◦ vec (X
+                                   H(X                      bq (T )),
+
+which is a C 1 function of the inner features. Hence H
+                                                     e ∈ Fed,T and
+
+                 ∥F − H∥             bq ∥∞ + ∥F ◦ X
+                      e ∞ ≤ ∥F − F ◦ X            bq − P ◦ X
+                                                           bq ∥∞ ≤ ε/2.
+                            |     {z     } |         {z        }
+                                           ≤ε/4                     ≤ε/4
+
+
+Apply Lemma 1 to replace each relaxed primitives by admissible C 2 functions with unique mini-
+mizers and to replace Fe0 by function F0 so that the final error increases by at most ε/2. This leads
+         d,T
+to f ∈ FD    with ∥F − f ∥∞ ≤ ε.
+
+
+
+A.2     P ROOF OF T HEOREM 2
+
+A.2.1    P ROOF OF T HEOREM 2 (1)
+Here we prove Theorem 2 (1)
+
+
+                                                       15
+Published as a conference paper at ICLR 2026
+
+
+
+
+Proof Sketch. The idea is straightforward. Each attention head is assigned to approximate one
+term mint∈Si fi (x(t)). Once these components are extracted, the outer function F0 can be approxi-
+mated by a suitable F̂ , completing the construction.
+
+Proof of Theorem 2 (1): Sufficient expressivity with D heads. Fix d, T and α ∈ (0, 1), and let ε > 0
+be given. Throughout the proof, constants depending only on (d, D, T ) are absorbed into Cd,D,T >
+0 which may change from line to line.
+In the display equation 4, each head produces an n-dimensional vector and Concathi=1 gives a vector
+in Rnh before F̂ . For the construction, we realize the usual block-by-head parameterization, which
+means that the encoder outputs a block-decomposed embedding
+
+                     x̂(t) = x̂(1) (t), . . . , x̂(D) (t) ∈ R2D ,  x̂(i) (t) ∈ R2 ,
+                                                         
+
+and the i-th head only reads the i-th block via block-diagonal WQ,i , WV,i (entries bounded by 1).
+This keeps the parameter counts within the same order. We therefore set the per-head embedding
+dimension to n = 2.
+Firstly, from Assumption (A2), for any δ > 0 there exist two-layer FFNs Ψi,δ : [0, 1]d → [0, 1] such
+that
+                                                                         C2
+                      max |fi (x) − Ψi,δ (x)| ≤ δ,        width(Ψi,δ ) ≤ γf ,                   (10)
+                    x∈[0,1]d                                            δ
+where γf > 0 is the exponent from (A2). Define for each head i, the position gate
+                                       (
+                                         0,  s ∈ Si ,
+                             ri (s) :=                     s ∈ [T ].
+                                         −1, s ∈/ Si ,
+
+(Recall Si ⊂ [T ] with |Si | ≥ αT by equation 8.) We implement the encoder Pϕ so that its i-th block
+is
+                   x̂(i) (t) = Ψi,δ (x(t)) , ri (t) ∈ [0, 1] × {−1, 0} ⊂ [−1, 1]2 .
+                                                   
+                                                                                                (11)
+                                √
+This choice follows ∥x̂(t)∥2 ≤ 2D. After a fixed rescaling (absorbed into β), this meets the norm
+constraint.
+Secondly, we would like to use head-wise attention to isolate the minimum on Si . For each head i,
+we take a single attention logit (mh = 1) by choosing
+               WO,i = I,       WK,i = [−1       1] ,     WQ,i ĉ0 = 1,      WV,i = I2 .
+All entries are within the allowed bound 1. With the block equation 11, the (pre-softmax) score of
+token t in head i is
+                     ρi (t) = (WK,i x̂(i) (t))⊤ (WQ,i ĉ0 ) = −Ψi,δ x(t) + ri (t).
+                                                                        
+                                                                                              (12)
+
+Let σ[ρi ] be the softmax equation 5 with β > 0. Define the head-i value readout (first coordinate of
+the head output)
+                                             T
+                                             X                     
+                                z̃i (XT ) :=    σ[ρi ](t) Ψi,δ x(t) .                           (13)
+                                             t=1
+
+Here, the second coordinate is unused. F̂ could ignore it via a fixed linear projection, counted in the
+constant Cd,D,T .
+Now, we give a uniform bound on Si . Take at := Ψi,δ (x(t)) ∈ [0, 1] and split the sum into Si and
+Sic . From ri (t) = 0 on Si and ri (t) = −1 on Sic , we have
+
+                                                                  e−βat
+                                                             
+                                                                            ,       t ∈ Si ,
+                                                             
+                                                             
+                                                                       −βau
+                                                               P
+                                  β(−at +ri (t))
+                                                                u∈Si e
+                                                             
+                                e                            
+         σ[ρi ](t) = P                                     ≤
+                             −βau +              −β(au +1)              e−βat
+                                       P
+                       u∈Si e            u∈Sic e
+                                                             e−β · P             , t ∈ Sic .
+                                                             
+                                                             
+                                                             
+                                                                             −βau
+                                                                      u∈Si e
+
+
+                                                   16
+Published as a conference paper at ICLR 2026
+
+
+
+
+Hence, we have
+                                                                                        −βat
+                                                                            P
+                                                                 −βat
+                                                                             t∈Sic at e
+                                                     P
+                                                       t∈Si at e
+              X                     X
+                                                                         −β
+        z̃i =      σ[ρi ](t)at +       σ[ρi ](t)at ≤ P         −βau
+                                                                      + e   P         −βau
+                                                                                             .             (14)
+              t∈Si               t∈Sic                  u∈Si e                u∈Si e
+                                                    |      {z       }
+                                                             Gibbs mean on Si
+
+To simplify, we denote a∗ := mint∈Si at and bt := at − a∗ ∈ [0, 1] for t ∈ Si . Then, we have
+                     −βat                   −βbt
+        P                        P
+           t∈Si at e              t∈Si bt e                                       |Si | − 1
+                                                         X
+         P         −βa
+                          = a∗ + P        −βb
+                                                 ≤ a∗ +      bt e−βbt ≤ a∗ +                ,
+            u∈Si e                 u∈Si e                                            eβ
+                       u                      u
+                                                                      t∈Si
+                                               −βb       −1
+The inequality comes from supb∈[0,1] be         = e /β for β ≥ 1 and one of the bt is 0, so the
+denominator in the middle fraction is ≥ 1. For the Sic term in 14, we use at ≤ 1 and u∈Si e−βau ≥
+                                                                                     P
+1 to get
+                                            −βat
+                                P
+                                      c at e
+                            −β Pt∈Si
+                          e                −βau
+                                                  ≤ e−β Sic ≤ e−β T.
+                                   u∈Si  e
+Combining the two bounds, we have the uniform estimate:
+                                                             |Si | − 1
+                                                                       + T e−β
+                                                     
+      min Ψi,δ x(t) ≤ z̃i (XT ) ≤ min Ψi,δ x(t) +                                  (β ≥ 1).   (15)
+      t∈Si                             t∈Si                     eβ
+In particular, since |Si | ≤ T , there is a constant CT with
+                                                      1      
+                                                         + e−β ,
+                                             
+         0 ≤ z̃i (XT ) − min Ψi,δ x(t) ≤ CT                                     CT := max{T /e, T }.       (16)
+                            t∈Si                       β
+
+Thirdly, we need to lift bounds from z̃i to zi . From equation 10 and the definition of zi ,
+                                                              
+                               min fi x(t) − min Ψi,δ x(t) ≤ δ.
+                                t∈Si                  t∈Si
+
+Together with equation 16,
+                                           1                
+          z̃i (XT ) − z̄i (XT ) ≤ δ + CT             + e−β           for all XT ∈ XT , i = 1, . . . , D.   (17)
+                                                β
+Let L0 := supz∈[0,1]D ∥∇F0 (z)∥1 < ∞ (compactness and C 1 ). Choose
+                                                                 4C L D 
+                      ε                          4CT L0 D            T 0
+             δ :=        ,     β ≥ βε := max 1,             , log            .
+                   4L0 D                             ε                ε
+Then by equation 17,
+                                                         ε
+                       ∥z̃(XT ) − z(XT )∥∞ ≤                           for all XT ∈ XT .                   (18)
+                                                       2L0 D
+
+Finally, we constrcut the approximation for F0 and count the number of parameter. By Assump-
+tion (A1), there exists a two-layer FFN Φδ0 : [0, 1]D → R with width ≤ C1 /δ0γ0 (for some γ0 > 0)
+such that
+                                     max |F0 (z) − Φδ0 (z)| ≤ δ0 .
+                                    z∈[0,1]D
+
+Set δ0 := ε/2. Define the model’s final feed-forward F̂ to project R2D → RD by keeping the first
+coordinate of each head (a fixed linear map with entries in {0, 1}) and apply Φδ0 .
+Then for all XT , we have
+                                                                                    
+ F̂ (Concati (·)) − F0 z(XT )       ≤ Φδ0 z̃(XT ) − Φδ0 z(XT ) + Φδ0 z(XT ) − F0 z(XT )
+                                    ≤ L0 ∥z̃(XT ) − z(XT )∥1 + δ0
+                                    ≤ L0 D ∥z̃(XT ) − z(XT )∥∞ + ε/2
+                                    ≤ ε/2 + ε/2 = ε,
+where we used equation 18 in the last inequality.
+Here, the trainable components are composed of three parts:
+
+
+                                                       17
+Published as a conference paper at ICLR 2026
+
+
+
+
+        • the D subnetworks Ψi,δ inside the encoder blocks equation 11;
+        • the fixed-size projections WQ,i , WK,i , WV,i (size O(D) and independent of ε);
+
+        • the two-layer FFN Φδ0 used inside F̂ .
+
+Thus
+                         1            1
+         M ≤ C′ D ·          + C ′′ · γ0 + C ′′′         for constants C ′ , C ′′ , C ′′′ = Cd,D,T .
+                        δ γf         δ0
+With δ = Θ(ε) and δ0 = Θ(ε) chosen above,
+                                   Cd,D,T
+                              M ≤         ,      γ := max{γf , γ0 },
+                                     εγ
+and the construction uses h = D heads with per-head dimension n = 2 and achieves ε-
+approximation on XT . This proves Theorem 2 (1).
+
+A.2.2    P ROOF OF T HEOREM 2 (2)
+Proof Sketch. The argument proceeds in two parts. The core idea is to construct two sequences
+whose representations after the attention layer are indistinguishably close, on the order of O(ϵk+1 ),
+yet whose target outputs differ by at least 3ϵ. Lemma 4 then implies the lower bound on the param-
+eter count required for approximation.
+Using Lemmas 5, 6, and 7, we obtain D disjoint neighborhoods around the minima x(i) . Since
+D > s = h, there exists at least one neighborhood not selected by the s heads. Within this re-
+gion, the pigeonhole principle guarantees the existence of two distinct subsequences. By carefully
+designing these subsequences, we ensure that their outputs after the attention layer are nearly in-
+distinguishable, while their target values differ by at least 3ϵ. Extending them to full sequences
+completes the construction.
+We now turn to the full proof. To establish Theorem 2 (2), we begin by introducing several auxiliary
+lemmas that will serve as building blocks for the argument. Lemma 5, 6, and 7 are only to set up the
+approximation problem into a more tractable form.
+Lemma 4. Let v1 , v2 ∈ Rn . Suppose
+                          ∥v1 − v2 ∥2 ≤ A     and    ∥F̂ (v1 ) − F̂ (v2 )∥ ≥ B,
+where F̂ : Rn → Rm is a two-layer feed-forward network satisfying the constraints stated above.
+Then F̂ must use at least                       
+                                             B
+                                        Ω    √
+                                            A n
+parameters.
+
+Proof of Lemma 4. Let ∆x := v1 − v2 and ∆F := F̂ (v1 ) − F̂ (v2 ). Suppose the two-layer network
+with width p be
+                                     F̂ (x) = V σ(U x + b) + c,
+              p×n          m×p
+where U ∈ R         ,V ∈R      , b ∈ Rp , c ∈ Rm , σ is 1-Lipschitz acting coordinate-wise and every
+entry of U, V, b, c has magnitude at most 1.
+For the j-th output coordinate, we have
+                                 p
+                                 X
+                                       Vjr σ(u⊤                ⊤
+                                                                          
+                         ∆Fj =                r v1 + br ) − σ(ur v2 + br ) ,
+                                 r=1
+
+where u⊤
+       r is the r-th row of U . Using the 1-Lipschitz property of σ and Cauchy–Schwarz inequality,
+we have
+                                 Xp                   Xp
+                       |∆Fj | ≤     |Vjr | |u⊤
+                                             r ∆x| ≤     |Vjr | ∥ur ∥2 ∥∆x∥2 .
+                                 r=1                     r=1
+
+
+                                                    18
+Published as a conference paper at ICLR 2026
+
+
+
+                                           √
+By the entrywise weight bound, ∥ur ∥2 ≤     n and |Vjr | ≤ 1. Therefore, for all j, we have
+                                                 √
+                                      |∆Fj | ≤ p n ∥∆x∥2 .                                        (19)
+Let ∥ · ∥ be the norm used in the lemma statement. By norm equivalence in finite dimensions, there
+exists cm ∈ (0, 1] depending only on the chosen norm and m such that
+                                          1
+                                 ∥y∥ ≤      ∥y∥∞       for all y ∈ Rm .
+                                         cm
+∥∆F ∥ ≥ B implies ∥∆F ∥∞ ≥ cm B, so there is some j ⋆ with
+                                          |∆Fj ⋆ | ≥ cm B.
+Combining this with equation 19 and ∥∆x∥2 ≤ A, we have
+                                      √                cm B
+                            cm B ≤ p n A =⇒ p ≥ √ .
+                                                       A n
+
+Finally, let peff ≤ p be the number of hidden units that actually affect the output, i.e., those with a
+nonzero row in U and a nonzero √  entry in the j ⋆ -th row of V . The above bound holds with peff in
+place of p, hence peff ≥ cm B/(A n). Each such unit uses at least one nonzero parameter in U and
+one in V , so the parameter counts k satisfy k ≥ peff . Therefore
+                                                               
+                                           cm B             B
+                                   k ≥ √ = Ω                √     ,
+                                           A n             A n
+which proves the lemma.
+Lemma 5. There exists R > 0 such that for every i ∈ {1, . . . , D} and every r < R, there exist
+constants δi > 0 and Li > 0 with the following property: there exists a segment Gi ⊂ B(x(i) , r) of
+length δi such that
+                       |fi (x) − fi (y)| ≥ Li ∥x − y∥2 ,      ∀ x, y ∈ Gi .
+and moreover
+                                     fi (x) > zi ,  ∀ x ∈ Gi ,
+
+Proof of Lemma 5. Fix i ∈ {1, . . . , D} and denote x⋆ := x(i) , f := fi and H⋆ := ∇2x f (x⋆ ). By
+positive definiteness, let λi := λmin (H⋆ ) > 0. By continuity of ∇2 f , there exists RiH > 0 such that
+                            ∇2 f (x) ⪰ λ2i I       for all x ∈ B(x⋆ , RiH ).
+Set µi := λi /2 > 0. Because the domain is [0, 1]d and x⋆ ∈ [0, 1]d , we could choose a unit vector
+vi pointing strictly into the cube at x⋆ (if x⋆ is interior, take any unit vector). Define
+                  τi := sup{ t > 0 : x⋆ + svi ∈ [0, 1]d for all s ∈ [0, t] } > 0,
+and set Ri := min{RiH , τi }. Take R := min1≤i≤D Ri > 0. Fix any r ∈ (0, R) and consider the
+restriction
+                               g(t) := f (x⋆ + tvi ),    t ∈ [0, r].
+Then
+                   g ′′ (t) = vi⊤ ∇2 f (x⋆ + tvi ) vi ≥ µi for all t ∈ [0, r].
+
+Since x⋆ minimizes f on [0, 1]d and vi is feasible inward, we have g(t) ≥ g(0) for small t ≥ 0
+leading to the one-sided derivative g ′ (0+) ≥ 0 (if x⋆ is interior then ∇f (x⋆ ) = 0 so g ′ (0) = 0).
+Because g ′′ ≥ µi , the derivative g ′ is increasing and thus
+                           g ′ (t) ≥ g ′ (0+) + µi t ≥ µi t,       t ∈ [0, r].
+Let a := r/4 and b := r/2 and define the segment
+                            Gi := { x⋆ + tvi : t ∈ [a, b] } ⊂ B(x⋆ , r),
+whose length is δi := b − a = r/4. For any x = x⋆ + tvi and y = x⋆ + svi in Gi with t > s, the
+mean value theorem gives some ξ ∈ (s, t) ⊂ [a, b] such that
+                                                                          λ r
+                                                                            i
+     |f (x) − f (y)| = |g(t) − g(s)| = |g ′ (ξ)| |t − s| ≥ µi a |t − s| =       ∥x − y∥2 .
+                                                                            8
+
+                                                  19
+Published as a conference paper at ICLR 2026
+
+
+
+
+Therefore the choice
+                                                λi r
+                                           Li :=     > 0
+                                                 8
+works uniformly for all x, y ∈ Gi . The segment Gi does not contain x⋆ , for all its points are at
+distance at least a = r/4 > 0 from x⋆ . By uniqueness of the minimizer, f (x) > f (x⋆ ) = zi for all
+x ∈ Gi .
+The lemma holds with δi = r/4 and Li = (λmin (∇2x fi (x(i) )) r)/8.
+Lemma 6. Let (z1 , . . . , zD ) denote the minima defined above. Then there exist constants r0 > 0
+and L0 > 0 such that the following holds: for any i ∈ {1, . . . , D} and any perturbation δ0 with
+|δ0 | < r0 ,
+                  F0 (z1 , . . . , zi + δ0 , . . . , zD ) − F0 (z1 , . . . , zD ) ≥ L0 |δ0 |.
+
+Proof of Lemma 6. Denote ei for the i-th standard basis vector of RD . By assumption, mi :=
+ ∂i F0 (z) > 0 for each i. Since F0 ∈ C 1 , the map u 7→ ∂i F0 (u) is continuous at z. Hence for each
+i, there exists ricont > 0 such that
+                         ∂i F0 (u) ≥ 21 mi        whenever      ∥u − z∥∞ < ricont .
+If necessary, shrink ricont so that the line segment { z + tei : |t| < ricont } lies in [0, 1]D . Define
+uniform constants
+                     L0 := 12 min mi > 0,                    r0 :=   min ricont > 0.
+                                1≤i≤D                                1≤i≤D
+
+Fix i and δ0 with |δ0 | < r0 . Consider the one-dimensional slice gi (t) := F0 (z + tei ) for |t| < r0 .
+Then gi is C 1 and gi′ (t) = ∂i F0 (z + tei ). By the mean value theorem, there exists θ ∈ (0, 1) such
+that
+                     F0 (z + δ0 ei ) − F0 (z) = gi′ (θδ0 ) δ0 = ∂i F0 z + θδ0 ei δ0 .
+                                                                                
+
+Taking absolute values and using the lower bound on ∂i F0 (·) inside the ℓ∞ -ball of radius r0 around
+z, we have
+                                 F0 (z + δ0 ei ) − F0 (z) ≥ L0 |δ0 |,
+which is the desired inequality.
+Lemma 7. Let zi = minx∈[0,1]d fi (x) and let x(i) denote the unique minimizer of fi (as assumed
+above). Then there exist constants R0 > 0 and ε0 > 0 such that:
+
+      1. The open balls {B(x(i) , R0 )}D
+                                       i=1 are pairwise disjoint.
+
+      2. For each i ∈ {1, . . . , D} and every x ∈ [0, 1]d \ B(x(i) , R0 ),
+                                                  fi (x) > zi + ε0 .
+
+Proof of Lemma 7. Since the minimizers {x(i) }D
+                                              i=1 are pairwise distinct and finite in number, we
+have
+                              ∆ := min x(i) − x(j) 2 > 0.
+                                           i̸=j
+
+Set R0 := 21 ∆. If i ̸= j and x ∈ B(x(i) , R0 ), by the triangle inequality, we have
+
+                ∥x − x(j) ∥2 ≥ ∥x(i) − x(j) ∥2 − ∥x − x(i) ∥2 > ∆ − R0 = R0 ,
+     / B(x(j) , R0 ). Hence the balls are pairwise disjoint, proving the first part.
+so x ∈
+For the second part, fix i and define the compact set Ki := [0, 1]d \ B(x(i) , R0 ). The continuity of
+fi implies that the minimum
+                                          mi := min fi (x)
+                                                        x∈Ki
+                               (i)                (i)
+is attained on Ki . Because x ∈ / Ki and x              is the unique global minimizer on [0, 1]d , we have
+mi > zi . Let εi := mi − zi > 0 and set
+                                       ε0 := 21 min εi > 0.
+                                                    1≤i≤D
+
+
+                                                        20
+Published as a conference paper at ICLR 2026
+
+
+
+
+  Notation flow (dependency structure)            Meaning
+  x(i)                                            Point where fi achieves minimum
+    → B(x(i) , r)                                 Basin region for retrieval coordinate i
+                                                  (Basin around x(i) )
+         → Gi , Ki                                Monotone local segment near x(i)
+                                                  (In B(x(i) , r))
+  P0                                              The set of all candidate points.
+                                                  (We only choose xt ∈ P0 )
+  Si                                              Index partition for retrieval coordinate i
+                                                  (i = 1, . . . , D)
+  Attention head j                                Defines response at position t
+    → λj (x, t)                                   Attention score
+       → (yj , tj )                               Maximum-attention point selected by
+                                                  head j in P0 × Sj
+         → Y = {y1 , . . . , ys }                 Chosen maximizers of attention score
+                                                  (one per head)
+       → vj (x, t)                                Value embedding
+  WLOG, suppose K1 ∩ Y = ∅.
+   → T0                                           T0 ⊂ S1 , indices not in (yj , tj ), j = 1, . . . , s
+     → η : [0, 1] → G1                            Coordinate system on G1
+      → q = f1 ◦ η                                Rewriting f1 |G1 into the coordinate system.
+     → Ut                                         Discrete grid on [0, 1] at index t
+      → zℓ (t)                                    Candidate point for subsequence ℓ, zℓ (t) ∈ η(Ut )
+  Adversarial subsequences
+    → Zℓ = (zℓ (1), . . . , zℓ (T0 ))             Two subsequences almost
+                                                  indistinguishable by attention head.
+         → Wℓ                                     Full sequence embedding Zℓ
+          → wℓ (t)                                Token of Wℓ of index t
+          → I1 , I2 , I3                          Partition of indices: differ / agree / remaining
+  Per-head analysis
+    → Qj,i                                        Attention mass on Ij (j ∈ {1, 2, 3}, i ∈ {1, . . . , s})
+    → Vj,i                                        Weighted value average on Ij
+
+       Table 1: Flow-style dependency map of notation introduced in the proof of Theorem 2.2.
+
+
+Then, for every x ∈ Ki , we have
+                           fi (x) ≥ mi = zi + εi ≥ zi + 2ε0 > zi + ε0 ,
+Thus, we have proved this lemma.
+
+Before the proof, We also provide a notation table to help with understanding in Table 1.
+
+Proof of Theorem 2 (2). Given the target function under the assumptions. For any given single-layer
+transformer defined in the main context, our goal is to find two different sequences such that their
+output in the part
+                                         T
+                                        X                                     
+                           Concathi=1      σ (WK,i x̂(t))⊤ WQ,i ĉ0 WV,i x̂(t)
+                                                                  
+                                                                                                          (20)
+                                         t=1
+
+are very close (differs by only O(ϵk+1 )), but their output from the target function differs by at least
+3ϵ, then according to lemma 4, we have the required parameter count for the FFN F̂ to be at least
+Ω(1/ϵk ).
+
+
+                                                     21
+Published as a conference paper at ICLR 2026
+
+
+
+
+Notations     For each head i = 1, . . . , s, define the attention weight function
+                           λi (x, t) = exp γ (WK,i Pϕ (x, t))⊤ WQ,i ĉ0 ,
+                                                                            
+
+and the value mapping
+                                        vi (x, t) = WV,i Pϕ (x, t) ∈ Rn ,
+where γ > 0 is the softmax scaling factor, WQ,i , WK,i ∈ Rn×E are the query and key projections,
+and WV,i ∈ Rn×E is the value projection for head i.
+
+
+Notation of sets Without loss of generality, we assume x(i) belongs to the interior of [0, 1]d , and
+the other case can be treated with the same method below. From lemma 5, lemma 6 and lemma 7
+we have that there exists R > 0 and segments Gi ⊂ B(x(i) , R), i = 1, . . . , D and L, δ0 , r > 0
+satisfying the following:
+
+       • ∀i, ∀x, y ∈ Gi , we have |fi (x) − fi (y)| > L∥x − y∥2 .
+
+       • ∀j ̸= i and ∀x ∈ B(x(j) , R), y ∈ B(x(i) , R), we have fi (y) − fi (x) > δ0 .
+       • The length of Gi is r, ∀i = 1, . . . , D.
+       • For any i ∈ {1, . . . , D} and any perturbation δ1 with |δ1 | < maxx∈B(x(i) ,R) (fi (x) − zi ),
+
+                              F0 (z1 , . . . , zi + δ1 , . . . , zD ) − F0 (z1 , . . . , zD ) ≥ L |δ1 |.
+
+                                                                                                       1
+                                                                                                           T −s−D+1
+We denote by Ki := Gi ∪{x(i) }, i = 1, . . . , D, and P0 = ∪D
+                                                            i=1 Ki . Recall that k = (n+1)s+1 −1.
+                                                                                     4
+
+                                                         1
+We assume without loss of generality that k > 0 and 4 T − s − D + 1 > 0, otherwise the result
+would be trivial.
+
+Max weight for each head            For j = 1, . . . , s, define recursively the pairs (yj , tj ) as follows:
+
+       • For the first head,
+                                                (y1 , t1 ) = arg max λ1 (y, t).
+                                                                     y∈P0
+                                                                     t∈S1
+
+       • For j > 1,
+                                           (yj , tj ) = arg          max           λj (y, t).
+                                                                     y∈P0
+                                                                     t∈Sj
+                                                                t∈{t
+                                                                 / 1 ,...,tj−1 }
+
+
+       • If maximum can be obtained at multiple (y, t), then choose one of them.
+
+Let Y = {y1 , . . . , ys }. Since the sets K1 , . . . , KD are pairwise disjoint and s < D, there exists at
+least one index i ∈ {1, . . . , D} such that
+                                                   Ki ∩ Y = ∅.
+Without loss of generality, we assume that i = 1. As we have |Si | ≥ 14 T > s + D − 1, i = 1, . . . , D,
+we have that there exists a set of (t∗2 , . . . , t∗D ) such that
+
+       • t∗j ∈
+             / {t1 , . . . , ts }, for j = 2, . . . , D.
+       • t∗j are pairwise distinct.
+       • t∗j ∈ Sj , j = 2, . . . , D.
+
+Let T0 = 14 T − s − D + 1 > 0 and assume that T0 is a integer. Then we have |S1 −
+{t1 , . . . , ts , t∗2 , . . . , t∗D }| ≥ T0 > 0. Without loss of generality, suppose {1, 2, . . . , T0 } ⊂
+S1 − {t1 , . . . , ts , t∗2 , . . . , t∗D }.
+
+
+                                                           22
+Published as a conference paper at ICLR 2026
+
+
+
+
+Sequences to be considered As G1 is a segment of length r, then it is natural to assign coordinate
+system η : [0, 1] → G1 on G1 , with q := f1 ◦ η being a monotonically increasing function on [0, 1].
+The monotone property is as a result of |f1 (x) − f1 (y)| ≥ L∥x − y∥2 .
+                        rL2
+We denote by M = T0 ⌊ 3T  0ϵ
+                             ⌋. As T0 |M , Construct the following T0 sets:
+                                          j−1    1         ( T0 )
+                                 Uj =         + { , . . . , M }, j = 1, . . . , T0                                          (21)
+                                           T0    M          M
+                          2
+                  rL
+We have |Uj | = ⌊ 3T0ϵ
+                       ⌋ = O(1/ϵ).
+Claim 2.1. Existence of two distinct sub-sequence
+There exists two subsequences z1 (1), . . . , z1 (T0 ) and z2 (1), . . . z2 (T0 ) with zi (t) ∈ η(Ut ) satisfying
+the following conditions.
+            PT0                                     PT0
+                                                                                               k+1
+               t=1 λi (z1 (t),t)vi (z1 (t),t)         t=1 λi (z2 (t),t)vi (z2 (t),t)
+       •         PT0                            −       P T0                               ≤ ϵ3T0 , for i = 1, . . . , s.
+                    t=1 λi (z1 (t),t)                      t=1 λi (z2 (t),t)           2
+           For each i = 1, . . . , s, either of the following holds:
+                P T0                  h                             i
+                      λi (z1 (t),t)                ϵk+1        ϵk+1
+            1. Pt=1
+                  T0                ∈ 1/(1 + 12T      2 ), 1 + 12T 2 .
+                  t=1 λi (z2 (t),t)                   0           0
+                            PT0                         k+1 Ps
+            2. maxj=1,2 t=1          λi (zj (t), t) ≤ ϵ 4      w=1 λi (yw , tw ).
+
+Proof. We compare the orders of 1/ϵ appearing on both sides of the conditions.
+First, since |Ut | = O(1/ϵ) for each t, the total number of possible choices of subsequences
+(z(1), . . . , z(T0 )) is at most O(1/ϵT0 ).
+Next, to satisfy condition (1), note that both vectors involved are n-dimensional with norms bounded
+by 1. Thus, the discretization required to achieve accuracy ϵk+1 /(3T0 ) in the ℓ2 norm leads to at
+most O(1/ϵ(k+1)ns ) distinct possibilities, since there are s heads.
+For condition (2), observe that
+                            Xs                                              T0
+                                                                            X
+                                         λi (yw , tw ) ≥ T10 max                  λi (zj (t), t).
+                                                                    j=1,2
+                                   w=1                                      t=1
+                                                                                      
+Hence, for each i, the relevant interval can be partitioned into at most O −ϵk+1 log ϵ
+                                                                                         sub-intervals.
+                                                          s (k+1)s
+                                                                    
+Taken across s heads, this contributes at most O (− log ϵ) /ϵ         possibilities.
+Combining the two conditions, the total number of distinct admissible cases is bounded above by
+                                                          (− log ϵ)s
+                                                                        
+                                                 O (k+1)ns+(k+1)s .
+                                                      ϵ
+Since T0 ≥ (k + 1)ns + (k + 1)s + 1, we have
+                                                                  (− log ϵ)s
+                                                                             
+                                              1
+                                     O T0            ≫ O (k+1)ns+(k+1)s .
+                                            ϵ                  ϵ
+Therefore, by the pigeonhole principle, there must exist two distinct subsequences
+(z1 (1), . . . , z1 (T0 )) and (z2 (1), . . . , z2 (T0 )) satisfying all the conditions of Claim 2.1.
+
+Construction of Distinct sequences From Claim 2.1, we have constructed two sub-sequences
+Z1 , Z2 satisfying the given conditions. We now consider the construction of two full input sequence
+W1 , W2 :
+
+       • For t = 1, . . . , T0 , if z1 (t) = z2 (t), then w1 (t) = w2 (t) = x(D) . Otherwise, w1 (t) =
+         z1 (t), w2 (t) = z2 (t).
+       • wj (ti ) = yi , i = 1, . . . , s;          j = 1, 2.
+
+       • wj (t∗i ) = x(i) , i = 2, . . . , D;          j = 1, 2.
+
+       • For all other t, wj (t) = x(D) .
+
+
+                                                                 23
+Published as a conference paper at ICLR 2026
+
+
+
+
+Difference of W 1, W 2 applied to target function Denote by I1 the set of all indices t with
+z1 (t) ̸= z2 (t), and I2 = [T0 ] − I1 , I3 = [T ] − I1 . It is clear from the difference of Z1 , Z2 that
+I1 ̸= ∅.
+We then define the following notations for the simplicity of calculation (defined for each head i =
+1, . . . , s):
+                   P
+       • Q1,i =       t∈I1 λi (w1 (t), t).
+                   P
+       • Q2,i =   t∈I1 λi (w2 (t), t).
+                 P
+       • V1,i = ( t∈I1 λi (w1 (t), t)vi (w1 (t), t))/Q1,i .
+                 P
+       • V2,i = ( t∈I1 λi (w2 (t), t)vi (w2 (t), t))/Q2,i .
+                 P
+       • Q3,i = t∈I2 λi (z1 (t), t), which is also the same if defined on Z2 .
+                 P
+       • V3,i = ( t∈I2 λi (z1 (t), t)vi (z1 (t), t))/Q3,i , which is the same if defined on Z2 .
+                 P
+       • Q4,i = t∈I3 λi (w1 (t), t), which is the same if defined on W2 .
+                 P
+       • V4,i = ( t∈I3 λi (w1 (t), t)vi (w1 (t), t))/Q4,i , which is the same if defined on W2 .
+
+As λi () maps to positive values, Vj,i are convex combinations of vi (), whose norm is bounded by 1
+according to the constraint section 1. Therefore ∥Vj,i ∥ ≤ 1, j = 1, 2, 3, 4.
+As f1 ◦ η is monotone on [0, 1], let t̃ = maxt∈I1 t, then we have
+
+       • maxt∈S1 f1 (w1 (t)) = f1 (w1 (t̃)).
+
+       • maxt∈S1 f1 (w2 (t)) = f1 (w2 (t̃)).
+
+And by construction we know that
+                                                                       r
+                                           ∥(w1 (t̃)) − (w2 (t̃))∥ ≥                                   (22)
+                                                                       M
+which is the minimal distance for any two points in Ut̃ . Then we have
+                                                                         rL
+                                       |f1 (w1 (t̃)) − f1 (w2 (t̃))| ≥                                 (23)
+                                                                         M
+As we have for i = 2, . . . , D
+
+       • maxt∈Si fi (w1 (t)) = z (i) .
+
+       • maxt∈Si fi (w2 (t)) = z (i) .
+
+Then following the perturbation property of F0 defined above we have that the difference of output
+                                          2
+between the two sequence to be at least rL
+                                         M , which is greater than 3ϵ. Then ϵ-approximation requires
+that |M odel(W1 ) − M odel(W2 )| ≥ ϵ.
+
+W1 and W2 are close after attention layer                For any given head i, we consider the the two cases
+given in 2.1.
+
+Case 1    Case 1 can be rewritten as follows:
+             Q1,i V1,i +Q3,i V3,i  Q V +Q3,i V3,i       k+1
+       • ∥       Q1,i +Q3,i       − 2,iQ2,i
+                                        2,i +Q3,i
+                                                  ∥2 ≤ ϵ3T0 .
+                       h                           i
+         Q +Q3,i                ϵk+1         ϵk+1
+       • Q1,i
+          2,i +Q 3,i
+                     ∈   1/(1 + 12T 2 ), 1 + 12T 2   .
+                                       0             0
+
+
+
+
+                                                          24
+Published as a conference paper at ICLR 2026
+
+
+
+
+Without loss of generality, we assume Q1,i ≥ Q2,i . By calculation, we have
+                        Q1,i V1,i + Q3,i V3,i    Q2,i V2,i + Q3,i V3,i
+                                              −                                                           (24)
+                           Q1,i + Q3,i              Q2,i + Q3,i
+                        Q3,i (Q2,i − Q1,i )(V3,i − V2,i )       Q1,i
+                      =                                    +             (V1,i − V2,i ).                  (25)
+                         (Q1,i + Q3,i )(Q2,i + Q3,i )        Q1,i + Q3,i
+                                               Q1,i +Q2,i
+We have already known that Q4,i ≥                  T0     (As Q4,i has the max weight of each head in it). Then
+
+                                         Q4,i (Q2,i − Q1,i )(V4,i − V2,i )
+                                          ∥                                ∥                              (26)
+                                          (Q1,i + Q4,i )(Q2,i + Q4,i )
+                                         (Q2,i − Q1,i )(V4,i − V2,i )
+                                      ≤∥                              ∥                                   (27)
+                                                (Q1,i + Q4,i )
+                                         T0 (Q2,i − Q1,i )(V4,i − V2,i )
+                                      ≤∥                                 ∥                                (28)
+                                                 (Q1,i + Q3,i )
+                                              T0 ϵk+1 (V4,i − V2,i )
+                                      ≤∥                             ∥                                    (29)
+                                                      12T02
+                                          ϵk+1
+                                      ≤                                                                   (30)
+                                          6T0
+Similarly, we also have
+                                     Q3,i (Q2,i − Q1,i )(V3,i − V2,i )    ϵk+1
+                                 ∥                                     ∥≤                                 (31)
+                                      (Q1,i + Q3,i )(Q2,i + Q3,i )        6T0
+From inequality 26 and substituting equation 24, we have
+                                 Q1,i                       ϵk+1   ϵk+1   ϵk+1
+                          ∥               (V1,i − V2,i )∥ ≤      +      =                                 (32)
+                              Q1,i + Q3,i                   6T0    3T0    2T0
+Therefore
+                                                Q1,i
+                                               ∥         (V1,i − V2,i )∥                                  (33)
+                                             Q1,i + Q4,i
+                                              T0 Q1,i
+                                          ≤∥             (V1,i − V2,i )∥                                  (34)
+                                             Q1,i + Q3,i
+                                                ϵk+1
+                                          ≤                                                               (35)
+                                                  2
+Thus
+                     Q1,i V1,i + Q4,i V4,i    Q2,i V2,i + Q4,i V4,i
+                    ∥                      −                        ∥2                                    (36)
+                        Q1,i + Q4,i              Q2,i + Q4,i
+                     Q4,i (Q2,i − Q1,i )(V4,i − V2,i )          Q1,i
+                  ≤∥                                   ∥+∥              (V1,i − V2,i )∥                   (37)
+                      (Q1,i + Q4,i )(Q2,i + Q4,i )          Q1,i + Q4,i
+                   ϵk+1   ϵk+1
+                  ≤     +                                                                                 (38)
+                    6T0     2
+                  ≤ϵk+1                                                                                   (39)
+
+Case 2   Case 2 can be rewritten as follows:
+             Q1,i V1,i +Q3,i V3,i  Q V +Q3,i V3,i       k+1
+       • ∥       Q1,i +Q3,i       − 2,iQ2,i
+                                        2,i +Q3,i
+                                                  ∥2 ≤ ϵ3T0 .
+                              k+1
+                                                               ϵk+1
+                                    Ps
+       • Q1,i + Q3,i ≤ ϵ 4             w=1 λi (yw , tw ) ≤       4 Q4,i .
+                              k+1
+                                                               ϵk+1
+                                    Ps
+       • Q2,i + Q3,i ≤ ϵ 4             w=1 λi (yw , tw ) ≤       4 Q4,i .
+
+
+                                                            25
+Published as a conference paper at ICLR 2026
+
+
+
+
+Thus
+                          Q1,i V1,i + Q4,i V4,i    Q2,i V2,i + Q4,i V4,i
+                          ∥                     −                        ∥2                        (40)
+                             Q1,i + Q4,i               Q2,i + Q4,i
+                          Q4,i (Q2,i − Q1,i )(V4,i − V2,i )          Q1,i
+                       ≤∥                                   ∥+∥                (V1,i − V2,i )∥     (41)
+                           (Q1,i + Q4,i )(Q2,i + Q4,i )          Q1,i + Q4,i
+                          (Q2,i − Q1,i )(V4,i − V2,i )          Q1,i
+                       ≤∥                              ∥+∥                (V1,i − V2,i )∥          (42)
+                                 (Q2,i + Q4,i )              Q1,i + Q4,i
+                              ϵk+1 (V4,i − V2,i )     ϵk+1
+                       ≤∥                         ∥+∥      (V1,i − V2,i )∥                         (43)
+                                      4                 4
+                       ≤ϵk+1                                                                       (44)
+
+And it can be seen from definition that
+               Q1,i V1,i +Q4,i V4,i
+           •       Q1,i +Q4,i  is the output of the i-th head of the attention layer with input sequence
+                                  Q V +Q4,i V4,i      PT
+                                                   = t=1 σ (WK,i wˆ1 (t))⊤ WQ,i ĉ0 WV,i wˆ1 (t)).
+                                                                                    
+               W1 . (which means 1,iQ1,i
+                                       1,i +Q4,i
+
+               Q2,i V1,i +Q4,i V4,i
+           •       Q2,i +Q4,i  is the output of the i-th head of the attention layer with input sequence
+                                  Q V +Q4,i V4,i      PT
+                                                   = t=1 σ (WK,i wˆ2 (t))⊤ WQ,i ĉ0 WV,i wˆ2 (t)).
+                                                                                    
+               W2 . (which means 2,iQ2,i
+                                       2,i +Q4,i
+
+
+
+Then for each i = 1, . . . , s, we have that
+     T
+     X                                           T
+                                                 X
+       σ (WK,i wˆ1 (t))⊤ WQ,i ĉ0 WV,i wˆ1 (t) −   σ (WK,i wˆ2 (t))⊤ WQ,i ĉ0 WV,i wˆ2 (t)∥ ≤ ϵk+1
+                                                                          
+ ∥
+     t=1                                                  t=1
+                                                                                                   (45)
+Therefore, as WO have entries bounded by 1, we have
+                        h                     T
+                                             X                                        i
+                       ∥ ĉ0 + WO Concathi=1    σ (WK,i wˆ1 (t))⊤ WQ,i ĉ0 WV,i wˆ1 (t)
+                                                                         
+                                                                                                   (46)
+                                                    t=1
+                      h                     T
+                                           X                                        i
+                     − ĉ0 + WO Concathi=1    σ (WK,i wˆ2 (t))⊤ WQ,i ĉ0 WV,i wˆ2 (t) ∥
+                                                                       
+                                                                                                   (47)
+                                                  t=1
+                     ≤sϵk+1                                                                        (48)
+However, it has been proven above that we need |M odel(W1 ) − M odel(W2 )| ≥ ϵ to achieve ϵ-
+approximation of the target function. According to lemma 4, the required parameter count of the
+FFN F̂ is of order Ω(ϵ/ϵk+1 ). Thus the parameter count required to achieve ϵ-approximation is
+Ω(1/ϵk ).
+
+
+Remark. Tightness of Theorem 2 (2) The lower bound in Theorem 2 (2) remains essentially tight
+under several relaxations of the feed-forward block F̂ . If F̂ uses Heaviside activations instead
+of 1-Lipschitz activations, matching upper bounds can be constructed, but this case is impractical
+since Heaviside activations are rarely used in practice. If parameter norms are permitted to scale
+as O(T 1/ϵ ), the parameter count can be reduced to O(1/ϵγ+1 ), though this scenario is likewise
+unrealistic in practical settings. Finally, if F̂ is allowed up to five layers, the lower bound changes
+to Ω(1/ϵk/4 ), which does not alter the qualitative conclusion.
+
+A.3        P ROOF OF T HEOREM 2 (3)
+
+Proof Sketch. The argument is based on an explicit construction. We begin with trivial attention,
+so that the post-attention output is simply the averaged concatenation T1 (x(1), . . . , x(T )) ∈ RT d .
+The feed-forward block can then be used to compute the transformations fi (x(t)), perform the
+necessary comparisons, and approximate F0 , as ensured by Lemmas 9 and 8.
+
+
+                                                           26
+Published as a conference paper at ICLR 2026
+
+
+
+
+Having outlined the main idea, we now proceed to the detailed proof. As a first step, we introduce
+several auxiliary lemmas that will be used in the argument.
+Lemma 8. Fix a pointwise activation σ (e.g., ReLU or any activation used in this paper). Let
+F1 : Rm1 → Rm2 be a 2-layer fully connected network, F2 : Rm2 → Rm3 a 3-layer fully connected
+network, and F3 : Rm3 → R a 2-layer fully connected network. Let W1 , W2 , W3 denote their
+respective (maximum) hidden widths, and set W := max{W1 , W2 , W3 }. Then there exists a 5-
+layer fully connected network G : Rm1 → R with activation σ and hidden width at most W such
+that
+                                                     for all x ∈ Rm1 .
+                                              
+                          G(x) = F3 F2 F1 (x)
+
+Proof. Proof of Lemma 8 Write the three networks in affine–nonlinearity form (with a pointwise
+activation σ):
+              F1 (x) = A1 σ(B1 x + b1 ) + a1 ,                        x ∈ Rm1 , F1 (x) ∈ Rm2 ,
+                                                                      u ∈ Rm2 , F2 (u) ∈ Rm3 ,
+                                                        
+              F2 (u) = C2 σ D2 σ(E2 u + e2 ) + d2 + c2 ,
+              F3 (v) = p3 σ(Q3 v + q3 ) + r3 ,                        v ∈ Rm3 , F3 (v) ∈ R.
+Define a 5-layer fully connected network G : Rm1 → R by stacking the hidden layers of F1 (one),
+F2 (two), and F3 (one), keeping their original widths:
+                                     h1 (x) := σ(B1 x + b1 ),
+                                      u(x) := A1 h1 (x) + a1 ,
+                                     h2 (x) := σ(E2 u(x) + e2 ),
+                                     h3 (x) := σ(D2 h2 (x) + d2 ),
+                                      v(x) := C2 h3 (x) + c2 ,
+                                     h4 (x) := σ(Q3 v(x) + q3 ),
+                                     G(x) := p3 h4 (x) + r3 .
+By construction,
+                                                                                 
+G(x) = p3 σ Q3 C2 σ(D2 σ(E2 (A1 σ(B1 x+b1 )+a1 )+e2 )+d2 )+c2 +q3 +r3 = F3 F2 F1 (x) .
+
+Thus G realizes the composition exactly, has 4 hidden layers (hence 5 layers total), and its hidden
+widths are precisely those of the constituent hidden layers of F1 , F2 , and F3 .
+
+Lemma 9 (Approximating max with a shallow ReLU network). Let f : [0, 1]T → R be
+f (x1 , . . . , xT ) = max{x1 , . . . , xT }. For any ϵ ∈ (0, 1], there exists a fully connected ReLU net-
+work fˆ with three layers (i.e., two hidden layers and one output layer), whose hidden-layer widths
+are each at most 2T ⌈1/ϵ⌉, such that fˆ ϵ-approximates f .
+
+Proof. Proof of Lemma 9 Let
+                                                n = ⌈1/ϵ⌉.
+
+For each coordinate t ∈ [T ] and each grid index i = 0, 1, . . . , n − 1, define the first hidden layer
+neurons by
+                                  h1 (t, i) = ReLU xt − ni .
+                                                               
+
+For each j = 0, 1, . . . , n − 1, define the second hidden layer neurons by
+                                          T
+                                                      !            T
+                                                                                   !
+                                         X                        X
+                                                                                 1
+                  h2 (j) = ReLU              h1 (t, j) − ReLU        h1 (t, j) − n .
+                                       t=1                              t=1
+
+Finally, the output of the network is given by
+                                                              n−1
+                                                              X
+                                     fˆ(x1 , . . . , xT ) =         h2 (j).
+                                                              j=0
+
+
+                                                     27
+Published as a conference paper at ICLR 2026
+
+
+
+
+Claim. Fix j ∈ {0, . . . , n − 1} and set
+                                     T                       T
+                                     X                       X             j
+                              Sj =          h1 (t, j) =           ReLU xt −   .
+                                     t=1                      t=1
+                                                                            n
+By definition,
+                                                            1
+                              h2 (j) = ReLU(Sj ) − ReLU Sj −    .
+                                                             n
+1) If h2 (j) > 0, then necessarily Sj > 0 (since ReLU(z) > 0 iff z > 0), hence there exists some t
+with                                         
+                              ReLU xt − nj > 0 ⇐⇒ xt > nj .
+Thus h2 (j) > 0 only if ∃ t with xt > j/n.
+2) If there exists t with xt > (j + 1)/n, then
+                                                     
+                                     Sj ≥ ReLU xt − nj > n1 .
+
+Therefore Sj ≥ n1 , and we get
+                                                        
+                                    h2 (j) = Sj − Sj − n1 = n1 .
+
+
+
+Fix x ∈ [0, 1]T and let j be such that maxt xt ∈ (j/n, (j + 1)/n]. By construction,
+                    h2 (k) = 0     for k ≥ j + 1,             h2 (k) = n1     for k ≤ j − 1,
+and for k = j we have
+                                                                                      T
+                                                                                        X                 
+        0 ≤ h2 (j) = ReLU(Sj ) − ReLU Sj − n1 ≤ n1 ,                        Sj :=              ReLU xt − nj .
+                                                                                        t=1
+Hence
+                           n−1
+                           X                  j−1
+                                              X                    h               i       h           i
+                 fˆ(x) =         h2 (k) =           1
+                                                    n + h2 (j) ∈
+                                                                       j j    1
+                                                                       n, n + n        =       j j+1
+                                                                                               n, n     .
+                           k=0                k=0
+Since maxt xt ∈ (j/n, (j + 1)/n], it follows that
+                              0 ≤ |fˆ(x) − max xt | ≤                   1
+                                                                        n   ≤ ϵ.
+                                                         t
+
+Therefore fˆ ϵ-approximates f (x) = maxt xt on [0, 1]T .
+
+Proof. Theorem 2 (3)
+We begin by fixing the embedding with positional information. Let Pϕ : [0, 1]d × [T ] → RdT be
+defined by
+                                Pϕ (x(t), t) = (0, . . . , 0, x(t), 0, . . . , 0),
+where the vector x(t) occupies the t-th block of dimension d, and all other blocks are zero. With the
+classification token ĉ0 = 0, the attention layer reduces to a trivial aggregation, and the output (prior
+to the feed-forward network) is
+                                     1                               dT
+                                     T (x(1), . . . , x(T )) ∈ [0, 1] .
+Given a target accuracy ϵ > 0, we construct three feed-forward networks F1 , F2 , F3 as follows.
+
+Step 1: Approximating the component functions.                   Define
+          F1 : T1 [0, 1]d×T         D×T
+                                                    F1 T1 x(1), . . . , T1 x(T )
+                                                                                
+                              → R         ,                                            = (u(1), . . . , u(T )),
+                       D
+where each u(t) ∈ R satisfies
+                              |u(t)i − fi (x(t))| ≤ ϵ         for all i = 1, . . . , D.
+By Assumption 3, such an approximation can be implemented by a two-layer FFN with parameter
+count O(1/ϵγ ).
+
+
+                                                         28
+Published as a conference paper at ICLR 2026
+
+
+
+
+Step 2: Approximating the minimization.               Let F2′ : RD×T → RD be defined by
+                      F2′ (u(1), . . . , u(T )) = (u1 , . . . , uD ),   ui = min u(t)i .
+                                                                             t∈Si
+
+By Lemma 9 (which works the same for taking minimum), there exists a three-layer ReLU network
+with O(1/ϵ) parameters that ϵ-approximates F2′ . We denote this approximation by F2 .
+
+Step 3: Approximating the outer function. Finally, let F3 : RD → R be a two-layer FFN that
+ϵ-approximates F0 , with parameter count O(1/ϵγ ).
+
+Composition. Since F0 is C 1 on a compact domain, it is Lipschitz with constant L, and the min
+operator is 1-Lipschitz. Therefore, the composed network
+                                                  F3 ◦ F 2 ◦ F 1
+provides an Lϵ-approximation of the target function, with total parameter count
+                                                   O(1/ϵγ+1 ).
+According to lemma 8, F3 ◦ F2 ◦ F1 can be written equivalently as a five-layer FFN.
+
+
+
+A.4    P ROOF OF C OROLLARY 1
+
+Proof Sketch.     It is a direct corollary of Theorem 2 (1) and 2 (2).
+
+Proof. Suppose D1 < D2 . Let M0 be the minimal positive integer such that H(D1 , 2, d, T, M0 )
+ϵ-approximates H. Then with representation ({fi , Si }D        i=1 , F0 ), Theorem 2 (1) suggests that there
+                                                                 1
+
+exists a positive Cd,D1 ,T such that
+                                                       Cd,D1 ,T
+                                                 M0 ≤                                                   (49)
+                                                            ϵγ
+With representation ({f˜i , S̃i }D
+                                 i=1 , F̃0 ), Theorem 2 (2) suggests that there exists a positive Cd,D2 ,T
+                                   2
+
+such that
+                                  Cd,D2 ,T             ( 14 T − D1 − D2 + 1)
+                          M0 ≥                 for k =                           −1                     (50)
+                                       ϵk                      3D1 + 1
+                                                                                                    1
+As fi and F0 are at least C 1 smooth, we have γ ≤ max(D1 , D2 ). Thus with D12 + D22 ≤ 50             T , we
+have k > γ. Then there exist ϵ > 0 such that
+                                       Cd,D2 ,T   Cd,D1 ,T
+                                           k
+                                                >                                                      (51)
+                                         ϵ          ϵγ
+This leads to a contradiction. Thus D1 = D2 .
+
+
+
+
+                                                         29
+Published as a conference paper at ICLR 2026
+
+
+
+
+B       E XPERIMENT D ETAILS
+
+B.1     D ETAILS FOR E XPERIMENT 1
+
+B.1.1     E XPERIMENTAL DETAILS FOR S ECTION 6.1
+
+Data generation. The intrinsic dimension of the synthetic task is D = 4. For each sequence length
+T ∈ {8, 16, 32, 64, 128} we generate 8000 training and 2000 validation examples. The inputs are
+i.i.d. Gaussian samples x(t) ∼ N (0, I4 ).
+
+Model architecture. Each input vector x(t) is first mapped to R8h by a two-layer feed-forward
+network with hidden dimension N and ReLU activations, ensuring a per-head embedding dimen-
+sion of 8. A trainable classification token c0 is appended, and no positional encoding is used since
+the task is permutation invariant. The sequence is processed by a single-layer multi-head attention
+block without residual connections or layer normalization, consistent with the theoretical setting.
+The output is concatenated and passed through a two-layer GELU-activated feed-forward network
+with hidden dimension N , yielding the final scalar prediction. The fixed hidden size ensures com-
+parability of parameter counts across different h.
+
+Training protocol. Each configuration (h, T ) is trained separately under multiple random seeds.
+To reduce the effect of optimization variance, we report the minimal validation error achieved across
+seeds. This choice isolates expressivity limitations of the architecture from randomness in training
+dynamics.
+
+Evaluation metric. We adopt the normalized mean squared error (NMSE), defined as mean
+squared error divided by the variance of the targets. As T increases, maxima of Gaussian sam-
+ples concentrate, shrinking target variance and making trivial predictors appear competitive under
+raw MSE. (An intuition is that suppose the target output be YT = max1≤t≤T xt with input tokens
+xt ∼ N (0, 1) independently, then Var(YT ) decreases as T increases, because YT concentrates more
+tightly around its growing mean.)Normalization by variance corrects this effect and ensures compa-
+rability across lengths. NMSE is also equivalent to 1 − R2 , where R2 is the standard coefficient of
+determination.
+
+Variance across seeds. While mean performance across seeds is also informative, reporting the
+minimal validation NMSE highlights the best achievable accuracy for a given architecture. This em-
+phasizes limitations due to model capacity rather than training noise. Tables showing seed variance
+are included for completeness (Table 2).
+Remark. When h ≥ D = 4, we also observe that the validation NMSE first decreases rapidly and
+then increases slowly as T grows. For shorter sequences, the model with enough heads can either
+capture the pattern through attention (Theorem 2 (1)) or rely on a memorization-based strategy with
+the feed-forward network (Theorem 2 (3)). Both approaches generalize reasonably well, but the
+memorization-based one does so less effectively. For longer sequences, memorization becomes
+infeasible and the model relies on attention, which generalizes better; however, longer sequences
+may also be more sensitive to parameterization, and the observed curve likely reflects a tradeoff
+between these effects. See Figure 3 in Appendix.
+
+B.1.2     F IGURES AND TABLES FOR S YNTHETIC E XPERIMENT 6.1
+
+Heads             T=8                         T=16                        T=32                        T=64                        T=128
+  1     7.01 × 10−2 ± 5.99 × 10−2   1.09 × 10−1 ± 9.93 × 10−2   1.10 × 10−1 ± 9.36 × 10−2   1.14 × 10−1 ± 8.53 × 10−2   1.45 × 10−1 ± 1.05 × 10−1
+  2     7.31 × 10−3 ± 4.75 × 10−4   8.41 × 10−3 ± 7.97 × 10−4   9.42 × 10−3 ± 6.42 × 10−4   1.31 × 10−2 ± 1.16 × 10−2   1.47 × 10−2 ± 1.21 × 10−2
+  3     6.94 × 10−4 ± 2.90 × 10−4   6.40 × 10−4 ± 3.87 × 10−4   9.09 × 10−4 ± 4.31 × 10−4   1.31 × 10−3 ± 5.10 × 10−4   1.58 × 10−3 ± 5.21 × 10−4
+  4     6.10 × 10−5 ± 1.52 × 10−4   4.36 × 10−5 ± 1.93 × 10−4   4.80 × 10−5 ± 2.30 × 10−4   8.75 × 10−6 ± 5.58 × 10−5   5.23 × 10−6 ± 5.67 × 10−6
+  5     3.35 × 10−5 ± 5.84 × 10−5   1.10 × 10−5 ± 2.36 × 10−5   4.91 × 10−6 ± 6.32 × 10−6   4.19 × 10−6 ± 8.39 × 10−6   3.99 × 10−6 ± 4.29 × 10−6
+
+
+Table 2: Error bar for synthetic dataset. NMSE(Mean ± Standard Deviation) for different sequence
+lengths T and number of heads.
+
+
+                                                                      30
+    Published as a conference paper at ICLR 2026
+
+
+
+
+                                                            8 1e 7
+                                                            6
+
+
+
+
+                                        Validation NMSE (Min)
+                                                            4
+                                                            2
+
+
+                                                                  Number of Heads
+                                                                             4
+                                                                             5
+                                                            0         20    40                            60     80     100     120
+                                                                                 Sequence Length
+    Figure 3: A zoom in plot of Figure1, which shows that when the number of head is enough, the loss
+    first decreases and then increases, as explained in the remark B.1.1
+
+
+                                                 H=1                                                                     H=2
+                       4.0                                                                               4.0
+Log Hidden Dimension
+
+
+
+
+                                                                                  Log Hidden Dimension
+
+
+
+
+                                                                                                                                                  T
+                       3.5                                                                               3.5                                      T=8
+                                                                                                                                                  T=16
+                       3.0                                                                                                                        T=32
+                                                                                                         3.0                                      T=64
+                                                                                                                                                  T=128
+                       2.5                                                                               2.5
+                                  1.6                           1.4        1.2                                  2.2      2.1       2.0
+                                Log Min Validation NMSE                                                          Log Min Validation NMSE
+                                                     Figure 4: Additional plot of 1b for H = 1 and H = 2.
+
+
+             Heads                  T=8                                  T=16                                T=32            T=64             T=128
+               1                1.75 × 10−2                           1.98 × 10−2                         2.06 × 10−2     2.54 × 10−2      3.03 × 10−2
+               2                7.17 × 10−3                           7.39 × 10−3                         7.82 × 10−3     8.57 × 10−3      1.02 × 10−2
+               3                2.11 × 10−4                           2.17 × 10−4                         2.73 × 10−4     3.71 × 10−4      4.77 × 10−4
+               4                1.32 × 10−6                           5.59 × 10−7                         3.40 × 10−7     3.46 × 10−7      5.70 × 10−7
+               5                2.19 × 10−6                           4.33 × 10−7                         3.22 × 10−7     2.73 × 10−7      2.66 × 10−7
+                             Table 3: Validation NMSE under fixed total embedding dimension E = nh = 32.
+
+
+
+             Heads                  T=8                                  T=16                                T=32            T=64             T=128
+               1                1.38 × 10−2                           1.63 × 10−2                         1.84 × 10−2     2.17 × 10−2      2.31 × 10−2
+               2                1.09 × 10−3                           7.08 × 10−4                         7.24 × 10−4     7.76 × 10−4      1.11 × 10−3
+               3                4.18 × 10−7                           1.72 × 10−7                         1.17 × 10−7     3.58 × 10−7      2.11 × 10−7
+               4                5.56 × 10−7                           1.22 × 10−7                         6.89 × 10−8     1.85 × 10−7      3.48 × 10−7
+    Table 4: Approximation error for the D = 3 retrieval task under fixed total embedding dimension
+    E = nh.
+
+
+                                                                                                           31
+Published as a conference paper at ICLR 2026
+
+
+
+
+ Heads          T=8              T=16              T=32              T=64              T=128
+   1        2.12 × 10−4       1.85 × 10−4       2.22 × 10−4       3.13 × 10−4       4.28 × 10−4
+   2        7.22 × 10−6       2.69 × 10−6       3.50 × 10−6       3.07 × 10−6       3.83 × 10−6
+   3        8.16 × 10−6       1.83 × 10−6       1.73 × 10−6       3.86 × 10−6       3.50 × 10−6
+   4        3.68 × 10−6       1.87 × 10−6       2.60 × 10−6       4.32 × 10−6       5.98 × 10−6
+   5        6.15 × 10−6       3.02 × 10−6       3.31 × 10−6       3.78 × 10−6       5.34 × 10−6
+Table 5: Two-layer transformer on the synthetic task (D = 4, NoPE, NoLN, fixed total embedding
+dimension E = nh = 32).
+
+
+B.2     MS MARCO T EXT R ETRIEVAL
+
+B.2.1    E XPERIMENT D ETAILS FOR MS MARCO ( TEXT RETRIEVAL ) E XPERIMENT
+Dataset construction. We construct retrieval-style datasets from the MS MARCO passage rank-
+ing collection (Bajaj et al., 2016). Since the original dataset associates each query with only a few
+candidate passages, we enlarge the candidate set by mining hard negatives. Specifically, BM25
+(Robertson & Zaragoza, 2009) is used to mine local negatives and FAISS (Johnson et al., 2019) sim-
+ilarity search to retrieve global negatives, reducing redundancy across queries. For each query, the
+sequence length T is defined as the total number of candidates (one positive and T − 1 negatives),
+with T ∈ {8, 16, 32, 64}. We build datasets containing 28,000 training queries and 2,000 validation
+queries for each T .
+
+Model and training setup. We evaluate a two-layer Transformer encoder with per-head embed-
+ding dimension fixed at 32, while varying the number of heads across {1, 2, 4, 6, 8, 10, 12, 14, 16}.
+Tokenization and input embeddings follow the BERT tokenizer and frozen BERT word, position,
+and segment embeddings (Devlin et al., 2019), projected to the model hidden size h = heads × 32.
+Only the projection and Transformer layers are trained. We report training top-1 accuracy, focusing
+on training performance since MS MARCO with BM25-mined negatives is particularly challenging
+for validation, and the difference can be seen in training metrics. Training MRR is also reported in
+Fig 5, with similar trend as training accuracy.
+
+B.2.2    F IGURES AND TABLES FOR E XPERIMENT
+
+            Heads        T=8               T=16             T=32              T=64
+              1      0.597 ± 0.003     0.450 ± 0.005    0.303 ± 0.003     0.154 ± 0.002
+              2      0.771 ± 0.003     0.647 ± 0.003    0.486 ± 0.002     0.286 ± 0.002
+              4      0.956 ± 0.002     0.900 ± 0.002    0.793 ± 0.002     0.580 ± 0.004
+              6      0.992 ± 0.000     0.977 ± 0.001    0.937 ± 0.001     0.814 ± 0.002
+              8      0.998 ± 0.000     0.995 ± 0.000    0.983 ± 0.001     0.932 ± 0.002
+             12      1.000 ± 0.000     0.999 ± 0.000    0.998 ± 0.000     0.991 ± 0.001
+             16      1.000 ± 0.000     1.000 ± 0.000    0.999 ± 0.000     0.996 ± 0.000
+
+Table 6: Error bar for MS Marco dataset. Accuracy (Mean ± Standard Deviation) for different
+sequence lengths T and number of heads.
+
+
+B.3     CIFAR-10 I MAGE C LASSIFICATION
+
+B.3.1    DATASET C ONSTRUCTION
+We create image classification datasets from the CIFAR-10 dataset using a padded preprocessing
+approach. The original CIFAR-10 images have dimensions of 32 × 32 pixels. To generate datasets
+with larger image sizes, we apply padding to achieve sizes in the set {32, 48, 64, 96, 128}. The
+original image is randomly positioned within the enlarged frame, with padding filled using the colors
+of the border pixels. An illustration is provided in Figure 6. By apply this padding method we are
+creating tasks with increasing difficulty. The background is enlarged, making models need more
+
+
+                                                 32
+Published as a conference paper at ICLR 2026
+
+
+
+
+        Heads        T=8                        T=16                T=32               T=64
+          1     0.5107 ± 0.0069            0.3917 ± 0.0071     0.2542 ± 0.0049    0.1257 ± 0.0057
+          2     0.5221 ± 0.0102            0.4205 ± 0.0056     0.2712 ± 0.0067    0.1369 ± 0.0038
+          4     0.5076 ± 0.0112            0.4048 ± 0.0070     0.2547 ± 0.0093    0.1139 ± 0.0061
+          6     0.5153 ± 0.0112            0.3865 ± 0.0103     0.2397 ± 0.0098    0.1018 ± 0.0057
+          8     0.5058 ± 0.0082            0.3801 ± 0.0084     0.2308 ± 0.0068    0.0983 ± 0.0050
+         12     0.5184 ± 0.0073            0.3721 ± 0.0107     0.2219 ± 0.0091    0.0902 ± 0.0054
+         16     0.5021 ± 0.0123            0.2816 ± 0.0418     0.2170 ± 0.0075    0.0878 ± 0.0058
+
+Table 7: MS Marco Validation Accuracy (Mean ± Standard Deviation) for different sequence lengths
+T and number of heads.
+
+
+
+
+                                 1.0
+                   Train MRR (Max)
+
+
+
+
+                                 0.8
+
+                                 0.6                        Sequence Length (T)
+                                                                     T=8
+                                                                     T=16
+                                 0.4                                 T=32
+                                                                     T=64
+                                       2     4     6    8           12           16
+                                                 Number of Heads
+                           Figure 5: Plot of training mrr for MS MARCO dataset.
+
+
+
+
+effort to learn how to extract useful information. The random placement make sure the padded
+outside aera cannot be simply ignored by position encodings.
+Each image is divided into non-overlapping patches of size 8 × 8 pixels, resulting in a sequence of
+patches for each image. For each image size, the sequence length T is defined as the total number
+of patches plus one additional class token, with T = {17, 37, 65, 145, 257}. We adopt the standard
+CIFAR-10 data splits, which include 50, 000 training images and 10, 000 test images across 10
+classes.
+
+
+
+B.3.2    M ODEL T RAINING S ETUP
+
+We evaluate a Vision Transformer (ViT) with four layers and a per-head embedding dimension of
+16, while varying the number of attention heads in different configurations. Each image patch is
+embedded through a linear projection, and positional embeddings are added along with a learnable
+class token. No global convolutional embedding is used.
+Input processing follows the standard ViT procedure, including patch embedding of size 8 × 8, po-
+sitional encoding, and aggregation of the class token for final classification. The model is trained
+using the AdamW optimizer with cosine annealing learning rate scheduling. Standard architectural
+techniques, such as layer normalization, residual connections, and dropout, are employed for regu-
+larization.
+
+
+                                                       33
+Published as a conference paper at ICLR 2026
+
+
+
+
+                            Figure 6: Examples of the padded images from the dataset.
+
+Heads             Seq=65                    Seq=145                    Seq=257                    Seq=577                    Seq=1025
+  1      4.78 × 101 ± 4.50 × 10−1   4.37 × 101 ± 4.70 × 10−1   4.20 × 101 ± 5.00 × 10−1   4.08 × 101 ± 6.50 × 10−1   4.00 × 101 ± 7.20 × 10−1
+  2      5.97 × 101 ± 4.50 × 10−1   5.52 × 101 ± 3.80 × 10−1   5.34 × 101 ± 4.40 × 10−1   5.15 × 101 ± 4.70 × 10−1   5.08 × 101 ± 7.40 × 10−1
+  4      7.55 × 101 ± 2.10 × 10−1   7.03 × 101 ± 3.20 × 10−1   6.85 × 101 ± 7.70 × 10−1   6.62 × 101 ± 6.00 × 10−1   6.58 × 101 ± 7.20 × 10−1
+  8      9.51 × 101 ± 1.50 × 10−1   9.26 × 101 ± 4.70 × 10−1   9.14 × 101 ± 6.20 × 10−1    9.07 × 101 ± 1.02 × 100    9.02 × 101 ± 1.00 × 100
+ 10      9.81 × 101 ± 5.00 × 10−2   9.73 × 101 ± 2.40 × 10−1   9.67 × 101 ± 4.60 × 10−1   9.65 × 101 ± 3.20 × 10−1   9.67 × 101 ± 7.30 × 10−1
+ 11      9.88 × 101 ± 1.20 × 10−1   9.83 × 101 ± 1.20 × 10−1   9.81 × 101 ± 2.40 × 10−1   9.77 × 101 ± 2.10 × 10−1   9.79 × 101 ± 2.20 × 10−1
+ 12      9.92 × 101 ± 3.00 × 10−2   9.89 × 101 ± 1.60 × 10−1   9.86 × 101 ± 2.40 × 10−1   9.86 × 101 ± 1.90 × 10−1   9.86 × 101 ± 2.90 × 10−1
+ 13      9.94 × 101 ± 6.00 × 10−2   9.93 × 101 ± 6.00 × 10−2   9.91 × 101 ± 1.10 × 10−1   9.90 × 101 ± 2.00 × 10−1   9.91 × 101 ± 2.50 × 10−1
+ 14      9.96 × 101 ± 3.00 × 10−2   9.94 × 101 ± 9.00 × 10−2   9.93 × 101 ± 1.00 × 10−1   9.93 × 101 ± 1.70 × 10−1   9.93 × 101 ± 2.30 × 10−1
+ 16      9.97 × 101 ± 3.00 × 10−2   9.96 × 101 ± 2.00 × 10−2   9.95 × 101 ± 7.00 × 10−2   9.96 × 101 ± 1.40 × 10−1   9.96 × 101 ± 1.70 × 10−1
+ 20      9.98 × 101 ± 1.00 × 10−2   9.97 × 101 ± 5.00 × 10−2   9.97 × 101 ± 8.00 × 10−2   9.98 × 101 ± 6.00 × 10−2   9.99 × 101 ± 7.00 × 10−2
+ 24      9.99 × 101 ± 2.00 × 10−2   9.98 × 101 ± 2.00 × 10−2   9.98 × 101 ± 4.00 × 10−2   9.99 × 101 ± 4.00 × 10−2   9.99 × 101 ± 5.00 × 10−2
+
+
+Table 8: Error bar for Image task. Accuracy (Mean ± Standard Deviation) for different sequence
+lengths and number of heads.
+
+
+
+C       L ARGE L ANGUAGE M ODEL U SAGE
+Large language models were used only for linguistic refinement (e.g., polishing sentences and check-
+ing grammar). The core ideas, theoretical results, experimental design, and analyses presented in
+this paper were entirely developed by the authors without assistance from large language models.
+
+
+
+
+                                                                     34
+Published as a conference paper at ICLR 2026
+
+
+
+
+     Heads        T=65           T=145            T=257            T=577         T=1025
+       1       50.50 ± 0.44   45.85 ± 0.58     43.53 ± 0.58     41.43 ± 0.97   39.95 ± 0.75
+       2       60.01 ± 0.57   55.01 ± 0.25     53.12 ± 0.69     49.95 ± 0.80   48.53 ± 0.83
+       4       67.98 ± 0.43   63.49 ± 0.70     61.42 ± 0.61     57.19 ± 0.54   55.31 ± 0.85
+       8       69.65 ± 0.55   66.06 ± 0.53     62.43 ± 0.95     57.58 ± 0.59   56.18 ± 1.14
+      10       69.70 ± 0.24   65.64 ± 0.37     62.45 ± 0.49     57.21 ± 1.03   54.44 ± 1.49
+      11       69.84 ± 0.36   65.26 ± 0.43     61.97 ± 0.29     56.95 ± 0.63   53.77 ± 2.91
+      12       69.66 ± 0.39   65.79 ± 0.56     62.63 ± 0.36     56.57 ± 0.66   53.17 ± 1.06
+      13       69.72 ± 0.18   65.30 ± 0.59     61.66 ± 0.58     54.81 ± 2.23   52.90 ± 1.45
+      14       69.49 ± 0.48   65.25 ± 0.48     61.32 ± 0.95     54.01 ± 2.13   50.42 ± 2.48
+      16       69.69 ± 0.33   64.24 ± 0.33     59.29 ± 1.12     49.68 ± 1.39   48.51 ± 2.59
+      20       67.99 ± 0.35   61.49 ± 1.07     55.25 ± 2.12     48.65 ± 0.85   46.89 ± 1.07
+      24       65.12 ± 0.68   56.80 ± 1.09     52.14 ± 0.56     48.74 ± 0.60   48.39 ± 0.76
+
+Table 9: Error bar for Image task. Validation Accuracy (Mean ± Standard Deviation) for different
+sequence lengths and number of heads.
+
+
+
+
+Table 10: Hyperparameter settings of popular transformer models. Only d (embedding dimension),
+L (number of layers), and H (number of attention heads) are shown for brevity.
+
+                     H     Model                          d       L    Year
+                     8     Attention is all you need     512      6    2017
+                     8     Gemma 2B                     2,048     18   2024
+                    12     GPT                           768      12   2018
+                    16     BERT-Large                   1,024     24   2019
+                    16     ViT-Huge                     1,280     32   2021
+                    16     Gemma 7B                     3,072     28   2024
+                    28     Turing-NLG                   4,256     78   2020
+                    32     LLaMA-7B                     4,096     32   2023
+                    32     Baichuan 2-7B                4,096     32   2023
+                    32     Mistral 7B                   4,096     32   2023
+                    32     Yi-6B                        4,096     32   2023
+                    32     LLaMA 3-8B                   4,096     32   2024
+                    32     Mixtral 8x7B                 4,096     32   2024
+                    40     LLaMA-13B                    5,120     40   2023
+                    40     Baichuan 2-13B               5,120     40   2023
+                    56     Yi-34B                       7,168     60   2023
+                    64     LLaMA-65B                    8,192     80   2023
+                    64     Llama-2-70B                  8,192     80   2023
+                    64     LLaMA 3-70B                  8,192     80   2024
+                    96     GPT-3                       12,288     96   2020
+                    96     Jurassic-1                  13,824     76   2021
+                    128    MT-NLG                      20,480    105   2021
+                    128    LaMDA                        8,192     64   2022
+                    128    LLaMA 3.1-405B              16,384    126   2024
+                    128    DeepSeek-V2                  5,120     60   2024
+
+
+
+
+                                               35
+

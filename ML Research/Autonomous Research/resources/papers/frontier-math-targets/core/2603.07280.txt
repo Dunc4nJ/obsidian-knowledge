@@ -1,0 +1,1164 @@
+                                                       Automated Lower Bounds for Bilinear Complexity
+                                                                    over Finite Fields
+
+                                                                                     Chengu Wang
+                                                                                 wangchengu@gmail.com
+
+
+                                                                                          Abstract
+
+                                                    We present a general, automated framework for proving lower bounds on the bilinear com-
+                                                plexity (tensor rank) of multiplication problems over a finite field Fq . The framework is pa-
+                                                rameterized only by the multiplication tensor and by a group of rank-preserving symmetries
+                                                acting on one argument: it classifies the orbits of constraint subspaces under that group, runs
+arXiv:2603.07280v10 [cs.CC] 30 Jul 2026
+
+
+
+
+                                                a dynamic program over the orbits combining four lower-bound techniques, and emits a proof
+                                                certificate that a verifier rechecks, typically faster than the search.
+                                                    Instantiating the framework for matrix multiplication, we improve the lower bounds for
+                                                four small formats over F2 , most notably showing that the bilinear complexity of multiplying
+                                                two 3 × 3 matrices over F2 is at least 20, raising the bound of 19 that had stood since Bläser
+                                                (2003). Instantiating it for polynomial multiplication — full products, cyclic convolution, and
+                                                the truncated (modulo xN ) and negacyclic (modulo xN + 1) products — we obtain eighteen
+                                                new lower bounds over F2 and F3 . Every bound is backed by a machine-checkable certificate.
+
+
+                                          1     Introduction
+
+                                          A bilinear algorithm for a bilinear map β : U × V → W over a field F computes a fixed set of
+                                          products of a linear form in the U -variables with a linear form in the V -variables, and then reads
+                                          off each coordinate of the output as a linear combination of those products. The minimum number
+                                          of such products is the bilinear complexity of β, and it equals the rank of the order-3 tensor naturally
+                                          associated with β. Two families of bilinear maps have driven the subject: matrix multiplication
+                                          and polynomial multiplication. For matrix multiplication the central quantity is R(⟨l, m, n⟩), the
+                                          rank of the tensor for multiplying an l × m by an m × n matrix; for polynomial multiplication it is
+                                          the rank of the tensor for multiplying two polynomials.
+                                          Over small finite fields these ranks are notoriously hard to pin down, and even for tiny formats the
+                                          best known lower and upper bounds often disagree. This paper develops one automated method
+                                          that attacks both families, and uses it to push several of these small cases.
+
+
+                                          1.1   Lower bounds for matrix multiplication
+
+                                          Strassen [30] showed R(⟨2, 2, 2⟩) ≤ 7 over Z, and Winograd [33] proved the matching lower
+                                          bound over Q. Hopcroft and Kerr [21] then established several lower bounds over F2 , including
+                                          RF2 (⟨2, 3, 3⟩) ≥ 15, and reported that a detailed analysis “seems to indicate” RF2 (⟨2, 3, 4⟩) ≥ 19,
+                                          without publishing a proof, while Bshouty [10] proved RF2 (⟨n, n, n⟩) ≥ 52 n2 − o(n2 ). Bläser estab-
+                                          lished the influential bounds R(⟨l, m, n⟩) ≥ lm+mn+l−m+n−3 over algebraically closed fields [7],
+
+
+                                                                                              1
+R(⟨n, n, n⟩) ≥ 52 n2 − 3n over arbitrary fields [6], and finally R(⟨n, m, n⟩) ≥ 2mn + 2n − m − 2 for
+m ≥ n ≥ 3 [8], which implies R(⟨3, 3, 3⟩) ≥ 19. On the upper side Laderman [24] multiplied 3 × 3
+matrices with 23 products over Z, so the rank of ⟨3, 3, 3⟩ has remained trapped in [19, 23], the
+prototypical open small format.
+
+
+1.2   Lower bounds for polynomial multiplication
+
+The bilinear complexity of polynomial multiplication has an equally long history and, unlike matrix
+multiplication, is governed by the arithmetic of Fq . The full product is the base case of fast integer
+and polynomial multiplication. For two degree-(N −1) polynomials, Fiduccia and Zalcstein [16] gave
+the lower bound 2N −1, met by Toom–Cook evaluation–interpolation whenever 2N −1 ≤ q +1 [31].
+When the field is too small for plain interpolation, the best upper bounds come from Karatsuba-like
+formulae, notably Montgomery’s [26], and from CRT/evaluation–interpolation over higher-degree
+places [34]. The exact value then climbs: Kaminski and Bshouty [22] settled the next range, and
+for larger N the strongest lower bounds embed a bilinear algorithm into a linear code and invoke
+the Griesmer bound [18] or Grassl’s tables [17], via the code constructions of Lempel–Seroussi–
+Winograd [25] and Chudnovsky–Chudnovsky [13]; small cases were settled by the exhaustive search
+of Barbulescu, Detrey, Estibals, and Zimmermann [4].
+A second strand is multiplication in a polynomial quotient ring Fq [x]/(xN − γ), which specializes
+to three classical families: cyclic convolution (γ = 1, modulo xN − 1), the group algebra of a cyclic
+group, underlying the discrete Fourier transform and cyclic codes; the truncated (or short) product
+(γ = 0, modulo xN ), the local algebra Fq [x]/xN that is the recurring base case of Karatsuba-
+and Toom-style schemes; and the negacyclic product (γ = −1, modulo xN + 1), a twisted group
+algebra underlying skew-cyclic codes and lattice-based cryptography. The lower bounds for all three
+are governed by the factorization of xN − γ: Winograd [34] proved that multiplication modulo a
+polynomial with k distinct irreducible factors needs at least 2N − k products (a bound Alder and
+Strassen [1] later extended to all associative algebras), and Bläser’s characterization of algebras of
+minimal bilinear complexity [9], combined with the minimal-rank theory of Averbuch, Galil, and
+Winograd [2, 3] (whose Part II treats exactly Fq [x]/xN ), strengthens these on the local-algebra
+factors. Upper bounds come from the convolution constructions of Wagh and Morgera [32] and
+Morgera [27], refined by Cenk and Özbudak [11, 12].
+
+
+1.3   Our contributions
+
+We give a single framework, described abstractly in Section 3 and instantiated per problem in
+Section 4, that proves bilinear-complexity lower bounds for any multiplication tensor equipped with
+a group of first-argument symmetries. It classifies the orbits of constraint subspaces (Section 5),
+runs a dimension-sweeping dynamic program with four lower-bound techniques (Section 6), and
+produces certificates that an independent verifier rechecks deterministically (Section 7).
+Our main results concern matrix multiplication, where the framework improves the best known
+lower bound for four small formats over F2 .
+Theorem 1 (Matrix multiplication).
+
+       RF2 (⟨2, 3, 4⟩) ≥ 19,   RF2 (⟨3, 3, 3⟩) ≥ 20,       RF2 (⟨3, 3, 4⟩) ≥ 25,   RF2 (⟨3, 4, 4⟩) ≥ 29.
+
+The headline is RF2 (⟨3, 3, 3⟩) ≥ 20, which raises the value 19 that had stood since Bläser (2003) [8];
+
+                                                       2
+the search finds this proof in about 40 minutes on a laptop and the certificate verifies in seconds. The
+same certificate has since been re-verified independently by Beuchert [5], using a checker written
+from scratch in a different programming language. The bound RF2 (⟨2, 3, 4⟩) ≥ 19 confirms a claim
+that Hopcroft and Kerr [21] reported without proof.
+For polynomial multiplication the same framework yields eighteen new lower bounds, over F2 and
+F3 — for the full product and for the three quotient families Fq [x]/(xN − γ).
+
+Theorem 2 (Polynomial multiplication). Write RFq (PN ), RFq (CN ), RFq (TN ), and RFq (C−      N ) for
+the bilinear complexity over Fq of, respectively, the full product of two degree-(N − 1) polynomials,
+cyclic convolution (modulo xN − 1), the truncated product (modulo xN ), and the negacyclic product
+(modulo xN + 1), each of length N . Then
+
+          full:   RF2 (P6 ) ≥ 16, RF2 (P7 ) ≥ 19, RF2 (P8 ) ≥ 21, RF3 (P6 ) ≥ 14;
+        cyclic:   RF2 (C7 ) ≥ 13, RF2 (C8 ) ≥ 19, RF2 (C10 ) ≥ 22, RF3 (C9 ) ≥ 19;
+    truncated:    RF2 (T6 ) ≥ 13, RF2 (T7 ) ≥ 16, RF2 (T8 ) ≥ 19, RF2 (T9 ) ≥ 21, RF2 (T10 ) ≥ 24,
+                  RF2 (T11 ) ≥ 27, RF3 (T8 ) ≥ 17, RF3 (T9 ) ≥ 19, RF3 (T10 ) ≥ 21;
+    negacyclic:   RF3 (C−
+                        9 ) ≥ 19.
+
+
+
+                  family          problem           prev LB              our LB      prev UB
+                                  RF2 (⟨2, 3, 4⟩)   18 [7], 19? [21]     19          20 [21]
+                                  RF2 (⟨3, 3, 3⟩)   19 [8]               20          23 [24]
+                  Matrix
+                                  RF2 (⟨3, 3, 4⟩)   24 [8]               25          29 [29]
+                                  RF2 (⟨3, 4, 4⟩)   28 [7]               29          38 [29]
+                                  RF2 (P6 )         15 [25, 13, 17]      16          17 [26]
+                                  RF2 (P7 )         18 [25, 13, 17]      19          22 [26]
+                  Full
+                                  RF2 (P8 )         20 [25, 13, 17]      21          26 [34, 15]
+                                  RF3 (P6 )         12 [25, 13, 18]      14          15 [34]
+                                  RF2 (C7 )         12 [14, 9]           13          13 [32]
+                                  RF2 (C8 )         16 [3, 9]            19          22 [27, 12]
+                  Cyclic
+                                  RF2 (C10 )        19 [2, 9]            22          29 [27]
+                                  RF3 (C9 )         18 [3, 9]            19          27 [27, 12]
+                                  RF2 (T6 )         12 [3, 9]            13          14 [12]
+                                  RF2 (T7 )         14 [3, 9]            16          18 [12]
+                                  RF2 (T8 )         16 [3, 9]            19          22 [12]
+                                  RF2 (T9 )         18 [3, 9]            21          27 [12]∗
+                  Truncated       RF2 (T10 )        20 [3, 9]            24          31 [12]
+                                  RF2 (T11 )        22 [3, 9]            27          36 [12]
+                                  RF3 (T8 )         16 [3, 9]            17          22 [12]
+                                  RF3 (T9 )         18 [3, 9]            19          27 [34]∗
+                                  RF3 (T10 )        20 [3, 9]            21          31 [34]
+                  Negacyclic      RF3 (C−
+                                        9)          18 [3, 9]            19          27 [12]
+∗
+  We obtain a new bilinear complexity upper bound of 26 for multiplication over Z[x]/x9 by flip-graph search [23]
+on F2 and lifting to Z. See Table 6 for the decomposition.
+
+         Table 1: The 22 new lower bounds (4 matrix, 18 polynomial) proved in this paper.
+
+Table 1 collects all twenty-two new lower bounds against the previous best lower bound and the
+
+
+                                                        3
+best known upper bound. Tables 3–7 in Appendix A set these in the full context of each family,
+including the many small cases where our framework reproduces the exact rank already known.
+The rest of the paper is organized as follows. Section 2 sketches the framework on a toy example;
+Sections 3–7 develop it in full — setup, per-problem symmetries, orbit enumeration, the four lower-
+bound techniques, and certificates — and Section 8 concludes.
+
+
+2    A toy example: RF2 (⟨2, 2, 2⟩) ≥ 7
+
+Before the formal development, we sketch how the framework proves an easy case: that 2 × 2
+matrix multiplication over F2 needs at least 7 multiplications. Everything below is made precise in
+Sections 3–7.
+                               P
+Write the tensor as ⟨2, 2, 2⟩ = i,j,k aij ⊗ bjk ⊗ cki , where the aij are the four entries of the first
+matrix factor A. The method works with constrained versions of the tensor, obtained by forcing
+some linear combinations of the aij to vanish — that is, by restricting A to a subspace, and keeping
+only the terms with a surviving aij . The matrix symmetries A 7→ P AQ−1 and A 7→ A⊤ permute
+these subspaces, and for 2 × 2 matrices over F2 there are only ten orbits up to symmetry, from the
+fully constrained A = 0 (orbit 0) up to the unconstrained tensor (orbit 9), which is ⟨2, 2, 2⟩ itself.
+The algorithm assigns each orbit a rank lower bound, working from the most constrained to the
+least so that each step may rely on the bounds already settled for smaller subspaces. We walk
+through all ten below, grouped by technique.
+
+
+Orbits 0, 1, 2, 3, 5 (flatten). The base technique reads a bound off a flattening: regroup the
+tensor’s three factors as two, view the result as a matrix,   and take its rank. Orbit 0, A = ( 00 00 ),
+has constrained tensor 0, so R = 0; orbit 1, A = 00 a011 , flattens to rank 2, so R ≥ 2; and orbits 2,
+                                                          
+
+3, and 5 — a001 a001 , a010 a011 , a010 a001 — each flatten to rank 4, so R ≥ 4.
+                                          
+
+
+
+Orbit 4, A = a001 aa01
+                         
+                      11
+                           (forced product). Flattening yields only 4. The forced-product tech-
+nique automates a substitution of Hopcroft and Kerr [21]: two of the tensor’s slices are single
+products that any optimal decomposition may be assumed to compute literally, which uses up 2 of
+its terms; stripping those two terms leaves a residual whose every F2 -completion flattens to rank
+at least 4. Hence R ≥ 2 + 4 = 6.
+
+
+Orbit 6, A = ( aa01
+                  00    a01
+                     a00 +a01 ) (substitution). Flattening again gives only 4, so we substitute. Fix
+an optimal decomposition; its A-components are nonzero linear forms in a00 , a01 , of which there
+are just three (a00 , a01 , a00 + a01 ). With at least 4 terms, by pigeonhole one form repeats, and
+setting it to zero kills at least 2 terms and lands in Orbit 2 (bound 4). Hence R ≥ 2 + 4 = 6.
+
+
+Orbits 7, 8 (degenerate reduction). Adding one more constraint shrinks                 a subspace to one
+already settled, whose bound is then inherited. For orbit 7, A = a010 aa01
+                                                                                
+                                                                             11
+                                                                                  , adding a01 + a10 = 0
+                                     a00 a01
+lands in orbit 4; for orbit 8, A = ( a01 a11 ), adding a00 = 0 lands in orbit 4. Either way R ≥ 6.
+
+
+Orbit 9, A = ( aa00 a01
+                 10 a11 ) (substitution). This is the unconstrained tensor, ⟨2, 2, 2⟩ itself. Fix an
+optimal decomposition and take any of its A-components — a nonzero linear form in the four aij .
+
+                                                   4
+Setting it to zero kills at least one term and lands in Orbit 7 or Orbit 8, each of bound 6. Since
+this holds for every nonzero form, R ≥ 1 + 6, that is, RF2 (⟨2, 2, 2⟩) ≥ 7.
+Appendix D works this example in full.
+
+
+3     The framework
+
+3.1   Tensor rank
+
+Fix a finite field Fq with q = pm . A multiplication problem is given by an order-3 tensor
+                                    X
+                               T =     tijk ai ⊗ bj ⊗ ck ∈ A ⊗ B ⊗ C,
+                                  i,j,k
+
+
+where A = FN            NB
+             q , B = Fq , C = Fq
+               A                    NC have bases a , b , c and the structure constants t
+                                                    i j k                 Pr             ijk ∈ Fq
+encode the bilinear map. The rank R(T ) is the least r such that T = λ=1 uλ ⊗ vλ ⊗ wλ with
+uλ ∈ A, vλ ∈ B, wλ ∈ C; this is exactly the bilinear complexity of the underlying map. We write
+RFq (T ) when emphasizing the field Fq , and R(T ) when it is clear from context.
+
+
+3.2   Constraints
+
+We attack R(T ) by constraining the first argument A to a subspace. A constraint is a linear
+functional on A, i.e. a vector in the dual A∗ = FN  q ; a set of constraints cuts A down to the
+                                                     A
+
+subspace on which all of them vanish, and substituting that subspace into T yields a smaller tensor
+TS with R(T ) ≥ R(TS ) for any subspace S obtained by adding constraints. A set of d independent
+constraints spans a d-dimensional subspace of A∗ , and two constraint sets that span the same
+subspace define the same TS . We therefore represent a constraint subspace by its reduced row
+echelon form (RREF), which is a unique key for the subspace.
+
+
+3.3   Symmetries and the query/store factorization
+
+The leverage in our method comes from symmetries that act on A and preserve R(T ). Abstractly,
+let G be a group acting on A∗ by semilinear bijections: each g is additive with g(λu) = ϕg (λ) g(u)
+for some field automorphism ϕg ∈ Gal(Fq /Fp ), so both the Fq -linear sandwich and multiplication
+maps (ϕg = id) and the Galois symmetries (ϕg a Frobenius a 7→ ap ) are allowed. We require that
+for every g ∈ G there is a rank-preserving symmetry of T whose action on the first factor is g.
+Since a semilinear bijection sends Fq -subspaces to Fq -subspaces, G permutes constraint subspaces
+and maps each TS to an isomorphic tensor, so R(TS ) is constant on each G-orbit of subspaces. Our
+dynamic program needs only one representative per orbit.
+The two facts the dynamic program rests on are the following.
+
+Lemma 1 (Monotonicity and orbit invariance). If TS ′ is obtained from TS by imposing additional
+constraints on the first argument, then R(TS ) ≥ R(TS ′ ). Moreover, for any rank-preserving first-
+argument symmetry g ∈ G we have R(TS ) = R(Tg(S) ), so R(TS ) depends only on the G-orbit of
+the constraint subspace.
+
+
+
+                                                 5
+Proof. A bilinear algorithm with r products that computes the map of TS also computes its re-
+striction to any smaller first-argument subspace with the same r products, so imposing further
+constraints cannot raise the rank; this is monotonicity. For invariance, the rank-preserving sym-
+metry whose first-factor action is g carries TS to Tg(S) by an invertible change of variables, which
+leaves the rank unchanged.
+
+The implementation never materializes G as a list. Instead it factors G into two subsets, a query
+set K and a store set Σ, whose product set K−1 · Σ covers G so that every orbit member is reached;
+neither need be a subgroup or be closed under inversion. This is the meet-in-the-middle, or square-
+root, trick. To test whether a query subspace g lies in the orbit of a stored representative g ′ , we
+precompute and hash the RREF of σ(g ′ ) for every σ ∈ Σ (the store images), and at query time
+probe the hash with the RREF of κ(g) for every κ ∈ K. A hit κ(g) ≡ σ(g ′ ) certifies g and g ′ as
+G-equivalent and yields the witness pair (κ, σ), from which the canonical form is recovered as
+
+                                         g ′ ≡ σ −1 κ(g) .
+                                                        
+                                                                                                   (1)
+
+      p grows by a factor |Σ| and a query costs |K| probes, with |K| · |Σ| ≳ |G|; choosing |K| ≈
+Storage
+|Σ| ≈ |G| trades square-root space for square-root time.
+
+
+4     Symmetries of the problem families
+
+The framework is fixed once we name, for each problem, the tensor T and the factorization (K, Σ)
+of its first-argument symmetry group.
+
+
+4.1   Matrix multiplication
+
+The tensor for multiplying an l × m matrix X by an m × n matrix Y , with product Z⊤ , is
+                                             l−1 m−1
+                                             X   X n−1
+                                                     X
+                               ⟨l, m, n⟩ =                 xij ⊗ yjk ⊗ zki ,
+                                             i=0 j=0 k=0
+
+so A = Fl×m
+         q   . For invertible P ∈ GLl , Q ∈ GLm , R ∈ GLn the substitution X 7→ P XQ−1 , Y 7→
+QY R , Z 7→ RZP −1 preserves the tensor (the sandwich symmetry). The rank is also invariant
+     −1
+
+under cyclically permuting the three factors, R(⟨l, m, n⟩) = R(⟨m, n, l⟩) (the cyclic symmetry); for
+a square format l = m = n this combines with matrix transposition into an order-two symmetry
+X 7→ X⊤ , Y 7→ Z⊤ , Z 7→ Y ⊤ (the transpose symmetry). Projected onto the first factor, the
+symmetry group acting on the matrix space A = Fl×m  q   is
+
+                                 G = (GLl (Fq ) × GLm (Fq )) ⋊ C2 ,
+
+with (P, Q) acting by X 7→ P XQ−1 and the C2 by transposition X 7→ X⊤ (present only when
+l = m = n). The meet-in-the-middle splits G by side: the store set is the right multiplications
+Σ = {X 7→ XR−1 : R ∈ GLm (Fq )} and the query set is the left multiplications K = {X 7→
+LX : L ∈ GLl (Fq )}, extended by the transpose when l = m = n. Scalar matrices act trivially
+                                                                                         p
+on subspaces, so each side is taken modulo the center, and both then have order about |G|.
+Equivalence of constraint subspaces under the subgroup without transpose is exactly the tensor-
+isomorphism problem on l × m × d tensors, which sits above graph and code equivalence in the
+isomorphism hierarchy [19, 20].
+
+                                                   6
+4.2   Full polynomial multiplication
+
+Multiplying two polynomials of degree < N in Fq [x] gives
+                          N
+                          X −1
+                   PN =           ai ⊗ bj ⊗ ci+j ,   NA = NB = N, NC = 2N − 1,
+                          i,j=0
+
+the ordinary convolution. Its first-argument symmetries are the action on degree-(N − 1) binary
+forms of the projective semilinear group
+                            Gfull = PΓL2 (Fq ) = PGL2 (Fq ) ⋊ Gal(Fq /Fp ),
+generated by the substitutions x 7→ x + c, the reversal x 7→ 1/x (which swaps ai ↔ aN −1−i ), the
+scalings x 7→ gx, and the Frobenius a 7→ ap . We factor it as Σ = PGL2 (Fq ) (the store side, of size
+q(q 2 − 1)) and K = Gal(Fq /Fp ) (the query side, of size m).
+
+
+4.3   Polynomial multiplication modulo xN − γ
+
+Fix a scalar γ ∈ Fq and let R = Fq [x]/(xN − γ). Multiplication in R reduces the convolution of a
+and b by the rule xN ≡ γ,
+          N −1
+                                      (
+          X                             ci+j ,     i + j < N,
+               ai ⊗ bj ⊗ wij , wij =                               NA = NB = NC = N.
+         i,j=0                          γ ci+j−N , i + j ≥ N,
+Three families specialize this tensor: cyclic convolution CN for γ = 1, the truncated (or short)
+product TN for γ = 0 — the local algebra Fq [x]/(xN ), in which the overflow terms vanish and
+x is nilpotent — and the negacyclic product C−  N for γ = −1. Over characteristic 2, −1 = 1, so
+C−
+ N  =  C N .
+The same three kinds of symmetry act on A = R for every γ: multiplication by a unit p ∈ R∗ (the
+shifts xr are the special case p = xr , valid for γ ̸= 0), the Fq -algebra automorphisms Aut(R), and
+the Galois group of Fq /Fp . The base-field scalars F∗q act trivially on subspaces, so the group acting
+on constraint subspaces is
+                                G = R∗ ⋊ Aut(R) ⋊ Gal(Fq /Fp ) /F∗q ,
+                                                                    
+
+with store side Σ = R∗ /F∗q and query side K = Aut(R) ⋊ Gal(Fq /Fp ) — the identical factorization
+in all three cases. Only the ring structure, and hence the sizes of the two sides, depends on γ.
+For γ = ±1 the Chinese remainder theorem splits R into field factors — for γ = 1 indexed by
+the q-cyclotomic cosets of Z/N , for γ = −1 by the cosets of the odd residues modulo 2N — so
+R∗ is typically far larger than the N shifts, which is precisely the extra symmetry the framework
+exploits. For γ = 0 the algebra is local: a polynomial is a unit iff its constant term is nonzero,
+so |Σ| = q N −1 , and an automorphism sends x to any nilpotent generator y1 x + · · · + yN −1 xN −1
+with y1 ̸= 0, giving |Aut(R)| = (q − 1)q N −2 . Table 2 contrasts the symmetry structures; the three
+quotient families share one row, differing only in γ.
+
+
+5     Orbit enumeration
+
+The first stage enumerates exactly one canonical representative per orbit of constraint subspaces, for
+every dimension d = 0, 1, . . . , NA . Subspaces are built up one constraint at a time and deduplicated
+with the same meet-in-the-middle trick.
+
+                                                     7
+    problem                      store Σ                  query K
+    matrix-mult ⟨l, m, n⟩        GLm (right mult.)        GLl (left mult.), and transpose (l = m = n)
+    full-poly-mult               PGL2 (Fq )               Gal(Fq /Fp )
+    poly-mult Fq [x]/(xN −γ)     R∗ /F∗q                  Aut(R) ⋊ Gal(Fq /Fp )
+
+Table 2: First-argument symmetry factorizations; the last row covers the cyclic (γ = 1), truncated
+(γ = 0), and negacyclic (γ = −1) products. In every family the query elements are indexed so that
+the i-th element is i, which is why a certificate can name a symmetry by a single integer.
+
+
+Representatives are generated dimension by dimension, in lexicographic order of their RREF. A
+dimension-d subspace is formed by appending to a dimension-(d − 1) representative one new con-
+straint whose leading pivot lies strictly above the existing pivots; candidates with a nonzero entry
+at an existing pivot are skipped because Gauss–Jordan elimination would reduce them against the
+current basis. Because candidates are visited in global lexicographic order, the first time an orbit
+is seen its representative is automatically the lexicographically least, so no separate minimality test
+is needed.
+Deduplication uses a hash set of RREF keys. For each kept representative c we insert the RREF of
+every store image σ(c), σ ∈ Σ; for each new candidate q we probe with the RREF of every query
+image κ(q), κ ∈ K, and discard q if any probe hits, since a hit means q ≡ (κ−1 σ)(c) lies in c’s orbit.
+Algorithm 1, in Appendix C, states the procedure.
+
+
+6     Rank lower-bound techniques
+
+The dynamic program sweeps subspace dimension from NA down to 0, processing all orbits of
+each dimension in parallel and inserting their freshly computed bounds into the orbit map before
+moving to the next (smaller) dimension. This ordering is sound because the only techniques that
+look anything up — degenerate reduction and backtracking — query strictly larger dimensions,
+already settled. Each orbit tries four techniques in order — flatten, degenerate reduction, forced
+product, backtracking — stopping once one meets the goal.
+
+
+Flatten. Compute the three flattening matrix ranks of the constrained tensor and take the max-
+imum. This is the base case and needs no other orbit.
+
+
+Degenerate reduction. Add one more independent constraint to the current subspace, produc-
+ing a strictly smaller subspace whose orbit was processed at the previous (larger) dimension; by
+Lemma 1 its bound is a valid bound for the current orbit. We scan candidate constraints, look up
+each enlarged subspace in the orbit map, and keep the best. The proof records the extra constraint
+together with the witness pair from Equation (1).
+
+
+Forced product.       This automates the Hopcroft–Kerr substitution [21], which rests on the fol-
+lowing lemma.
+
+Lemma 2 (Hopcroft and Kerr [21, Lemma 2]). Let f0 , . . . , ft−1 be bilinear forms of which f0 , . . . , fs−1
+are linearly independent and each is a single product (a form of rank 1). If the whole set can be
+
+
+                                                     8
+computed with r multiplications, then it can be computed with r multiplications s of which are
+exactly f0 , . . . , fs−1 .
+
+Proof. Take any bilinear algorithm with products p0 , . . . , pr−1 computing the fi , each a fixed Fq -
+linear combination of the products. Exchange products for the fi one at a time, maintaining the
+invariant that the current r products are f0 , . . . , fi−1 together with r − i of the original pj , spanning
+all the fi . At step i, since fi is independent of f0 , . . . , fi−1 , its expression in the current products
+gives a nonzero coefficient to some remaining original product pj ; then pj lies in the span of fi and
+the other current products, so swapping pj for fi — itself a legal product, having rank 1 — preserves
+the invariant. After s steps the algorithm has r products, s of which are exactly f0 , . . . , fs−1 .
+
+Grouping the tensor along the C factor into t slices, those whose A ⊗ B part has matrix rank 1
+are single products; we greedily take a maximal independent set of s of them and, by Lemma 2,
+assume an optimal decomposition computes them literally. Stripping these s terms leaves s(t − s)
+unknown field coefficients in the residual; we enumerate all q s(t−s) assignments, flatten each, and
+take the minimum, so the bound is s + min. We repeat for all three cyclic orientations and keep the
+best. Since the minimum must range over every assignment for soundness, we skip the technique
+when q s(t−s) is too large to enumerate. The proof records only which orientation won. Note that
+Lemma 2 holds over any field; it is the exhaustive enumeration of the q s(t−s) residuals that makes
+the technique effective only over a small finite field.
+
+
+Substitution with backtracking. The substitution method of Pan [28] is a powerful technique
+in bilinear complexity lower bound proofs
+                                                             P
+Lemma 3 (Substitution). Fix an optimal decomposition TS = λ uλ ⊗ vλ ⊗ wλ with R(TS ) terms,
+each A-component uλ a nonzero linear form in the surviving A-variables. Suppose that repeatedly
+setting a linear form to zero — each step imposing that form as a new constraint and discarding
+the terms it annihilates — removes δ terms in total and reaches the more-constrained tensor TS ′ .
+Then R(TS ) ≥ δ + R(TS ′ ).
+
+Proof. Setting a linear form to zero constrains the first argument to the hyperplane it defines; the
+terms whose A-component that constraint annihilates drop out, and the surviving terms remain
+a valid decomposition of the constrained tensor. So a single step that discards d terms gives
+R(TS ) ≥ d + R(TS ′′ ) for the one-larger subspace S ′′ . Iterating along the chain and summing the
+discarded terms yields the claim.
+
+So if a chain of substitutions removing δ terms lands in an orbit of already-certified bound b with
+δ +b ≥ target, then R(TS ) ≥ target. The technique searches for such a chain by DFS over canonical
+A-components — the nonzero linear forms supported away from the current pivots, one per coset.
+The DFS depth is capped at the known lower bound given by the previous techniques.
+Soundness rests on a completeness invariant: the case analysis over the unknown A-components
+must be exhaustive, so the technique certifies the target only if every branch of the DFS — one
+per canonical nonzero form at each level — reaches it. Several optimizations make the search
+scale without weakening this invariant: the DFS branches are run in parallel; a thread-local cache
+memoizes the bound of each enlarged subspace, halving itself stochastically when it grows too large;
+the target bound is raised one unit at a time so that easy branches prune early; and a step limit
+aborts large branches — an aborted branch aborts the technique for the whole orbit, trading away
+
+                                                     9
+completeness of the search but never soundness of a reported bound, and the dynamic program
+falls back to the other techniques. On success, each branch contributes one record to the proof: the
+depth, the subset mask of substituted forms, and the witness pair identifying the orbit it reduced
+to.
+
+
+7    Proof certificates and verification
+
+Every bound is emitted as a certificate that a verifier rechecks; the verifier is simpler than the search,
+and runs faster with less memory. For each orbit the certificate records its canonical constraint
+subspace, the certified lower bound, and a proof that is exactly one of the four techniques (the
+unconstrained orbit’s bound is “the” bound for the problem). Each proof stores only what the
+verifier cannot cheaply recompute:
+
+    • Flatten: nothing; the verifier recomputes the flattening rank.
+    • Forced product: the winning cyclic orientation, an integer in {0, 1, 2}.
+    • Degenerate: the extra constraint, together with the witness pair (κ, σ) of Equation (1) that
+      identifies the enlarged subspace’s orbit.
+    • Backtracking: for each DFS leaf, its depth, the subset of substituted forms, and the witness
+      pair of the orbit it reduced to. The verifier replays the case analysis and confirms that the
+      recorded leaves cover every canonical nonzero form at each level.
+
+The verifier replays the same sweep from dimension NA down to 0, so each orbit is checked only
+against strictly larger orbits already confirmed. It rechecks flatten and forced product by recom-
+putation, and degenerate and backtracking by reconstructing the canonical form of every claimed
+reduction from its witness via Equation (1) and confirming the looked-up bound supports the claim.
+A witness that misses a known orbit, a recomputed bound that falls short, or a miscounted trace
+aborts verification. Soundness follows by induction on decreasing dimension: at dimension NA
+only flatten and forced product apply, and every smaller-dimension step reduces to an orbit verified
+earlier.
+
+
+8    Conclusion and open problems
+
+We have given a single automated framework for bilinear-complexity lower bounds over finite fields,
+parameterized only by a tensor and a symmetry group, and used it to improve the long-standing
+bound on ⟨3, 3, 3⟩ over F2 to 20, to settle three more matrix formats, and to obtain eighteen
+new lower bounds for polynomial multiplication across the full, cyclic, truncated, and negacyclic
+products. Every bound comes with a certificate that an auditable verifier rechecks, typically faster
+than the search. The source code, verifier, and all certificates are available at
+https://github.com/wcgbg/tensor-rank-lower-bound.
+Several questions remain. The exact rank of ⟨3, 3, 3⟩ over F2 is still open in [20, 23], and scaling to
+⟨4, 4, 4⟩ is blocked by the sheer number of constraint orbits, needing stronger symmetry reduction;
+the polynomial bounds should extend to larger N with more compute. Natural next steps are
+extension-field multiplication in Fqn over Fq (f · g mod p(x) for an irreducible p of degree n), and
+genuinely new bounds beyond F2 and F3 , to which the framework applies verbatim.
+
+                                                   10
+Acknowledgements
+
+Thanks to Youming Qiao for helpful discussions on the tensor isomorphism problem and reviewing
+this paper.
+Generative AI tools were used throughout this work: in background research and literature searches,
+in generating and exploring ideas, in developing the search and verification code, in checking math-
+ematical derivations, and in drafting and editing this paper. We have reviewed all the code and
+paper content, and take full responsibility for them.
+
+
+References
+
+ [1] Alexander Alder and Volker Strassen. On the algorithmic complexity of associative algebras.
+     Theoretical Computer Science, 15(2):201–211, 1981.
+
+ [2] Amir Averbuch, Zvi Galil, and Shmuel Winograd. Classification of all the minimal bilinear
+     algorithms for computing the coefficients of the product of two polynomials modulo a poly-
+     nomial, part i: the algebra g[u]/⟨q(u)l ⟩, l > 1. Theoretical Computer Science, 58(1):17–56,
+     1988.
+
+ [3] Amir Averbuch, Zvi Galil, and Shmuel Winograd. Classification of all the minimal bilinear
+     algorithms for computing the coefficients of the product of two polynomials modulo a polyno-
+     mial, part ii: the algebra g[u]/⟨un ⟩. Theoretical Computer Science, 86(2):143–203, 1991.
+
+ [4] Razvan Barbulescu, Jérémie Detrey, Nicolas Estibals, and Paul Zimmermann. Finding optimal
+     formulae for bilinear maps. In Arithmetic of Finite Fields (WAIFI 2012), volume 7369 of
+     Lecture Notes in Computer Science, pages 168–186. Springer, 2012.
+
+ [5] Stefan Beuchert. Independent Verification of the Wang F2 -Certificate for R(⟨3, 3, 3⟩) ≥ 20.
+     Zenodo, https://doi.org/10.5281/zenodo.20752782, 2026.
+
+ [6] Markus Bläser. A 5/2n2 -lower bound for the multiplicative complexity of n × n-matrix mul-
+     tiplication. In Proceedings of the 40th Annual IEEE Symposium on Foundations of Computer
+     Science (FOCS), pages 45–50. IEEE, 1999.
+
+ [7] Markus Bläser. Lower bounds for the multiplicative complexity of matrix multiplication.
+     Computational Complexity, 8(3):203–226, 1999.
+
+ [8] Markus Bläser. On the complexity of the multiplication of matrices of small formats. Journal
+     of Complexity, 19(1):43–60, 2003.
+
+ [9] Markus Bläser. A complete characterization of the algebras of minimal bilinear complexity.
+     SIAM Journal on Computing, 34(2):277–298, 2005.
+
+[10] Nader H. Bshouty. A lower bound for matrix multiplication. SIAM Journal on Computing,
+     18(4):759–765, 1989.
+
+[11] Murat Cenk and Ferruh Özbudak. On multiplication in finite fields. Journal of Complexity,
+     26(2):172–186, 2010.
+
+
+
+                                                11
+[12] Murat Cenk and Ferruh Özbudak. Multiplication of polynomials modulo xn . Theoretical
+     Computer Science, 412(29):3451–3462, 2011.
+
+[13] David V. Chudnovsky and Gregory V. Chudnovsky. Algebraic complexities and algebraic
+     curves over finite fields. Journal of Complexity, 4(4):285–316, 1988.
+
+[14] Hans F. de Groote. Characterization of division algebras of minimal rank and the structure
+     of their algorithm varieties. SIAM Journal on Computing, 12(1):101–117, 1983.
+
+[15] Haining Fan and M Anwar Hasan. Comments on “Five, six, and seven-term Karatsuba-like
+     formulae”. IEEE Transactions on Computers, 56(5):716–717, 2007.
+
+[16] Charles M. Fiduccia and Yechezkel Zalcstein. Algebras having linear multiplicative complexi-
+     ties. Journal of the ACM, 24(2):311–331, 1977.
+
+[17] Markus Grassl. Bounds on the minimum distance of linear codes and quantum codes. Online,
+     http://www.codetables.de, 2007.
+
+[18] James H. Griesmer. A bound for error-correcting codes. IBM Journal of Research and Devel-
+     opment, 4(5):532–542, 1960.
+
+[19] Joshua A. Grochow and Youming Qiao. On the complexity of isomorphism problems for ten-
+     sors, groups, and polynomials i: tensor isomorphism-completeness. SIAM Journal on Com-
+     puting, 52(2):568–617, 2023.
+
+[20] Joshua A. Grochow and Youming Qiao. On the complexity of isomorphism problems for ten-
+     sors, groups, and polynomials iv: linear-length reductions and their applications. In Proceedings
+     of the 57th Annual ACM Symposium on Theory of Computing (STOC), pages 766–776, 2025.
+
+[21] John E. Hopcroft and Leslie R. Kerr. On minimizing the number of multiplications necessary
+     for matrix multiplication. SIAM Journal on Applied Mathematics, 20(1):30–36, 1971.
+
+[22] Michael Kaminski and Nader H. Bshouty. Multiplicative complexity of polynomial multipli-
+     cation over finite fields. Journal of the ACM, 36(1):150–170, 1989.
+
+[23] Manuel Kauers and Jakob Moosbauer. Flip graphs for matrix multiplication. In Proceedings
+     of the 2023 International Symposium on Symbolic and Algebraic Computation, pages 381–388,
+     2023.
+
+[24] Julian D. Laderman. A noncommutative algorithm for multiplying 3 × 3 matrices using 23
+     multiplications. Bulletin of the American Mathematical Society, 82(1):126–128, 1976.
+
+[25] Abraham Lempel, Gadiel Seroussi, and Shmuel Winograd. On the complexity of multiplication
+     in finite fields. Theoretical Computer Science, 22(3):285–296, 1983.
+
+[26] Peter L. Montgomery. Five, six, and seven-term Karatsuba-like formulae. IEEE Transactions
+     on Computers, 54(3):362–369, 2005.
+
+[27] Salvatore D. Morgera. Multiplicative complexity of bilinear algorithms for cyclic convolution
+     over finite fields. Multidimensional Systems and Signal Processing, 1(1):99–111, 1990.
+
+[28] V Ya Pan. Methods of computing values of polynomials. Russian Mathematical Surveys,
+     21(1):105–136, 1966.
+
+
+                                                 12
+[29] Alexey V. Smirnov. The bilinear complexity and practical algorithms for matrix multiplication.
+     Computational Mathematics and Mathematical Physics, 53(12):1781–1795, 2013.
+
+[30] Volker Strassen. Gaussian elimination is not optimal. Numerische Mathematik, 13(4):354–356,
+     1969.
+
+[31] Andrei L. Toom. The complexity of a scheme of functional elements realizing the multiplication
+     of integers. Soviet Mathematics Doklady, 3:714–716, 1963.
+
+[32] Meghanad D. Wagh and Salvatore D. Morgera. A new structured design method for convo-
+     lutions over finite fields, part i. IEEE Transactions on Information Theory, 29(4):583–595,
+     1983.
+
+[33] Shmuel Winograd. On multiplication of 2 × 2 matrices. Linear Algebra and its Applications,
+     4(4):381–388, 1971.
+
+[34] Shmuel Winograd. Some bilinear forms whose multiplicative complexity depends on the field
+     of constants. Mathematical Systems Theory, 10(2):169–180, 1977.
+
+
+A     Complete bound tables by family
+
+Tables 3–7 give the full lower- and upper-bound picture for each problem family. The boxed entries
+are the new lower bounds proved in this paper and collected in Table 1. Over characteristic 2 the
+negacyclic product coincides with cyclic convolution (xN + 1 = xN − 1), so Table 7 lists only F3 .
+In five entries the previously known lower bound exceeds ours by one: cyclic convolution at N = 5
+over both F2 and F3 and at N = 9 over F2 (Table 5), the truncated product at N = 4 over F3
+(Table 6), and the negacyclic product at N = 5 over F3 (Table 7). These entries share a pattern:
+the previous bound is tight (it meets the best known upper bound, so the rank is known exactly),
+and it comes from the algebra-specific minimal-rank theory of Bläser [9] and of Averbuch, Galil, and
+Winograd [3], which exploits the multiplicative structure of the quotient algebra. Our substitution-
+based techniques do not subsume those arguments, and in each of these cases they stop one short of
+the known rank; the “our LB” column always reports what our framework proves, not the stronger
+inherited bound.
+The tables also serve as a global sanity check on the method: in no entry does a bound we prove
+exceed the best known upper bound, and in many small cases it matches the exact rank already
+known. A soundness bug inflating a bound would, across the dozens of tabulated cases, likely have
+produced a lower bound exceeding some known upper bound, or a lower bound that is much lower
+than the best known lower bound.
+
+
+B    Computational results
+
+Table 8 reports the search and verification details for each new bound. The bounds themselves and
+their comparison to prior work appear in Tables 3–7 of Appendix A.
+
+
+
+
+                                                 13
+             format         prev LB                 our LB        prev UB
+             ⟨2, 2, 2⟩      7 [33]                  7             7 [30]
+             ⟨2, 2, 3⟩      11 [21]                 11            11 (⟨2, 2, 2 : 7⟩ + ⟨2, 2, 1 : 4⟩)
+             ⟨2, 2, 4⟩      14 [21]                 14            14 (⟨2, 2, 2 : 7⟩ + ⟨2, 2, 2 : 7⟩)
+             ⟨2, 3, 3⟩      15 [21]                 15            15 [21]
+             ⟨2, 3, 4⟩      18 [7], 19? [21]         19           20 [21]
+             ⟨3, 3, 3⟩      19 [8]                   20           23 [24]
+             ⟨3, 3, 4⟩      24 [8]                   25           29 [29]
+             ⟨3, 4, 4⟩      28 [7]                   29           38 [29]
+
+             Table 3: Matrix multiplication tensor rank over F2 ; boxed entries are new.
+
+                                   over F2                                  over F3
+         N      prev LB             our LB     prev UB       prev LB            our LB      prev UB
+         1      1                   1          1             1                  1           1
+         2      3 [16]              3          3 [31]        3 [16]             3           3 [31]
+         3      6 [25, 13, 18]      6          6 [22]        6 [25, 13, 17]     6           6 [22]
+         4      9 [22]              9          9 [22]        9 [22]             9           9 [22]
+         5      13 [25, 13, 17]     13         13 [26]       12 [22]            12          12 [22]
+         6      15 [25, 13, 17]      16        17 [26]       12 [25, 13, 18]     14         15 [34]
+         7      18 [25, 13, 17]      19        22 [26]
+         8      20 [25, 13, 17]      21        26 [34, 15]
+
+        Table 4: Full product of two degree-(N − 1) polynomials; boxed entries are new.
+
+                                    over F2                               over F3
+               N      prev LB       our LB     prev UB       prev LB      our LB      prev UB
+               1      1             1          1             1            1           1
+               2      3 [34]        3          3 [27]        2 [34]       2           2 [32]
+               3      4 [34]        4          4 [32]        5 [34]       5           5 [27]
+               4      8 [9, 4]      8          8 [27, 12]    5 [34]       5           5 [32]
+               5      10 [13, 9]    9          10 [32]       10 [9, 4]    9           10 [32]
+               6      11 [2, 9]     11         12 [27]       10 [34]      10          10 [27]
+               7      12 [14, 9]     13        13 [32]       13 [14, 9]   13          16 [27, 11]
+               8      16 [3, 9]      19        22 [27, 12]   11 [34]      11          11 [32]
+               9      19 [13, 9]    18         19 [27]       18 [3, 9]     19         27 [27, 12]
+               10     19 [2, 9]      22        29 [27]
+
+                 Table 5: Cyclic convolution modulo xN − 1; boxed entries are new.
+
+
+C    Orbit-enumeration algorithm
+
+Algorithm 1 spells out the orbit enumerator of Section 5: each dimension-d representative is built
+by extending a dimension-(d − 1) one with a new highest-pivot constraint, and the inner duplicate
+
+
+                                                       14
+                                             over F2                                      over F3
+                       N      prev LB        our LB        prev UB          prev LB       our LB       prev UB
+                       1      1              1             1                1             1            1
+                       2      3 [34, 1]      3             3 [31]           3 [34, 1]     3            3 [31]
+                       3      5 [34, 1]      5             5 [3, 9]         5 [34, 1]     5            5 [3, 9]
+                       4      8 [3, 9]       8             8 [12]           8 [3, 9]      7            8 [12]
+                       5      10 [3, 9]      10            11 [12]          10 [3, 9]     10           10 [4]
+                       6      12 [3, 9]       13           14 [12]          12 [3, 9]     12           14 [12]
+                       7      14 [3, 9]       16           18 [12]          14 [3, 9]     14           18 [12]
+                       8      16 [3, 9]       19           22 [12]          16 [3, 9]      17          22 [12]
+                       9      18 [3, 9]       21           27 [12]∗         18 [3, 9]      19          27 [34]∗
+                       10     20 [3, 9]       24           31 [12]          20 [3, 9]      21          31 [34]
+                       11     22 [3, 9]       27           36 [12]
+∗
+  We obtain a new bilinear complexity upper bound of 26 for multiplication over Z[x]/x9 by flip-graph search on
+F2 [23] and lifting to Z.
+(5a1−6a2+2a3+a5−a6)⊗(3b0+2b1+b2)⊗(−c6−c7−c8)+a0⊗b0⊗(c0−c3−c5−c8)+(a1−a2)⊗(3b0+2b1+b2)⊗(−c2−c3−
+c4 − c6) + (a0 − a1) ⊗ (b0 + b1 + 3b2 + 3b3 + b4 + b6 + b7) ⊗ (−c7 − c8) + (2a0 − a1) ⊗ (b0 − b5 + b7) ⊗ c7 + (3a0 − 2a1 + a2 − 2a3 + a4) ⊗
+(4b0 + 3b1 + b2 + b3 + b4) ⊗ c4 + (a2 − 4a3 + 2a4 − 2a5 + 3a6 − a7) ⊗ (b0 + b1) ⊗ c7 + (a1 − a2) ⊗ (3b0 + b1 − b2 − 3b3 − 3b4 − 2b5 − b6) ⊗
+(c6+c7+c8)+(a2−a3+a4−2a5+a6)⊗(2b0+2b1+b2)⊗(−c6−c7)+(a0−a2+a3)⊗(b0+b1+b4+b5)⊗(−c3+c5+c8)+(2a0−
+a1) ⊗ (b0 + b1) ⊗ (c1 − c2 − c3 − c4 − c5) + (a0 − 2a1 + 2a2 − a3) ⊗ (6b0 + 4b1 + 2b2 + b3 + b4 + b5) ⊗ (−c3 − c6 − c7 − c8) + (a0 + 2a1 −
+a2−2a3+2a4−a5)⊗(b0+b1+b2)⊗c6+a0⊗(b1+b2+b3+b4+b6+b7+b8)⊗c8+(a0−a1+a2−2a3+a4)⊗(5b0+4b1+b2+b3+
+b4)⊗(−c4−c7)+(a0−a1−a2−a3+a4)⊗(5b0+3b1+2b2+2b3+b4)⊗(−c4−c5)+(a0+a1−a2)⊗(3b0+2b1+b2+b3+b4+b5+
+b6)⊗(c6+c7)+(6a0−3a1−2a2−a3+2a6−a7)⊗(2b0+b1)⊗(−c7−c8)+(6a0−a1+a3−a4+a6−2a7+a8)⊗b0⊗c8+(a2−a3)⊗
+(b2−b4−b5)⊗(c3−c5−c6−c8)+(a2+a3−a4)⊗(7b0+4b1+2b2+2b3+b4)⊗(−c4−c5−c7−c8)+(2a0−2a1+2a2−a3)⊗(4b0+
+3b1 + b2 + b3 + b4 + b5) ⊗ (c3 + c7) + (a0 + a1 − a2) ⊗ (2b0 + 2b1 + b2) ⊗ (c2 + c7 + c8) + (a0 + a3 − 2a4 + a5) ⊗ (2b0 + 2b1 + b2 + b3) ⊗
+(−c5−c7)+(3a0−2a1+a2+a3−2a4+a5)⊗(3b0+2b1+b2+b3)⊗(c5+c7+c8)+(a0−a1)⊗(2b0+b1)⊗(−c1+c3+c6+c7+c8)
+
+              Table 6: Truncated product modulo xN ; boxed entries are new lower bounds.
+
+                                                                     over F3
+                                       N           prev LB            our LB            prev UB
+                                       1           1                  1                 1
+                                       2           3 [34]             3                 3 [31]
+                                       3           5 [34]             5                 5 [3, 9]
+                                       4           6 [34]             6                 6 [14]
+                                       5           10 [9, 4]          9                 10 [11]
+                                       6           12 [2, 9]          12                15 [34]
+                                       7           13 [14, 9]         13                16 [11]
+                                       8           16 [9, 4]          16                18 [11]
+                                       9           18 [3, 9]           19               27 [12]
+
+Table 7: Negacyclic convolution modulo xN + 1; the boxed entry is new. Over F2 , xN + 1 = xN − 1,
+so the negacyclic product coincides with cyclic convolution (Table 5).
+
+
+test is the meet-in-the-middle probe of that section. The visited set is cleared at the start of each
+dimension, since the subspace dimension is an invariant of the group action.
+
+
+
+
+                                                                   15
+                                                        search      search    cert.        verify    verify
+       result                   machine†                 time        cost     size          time      cost
+       RF2 (⟨2, 3, 4⟩) ≥ 19‡    MacBook Air             2 hrs       –         –            2 hrs     –
+       RF2 (⟨3, 3, 3⟩) ≥ 20     MacBook Air             40 min      –         32 MiB       3 sec     –
+       RF2 (⟨3, 3, 4⟩) ≥ 25     c8g.{16,48}xlarge§      4.6 days 52 USD       600 MiB      70 min 1 USD
+       RF2 (⟨3, 4, 4⟩) ≥ 29     c8g.48xlarge            4.9 hrs  5 USD        500 MiB      3.4 hrs 3 USD
+       RF2 (P6 ) ≥ 16           c8g.48xlarge            11 min        –       –            10 min    –
+       RF2 (P7 ) ≥ 19           c8g.48xlarge            3 hrs       3 USD     9 MiB        2.6 hrs 3 USD
+       RF2 (P8 ) ≥ 21           c8g.48xlarge            6 hrs       6 USD     224 MiB      3 hrs   3 USD
+       RF3 (P6 ) ≥ 14           c8g.48xlarge            35 min        –       6 MiB        31 min    –
+       RF2 (C7 ) ≥ 13           c8g.48xlarge            –              –      –            –            –
+       RF2 (C8 ) ≥ 19           c8g.48xlarge            –              –      –            –            –
+       RF2 (C10 ) ≥ 22          c8g.48xlarge            –              –      8 MiB        –            –
+       RF3 (C9 ) ≥ 19           c8g.48xlarge            3 min          –      3 MiB        –            –
+       RF2 (T6 ) ≥ 13           c8g.48xlarge            –             –       –            –            –
+       RF2 (T7 ) ≥ 16           c8g.48xlarge            –             –       –            –            –
+       RF2 (T8 ) ≥ 19           c8g.48xlarge            –             –       –            –            –
+       RF2 (T9 ) ≥ 21           c8g.48xlarge            –             –       –            –            –
+       RF2 (T10 ) ≥ 24          c8g.48xlarge            1 min         –       3 MiB        –            –
+       RF2 (T11 ) ≥ 27          c8g.48xlarge            7 min         –       22 MiB       –            –
+       RF3 (T8 ) ≥ 17           c8g.48xlarge            –             –       –            –            –
+       RF3 (T9 ) ≥ 19           c8g.48xlarge            2 min         –       2 MiB        –            –
+       RF3 (T10 ) ≥ 21          c8g.48xlarge            3.4 hrs     3 USD     20 MiB       –            –
+       RF3 (C−
+             9 ) ≥ 19           c8g.48xlarge            3 min          –      2 MiB        –            –
+– Very small number.
+†
+  Machines: Apple MacBook Air M4 with 16 GB RAM; AWS c8g.16xlarge Spot Instance, Graviton4 processors, 64
+vCPUs, 128 GiB memory; AWS c8g.48xlarge Spot Instance, Graviton4 processors, 192 vCPUs, 384 GiB memory.
+‡
+  Run on the equivalent ⟨3, 2, 4⟩ format: composing the transpose symmetry R(⟨l, m, n⟩) = R(⟨n, m, l⟩) with one
+cyclic shift R(⟨l, m, n⟩) = R(⟨m, n, l⟩) of Section 4 gives R(⟨2, 3, 4⟩) = R(⟨4, 3, 2⟩) = R(⟨3, 2, 4⟩). The proof is
+forced-product-heavy, so CPU verification takes about as long as the search. The verification can be accelerated by
+an NVIDIA L20 GPU to approximately 1 minute.
+§
+  Search on c8g.16xlarge. Verification on c8g.48xlarge.
+
+                  Table 8: Search and verification details for each new lower bound.
+
+Orbit counts
+
+Table 9 reports the number of constraint-subspace orbits Algorithm 1 finds for each matrix mul-
+tiplication format over F2 and F3 . The count depends on whether the transpose symmetry is in
+force, which happens exactly when the format is square (l = m = n); the polynomial families are
+swept by the same procedure.
+Where the exact count is out of reach, an orbit-counting (Burnside) estimate gives its order of
+magnitude. The number of orbits is at least the number of constraint subspaces divided by the
+group order; approximating the number of d-dimensional subspaces of Flmq and summing over d
+
+
+
+
+                                                        16
+Algorithm 1 Enumerate constraint-subspace orbits
+ 1: reps[0] ← [∅]
+ 2: for d = 1 to NA do
+ 3:    visited ← ∅
+ 4:    for each representative c ∈ reps[d − 1] (in lex order) do
+ 5:         for each candidate constraint r above all pivots of c (in lex order) do
+ 6:            q ← c ∪ {r}
+ 7:            if not Seen(q) then
+ 8:                append q to reps[d]
+ 9:                for σ ∈ Σ do insert RREF(σ(q)) into visited
+10:                end for
+11:            end if
+12:         end for
+13:    end for
+14: end for
+15: return reps
+
+
+16: function Seen(q)
+17:    for κ ∈ K do
+18:       if RREF(κ(q)) ∈ visited then return true
+19:       end if
+20:    end for
+21:    return false
+22: end function
+
+
+                 format l × m          transpose?      # orbits over F2         # orbits over F3
+                 2×2                   yes                             10                      10
+                 2×2                   no                              11                      11
+                 2×3                   no                              31                      31
+                 2×4                   no                              86                      91
+                 3×3                   yes                            496                     736
+                 3×3                   no                             710                    1046
+                 3×4                   no                         158,426             >1.6 × 106 †
+                 4×4                   yes                    >1.6 × 1011             >8.8 × 1015
+†
+    The exact value is computable but unlikely to improve any matrix bound.
+
+Table 9: Number of constraint-subspace orbits for matrix multiplication, A = Fl×m
+                                                                              q   . “transpose?”
+marks whether the order-two transpose symmetry is included; it applies only to square formats
+l = m = n. The > entries are the counting estimate of Equation (2).
+
+yields
+                                 lm
+                                 X                     q lm d
+                                                                                  ,                  (2)
+                                       |GLl (Fq ) × GLm (Fq ) × GLd (Fq )| · |T |
+                                 d=0
+where T = C2 when Q thentranspose    symmetry is present (l = m = n) and T = C1 otherwise,
+and |GLn (Fq )| = n−1
+                    k=0 (q − q k ). This produces the parenthesized entries of Table 9. Both the
+
+estimate and the enumeration can be halved by duality: orthogonal complement matches each orbit
+
+                                                         17
+of d-dimensional subspaces with one of dimension lm − d in equal number, so only the dimensions
+d ≤ ⌊lm/2⌋ need be enumerated.
+
+
+More invariants
+
+Clearing visited per dimension exploits a single G-invariant, the subspace dimension: two subspaces
+in the same orbit always have the same dimension, so the set never needs to hold subspaces of
+different dimensions simultaneously. The same idea applies to any G-invariant. Fixing a value (or
+a tuple of values) of one or more invariants, keeping in visited only the representatives realizing
+that value, and sweeping the values one at a time replaces a single large hash set with several small
+ones and never merges orbits across values, since equivalent subspaces agree on every invariant.
+We do not currently exploit invariants beyond the dimension, as enumeration memory is not the
+bottleneck of our results; the invariants of G available for each family include the following.
+
+
+Matrix multiplication (A = Fl×m
+                            q   , G = (GLl (Fq ) × GLm (Fq )) ⋊ C2 ).
+
+   • Rank distribution: ρi (S) = |{M ∈ S : rank M = i}| for i = 0, . . . , min(l, m). The sandwich
+     action M 7→ P M Q−1 and the transpose preserve the rank of each M , so ρ is constant on
+     orbits.
+
+   • Point profiles: let B0 , . . . , Bd−1 be a basis of S. The left profile is λi (S) = |{x ∈ Flq :
+     rank[x⊤ B0 , . . . , x⊤ Bd−1 ] = i}| for i = 0, . . . , m, and the right profile is µi (S) = |{y ∈ Fm q :
+     rank[B0 y, . . . , Bd−1 y] = i}| for i = 0, . . . , l. Left multiplication preserves λ, right multiplica-
+     tion preserves µ, and a change of basis of S preserves both; when l = m = n the transpose
+     swaps them, so the unordered pair {λ, µ} is invariant.
+
+
+Full polynomial multiplication (A = degree-(N − 1) binary forms, Gfull = PΓL2 (Fq )). A
+nonzero form is an effective degree-(N − 1) divisor on P1 , and PΓL2 permutes the closed points of
+P1 preserving their degree.
+
+   • Factorization-type distribution (the analog of the rank distribution): for a nonzero f ∈ S,
+     let τ (f ) be the multiset of pairs (deg P, ordP f ) over the closed points P in the support of
+     div(f ) — equivalently, the multiset of (degree, multiplicity) of the Fq -irreducible factors of
+     f . Every g ∈ PΓL2 sends f to a form with the same type, so ρτ (S) = |{f ∈ S : τ (f ) = τ }| is
+     invariant.
+
+   • Point profile (the analog of the point profiles): for a closed point P and k ≥ 1, let SP,≥k =
+     {f ∈ S : ordP f ≥ k}; the local vanishing profile is the codimension sequence vP (S) =
+     (dim S − dim SP,≥k )k≥1 . Since PΓL2 permutes the degree-δ closed points, for each δ the
+     multiset {vP (S) : deg P = δ} is invariant; its k = 1 term is the rank of the evaluation map
+     from S to the fiber at P . The projective action fuses 0, ∞, and every other point into one P1 ,
+     so here there is a single point profile rather than the left/right pair of matrix multiplication.
+
+
+Cyclic polynomial multiplication (A = R = Fq [x]/(xN −1), Gcyc = (R∗ ⋊Aut(R)⋊Gal(Fq /Fp ))/F∗q ).
+By the Chinese remainder theorem R ∼
+                                         Qt
+                                       = i=1 Fqdi over the q-cyclotomic cosets of Z/N , with projec-
+tions πi : R → Fqdi (evaluation at the N -th roots of unity). Gcyc scales each πi by a unit, permutes
+
+
+                                                     18
+the equal-degree factors, and twists them by field automorphisms, so it preserves the degree of each
+factor and the zero pattern of a ∈ R.
+
+    • Support-type distribution (the analog of the rank distribution): for a ∈ S, let supp(a) =
+      {di : πi (a) ̸= 0} be the multiset of degrees of the factors on which a is supported. Then
+      ρσ (S) = |{a ∈ S : supp(a) = σ}| is invariant.
+
+    • Projection-dimension profile (the cyclic point profile): for each factor dimFq πi (S) ∈
+      {0, . . . , di } (a unit scales πi (S) within Fqdi , preserving its Fq -dimension); for each δ the mul-
+      tiset {dimFq πi (S) : di = δ} is invariant. These factors are exactly the evaluation points at
+      the N -th roots of unity.
+
+All three point profiles are the same construction — evaluate the subspace at the points the sym-
+metry group permutes and record the resulting rank distribution — and differ only in the point
+set: the left/right vector spaces for matrix multiplication, the projective line P1 for full polynomial
+multiplication, and the N -th roots of unity for cyclic convolution.
+
+
+D     Toy example in detail: RF2 (⟨2, 2, 2⟩) ≥ 7
+
+We illustrate the dynamic program on ⟨2, 2, 2⟩ over F2 in detail, where A is the space of 2 × 2
+matrices and the symmetry group is G = (GL2 (F2 ) × GL2 (F2 )) ⋊ C2 acting by X 7→ P XQ−1 and
+by transposition. There are ten orbits of constraint subspaces. The program processes them from
+the most constrained to the unconstrained tensor, assigning each a lower bound by whichever of
+the four techniques of Section 6 succeeds first.PWe write aij for the free entries of A that survive
+the constraints, and the constrained tensor is i,j,k aij ⊗ bjk ⊗ cki restricted to them.
+
+
+Orbit 0: {a00 = 0, a01 = 0, a10 = 0, a11 = 0}
+            
+         0 0
+A=             . The constrained tensor is T0 = 0, so R(T0 ) = 0.
+         0 0
+
+
+Orbit 1: {a00 = 0, a01 = 0, a10 = 0}
+            
+       0 0
+A=             , with tensor T1 = a11 ⊗ b10 ⊗ c01 + a11 ⊗ b11 ⊗ c11 . Flattening the A and B factors
+       0 a11
+into one yields a matrix of rank 2, so R(T1 ) ≥ 2.
+
+
+Orbit 2: {a00 = 0, a01 + a10 = 0, a11 = 0}
+              
+       0 a01
+A=               , with tensor T2 = a01 ⊗ b00 ⊗ c01 + a01 ⊗ b01 ⊗ c11 + a01 ⊗ b10 ⊗ c00 + a01 ⊗ b11 ⊗ c10 .
+      a01 0
+Flattening yields a matrix of rank 4, so R(T2 ) ≥ 4.
+
+
+
+
+                                                     19
+Orbit 3: {a00 = 0, a01 = 0}
+              
+       0    0
+A=               , with tensor T3 = a10 ⊗ b00 ⊗ c01 + a10 ⊗ b01 ⊗ c11 + a11 ⊗ b10 ⊗ c01 + a11 ⊗ b11 ⊗ c11 .
+      a10 a11
+Flattening yields rank 4, so R(T3 ) ≥ 4.
+
+
+Orbit 4: {a00 = 0, a01 + a10 = 0}
+                
+          0 a01
+A=                , with tensor
+         a01 a11
+
+T4 = a01 ⊗ b00 ⊗ c01 + a01 ⊗ b01 ⊗ c11 + a01 ⊗ b10 ⊗ c00 + a01 ⊗ b11 ⊗ c10 + a11 ⊗ b10 ⊗ c01 + a11 ⊗ b11 ⊗ c11 .
+
+Flattening yields only 4, so we invoke the forced-product technique (Section 6), which automates
+the substitution of Hopcroft and Kerr stated in Lemma 2.
+                                       P
+Fix an optimal decomposition T4 = λ uλ ⊗ vλ ⊗ wλ with r = R(T4 ) terms. Grouping T4 along
+the C factor exposes its slices as forms in A ⊗ B: the slice at c00 is the single product a01 ⊗ b10 and
+the slice at c10 is the single product a01 ⊗ b11 , and these two are linearly independent (so s = 2).
+By Lemma 2 we may assume the decomposition computes them literally, say u0 ⊗ v0 = a01 ⊗ b10
+and u1 ⊗ v1 = a01 ⊗ b11 .
+Now strip these two terms from T4 . The lemma pins down their A ⊗ B parts but not their C-
+components w0 , w1 : each must match the slice it computes along c00 (resp. c10 ), but its coordinates
+along the remaining basis vectors c01 , c11 are unconstrained. Over F2 this leaves four unknown bits
+µ0 , . . . , µ3 , and the residual is
+
+  T4′ = T4 + a01 ⊗ b10 ⊗ (c00 + µ0 c01 + µ1 c11 ) + a01 ⊗ b11 ⊗ (c10 + µ2 c01 + µ3 c11 ),        µi ∈ {0, 1}.
+
+Enumerating all 24 = 16 assignments of µ and flattening each gives R(T4′ ) ≥ 4 in every case, so
+R(T4 ) ≥ 4 + 2 = 6.
+
+
+Orbit 5: {a00 = 0, a11 = 0}
+              
+       0 a01
+A=               , with tensor T5 = a01 ⊗ b10 ⊗ c00 + a01 ⊗ b11 ⊗ c10 + a10 ⊗ b00 ⊗ c01 + a10 ⊗ b01 ⊗ c11 .
+      a10 0
+Flattening yields rank 4, so R(T5 ) ≥ 4.
+
+
+Orbit 6: {a01 + a10 = 0, a00 + a01 + a11 = 0}
+                        
+         a00     a01
+A=                         . Flattening gives only 4. Here, we try to get a better lower bound using
+         a01 a00 + a01                                                                  P
+substitution with backtracking (Section 6). Fix an optimal decomposition T6 = λ uλ ⊗vλ ⊗wλ ; as
+in the hypothesis of Lemma 3, we may take each uλ to lie in the constrained space spanned by the
+free entries {a00 , a01 }, since projecting the uλ onto that space changes no term’s contribution on
+the constrained tensor and can only shorten the decomposition. The only nonzero linear forms in
+a00 , a01 over F2 are a00 , a01 , and a00 + a01 , so every nonzero uλ is one of these three. The flattening
+bound just computed shows the decomposition has at least 4 terms, so by pigeonhole one of the
+three forms occurs as some uλ at least twice, and setting it to zero kills at least two terms:
+
+                                                      20
+                             
+                       0 a01
+   • a00 = 0 leaves            , Orbit 2 after adding row 0 to row 1;
+                      a01 a01
+                             
+                      a00 0
+   • a01 = 0 leaves            , Orbit 2 after swapping the rows;
+                       0 a00
+                                  
+                           a00 a00
+   • a00 + a01 = 0 leaves            , Orbit 2 after adding row 1 to row 0.
+                           a00 0
+
+This pigeonhole argument of the lower bound 6 can be automated by the backtracking below.
+
+   • a00 : 6 not met; go deeper.
+
+         – a00 , a00 : set a00 = 0, reaching Orbit 2; R(T6 ) ≥ R(T2 ) + 2 ≥ 6. Proved; backtrack.
+         – a00 , a01 : 6 not met; go deeper.
+             ∗ a00 , a01 , a01 : set a01 = 0, reaching Orbit 2; R(T6 ) ≥ 6. Proved; backtrack.
+             ∗ a00 , a01 , a00 + a01 : 6 not met; go deeper.
+                 · a00 , a01 , a00 + a01 , a00 + a01 : set a00 + a01 = 0, reaching Orbit 2; R(T6 ) ≥ 6.
+                    Proved; backtrack.
+         – a00 , a00 + a01 : 6 not met; go deeper.
+             ∗ a00 , a00 + a01 , a00 + a01 : set a00 + a01 = 0, reaching Orbit 2; R(T6 ) ≥ 6. Proved;
+               backtrack.
+
+   • a01 : 6 not met; go deeper.
+
+         – a01 , a01 : set a01 = 0, reaching Orbit 2; R(T6 ) ≥ 6. Proved; backtrack.
+         – a01 , a00 + a01 : 6 not met; go deeper.
+             ∗ a01 , a00 + a01 , a00 + a01 : set a00 + a01 = 0, reaching Orbit 2; R(T6 ) ≥ 6. Proved;
+               backtrack.
+
+   • a00 + a01 : 6 not met; go deeper.
+
+         – a00 + a01 , a00 + a01 : set a00 + a01 = 0, reaching Orbit 2; R(T6 ) ≥ 6. Proved; backtrack.
+
+Every branch reaches the target, so R(T6 ) ≥ 6.
+
+
+Orbit 7: {a00 = 0}
+              
+        0 a01
+A=               . Adding the constraint a01 + a10 = 0 lands in Orbit 4, so degenerate reduction
+       a10 a11
+(Section 6) gives R(T7 ) ≥ R(T4 ) ≥ 6.
+
+
+Orbit 8: {a01 + a10 = 0}
+           
+    a00 a01
+A=           . Adding the constraint a00 = 0 lands in Orbit 4, so R(T8 ) ≥ R(T4 ) ≥ 6.
+    a01 a11
+
+
+
+                                                     21
+Orbit 9: { }
+                 
+        a00 a01                                                P
+A =
+        a10 a11
+                      is the unconstrained tensor T9 =            i,j,k aij ⊗ bjk ⊗ cki = ⟨2, 2, 2⟩. We apply
+                                                                                    P
+substitution with backtracking. Fix an optimal decomposition T9 =                      λ uλ ⊗ vλ ⊗ wλ . If a00
+appears as some uλ , setting a00 = 0 lands in Orbit 7 and gives R(T9 ) ≥ R(T7 ) + 1 ≥ 7; by the
+sandwich symmetry the same holds when the form is any of a01 , a10 , a11 , a00 + a01 , a10 + a11 ,
+a00 + a10 , a01 + a11 , or a00 + a01 + a10 + a11 . Otherwise the form is one of a01 + a10 , a00 + a11 ,
+a00 + a01 + a10 , a00 + a01 + a11 , a00 + a10 + a11 , or a01 + a10 + a11 , and setting it to zero lands in Orbit
+8, giving R(T9 ) ≥ R(T8 ) + 1 ≥ 7. These exhaust the nonzero forms, so RF2 (⟨2, 2, 2⟩) = R(T9 ) ≥ 7.
+
+
+
+
+                                                      22
+

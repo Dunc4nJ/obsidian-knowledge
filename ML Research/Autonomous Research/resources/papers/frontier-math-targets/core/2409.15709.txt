@@ -1,0 +1,655 @@
+                                                                                 R(5, 5) ≤ 46
+
+
+                                                            VIGLEIK ANGELTVEIT AND BRENDAN D. MCKAY
+
+
+                                                  Abstract. We prove that the Ramsey number R(5, 5) is less than or equal
+arXiv:2409.15709v2 [math.CO] 1 Sep 2025
+
+
+
+
+                                                  to 46. The proof uses a combination of linear programming and checking a
+                                                  large number of cases by computer. All of the computational parts of the proof
+                                                  were independently implemented by both authors, with consistent results.
+
+
+
+
+                                                                              1. Introduction
+                                             The Ramsey number R(s, t) is defined to be the smallest n such that every graph
+                                          of order n contains either a clique of s vertices or an independent set of t vertices.
+                                          See [9] for a survey on the currently known bounds for small Ramsey numbers.
+
+                                          Theorem 1.1. The Ramsey number R(5, 5) is less than or equal to 46.
+
+                                              The lower bound of 43, which was established by Exoo [5] in 1989, is still the
+                                          best. The upper bound of 49 was proved by the second author and Radziszowski
+                                          [8], and this was improved by the authors [1] to 48.
+                                              A Ramsey graph of type (s, t) is a simple graph with no clique of size s or inde-
+                                          pendent set of size t. Let R(s, t) denote the set of (isomorphism classes of) Ramsey
+                                          graphs of type (s, t), and let R(s, t, n) denote the subset of those with n vertices.
+                                          Let R(s, t, n, e = e0 ) denote the subset of R(s, t, n) having e0 edges, and similarly
+                                          for R(s, t, n, e ≤ e0 ) and R(s, t, n, e ≥ e0 ). Let e(s, t, n) and E(s, t, n) denote the
+                                          minimal and maximal number of edges of such a Ramsey graph, respectively.
+                                              The improvements in the upper bound for R(5, 5) are intimately connected to our
+                                          understanding of R(4, 5, n) for n large. Recall from [7] that R(4, 5) = 25. It follows
+                                          that any vertex v of a graph in R(5, 5, m) must have degree m − 25 ≤ d(v) ≤ 24.
+                                              It follows immediately that R(5, 5) ≤ 50, and that any graph in R(5, 5, 49) must
+                                          be regular of degree 24. This, together with a partial census of the set R(4, 5, 24),
+                                          allowed the second author and Radziszowski [8] to prove that R(5, 5) ≤ 49. Their
+                                          argument can be summarised as follows. First, they proved that E(4, 5, 24) = 132,
+                                          and found the two graphs in R(4, 5, 24, e = 132).
+                                              Given a graph F and a vertex v ∈ V (F ), let Fv+ be the induced subgraph on the
+                                          vertices adjacent to v and let Fv− be the induced subgraph on the vertices not v or
+                                          adjacent to v. We call Fv+ and Fv− the neighbourhood and dual neighbourhood of v
+                                          in F , respectively.
+                                              Recall the following identity, e.g. from the m = 2 case of [8, Theorem 2.2], which
+                                          can be proved by counting the subgraphs induced by sets of three vertices. If F
+                                          has n vertices, writing e(·) for the number of edges in its argument and d(v) for the
+                                                                                        1
+degree of vertex v, we have
+                                           X
+                                                    e(Fv− )−e(Fv+ )− 12 d(v)(n−2d(v)) .
+                                                                                     
+(1.2) excess(F ) = 0, where excess(F ) =
+                                         v∈V (F )
+
+Given a hypothetical graph F ∈ R(5, 5, 49), the above equation forces the neigh-
+bourhoods of all the vertices in F to be one of those two graphs in R(4, 5, 24, e =
+132) and the dual neighbourhoods to be one of the complement graphs. The authors
+then used further subgraph identities to obtain a contradiction.
+
+
+                                                      H
+               a
+                                           B
+                                                                    L
+                              K                        L1         L2
+              b
+                                           A
+                                                      G
+                  Figure 1. The structure of a graph in R(5, 5, n).
+
+
+                   2. High level description of the method
+   The method used in both [1] and the present paper can be summarized with
+the help of Figure 1, which shows a graph in R(5, 5, n), where n = 48 in [1] and
+n = 46 here. Consider two adjacent vertices a, b. The neighbourhood of a is
+H = {b} ∪ K ∪ B and that of b is G = {a} ∪ K ∪ A. Both of these neighbourhoods
+are in R(4, 5). L is the part of the graph adjacent to neither a nor b. The subgraph
+consisting of G and H, overlapping in K, plus the edge {a, b} but not the edges
+between A and B, will be denoted by G ∪K H.
+   Using a mixture of theory and computation we compile a collection of pairs
+                                                    +
+{(G, a), (H, b)} such that G+ a is isomorphic to Hb and every graph in R(5, 5, n)
+necessarily contains a pair in our collection overlapped as in the figure with a
+adjacent to b. We call a pair like (G, a) a pointed graph. Next, for each pair of
+pointed graphs in our collection, we determine all the ways to fill in edges in the
+places indicated by heavy dashed lines in the figure without creating cliques or
+independent sets of size 5. We call this gluing along the edge ab. The choice of
+L1 ⊆ L is arbitrary so we may choose any L1 that is necessarily present if this
+structure extends to a graph in R(5, 5, n).
+   In our previous work [1], our strategy was to start with L1 = ∅, so that only
+edges between A and B were sought. This produced a large but manageable number
+                                           2
+of solutions. Then we attempted to extend each solution to a graph in R(5, 5) by
+adding one additional vertex. Since no such extension existed in any of the cases,
+we concluded that R(5, 5, 48) = ∅.
+   With n = 46, choosing L1 = ∅ is impractical as the number of valid ways to
+add edges between A and B is extremely large. Instead, we chose a larger L1 and
+found that the number of solutions became manageable. The method for choosing
+L1 differed between the approaches of the two authors, and will be described in
+Sections 6 and 7.
+
+
+   We next outline the method for choosing a collection of pairs {(G, a), (H, b)} of
+pointed graphs.
+   The proof that R(5, 5) ≤ 48 in [1] can be summarised as follows. First we de-
+termined the complete catalogue of R(4, 5, 24), which contains a total of 352,366
+graphs. Given a hypothetical graph F ∈ R(5, 5, 48), either F or its complement
+must have a pair of adjacent vertices a, b of degree 24 whose neighbourhoods inter-
+sect in some subgraph K ∈ R(3, 5, d) for d ≤ 11. (The fact that it is possible to
+choose d ≤ 11 requires a proof, see [1].) Let G = Fb+ and H = Fa+ be the neigh-
+                                                  +
+bourhoods of b and a in F . Then K = G+     a = Hb , and a large subgraph of F can be
+reconstructed as G∪K H. Hence it suffices to consider all ways of gluing G∪K H for
+K ∈ R(3, 5, d) where d ≤ 11 and G, H ∈ R(4, 5, 24). There is one gluing operation
+required for each pair of pointed graphs of type K and for each automorphism of K,
+and in total we computed approximately 2 trillion gluing operations. As mentioned
+above we will call this gluing along an edge. Note that [1] relied on the complete
+catalogue of R(4, 5, 24) but did not use any linear programming.
+   In the current paper we take the ideas from [8] and [1] much further. For a hypo-
+thetical graph F ∈ R(5, 5, 46) every vertex must have degree d(v) ∈ {21, 22, 23, 24},
+and we consider parts of R(4, 5, n) for n = 21, 22, 23, 24. From [7] we know that
+R(4, 5, n) is quite large for n = 21, 22, 23. Indeed, in [7] the authors estimated
+that |R(4, 5, 21)| ≈ 5.5 × 1017 , |R(4, 5, 22)| ≈ 1.9 × 1015 and |R(4, 5, 23)| ≈ 1011 .
+(See the Appendix for updated estimates.) Hence any approach that relies on the
+complete catalogue of these Ramsey graphs is impractical.
+   Instead we use linear programming to reduce the number of graphs we need to
+consider. The basic idea is to determine R(4, 5, n, e ≥ e0 ) for n = 21, 22, 23 and
+suitable e0 (which depends on n) and exclude these graphs by gluing along an edge
+as described above. Then we can use linear programming to finish the proof of
+Theorem 1.1.
+   In more detail, we determine the sets R(4, 5, 23, e ≥ 119), R(4, 5, 22, e ≥ 113)
+and R(4, 5, 21, e ≥ 107). We also use R(4, 5, 24, e ≥ 127), determined in [1]. Then
+we glue these graphs along an edge. There are some additional challenges:
+
+    (1) The method used in [7, 1] to determine R(4, 5, 24) is too slow to determine
+        R(4, 5, n) for n = 21, 22, 23, so we cannot simply compute all of R(4, 5, n)
+        and throw away the graphs with too few edges. We explain our approach
+        in Section 3.
+                                           3
+    (2) The method used in [1] to glue two graphs along an edge produces far too
+        many output graphs, and even if we could collect them all it would take too
+        long to compute all possible ways to add one vertex while staying within
+        R(5, 5). We get around that by adding extra vertices straight away when
+        gluing along an edge as in [1].
+
+   In addition, we show in Section 5 that we do not have to perform all possible
+gluing operations. In fact, we show that we can leave out some of the more time-
+consuming gluing operations.
+   We estimate that completing the census of R(4, 5, n, e ≥ e0 ) took approximately
+15 years of CPU time while gluing the necessary graph took another 15 years of
+CPU time. Hence the whole project took about 30 years of CPU time for the first
+author to complete.
+   In the interests of confidence, all the computations were repeated by the sec-
+ond author using independent programs and usually with different methods. This
+replication took about 50 years of additional CPU time. For some tasks, such as
+creation of the catalogues described in the following section, the outputs of the two
+implementations could be directly compared. For the remaining much more compli-
+cated stages, the two approaches were deliberately intended to be disjoint to avoid
+the well-known axiom of software engineering that two programmers implementing
+the same algorithm tend to make errors in the same places. Moreover, if a graph
+R(5, 5, 46) exists, each implementation should have found many of its subgraphs by
+their completely different approaches. We feel that this provides better confidence
+than two implementations of the same approach would provide.
+
+
+
+
+                   3. Graphs in R(4, 5, n) with many edges
+   Recall that in [1] the authors completed the census of graphs in R(4, 5, 24) that
+was started in [7], and that |R(4, 5, 24)| = 352,366. To proceed, we also need to
+know something about the graphs in R(4, 5, n) for n = 21, 22, 23. As mentioned in
+the introduction there are far too many such graphs, see Table 1.
+   Fortunately we do not need all of the graphs in R(4, 5, n) but only the ones with
+a large number of edges. We consider R(4, 5, n) for n = 24, 23, 22, 21 in turn. Note
+that different choices for how many graphs of each type to consider are possible.
+For example, we could consider R(4, 5, 22, e = 114) only at the price of having to
+consider R(4, 5, 23, e ≥ 118) instead of R(4, 5, 23, e ≥ 119). It also seems like it
+would suffice to consider R(4, 5, 24, e ≥ 128) rather than R(4, 5, 24, e ≥ 127). But
+if we did that we would have to weaken Proposition 5.3 and perform more of the
+more difficult gluing operations.
+                                          4
+3.1. R(4, 5, 24). We have E(4, 5, 24) = 132, and for the proof of Theorem 1.1 it
+suffices to consider R(4, 5, 24, e ≥ 127). We recall from [1] that we have
+                              |R(4, 5, 24, e = 132)| = 2
+                              |R(4, 5, 24, e = 131)| = 3
+                              |R(4, 5, 24, e = 130)| = 32
+                              |R(4, 5, 24, e = 129)| = 147
+                              |R(4, 5, 24, e = 128)| = 843
+                              |R(4, 5, 24, e = 127)| = 3,401
+
+3.2. R(4, 5, 23). We have E(4, 5, 23) = 122, and for the proof of Theorem 1.1 it
+suffices to consider R(4, 5, 23, e ≥ 119). We have
+                            |R(4, 5, 23, e = 122)| = 2
+                            |R(4, 5, 23, e = 121)| = 119
+                            |R(4, 5, 23, e = 120)| = 7,800
+                            |R(4, 5, 23, e = 119)| = 332,778
+Finding all of these graphs was the second most time consuming part of the project,
+taking approximately 5 years of CPU time.
+   To find these graphs, we used the following strategy: As in [7], the idea is to glue
+R(3, 5, p) to R(4, 4, q) for p + q + 1 = 23. Given G ∈ R(3, 5, p) and H ∈ R(4, 4, q),
+denote the vertices of H by v0 , . . . , vq−1 . Now consider all tuples (d0 , . . . , dq−1 )
+so that if we glue G to H with vi adjacent to di vertices in G, the results lie in
+R(4, 5, 23, e ≥ 119).
+   Now we can order the vertices of H in a clever way, balancing two objectives:
+We want a vertex vi with di large near the beginning, and we want a dense sub-
+graph of H near the beginning. We can do this for all H ∈ R(4, 4, q) and all
+tuples (d0 , . . . , dq−1 ) with sufficiently large sum, and organise the set of such pairs
+(H, (d0 , . . . , dq−1 )) into a tree. The advantage of doing this is that after attach-
+ing, say, k vertices to G we produce graphs in R(4, 5, p + k + 1, e large), and this
+produces a bottleneck that we can take advantage of.
+
+3.3. R(4, 5, 22). We have E(4, 5, 22) = 114, and for the proof of Theorem 1.1 it
+suffices to consider R(4, 5, 22, e ≥ 113). We have
+                             |R(4, 5, 22, e = 114)| = 133
+                             |R(4, 5, 22, e = 113)| = 30,976
+We used a similar strategy as above. This calculation was significantly faster than
+the one for R(4, 5, 23, e ≥ 119).
+
+3.4. R(4, 5, 21). We have E(4, 5, 21) = 107, and for the proof of Theorem 1.1 it
+suffices to consider R(4, 5, 21, e = 107). We have
+                               |R(4, 5, 21, e = 107)| = 31.
+Once again we used a similar strategy as above, and this calculation was faster still.
+                                             5
+   Some additional counts that we don’t need for this project are given in Table 1,
+and the graphs themselves, including additional classes, are available on the inter-
+net [2].
+
+                         4. Some linear programming
+   The purpose of this section and the next is to define a set of gluing operations
+sufficient to prove Theorem 1.1. This set will be given in Theorem 5.4.
+   Define the following sets:
+   A = R(4, 5, 24, e ≥ 127)
+ B1 = R(4, 5, 23, e ≥ 121)    B2 = R(4, 5, 23, e = 120) B3 = R(4, 5, 23, e = 119)
+  C2 = R(4, 5, 22, e = 114)   C3 = R(4, 5, 21, e = 113)
+ D3 = R(4, 5, 21, e = 107)
+
+  Define Ā to be the set of complements of the members of A, and so on. So for
+example, Ā = R(5, 4, 24, e ≤ 149). Let
+                      E = A ∪ B1 ∪ B2 ∪ B3 ∪ C2 ∪ C3 ∪ D3 .
+  Now consider the special case of a graph F ∈ R(5, 5, 46). Then every vertex of
+F has degree in {21, 22, 23, 24} and we can write (1.2) as
+                                X
+                                      e(Fv− ) − e(Fv+ ) + 24
+                                                             
+                excess(F ) =
+                               d(v)=24
+                                      X
+                                             e(Fv− ) − e(Fv+ )
+                                                                 
+                               +
+                                   d(v)=23
+                                      X
+                                             e(Fv− ) − e(Fv+ ) − 22
+                                                                      
+                               +
+                                   d(v)=22
+                                      X
+                                             e(Fv− ) − e(Fv+ ) − 42 = 0.
+                                                                   
+                               +
+                                   d(v)=21
+
+   On the first line, with d(v) = 24, Fv− ∈ R(5, 4, 21) while Fv+ ∈ R(4, 5, 24), and
+so on. We can rewrite excess(F ) as
+                           X
+                                 (e(Fv− ) − 104) + (127 − e(Fv+ )) + 1
+                                                                       
+            excess(F ) =
+                        d(v)=24
+                              X
+                                      (e(Fv− ) − 119) + (118 − e(Fv+ )) + 1
+                                                                              
+                        +
+                            d(v)=23
+                              X
+                                      (e(Fv− ) − 135) + (112 − e(Fv+ )) + 1
+                                                                              
+                        +
+                            d(v)=22
+                              X
+                                      (e(Fv− ) − 149) + (106 − e(Fv+ )) + 1 .
+                                                                           
+                        +
+                            d(v)=21
+
+   Given such an F ∈ R(5, 5, 46), suppose each Fv+ ̸∈ E and each Fv− ̸∈ Ē. Then
+each vertex v ∈ V (F ) contributes at least 1 to excess(F ), so excess(F ) ≥ 46 and
+hence we cannot have excess(F ) = 0. This suggests a proof strategy: Deal with the
+                                              6
+relatively small number of graphs in E (and Ē) separately, and then use the above
+equation for excess(F ) to finish.
+
+Remark 4.1. As alluded to above, the above argument works with R(4, 5, 24, e ≥
+128) instead of R(4, 5, 24, e ≥ 127). But we include e = 127 because otherwise we
+cannot prove Theorem 5.4.
+
+
+                      5. Gluing pairs of pointed graphs
+   The obvious strategy is to consider all pointed graphs constructed from E, and
+glue every pair of pointed graphs of type K for each K ∈ R(3, 5, d). If we can
+do this, it will imply that there are at most 4 vertices of F ∈ R(5, 5, 46) with
+neighbourhoods in E because with 5 such vertices there must be an edge between
+two of them and gluing along that edge will detect F . Similarly this implies that
+there are at most 4 vertices with dual neighbourhoods in Ē. Each Fv+ or Fv− not
+in E decreases the estimate of excess(F ) by at most 5, and we get excess(F ) ≥
+46 − 8 · 5 = 6.
+   There are two problems with this strategy:
+Problem 1: If we glue pointed graphs (G, a) ∈ R(4, 5, n1 , K) and (H, b) ∈
+R(4, 5, n2 , K) for K ∈ R(3, 5, d) along an edge the output is a collection of graphs
+in R(5, 5, n1 + n2 − d). This worked well when n1 = n2 = 24 and d ≤ 11, as this
+produced graphs in R(5, 5, n ≥ 37) and there are not very many of those. (Well,
+actually there are lots of such graphs. But there are very few such graphs that also
+have two vertices of degree 24.) We solve that by including additional vertices, as
+indicated in Figure 1.
+Problem 2: As we decrease n1 and n2 , and increase d, the gluing calculations take
+a lot longer. This should not be surprising, as we are starting with fewer specified
+edges. We put a lot of work into optimising the gluing program, but even so the
+calculation would have taken too long. We solve this by showing that it suffices to
+glue only some of the pairs of pointed graphs from E.
+   Define the following sets of graphs:
+
+                                E1 = A ∪ B1 ,
+                                E2 = B2 ∪ C2 ,
+                                E3 = B3 ∪ C3 ∪ D3 .
+
+   Define Ē1 , Ē2 , Ē3 to be the sets of complementary graphs. Given a graph G ∈
+R(4, 5, n), let P (G) denote the corresponding set of pointed graphs. This set usually
+consists of n pointed graphs, although some pointed graphs might be isomorphic.
+Let Pk (G) denote the set of pointed graphs obtained as follows: First, find the
+n pointed graphs for G (without removing isomorphic graphs). Then sort them
+according to a heuristic measure of difficulty, and throw away the k − 1 most
+difficult pointed graphs. At this point we can throw away isomorphic copies of the
+remaining pointed graphs.
+                                          7
+   Given F ∈ R(5, 5, 46), we can consider the induced subgraph F [E] of F on the
+vertices with neighbourhood in E. Similarly, let F [Ē] denote the induced subgraph
+of F on the vertices with dual neighbourhood in Ē.
+   In the following, we abuse notation by saying that a vertex v ∈ V (F ) is in E if
+its neighbourhood is in E, and similarly for Ei .
+
+Lemma 5.1. Any graph G ∈ R(5, 4, 17) has a vertex of degree at least 8.
+
+Proof. This is an explicit calculation. If G has at least 60 edges then this is auto-
+matic, and we can check this by completing a census of R(5, 4, 17, e ≤ 59). There
+are 7147 such graphs, and all of them have at least one vertex of degree greater
+than or equal to 8.                                                                □
+
+Lemma 5.2. Suppose G ∈ R(5, 5, 21) has two non-adjacent vertices of degree at
+most 4. Then either G contains a vertex of degree at least 8 or G contains a 4-clique
+{w1 , w2 , w3 , w4 } with degG (w1 ) + degG (w2 ) + degG (w3 ) + degG (w4 ) ≤ 24.
+
+Proof. This is another explicit calculation. If G has a vertex of degree 3 then the
+result follows from Lemma 5.1 by considering its dual neighbourhood. If G has two
+non-adjacent vertices {v1 , v2 } of degree 4 then the dual neighbourhood of v1 is of
+type R(5, 4, 16) and has a vertex of degree at most 4. By an explicit calculation
+there are 2029 graphs in R(5, 4, 16) with maximum degree at most 7 and a vertex
+of degree at most 4. After adding v1 and 4 more vertices we find that there are 148
+graphs in R(5, 5, 21) with maximum degree at most 7 and two non-adjacent vertices
+of degree at most 4. And all of these have a 4-clique satisfying the condition in the
+lemma.                                                                             □
+
+Proposition 5.3. Given F ∈ R(5, 5, 46), either F [E] or the complement F̄ [E]
+must contain one of the following:
+    (1) Some vertex in E1 adjacent to at least 1 other vertex in E.
+    (2) Some vertex in E2 adjacent to at least 1 other vertex in E2 .
+    (3) Some vertex in E2 adjacent to at least 5 other vertices in E.
+    (4) Some vertex in E3 \ D3 adjacent to at least 8 other vertices in E.
+    (5) Some vertex in D3 adjacent to at least 8 other vertices in E \ D3 .
+
+Proof. Suppose F ∈ R(5, 5, 46) has mi vertices with neighbourhood in Ei and m̄i
+vertices with dual neighbourhood in Ēi for i = 1, 2, 3. Let α = 5m1 + 2m2 + m3
+and β = 5m̄1 + 2m̄2 + m̄3 . Then excess(E) ≥ 46 − α − β, so since excess(E) = 0
+we get α + β ≥ 46.
+    Moreover, let n21 be the number of vertices in F [E] of degree 21 in F and define
+n̄21 similarly using F̄ . Then, if n21 > m̄1 we have at least n21 − m̄1 vertices
+in F with dual neighbourhoods in R(5, 4, 24, e ≥ 150) and together with the dual
+consideration it follows that α+β ≥ 46+max(n21 − m̄1 , 0)+max(n̄21 −m1 , 0). (This
+was the reason for considering R(4, 5, 24, e ≥ 127) rather than R(4, 5, 24, e ≥ 128).)
+    If F does not satisfy the conclusion of the proposition then the induced subgraph
+F [E] is in R(5, 5, m1 + m2 + m3 ). Moreover, the vertices in E1 have degree 0
+in F [E], so m1 ≤ 4 and the induced subgraph on the remaining vertices is in
+                                          8
+R(5, 5 − m1 , m2 + m3 ). The vertices in E2 have degree at most 4 in F [E] and are
+only adjacent to vertices in E3 . Finally, the vertices in E3 \ D3 have degree at most
+7 and the vertices in D3 have degree at most 7 + (n21 − 1).
+    First we claim that if α ≥ 21 then m1 ≤ 2. To prove this, we do a case by case
+analysis. Suppose this fails for some F ∈ R(5, 5, 46). If m1 = 4 then m2 + m3 > 0,
+and we get an independent 5-set on the 4 vertices in E1 and one additional vertex
+in E, a contradiction. If m1 = 3 and m2 ≥ 2 we again get an independent 5-set. If
+m1 = 3 and m2 ≤ 1 then m2 + m3 ≥ 5. If all the vertices in E2 ∪ E3 are adjacent
+we get a 5-clique. Otherwise we get an independent 5-set.
+    Second, we claim that if α ≥ 23 then either α = 23, m1 = 2 and n21 = 13 or
+m1 ≤ 1 and n21 ≥ α − 21. To prove this, we first consider the case m1 = 2. If
+m1 = 2 we must have m2 ≤ 2 and 2m2 + m3 ≥ 13. If m2 > 0 then the vertices in
+E2 ∪ E3 form a graph in R(5, 3, d ≥ 11). Every vertex in such a graph has degree
+at least 6, so F [E] satisfies (3). If m2 = 0 then m3 ≥ α − 10 and the vertices in E3
+form a graph in R(5, 3, α − 10). If α > 23 then R(5, 3, α − 10) is empty. If α = 23
+then every vertex in such a graph has degree at 8, so either F [E] satisfies (4) or all
+13 vertices in R(5, 3, 13) are in D3 .
+    To finish proving the claim it suffices to show that if α = 23 and n21 ≤ 1 then
+F satisfies the conclusion of the proposition. (If α > 23 and n21 ≤ α − 22, simply
+remove α − 23 vertices from E, starting with vertices of degree 21 in F .) Suppose
+not. It suffices to consider m1 = 1 and m1 = 0. We do each case in turn.
+    If α = 23, m1 = 1 and n21 ≤ 1 then either F [E] satisfies (1) or (2), or m2 ≤ 3
+and 2m2 + m3 ≥ 18. The vertices in E2 ∪ E3 form a graph in R(5, 4, m2 + m3 ),
+and either F [E] satisfies (3) or the vertices in E2 have degree at most 4. If m2 ≤ 1
+then we are done by Lemma 5.1. If m2 ≥ 2 then the dual neighbourhood of the
+first vertex in E2 is in R(5, 3, d ≥ 10) and since every vertex in such a graph has
+degree at least 5 we conclude that F [E] satisfies (3).
+    If α = 23, m1 = 0 and n21 ≤ 1 then either F [E] satisfies (1) or (2), or m2 ≤ 4
+and 2m2 + m3 ≥ 23. Now we consider each value of m2 separately. If m2 = 3 or
+m2 = 4 then we can pick two vertices in E2 in such a way that the intersection of
+their dual neighbourhoods form a graph in R(5, 3, d ≥ 10). This follows from an
+application of the inclusion-exclusion principle. If m2 = 4, let {w1 , w2 , w3 , w4 } be
+the vertices in E2 and let Ai for i = 1, 2, 3, 4 be the vertices in E3 not adjacent to
+wi . Since each wi has degree at most 4 in F [E], each Ai has size at least 11. Let
+us write Aij for Ai ∩ Aj , and so on. If the conclusion fails, each double intersection
+                                          P            P            P
+has size at most 7. Now we use that          |Ai | = 2 |Aij | − 3 |Aijk | to conclude
+that
+     [         X           X           X               X            X
+        Ai =       |Ai | −    |Aij | +    |Aijk | ≥ 32   |Ai | − 13   |Aij | ≥ 15 + 13 ,
+                       S
+a contradiction since    Ai = 19 − 4 = 15. The case m2 = 3 is similar. Since every
+vertex in such a graph has degree at least 5, it follows that F satisfies (2) or (3).
+   If m2 = 2 then m3 ≥ 19, and F [E] (or an induced subgraph) lies in R(5, 5, 21).
+If F does not satisfy the conclusion of the proposition then F [E] ∈ R(5, 5, 21) has
+two non-adjacent vertices of degree at most 4, and maximal degree at most 7. Now
+                                           9
+there are some such graphs, so further analysis is required. But we can find all of
+them, starting from R(5, 4, 16, e ≤ 52). Given such a graph G, we can consider all
+4-cliques and use an inclusion-exclusion argument. This gives a contradiction as
+                                                                            P
+follows: By Lemma 5.2 there is a 4-clique {w1 , w2 , w3 , w4 } in G with degG (wi ) ≤
+24. Let Ai be the neighbours of wi in F [V (F ) − E]. Since 3 of {w1 , w2 , w3 , w4 }
+have degree at least 22 in F and the last wi have degree at least 21 in F , we get
+P                                                      P           P           P
+   |Ai | ≥ 3 · 22 + 21 − 24 = 63. Now we use that         |Ai | = 2 |Aij | − 3 |Aijk | to
+conclude that
+        [          X           X            X                    X
+           Ai =        |Ai | −     |Aij | +   |Aijk | ≥ 63
+                                                        2
+                                                           −   1
+                                                               2
+                                                                   |Aijk | ≥ 25 + 12 .
+                                                S
+This yields the desired contradiction, as         Ai ≤ 46 − 21 = 25.
+   If m2 = 1 then m3 ≥ 21 and F [E] (or an induced subgraph) lies in R(5, 5, 22).
+If F does not satisfy the conclusion of the proposition then G ∈ R(5, 5, 22) has one
+vertex of degree at most 4. The dual neighbourhood of this vertex is in R(5, 4, d ≥
+17), and now we use Lemma 5.1 to conclude.
+   Finally, if m2 = 0 then m3 ≥ 23 and F [E] (or an induced subgraph) lies in
+R(5, 5, 23). If F does not satisfy the conclusion of the proposition then G ∈
+R(5, 5, 23), and G has maximal degree at most 7. Such a G must have a 4-clique on
+vertices {w1 , w2 , w3 , w4 } with each wi having degree at least 22 in F . Then each wi
+is adjacent to at least 15 vertices in V (F ) − V (G), and we obtain a contradiction
+by using the inclusion-exclusion principle in the same way as above, now with
+                               [                X
+                                  Ai ≥ 60 2
+                                            − 1
+                                              2
+                                                   |Aijk | = 24.
+   Now we can finish the proof. Without loss of generality we can assume α ≥ β,
+and we immediately get α ≥ 23. If β ≤ 20 then α ≥ 26 + (α − 21 − m̄1 ), which
+implies m̄1 ≥ 5, a contradiction. If β = 21 or β = 22 we get α ≥ 24 + (α − 21 − m̄1 ),
+which implies m̄1 ≥ 3, a contradiction. And if β ≥ 23 we get α + β ≥ 46 + (α −
+21 − m̄1 ) + (β − 21 − m1 ), so m1 + m̄1 ≥ 4. If m1 ≥ 3 or m̄1 ≥ 3 we are done.
+Otherwise (α, m1 , n21 ) = (23, 2, 13) and (β, m̄1 , n̄21 ) = (23, 2, 13) and again we are
+done.                                                                                   □
+
+  Given F , it suffices to glue along a single edge in F [E]. Hence it follows from
+Proposition 5.3 that it suffices to do the following gluings:
+
+Theorem 5.4. To prove Theorem 1.1 it suffices to do the following gluings:
+    (1) Glue P (E1 ) to P (E);
+    (2) Glue P (E2 ) to P (E2 );
+    (3) Glue P5 (E2 ) to the rest of P (E);
+    (4) Glue P8 (E3 \ D3 ) to P (E).
+    (5) Glue P8 (D3 ) to P (E \ D3 ).
+
+                           6. First gluing computation
+   In this section we describe the method used by the first author. It follows
+the description in Section 2, with G, H chosen from the pairs listed in Theorem
+5.4. Each gluing problem can be encoded as a SAT problem whose clauses forbid
+                                            10
+cliques or independent sets of size 5. We also added symmetry breaking clauses to
+distinguish the vertices of L1 .
+   If |G| + |H| − |K| ≥ 37 we chose L1 to be empty, and if |G| + |H| − |K| < 37 we
+chose L1 so that the output graphs (if any) have exactly 37 vertices.
+   We are entitled to make some additional assumptions about L1 , and some ex-
+perimentation suggested the following: Pick a vertex v in K of maximal degree d
+in G ∪K H, and choose L1 so that it is adjacent to min(|L1 |, 21 − d) of the vertices
+in L1 . In other words, we try to choose v and L1 so that v has degree 21. We can
+do that because any vertex of F ∈ R(5, 5, 46) has degree at least 21.
+   When running our solver, we then prioritised branching on variables correspond-
+ing to edges in the neighbourhood of v. If v has degree 21 in G ∪K H ∪ L1 then
+the neighbourhood of v has to be in R(4, 5, 21), and because R(4, 5, 21) is at least
+somewhat smaller than R(4, 5, 19) or R(4, 5, 20) (see the appendix) this provided
+an additional bottleneck in the calculation.
+   These gluing operations produced a total of 8,485,247 graphs in R(5, 5, 37). None
+of those extended to R(5, 5, 38).
+   Our SAT solver was a very simple special purpose solver without advanced fea-
+tures like clause learning and restarts.
+
+
+
+
+                         7. Second gluing computation
+   In this section we describe the method used by the second author. It follows the
+description in Section 2, with G, H chosen from the pairs listed in Theorem 5.4.
+   Let v be a vertex in K whose degree kmin is the least so far (i.e. given only
+its connections to a, b, A, B, K). Let w be a vertex in K whose degree kmax is the
+greatest so far that is less than 21. Possibly w doesn’t exist, in which case references
+to it should be ignored.
+   The flexibility in choosing L1 allows us to make some assumptions which give
+the SAT solving a head start and also remove some of the symmetry.
+
+      • |L1 | = 1 : If w exists, it is adjacent to L so we can take L1 adjacent to w.
+      • |L1 | = 2 and |L| ≥ 4 : If kmin ≤ 17, v is adjacent to at least 4 vertices of L.
+        Those 4 vertices must include an edge or else they form an independent set
+        of size 5 in conjunction with a. We can take L1 to be that edge, with both
+        ends adjacent to v. If 18 ≤ kmin ≤ 19, we can similarly take L1 to be an
+        edge with at least one end adjacent to v.
+      • |L1 | = 3 and |L| ≥ 9 : Since R(3, 4) = 9, L contains a triangle which we
+        can take as L1 . If kmin ≤ 14 we can also add one edge between v and L1 .
+      • |L1 | = 4 and |L| ≥ 13 : By direct computation we find that every graph in
+        R(5, 4, 13) contains an induced subgraph consisting of two triangles sharing
+        an edge. So we can assume L1 contains this graph of five edges and one
+        non-edge.
+                                           11
+     • |L1 | = 5 and |L| ≥ 14 : By direct computation, every graph in R(5, 4, 14)
+       contains either B1 or B2 as an induced subgraph.
+
+                             B1                B2
+
+
+
+        If either G or H has 21 vertices, its complementary neighbourhood belongs
+        to R(5, 4, 24). By direct computation, we find that none of the 413 graphs
+        in R(5, 4, 14) without B2 as an induced subgraph extend to R(5, 4, 24).
+        Therefore, we can take L1 to contain all the edges of B1 and the non-edges
+        of B2 . The remaining vertex pair in L1 can be assumed to be an edge if
+        either G or H has 21 vertices, and is left unspecified otherwise.
+   The computation now proceeded in phases. Initially, |L2 | was chosen to be 10,
+but the program automatically switched to |L2 | = 9 if too many solutions were
+being found. Each phase consisted of these steps:
+    (1) The SAT clauses were propagated and a limited amount of backtracking
+        was performed if the propagation was inconclusive. This lead to either
+        elimination, a solution found, or an inconclusive result. No attempt was
+        made to find all solutions.
+    (2) If satisfiability was still unsettled, the reduced SAT program was handed to
+        the SAT solver Glucose [3] with a time limit of 1 minute. Glucose decided
+        satisfiability in 1 second on average.
+    (3) If satisfiability was still unsettled (a very rare event), a combination of
+        Glucose and backtracking was applied. All such cases showed infeasibility.
+   If a configuration produced a solution, it was passed to the next phase with
+|L1 | increased by 1. Each phase had many fewer configurations to process than
+the previous phase. As a sanity check, a number of cases were run as well using
+Kissat [4] instead of Glucose.
+   In the first phase, the total number of (G, H)-overlaps was about 12 million,
+of which 5.6 million were processed by Glucose. Glucose found 15,248 satisfiable
+cases, and the remainder were unsatisfiable including 77 which timed out and needed
+step (3). The 15,248 satisfiable cases went to the second phase, where only 17 cases
+were found to be satisfiable and were sent to the third phase where they were
+unsatisfiable.
+   This proves that none of the initial configurations can be extended to R(5, 5, 46).
+
+                                  8. Conclusions
+   Given the theory and the two independent computations, Theorem 1.1 has now
+been firmly established. We believe that future improvements to the upper bound
+on R(5, 5) will need new theoretical insights, as an excessive amount of computer
+time would be required to apply the same method. Improved upper bounds on
+some Ramsey numbers that partly rely on our investigation of R(4, 5) can be found
+in the 2024 edition of Radziszowki’s survey [9].
+                                          12
+                         Appendix A. A census of R(4, 5)
+   While only a small part of R(4, 5) was required for our main theorem, we record
+here an update of [7, Table 3]. Recall that e(4, 5, n) and E(4, 5, n) are, respectively,
+the minimum and maximum number of edges in R(4, 5, n). In Table 1, we show
+           emin = e(4, 5, n), emax = E(4, 5, n), N (x) = |R(4, 5, n, e = x)|.
+Floating-point numbers in the final column are estimates obtained by a statistical
+method described by the first author [6]. Briefly, a backtrack program for generat-
+ing the graphs exhaustively without isomorphs by adding one vertex at a time is
+modified to randomly reject a fraction of the graphs of each size. The large number
+of graphs in the 18–20 vertex range means that accurate counts for 21-23 vertices
+are more difficult to obtain. In total, |R(4, 5)| ≈ 2.93 × 1019 .
+
+   n emin     emax N (emin ) N (emin +1) N (emax −1) N (emax )   |R(4, 5, n)|
+    1  0         0     1           0           0         1              1
+    2  0         1     1           1           1         1              2
+    3  0         3     1           1           1         1              4
+    4  0         5     1           1           2         1             10
+    5  1         8     1           2           3         1             28
+    6  2        12     1           4           2         1            114
+    7  3        16     1           3           4         1            627
+    8  4        21     1           2           4         1           5 588
+    9  6        27     1           4           2         1           81 321
+   10  8        33     1           5           3         1         1 915 582
+   11 10       40      1           3           2         1        67 445 833
+   12 12       48      1           1           1         1      3 215 449 959
+   13 17       53      1           6          10         2     184 701 427 544
+   14 22       60      2          16           4         1      1.113 × 1013
+   15 27       66      1           6          14         1      5.960 × 1014
+   16 32       72      1           2         138         5      2.320 × 1016
+   17 41       79      5         226          86         1      5.176 × 1017
+   18 50       85    326       29 160       12 374      74       4.98 × 1018
+   19 57       92      1           1        46 277     210       1.47 × 1019
+   20 68       100  2 016     213 961        822         1       8.57 × 1018
+   21 77       107    83        5 940       10 188      31        5.6 × 1017
+   22 88       114     3          94        30 976     133        1.8 × 1015
+   23 101      122     1          76         119         2         9 × 1010
+   24 116      132     9          90           3         2          352 366
+                   Table 1. Parameters and counts for R(4, 5)
+
+
+
+
+                                       References
+[1] Vigleik Angeltveit and Brendan D. McKay. R(5, 5) ≤ 48. J. Graph Theory, 89(1):5–13, 2018.
+                                             13
+[2] Vigleik Angeltveit and Brendan D. McKay. Edge-extremal Ramsey (4, 5)-graphs. https://
+    users.cecs.anu.edu.au/~bdm/data/ramsey.html.
+[3] Gilles Audemard and Laurent Simon. On the Glucose SAT solver. Internat. J. Artificial In-
+    telligence Tools, 27, #1840001, 2018.
+[4] Armin Biere, Katalin Fazekas, Mathias Fleury, and Maximillian Heisinger. CaDiCaL, Kissat,
+    Paracooba, Plingeling and Treengeling entering the SAT Competition 2020, in Tomas Balyo,
+    Nils Froleyks, Marijn Heule, Markus Iser, Matti Järvisalo, and Martin Suda, editors, Proc.
+    of SAT Competition 2020 — Solver and Benchmark Descriptions, pages 50–53. University of
+    Helsinki, 2020.
+[5] Geoffrey Exoo. A lower bound for R(5, 5). J. Graph Theory, 13(1):97–98, 1989.
+[6] Brendan D. McKay, Isomorph-free exhaustive generation, J. Algorithms, 26 (1998), 306–324.
+[7] Brendan D. McKay and Stanislaw P. Radziszowski. R(4, 5) = 25. J. Graph Theory, 19(3):309–
+    322, 1995.
+[8] Brendan D. McKay and Stanislaw P. Radziszowski. Subgraph counting identities and Ramsey
+    numbers. J. Combin. Theory Ser. B, 69(2):193–209, 1997.
+[9] Stanislaw P. Radziszowski. Small Ramsey numbers, Electron. J. Combin., Dynamic Survey 1.
+    1994–2024.
+
+  (1) Mathematical Sciences Institute, Australian National University, Canberra,
+ACT 2601, Australia
+
+   (2) School of Computing, Australian National University, Canberra, ACT 2601, Aus-
+tralia
+   Email address, 1: vigleik.angeltveit@anu.edu.au
+   Email address, 2: brendan.mckay@anu.edu.au (corresponding author)
+
+
+
+
+                                              14
+
