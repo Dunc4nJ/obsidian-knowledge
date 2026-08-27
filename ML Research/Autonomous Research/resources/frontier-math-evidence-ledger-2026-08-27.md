@@ -180,8 +180,10 @@ Running all targets as one undifferentiated search would destroy falsifiability.
 - Claim: max_n has an exact two-hidden-layer ReLU representation for n at most 10; every CPWL function on R^d inherits the result through d at most 9.
 - Primary source: Rueß et al., “Shallower ReLU Network Representations via Exact Linear Algebra,” [arXiv:2607.21651](https://arxiv.org/abs/2607.21651).
 - Local locator: papers/frontier-math-targets/core/2607.21651.txt:30, 62–101, 118–128.
-- Evidence direction: supports a live next rung and exact-algebra verification.
-- Qualification: unrestricted width and real weights; failure of the paper’s ansatz is not a universal lower bound.
+- Evidence direction: supports a live next rung and exact-algebra verification. The public certificate repository was pinned at commit `2343f1213302e3431344595423e69e3395537020`; existing sparse certificates use 3, 4, 57, 69, 337, and 402 templates for `n=5..10`.
+- Exact ansatz-size audit: a Burnside counter finds 216,428 symmetry templates for the full `n=10,k=4` ansatz and 12,179,657 for `n=11,k=5`, a `56.28x` column-family jump. An independent hinge-ray derivation gives 47,157 versus 657,822 retained hinge rows, so the explicit full matrices have dimensions `47,167 x 216,428` and `657,833 x 12,179,657` before any private solver reductions. The raw unordered pair space grows from 90,002,728,585 to 73,241,479,993,605. Local audit: `relu-max-certificates/max11-ansatz-audit-2026-08-27.md`.
+- Fresh cousin: Safran, [arXiv:2608.23877](https://arxiv.org/abs/2608.23877), proves exponential-width hierarchies between adjacent fixed depths with unrestricted weights. It does not rule out an arbitrarily wide finite two-hidden-layer representation of `max_11`.
+- Qualification: unrestricted width and real weights; failure of the paper’s ansatz is not a universal lower bound. The full row and column counts do not determine sparse nonzeros, rational rank, fill-in, bit growth, solve time, or likely certificate support, and the optimized builder/solver is absent from the public repository.
 - Confidence: high on theorem scope; freshness remains search-qualified.
 
 ### E-002 — 3x3 bilinear rank
@@ -238,7 +240,7 @@ Running all targets as one undifferentiated search would destroy falsifiability.
 - Exact replay: Aichholzer's archived `best028.asc` integer-coordinate witness was recovered, SHA-256 `666d74d36b125e18e439167918bc150f1e82bbb3db5c99ab568021b7c9bfa6fa`. A new integer-arithmetic verifier checked all 3,276 triples for general position and all 20,475 four-point subsets, returning exactly 7,234 crossings.
 - Local audit: expanded/k28-baseline-audit-2026-08-27.md; verifier: expanded/verify_k28_best028.py.
 - Qualification: this independently replays the known 7,234 **upper** witness; it does not decide whether a 7,233 construction exists or prove the universal 7,234 lower bound. A nonrealizable oriented matroid does not supply a planar point construction.
-- Confidence: 0.99 on the interval and 0.96 on unresolved status through the audit date, pending a second implementation/reviewer for the local replay.
+- Confidence: 0.99 on the interval and 0.96 on unresolved status through the audit date. The recovered upper witness was replayed by two exact implementations under a same-family T1 reviewer; this is not independent-family or expert proof review.
 
 ### E-008 — Costas-32
 
@@ -421,6 +423,8 @@ Running all targets as one undifferentiated search would destroy falsifiability.
 | V-T1-04 exact-pilot source audit | T1, same model family | Reconstructed K28's one-bit interval and audited Costas databases, current papers, repositories, and certificate requirements | Raised K28 source confidence; bounded the Costas statement to “no published/catalogued witness found”; refused universal absence; identified Costas as more attention-legible but more lottery-like |
 | V-T1-05 weighted-regression audit | T1, same model family | Searched the exact theorem, companion paper, endpoint formula, and adjacent 2026 work | Confirmed the published intermediate regime remains unresolved in bounded searches; demoted the author-signaled `n=2d−1` endpoint; selected `R(3,4)` as the clean first original cell |
 | V-T1-06 hostile allocation review | T1, same model family | Attacked the revised ranking for certificate-size bias, attention inflation, missing negative routes, crowding, and north-star mismatch | Split the leaderboard by objective; promoted field-pinned tensor rank over Costas overall; retained K28 as a quiet pilot; added `HC4` only to the moonshot lane; required stronger wording around ReLU `max_11` |
+| V-T1-07 K28 artifact replay | T1, same model family | Redownloaded the archived point set, attacked the checker, reran it in isolation, and wrote an independent convex-hull counter | Confirmed the hash-pinned 7,234 witness in two implementations; found and prompted repair of hash, row-arity, exit-status, and time-of-check hardening issues; discharged only the baseline-replay obligation, not the open problem |
+| V-T1-08 ReLU system-size audit | T1, same model family | Independently attacked the Burnside template count, derived the hinge-row universe, checked provenance, and asked whether the result made `max_11` launch-ready | Reproduced 12,179,657 columns and 657,822 hinge rows by separate methods; identified the full `657,833 x 12,179,657` matrix; refused discharge because sparsity, rank, fill-in, bit growth, solver cost, certificate budget, and private reductions remain unknown |
 
 No review above is independent-family corroboration. Before any public claim, the selected target should receive at least one domain-expert or genuinely cross-family T2 review, followed by an independent verification implementation.
 
@@ -483,17 +487,19 @@ Expanded sources include:
 
 North-star sources now include the Anthropic zeta paper/note, OpenAI's ten-advances and reasoning-walkthrough documents, the Jacobian consequences paper, the `HC5`/low-dimensional status paper, and the quartic `HC4` paper. Two post-Anthropic zeta repositories are pinned locally as **unreviewed research artifacts**, not accepted papers.
 
+The ReLU materials now include the public exact-certificate repository, an exact Burnside template-count audit for `max_11`, and the 2026 adjacent-depth hierarchy preprint `2608.23877`.
+
 The quant folder now includes both full-SVI and sub-SVI papers, the American-put boundary nonconvexity paper, a current quant-finance benchmark paper, and the curated formal-mathfin open-problem list used only for scouting.
 
-PDFs and pdftotext extractions are stored side by side. `MANIFEST.sha256` was regenerated after Round 3 and binds 183 files while deliberately pruning nested `.git`, virtual-environment, and bytecode-cache metadata.
+PDFs and pdftotext extractions are stored side by side. The current `MANIFEST.sha256` binds 200 files and has SHA-256 `a89e5ebbe91c6bb3c230761b1a3cafef0bcd1cea3fd10ddf00679813ae958eb9`; nested `.git`, virtual-environment, and bytecode-cache metadata are deliberately pruned.
 
 ## Remaining gaps before launch
 
 1. **T2 remains open:** no independent-family or domain-expert review yet.
-2. **K28 baseline reconstructed:** the primary inequality chain and archived 7,234 integer-coordinate construction have now been replayed exactly; a second implementation/reviewer remains desirable before launch.
+2. **K28 baseline reconstructed:** the primary inequality chain and archived 7,234 integer-coordinate construction have now been replayed exactly by two implementations under a same-family reviewer. The remaining problem is mathematical—find 7,233 coordinates or certify the 7,234 universal lower bound—not artifact recovery.
 3. **Costas bounded audit completed:** no published/catalogued witness was found, but launch still needs recovery benchmarks on known order-29 arrays and a final repository sweep; universal absence remains unclaimable.
 4. **Weighted-regression citation audit completed:** before publication, contact or otherwise check the authors' private `n=2d−1` argument; use `R(3,4)` as the proposed original target and rerun novelty.
-5. **ReLU:** estimate `max_11` system/certificate size and predeclare that failure of any chosen ansatz is only a bounded null.
+5. **ReLU narrowed:** the explicit full system size is now known exactly (`657,833 x 12,179,657`), but sparse nonzeros, rational rank, fill-in, bit growth, memory/solve budget, likely certificate support, and the optimized implementation remain unavailable; freeze and hash the chosen ansatz and predeclare that failure is only a bounded null.
 6. **Matrix rank:** freeze the field and keep rank, border rank, ring validity, and addition count as distinct claims.
 7. **HC4:** sweep degree-five and structural subclasses posted after 2026-08-14 before allocating compute.
 8. **Zeta follow-ups:** independently audit the analytic reduction and transport the strongest stable candidate into a proof assistant or a clean-room checker before treating any claimed constant as established.

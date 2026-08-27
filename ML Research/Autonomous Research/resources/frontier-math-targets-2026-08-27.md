@@ -5,7 +5,7 @@
 **Calibration:** Anthropic's zeta-zero result and the dimension-qualified Jacobian counterexample  
 **Primary objective:** find a mathematically important, precisely stated, independently checkable target whose solution or sharp improvement would attract serious attention, preferably with direct relevance to machine learning, model training, algorithms, or quantitative research.
 
-> **Round 3 adversarial revision:** This file preserves the initial candidate dossier and is no longer the canonical ranking. Six same-family T1 review passes corrected target statements, challenged certificate-size bias, audited the three leading pilots, added `HC4` and a quant reconnaissance lane, and separated expected value from headline ceiling. The current rankings, evidence cards, negative findings, verifier replay, and source locators are in [frontier-math-evidence-ledger-2026-08-27.md](frontier-math-evidence-ledger-2026-08-27.md). Do not quote the Round 1 ordering below without this revision notice.
+> **Round 3 adversarial revision:** This file preserves the initial candidate dossier and is no longer the canonical ranking. Eight same-family T1 review passes corrected target statements, challenged certificate-size bias, audited the leading pilots, added `HC4` and a quant reconnaissance lane, and separated expected value from headline ceiling. The current rankings, evidence cards, negative findings, verifier replay, and source locators are in [frontier-math-evidence-ledger-2026-08-27.md](frontier-math-evidence-ledger-2026-08-27.md). Do not quote the Round 1 ordering below without this revision notice.
 
 ## Executive verdict
 

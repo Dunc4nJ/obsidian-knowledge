@@ -33,6 +33,7 @@ Downloaded artifacts:
 - Page SHA-256: `3d47a3d113a8fcd7ce9555b4bd4a6574160a2b42f3415dcba9f7950143ed5013`
 - Point set: `k28-best028.asc`
 - Point-set SHA-256: `666d74d36b125e18e439167918bc150f1e82bbb3db5c99ab568021b7c9bfa6fa`
+- Hardened verifier SHA-256: `fd2eb4804ea079525c0ffa8428b03285d77de2263b9d29d298cb39966db552b7`
 
 The point artifact contains 28 integer-coordinate pairs.
 
@@ -81,4 +82,4 @@ It does **not** decide the open problem. A solution still requires either:
 - a realizable 28-point construction with 7,233 crossings; or
 - a proof that every realizable 28-point order type has at least 7,234 crossings.
 
-The verifier is intentionally small, but it is not yet a formally verified or independently implemented checker. A second implementation/reviewer should replay it before campaign launch.
+The verifier is intentionally small and is not formally verified. A same-family T1 reviewer redownloaded the witness byte-for-byte, reran the checker in isolated mode, and independently obtained 7,234 using a separately written monotone-chain convex-hull counter. That is implementation diversity, not different-family or human mathematical review.
