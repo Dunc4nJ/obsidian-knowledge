@@ -1,0 +1,842 @@
+                                                SETS OF EQUIANGULAR LINES IN DIMENSION 18 CONSTRUCTED FROM
+                                                                        A9 ⊕ A9 ⊕ A1
+
+                                                  YEN-CHI ROGER LIN, AKIHIRO MUNEMASA, TETSUJI TANIGUCHI, AND KIYOTO YOSHINO
+
+
+                                                    A BSTRACT. In 2023, Greaves et al. constructed several sets of 57 equiangular lines in dimension
+arXiv:2503.06377v3 [math.CO] 27 Jun 2025
+
+
+
+
+                                                    18. Using the concept of switching root introduced by Cao et al. in 2021, these sets of equiangular
+                                                    lines are embedded in a lattice of rank 19 spanned by norm 3 vectors together with a switching root.
+                                                    We characterize this lattice as an overlattice of the root lattice A9 ⊕ A9 ⊕ A1 , and show that there
+                                                    are at least 246896 sets of 57 equiangular lines in dimension 18 arising in this way, up to isometry.
+                                                    Additionally, we prove that all of these sets of equiangular lines are strongly maximal. Here, a set
+                                                    of equiangular lines is said to be strongly maximal if there is no set of equiangular lines properly
+                                                    containing it even if the dimension of the underlying space is increased. Among these sets, there are
+                                                    ones with only six distinct Seidel eigenvalues.
+
+
+
+
+                                                                                          1. I NTRODUCTION
+                                              A set of lines through the origin in a real vector space is equiangular if any pair of these lines
+                                           forms the same angle. The maximum cardinality N (d) of a set of equiangular lines in dimension
+                                           d has been studied since 1948 [14]. The values or bounds of N (d) for d ≤ 23 are summarized in
+                                           Table 1 [11, 12, 13, 14, 16, 23]. In any dimension, a general upper bound N (d) ≤ d(d + 1)/2 [16]
+
+                                                                     TABLE 1. The values or bounds of N (d) for d ≤ 23.
+
+                                                d    2 3 4 5 6 7–14 15 16 17   18    19    20   21 22 23
+                                               N (d) 3 6 6 10 16 28 36 40 48 57–59 72–74 90–94 126 176 276
+
+                                           and lower bounds [6, 10] are known. For a fixed common angle arccos(α), the maximum cardinality
+                                           Nα (d) of a set of equiangular lines with common angle arccos(α) in dimension d has also been
+                                           studied. It is known that 1/α must be an odd integer if Nα (d) > 2d [16, Theorem 3.4]. In the case of
+                                           α = 1/3, sets of equiangular lines with common angle arccos(1/3) have been enumerated [21, 26],
+                                           and their maximality has been determined [3]. In the case of α = 1/5, the so-called Lemmens-
+                                           Seidel conjecture N1/5 (d) = max {276, ⌊(3d − 3)/2⌋} for d ≥ 23 has been proved [2, 16, 26]. In
+                                           high dimensions, Jiang et al. proved that for every integer k ≥ 2, N1/(2k−1) (d) = ⌊k(d−1)/(k−1)⌋
+                                           for all sufficiently large d [15].
+                                              As mentioned above, determining N (d) and Nα (d) has attracted significant attention, and a nat-
+                                           ural question arises as to whether existing sets of equiangular lines can be extended to construct new
+                                           ones. To address this, the concept of strongly maximal sets of equiangular lines was introduced [3].
+                                           A set of equiangular lines is said to be strongly maximal if there is no set of equiangular lines prop-
+                                           erly containing it even if the dimension of the underlying space is increased. Cao et al. [3] proved
+
+                                              2020 Mathematics Subject Classification. 05B40, 05B20, 05C50, 05C70.
+                                              Key words and phrases. equiangular lines, root lattice, 1-factorization, switching equivalence.
+                                              The research of A. Munemasa was supported by JSPS KAKENHI Grant Number 20K03527. The research of
+                                           T. Taniguchi was supported by JSPS KAKENHI Grant Number 21K03344. The research of Y. R. Lin is partially sup-
+                                           ported by Taiwan NSTC grant 113-2115-M-003-016-MY2.
+                                                                                                     1
+2                            SETS OF EQUIANGULAR LINES IN DIMENSION 18
+
+that any set of equiangular lines achieving the so-called absolute bound is strongly maximal and
+determined strongly maximal sets of equiangular lines with common angle arccos(1/3).
+   The main focus of this paper is on sets of equiangular lines in dimension 18, which is the smallest
+dimension where N (d) remains unknown. From the relative bound [16], it follows that N (18) =
+N1/5 (18) ≤ 61. Greaves et al. [11] further refined this bound, proving that N (18) ≤ 59. Also,
+Taylor remarked that N (18) ≥ 48 [22, p. 124]. Szőllösi [20] improved the lower bound to N (18) ≥
+54. Subsequently, Lin and Yu [17] proved N (18) ≥ 56, and show that no extra line can be added
+to either of the two sets of equiangular lines in [17, 20]. Their approach to constructing large
+sets of equiangular lines involved removing specific lines from a set of 276 equiangular lines in
+dimension 23, which is known to be unique [9, Theorem A]. More recently, Greaves et al. [13]
+proved that N (18) ≥ 57 by searching for vectors in Z18 of norm 10 with pairwise inner product
+±2. They explicitly provided four Seidel matrices corresponding to four sets of 57 equiangular
+lines in dimension 18 and claimed to have identified numerous others. They then posed the question
+of whether their four sets of equiangular lines are contained in the set of 276 equiangular lines in
+dimension 23. Yoshino [24] resolved this question in the negative, and moreover proved that the
+four sets are strongly maximal.
+   In this paper, we show that there are a large number of strongly maximal sets of 57 equiangular
+lines in dimension 18 which are realized by sets of norm 3 vectors in a certain overlattice Λ of
+the root lattice A9 ⊕ A9 ⊕ A1 . We note the lattice Λ in Theorem 1.1 is chosen in such a way
+that it realizes four sets of 57 equiangular lines in [13]. In fact, we verify in Appendix that the
+sets of equiangular lines we found include those explicitly given in [13]. Our main theorem is as
+follows. The definition of affine equiangular sets will be given in Definition 2.1. It makes possible
+to represent a set of equiangular lines with common angle arccos(1/5) in terms of a set of norm 3
+vectors in an integral lattice.
+Theorem 1.1. There are at least 246896 affine equiangular sets of cardinality 57 with norm 3 with
+respect to (0, 0, (1, −1)) in the lattice Λ up to isometry. Furthermore, all of these affine equiangular
+sets are strongly maximal.
+  Since affine equiangular sets essentially correspond to sets of equiangular lines, as will be intro-
+duced and explained in Section 2, this theorem immediately implies the following corollary.
+Corollary 1.2. There are at least 246896 sets of 57 equiangular lines in dimension 18 with common
+angle arccos(1/5) up to isometry.
+   However, all the sets of equiangular lines we found are strongly maximal as well, and as a result,
+our result does not directly contribute to a possible of improvement the lower bound on N (18). It
+may well be true that N (18) is 57.
+   The main tool in our study is the concept of switching roots, introduced in [3], which significantly
+simplifies the search for vectors that form sets of equiangular lines. A natural approach to searching
+for vectors that form a set of equiangular lines with common angle of arccos(1/5) is to look for
+vectors with norm 5 and pairwise inner products ±1 in a given integral lattice. However, enumer-
+ating all such vectors with norm 5 in a given lattice is often computationally intricate, making it
+difficult to directly investigate sets of equiangular lines. Furthermore, although strong maximality
+can be verified by enumerating vectors of norm at most 5 in the dual of the lattice, this process is
+computationally even harder. By introducing switching roots, these vectors can be translated into
+an affine space along the direction of the switching root, thereby reducing the problem to searching
+for vectors of norm 3 with pairwise inner products 0 or 1 in an integral lattice. Since the resulting
+lattice often has a smaller discriminant, we can more easily address the problem of whether a set
+of equiangular lines is strongly maximal. See Section 2 for details. In this paper, we define such
+                             SETS OF EQUIANGULAR LINES IN DIMENSION 18                                  3
+
+vectors of norm 3 as an affine equiangular set in Definition 2.1, and adopt the overlattice Λ of
+A9 ⊕ A9 ⊕ A1 in Definition 3.2 as a suitable lattice.
+   This paper is organized as follows. In Section 2, we introduce affine equiangular sets in connec-
+tion with sets of equiangular lines, and describe how to verify their strong maximality. In Section 3,
+we introduce the overlattice Λ, and in Section 4, we provide a set X of vectors of norm 3 that
+contains the desired affine equiangular sets. Since X is partitioned as X1 ∪ X−1 ∪ X5 , and every
+affine equiangular set in X is switching equivalent to one in X1 ∪ X5 , we study maximum affine
+equiangular sets in X5 and X1 in Section 5 and Section 6, respectively. In Section 7, we study
+the lattices coming from maximum affine equiangular sets in X to later consider affine equiangular
+sets up to isometry. In Section 8, we provide a lower bound on the number of maximum affine
+equiangular sets in X up to switching, and a lower bound on the number up to isometry in Corol-
+lary 8.2. In addition, we verify that the maximum affine equiangular sets in X are strongly maximal
+in Theorem 8.4, and obtain Theorem 1.1. In Section 9, we provide examples sets of 57 equiangular
+lines in dimension 18, whose Seidel matrices have only 6 distinct eigenvalues, one less than what
+Geaves et al. found [13]. In Appendix, we verify that the sets of equiangular lines constructed in
+this paper include those explicitly given in [13].
+
+              2. S ETS OF EQUIANGULAR LINES AND AFFINE EQUIANGULAR SETS
+   In this section, we introduce sets of equiangular lines and affine equiangular sets, and describe
+the relations between them. In general, an isometry is defined as a mapping between metric spaces
+that preserves metric. In this paper, we treat lines and vectors in a Euclidean space, and hence
+isometries are compositions of translations and orthogonal transformations. Furthermore, we will
+restrict our attention to isometries which fix certain points, such as the origin or a specific vector
+(e.g., a switching root), and consequently preserve inner products. For simplicity, we also refer to a
+function defined on a set of vectors that preserves inner products as an isometry.
+   First, we introduce concepts related to sets of equiangular lines. For a set Φ of equiangular
+lines, denote by ⟨Φ⟩R the smallest vector subspace containing all lines in Φ. Two sets Φ and Φ′ of
+equiangular lines are said to be isometric if there exists an isometry f : ⟨Φ⟩R → ⟨Φ′ ⟩R such that
+f (Φ) = Φ′ . Here, note that f (Φ) denotes {{f (u) : u ∈ l} : l ∈ Φ}. A set Φ of equiangular lines
+is said to be strongly maximal if there is no set of equiangular lines properly containing Φ even if
+the dimension of the underlying space is increased. Also, a Seidel matrix is a symmetric matrix
+with diagonal entries 0 and off-diagonal entries ±1. Two Seidel matrices are said to be switching
+equivalent if they are similar under some signed permutation matrix. For a non-negative integer
+n, denote by [n] the set {1, . . . , n}. For a set Φ = {li }ni=1 of n equiangular lines with common
+angle arccos(α), there exist unit vectors v1 , . . . , vn such that li = Rvi for every i ∈ [n]. Then, the
+matrix (1/α)(I − G) is a Seidel matrix, where G is the Gram matrix of v1 , . . . , vn . Although vj
+can be replaced with −vj as a unit vector generating lj for some j, this Seidel matrix is uniquely
+determined up to switching equivalence. In particular, the characteristic polynomial of the Seidel
+matrix S is an invariant of the set Φ of equiangular lines.
+   Next we introduce the concept of affine equiangular sets. Note that a vector v is called a root if
+(r, r) = 2.
+Definition 2.1. Let s be a real number at least 1. Let r be a root in RN , where N ∈ Z≥1 . The set
+of vectors u1 , . . . , un in RN is called an affine equiangular set with norm s with respect to r if
+      (i) (u1 , r) = · ( · · = (un , r) = 1,
+                            s     if i = j,
+     (ii) (ui , uj ) =
+                            0, 1 otherwise.
+The root r is called the switching root of the affine equiangular set.
+4                            SETS OF EQUIANGULAR LINES IN DIMENSION 18
+
+  For an affine equiangular set ω = {u1 , . . . , un } with norm s with respect to a switching root r,
+we have
+                                               (
+                           2ui − r 2uj − r              2s − 1 if i = j,
+                             √ , √                 =
+                                2        2              −1, 1    otherwise.
+Furthermore, the lines R(2u1 −r), . . . , R(2un −r) are equiangular with common angle arccos(1/(2s−
+1)) in the vector space ⟨u1 , . . . , un ⟩ ∩ r⊥ . We say that this set of equiangular lines is induced by
+ω. Any set of equiangular lines with common angle arccos(1/(2s − 1)) is induced by some affine
+equiangular set with norm s. Refer to [2] for details.
+Definition 2.2. Two affine equiangular sets ω and ω ′ with respect to a common switching root r are
+said to be switching equivalent if there exists a bijection g : ω → ω ′ such that either g(u) = u or
+g(u) = r − u for all u ∈ ω. Denote by ∼sw the switching equivalence, that is, ω ∼sw ω ′ if ω and
+ω ′ are switching equivalent. Denote by [ω] the switching class {ω ′ : ω ′ ∼sw ω}.
+   We see that if two affine equiangular sets are switching equivalent, then they induce the same set
+of equiangular lines. It should be noted that the concepts above have been essentially introduced in
+terms of matrices in [3].
+Definition 2.3. Affine equiangular sets ω with respect to a switching root r and ω ′ with respect to
+a switching root r′ are isometric if there exists an affine equiangular set ω ′′ switching equivalent to
+ω ′ and a bijective isometry g : ω ∪ {r} → ω ′′ ∪ {r′ } such that g(r) = r′ .
+Lemma 2.4. Affine equiangular sets ω with respect to a switching root r and ω ′ with respect to
+a switching root r′ are isometric if and only if the set of equiangular lines induced by ω and that
+induced by ω ′ are isometric.
+Proof. Let Φ and Φ′ be the sets of equiangular lines induced by ω and ω ′ , respectively. Assume that
+ω and ω ′ are isometric. Then, there exists an affine equiangular set ω ′′ switching equivalent to ω ′
+and a bijective isometry g : ω ∪ {r} → ω ′′ ∪ {r′ } such that g(r) = r′ . This induces the bijection
+                           {2u − r : u ∈ ω} → {2u′′ − r′ : u′′ ∈ ω ′′ }
+                               2u − r       7→     2g(u) − r′ .
+Since this preserves inner product, this mapping can be extended to the isometry
+                          f : ⟨2u − r : u ∈ ω⟩R → ⟨2u′′ − r′ : u′′ ∈ ω ′′ ⟩R .
+Here, ⟨2u − r : u ∈ ω⟩R = ⟨Φ⟩R holds, and
+                      ⟨2u′′ − r′ : u′′ ∈ ω ′′ ⟩R = ⟨2u′ − r′ : u′ ∈ ω ′ ⟩R = ⟨Φ′ ⟩R
+holds by ω ′ ∼sw ω ′′ . Since this isometry f satisfies f (Φ) = Φ′ by definition, we conclude that Φ
+and Φ′ are isometric.
+    Conversely, we assume that Φ and Φ′ are isometric. Then, there exists an isometry f : ⟨Φ⟩R →
+⟨Φ′ ⟩R such that f (Φ) = Φ′ . Noting that u ∈ ω corresponds one-to-one to R(2u − r) ∈ Φ, and
+u′ ∈ ω ′ does one-to-one to R(2u′ − r′ ) ∈ Φ′ , we see that for any u ∈ ω, there uniquely exists
+u′ ∈ ω ′ such that f (R(2u − r)) = R(2u′ − r′ ). Then, f (u) ∈ {u′ , r′ − u′ } holds. This means that
+ω ′′ := {f (u) : u ∈ ω} is switching equivalent to ω ′ . In addition, the mapping ω → ω ′′ ; u 7→ f (u)
+is a bijective isometry. Therefore, ω and ω ′ are isometric.                                         □
+Definition 2.5. An affine equiangular set ω with respect to a switching root r is said to be strongly
+maximal if there is no affine equiangular set with respect to r properly containing ω, even if the
+dimension of the underlying space is increased.
+                              SETS OF EQUIANGULAR LINES IN DIMENSION 18                                  5
+
+   Note that an affine equiangular set is strongly maximal if and only if the set of equiangular lines
+induced by it is strongly maximal. Also, for a set S of vectors, denote by ⟨S⟩ the lattice generated
+by S, that is, the set of linear combinations of vectors in S with integral coefficients. Although, in
+general, an additive subgroup of Rn is called a lattice if it is discrete, all sets written as ⟨S⟩ in this
+paper are discrete.
+Lemma 2.6. An affine equiangular set ω with norm s with respect to r is strongly maximal if and
+only if there is no vector v in the dual of the lattice ⟨ω ∪ {r}⟩ such that (v, v) ≤ s, (v, r) = 1 and
+(v, u) ∈ {0, 1} for every u ∈ ω.
+Proof. The affine equiangular set ω is not strongly maximal if and only if there exists a vector w
+in some vector space containing ⟨ω ∪ {r}⟩ such that (w, r) = 1 and (w, u) ∈ {0, 1} for every
+u ∈ ω. Let v be the orthogonal projection of such a vector w onto the vector space generated
+by the vectors of ω together with r. Then, v is contained in the dual lattice of ⟨ω ∪ {r}⟩, and
+satisfies (w, u) ∈ {0, 1} for all u ∈ ω and (w, r) = 1. Thus, we obtain the necessary and sufficient
+condition.                                                                                        □
+
+                               3. A N OVERLATTICE OF A9 ⊕ A9 ⊕ A1
+   In this section, we introduce an overlattice of A9 ⊕ A9 ⊕ A1 , which contains affine equiangular
+sets of cardinality 57, and describe its properties. Before that, we first describe properties of the root
+lattices An and their dual. For detailed explanations, see [5, 18]. Let 1 be the vector all of whose
+entries are 1. The root lattice An is defined as
+                                       An = {x ∈ Zn+1 : (1, x) = 0}.
+Its dual quotient A∗n /An is a cyclic group of order n + 1 generated by the coset of
+                                                                  
+                                           1           1       n
+                                αn =           ,...,      ,−          .
+                                         n+1         n+1 n+1
+In particular,
+                                             disc An = n + 1,                                       (3.1)
+                                                         n
+                                              ∥αn ∥2 =       .                                      (3.2)
+                                                       n+1
+Also,
+                                         Aut(An ) = ⟨−1⟩ × Sn+1 ,                                   (3.3)
+where Sn+1 is the symmetric group of all permutations of the coordinates.
+Lemma 3.1 ([18]). For each m ∈ [n + 1], the n+1
+                                                    
+                                                 m    minimum representatives of mαn + An ∈
+A∗n /An are given by
+                                                                           
+                     m    X           n+1−mX                        [n + 1]
+                                ei −                  ei      (I ∈           )          (3.4)
+                   n+1                    n+1                          m
+                           i∈[n+1]\I                    i∈I
+
+with norm
+                                        m(n + 1 − m)
+                                                       .                                            (3.5)
+                                             n+1
+  Next, we introduce an overlattice of A9 ⊕ A9 ⊕ A1 , and characterize it.
+Definition 3.2. Let L := A9 ⊕ A9 ⊕ A1 , and α := (α9 , 2α9 , α1 ). Define
+                                              Λ := L + Zα.                                          (3.6)
+Additionally, let r := (0, 0, 2α1 ).
+6                            SETS OF EQUIANGULAR LINES IN DIMENSION 18
+
+Lemma 3.3. The lattice Λ is the unique integral lattice satisfying the following conditions, up to
+Aut(L).
+                                  L ⊆ Λ ⊆ L∗ ,                                                    (3.7)
+                                  disc Λ = 2,                                                     (3.8)
+                                  the projection of Λ to QA1 is A∗1 .                             (3.9)
+Moreover,
+                                           Λ/L ≃ Z/10Z.                                          (3.10)
+Proof. The lattice L + Zα in (3.6) satisfies the three conditions (3.7)–(3.9). Conversely, suppose
+that Λ is an integral lattice satisfying (3.7)–(3.9). Observe, by [8, p. 4],
+                                  vol(Rn /L) 2 disc L
+                                             
+                           2
+                  |Λ : L| =                      =
+                                  vol(Rn /Λ)        disc Λ
+                               disc L
+                             =                                               (by (3.8))
+                                   2
+                               (disc A9 )2 disc A1
+                             =
+                                         2
+                             = 100                                           (by (3.1)).
+Thus, Λ/L ∼  = Z/10Z. By (3.9), Λ/L is generated by the coset of an element (m1 α9 , m2 α9 , α1 ) ∈
+A∗9 ⊕ A∗9 ⊕ A∗1 , where m1 , m2 ∈ Z and gcd(m1 , m2 , 5) = 1. Since L is integral, we have
+                                                        9(m21 + m22 ) + 5
+                          Z ∋ ∥(m1 α9 , m2 α9 , α1 )∥2 =                    .
+                                                                10
+This implies {m21 , m22 } ≡ {1, 4} or {9, 6} modulo 10. Since (± id, ± id, id) ∈ Aut(L), we may
+assume (m1 , m2 ) = (1, 2) or (3, 6) up to Aut(L). Since (3α9 , 6α9 , α1 ) and (α9 , 2α9 , α1 ) generate
+the same cyclic subgroup of L∗ /L, we obtain (3.6).                                                   □
+Lemma 3.4. The automorphism group Aut(Λ) is {±(σ1 , σ2 , ± id) : σ1 , σ2 ∈ S10 }.
+Proof. Let τ be the automorphism of L defined by τ (x, y, z) = (y, x, z) for (x, y, z) ∈ L =
+A9 ⊕ A9 ⊕ A1 . Then, we see that
+                  Aut(L) = {τ ε ◦ (±σ1 , ±σ2 , ± id) : ε ∈ {0, 1}, σ1 , σ2 ∈ S10 }.
+Let
+                               Γ := {±(σ1 , σ2 , ± id) : σ1 , σ2 ∈ S10 }.
+First, we verify Γ ⊂ Aut(Λ). Since Γ ⊂ Aut(L), it suffices to verify that f (α) ∈ Λ for any f ∈ Γ.
+Since σ(α9 ) − α9 is a root in A9 for any σ ∈ S10 , we see that S10 acts trivially on A∗9 /A9 . Hence,
+we have (σ1 , σ2 , id) ∈ Aut(Λ) for any σ1 , σ2 ∈ S10 . Also, since (id, id, − id)α = α − r ∈ Λ,
+we have (id, id, − id) ∈ Aut(Λ). Additionally, since − id ∈ Aut(Λ), we obtain Γ ⊂ Aut(Λ) as
+desired.
+   Next, we prove Γ ⊃ Aut(Λ). Let υ := (id, − id, id) ∈ Aut(L). Then
+                                                            [
+                             Aut(Λ) ⊂ Aut(L) = Γ ∪                 f Γ.
+                                                           f ∈{τ,υ,τ ◦υ}
+
+Thus, it suffices to show τ, υ, τ ◦ υ ̸∈ Aut(Λ). Since
+                                                 9
+                                                 [
+                                       Λ/L =          (mα + L)
+                                                m=0
+                               SETS OF EQUIANGULAR LINES IN DIMENSION 18                             7
+
+holds by Lemma 3.3, it suffices to prove f (α) − mα ̸∈ L for any f ∈ {τ, υ, τ ◦ υ} and m ∈
+{0, . . . , 9}. By direct calculation, we have
+                          τ (α) − mα = ((2 − m)α9 , (1 − 2m)α9 , (1 − m)α1 ) ,
+                          υ(α) − mα = ((1 − m)α9 , (−2 − 2m)α9 , (1 − m)α1 ) ,
+                     (τ ◦ υ)(α) − mα = ((−2 − m)α9 , (1 − 2m)α9 , (1 − m)α1 ) .
+Since (aα9 , bα9 , cα1 ) ∈ L for a, b, c ∈ Z if and only if a ≡ b ≡ 0 (mod 10) and c ≡ 0 (mod 2),
+we obtain that f (α) ̸∈ Λ as desired. Therefore, Aut(Λ) = Γ.                                   □
+
+                                       4. V ECTORS OF NORM 3 IN Λ
+   We will construct affine equiangular sets in Λ with norm 3 with respect to r to obtain sets of
+equiangular lines with a common angle of arccos(1/5) in dimension 18. In this section, we provide
+a set X of candidate vectors that can form the desired affine equiangular sets. Subsequently, we
+partition the set X into two subsets and show that it suffices to construct affine equiangular sets in
+these subsets independently. From now on, write the minimum norm of an element of a set S as
+min S.
+Definition 4.1. Let                                                            
+                                                                         1
+                               X :=         γ ∈ Λ : (γ, γ) = 3, (γ, r) =            ,
+                                                                         2
+and
+                                      Xm := X ∩ (L + mα)        (m ∈ Z).                         (4.1)
+For i, j, k ∈ [10] with i ̸= j, let
+                                                                         
+                                               1           2
+                            v1 (i, j, k) :=      1 − ei , 1 − ej − ek , α1 ,
+                                              10           10
+                           v−1 (i, j, k) := r − v1 (i, j, k).
+          [10]
+              
+For I ∈    5 , let
+                                                                        !
+                                                    1    X
+                                      v5 (I) :=       1−   ei , 0, α1       .
+                                                    2
+                                                          i∈I
+
+Lemma 4.2. We have
+                                             X = X1 ∪ X−1 ∪ X5 .                                 (4.2)
+Also,
+                        Xε = {vε (i, j, k) : i, j, k ∈ [10], j ̸= k}    (ε ∈ {±1}),              (4.3)
+                                                   
+                                                 [10]
+                        X5 = v5 (I) : I ∈                .                                       (4.4)
+                                                   5
+Proof. Since (γ, r) = 1 for every γ ∈ X, we see that Xm = ∅ for any even integer m. By
+Lemma 3.1, we have
+            min (mα + L) ≥ min (mα9 + A9 ) + min (2mα9 + A9 ) + min (α1 + A1 )
+                           (
+                            5 if m = ±3,
+                         =
+                            3 if m = ±1, 5.
+8                                SETS OF EQUIANGULAR LINES IN DIMENSION 18
+
+Hence, X±3 = ∅, and (4.2) follows. Furthermore, we see that for every vector γ = (γ1 , γ2 , γ3 ) ∈ X,
+γ1 , γ2 and γ3 are minimal representatives in mα9 + A9 , 2mα9 + A9 and α1 + A1 , respectively. By
+Lemma 3.1 again, we have (4.3) and (4.4).                                                          □
+    By direct calculation, we have the following.
+Lemma 4.3. Let i, j, k ∈ [10] with j ̸= k, and i′ , j ′ , k ′ ∈ [10] with j ′ ̸= k ′ . Then,
+             (vε (i, j, k), vε (i′ , j ′ , k ′ )) = |{i} ∩ {i′ }| + |{j, k} ∩ {j ′ , k ′ }| (ε = ±1).   (4.5)
+Let I, J ∈ [10]
+                
+             5 . Then,
+                                      (v1 (i, j, k), v5 (I)) = |{i} ∩ I|,                               (4.6)
+                                          (v5 (I), v5 (J)) = |I ∩ J| − 2.                               (4.7)
+Definition 4.4. Let X , X1 and X5 be the sets of maximum affine equiangular sets in X, X1 , and
+X5 , respectively, with respect to r.
+   Our aim is to investigate maximum affine equiangular sets ω in X with norm 3 with respect to
+r up to switching equivalence, that is, replacing some of the vectors u ∈ ω by r − u. From the
+following lemma, we may restrict our attention to affine equiangular sets in X1 and ones in X5
+Lemma 4.5. We have X / ∼sw = {[ψ ∪ ϕ] : [ψ] ∈ X5 / ∼sw , ϕ ∈ X1 } . In particular, |X / ∼sw | =
+|X5 / ∼sw | |X1 | .
+Proof. Let X±1 be the set of maximum affine equiangular sets in X1 ∪ X−1 . By (4.6), we have
+(u, v) ∈ {0, 1} for any u ∈ X1 ∪ X−1 and v ∈ X5 . Hence,
+                                     X = {ψ ∪ ϕ : ψ ∈ X5 , ϕ ∈ X±1 }.
+Since X−1 = {r − u : u ∈ X1 }, we see that for each ϕ ∈ X±1 , there exists (a unique) ϕ′ ∈ X1 with
+ϕ′ ∼sw ϕ. Noting that X5 and X−1 ∪ X1 are closed under switching equivalence ∼sw , we have
+                        X / ∼sw = {[ψ ∪ ϕ] : [ψ] ∈ X5 / ∼sw , [ϕ] ∈ X±1 / ∼sw }
+                                   = {[ψ ∪ ϕ] : [ψ] ∈ X5 / ∼sw , ϕ ∈ X1 } .
+Next, we verify |X / ∼sw | = |X5 / ∼sw | |X1 | . Let ψ, ψ ′ ∈ X5 and ϕ, ϕ′ ∈ X1 be such that [ψ ∪ ϕ] =
+[ψ ′ ∪ ϕ′ ]. Then, it suffices to show [ψ] = [ψ ′ ] and ϕ = ϕ′ . Indeed, we obtain [ψ] = [ψ ′ ] and
+[ϕ] = [ϕ′ ]. Moreover, as discussed earlier, since an element of X1 uniquely exists as a representative
+of [ϕ], we conclude ϕ = ϕ′ .                                                                         □
+
+                           5. M AXIMUM AFFINE EQUIANGULAR SETS IN X5
+   In this section, we determine a unique maximum affine equiangular set in X5 up to Aut(Λ)r with
+a computer.
+Lemma 5.1. Every affine equiangular set in X5 with respect to r is of cardinality at most 12.
+Proof. Recall that the vectors in X5 are
+                                                       !                    
+                                  1    X                                 [10]
+                                    1−   ei , 0, α1           for    I∈       .
+                                  2                                        5
+                                          i∈I
+
+Hence, the dimension of the linear space generated by X5 together with r is at most dim(R10 ⊥
+1) + 1 = 10. Thus, an arbitrary affine equiangular set in X5 with respect to r induces a set of
+equiangular lines with common angle arccos(1/5) in dimension 9. The cardinality N1/5 (9) of a
+maximum set of equiangular lines with common angle arccos(1/5) in dimension 9 equals 12 [10,
+                                SETS OF EQUIANGULAR LINES IN DIMENSION 18                                        9
+
+Theorem 6.7 (with a computer)]. Therefore, the affine equiangular set is of cardinality at most
+12.                                                                                          □
+Definition 5.2. Let S4 be the symmetric group on [4]. Let c1 , . . . , c6 be the conjugates (1, 2, 3, 4),
+(1, 3, 2, 4), (1, 2, 4, 3), (1, 3, 4, 2), (1, 4, 2, 3), (1, 4, 3, 2) of the cyclic permutation (1, 2, 3, 4) in S4 ,
+respectively. Let I0 be the set of
+                 Ii,j := ([4] \ {i}) ⊔ {k ∈ [10] \ [4] : ick−4 = j}        (i, j ∈ [4], i ̸= j).             (5.1)
+Let ψ0 be the set of v5 (I) for all I in I0 . Let Λ5 be the lattice generated by the vectors in ψ0 and r,
+and L5 be the root sublattice of Λ5 , that is, the lattice generated by roots in Λ5 .
+   The sets (5.1) are explicitly enumerated as follows.
+                                {2, 3, 4, 5, 7}, {2, 3, 4, 6, 8}, {2, 3, 4, 9, 10},
+                                {1, 3, 4, 8, 10}, {1, 3, 4, 5, 9}, {1, 3, 4, 6, 7},
+                                {1, 2, 4, 7, 9}, {1, 2, 4, 6, 10}, {1, 2, 4, 5, 8},
+                                {1, 2, 3, 5, 6}, {1, 2, 3, 8, 9}, {1, 2, 3, 7, 10}.
+The automorphism group Aut(I0 ) ⊂ S10 of I0 is defined as the bijections σ from [10] to itself such
+that σ(I) ∈ I0 for any I ∈ I0 . Also, the symmetric group S4 on [4] acts on I0 in such a way that
+σ(Ii,j ) := Iiσ ,j σ for σ ∈ S4 . For example, (1, 2) ∈ S4 induces the automorphism
+                                    (1, 2)(5, 8)(6, 9)(7, 10) ∈ Aut(I0 ).                                    (5.2)
+Lemma 5.3. The set ψ0 is a maximum affine equiangular set in X5 with respect to r. In particular,
+an affine equiangular set in X5 is maximum if and only if its cardinality is 12.
+Proof. By direct calculation, ψ0 is an affine equiangular set in X5 with respect to r. In addition,
+since ψ0 is of cardinality 12, it is maximum by Lemma 5.1.                                       □
+   To prove the following lemmas, we use the software Magma.
+Lemma 5.4. The number |X5 / ∼sw | of maximum affine equiangular sets in X5 with respect to r
+up to switching equivalence is 151200. Also, the automorphism group Aut(Λ)r transitively acts on
+X5 / ∼sw .
+Proof. First, we explain how to determine X5 / ∼sw . Using Magma [1], we construct the graph G
+with vertex set V := {{u, r − u} : u ∈ X5 } such that for two vertices x and x′ , they are adjacent if
+(u, u′ ) ∈ {0, 1} for any u ∈ x and u′ ∈ x′ . Then, |V | = 126. Note that, for each clique {xi }i∈[k] ,
+it holds that for any ui ∈ xi (i ∈ [k]), {ui }i∈[k] is an affine equiangular set in X5 with respect to
+r. Furthermore, the clique induces the switching class [{ui }i∈[k] ]. Hence, by Lemma 5.3, X5 / ∼sw
+corresponds to the set C of all cliques of cardinality 12 in G. Using Magma again, we can construct
+C, and have |C| = 151200.
+   Next, we explain how to verify the automorphism group Aut(Λ)r transitively acts on X5 / ∼sw .
+Since Aut(Λ)r has been determined by Lemma 3.4, we see that for [ψ] ∈ X5 / ∼sw ,
+                                 Aut(Λ)r [ψ] = {(σ, id, id) : σ ∈ S10 }[ψ].
+Thus, it suffices to consider the induced action of S10 on C, instead of the action of Aut(Λ)r on
+X5 / ∼sw . Using Magma, we can confirm that S10 transitively acts on the maximum cliques.      □
+   We verified the following using Magma by explicitly constructing L5 .
+Lemma 5.5. We have
+             L5 = ⟨(ei − ej , 0, 0) : i, j ∈ [4]⟩ ⊕ ⟨(ei − ej , 0, 0) : i, j ∈ [10] \ [4]⟩ ⊕ ⟨r⟩
+                ≃ A3 ⊕ A5 ⊕ A1 .
+10                                SETS OF EQUIANGULAR LINES IN DIMENSION 18
+
+                            6. M AXIMUM AFFINE EQUIANGULAR SETS IN X1
+   In this section, we investigate affine equiangular sets in X1 with respect to r. We denote by Kn
+the complete graph with vertex set [n]. The number T (n) of matchings in Kn is called an involution
+number (also, telephone number). This satisfies T (0) = 1 and T (n) = T (n − 1) + (n − 1)T (n −
+2) for n ≥ 1 (see [19, p. 85, Problem 17(d)]). The values of involution numbers starting from
+n = 0 to 10 are 1, 1, 2, 4, 10, 26, 76, 232, 764, 2620, 9496. Also, denote by F (n) the number of
+1-factorization of the complete graph K2n , where isomorphic 1-factorizations are distinguished if
+their matchings are not equal as sets. The values of F (n) starting from n = 0 to 5 are 1, 1, 6, 6240,
+1225566720, 252282619805368320 [7].
+Definition 6.1. Let n be a non-negative integer, and
+                                                                                                  2n
+         (                                                                                                          )
+                                                                                                  [
+ Yn :=        (Yi )2n
+                   i=1 : Y1 , . . . , Y2n are pairwise disjoint matchings of K2n and                     Yi = E(K2n ) .
+                                                                                                 i=1
+
+   The cardinality of Yn is the number of proper edge colorings of K2n with 2n colors. Since this
+is not known, we provide a lower bound as follows.
+Lemma 6.2. For a non-negative integer n, |Yn | ≥ (2n − 1)!F (n)T (2n).
+Proof. Let
+                   F := {(Mi )2n−1
+                              i=1 : M1 , . . . , M2n−1 form a 1-factorization of K2n }.
+
+Let M be the set of matchings of K2n . Since |F| = (2n − 1)!F (n) and |M| = T (2n), the proof
+will be complete if
+                          f:         F ×M          →                      Yn
+                                  (Mi )2n−1                        (Mi \ M2n )2n−1
+                                                                                        
+                                       i=1  , M2n   7→                        i=1 , M2n
+
+is injective. Let (Mi )2n−1       2n−1
+                       i=1 , (Ni )i=1 ∈ F and M2n , N2n ∈ M. Then, assume (Mi \ M2n )i=1 =
+                                                                                          2n−1
+            2n−1
+(Ni \N2n )i=1 and M2n = N2n . To prove Mi = Ni for every i by way of contradiction, we assume
+that Mi ̸= Ni for some i. There exists an edge e := {x, y} ∈ Mi \ Ni . Then, e ∈ M2n = N2n
+follows. Since Ni is a 1-factor, there exists an edge e′ := {x, z} ∈ Ni for some z. Since Mi is a
+1-factor, e′ ̸∈ Mi holds, and hence e′ ∈ N2n = M2n follows. Thus, x ∈ e ∩ e′ and e, e′ ∈ N2n .
+However, this contradicts the fact that the assumption that N2n is a matching.                 □
+
+     Next, we establish a one-to-one correspondence between X1 and Y5 in the following lemma.
+Lemma 6.3. The maximum affine equiangular sets ϕ ∈ X1 in X1 with respect to r correspond
+one-to-one to the elements (Yi )10
+                                i=1 ∈ Y5 in such a way that
+
+                                   ({{j, k} ∈ E(K10 ) : v1 (i, j, k) ∈ ϕ})10
+                                                                          i=1                                       (6.1)
+in Y5 , and
+                                     {v1 (i, j, k) : {j, k} ∈ Yi for i ∈ [10]}                                      (6.2)
+in X1 . In particular, a maximum affine equiangular set in X1 with respect to r is of cardinality 45.
+Proof. Recall from Lemma 4.3 that for 1 ≤ i, i′ , j ̸= k, j ′ ̸= k ′ ≤ 10,
+                       (v1 (i, j, k), v1 (i′ , j ′ , k ′ )) = |{i} ∩ {i′ }| + |{j, k} ∩ {j ′ , k ′ }|.
+                              SETS OF EQUIANGULAR LINES IN DIMENSION 18                                        11
+
+This implies that the affine equiangular sets ϕ in X1 with respect to r correspond one-to-one to the
+tuples of pairwise disjoint 10 matchings (Yi )10                               10
+                                               i=1 in K10 , where ϕ and (Yi )i=1 are related to each
+other by (6.1) and (6.2), respectively. Hence, for an arbitrary affine equiangular set ϕ,
+                                           10
+                                           X
+                                   |ϕ| =         |Yi | ≤ |E(K10 )| = 45,
+                                           i=1
+
+with equality if and only if (Yi )10
+                                  i=1 ∈ Y5 .                                                                  □
+Lemma 6.4. We have |X1 | ≥ 9!T (10)F (5) = 21502468915200.
+Proof. By Lemma 6.3, |X1 | = |Y5 |. Also, by Lemma 6.2, |Y5 | ≥ 9!T (10)F (5). Here, F (5) = 6240
+and T (10) = 9496. Thus, the desired conclusion follows.                                       □
+
+       7. T HE L ATTICES GENERATED BY MAXIMUM AFFINE EQUIANGULAR SETS IN X
+   In this section, our aim is to prove that the lattice generated by a maximum affine equiangular set
+in X together with the switching root r coincides with Λ.
+Lemma 7.1. Let (Yi )10
+                    i=1 ∈ Y5 . Let
+                                           4
+                                           [                        10
+                                                                    [
+                                 E+ :=           Yi   and   E− :=            Yi .                           (7.1)
+                                           i=1                      i=5
+                                                                 [10]
+Let G be a graph with vertex set [10] and edges {j, j ′ } ∈
+                                                                        
+                                                                  2         satisfying for some k ∈ [10],
+                                    ′                                   ′
+                         {{j, k}, {j , k}} ⊂ E+ or {{j, k}, {j , k}} ⊂ E− .                                 (7.2)
+Then, G is connected.
+Proof. For any j ∈ [10], define N± (j) := {h ∈ [10] : {j, h} ∈ E± }. By way of contradiction, we
+assume that G is not connected. Then, there are two vertices j and j ′ which are not contained in the
+same connected component. Since Y1 , . . . , Y4 are matchings, we have
+                                  |N+ (j)| ≤ 4        and   |N+ (j ′ )| ≤ 4
+hold. Also,
+                                           N+ (j) ∩ N+ (j ′ ) = ∅                                           (7.3)
+and
+                                   {j, j ′ } ∪ N+ (j) ∪ N+ (j ′ ) = [10]                                    (7.4)
+hold. Indeed, if (7.3) or (7.4) does not hold, then there is k ∈ [10] such that (7.2), that is, j and j ′
+are adjacent in G. This is a contradiction. Thus, we see that
+                  |N+ (j)| = |N+ (j)| = 4 and          {j, j ′ } ⊔ N+ (j) ⊔ N+ (j ′ ) = [10].
+In other words,
+                     |N− (j)| = |N− (j ′ )| = 5 and         N− (j) ⊔ N− (j ′ ) = [10].                      (7.5)
+In particular, N− (j) and N− (j ′ ) are connected component of G. Then, we have
+                                                                              N− (j ′ )
+                                                                                    
+                  ′                  ′        ′                  N− (j)
+      E− = {l, l } : l ∈ N− (j), l ∈ N− (j )        and E+ =              ∪             .                   (7.6)
+                                                                    2           2
+Indeed, if h, k ∈ N− (j) and {h, k} ∈ E− , then {{j, k}, {h, k}} ⊂ E− , and hence {j, h} is an edge
+of G. Since j ∈ N− (j ′ ) and h ∈ N− (j), this is impossible. Thus, we have shown N−2(j) ⊂ E+ .
+                                                                                          
+12                             SETS OF EQUIANGULAR LINES IN DIMENSION 18
+
+                              ′ 
+Similarly, we obtain N−2(j ) ⊂ E+ . Since |E+ | = 4i=1 |Yi | ≤ 20, equality is forced, and we
+                                                       P
+conclude that (7.6) holds.
+  Now Y1 , . . . , Y4 are perfect matchings. However, since E+ forms the disjoint union of K5 and
+K5 , E+ does not contain perfect matchings. This is a contradiction.                           □
+Lemma 7.2. Every maximum affine equiangular set in X with respect to r and the switching root r
+generates Λ.
+Proof. Let ω ′ ∈ X . Let M ′ be the lattice generated by ω ′ together with r. By Lemma 4.5, we may
+assume without loss of generality that ω ′ = ψ ′ ∪ ϕ′ for some ψ ′ ∈ X5 and ϕ′ ∈ X1 . By Lemma 5.4,
+there exists σ ∈ S10 × {id} × {id} ⊂ Aut(Λ) such that
+                                              ψ := σ(ψ ′ ) = ψ0 .                                    (7.7)
+Let M := σ(M ′ ). Then, Lemma 5.5 together with (7.7) implies
+                                      (A3 ⊕ A5 ) ⊕ O10 ⊕ A1 ⊂ M.                                     (7.8)
+Here, denote by On    the lattice {0} ⊂ Zn for a positive integer n. Let ϕ := σ(ϕ′ ) and ω := ψ ∪ ϕ.
+Then, ω together with r generates M . Moreover, since σ leaves X1 invariant, we have ϕ ∈ X1 . By
+Lemma 6.3, there exists (Yi )10
+                             i=1 ∈ Y5 such that
+                          ϕ = {v1 (i, j, k) : {j, k} ∈ Yi for i ∈ [10]} ⊂ X1 .                       (7.9)
+Let E+ and E− be as in (7.1).
+  First, we prove
+                                           O10 ⊕ A9 ⊕ A1 ⊂ M.                                       (7.10)
+                                                                                 [10]
+Indeed, we define a graph G with vertex set [10] and edges {j, j ′ } ∈
+                                                                                      
+                                                                                  2       if
+                                            (0, ej ′ − ej , 0) ∈ M.                                 (7.11)
+It suffices to prove that G is connected. Note that, if {j, k} ∈ Yi and {j ′ , k} ∈ Yi′ , then
+                        v1 (i, j, k) − v1 (i′ , j ′ , k) = (ei′ − ei , ej ′ − ej , 0) ∈ M.          (7.12)
+Therefore, we have from (7.8), (0, ej ′ − ej , 0) ∈ M , or equivalently, {j, j ′ } ∈ E(G), provided that
+(7.2) holds. By applying Lemma 7.1 to G, we conclude that G is connected, that is, (7.10) holds.
+   Next, we prove
+                                            A9 ⊕ A9 ⊕ A1 ⊂ M.                                       (7.13)
+There exist i ∈ [4] and i′ ∈ [10] \ [4] such that Yi′ and Yi are non-empty. Fix {j ′ , k ′ } ∈ Yi′ and
+{j, k} ∈ Yi . Then,
+                 v1 (i, j, k) − v1 (i′ , j ′ , k ′ ) = (ei′ − ei , ej ′ + ek′ − ej − ek , 0) ∈ M.
+By (7.10), we have (ei′ − ei , 0, 0) ∈ M. By (7.8) and (7.10), we obtain (7.13).
+   Finally, we prove M = Λ. The elements ω ∩ X5 are of order 2 in Λ/L, and the elements ω ∩ X1
+are of order 5 in Λ/L. Since L ⊂ M by (7.13) and |Λ/L| = 10 by (3.10), we conclude M = Λ. □
+
+         8. M AXIMUM AFFINE EQUIANGULAR SETS IN X AND STRONG MAXIMALITY
+   In this section, we estimate the number of maximum affine equiangular sets in X up to switching
+in Theorem 8.1, and up to isometry in Corollary 8.2. This corollary implies Theorem 1.1. Further-
+more, we verify that these sets are strongly maximal in Theorem 8.4.
+Theorem 8.1. The number |X / ∼sw | of maximum affine equiangular sets in X with respect to r
+up to switching equivalence is at least 3251173299978240000.
+                             SETS OF EQUIANGULAR LINES IN DIMENSION 18                                 13
+
+Proof. By Lemma 4.5, we have |X / ∼sw | = |X5 / ∼sw | · |X1 |. Since |X5 / ∼sw | = 151200 by
+Lemma 5.4 and |X1 | ≥ 21502468915200 by Lemma 6.4, we have the desired conclusion.        □
+
+   The stabilizer subgroup Aut(Λ)r of Aut(Λ) with respect to the switching root r naturally acts
+on X / ∼sw . Specifically, for f ∈ Aut(Λ)r and [ω] ∈ X / ∼sw , the action is defined as f ([ω]) :=
+[{f (u) : u ∈ ω}].
+Corollary 8.2. The number of affine equiangular set of cardinality 57 with norm 3 with respect to
+r in Λ is at least 246896 up to isometry.
+Proof. Define a relation ∼iso on X in such a way that for ω, ω ′ ∈ X , ω ∼iso ω ′ if and only if ω and
+ω ′ are isometric. For ω ∈ X , denote by [ω]iso the isometry class {ω ′ ∈ X : ω ′ ∼iso ω} of ω in X
+under ∼iso . Then the mapping
+                              h : Aut(Λ)r \ (X / ∼sw ) → X / ∼iso
+                                     Aut(Λ)r [ω]       7→ [ω]iso .
+is well-defined and surjective. Next, we prove the mapping h is injective. Let ω and ω ′ be elements
+of X such that [ω]iso = [ω ′ ]iso . Then, there exist ω ′′ ∈ X with ω ′ ∼sw ω ′′ and a bijective isometry
+g : ω ∪ {r} → ω ′′ ∪ {r} such that g(r) = r. Since ⟨ω ∪ {r}⟩ = ⟨ω ′′ ∪ {r}⟩ = Λ by Lemma 7.2,
+there exists f ∈ Aut(Λ)r such that
+                                 g = f |ω∪{r} : ω ∪ {r} → ω ′′ ∪ {r}.
+Therefore, f ([ω]) = [f (ω)] = [ω ′′ ] = [ω ′ ] holds, and Aut(λ)r [ω] = Aut(λ)r [ω ′ ] follows. This
+means that h is injective. Therefore
+                                 |X / ∼iso | = |Aut(Λ)r \ (X / ∼sw )| .                            (8.1)
+Also, µ := (− id, − id, id) is contained in Aut(Λ)r by Lemma 3.4. Since µ(u) = r − u for any
+u ∈ X, we see that µ(ω) ∼sw ω for any ω ∈ X . Thus, the kernel of the action of Aut(Λ)r
+on X / ∼sw contains the subgroup of order 2 generated by µ. Since | Aut(Λ)r | = 2 · (10!)2 by
+Lemma 3.4, (8.1) implies
+                                           |X / ∼sw |     |X / ∼sw |
+                       |X / ∼iso | ≥                    =            ≥ 246896                      (8.2)
+                                         |Aut(Λ)r /⟨µ⟩|     (10!)2
+by Theorem 8.1.                                                                                       □
+
+   We remark that in this proof, equality does not hold in the first inequality in (8.2) since the
+quotient group Aut(Λ)r /⟨µ⟩ does not act on X / ∼sw semiregularly. Refer to Example 9.6 for
+details. Finally, we prove Theorem 8.4, which asserts that any ω ∈ X is strongly maximal.
+Lemma 8.3. There is no vector v in Λ∗ \ Λ such that (v, v) ≤ 3 and (v, r) = 1.
+Proof. Let β := (2α9 , −α9 , 0). We have Λ∗ = Λ + Zβ from (3.8). Assume, for contradiction, that
+such a vector v exists. Since Λ∗ \ Λ = β + Λ, we have by Lemma 3.3
+                                                      9
+                                                      [
+                                       v ∈ Λ∗ \ Λ =       (iα + β + L).
+                                                      i=0
+
+By the condition (v, r) = 1, we have
+                           [                                [
+                   v∈            (iα + β + L) =                   ((iα9 , jα9 , α1 ) + L) ,
+                         i=1,3,5,7,9                    (i,j)∈P
+14                                SETS OF EQUIANGULAR LINES IN DIMENSION 18
+
+where P := {(3, 1), (5, 5), (7, 9), (9, 3), (1, 7)} . We have
+                                                                                      
+             (v, v) ≥ min           min (iα9 + A9 ) + min (jα9 + A9 ) + min (a1 + A1 ) .
+                        (i,j)∈P
+
+By (3.5), we have
+                                      1                           1     1
+                          (v, v) ≥       · min {21 + 9, 25 + 25} + = 3 + .
+                                      10                          2     2
+This contradicts (v, v) ≤ 3.                                                                        □
+Theorem 8.4. Every maximal affine equiangular set contained in X with respect to r is strongly
+maximal.
+Proof. This follows from Lemmas 2.6, 7.2 and 8.3.                                                   □
+
+                                                9. E XAMPLES
+   In this section, we first provide examples of 1-factorizations. We construct, from one of the
+1-factorizations, sets of 57 equiangular lines in dimension 18 whose Seidel matrix has exactly 6
+eigenvalues, one less than what Greaves et al. found [13]. Subsequently, we examine the automor-
+phism group of an affine equiangular set, and verify that the quotient group Aut(Λ)r /⟨µ⟩ does not
+act on X / ∼sw semiregularly.
+Example 9.1. We provide a 1-factorization of the complete graph K2n for a positive integer n as
+follows [4, 5.46] . For k ∈ [2n − 1],
+                                                                                          
+                                                                                      [2n]
+   Hk := {{2n, k}} ∪ {{(k − i) mod 2n − 1, (k + i) mod 2n − 1} : i ∈ [2n − 1]} ⊂
+                                                                                        2
+is a 1-factor, where (k ± i) mod 2n − 1 ∈ [2n − 1]. Then, the set {Hi }2n−1
+                                                                       i=1 is a 1-factorization. In
+the case of n = 5, we have
+                             H1 := {{10, 1}, {9, 2}, {8, 3}, {7, 4}, {6, 5}},
+                             H2 := {{10, 2}, {1, 3}, {9, 4}, {8, 5}, {7, 6}},
+                             H3 := {{10, 3}, {2, 4}, {1, 5}, {9, 6}, {8, 7}},
+                             H4 := {{10, 4}, {3, 5}, {2, 6}, {1, 7}, {9, 8}},
+                             H5 := {{10, 5}, {4, 6}, {3, 7}, {2, 8}, {1, 9}},
+                             H6 := {{10, 6}, {5, 7}, {4, 8}, {3, 9}, {2, 1}},
+                             H7 := {{10, 7}, {6, 8}, {5, 9}, {4, 1}, {3, 2}},
+                             H8 := {{10, 8}, {7, 9}, {6, 1}, {5, 2}, {4, 3}},
+                             H9 := {{10, 9}, {8, 1}, {7, 2}, {6, 3}, {5, 4}}.
+   To investigate the properties of a given set of equiangular lines, the eigenvalues of Seidel matrix
+induced by it have been considered [3, 13, 25]. In particular, it is often thought that Seidel matrices
+with fewer eigenvalues tend to exhibit better properties. Greaves et al. found sets of 57 equiangular
+lines in dimension 18 whose Seidel matrices have at least 7 distinct eigenvalues in [13]. We found
+ones with 6 distinct eigenvalues as in the following example.
+Example 9.2. Let ϕ0 and ϕ1 be the maximum affine equiangular sets in X1 induced by
+                    (H1 , H2 , . . . , H9 , ∅) ∈ Y5   and   (∅, H1 , . . . , H8 , H9 ) ∈ Y5 ,
+                              SETS OF EQUIANGULAR LINES IN DIMENSION 18                             15
+
+respectively, by Lemma 6.3. The characteristic polynomial of the Seidel matrices induced by ψ0 ⊔ϕ0
+and ψ0 ⊔ ϕ1 are
+                       (x − 5)39 (x + 9)2 (x + 11)11 (x + 13)3 (x2 + 17x + 36)                   (9.1)
+and
+                       (x − 5)39 (x + 9)(x + 11)13 (x + 13)2 (x2 + 17x + 32),                    (9.2)
+respectively.
+Remark 9.3. In addition to the two sets of equiangular lines in Example 9.2, there exist many other
+sets of equiangular lines whose Seidel matrices have the same characteristic polynomials as (9.1)
+or (9.2). Below, we describe our method for finding affine equiangular sets corresponding to such
+sets of equiangular lines. First, since there are 396 1-factorizations of K10 up to permutation [4,
+5.26], we fix a 1-factorization among them sequentially. Next, we randomly constructed 100 el-
+ements (Yi )10
+             i=1 of Y5 such that for some j ∈ [10], Yj = ∅ and {Yi }i∈[10]\{j} forms the chosen
+1-factorization of K10 . Subsequently, we constructed the corresponding affine equiangular sets
+ϕ ∈ X1 using Lemma 6.3, and then we found that, based on our computer experiments, the maxi-
+mum affine equiangular sets ψ0 ⊔ ϕ have the desired properties without exception. Here, ψ0 ∈ X5
+has been given in Definition 5.2. That is, the corresponding Seidel matrices have the characteristic
+polynomial in (9.1) or (9.2).
+   Next, we verify that the action of Aut(Λ)r /⟨µ⟩ on X / ∼sw is not semiregular. This suggests
+that, in order to determine |X / ∼iso |, it is necessary to examine the cardinalities of the orbits of
+X / ∼sw under the action of Aut(Λ)r /⟨µ⟩ in more detail. Before providing an example in X / ∼sw
+with respect to which the stabilizer is nontrivial, we introduce an additional definition.
+                                                                               2n−1
+Definition 9.4. Let n be a positive integer. The automorphism group Aut({Fi }i=1    ) of 1-factorization
+{Fi }i=1 of K2n is the set of bijections from [2n] to itself such that f (Fi ) ∈ {Fi }2n−1
+     2n−1
+                                                                                        i=1 for any
+i ∈ [2n − 1].
+Example 9.5. As asserted in [4, 5.55], the automorphism group of the 1-factorization {Hi }9i=1
+is of order 54. In fact, this group is the semidirect product of the cyclic group generated by the
+permutation (1, 2, 3, 4, 5, 6, 7, 8, 9) and the group (Z/9Z)× , where [9] and Z/9Z are identified. For
+example, −1 ∈ (Z/9Z)× induces the element
+                               (1, 8)(2, 7)(3, 6)(4, 5) ∈ Aut({Hi }9i=1 ).                       (9.3)
+  Next, we explicitly construct an example in X / ∼sw with respect to which the stabilizer of
+Aut(Λ)r /⟨µ⟩ is nontrivial.
+Example 9.6. Using Lemma 6.4, we define ϕ ∈ X1 corresponding to
+                           (H1 , H8 , H9 , ∅, H2 , H3 , H4 , H7 , H6 , H5 ) ∈ Y5 ,
+and set ω := ψ0 ⊔ ϕ. Then, ω ∈ X by Lemma 4.5. Also, let
+                σ := ((1, 2)(5, 8)(6, 9)(7, 10), (1, 8)(2, 7)(3, 6)(4, 5), id) ∈ Aut(Λ)r .
+Then, since σ(ψ0 ) = ψ0 follows from (5.2) and σ(ϕ) = ϕ holds from (9.3), we obtain σ(ψ0 ⊔ ϕ) =
+ψ0 ⊔ ϕ. Therefore, the stabilizer subgroup with respect to [ω] ∈ X / ∼sw of Aut(Λ)r /⟨µ⟩ contains
+σ⟨µ⟩, and is nontrivial.
+
+                                        ACKNOWLEDGEMENTS
+  We are grateful to Jack Koolen for his valuable discussions.
+16                                 SETS OF EQUIANGULAR LINES IN DIMENSION 18
+
+                                                     R EFERENCES
+ [1] W. Bosma, J. Cannon, and C. Playoust. The Magma algebra system. I. The user language. J. Symbolic Comput.,
+     24(3-4):235–265, 1997.
+ [2] M.-Y. Cao, J.H. Koolen, Y.-C.R. Lin, and W.-H. Yu. The Lemmens-Seidel conjecture and forbidden subgraphs. J.
+     Combin. Theory Ser. A, 185:105538, 2022.
+ [3] Meng-Yue Cao, Jack H. Koolen, Akihiro Munemasa, and K. Yoshino. Maximality of Seidel matrices and switching
+     roots of graphs. Graphs Combin., 37(5):1491–1507, 2021.
+ [4] C.J. Colbourn and J.H. Dinitz. Handbook of Combinatorial Designs. Discrete Mathematics and Its Applications.
+     Taylor & Francis, 2006.
+ [5] J. H. Conway and N. J. A. Sloane. Sphere packings, lattices and groups, volume 290 of Grundlehren der mathe-
+     matischen Wissenschaften [Fundamental Principles of Mathematical Sciences]. Springer-Verlag, New York, third
+     edition, 1999.
+ [6] D. de Caen. Large equiangular sets of lines in Euclidean space. Electron. J. Combin., 7:Research Paper 55, 3, 2000.
+ [7] J.H. Dinitz, D.K. Garnick, and B.D. McKay. There are 526, 915, 620 nonisomorphic one-factorizations of K12 . J.
+     Combin. Des., 2(4):273–285, 1994.
+ [8] W. Ebeling. Lattices and codes. Advanced Lectures in Mathematics. Springer Spektrum, Wiesbaden, third edition,
+     2013.
+ [9] J.-M. Goethals and J. J. Seidel. The regular two-graph on 276 vertices. Discrete Math., 12:143–158, 1975.
+[10] G.R.W. Greaves, J.H. Koolen, A. Munemasa, and F. Szöllősi. Equiangular lines in Euclidean spaces. J. Combin.
+     Theory Ser. A, 138:208–235, 2016.
+[11] G.R.W. Greaves and J. Syatriadi. Real equiangular lines in dimension 18 and the jacobi identity for complementary
+     subgraphs. Journal of Combinatorial Theory, Series A, 201:105812, 2024.
+[12] G.R.W. Greaves, J. Syatriadi, and P. Yatsyna. Equiangular lines in low dimensional Euclidean spaces. Combinator-
+     ica, 41(6):839–872, 2021.
+[13] G.R.W. Greaves, J. Syatriadi, and P. Yatsyna. Equiangular lines in Euclidean spaces: dimensions 17 and 18. Math.
+     Comp., 92(342):1867–1903, 2023.
+[14] J. Haantjes. Equilateral point-sets in elliptic two- and three-dimensional spaces. Nieuw Arch. Wiskunde (2), 22:355–
+     362, 1948.
+[15] Z. Jiang, J. Tidor, Y. Yao, S. Zhang, and Y. Zhao. Equiangular lines with a fixed angle. Ann. of Math. (2), 194(3):729–
+     743, 2021.
+[16] P. W. H. Lemmens and J. J. Seidel. Equiangular lines. J. Algebra, 24:494–512, 1973.
+[17] Y.-C. R. Lin and W.-H. Yu. Saturated configuration and new large construction of equiangular lines. Linear Algebra
+     Appl., 588:272–281, 2020.
+[18] M. Ozeki. A detailed study of the relationship between some of the root lattices and the coding theory. Kyushu
+     Journal of Mathematics, 72(1):123–141, 2018.
+[19] J. Riordan. An introduction to combinatorial analysis: Reprint of the 1958 original. Dover Publications, Inc., Mi-
+     neola, NY, 2002.
+[20] F. Szöllősi. A remark on a construction of D. S. Asche. Discrete Comput. Geom., 61(1):120–122, 2019.
+[21] F. Szöllősi and P. Östergård. Enumeration of Seidel matrices. European J. Combin., 69:169–184, 2018.
+[22] D.E. Taylor. Some topics in the theory of finite groups. PhD thesis, University of Oxford, 1971.
+[23] J. H. van Lint and J. J. Seidel. Equilateral point sets in elliptic geometry. Nederl. Akad. Wetensch. Proc. Ser. A
+     69=Indag. Math., 28:335–348, 1966.
+[24] K. Yoshino. The Lemmens-Seidel conjecture for base size 5. arXiv:2209.08308, 2022.
+[25] K. Yoshino. Spectral proofs of maximality of some seidel matrices. Interdiscip. Inf. Sci., 28(1):107–110, 2022.
+[26] K. Yoshino. Enumeration of sets of equiangular lines with common angle arccos(1/3). arXiv:2312.10384, 2023.
+
+
+
+              A PPENDIX : S ETS OF EQUIANGULAR LINES FOUND BY G REAVES ET AL .
+  Greaves et al. provided four sets of 57 equiangular lines with a common angle arccos(1/5) in
+dimension 18 [13]. These are included among the many sets of 57 equiangular lines we have
+constructed. In this appendix, we explicitly provide the corresponding affine equiangular sets. To
+achieve this, we define
+
+                                          ω(I) := {v1 (I) : I ∈ I} ∪ ϕ0
+                             SETS OF EQUIANGULAR LINES IN DIMENSION 18                                 17
+
+where I is a set of triples (i, j, k) and v1 ((i, j, k)) represents v1 (i, j, k). We provide four sets
+I1 , . . . , I4 below. The four affine equiangular sets ω(I1 ), . . . , ω(I4 ) induce the four sets of 57
+equiangular lines in dimension 18. These sets of equiangular lines correspond to the Seidel matrix
+Si coming from Fi in [13] for i = 1, 2, 3, 4. For short, we denote 10 by 0, and denote (i, j, k) by
+ijk. Let I1 be the set of the following .
+              117, 125, 130, 146, 189, 213, 224, 250, 269, 278, 319, 323, 345, 380, 426,
+              439, 458, 470, 514, 528, 535, 567, 590, 610, 627, 634, 659, 668, 716, 747,
+              818, 820, 836, 849, 857, 912, 938, 940, 956, 979, 015, 029, 037, 048, 060.
+Let I2 be the set of the following tuples.
+              125, 130, 146, 179, 219, 234, 250, 268, 318, 320, 336, 347, 412, 438, 459,
+              467, 514, 526, 535, 578, 590, 610, 627, 649, 658, 713, 729, 748, 756, 770,
+              817, 828, 839, 845, 860, 915, 924, 937, 969, 980, 016, 023, 040, 057, 089.
+Let I3 be the set of the following tuples.
+              119, 124, 138, 156, 170, 218, 225, 230, 246, 279, 328, 347, 359, 416, 427,
+              435, 448, 490, 517, 536, 540, 589, 614, 620, 639, 658, 667, 712, 734, 757,
+              769, 780, 815, 829, 837, 860, 910, 923, 945, 968, 013, 026, 049, 050, 078.
+Let I4 be the set of the following tuples.
+              113, 127, 145, 169, 180, 216, 228, 234, 257, 290, 314, 320, 338, 356, 379,
+              410, 423, 446, 459, 478, 519, 524, 530, 558, 615, 629, 637, 640, 668, 749,
+              767, 817, 825, 839, 848, 860, 918, 926, 935, 970, 012, 036, 047, 050, 089.
+
+  D EPARTMENT OF M ATHEMATICS , NATIONAL TAIWAN N ORMAL U NIVERSITY, TAIPEI C ITY 11677, TAIWAN
+  Email address: yclin@math.ntnu.edu.tw
+
+   G RADUATE S CHOOL OF I NFORMATION S CIENCES , T OHOKU U NIVERSITY, AOBA WARD , S ENDAI , 980-8579,
+JAPAN
+   Email address: munemasa@tohoku.ac.jp
+
+   D EPARTMENT OF E LECTRONICS AND C OMPUTER , H IROSHIMA I NSTITUTE OF T ECHNOLOGY, S AEKI WARD ,
+H IROSHIMA , 731-5143, JAPAN
+   Email address: t.taniguchi.t3@cc.it-hiroshima.ac.jp
+
+  D EPARTMENT OF C OMPUTER S CIENCE , FACULTY OF A PPLIED I NFORMATION S CIENCE , H IROSHIMA I NSTITUTE
+OF T ECHNOLOGY, S AEKI WARD , H IROSHIMA , 731-5143, JAPAN
+  Email address: k.yoshino.n9@cc.it-hiroshima.ac.jp
+

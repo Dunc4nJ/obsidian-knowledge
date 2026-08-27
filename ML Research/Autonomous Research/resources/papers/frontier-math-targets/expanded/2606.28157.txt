@@ -1,0 +1,550 @@
+                                                   A UNIT-DISTANCE GRAPH IN THE PLANE WITH
+                                                        INDEPENDENCE RATIO BELOW 1/4
+
+
+                                                                       ÁKOS DÚCZ AND DÁNIEL VARGA
+
+
+                                                   Abstract. We prove that there exists a finite unit-distance graph in the plane
+                                                   with independence ratio strictly smaller than 1/4, answering a question of
+                                                   Erdős. Our proof closely follows the framework of Matolcsi, Ruzsa, Varga,
+                                                   and Zsámboki [17], based on the geometric fractional chromatic number, but
+                                                   adds a carefully chosen two-vertex augmentation that pushes their 27-vertex
+                                                   construction from geometric fractional chromatic number 4 to a value strictly
+arXiv:2606.28157v1 [math.CO] 26 Jun 2026
+
+
+
+
+                                                   larger than 4. This disproves their Conjecture 1, and implies that the fractional
+                                                   chromatic number of the plane is strictly larger than 4. The proof can be made
+                                                   fully constructive, but the resulting finite graph has an enormous number of
+                                                   vertices.
+
+
+
+
+                                                                                1. Introduction
+                                              In a 1987 problem list, Erdős posed the following question. Let f (n) be the
+                                           largest integer such that every set of n points in the plane contains f (n) points
+                                           no two of which are at distance 1. Equivalently, f (n) is the minimum possible
+                                           independence number of a unit-distance graph arising from n points in the plane.
+                                           Erdős asked to determine f (n) as accurately as possible and, in particular, whether
+                                           f (n) ≥ n/4 for all n [9]. In this note, we answer this question in the negative:
+                                           Theorem 1. There exists a unit-distance graph G in the plane such that
+                                                                                     α(G)    1
+                                                                                            < .
+                                                                                    |V (G)|  4
+                                             We only prove the existence of this graph here. In principle, the construction
+                                           can be made fully explicit, but the resulting graph is astronomically large.
+                                             Our result falsifies Conjecture 1 of Matolcsi et al. [17], which states that for
+                                           any finite unit-distance graph G, its fractional chromatic number χf (G) is strictly
+                                           smaller than 4:
+                                           Corollary 1.
+                                                                                    χf (R2 ) > 4.
+                                             As immediate consequences, we recover de Grey’s lower bound [5],
+                                           Corollary 2.
+                                                                                    χ(R2 ) ≥ 5,
+                                              and obtain a simpler proof of another conjecture of Erdős, concerning the density
+                                           of measurable 1-avoiding sets in the plane, first proved by Ambrus et al. [1] using
+                                           Fourier-analytic tools:
+                                           Corollary 3.
+                                                                                  m1 (R2 ) < 1/4.
+
+                                             Date: June 2026.
+                                                                                          1
+2                               Á. DÚCZ AND D. VARGA
+
+
+   We closely follow the framework of Matolcsi, Ruzsa, Varga, and Zsámboki [17],
+which is based on the geometric fractional chromatic number χgf (G). Their method
+consists of a three-step strategy for constructing unit-distance graphs with small
+independence ratio. In the present paper, we modify only the first step, and then
+use the remaining two steps unchanged.
+     (1) They construct a specific 27-vertex point configuration G27 with χgf (G27 ) =
+         4.
+     (2) Exploiting the amenability of the group of Euclidean transformations in
+         dimension 2, they apply a blow-up procedure placing many congruent copies
+         of G27 to construct unit-distance graphs G′ with χf (G′ ) arbitrarily close
+         to χgf (G27 ).
+     (3) Starting from some G′ , they apply a second blow-up procedure, based on
+         large discrete cubes in the additive lattice generated by V (G′ ), to construct
+         unit-distance graphs with independence ratio arbitrarily close to 1/χf (G′ ).
+   In this note, we revisit their 27-vertex point configuration G27 and show that
+adding two suitably chosen points is enough to push its geometric fractional chro-
+matic number strictly above 4. As we will see, such augmentations are exceedingly
+rare. Most of the note is devoted to finding one, and proving that it has the desired
+effect. To this end, we characterize all optimal geometric fractional colorings of G27 :
+they form the convex hull of only 23 extremal colorings and have affine dimension
+11. The small number of extremal colorings is surprising, since the underlying lin-
+ear program has 182304 variables and 16855 constraints. Moreover, these extremal
+colorings have small denominators; each can be realized as a k-fold coloring with
+k ≤ 22.
+   Our search for augmentations of G27 is guided by this characterization of the
+optimal face. Since the extremal optimal geometric fractional colorings are few in
+number and have small denominators, we can test candidate vertices by solving
+finite constraint satisfaction problems. For each candidate vertex, we ask which
+colorings can be extended to the new vertex. A vertex that obstructs many colorings
+is then regarded as a promising candidate. We then identify two of the most
+promising candidates, together obstructing all our colorings. Adding both of them
+to G27 brings its geometric fractional chromatic number above 4, which can be
+certified by a dual solution to the appropriate linear program. We describe this
+procedure in detail in the main text.
+
+                                 2. Previous work
+2.1. The fractional chromatic number of the plane. Originally introduced as
+a linear programming relaxation of the famous Hadwiger–Nelson problem [13, 21],
+a major motivation for studying χf (R2 ) came from a measurable analogue of the
+problem stated above, also asked by Erdős. Let m1 (R2 ) denote the supremum of the
+upper densities of measurable sets A ⊆ R2 containing no two points at distance 1.
+Erdős conjectured that m1 (R2 ) < 1/4 [8].
+   It is easy to see the following:
+Claim 1. For any unit-distance graph G, m1 (R2 ) ≤ 1/χf (G).
+   This claim is the weighted version of the standard averaging argument giving
+m1 (R2 ) ≤ α(G)/|V (G)|. Indeed, the reciprocal 1/χf (G) is the minimum, over
+all nonzero nonnegative vertex weightings w of G, of the ratio max{w(I) : I ∈
+  A UNIT-DISTANCE GRAPH IN THE PLANE WITH INDEPENDENCE RATIO BELOW 1/4 3
+
+
+I(G)}/w(V (G)). The Croft construction [4] gives m1 (R2 ) ≥ δCroft = 0.22936 . . .
+Together with Claim 1, this implies χf (R2 ) ≤ 1/δCroft < 4.36.
+   A natural way of proving m1 (R2 ) < 1/4 is therefore to find finite unit-distance
+graphs G with χf (G) > 4. This approach produced a long sequence of lower bounds
+for χf (R2 ): The Moser spindle already gives χf (R2 ) ≥ 7/2, and this bound was
+subsequently improved by Mahan to 144/41, by Fisher and Ullman to 32/9, and
+by Cranston and Rabern to 76/21 [16, 10, 3]. Further progress was obtained by
+Bellitto, Pêcher, and Sédillot, who found a 607-vertex graph giving the lower bound
+3.899 [2]. Unpublished computations of Parts pushed this finite-graph approach
+still closer to 4, reaching approximately 3.9898 on a graph with 1057 vertices [19].
+Despite these increasingly large constructions, no finite unit-distance graph with
+fractional chromatic number greater than 4 was known before the current work.
+   The conjecture m1 (R2 ) < 1/4 was eventually settled by Ambrus et al. [1], not
+by establishing χf (R2 ) > 4, but by combining the geometric fractional chromatic
+number method with Fourier analytic techniques.
+   Later, Matolcsi et al. [17] gave a Fourier-free, geometric fractional chromatic
+number-based bound reaching the critical threshold: they proved χf (R2 ) ≥ 4.
+This gives only m1 (R2 ) ≤ 1/4, whereas Erdős asked for the strict inequality. The
+present note crosses this threshold by producing a finite unit-distance graph with
+independence ratio α(G)/|V (G)| strictly smaller than 1/4, therefore providing a
+Fourier-free proof of the conjecture.
+   The task of estimating f (n)/n accurately is still wide open. In fact, we conjecture
+
+Conjecture 1. f (n)/n = m1 (R2 ) + o(1)
+
+  and in particular that m1 (R2 ) = δCroft .
+
+2.2. The Moser lattice. Since our augmentation of G27 falsifies [17, Conjecture
+1] claiming that the independence ratio of a unit distance graph in the plane is
+always larger than 1/4, it is worth revisiting the line of reasoning that led to the
+conjecture. The Moser lattice is the additive group generated by the elements of the
+Moser spindle in its standard embedding into the complex plane. The relevance of
+the Moser lattice first became apparent in the work of Ambrus, Csiszárik, Matolcsi,
+Varga, and Zsámboki [1]: although their search for unit-distance graphs was carried
+out in a much larger ambient ring in the complex plane, the graphs giving the best
+bounds turned out to be subsets of the Moser lattice.
+   Motivated by this observation, Matolcsi, Ruzsa, Varga, and Zsámboki [17] pur-
+sued a search restricted to the Moser lattice, which produced the graph G27 with
+χgf (G27 ) = 4. The lattice-restricted strategy then stopped improving at this value,
+a phenomenon later explained by the first author of the present note, who showed
+that the entire Moser lattice is geometrically integer 4-colorable [6]. In unpublished
+experiments while preparing [17], Matolcsi et al. also carried out searches not re-
+stricted to the lattice, in two variants: one starting from the Moser spindle, which
+failed to reach χgf = 4, and another starting from the already constructed graph
+G27 , which failed to improve on the value 4.
+   The above pieces of evidence made [17, Conjecture 1] a natural conjecture. Our
+current results help explain why the counterexample was difficult to find: the points
+that improve the geometric fractional chromatic number of G27 appear to be ex-
+tremely rare. As we discuss below, the successful augmentation was found only
+4                               Á. DÚCZ AND D. VARGA
+
+
+after using the structure of the optimal face of the geometric fractional coloring
+polytope to guide the search.
+
+                        3. Notation and preliminaries
+   Throughout the note, a unit-distance graph means a finite point configuration
+in the plane together with the graph whose edges join pairs of points at distance
+1. Thus the embedding into the plane is part of the information, and when we talk
+about the distance of two vertices, we always mean Euclidean distance rather than
+graph theoretic distance. If G is such a graph, we write V (G) for its vertex set and
+I(G) for the set of all independent sets of G.
+   For a finite graph G, let α(G) denote its independence number. The ratio
+α(G)/|V (G)| is called the independence ratio of G.
+   A fractional coloring of G is a function
+                                   γ : I(G) → R≥0
+such that              X
+                               γ(I) ≥ 1       for every v ∈ V (G).
+                      I∈I(G)
+                       v∈I
+The weight of γ is
+                                            X
+                                   |γ| =            γ(I),
+                                           I∈I(G)
+
+and the fractional chromatic number χf (G) is the minimum possible value of |γ|
+over all fractional colorings of G.
+   We now recall the geometric variant introduced by [1]. If S ⊆ V (G), write
+                                         X
+                                  γ(S) =     γ(I).
+                                            I∈I(G)
+                                             S⊆I
+
+Thus γ(S) is the total weight of colors assigned simultaneously to all vertices of S.
+A fractional coloring γ is called geometric if
+                                     γ(S) = γ(S ′ )
+whenever S, S ′ ⊆ V (G) are isometric as subsets of the plane. In other words, the
+quantity γ(S) depends only on the congruence class of the point configuration S,
+not on its particular location inside G.
+  The geometric fractional chromatic number of G, denoted χgf (G), is the mini-
+mum weight of a geometric fractional coloring of G:
+                                         X
+                        χgf (G) = min       γ(I) = min |γ|,
+                                     γ                      γ
+                                           I∈I(G)
+
+where the minimum is taken over all geometric fractional colorings γ of G. Since
+geometric fractional colorings are fractional colorings with additional linear con-
+straints, we always have
+                                 χf (G) ≤ χgf (G).
+   In fact, the original motivation behind the definition of the geometric fractional
+chromatic number is obtaining stronger bounds on m1 (R2 ), since by [1, Corollary
+2] we also have
+  A UNIT-DISTANCE GRAPH IN THE PLANE WITH INDEPENDENCE RATIO BELOW 1/4 5
+
+
+
+
+                                 m1 (R2 ) ≤ 1/χgf (G)
+for any unit-distance graph G.
+
+      4. The Augmented Graph and Proof of the Main Theorem
+
+
+
+
+        Figure 1. Our extension of the G27 graph with vertices p and q.
+
+
+
+                                     √ p, q, which achieve √
+   Here we present the pair of vertices                    our χgf bound when
+added to G27 . If we let ω1 = 1/2 + i 3/2 and ω3 = 5/6 + i 11/6, we can define
+the Moser lattice as
+                 LM oser = {a + bω1 + cω3 + dω1 ω3 : a, b, c, d ∈ Z}.
+The entire G27 graph is a subset of LM oser , and by [6], no graph in this lattice can
+achieve χgf (G) > 4.
+   Vertex p can be represented as
+                                        √
+                                                                          
+                17      7                       1 1          1      1
+        p = 3 + ω1 − ω3 + 2ω1 ω3 + 5 − + ω1 − ω3 + ω1 ω3 .
+                 8      8                       4 8          8      4
+   The point q does not admit an equally simple description. It is given by
+
+                   11 13   1             η
+              q=     + ω1 − ω3 + 2ω1 ω3 + (−ω1 + ω3 + ω1 ω3 )
+                   4   8   8             8
+  where
+                                               √
+                                     s
+                                      415 + 79 33
+                               η=i                .
+                                            8
+   The unit-distance graph G29 is defined by the points V (G27 ) ∪ {p, q}, shown in
+Figure 1. Its shape suggests the informal nickname “Snail graph”.
+   The two new vertices only give rise to the trivial congruences {p} ∼   = {q} ∼=
+{vi }, and two nontrivial 2-element congruences, namely {p, v11 } = {v6 , v13 } ∼
+                                                                    ∼            =
+6                               Á. DÚCZ AND D. VARGA
+
+
+{v21 , v26 } ∼
+             = {v8 , v18 } and {q, v24 } ∼
+                                         = {v6 , v3 }. Both p and q are degree-1 vertices
+connected to v3 . The schematics of the new congruences is shown in Figure 2.
+Lemma 1.
+                                  χgf (G29 ) > 4.0007.
+   This is certified by a rational dual solution to the geometric fractional coloring
+number (GFCN) linear program of G29 , which is given in the supplementary ma-
+terial [7]. The verification process is essentially the same as in [17], except that
+our rational certificate is not claimed to be optimal. Determining the exact value
+of χgf (G29 ) would require solving the GFCN dual linear program for G29 exactly
+over the rationals. This program has 16860 variables and 498168 constraints, and
+its exact solution was beyond our available computational resources.
+
+   Following the arguments in the proofs of Theorems 1 and 2 in [17], we can
+obtain finite “blow-ups” of our graph G29 with independence ratio arbitrarily close
+to 1/χgf (G29 ), and in particular under 1/4, proving our Theorem 1:
+Theorem (Restatement of Theorem 1). There exists a finite unit-distance graph
+G in the plane such that α(G)/|V (G)| < 1/4.
+
+
+
+
+        Figure 2. Congruences containing the vertices p and q. The blue
+        intervals both have length 1, the green intervals both have length
+        2, and the red intervals all have the same length.
+
+
+5. Characterizing the optimal geometric fractional colorings of G27
+   The rest of this note explains how the vertices p and q were found. We now
+characterize the optimal geometric fractional colorings of G27 , or more specifically
+we enumerate all extremal points of the polytope of optimal geometric fractional
+colorings.
+   The first step is to write up the linear program defining χgf (G27 ). A geometric
+fractional coloring is represented by a nonnegative vector x = (xI )I∈I(G27 ) , where
+xI is the weight assigned to the independent set I. Following the notation of [17],
+  A UNIT-DISTANCE GRAPH IN THE PLANE WITH INDEPENDENCE RATIO BELOW 1/4 7
+
+
+the normalization and congruence constraints are encoded by a vector e and a
+matrix C, so that the relevant primal linear program has the form
+                                      min⟨1, x⟩
+subject to
+                          x ≥ 0,       ⟨e, x⟩ = 1,    Cx = 0.
+               P
+Here ⟨1, x⟩ = I∈I(G27 ) xI is the total weight of the coloring. The vector e is a
+0 − 1 vector with dimension equal to |I(G27 )|, with ones corresponding to inde-
+pendent sets containing the first vertex of V (G27 ). Each row of C corresponds to
+a congruence constraint between two isometric subsets S, S ′ of V (G27 ), encoding
+γ(S) = γ(S ′ ).
+   The certificate proving χgf (G27 ) = 4 is a dual vector y such that the correspond-
+ing dual inequalities are all satisfied. For each I ∈ I(G27 ), write CI for the column
+of C indexed by I, and define the dual slack
+                               rI = y T CI − 4eI + 1.
+Thus rI ≥ 0 for every I ∈ I(G27 ). Let
+                             I0 = {I ∈ I(G27 ) : rI = 0}
+be the set of independent sets on which the dual inequality is tight.
+   Due to complementary slackness, if x is an optimal primal solution, then no
+weight can be placed on an independent set whose dual inequality has positive
+slack:
+                              rI > 0 =⇒ xI = 0.
+Consequently, every optimal geometric fractional coloring is supported on I0 . Sur-
+prisingly, |I0 | = 168, in sharp contrast with |I(G27 )| = 182304. That is, only
+a minuscule fraction of the independent sets of G27 are allowed to participate in
+optimal geometric fractional colorings.
+   Conversely, every feasible point supported on I0 is automatically optimal. In-
+deed, suppose that
+                            I0
+                       x ∈ R≥0 ,      ⟨e, x⟩ = 1,       Cx = 0.
+For each I in the support of x, the equality rI = 0 gives
+                                   1 = 4eI − y T CI .
+Multiplying by xI and summing over I gives
+                            ⟨1, x⟩ = 4⟨e, x⟩ − y T Cx = 4.
+  Let C0 and e0 be the restrictions of C and e to the columns indexed by I0 . Thus
+we characterize the optimal face if we determine the restricted polytope:
+                          n                                   o
+                     F = x ∈ RI≥0   0
+                                      : ⟨e0 , x⟩ = 1, C0 x = 0 .
+   The affine hull of F has dimension 11. It remains to enumerate the extremal
+points of F . For rational coefficients, we can get an exact solution for this task
+using the Double Description Method [12, 11].
+   It turns out that the polytope F of optimal geometric fractional colorings of
+G27 has exactly 23 extremal points; we denote this set by E. Two elements of E
+are the integer colorings characterized in [6], and hence are 1-fold colorings. For
+each of the fold numbers 3, 6, and 12, there are two extremal colorings, while the
+largest fold number, 22, is attained by three extremal colorings. Four representative
+8                                                                                        Á. DÚCZ AND D. VARGA
+
+
+examples are shown in Table 1; the full list of 23 extremal colorings is included in
+the supplementary material [7].
+
+
+                                                       18                                                                                                          18
+                                                                                             10                                                                                                          10
+
+                                                                               19                                                                                                          19
+                                             25                                                  26                                                      25                                                  26
+                                                                 16                                                                                                          16
+                                                                                                           7                                                                                                           7
+
+                                    17                                                                                                          17
+                                                                                                                        9                                                                                                           9
+                              13                                               14                 2                                       13                                               14                 2
+
+                    23                                      24                                                                  23                                      24
+                               27                                                                     15                                   27                                                                     15
+                                                                      5                                                     6                                                     5                                                     6
+                                                                                        11                     1                                                                                    11                     1
+
+                         21                                               22                 8                                       21                                               22                 8
+                                                                                                                   12                                                                                                          12
+                                                                                    4                                                                                                           4
+
+
+
+
+                                         3                                                                                                           3
+                                                  20                                                                                                          20
+
+
+
+
+                                                       18                                                                                                          18
+                                                                                             10                                                                                                          10
+
+                                                                               19                                                                                                          19
+                                             25                                                  26                                                      25                                                  26
+                                                                 16                                                                                                          16
+                                                                                                           7                                                                                                           7
+
+                                    17                                                                                                          17
+                                                                                                                        9                                                                                                           9
+                              13                                               14                 2                                       13                                               14                 2
+
+                    23                                      24                                                                  23                                      24
+                               27                                                                     15                                   27                                                                     15
+                                                                      5                                                     6                                                     5                                                     6
+                                                                                        11                     1                                                                                    11                     1
+
+                         21                                               22                 8                                       21                                               22                 8
+                                                                                                                   12                                                                                                          12
+                                                                                    4                                                                                                           4
+
+
+
+
+                                         3                                                                                                           3
+                                                  20                                                                                                          20
+
+
+
+
+         Table 1. Four examples from the set E of 23 extremal optimal
+         geometric fractional colorings of G27 . They are 1-, 3-, 6-, and 22-
+         fold fractional colorings, respectively.
+
+
+                                    6. Finding suitable extra vertices
+  With our characterization of all geometric fractional colorings of G27 , we have a
+powerful tool for testing new vertex candidates.
+6.1. Generating candidate vertices. Let D be the set of all pairwise distances
+between the vertices of G27 . Our candidate vertex pool C was generated by the
+following algorithm:
+     (1) Take any two vertices vi , vj ∈ V (G27 ).
+     (2) Select two distances d1 , d2 ∈ D.
+     (3) Let c1 , c2 be the intersections of circles centered at vi , vj with radii d1 , d2
+         (if any exist). Add these to C.
+   We then repeat these steps until a sufficiently large pool C is found.
+6.2. Filtering good candidate pairs. Due to the size of V (G27 ), it is clearly in-
+feasible to check all candidates in C by evaluating their corresponding GFCN linear
+programs, since each candidate takes multiple minutes to evaluate. We therefore
+employ a prefiltering step on C, which only solves relatively small constraint satis-
+faction problems over integer variables.
+  A UNIT-DISTANCE GRAPH IN THE PLANE WITH INDEPENDENCE RATIO BELOW 1/4 9
+
+
+   The primal optima of the GFCN LP for the G27 graph are all convex com-
+binations of 23 extremal colorings. Since these colorings are rational with small
+denominators, we can interpret them as fractional colorings assigning a colors out
+of a total of b to each vertex of G27 , with b = 4a. If we let c(x) denote the set of
+colors assigned to the vertex x, the GFCN constraints turn into:
+
+(1)                  ∥x − y∥ = 1 =⇒ c(x) ∩ c(y) = ∅,
+
+                          S∼
+                                         \             \
+(2)                        = S ′ =⇒           c(x) =           c(x) .
+                                        x∈S            x∈S ′
+   For such a given rational coloring and a new candidate vertex y, we create a
+constraint satisfaction problem, where we must assign a set of exactly a colors to
+c(y), extending the previous coloring such that conditions (1) and (2) are met. If
+this CSP is infeasible, then our particular coloring has no extension to the graph
+G ∪ {y}. In our implementation, condition (2) was restricted to only 2 and 3-point
+congruences for efficiency.
+   Given candidate vertices C, and a set of rational geometric colorings R of G27 ,
+we can then efficiently check which vertices in C obstruct which colorings of R.
+Hence, a promising approach to find a vertex v ∈ C such that χgf (G ∪ {v}) > 4 is
+to choose R to be equal to E, the 23-element set of extremal colorings. However,
+a vertex obstructing all extremal points E of the optimal face F does not imply
+that it obstructs all elements of F , and indeed the choice of R = E only returned
+candidates with χgf (G ∪ {v}) = 4 during the allocated time budget.
+   Our chosen set of colorings R therefore consisted of all of E, and additionally
+all possible 1 : 1-ratio combinations of pairs of colorings from E, totalling 276
+colorings checked for each vertex. A nearly 2-day search resulted in over 800 vertex
+pairs y1 , y2 ∈ C that together block all 276 colorings (we found no single vertex
+obstructing all of R). A large number of these vertex pairs appear to give the
+same or similar bounds numerically, with the best pair reaching a GFCN value of
+over 4.0009, although the only pair rigorously verified is the one we present in this
+article.
+   If we have a blocking pair of vertices, then a rough estimate yields that one
+of its elements must obstruct at least 138 of the 276 colorings (disregarding the
+interaction between the newly added vertices). This property is exceedingly rare
+among vertices generated by the algorithm described in section 4.1. By randomly
+sampling elements of C, we estimate that less than 0.1% of vertices have this
+property. Even obstructing just a single coloring is rare, with a probability close to
+5% per sampled vertex. For comparison, vertex p blocks 273 of the 276 colorings,
+while q blocks 252.
+
+                             7. AI use declaration
+   The authors used OpenAI’s ChatGPT (GPT-5.5) during the preparation of this
+manuscript for language editing, grammar improvement, and formatting sugges-
+tions. The authors used OpenAI’s ChatGPT and Codex (GPT-5.5) to assist with
+software development, including code drafting, debugging, and implementation of
+computational experiments. Codex was asked to help search for vertices of the opti-
+mal primal face of a linear program; the resulting code unexpectedly found all such
+vertices, not merely a sample. This observation influenced the subsequent research
+10                                  Á. DÚCZ AND D. VARGA
+
+
+direction, in particular the decision to use the full characterization of the optimal
+face as a tool. All mathematical results and arguments were conceived, verified,
+and validated by the authors, who take full responsibility for the correctness of the
+work. Moreover, the supplementary verification script for this paper was written
+and verified entirely by hand.
+
+                                  8. Acknowledgements
+   Á. D. and D. V. were supported by grant NKFIH-153165, and the Ministry of
+Innovation and Technology NRDI Office within the framework of the Artificial In-
+telligence National Laboratory (RRF-2.3.1-21-2022-00004). We thank Domonkos
+Czifra, Máté Matolcsi, Dömötör Pálvölgyi, and Pál Zsámboki for helpful discus-
+sions.
+
+                                         References
+ [1] G. Ambrus, A. Csiszárik, M. Matolcsi, D. Varga, and P. Zsámboki, The density of planar
+     sets avoiding unit distances, Math. Program. 207 (2024), 303–327.
+ [2] T. Bellitto, A. Pêcher, and A. Sédillot, On the density of sets of the Euclidean plane avoiding
+     distance 1, Discrete Math. Theor. Comput. Sci. 23 (2021), no. 1.
+ [3] D. W. Cranston and L. Rabern, The fractional chromatic number of the plane, Combinatorica
+     37 (2017), no. 5, 837–861.
+ [4] H. T. Croft, Incidence incidents, Eureka 30 (1967), 22–26.
+ [5] A. D. N. J. de Grey, The chromatic number of the plane is at least 5, Geombinatorics 28
+     (2018), no. 1, 18–31. arXiv:1804.02385.
+ [6] Á. Dúcz, A note on geometric colorings of the Moser lattice, arXiv:2606.12325, 2026.
+ [7] Á. Dúcz and D. Varga, Supplementary material for “A unit-distance graph in the plane with
+     independence ratio below 1/4”, available at https://users.renyi.hu/~akos/ep1070/.
+ [8] P. Erdős, Problems and results in combinatorial geometry, in: Discrete Geometry and Con-
+     vexity (New York, 1982), Ann. New York Acad. Sci., vol. 440, New York Acad. Sci., New
+     York, 1985, pp. 1–11.
+ [9] P. Erdős, Some combinatorial and metric problems in geometry, in: Intuitive Geometry
+     (Siófok, 1985), Colloq. Math. Soc. János Bolyai, vol. 48, North-Holland, Amsterdam, 1987,
+     pp. 167–177.
+[10] D. Fisher and D. Ullman, The fractional chromatic number of the plane, Geombinatorics 2
+     (1992), no. 1, 8–12.
+[11] K. Fukuda, cddlib Reference Manual, version 094m, 2021.
+[12] K. Fukuda and A. Prodon, Double description method revisited, in: M. Deza, R. Euler, and
+     I. Manoussakis, editors, Combinatorics and Computer Science, Lecture Notes in Computer
+     Science, vol. 1120, Springer, Berlin, 1996, pp. 91–111.
+[13] M. Gardner, A new collection of “brain-teasers”, Sci. Amer. 206 (1960), no. 4, 172–180.
+[14] H. Hadwiger, Überdeckung des Euklidischen Raumes durch kongruente Mengen, Portugaliae
+     Math. 4 (1945), 238–242.
+[15] R. Hochberg and P. O’Donnell, A large independent set in the unit distance graph, Geombi-
+     natorics 2 (1993), no. 4, 83–84.
+[16] S. L. Mahan, The fractional coloring number of the plane, Master’s thesis, University of
+     Colorado Denver, 1995.
+[17] M. Matolcsi, I. Z. Ruzsa, D. Varga, and P. Zsámboki, The fractional chromatic number of
+     the plane is at least 4, arXiv:2311.10069, 2023.
+[18] L. Moser and W. Moser, Solution to problem 10, Canad. Math. Bull. 4 (1961), 187–189.
+[19] J. Parts, comment on Polymath16, seventeenth thread: Declaring victory, Short, Fat Matri-
+     ces, September 21, 2022. Available at https://dustingmixon.wordpress.com/2021/02/01/
+     polymath16-seventeenth-thread-declaring-victory/#comment-37575.
+[20] E. R. Scheinerman and D. H. Ullman, Fractional Graph Theory: A Rational Approach to
+     the Theory of Graphs, Wiley-Interscience Series in Discrete Mathematics and Optimization,
+     John Wiley & Sons, New York, 1997.
+  A UNIT-DISTANCE GRAPH IN THE PLANE WITH INDEPENDENCE RATIO BELOW 1/411
+
+
+[21] A. Soifer, The Mathematical Coloring Book: Mathematics of Coloring and the Colorful Life
+     of its Creators, Springer, New York, 2009.
+

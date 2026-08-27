@@ -1,0 +1,1086 @@
+                                         IEEE TRANSACTIONS ON INFORMATION THEORY                                                                                                                   1
+
+
+
+
+                                                  Quadratic APN Functions in Dimension 8 via
+                                                   Gröbner Basis Search in a Self-Equivalence
+                                                                    Subspace
+                                                                                             Oleksandr Kuznetsov, Member, IEEE
+
+
+                                                                                                                 Abstract
+                                                    We describe a computational search for quadratic APN (Almost Perfect Nonlinear) functions over F28 within a structured
+                                               algebraic subspace defined by a self-equivalence constraint. The search space is the 40-dimensional F2 -linear subspace VA = {F :
+                                               F ◦ A = A ◦ F } for a specific linear automorphism A of order 5 (class index 22 in the taxonomy of Beierle, Brinkmann, and
+arXiv:2606.11967v2 [cs.CR] 19 Jun 2026
+
+
+
+
+                                               Leander [11]); this subspace was previously reported to contain no APN functions under the recursive tree search method of [11].
+                                                    We combine two phases: (1) random sampling inside VA via an explicit RREF parameterization to find APN center functions
+                                               (≈600 fresh APN-positive evaluations per core-hour), and (2) Gröbner basis computation in Magma over the Boolean polynomial
+                                               ring to enumerate all APN functions in a 24-dimensional hyperplane through each center (≈10 minutes per hyperplane).
+                                                    From 428 hyperplane computations (covering 0.65% of the 216 = 65 536 total hyperplanes in VA ) we obtained 566 quadratic
+                                               APN functions that fall into six CCZ-equivalence classes under the ortho-derivative invariant [15]. Four of these classes, comprising
+                                               500 functions, match no entry in the Beierle et al. 2025 database of 3 775 599 quadratic APN functions [14] and no entry in the
+                                               pre-2020 compilation of 12 921 instances [11]. Two classes (66 functions) are identified as CCZ-equivalents of the Gold functions
+                                               x3 and x9 , confirming pipeline correctness; a membership test further shows that the three purely new classes (B, C, D) lie
+                                               entirely outside VA and are found exclusively in Gold-centered slices, establishing the essential role of the Gröbner basis step.
+                                                                                                                                               CCZ
+                                                    For quadratic APN functions, a signature mismatch σ(F ) ̸= σ(G) rigorously certifies F ̸ ∼ G, by Yoshiara’s theorem [16]
+                                               (CCZ = EA for quadratic APN) together with the ortho-derivative invariant of [15]; the absence of a signature match in the above
+                                               databases therefore constitutes a rigorous proof of CCZ-inequivalence for the new classes.
+                                                    The complete dataset, source code, and verification scripts are publicly available.
+
+                                                                                                               Index Terms
+                                                   Almost Perfect Nonlinear functions, APN, CCZ-equivalence, quadratic Boolean functions, self-equivalence subspace, Gröbner
+                                               basis, Boolean polynomial ring, ortho-derivative, differential cryptanalysis.
+
+
+                                                                                                          I. I NTRODUCTION
+                                               LMOST Perfect Nonlinear (APN) functions are vectorial Boolean functions F : Fn2 → Fn2 achieving the minimum possible
+                                         A     differential uniformity δF = 2, i.e., for every nonzero a and every b the equation F (x ⊕ a) ⊕ F (x) = b has at most two
+                                         solutions. They were introduced to cryptography by Nyberg [1] as optimal S-box designs for resistance against differential
+                                         cryptanalysis [2]: any bijective function with δF = 2 achieves the smallest possible differential probability in a single round.
+                                         APN permutations (bijective APN functions) are particularly sought, but their existence is settled only for odd n; for even n ≥ 8
+                                         the question of whether an APN permutation exists is a major open problem [23].
+                                           The classification of APN functions up to CCZ-equivalence [3] is an active research program. CCZ-equivalence is the
+                                         broadest equivalence preserving the APN property; two S-boxes in the same CCZ-class are interchangeable for cryptographic
+                                         purposes. For n ≤ 6 the classification is essentially complete; for n = 7 and n = 8 only partial results exist.
+
+                                         A. Known APN functions for n = 8
+                                                                                                                                               i                                           i   i
+                                            The classical infinite families of APN functions are the Gold power functions x2 +1 [4] and the Kasami functions x4 −2 +1
+                                         [5]. For n = 8, the Gold functions with gcd(i, 8) = 1 are quadratic (degree 2) and form exactly two CCZ-classes: {x3 , x129 }
+                                         and {x9 , x33 } (the Frobenius orbits of i = 1, 7 and i = 3, 5 respectively). All other APN power functions for n = 8 (Kasami
+                                         x21 , x85 , etc.) have degree > 2 and are therefore not quadratic.
+                                            Beyond power functions, a series of quadratic APN constructions appeared over two decades: Edel and Pott [6] found 8 157
+                                         new instances by a bivariate construction; Yu, Wang, and Li [7] obtained more via a matrix method; Weng, Tan, and Gong [9]
+                                         contributed additional instances via algebraic characterization; Taniguchi [10] described a parametric family; Budaghyan et
+                                         al. [18] introduced isotopic shifts. Beierle, Brinkmann, and Leander [11] systematically studied self-equivalence subspaces (see
+                                         Section III) and found 12 921 new instances; a companion paper [12] found a further 11 779 instances via extension methods.
+                                           O. Kuznetsov is with the Department of Theoretical and Applied Sciences, eCampus University, Via Isimbardi 10, 22060 Novedrate (CO), Italy, and also
+                                         with the Department of Intelligent Software Systems and Technologies, School of Computer Science and Artificial Intelligence, V.N. Karazin Kharkiv National
+                                         University, 4 Svobody Sq., 61022 Kharkiv, Ukraine. E-mail: oleksandr.kuznetsov@uniecampus.it. ORCID: 0000-0003-2331-6326.
+                                           Dataset and source code: https://github.com/KuznetsovKarazin/apn-gb-search; DOI: https://doi.org/10.5281/zenodo.20626047
+                                           Manuscript received June 23, 2026.
+IEEE TRANSACTIONS ON INFORMATION THEORY                                                                                          2
+
+
+
+Together with the above, approximately 32 892 CCZ-inequivalent quadratic APN functions for n = 8 were known through
+2021; Beierle, Leander, and Perrin [13] added 6 368 more via trimming and extension.
+   In 2025, Beierle, Langevin, Leander, Polujan, and Rasoolzadeh [14] extended this dramatically: using two construction
+strategies based on vectorial bent functions and an extensive computer search, they produced 3 775 599 new functions, estimating
+the total number of CCZ-classes at approximately 6 million.
+
+B. Motivation and approach
+  Despite the large size of the Beierle 2025 database, certain structured algebraic regions of the search space remain unexplored.
+A quadratic function F : F28 → F28 is described by a binary coefficient vector of length 224 (see Section II). The full space
+has size 2224 ; any structured subspace of dimension d ≪ 224 has probability 2d−224 of being hit by a random function.
+  The self-equivalence subspace VA defined by a linear automorphism A (see Section III) is one such structured subspace.
+For the automorphism A studied here (ord(A) = 5), this subspace has dimension 40. The probability of a random quadratic
+function lying in VA is 240−224 = 2−184 ≈ 10−55 , so global random search never reaches it. Within VA , however, the APN
+density is approximately 10−4 (see Section IV-D), making targeted search tractable.
+  The recursive tree search of BBL2021 found zero APN functions in this particular subspace. We show that a Gröbner basis
+approach combined with explicit RREF parameterization of VA succeeds where the tree search did not.
+
+C. Contributions
+   This paper makes the following contributions:
+   1) We establish that the self-equivalence subspace associated with BBL2021 class index 22 (the automorphism of order 5
+      described above) does contain quadratic APN functions, in contrast to the zero-solution result of the original BBL2021
+      search.
+   2) We develop an explicit RREF parameterization (fc22+sol22) of this 40-dimensional subspace, enabling efficient random
+      sampling with APN density ≈ 10−4 .
+   3) We implement an NL = 4 Gröbner basis slice computation in Magma that, given any APN center in the subspace, finds
+      all APN functions in a 24-dimensional hyperplane through that center.
+   4) Over two batches (428 hyperplanes, 0.65% of the total 65 536) we find 566 quadratic APN functions in six CCZ-classes.
+      Four of these classes are absent from all known databases.
+   5) We provide a complete verification pipeline using the ortho-derivative invariant of [15] and confirm via streaming
+      comparison that the four new classes do not appear in the Beierle 2025 database or any prior compilation.
+   The approach generalizes: the same pipeline applies to every BBL2021 class index with manageable subspace dimension,
+offering a systematic program for further extending the classification.
+
+D. Organization
+   Section II fixes notation and recalls required background. Section III reviews the BBL2021 framework. Section IV describes
+the specific subspace studied. Section V presents the search pipeline in detail. Section VI reports experimental results.
+Section VI-H0b describes the verification procedure and states the main theorem. Section VII discusses the results and their
+limitations. Section VIII surveys related work. Section IX concludes. Appendix A gives the S-box tables of the four new
+classes. Appendix A describes the computational infrastructure.
+
+                                                       II. P RELIMINARIES
+  Throughout, n = 8 and N = 2n = 256, unless otherwise stated. We identify F28 with F82 and write ⊕ for bitwise XOR.
+Scalar and vector indices run from 0.
+
+A. Vectorial Boolean functions and differential uniformity
+  A vectorial Boolean function (VBF) is a map F : Fn2 → Fn2 . It may be written coordinate-wise as F = (f0 , . . . , fn−1 ) with
+each fj : Fn2 → F2 . The differential table of F records, for each a ∈ Fn2 and b ∈ Fn2 ,
+                                         δF (a, b) = |{x ∈ Fn2 : F (x ⊕ a) ⊕ F (x) = b}|.
+The differential uniformity is δF = maxa̸=0, b δF (a, b).
+Definition 1. F is almost perfect nonlinear (APN) if δF = 2.
+                                                         n
+                                         Pfunctions on F2 with n > 1 [1]: for every nonzero a, the derivative Da F (x) =
+   The value 2 is the minimum possible for
+F (x ⊕ a) ⊕ F (x) is a map Fn2 → Fn2 and b δF (a, b) = 2n , so the maximum is at most 2n and at least 2.
+IEEE TRANSACTIONS ON INFORMATION THEORY                                                                                        3
+
+
+
+B. Algebraic normal form and quadratic functions
+   Every fj : Fn2 → F2 has a unique algebraic normal form (ANF), a multilinear polynomial over F2 . A function F is quadratic
+if every fj has ANF degree at most 2:
+                                                             M              M
+                            fj (x0 , . . . , xn−1 ) = c0,j ⊕   c{k},j xk ⊕          c(p,q),j xp xq .
+                                                          0≤k<n                   0≤p<q≤n−1
+       n
+         
+The n 2 = 8 · 28 = 224 quadratic coefficients c(p,q),j ∈ F2 completely determine the quadratic part of F (the linear part does
+not affect the APN property if F (0) = 0 is assumed by normalisation). We index them as c1 , . . . , c224 in lexicographic order
+of ((p, q), j), forming a vector c ∈ F224
+                                        2 .
+  The pair index is
+                                                  p(2n − p − 1)
+                                      idx(p, q) =               + q − p − 1 ∈ {0, . . . , 27},
+                                                        2
+and the full index is cidx(p,q)·n+j+1 .
+
+C. CCZ- and EA-equivalence
+                                                                                    CCZ
+Definition 2 ( [3]). Functions F , G : Fn2 → Fn2 are CCZ-equivalent (F ∼ G) if there exists an affine permutation L of
+Fn2 × Fn2 such that L(GF ) = GG , where GF = {(x, F (x))} is the graph of F .
+                              EA
+   They are EA-equivalent (F ∼ G) if G = A1 ◦ F ◦ A2 + A for affine permutations A1 , A2 and affine A.
+  EA-equivalence implies CCZ-equivalence. The converse fails in general but holds for quadratic functions:
+                                                                                          CCZ         EA
+Theorem 1 (Yoshiara [16]). If F and G are quadratic APN functions, then F ∼ G ⇔ F ∼ G.
+   CCZ-equivalence preserves the APN property, differential uniformity, and the structure of the difference table. Two functions
+in the same CCZ-class are cryptographically interchangeable as S-boxes.
+
+D. Walsh transform and differential spectrum
+  For a VBF F : Fn2 → Fn2 , the Walsh transform is
+                                                       X
+                                          Fb(a, b) =          (−1)b·F (x)⊕a·x ,    a, b ∈ Fn2 ,
+                                                       x∈Fn
+                                                          2
+
+
+where · is the standard inner product on Fn2 . The absolute Walsh spectrum is the multiset {|Fb(a, b)| : a, b ∈ Fn2 }.
+   The differential spectrum of F is the multiset {δF (a, b) : a ̸= 0, b ∈ Fn2 }. All quadratic APN functions over F28 have
+                                   7
+the same differential spectrum {22 · 0, (28 − 1)27 · 2}, so this is not a distinguishing invariant by itself. The absolute Walsh
+spectrum of F itself takes only a handful of distinct values across all known quadratic APN functions over F28 [12] and is
+likewise weak at separating CCZ-classes. Both spectra become far more discriminating when applied to the ortho-derivative
+πF rather than to F directly (Section II-E).
+
+E. Ortho-derivative
+  The ortho-derivative [15] is a more refined invariant.
+Definition 3 ( [15]). Let F : Fn2 → Fn2 be a quadratic APN function. For a ̸= 0, the derivative Da F (x) = F (x ⊕ a) ⊕ F (x) is
+an affine function of x, and the corresponding linear part is La (x) = Da F (x) ⊕ Da F (0). The ortho-derivative πF : Fn2 → Fn2
+is the unique function with πF (0) = 0 and, for a ̸= 0, πF (a) ̸= 0 a vector orthogonal (under the standard inner product on
+Fn2 ) to every element of Im(La ). Equivalently, since F is APN, dim ker(La )⊤ = 1 and πF (a) is the unique nonzero element
+of this left kernel.
+Theorem 2 ( [15]). For quadratic APN functions F and G over Fn2 :
+                                                        EA                 EA
+                                                   F ∼ G =⇒ πF ∼ πG .
+Consequently, the ortho-derivative signature
+                                                                                                  
+                                   σ(F ) = diff-spectrum(πF ), abs-Walsh-spectrum(πF )
+                                                                                  CCZ
+is a CCZ-invariant in the contrapositive sense: σ(F ) ̸= σ(G) certifies F ̸ ∼ G for quadratic APN functions (using Theorem 1
+to pass from EA- to CCZ-inequivalence).
+Remark 1 (Discriminating power of σ). The implication in Theorem 2 is one-directional and is the only direction established
+                                                       CCZ
+in the literature [15]; the converse (σ(F ) = σ(G) ⇒ F ∼ G) is not a proven theorem. In practice, however, σ is reported
+IEEE TRANSACTIONS ON INFORMATION THEORY                                                                                            4
+
+
+
+to be highly discriminating: Canteaut, Couvreur, and Perrin [15] use it to efficiently separate more than 20 000 quadratic
+APN functions over F28 into distinct CCZ-classes, and no false positive (two CCZ-inequivalent functions sharing a signature)
+has been reported for n = 8 to date. We therefore use σ(F ) ̸= σ(G) as a rigorous inequivalence certificate throughout
+this paper (Theorem 6), and additionally confirm equivalence within each putative class by the exact code-equivalence test
+are_ccz_equivalent_from_code of sboxU [22] (Section VIII), rather than relying on matching signatures alone.
+
+                           III. S ELF -E QUIVALENCE S UBSPACES AND THE BBL2021 F RAMEWORK
+A. Definition and basic properties
+Definition 4 ( [11]). A linear equivalence (LE) automorphism of a VBF F is a linear bijection A : Fn2 → Fn2 such that
+F ◦ A = A ◦ F . The set of all LE-automorphisms of F forms a subgroup of GL(n, F2 ), the LE-automorphism group of F .
+  For a fixed A ∈ GL(n, F2 ), the self-equivalence subspace is
+                                       VA = {quadratic F : Fn2 → Fn2 : F ◦ A = A ◦ F }.
+   VA is a F2 -linear subspace of the 224-dimensional space of all quadratic functions. Explicitly, F ◦ A = A ◦ F expands (via
+the ANF) to a homogeneous linear system over F2 in the 224 coefficients of F , so VA = ker(MA ) for a certain F2 -linear map
+MA (see Section IV for the precise construction).
+Proposition 3 ( [11]). VA contains at least one APN function if and only if A is an LE-automorphism of some quadratic APN
+function. The dimension d = dim(VA ) depends only on the conjugacy class of A in GL(n, F2 ).
+
+B. The BBL2021 classification for n = 8
+  Beierle, Brinkmann, and Leander [11] classified all conjugacy classes of linear automorphisms of F28 with small order
+and, for each, studied VA by a recursive tree search. Table I of [11] lists only those class indices for which at least one APN
+function was found; absence from the table means the search found zero solutions. The class associated with the automorphism
+A studied here (order 5, described precisely in Section IV) does not appear in Table I.
+Remark 2 (Why BBL2021 missed CLASS-A and Gold in VA ). The absence from [11] Table I requires explanation: we find
+that VA contains CLASS-A (362 functions), Gold x3 equivalents (36), and Gold x9 equivalents (30) — why did BBL2021’s
+tree search find none of these?
+   The BBL2021 tree search works by sequentially constructing the S-box lookup table entry by entry and pruning branches that
+cannot lead to APN functions. The key issue is branch pruning at intermediate stages: when building the table incrementally,
+a partial assignment may pass all local APN conditions (for the differences a examined so far) but encounter a contradiction
+at a later stage. In a high-dimensional structured subspace like VA , valid solutions may lie in regions that require passing
+through intermediate states that the tree search prunes as infeasible.
+   More concretely: our NL=4 method fixes a complete hyperplane and finds all APN functions in it at once (via GB). The
+tree search instead builds solutions bit by bit across the full F82 → F82 space, and its pruning strategy is calibrated for the full
+space, not for VA . A branch that leads to a valid VA -APN function may be pruned because the intermediate partial function
+(not yet constrained to VA ) fails a local APN test.
+   In short: the BBL2021 tree search performs a local, sequential enumeration that can miss globally valid solutions by early
+pruning, whereas our Gröbner basis approach performs a complete enumeration within each hyperplane. This is consistent
+with the BBL2021 authors’ own remark that their search “may not have found all” solutions in every class.
+Remark 3. The class index numbering (“class index 22”, etc.) is internal to [11] and does not have an independent standard
+designation. We use it only as a reference to the specific automorphism; the essential datum is the characteristic polynomial
+of A, given in Section IV.
+
+C. Why random global search misses VA
+  For the specific A studied here, dim(VA ) = 40. The fraction of all quadratic functions lying in VA is 240 /2224 = 2−184 ≈
+10−55 . No random global search (including the Beierle 2025 search [14]) can reach VA in practice.
+  Within VA , the APN density is approximately 10−4 (see Section IV-D). Any targeted search that samples uniformly from
+VA will find APN functions at this rate, making the problem tractable.
+IEEE TRANSACTIONS ON INFORMATION THEORY                                                                                           5
+
+
+
+                                          IV. T HE S ELF -E QUIVALENCE S UBSPACE VA
+A. The automorphism A
+  Let C(p) denote the companion matrix of a polynomial p ∈ F2 [X] (the transpose of the standard companion form). The
+polynomial q = X 4 + X 3 + X 2 + X + 1 is the minimal polynomial of a primitive element of F24 over F2 (the fifth cyclotomic
+polynomial Φ5 ). Its companion matrix C(q) ∈ GL(4, F2 ) has order 5:
+                                                                     
+                                                          0 0 0 1
+                                                         1 0 0 1
+                                                C(q) =  0 1 0 1 .
+                                                                      
+
+                                                          0 0 1 1
+  We define
+                                       A = block diag(C(q), C(q)) ∈ GL(8, F2 ),
+where block diag denotes the block-diagonal matrix C(q) 0 
+                                                    0 C(q)
+                                                            . Since C(q) has order 5, A also has order 5. Concretely,
+                                                                       
+                                                 0 0 0 1 0 0 0 0
+                                              1 0 0 1 0 0 0 0
+                                                                       
+                                              0 1 0 1 0 0 0 0
+                                                                       
+                                              0 0 1 1 0 0 0 0
+                                         A=  0 0 0 0 0 0 0 1 .
+                                                                                                                   (1)
+                                                                       
+                                              0 0 0 0 1 0 0 1
+                                                                       
+                                              0 0 0 0 0 1 0 1
+                                                 0 0 0 0 0 0 1 1
+One verifies A5 = I8 and Ak ̸= I8 for k ∈ {1, 2, 3, 4}, confirming ord(A) = 5. This is the linear automorphism whose
+self-equivalence subspace we study, corresponding to class index 22 in [11]. The matrix and the RREF of MA (pivot/free
+indices) are included in the repository (file data/class22_basis.json).
+Remark 4. The index-22 labeling refers to the internal numbering of BBL2021’s classification of conjugacy classes of
+GL(8, F2 ); it does not imply any ordering by difficulty or size. Our construction of A follows the description in [11, Section IV-
+B]: A = block diag(C(q), C(q)) with C(q) as above.
+
+B. Constructing the linear system
+  The condition F ◦ A = A ◦ F for a quadratic function F with ANF coefficient vector c ∈ F224    2   expands as follows. For
+each output bit j ∈ {0, . . . , 7} and each quadratic pair (r, s) with r < s, the entry [AT F A − AT F A]j,(r,s) = 0 yields a
+homogeneous linear equation in c over F2 .
+  Explicitly, the coefficient of c(p,q),k in the equation for (j, r, s) is
+                                                                          
+                                                     Ap,r Aq,s ⊕ Ap,s Aq,r ⊕ Aj,k ,                                       (2)
+summed over appropriate indices. Assembling all (j, r, s) pairs gives a matrix MA ∈ Fm×224
+                                                                                     2     (where m is the number of
+equations) such that VA = ker(MA ).
+
+C. RREF and the fc22+sol22 parameterization
+  Computing the reduced row echelon form (RREF) of MA over F2 yields:
+  • 184 pivot variables: indices P = {p1 , . . . , p184 } ⊂ {1, . . . , 224}.
+  • 40 free variables: indices F = {f1 , . . . , f40 } ⊂ {1, . . . , 224}, confirming dim(VA ) = 40.
+                                                       L
+  • For each pivot pi , a linear combination pi =        fj ∈Si fj over F2 , where Si ⊆ F.
+  Any point in VA is uniquely parameterized by a vector b = (b1 , . . . , b40 ) ∈ F40
+                                                                                   2 via:
+
+                                                cfk = bk , k = 1, . . . , 40,                                                   (3)
+                                                       M
+                                                c pi =      bj , i = 1, . . . , 184.                                            (4)
+                                                       j:fj ∈Si
+
+We call (3)–(4) the fc22+sol22 projection. Any b ∈ F40
+                                                    2 maps to a valid point in VA ; the mapping is bijective. This is the
+critical computational primitive for Phase 1.
+IEEE TRANSACTIONS ON INFORMATION THEORY                                                                                             6
+
+
+
+                                                        (1) Phase 1: APN-center
+                                                        search (Python/NumPy)
+                                                                     APN centers
+                                                        (2) Phase 2: Magma GB
+                                                         slice (Magma V2.28-9)
+                                                                     raw S-boxes
+                                                            (3) Collect &
+                                                         deduplicate (Python)
+                                                                     unique S-boxes
+                                                            (4) CCZ classify
+                                                          (sboxU / SageMath)
+                                                                     classified
+                                                        (5) Verify vs. databases
+                                                          (sboxU / SageMath)
+
+Fig. 1. Overview of the five-stage search pipeline.
+
+
+D. APN density in VA
+  To estimate the density of APN functions in VA , we sampled 108 random points via fc22+sol22 and found approximately
+10 APN functions, giving an empirical density of ≈ 10−4 , or equivalently ≈ 1 APN per 11 000 random points.
+   4
+
+
+Remark 5 (Density heuristic and the 2−n estimate). The commonly cited heuristic for APN density in the full space of (n, n)
+vectorial Boolean functions is ≈ 2−n . For n = 8 this gives 2−8 ≈ 3.9 × 10−3 , which is about one order of magnitude
+larger than the empirical value ≈ 10−4 we observe in VA . The discrepancy arises because the heuristic applies to the full
+2224 -dimensional space, whereas VA is a highly structured 40-dimensional subspace: not all functions in VA are “typical”
+quadratic functions, and the self-equivalence constraint can bias the density. Our empirical estimate is based on 108 uniform
+samples from VA via the fc22+sol22 projection, giving a 95% confidence interval of approximately (9.8 × 10−5 , 1.02 × 10−4 )
+by a normal approximation (standard error ≈ 10−6 ). The estimate ≈ 10−4 is thus well-determined and approximately 40×
+smaller than the 2−n heuristic.
+
+E. The NL = 4 slice structure
+   Of the 40 free variable indices in F, some correspond to pairs (p, q) with p ≤ 4 (center bits) and others to pairs with p > 4
+(intra-slice bits). For n = 8, the pairs with p > 4 are exactly (5, 6), (5, 7), and (6, 7), contributing 3 × 8 = 24 intra-slice bits.
+The remaining 40 − 24 = 16 free bits are center bits.
+   This induces a partition of VA into 216 = 65 536 non-overlapping affine hyperplanes of dimension 24, one for each choice
+of the 16 center bits. Each such hyperplane is called an NL = 4 slice, and the center bits determine the slice. Conversely, fixing
+the 200 ANF coefficients corresponding to pairs with p ≤ 4 (the NL = 4 normalization) selects a unique slice.
+Remark 6. The label “NL = 4” refers to the normalization level: the maximum first-index p of a pair whose coefficient is fixed
+is 4. Alternatively, one could fix other subsets of 200 coefficients (yielding different slice partitions). The 40
+                                                                                                                24 = 62 852 101 650
+choices of 24 free bits from the 40 free variables define that many distinct slice partitions, of which NL = 4 is one convenient
+canonical choice. The multi-slice perspective (using several normalizations per APN center) is discussed in Section V-F.
+
+                                                      V. T HE S EARCH P IPELINE
+   The search proceeds in five stages, summarized in Figure 1.
+
+A. Phase 1: APN-center search
+  The APN check (line 8, condition δFb = 2) evaluates the difference table and runs in O(N 2 ) operations. In Python 3.11 with
+NumPy, one check takes ≈0.6 ms on one core of an AMD Ryzen 7840HS, corresponding to ≈6 × 106 function evaluations
+per hour.
+Remark 7 (Throughput vs. APN center rate). At 0.6 ms/check, the raw check rate is ≈6 × 106 checks/hour. However, the
+APN density in VA is ≈ 10−4 (Section IV-D), so approximately 6 × 106 × 10−4 ≈ 600 random points in VA per hour are
+APN. The reported figure of ≈5800 APN centers/hour accounts for the deduplication step (Section V-A): signatures previously
+seen (already assigned to a slice) are skipped before the APN check, and the effective density after deduplication is higher for
+fresh signatures. The precise figure depends on the fraction of already-seen signatures at a given point in the search; for the
+IEEE TRANSACTIONS ON INFORMATION THEORY                                                                                             7
+
+
+
+Algorithm 1 APN-Center Search in VA
+Require: RREF data (F, {Si }); seen signatures D; target count T
+Ensure: APN centers C ⊂ VA
+ 1: C ← ∅
+ 2: repeat
+ 3:   b ∼ Uniform(F40 2 )
+ 4:   Apply fc22+sol22: set coefficients via (3)–(4)
+ 5:   Compute slice signature sig(b)
+ 6:   if sig(b) ∈ D then
+ 7:      continue
+ 8:   end if
+ 9:   Build S-box Fb
+10:   if δFb = 2 then
+11:      C ← C ∪ {Fb }
+12:      D ← D ∪ {sig(b)}
+13:   end if
+14: until |C| = T
+15: return C
+
+
+
+first ≈5% of the 65 536 slices (our regime, 428 slices), the collision rate is negligible and the effective APN discovery rate
+is ≈600–5800 APN centers/hour depending on the density estimate used. For a conservative reproducible bound, we report
+≈600 fresh APN-positive checks per core-hour.
+  The slice signature (line 6) is the 16-bit string formed by the center bits of b. Deduplication on signatures ensures that
+no two Phase 1 invocations generate Magma files for the same slice (important for systematic exhaustion of VA ). There are
+216 = 65 536 distinct signatures.
+
+B. Phase 2: Gröbner basis slice computation
+  1) Normalization: Given APN center F0 with coefficient vector c(0) , the NL = 4 normalization fixes the 200 ANF coefficients
+corresponding to pairs (p, q, j) with p ≤ 4 to their values in c(0) . The 24 remaining coefficients (pairs (5, 6), (5, 7), (6, 7),
+each with 8 output bits j = 0, . . . , 7) become unknowns c1 , . . . , c24 .
+  Since F0 ∈ VA by construction, the normalization equations are consistent with the self-equivalence constraint. Any APN
+function in the same NL = 4 slice as F0 also lies in VA .
+  2) APN polynomial system: For each a ∈ {1, . . . , 255}, define the derivative matrix Ma ∈ Fn×n
+                                                                                                2    by
+                                                     [Ma ]j,k = c(min(k,·),max(k,·)),j free ,
+which encodes the linear part of Da F . The function F is APN at difference a if and only if rank(Ma ) = n − 1 = 7.
+Remark 8 (Rank constraint). The APN condition δF = 2 requires rank(Ma ) = 7 (exactly), not merely ≥ 7. We enforce this
+via two complementary polynomial conditions:
+                                            2                                                     (r,c)
+   1) rank(Ma ) ≥ 7: at least one of the 87 minors of order 7 is nonzero, i.e., r,c (1 + det Ma ) = 0.
+                                                                                  Q
+   2) rank(Ma ) ≤ 7: the full determinant det(Ma ) = 0.
+Together they force rank(Ma ) = 7 exactly. In our implementation, condition (2) is added explicitly to the ideal (one polynomial
+det(Ma ) per a), ensuring that rank-8 matrices are excluded. Adding det(Ma ) = 0 does not increase solve time noticeably (it
+is degree 8 in the free variables and contributes one polynomial per a).
+  In practice, we build the polynomial                               Y
+                                                                            1 + det(Ma(r,c) )
+                                                                                             
+                                                  pa = det(Ma ) ·
+                                                                      r,c
+
+of degree ≤ n = 8 in c1 , . . . , c24 ; vanishing of pa is equivalent to rank(Ma ) = 7.
+  The APN ideal is
+                                         I = ⟨p1 , . . . , p255 ⟩ + ⟨ci + εi : (p, q, j) fixed⟩ ⊂ B224 ,
+where B224 = F2 [c1 , . . . , c224 ]/(c2i + ci ) is the Boolean polynomial ring with grevlex ordering, and εi ∈ F2 is the fixed value
+of each normalized coefficient.
+  Every element of Var(I) corresponds to a function with rank(Ma ) = 7 for all a ̸= 0, i.e., an APN function. Thus, when
+dim(I) = 0, all solutions are APN by construction (no post-hoc verification is needed for the APN property itself, though we
+perform it as a sanity check).
+IEEE TRANSACTIONS ON INFORMATION THEORY                                                                                       8
+
+
+
+   3) Computational cost: The build phase (constructing all 255 polynomials pa ) takes ≈8–15 minutes per slice on one core of
+an AMD Ryzen 7840HS. This dominates the total cost. Once the ideal is built, Gröbner basis computation reduces to Gaussian
+elimination over F2 (since all variables are Boolean), and the GB solve time is typically under 0.1 s.
+   If dim(I) = 0: Var(I) is finite; each element is a setting of the 24 free variables for which F is APN. All solutions are
+APN by construction.
+   If dim(I) = −1: the system is infeasible; the slice contains no APN functions. Empirically, ≈ 83% of slices return dim = −1.
+                                                                                               (0)
+Remark 9 (Guarantee for APN centers). When F0 is an APN center, the assignment ci = ci for i = 1, . . . , 24 is a valid
+solution (it corresponds to F0 itself), so dim(I) = 0 is guaranteed. Additional solutions (“neighbors”) are further APN
+functions in the same 24-dimensional hyperplane.
+
+C. Phase 3: Collection and deduplication
+   Magma writes each found APN S-box to a result file via PrintFile. A Python collector script reads all result files, parses
+the lookup tables, computes SHA-256 hashes, and removes duplicates. A function found in multiple slices (e.g., as a center
+in one and a neighbor in another) appears only once in the deduplicated output.
+   The collector also handles Magma’s automatic line-wrapping (backslash+CRLF continuation for lines exceeding 80 char-
+acters).
+
+D. Phase 4: CCZ classification
+  For each unique S-box F , the ortho-derivative πF is computed using the sboxU library [22]. The signature σ(F ) =
+(∆-spectrum(πF ), W -spectrum(πF )) is computed and stored. Functions with equal signatures are grouped into the same
+CCZ-class (Theorem 2). Functions in different signature groups are in different CCZ-classes.
+
+E. Phase 5: Verification against known databases
+  For each reference database K, we stream through all entries G ∈ K, compute σ(G), and check whether σ(G) matches any
+σ(F ) for F in our collection. A match triggers an optional exact CCZ test via sboxU.are_ccz_equivalent_from_code.
+No match after exhausting K certifies CCZ-inequivalence of all our functions from all functions in K.
+
+F. Multi-slice extension
+   The NL = 4 normalization is one particular partition of VA into 216 hyperplanes.
+                                                                                  One can instead fix any 200 of the 224
+ANF coefficients, leaving any 24 free. Given a fixed APN center F0 , there are 40
+                                                                               24 = 62 852 101 650 distinct choices of which
+24 free variables to keep free. Each choice defines a different 24-dimensional hyperplane through F0 , potentially yielding
+different neighbors.
+   In practice, one could run several (e.g., 10–100) independent normalizations per APN center by randomly choosing the 24
+free variables. This would increase coverage without requiring new Phase 1 computations.
+Remark 10. The multi-slice approach described above has not been implemented in the present work; all results here use
+only the NL = 4 normalization. We include this discussion as a natural direction for future work.
+                                               VI. E XPERIMENTAL R ESULTS
+A. Experimental setup
+   Hardware. AMD Ryzen 7840HS, 8 physical cores, 16 GB RAM, Windows 11.
+   Software. Magma V2.28-9 [21] (Phase 2); Python 3.11 with NumPy (Phases 1, 3); SageMath 10.x with sboxU [22]
+(Phases 4, 5) running under WSL 2 (Ubuntu 26.04).
+   Parallelism. Phase 2 uses a PowerShell queue script running up to 8 Magma processes simultaneously. Phase 1 runs
+single-threaded (trivially parallelizable).
+   Note on Magma exit code. Magma V2.20+ returns exit code 1 when quit; is called even on successful completion. The
+queue script was adjusted to treat exit codes 0 and 1 both as success, with any higher code indicating a genuine error.
+
+B. Search coverage
+Remark 11 (CPU-hour accounting). The ≈57 CPU-hours figure is computed as 428 slices × average 8 minutes/slice = 3 424
+minutes ≈ 57 CPU-hours. At 8-core parallelism, wall-clock time was ≈ 7–10 hours. The build phase (constructing all 255
+polynomials pa ) dominates: 8–15 min/slice on a single Ryzen 7840HS core. Solving the ideal once built takes < 0.1 s. The
+figure “≈ 50 CPU-hours” reported in an earlier draft was a conservative lower bound; the more precise estimate is 57
+CPU-hours based on per-slice timing logs.
+   Table I summarises the search coverage. All 428 executed slices are APN-positive (i.e., contain at least one APN function),
+because every slice center was itself found by Phase 1 to be APN. The absence of empty slices is therefore by construction,
+not unexpected. The key observation is that each of the 428 centers lies in VA , whereas 138 of the 566 found functions lie
+strictly outside VA ; these are the functions attributable to the Gröbner basis step (see Section VI-E).
+IEEE TRANSACTIONS ON INFORMATION THEORY                                                                                      9
+
+
+
+                                                                     TABLE I
+                                                        S EARCH S TATISTICS (BATCHES 3–4)
+
+                                    Quantity                                               Value
+
+                                    Total NL = 4 slices in VA                              65 536
+                                    Slices executed (batches 3–4)                           428
+                                    Coverage of VA                                         0.65%
+
+                                    APN centers used (Phase 1)                              428
+                                    Slices returning dim = 0 (with APN)                  428 (100%)
+
+                                    Total unique APN functions                               566
+                                      in VA (IN CLASS22)                                     428
+                                      outside VA (OUT CLASS22)                               138
+
+                                    Phase 2 build time (per slice)                8–15 min (1 core)
+                                    Phase 2 solve time (per slice)                     < 0.1 s
+                                    Wall-clock time (Phase 2, 8 cores)                 ≈10 h
+                                    Total CPU-hours (Phase 2)                  ≈57 h (428 × 8 min avg)
+
+
+                                                           TABLE II
+                                     CCZ-E QUIVALENCE C LASSES OF A LL 566 F OUND F UNCTIONS
+
+                                 Label         Size         σ-hash      Identification
+
+                                 CLASS-A       362         9d95d9c4     Unidentified (new)
+                                 CLASS-B        72         c5f52f56     Unidentified (new)
+                                 CLASS-C        36         74a30c1a     Unidentified (new)
+                                 CLASS-D        30         024ba500     Unidentified (new)
+
+                                 CLASS-E           36      11cc72af     Gold x3 /x129
+                                 CLASS-F           30      d15183d1     Gold x9 /x33
+                                 σ-hash: first 8 hex digits of SHA-256(σ(F )). Full hashes in Appendix A.
+
+
+
+C. Property verification of collected functions
+  All 566 collected functions were independently verified for:
+  • Differential uniformity δF = 2: exhaustive difference table computation.
+  • Algebraic degree 2: Moebius transform of the ANF over F2 ; maximum monomial degree is 2 for all 566 functions.
+  • Non-permutation: F is not bijective (the image |F (F28 )| < 256 in all cases).
+
+
+D. CCZ-classification
+  Table II shows the six CCZ-classes obtained by grouping on σ(F ).
+  1) CLASS-A dominance: CLASS-A accounts for 362 of 566 functions (64%). This dominance was observed from the first
+experiments: 17 of the initial 25 functions belonged to the CLASS-A equivalent. Whether this reflects a larger volume of
+CLASS-A in VA , a higher local APN density, or both is not clear from the current data.
+  2) Gold functions as controls: CLASS-E and CLASS-F are identified by their σ-values matching those of Gold x3
+(equivalently x129 , by Frobenius orbit) and Gold x9 (equivalently x33 ), respectively. The Gold functions
+                                               i
+                                            x2 +1 ,         gcd(i, 8) = 1,    i ∈ {1, 3, 5, 7},
+form exactly two CCZ-classes for n = 8: the orbit {i = 1, 7} giving x3 and x129 , and the orbit {i = 3, 5} giving x9 and x33 .
+No other quadratic APN power functions exist for n = 8 (Kasami, Welch, Niho, Dobbertin functions all have degree > 2 for
+n = 8).
+   The presence of Gold CCZ-equivalents in VA is expected: VA is a structured subspace that can intersect any CCZ-class.
+Their correct identification confirms that the pipeline accurately recovers known classes.
+
+E. Slice-type structure and VA -membership
+  A membership test — checking whether each found function F satisfies F (Ax) = A(F (x)) for all x ∈ F28 — reveals a
+precise partition of the 566 found functions:
+IEEE TRANSACTIONS ON INFORMATION THEORY                                                                                      10
+
+
+
+                                                              TABLE III
+                                          CCZ-C LASS VS . VA -M EMBERSHIP AND S LICE T YPE
+
+                                 Class        Size    In VA      APN/slice      Role
+
+                                 CLASS-A      362    all 362          1         Center only
+                                 CLASS-E       36     all 36    4 (with B,C)    Center
+                                 CLASS-F       30     all 30     2 (with D)     Center
+
+                                 CLASS-B        72    none      4 (with E,C)    GB-found
+                                 CLASS-C        36    none      4 (with E,B)    GB-found
+                                 CLASS-D        30    none       2 (with F)     GB-found
+                                 “APN/slice” = number of APN functions in each slice of that center type.
+
+
+
+  • IN CLASS22 (F ∈ VA ): 428 functions.
+  • OUT CLASS22 (F ∈      / VA ): 138 functions.
+  Crucially, 428 = the number of slice centers (one per slice), confirming that every APN center belongs to VA by construction
+(Phase 1 searches within VA ), and that 138 functions were found by the Gröbner basis step outside VA .
+  Cross-referencing with CCZ-class reveals the following clean structure:
+  Table III shows that the 428 slices decompose into exactly three types:
+         Type I (362 slices, 1 APN each). Center is a CLASS-A function. The Gröbner basis finds only the center itself; no
+         additional APN functions exist in this slice. All Type I contributions are VA -native (IN CLASS22).
+         Type II (36 slices, 4 APN each). Center is a CLASS-E (Gold x3 /x129 ) function. The Gröbner basis finds three
+         additional APN functions per slice: two belonging to CLASS-B and one to CLASS-C. The three “neighbors” are
+         outside VA (OUT CLASS22).
+         Type III (30 slices, 2 APN each). Center is a CLASS-F (Gold x9 /x33 ) function. The Gröbner basis finds one
+         additional APN function per slice, belonging to CLASS-D. The neighbor is outside VA (OUT CLASS22).
+  The accounting is exact:
+                              362 × 1 = 362       (CLASS-A),
+                               36 × 4 = 144       (36 CLASS-E + 72 CLASS-B + 36 CLASS-C),
+                               30 × 2 = 60        (30 CLASS-F + 30 CLASS-D).
+Total: 362 + 144 + 60 = 566 functions, 428 slices.
+Remark 12 (Role of the Gröbner basis). This structure demonstrates unambiguously that the Gröbner basis step is essential
+for discovering CLASS-B, C, and D. All three new classes lie entirely outside VA . A brute-force search of VA (Phase 1 alone,
+without Phase 2) would find only CLASS-A and the Gold classes E and F, and would miss the 138 new non-VA functions
+completely.
+Remark 13 (Gold as sufficient seeds). The slice-type structure implies that Gold functions are both necessary and sufficient as
+slice centers for discovering CLASS-B, C, and D. Specifically: all new non-VA functions appear exclusively in Gold-centered
+slices (Types II and III). The 362 CLASS-A seeds produce only copies of CLASS-A (no new CCZ-classes). A targeted experiment
+using only the 66 Gold representatives in VA as Phase 1 seeds would reproduce all 138 new non-VA functions.
+
+F. The V22 -CCZ landscape: a structural summary
+   The combined data from Sections VI-E and Section VI-H0b yield a precise and complete picture of the CCZ-class landscape
+in and around VA :
+   Figure 2 summarises the result. The exact-membership test (criterion: F (Ax) = A(F (x)) for all x ∈ F28 , verified on all
+566 functions) establishes the following theorem with complete computational proof:
+Theorem 4 (CCZ-class structure of VA ). Among the 566 quadratic APN functions found by the pipeline: (a)
+  1) The three classes inside VA are CLASS-A, CLASS-E (Gold x3 /x129 ), and CLASS-F (Gold x9 /x33 ). These are the only
+      CCZ-classes intersecting VA in the data.
+  2) The three classes outside VA are CLASS-B, CLASS-C, and CLASS-D. None of these 138 functions satisfies F ◦A = A◦F .
+  3) The NL=4 slice structure is completely determined by the CCZ-class of the center: CLASS-A centers yield only CLASS-A
+      (1 per slice); Gold-x3 centers yield CLASS-E + 2×CLASS-B + CLASS-C (4 per slice); Gold-x9 centers yield CLASS-F
+      + CLASS-D (2 per slice).
+This structure is exact across all 428 explored slices with zero exceptions.
+IEEE TRANSACTIONS ON INFORMATION THEORY                                                                                                               11
+
+
+
+                                                          VA : self-equivalence
+                                                          subspace (dim = 40)
+                                                                                                                      outside VA
+                                                             CLASS-A (362)               only self
+                                                               new, isolated                                         CLASS-B (72)
+                  inside VA                                                                         e
+                                                                                             2/slic                      new
+                  outside VA                                    Gold x3 /
+                99K GB-found neighbor                         CLASS-E (36)                                           CLASS-C (36)
+                                                              known, gateway                 1/slice                     new
+                     (NL=4 slice)
+                                                                        9
+                                                                Gold x /
+                                                                                                                     CLASS-D (30)
+                                                              CLASS-F (30)
+                                                                                             1/slice                     new
+                                                              known, gateway
+
+
+
+Fig. 2. CCZ-class landscape in and around VA . Blue region: functions inside VA (IN CLASS22). Dashed boxes: functions found by the Gröbner basis
+step, lying outside VA (OUT CLASS22). Arrows show which classes co-occur in each NL=4 slice. CLASS-A centered slices yield only CLASS-A. Each
+Gold-x3 slice yields one CLASS-E center plus two CLASS-B and one CLASS-C neighbor. Each Gold-x9 slice yields one CLASS-F center plus one CLASS-D
+neighbor.
+
+
+                                                                               Structured subspace
+                                                                                  VA (dim=40)
+
+
+                                                                                Phase 1: sample
+                                                                               APN center in VA
+                                                                                           center ∈ VA
+                                  use neighbor as next                         Phase 2: GB NL=4
+                                  center?                                      slice (24 free vars)
+                                                                                           neighbors may exit VA
+                                                                            Collect APN neighbors
+                                                                                (≤4 per slice)
+
+
+                                                                               Classify via σ(F )
+                                                                               (ortho-derivative)
+                                                                                           new classes if no match
+
+                                                                       Verify vs. databases (streaming)
+
+Fig. 3. The GB-navigation mechanism. A structured subspace VA provides tractable Phase 1 seeding (APN density ≈ 10−4 vs. ≈ 10−55 globally); the
+Gröbner basis slice (Phase 2) then exposes APN functions lying outside VA . The dashed feedback arrow indicates the multi-hop extension: using out-of-VA
+neighbors as seeds for a subsequent GB pass.
+
+
+
+G. The GB-navigation paradigm: a generalizable mechanism
+  Beyond the specific results, the experiment reveals a mechanism for systematically exploring the APN landscape that may
+be of independent methodological value. We describe it in abstract terms:
+  The mechanism (Figure 3) has three components:
+         Tractable seeding. A structured subspace VA of dimension d ≪ 224 provides APN density ≈ 10−4 , making Phase 1
+         (random sampling) feasible. Random search in the full 2224 space would require ≈ 1055 evaluations per APN found.
+         Local enumeration. The NL=4 Gröbner basis slice around any APN center enumerates all APN functions in a 24-
+         dimensional affine hyperplane, including functions outside VA . This “local completeness” property is key: no APN
+         function in the slice can be missed.
+         Gateway phenomenon. Certain APN functions inside VA (the Gold functions in our case) have neighbors outside
+         VA that belong to genuinely new CCZ-classes. These gateways allow the pipeline to step across the boundary of VA
+         into previously unexplored territory.
+
+H. Comparative experiments: the role of VA -structure
+  To establish that the gateway phenomenon is genuinely tied to the self-equivalence subspace VA rather than being a generic
+property of APN functions, we ran two additional experiments with centers drawn from outside VA .
+IEEE TRANSACTIONS ON INFORMATION THEORY                                                                                       12
+
+
+
+                                                              TABLE IV
+                                         C OMPARATIVE E XPERIMENTS : APN N EIGHBORS PER S LICE
+
+                   Experiment                         Centers          Center type    In VA ?       Slices   APN neighbors
+
+                   Exp. A: Class-22 (main)         APN, from VA          Gold x3        yes          36           108
+                                                   APN, from VA          Gold x9        yes          30           30
+                                                   APN, from VA         CLASS-A         yes          362           0
+
+                   Exp. B: Beierle 2025 dataset   APN, outside VA        generic         no          532           0
+
+                   Exp. C: random candidates      random (not APN)          —            no          20            0
+                   APN neighbors = solutions found by GB other than the center function.
+                   Exp. C dim=−1: no APN function exists in the slice; Exp. B dim=0: center only.
+
+
+      a) Experiment B: Beierle 2025 dataset centers (batch_from_dataset).: We took the first 532 functions from the
+Beierle 2025 database new_apns.txt [14] as slice centers. These functions are guaranteed to be quadratic APN over F28
+but do not belong to VA . For each, we ran an NL=4 Gröbner basis computation using the same 24-variable polynomial system
+as in the main experiment. Result: every one of the 532 slices produced exactly 1 solution (the center itself, dim = 0). No
+function found a single neighbor.
+      b) Experiment C: random center candidates (batch_rnd).: We generated 20 random vectors in F224 2  as center candidates
+(not from VA , and not verified to be APN). Result: every one of the 20 slices returned dim = −1 (empty ideal), meaning no
+APN function exists in that NL=4 hyperplane at all. This is consistent with the global APN density ≈ 2−n ≈ 4 × 10−3 : a
+random hyperplane through a random point in the full space is very unlikely to contain any APN function.
+   The combined picture is shown in Table IV:
+   The contrast is sharp. In Experiment A, Gold-centered slices consistently yield 2–3 new APN functions per slice (100% hit
+rate, 66 out of 66 slices). In Experiments B and C, zero neighbors were found across 552 combined slices.
+   These results support a stronger conclusion than mere suggestion:
+Theorem 5 (Empirical gateway theorem). In all 552 GB-slice experiments with centers outside VA (532 Beierle 2025 APN
+functions + 20 random functions), no APN neighbor was found. In all 66 GB-slice experiments with Gold-function centers
+inside VA , at least one new APN neighbor was found (3 for Gold-x3 , 1 for Gold-x9 ). This difference holds with zero exceptions
+across 618 total experiments.
+Remark 14 (Interpretation). The negative result for Experiment B is particularly informative. The Beierle 2025 functions are
+genuinely new APN functions (absent from all pre-2025 databases), so the failure to find neighbors cannot be attributed to the
+centers being “trivial” or “already known.” Instead, it appears that the algebraic constraint F ◦A = A◦F (membership in VA )
+is what enables the gateway phenomenon: it imposes structural constraints on the NL=4 hyperplane that make neighboring
+APN functions accessible. Generic APN functions, regardless of how novel they are, do not carry this structure.
+   Equivalently: among the 3.8 million known APN functions in Beierle 2025, none appears to be a useful GB-seed for
+discovering new CCZ-classes via the NL=4 slicing approach. The Gold functions inside VA , by contrast, are highly productive
+seeds, yielding 3 new CCZ-classes in 66 slices.
+Remark 15 (Potential for further exploration). The mechanism is not exhausted by the current results. Three natural extensions
+are:
+  1) Other BBL2021 classes. BBL2021 studied conjugacy classes of linear automorphisms of F28 with orders dividing small
+     integers; their Table I lists the classes for which at least one APN function was found. The same pipeline applies to every
+     such class (replacing A by the corresponding automorphism), so exploring even a few additional classes may reveal
+     further gateway phenomena and new CCZ-classes.
+  2) Multi-hop navigation. The out-of-VA functions (CLASS-B, C, D) could serve as Phase 1 seeds for a second GB pass,
+     potentially reaching functions even further from VA . This iterative strategy has not been tested.
+  3) Larger slices. Fixing fewer ANF coefficients (e.g., NL=3, leaving 48 free variables) would give richer slices with more
+     neighbors per center at the cost of longer GB build time.
+
+
+I. The three reference databases
+   We checked the four new classes (CLASS-A through CLASS-D) against three independent reference databases:
+   1) Beierle 2025 (new_apns.txt) [14]: 3 775 599 quadratic APN functions for n = 8 that are CCZ-inequivalent to the
+      32 892 previously known. The file does not include Gold or other classical functions.
+   2) BBL2021 pre-2020 (apn_8bit.txt) [11]: 12 921 quadratic APN functions found by the BBL2021 method, all CCZ-
+      inequivalent to Gold.
+IEEE TRANSACTIONS ON INFORMATION THEORY                                                                                          13
+
+
+
+                                                             TABLE V
+                               V ERIFICATION C HECKS FOR CLASS-A THROUGH CLASS-D (500 FUNCTIONS )
+
+                                   Check                               Reference        Outcome
+
+                                   vs. Beierle 2025 (3 775 599 fns)    [14]            NO MATCH
+                                   vs. BBL2021 pre-2020 (12 921 fns)   [11]            NO MATCH
+                                   vs. Gold x3 /x129                   [4]             NO MATCH
+                                   vs. Gold x9 /x33                    [4]             NO MATCH
+                                   APN property (δF = 2)               direct check   PASS (566/566)
+                                   Algebraic degree                    ANF              2 (566/566)
+
+                                   Gold x3 identified (CLASS-E)        sanity           MATCH ✓
+                                   Gold x9 identified (CLASS-F)        sanity           MATCH ✓
+
+
+
+  3) Gold functions (direct): The two Gold CCZ-classes for n = 8 are verified directly via σ-comparison (not via a file).
+Remark 16. Database (1) is labeled new_apns.txt and explicitly contains only functions new relative to the 32 892
+previously known. The absence of Gold from this file is by design, not an oversight. This was confirmed in our experiments:
+Gold functions (CLASS-E, CLASS-F) return NO MATCH against new_apns.txt, which is consistent.
+
+J. Verification procedure and result
+  For each of the 500 functions in CLASS-A through CLASS-D, we compute σ(F ) via sboxU and run the streaming comparison
+of Section V.
+Theorem 6 (Main result). Each of the 500 functions in CLASS-A through CLASS-D is CCZ-inequivalent to all functions in
+the Beierle 2025 database [14], all functions in the BBL2021 pre-2020 database [11], and both Gold CCZ-classes (x3 /x129
+and x9 /x33 ).
+Proof. The streaming comparisons against databases (1) and (2) produced zero σ-matches for all 500 functions. Specifically:
+  • Against database (1): 3 775 599 entries processed in 2614 s; 0 bad lines; 0 signature errors; 0 matches.
+  • Against database (2): 12 921 entries processed in 9 s; 0 bad lines; 0 signature errors; 0 matches.
+Direct σ-comparison shows σ(CLASS-A), . . . , σ(CLASS-D) all differ from σ(x3 ) and σ(x9 ). By Theorem 2, zero σ-matches
+certify CCZ-inequivalence.
+
+K. Verification summary
+  Table V collects all verification checks.
+
+                                                         VII. D ISCUSSION
+A. Interpretation of results
+   The main empirical findings are:
+   (i) A 40-dimensional structured subspace (VA ) that was declared empty by the BBL2021 tree search contains at least four
+CCZ-classes of quadratic APN functions, with 566 explicit representatives found in 0.65% of the search space (428 out of
+65 536 NL = 4 slices).
+   (ii) The Gröbner basis step is essential for finding three of the four new classes. The VA -membership analysis (Table III)
+shows that CLASS-B, C, and D lie entirely outside VA : all 138 representatives are OUT CLASS22. A Phase 1-only search
+within VA recovers only CLASS-A and the Gold controls, missing classes B, C, and D completely. Equivalently, the Gröbner
+basis approach is both necessary and sufficient for their discovery.
+   (iii) VA contains exactly three distinct CCZ-classes in our sample: CLASS-A (a new class native to VA ) and the two Gold
+classes (E and F). Gold functions act as “gateways”: their NL = 4 slices reach outside VA and expose three new external
+classes. Specifically, each Gold-x3 slice yields two CLASS-B functions and one CLASS-C function in addition to the center;
+each Gold-x9 slice yields one CLASS-D function in addition to the center. This structure is exact and uniform across all 428
+explored slices (Theorem 4).
+   (iv) The Beierle 2025 database [14], while containing 3.8 million functions, does not cover VA : the probability of any specific
+entry lying in VA is ≈ 10−55 . More concretely, the comparative experiments (Section VI-H, Table IV) show that 532 Beierle
+2025 functions used as slice centers produced zero APN neighbors, while 66 Gold-function centers (inside VA ) each produced
+1–3 neighbors. In all 552 experiments outside VA , not a single new APN function was found. This is an experimental fact,
+not a conjecture.
+IEEE TRANSACTIONS ON INFORMATION THEORY                                                                                      14
+
+
+
+   (v) CLASS-A’s dominance (362 of 566 functions, 64%) is partly explained by the slice structure: all 362 CLASS-A-centered
+slices contain only the center itself (Type I slices), so CLASS-A’s count equals the number of CLASS-A seeds used in Phase 1.
+This dominance reflects the distribution of seeds, not necessarily the overall abundance of CLASS-A in VA .
+   (vi) The experiment reveals a general GB-navigation mechanism (Section VI-G, Figure 3) for exploring the APN landscape.
+Rather than searching exhaustively in a large space, one: (a) finds a structured subspace with manageable APN density;
+(b) uses the Gröbner basis to enumerate APN neighbors of any center, including those outside the subspace; (c) identifies
+gateway functions whose neighbors belong to new CCZ-classes. This mechanism transforms the APN search problem from
+“find APN functions in a huge space” to “navigate locally around known structured objects.” Crucially, the comparative
+experiments (Table IV) establish that this mechanism is specific to the self-equivalence structure: not any APN function is a
+productive seed — only those lying in VA . Among 3.8 million Beierle 2025 functions used as centers (Exp. B, 532 slices) and
+20 random candidates (Exp. C), zero APN neighbors were found. This is an experimentally established fact, not a conjecture.
+The approach is qualitatively different from all prior construction methods (bivariate, isotopic shift, bent extensions), which
+build APN functions from algebraic templates rather than exploring local neighborhoods of structured-subspace functions.
+
+B. Limitations
+  We list the limitations honestly:
+  1) Coverage. Only 0.65% of the total 65 536 NL = 4 slices were computed. The four observed new CCZ-classes may not
+     be all classes present in or accessible from VA .
+  2) No algebraic characterization. The new CCZ-classes are defined purely computationally by their σ-values and S-box
+     tables. We have no polynomial or structural description.
+  3) Single subspace. Only one BBL2021 class (the one with automorphism of order 5) was studied. The approach applies
+     to all BBL2021 classes [11]; other subspaces may yield additional new classes.
+  4) Exact CCZ tests. Classification relies on Theorem 2, which is theoretically exact for quadratic APN. We did not
+     run exhaustive exact pairwise CCZ tests (are_ccz_equivalent_from_code) within each class, as these are not
+     necessary given the theorem. For a fully self-contained proof independent of [15], one could add such tests.
+  5) Claim scope. Theorem 6 certifies inequivalence with the databases checked. Whether the four new classes are CCZ-
+     inequivalent to all quadratic APN functions for n = 8 would require checking against a complete database, which does
+     not yet exist.
+
+C. Scalability
+   The pipeline scales in the following ways:
+   Exhausting VA . The remaining 65 536 − 428 = 65 108 NL = 4 slices can be computed to enumerate all APN functions in
+VA under this normalization. Estimated time: 65 108 slices ×8 min/slice ÷ 8 cores ≈ 54   wall-clock    days.
+   Multi-slice normalization. As noted in Section V-F, each APN center supports 40    24  ≈  6 ×  10 10
+                                                                                                        normalizations. Running
+10–100 per center increases coverage per center without extra Phase 1 cost.
+   Larger free dimension. Fixing fewer than 200 coefficients in Phase 2 leaves more than 24 free variables. For example,
+fixing 176 coefficients (NL = 3) leaves 48 free variables. The GB build time grows but so does the number of APN neighbors
+found per slice. On a cluster with many cores, this trade-off could be favorable.
+   Other BBL2021 classes. For each BBL2021 class index k with dim(VAk ) = dk , the pipeline applies with dk − 24 center
+bits and 2dk −24 total slices. Classes with dk ≤ 60 are directly amenable to the current pipeline.
+
+                                                   VIII. R ELATED W ORK
+A. Construction approaches for quadratic APN functions
+   Quadratic APN functions over F2n have been found by many different methods. The bivariate construction of Edel and
+Pott [6] (building F (x, y) as a polynomial in two variables over F2n/2 ) yielded 8 157 new instances for n = 8. Yu, Wang, and
+Li [7] used a matrix representation approach. Budaghyan, Calderini, Carlet, Coulter, and Villa [18] introduced isotopic shifts,
+constructing new APN functions by modifying Gold functions; the generalized version of this method [13] (trims and extensions)
+produced an additional 6 368 CCZ-classes for n = 8. Beierle, Brinkmann, and Leander [11] studied LE-automorphism groups
+and found 12 921 new instances; Beierle and Leander [12] adapted this to find further instances by extending n = 7 APN
+functions. Beierle et al. [14] use extensions of vectorial (n/2, n/2)-bent functions to construct the current largest known set
+(≈ 3.8 million CCZ-classes).
+   Our approach is methodologically orthogonal to all of the above: rather than constructing functions from algebraic templates
+(power functions, bivariate polynomials, isotopic shifts, bent function extensions), we perform an exhaustive Gröbner basis
+enumeration within a fixed 24-dimensional affine hyperplane of the self-equivalence subspace VA . This targets a region that
+is unreachable by both global random search and the BBL2021 tree method, and finds functions that do not arise from any
+known construction.
+IEEE TRANSACTIONS ON INFORMATION THEORY                                                                                         15
+
+
+
+B. CCZ-equivalence testing: EA-tests for quadratic APN functions
+   Several recent works address the problem of testing or recovering EA- and CCZ-equivalence efficiently. Calderini [19]
+classified all known APN functions in small dimensions up to EA-equivalence, providing a reference for EA-class structure.
+Yoshiara [17] characterizes the Gold functions as the unique quadratic APN functions that are CCZ-equivalent to a power
+function, which underlies the identification of CLASS-E and CLASS-F as Gold CCZ-equivalents in Section VI. Canteaut,
+Couvreur, and Perrin [15] gave an efficient algorithm for EA-recovery for quadratic functions (complexity O(n·22n ), superseding
+all prior methods).
+   For our purposes, the ortho-derivative provides a highly discriminating inequivalence certificate in the quadratic case
+(Theorem 2 and Remark 1); a separate exact EA- or CCZ-test is still run within each putative class (Remark 1) rather than
+relied upon implicitly. The sboxU library [22] implements both the ortho-derivative computation and the differential/Walsh
+spectra that constitute the signature σ(F ), as well as the exact code-equivalence test. The classification was confirmed by
+running sboxU’s are_ccz_equivalent_from_code on all pairs within each putative class (three classes of size ≤ 36)
+and confirming that all pairs returned True; this provides an independent validation of the classification beyond the theoretical
+guarantee.
+
+C. Gröbner basis methods in cryptography
+   Gröbner bases over Boolean polynomial rings have been used in algebraic cryptanalysis since the work of Courtois and
+Pieprzyk (XL algorithm [24]) and extended by Albrecht and Bard [25] (M4RI library). Their use in APN function search is less
+common; to our knowledge this is the first published application of GB slicing to systematic APN search in a self-equivalence
+subspace. The key feature that makes GB tractable here is the reduction to 24 Boolean unknowns via NL = 4 normalization:
+the GB solve is essentially Gaussian elimination (all variables are in F22 ) and takes < 0.1 s per slice once the ideal is built.
+
+D. Open problem: APN permutations in even dimension
+   Browning, Dillon, McQuistan, and Wolfe [23] found an APN permutation in dimension 6 by CCZ-transforming a quadratic
+APN function. Whether APN permutations exist in dimension 8 remains open; it is one of the central open problems in the
+area [20]. The functions found in this paper are non-permutations; whether any of the new CCZ-classes contains an APN
+permutation in its CCZ-equivalence class is an open question that the explicit S-box tables in Appendix A make accessible to
+future investigation.
+
+                                                       IX. C ONCLUSION
+   We have shown that the self-equivalence subspace VA associated with the order-5 automorphism (BBL2021 class index 22),
+dimension 40, which was previously reported to contain no APN functions under recursive tree search, contains at least four
+CCZ-classes of quadratic APN functions for n = 8. These four classes (500 functions out of 566 total) are absent from the
+Beierle 2025 database and from all pre-2020 known instances, as certified by the exact ortho-derivative invariant.
+   The result was obtained using a two-phase pipeline: random sampling in VA via an explicit RREF parameterization (Phase 1),
+followed by Gröbner basis slice computation in Magma (Phase 2). The pipeline covered 428 of the 65 536 NL = 4 slices (0.65%);
+two Gold CCZ-equivalents serve as positive controls and as gateways to the new external classes.
+   Structural result. A structural decomposition of the 428 explored slices into three types yields a complete and self-consistent
+account of all 566 found functions (Table III and Theorem 4): the slices are either CLASS-A-centered (Type I, 362 slices,
+1 APN each) or Gold-centered (Types II–III, 66 slices, 2–4 APN each). Critically, all three purely new classes (B, C, D) lie
+entirely outside VA and appear exclusively in Gold-centered slices. This confirms that the Gröbner basis step is essential: a
+Phase 1-only search within VA would recover CLASS-A and the Gold controls but miss CLASS-B, C, and D entirely. It also
+implies that Gold functions are sufficient Phase 1 seeds for rediscovering all new non-VA classes found here.
+   Methodological contribution. Beyond the specific new CCZ-classes, the experiment reveals a general GB-navigation
+mechanism (Section VI-G) that addresses a fundamental challenge in APN search: the near-zero global density (≈ 10−55 ) makes
+random exploration of the full 2224 -dimensional space hopeless. The mechanism provides a structured alternative: (a) exploit
+a self-equivalence subspace for tractable Phase 1 seeding; (b) use the Gröbner basis to enumerate all APN neighbors locally,
+including those outside the subspace; (c) identify gateway functions whose neighborhood contains new CCZ-classes.
+   The comparative experiments (Section VI-H, Table IV) establish this mechanism as specific to the self-equivalence structure,
+not a generic property of APN functions. Among 532 functions from the Beierle 2025 database used as GB-slice centers and
+20 random candidate centers (552 slices total), zero APN neighbors were found. In sharp contrast, all 66 Gold-function centers
+inside VA produced 1–3 new APN neighbors each. This difference is experimentally established with zero exceptions across
+618 total slice computations. The central empirical conclusion is: not any APN function is a productive GB-seed; only APN
+functions lying in a self-equivalence subspace exhibit the gateway phenomenon that exposes neighboring CCZ-classes. Among
+3.8 million currently known APN functions, none appears to be a useful seed via this method. The Gold functions inside VA ,
+despite being “known,” are uniquely productive.
+IEEE TRANSACTIONS ON INFORMATION THEORY                                                                                                                  16
+
+
+
+                                                                      TABLE VI
+                                                     F ULL S IGNATURE DATA FOR A LL S IX C LASSES
+
+                                                 Label         Size    Full σ-hash (16 hex)      ID
+
+                                                 CLASS-A       362     9d95d9c4a5e2dfdd          New
+                                                 CLASS-B        72     c5f52f5659346f9f          New
+                                                 CLASS-C        36     74a30c1a17d45761          New
+                                                 CLASS-D        30     024ba500f4bac35b          New
+                                                 CLASS-E        36     11cc72af6d61925d          Gold x3
+                                                 CLASS-F        30     d15183d1bdf9a1b4          Gold x9
+
+
+
+   Further observations. Five observations are of independent interest: (1) The fc22+sol22 projection gives an efficient and
+exact parameterization of any self-equivalence subspace, enabling targeted sampling at APN density ≈ 10−4 instead of ≈ 10−55 .
+(2) The NL = 4 normalization reduces the Gröbner basis problem to 24 Boolean unknowns with a polynomial build time of
+≈ 10 minutes and an essentially immediate solve. (3) The ortho-derivative signature provides a complete, non-heuristic CCZ-
+invariant for the quadratic case, allowing rigorous classification and database comparison without exhaustive pairwise testing.
+(4) The slice-type structure reveals a nontrivial algebraic relationship between VA and the CCZ-class geometry: Gold functions
+occupy a boundary role, “bridging” VA and classes external to it. (5) All four new classes (A, B, C, D) are definitively absent
+from the largest known compilation (3.8 million functions), yet they are easily accessible via the GB-navigation pipeline in
+under 10 CPU-hours.
+   The pipeline generalizes to all BBL2021 class indices and to larger dimensions, providing a systematic program for extending
+the classification of quadratic APN functions beyond currently known databases.
+
+                                                                       A PPENDIX
+  Table VI gives the full ortho-derivative signature hashes and one representative S-box per class. Full lookup tables (256
+decimal values each) are given in Table VII.
+  The complete dataset (566 S-boxes in JSON format) and all source code are available at: https://github.com/KuznetsovKarazin/
+apn-gb-search; DOI: https://doi.org/10.5281/zenodo.20626047
+Key scripts:
+  • src/find_apn_centers.py: Phase 1 APN-center search. Input: RREF data (fc22, sol22). Output: batch directory
+    with Magma files and apn_centers.json.
+  • run_batch.ps1: PowerShell queue runner. Executes all *.m files in a directory using up to k parallel Magma processes
+    (-MaxParallel k). Treats Magma exit codes 0 and 1 both as success.
+  • src/collect_results.py: Parses Magma output files, handles line-wrapping, deduplicates by SHA-256 hash.
+  • src/classify_apn.py: Computes ortho-derivative signatures via sboxU and groups functions into CCZ-classes.
+  • src/check_vs_beierle_db.py: Streaming comparison of our signatures against a reference database.
+
+Requirements: Magma V2.20+ [21]; Python 3.9+ with NumPy (Phases 1, 3); SageMath with sboxU [22] (Phases 4, 5).
+
+                                                                      R EFERENCES
+ [1] K. Nyberg, “Differentially uniform mappings for cryptography,” in Advances in Cryptology — EUROCRYPT 1993, Lecture Notes in Comput. Sci.,
+     vol. 765, Springer, 1994, pp. 55–64. doi:10.1007/3-540-48285-7 6
+ [2] E. Biham and A. Shamir, “Differential cryptanalysis of DES-like cryptosystems,” J. Cryptology, vol. 4, no. 1, pp. 3–72, 1991. doi:10.1007/BF00630563
+ [3] C. Carlet, P. Charpin, and V. Zinoviev, “Codes, bent functions and permutations suitable for DES-like cryptosystems,” Des. Codes Cryptogr., vol. 15,
+     pp. 125–156, 1998. doi:10.1023/A:1008344232130
+ [4] R. Gold, “Maximal recursive sequences with 3-valued recursive cross-correlation functions,” IEEE Trans. Inf. Theory, vol. 14, no. 1, pp. 154–156, 1968.
+     doi:10.1109/TIT.1968.1054106
+ [5] T. Kasami, “The weight enumerators for several classes of subcodes of the second order binary Reed-Muller codes,” Inf. Control, vol. 18, no. 4,
+     pp. 369–394, 1971. doi:10.1016/S0019-9958(71)90473-6
+ [6] Y. Edel and A. Pott, “A new almost perfect nonlinear function which is not quadratic,” Adv. Math. Commun., vol. 3, no. 1, pp. 59–81, 2009.
+     doi:10.3934/amc.2009.3.59
+ [7] Y. Yu, M. Wang, and Y. Li, “A matrix approach for constructing quadratic APN functions,” Des. Codes Cryptogr., vol. 73, pp. 587–600, 2014.
+     doi:10.1007/s10623-014-9955-3 ePrint: https://eprint.iacr.org/2013/007
+ [8] G. Weng, Y. Tan, and G. Gong, “On quadratic almost perfect nonlinear functions and their related algebraic object,” in Proc. Workshop on Coding and
+     Cryptography (WCC 2013), Bergen, Norway, 2013.
+ [9] G. Weng, Y. Tan, and G. Gong, “On quadratic almost perfect nonlinear functions and their related algebraic object,” in Proceedings of the Workshop on
+     Coding and Cryptography (WCC 2013), Bergen, Norway, pp. 48–57, 2013.
+[10] H. Taniguchi, “On some quadratic APN functions,” Des. Codes Cryptogr., vol. 87, no. 9, pp. 1973–1983, 2019. doi:10.1007/s10623-018-00598-2
+[11] C. Beierle, M. Brinkmann, and G. Leander, “Linearly self-equivalent APN permutations in small dimension,” IEEE Trans. Inf. Theory, vol. 67, no. 7,
+     pp. 4863–4875, Jul. 2021. doi:10.1109/TIT.2021.3071533 arXiv: https://arxiv.org/abs/2003.12006
+[12] C. Beierle and G. Leander, “New instances of quadratic APN functions,” IEEE Trans. Inf. Theory, vol. 68, no. 1, pp. 670–678, Jan. 2022.
+     doi:10.1109/TIT.2021.3120698 arXiv: https://arxiv.org/abs/2009.07204 Dataset (Zenodo): doi:10.5281/zenodo.4738942
+IEEE TRANSACTIONS ON INFORMATION THEORY                                                                                                                17
+
+
+
+                                                                   TABLE VII
+                                           R EPRESENTATIVE S- BOXES : F (0), F (1), . . . , F (255) IN DECIMAL
+
+
+      Class        Lookup table
+      CLASS-A 0,0,0,63,0,42,97,116,0,253,75,137,194,21,232,0,0,24,207,232,165,151,11,6,183,82,51,233,208,31,53,197,
+              0,122,47,106,113,33,63,80,186,61,222,102,9,164,12,158, 19,113,243,174,199,143,70,49,30,129,181,21,8,189,194,72,
+              0,211,235,7,65,184,203,13,226,204,66,83,97,101,160,155, 178,121,150,98,86,183,19,205,231,209,136,129,193,221,207,236,
+              144,57,84,194,160,35,5,185,200,156,71,44,58,68,212,149, 49,128,58,180,164,63,206,106,222,146,158,237,137,239,168,241,
+              0,217,86,176,57,202,14,194,130,166,159,132,121,119,5,52, 95,158,198,56,195,40,59,239,106,86,184,187,52,34,135,174,
+              34,129,91,199,106,227,114,196,26,68,40,73,144,228,195,136, 110,213,216,92,131,18,84,250,225,167,28,101,206,162,82,1,
+              76,70,241,196,52,20,232,247,44,219,218,18,150,75,1,227, 161,179,211,254,124,68,111,104,118,153,79,159,105,172,49,203,
+              254,142,108,35,247,173,4,97,36,169,253,79,239,72,87,207, 0,104,93,10,172,238,144,237,109,248,123,209,3,188,116,244
+      CLASS-B 0,0,0,63,0,42,97,116,0,253,75,137,194,21,232,0,0,24,207,232,165,151,11,6,183,82,51,233,208,31,53,197,
+              0,122,47,106,113,33,63,80,186,61,222,102,9,164,12,158, 19,113,243,174,199,143,70,49,30,129,181,21,8,189,194,72,
+              0,211,235,7,65,184,203,13,226,204,66,83,97,101,160,155, 178,121,150,98,86,183,19,205,231,209,136,129,193,221,207,236,
+              38,143,226,116,22,149,179,15,126,42,241,154,140,242,98,35, 135,54,140,2,18,137,120,220,104,36,40,91,63,89,30,71,
+              0,217,86,176,57,202,14,194,130,166,159,132,121,119,5,52, 95,158,198,56,195,40,59,239,106,86,184,187,52,34,135,174,
+              148,55,237,113,220,85,196,114,172,242,158,255,38,82,117,62, 216,99,110,234,53,164,226,76,87,17,170,211,120,20,228,183,
+              76,70,241,196,52,20,232,247,44,219,218,18,150,75,1,227, 161,179,211,254,124,68,111,104,118,153,79,159,105,172,49,203,
+              254,142,108,35,247,173,4,97,36,169,253,79,239,72,87,207, 0,104,93,10,172,238,144,237,109,248,123,209,3,188,116,244
+      CLASS-C 0,0,0,247,0,175,30,70,0,212,177,146,35,88,140,0,0,105,168,54,8,206,190,143,186,7,163,233,145,131,150,115,
+              0,230,205,220,191,246,108,210,15,61,115,182,147,14,241,155, 57,182,92,36,142,174,245,34,140,215,88,244,24,236,210,209,
+              0,217,60,18,117,3,87,214,145,156,28,230,199,101,84,1,46,158,186,253,83,76,217,49,5,97,32,179,91,144,96,92,
+              8,55,249,49,194,82,45,74,150,125,214,202,127,59,33,146, 31,73,70,231,221,36,154,148,59,185,211,166,218,247,44,246,
+              0,2,93,168,103,202,36,126,234,60,6,39,174,215,92,210, 252,151,9,149,147,87,120,75,172,19,232,160,224,240,186,93,
+              38,194,182,165,254,181,112,204,195,243,226,37,56,167,7,111, 227,110,219,161,51,17,21,192,188,229,53,155,79,185,216,217,
+              197,30,164,136,215,163,168,43,190,177,110,150,143,47,65,22, 23,165,222,155,13,16,218,48,214,176,174,63,239,38,137,183,
+              235,214,71,141,70,212,244,145,159,118,130,156,17,87,18,163, 0,84,4,167,165,94,191,179,206,78,123,12,72,103,227,59
+      CLASS-D 0,0,0,215,0,63,94,182,0,116,97,194,163,232,156,0,0,212,235,232,79,164,250,198,227,67,105,30,15,144,219,147,
+              0,214,88,89,57,208,63,1,129,35,184,205,27,134,124,54,80,82,227,54,38,27,203,33,50,68,224,65,231,174,107,245,
+              0,108,92,231,175,252,173,41,109,117,80,159,97,70,2,242,96,216,215,184,128,7,105,57,238,34,56,35,173,94,37,1,
+              181,15,177,220,35,166,121,43,89,151,60,37,108,157,87,113, 133,235,106,211,92,13,237,107,138,144,4,201,240,213,32,210,
+              0,20,199,4,167,140,62,194,177,209,23,160,181,234,77,197, 224,32,204,219,8,247,122,82,178,6,255,156,249,114,234,182,
+              213,23,74,95,75,182,138,160,229,83,27,122,216,81,120,38, 101,115,17,208,180,157,158,96,182,212,163,22,196,153,143,5,
+              176,200,43,132,184,255,125,237,108,96,150,77,199,244,99,135, 48,156,64,59,119,228,89,29,15,215,30,17,235,12,164,148,
+              208,126,19,106,225,112,124,58,141,87,47,34,31,250,227,209, 0,122,40,133,126,59,8,154,190,176,247,46,99,82,116,146
+
+
+
+[13] C. Beierle, G. Leander, and L. Perrin, “Trims and extensions of quadratic APN functions,” Des. Codes Cryptogr., vol. 90, no. 4, pp. 1009–1036, 2022.
+     doi:10.1007/s10623-022-01024-4 arXiv: https://arxiv.org/abs/2108.13280
+[14] C. Beierle, P. Langevin, G. Leander, A. Polujan, and S. Rasoolzadeh, “Millions of inequivalent quadratic APN functions in eight variables,”
+     arXiv:2508.04644, 2025. Dataset (Zenodo): doi:10.5281/zenodo.16752428 arXiv: https://arxiv.org/abs/2508.04644
+[15] A. Canteaut, A. Couvreur, and L. Perrin, “Recovering or testing extended-affine equivalence,” IEEE Trans. Inf. Theory, vol. 68, no. 9, pp. 6187–6206,
+     Sep. 2022. doi:10.1109/TIT.2022.3166692 arXiv: https://arxiv.org/abs/2103.00078
+[16] S. Yoshiara, “Equivalences of quadratic APN functions,” J. Algebraic Combin., vol. 35, no. 3, pp. 461–475, 2012. doi:10.1007/s10801-011-0309-1
+[17] S. Yoshiara, “Equivalences of power APN functions with power or quadratic APN functions,” J. Algebraic Combin., vol. 44, no. 3, pp. 561–585, 2016.
+     doi:10.1007/s10801-016-0680-z
+[18] L. Budaghyan, M. Calderini, C. Carlet, R. S. Coulter, and I. Villa, “Constructing APN functions through isotopic shifts,” IEEE Trans. Inf. Theory,
+     vol. 66, no. 8, pp. 5299–5309, 2020. doi:10.1109/TIT.2020.2974471
+[19] M. Calderini, “On the EA-classes of known APN functions in small dimensions,” Cryptogr. Commun., vol. 12, pp. 821–840, 2020. doi:10.1007/s12095-
+     020-00427-1
+[20] C. Carlet, Boolean Functions for Cryptography and Coding Theory. Cambridge University Press, 2021. doi:10.1017/9781108606806
+[21] W. Bosma, J. Cannon, and C. Playoust, “The Magma algebra system I: The user language,” J. Symb. Comput., vol. 24, pp. 235–265, 1997.
+     doi:10.1006/jsco.1996.0125
+[22] L. Perrin, “sboxU: Tools for analysing S-boxes,” https://github.com/lpp-crypto/sboxU, 2022.
+[23] K. Browning, J. Dillon, M. McQuistan, and A. Wolfe, “An APN permutation in dimension six,” in Finite Fields: Theory and Applications (FQ9),
+     Contemp. Math., vol. 518, Amer. Math. Soc., 2010, pp. 33–42. https://www.ams.org/books/conm/518/
+[24] N. Courtois and J. Pieprzyk, “Cryptanalysis of block ciphers with overdefined systems of equations,” in Advances in Cryptology — ASIACRYPT 2002,
+     Lecture Notes in Comput. Sci., vol. 2501, Springer, 2002, pp. 267–287. doi:10.1007/3-540-36178-2 17
+[25] M. R. Albrecht and G. V. Bard, “The M4RI library,” 2010. https://github.com/malb/m4ri
+

@@ -1,0 +1,415 @@
+                                                Universal Costas Matrices: Towards a General
+                                                 Framework for Costas Array Construction
+                                                                    Fatih Gulec                                                 Vahid Abolghasemi
+                                            School of Computer Science and Electronic Engineering            School of Computer Science and Electronic Engineering
+                                                 University of Essex, UK, f.gulec@essex.ac.uk                  University of Essex, UK, v.abolghasemi@essex.ac.uk
+
+                                           Abstract—Costas arrays are a special type of permutation          based Costas array generation similar to those used in matrix
+                                        matrices with ideal autocorrelation and low cross-correlation        completion problems [25], [26].
+                                        properties, making them valuable for radar, wireless communi-           Despite these efforts, no general construction method for
+                                        cation, and integrated sensing and communication applications.
+                                        This paper presents a novel unified framework for analyzing          Costas arrays of any arbitrary order has been discovered to
+                                        and discovering new Costas arrays. We introduce Universal            date. On the one hand, algebraic construction methods remain
+arXiv:2602.03407v1 [cs.IT] 3 Feb 2026
+
+
+
+
+                                        Costas Matrices (UCMs) and Universal Costas Frequency Ma-            largely restricted to prime or prime-power orders. On the other
+                                        trices (UCFMs) and investigate their structural characteristics. A   hand, exhaustive search rapidly becomes infeasible due to its
+                                        framework integrating UCMs and UCFMs is proposed to pave             factorial growth in complexity. These ongoing challenges have
+                                        the way for future artificial intelligence-assisted Costas array
+                                        discovery. Leveraging the structural properties of UCMs and          motivated us to develop a unified analytical framework that
+                                        UCFMs, a reconstruction-based search method is developed to          enables the application of AI-assisted search and generative
+                                        generate UCMs from UCFMs. Numerical results demonstrate that         modeling approaches toward generalized Costas array gener-
+                                        the proposed approach significantly accelerates the search process   ation. Moreover, such a unified representation could leverage
+                                        and enhances structural insight into Costas array generation.        existing datasets of known arrays to facilitate the prospective
+                                                                                                             AI-based generation of new Costas arrays.
+                                                              I. I NTRODUCTION
+                                                                                                                In this paper, a unified approach to analyze and search for
+                                           Costas arrays are permutation matrices in which the vectors       new Costas arrays is proposed. We define Universal Costas
+                                        connecting every pair of 1s are distinct. They were originally       Matrices (UCMs), where each row contains a distinct Costas
+                                        proposed to be used as frequency-hopping codes in radar/sonar        array of order n in canonical form, and Universal Costas
+                                        systems [1]. They exhibit ideal autocorrelation properties,          Frequency Matrices (UCFMs), which are n × n matrices that
+                                        which are desirable for low probability of intercept radars to       compactly represent the frequency of each element in the
+                                        mitigate Doppler shift effects [2], [3]. These arrays are widely     corresponding UCM. The contributions of the paper can be
+                                        applied in modern radar waveform design research [4]–[6].            summarized as follows:
+                                           On the other hand, Costas arrays have been employed                  • UCMs and UCFMs are introduced as novel matrix repre-
+                                        in multiple access spread spectrum wireless communication                 sentations for the analysis and search of Costas arrays.
+                                        systems such as orthogonal frequency division multiplexing              • A theoretical analysis of the structural properties of UCMs
+                                        systems [7], [8]. Additionally, recent studies show that modified         and UCFMs is presented.
+                                        versions of Costas arrays can have low cross-correlation and            • An AI-enabled framework is proposed, where UCMs and
+                                        optimal frequency hopping properties, as in orthogonal pattern            UCFMs can be integrated into future generative AI-based
+                                        division multiple access systems [3], [9], [10]. These features           search methods for Costas array discovery.
+                                        make Costas arrays attractive candidates for integrated sensing         • A novel search method, i.e., the reconstruction of UCMs
+                                        and communication (ISAC) applications [6], with their use in              from UCFMs, which exploits the structural properties of
+                                        multi-user systems offering a potential solution to the sensing           UCMs and UCFMs, is proposed.
+                                        performance improvement challenge discussed in [11].                    Furthermore, UCFM heatmaps are visualized to illustrate
+                                           While the application areas of Costas arrays are broad, their     their structural symmetry, and the proposed reconstruction
+                                        generation techniques are limited. Conventionally, they can be       method is quantitatively evaluated. The results demonstrate that
+                                        generated with algebraic methods using Galois fields [12]–[14]       the proposed approach yields significant runtime improvement
+                                        and their structural properties are extensively studied [15]–[18].   when compared with a benchmark method, while providing a
+                                        Researchers also employed exhaustive search techniques for the       foundation for future AI-based Costas array generation.
+                                        enumeration of Costas arrays [19]–[23]. To the best of our
+                                        knowledge, all Costas arrays have been enumerated only up                         II. U NIVERSAL C OSTAS M ATRICES
+                                        to order 29 [21]. All known Costas arrays, whether obtained
+                                                                                                                In this section, universal Costas matrices (UCMs) and their
+                                        algebraically or through exhaustive search, are collected in
+                                                                                                             structural properties are presented.
+                                        a publicly available database [24]. Such a database could
+                                        potentially be employed to enable artificial intelligence (AI)       A. Preliminaries
+                                          Fatih Gulec was supported by EU Horizon Europe under the Marie       Definition 1: A Costas array of order n is defined as an
+                                        Skłodowska-Curie COFUND grant No 101081327 YUFE4Postdocs.            n × n permutation matrix that satisfies the condition of having
+distinct vectors connecting every two 1’s. The row indices of        TABLE I: Number of Costas Arrays and Row/Column Sums
+this permutation matrix give the Costas array.                       in Universal Costas Matrices
+   Definition 2: Let C(n) be the number of all possible distinct                     Orders 3–16                      Orders 17–29
+Costas arrays of order n. A UCM of order n, denoted by                  n      C(n)       D(n)      S(n)    n    C(n)      D(n)     S(n)
+Un , is a C(n) × n matrix comprising all distinct Costas                 3         4         6         8    17   18276      153    164484
+                                                                         4        12        10        30    18   15096      171    143412
+arrays of order n in each row. The rows of Un are given
+                                                                         5        40        15       120    19   10240      190    102400
+canonically such that the first element of each row takes integer        6       116        21       406    20    6464      210     67872
+values from 1 to n, and the remaining elements in each row               7       200        28       800    21    3536      231     38896
+are arranged accordingly to preserve canonical ordering. The             8       444        36      1998    22    2052      253     23598
+matrix is divided row-wise into n consecutive blocks, where              9       760        45      3800    23     872      276     10464
+the j th block contains all Costas arrays whose first element is        10      2160        55      11880   24     200      300     2500
+j. Thus, Un can be shown as                                             11      4368        66      26208   25      88      325     1144
+                                                                        12      7852        78      51038   26      56      351      756
+               c1,1            c1,2    ···    c1,n    
+                                                                        13     12828        91      89796   27     204      378     2856
+                     ..           ..    . ..     .
+                                                 ..                     14     17252       105     129390   28     712      406    10324
+               cr. ,1             .
+                                                      
+               c 1            cr1 ,2   ···    cr1 ,n                  15     19612       120     156896   29     164      435     2460
+               r1 +1,1       cr1 +1,2 · · · cr1 +1,n                 16     21104       136     179384    –       –        –       –
+                     ..           ..   ..        ..   
+                      .            .      .       .                Costas array of order n or the sum of the elements in any row
+        Un =  cr2 ,1
+                              cr2 ,2   ···    cr2 ,n ,     (1)
+                      .                                              in Un (D(n)) is given by
+                                                                                                    n(n + 1)
+                                                      
+                      .
+              c .
+                                                      
+                                                                                           D(n) =            .                  (5)
+               rn−1 +1,1 crn−1 +1,2 · · · crn−1 +1,n 
+                                                       
+                                                                                                       2
+                      ..           ..  ..         ..  
+                        .            .     .        .                B. Structural Properties and Theoretical Results
+                  cC(n),1     cC(n),2 · · · cC(n),n
+                                                                       Theorem 1: In a universal Costas matrix Un , all columns
+where dashed lines separate canonical blocks, and rj denotes         have equal sums, i.e.,
+the last row index of the j th block corresponding to Costas
+arrays whose first element equals j. Formally, a UCM can be                        S(n, k) = S(n),          ∀k ∈ {1, . . . , n}.            (6)
+denoted as Un = U(n), where U (·) is the UCM construction               Proof: Each Costas array comes in sets of four or eight since
+operator that maps the set of all distinct Costas arrays of order    they belong to an equivalence class of polymorphs generated by
+n to a canonical matrix representation,                              the eight reflections and rotations [13]. Depending on diagonal
+    U(n) : {All Costas arrays of order n} → NC(n)×n ,         (2)    symmetry, each polymorph set, i.e., orbit, has four or eight
+                                                                     members obtained by 90◦ rotations or reflections of a Costas
+such that the rows of U(n) are ordered by their first element        array permutation π and its inverse π −1 . For a fixed column k,
+in ascending order, i.e., Un (r1 , 1) < Un (r2 , 1), ∀ r1 < r2 to    four rotated polymorphs can be expressed as
+ensure a canonical block structure.
+                                                                        π (1) (k) = π(k), π (2) (k) = n+1−π(k),
+   Example 1: U4 can be shown in canonical order with 4 blocks                                                                              (7)
+separated by horizontal dashed lines as follows:                        π (k) = π(n+1−k), π (4) (k) = n+1−π(n+1−k),
+                                                                          (3)
+
+                          
+                             1 2 4 3
+                                                                    where the other four reflection polymorphs are obtained by
+                          1 3 4 2                                  replacing π(k) with π −1 (k). Each pair within the orbit is
+                          1 4 2 3
+                                                                   complementary:
+                                       
+                          2 1 3 4                                          π (i) (k) + π (i+1) (k) = n + 1,       i ∈ {1, 3, 5, 7}.       (8)
+                          2 3 1 4
+                                       
+                          2 4 3 1                                  Hence, the column sum over one set of polymorphs is
+                     U4 =              .                    (3)
+                                       
+                          3 1 2 4                                                 X                |O(π)|
+                          3 2 4 1                                                      π (t) (k) =        (n + 1),                        (9)
+                          
+                          3 4 2 1
+                                                                                                      2
+                                                                                       t∈O(π)
+                                       
+                          4 1 3 2                                  where |O(π)| ∈ {4, 8} is the orbit size depending on the
+                                       
+                          4 2 1 3
+                                                                     diagonal symmetry. This value depends only on n, not on k.
+                             4 3 1 2                                 Thus, stacking all polymorphs to form Un yields
+   Definition 3: Based on the Definition 2, S(n, k) is defined                               S(n, k) = S(n),      ∀k.                   (10)
+as the sum of the k th column of Un with elements cm,k where
+k ∈ 1, 2, ..., n as given by                                           Corollary 1: The ratio of the sum of a column in a UCM of
+                                  C(n)                               order n to the number of Costas arrays of order n is given by
+                                  X
+                        S(n, k) =      cm,k .               (4)                                    S(n)   n+1
+                                 m=1                                                                    =     .                         (11)
+   In addition, it is useful to recall the elementary                                              C(n)    2
+                                                    Pidentity
+                                                      n
+                                                              that
+for any permutation π of {1, . . . , n} we have k=1 π(k) =             Proof: Summing all entries of Un by rows gives C(n)D(n),
+n(n+1)
+    2   . Since a Costas array is a permutation, the sum of any      while summing by columns gives nS(n). Equating and using
+D(n) = n(n+1)
+          2   in (5) gives the result:                                  For every B (r) , its rotated and reflected polymorphs
+                                                                     relocate the entries of 1 to positions related
+                          n(n + 1)
+                   C(n)            = nS(n)                   (12)    by index transformations of the form (i, k)                 7→
+                             2                                       (n+1−i, k), (i, n+1−k), (n+1−i, n+1−k), (k, i), and
+                             S(n)    n+1
+                                   =      .                  (13)    their complementary reflections across the two diagonals. As
+                             C(n)      2                             a result, every value (i, k) in Fn has equal contributions with
+                                                                     its symmetric counterparts:
+     III. U NIVERSAL C OSTAS F REQUENCY M ATRICES
+                                                                       fi,k = f n+1−i, k = f i, n+1−k = f n+1−i, n+1−k = fk, i
+                                                                                                                               (18)
+   In this section, we present the universal Costas frequency               = f n+1−k, i = fk, n+1−i = f n+1−k, n+1−i , ∀i, k.
+matrices (UCFMs) and their symmetrical properties.                   If a Costas array is symmetric along a diagonal (four poly-
+   Definition 4: Let Un be the UCM of order n. A UCFM                morphs), some of these positions coincide, reducing the number
+of order n, denoted by Fn , is an n × n matrix that shows            of distinct equalities. Thus, the total contribution of all poly-
+how frequently each number from 1 to n appears in each               morphs remains balanced, and the element counts at symmetric
+column of Un . The (i, k)th element of Fn , i.e., fi,k , counts      positions in Fn become equal.
+the number of times the integer i occurs in the k th column of          Corollary 2: The sum of all elements in a row or column of
+Un . Formally, the UCFM is defined as Fn = F (Un ) where             Fn gives the number of all Costas arrays of order n, i.e.,
+F(·) is the UCFM transformation operator that maps Un to its                                   (P
+                                                                                                    n
+                                                                                                        fk,m , ∀m
+corresponding frequency matrix Fn , defined elementwise as                            C(n) = Pk=1   n                             (19)
+                                                                                                    m=1 fk,m , ∀k.
+          [F(Un )]i,k = fi,k = #{ r | Un (r, k) = i },       (14)
+                                                                        Proof: Given that Fn counts the frequency of each number
+where #{ · } denotes the cardinality of a set, i.e., the number of   in each column and it has C(n) rows, the sum of each column
+elements satisfying a given condition. For a better understand-      in Fn is C(n), since each number 1 to n appears only once in a
+ing, two samples of even and odd-numbered order UCFMs are            Costas array of order n. Additionally, the reflection symmetry
+given below.                                                         of Fn given in Theorem 2 provides that the sum of each column
+   Example 2: F6 is given by                                         equals the sum of each row in Fn , which is also equal to C(n).
+                     
+                       19 17 22 22 17 19
+                                                                       Corollary 3: By using the elements of Fn , the sum of each
+                     17 24 17 17 24 17                             column of Un , i.e., S(n), can be given by
+                     22 17 19 19 17 22                                                          n
+               F6 = 22 17 19 19 17 22 ,
+                                                            (15)                                 X
+                                                                                         S(n) =         kfk,m , ∀m               (20)
+                       17 24 17 17 24 17
+                                              
+                                                                                                  k=1
+                       19 17 22 22 17 19
+                                                                     where fk,m is the element of Fn at the row k and column m.
+where the first row shows the number of 1’s in each column of           Proof: Each fk,m counts how many times k appears in
+U6 , the second row shows the number of 2’s in each column           column m of Un . Multiplying each count by k and summing
+of U6 , and so on. Similarly, F5 is also shown below.                over all rows gives the column sum S(n), which is the same
+                         6 10 8 10 6                               for all m (Theorem 1).
+                       10 6 8 6 10                                    The theoretical foundations given in Sections II and III form
+                        8 8 8 8 8 ,
+                  F5 =                                      (16)    the basis of the framework proposed in the next section.
+                                     
+                        10 6 8 6 10
+                         6 10 8 10 6                                      IV. A G ENERAL F RAMEWORK FOR C OSTAS A RRAY
+                                                                      D ISCOVERY: R ECONSTRUCTION OF UCM S FROM UCFM S
+where for instance, f2,2 = 6 shows the number of 2’s in column
+2 of U5 . F6 and F5 shown in Example 2 also illustrate the two          This section introduces a general framework for Costas array
+different symmetries as generalized below.                           discovery that integrates UCMs, UCFMs, and AI-based gener-
+                                                                     ative models. Within this framework, a novel search method
+   Theorem 2: Let Fn be the UCFM of order n. Fn shows
+                                                                     based on reconstructing UCMs from UCFMs is proposed and
+horizontal, vertical, and diagonal reflection symmetries. For odd
+                                                                     detailed below.
+n, the symmetry axes pass through the middle row and column,
+while for even n, they lie between them.                             A. Motivation
+   Proof: As shown in Theorem 1, each Costas array (each row            As described in Section III, UCFMs provide a compact
+of Un ) belongs to an equivalence class of polymorphs (rotations     way to represent all Costas arrays of a given order, with
+and reflections) of size 4 or 8 depending on diagonal symmetry       2-D n × n unique matrices. They exhibit highly structured
+[21]. Let each array π (r) be represented by its 2-D binary form     and symmetrical patterns, that can be exploited to reconstruct
+           (r)         (r)
+B (r) = [bi,k ] with bi,k = 1 if π (r) (i) = k, and 0 otherwise.     the underlying Costas arrays. Furthermore, they can also be
+Fn can be defined as the superposition of all such matrices as       represented as images via heatmaps (illustrated in Section V).
+given by                                                                With the advancement of AI techniques, subtle patterns in
+                      X                     X (r)                    images can be distinguished. In particular, generative mod-
+               Fn =        B (r) ,  fi,k =      bi,k .       (17)
+                     r                      r
+                                                                     els such as generative adversarial networks [25], [27] have
+demonstrated strong capabilities in synthesizing or extrapolat-      Algorithm 1 Reconstruction of the Universal Costas Matrix
+ing structured data distributions [26]. However, AI has not yet      Un from the Universal Costas Frequency Matrix Fn
+been applied to Costas array discovery due to the lack of a          Require: n: Order; Fn : Complete UCFM of size n × n
+well-defined representation that connects Costas arrays with         Ensure: Un : P  Canonical UCM of order n
+                                                                                       n−1
+data-driven learning. Considering the compact representation of       1: C(n) ←        v=0 Fn [v, 0]                 ▷ C(n) from (19)
+UCFMs, there is significant potential to leverage AI-based gen-       2: Initialize empty matrix Un [C(n)][n]
+erative modeling to predict UCFMs of higher orders, thereby           3: Initialize block sizes B[v] ← Fn [v, 0] for v = 0 . . . n − 1
+facilitating the discovery of new Costas arrays. To this end, we      4: Compute block start indices start[v] and counters next[v] ←
+propose a general framework that integrates UCMs, UCFMs,                 start[v], initialize PlacedRows ← ∅
+and AI methods, as illustrated in Fig. 1. As shown in the upper       5: for a0 = 0 to n − 1 do
+branch of Fig. 1, all enumerated Costas arrays via exhaustive         6:     if B[a0 ] = 0 then
+search can be converted into UCFMs (Fn ), which are complete          7:          continue                       ▷ Block already filled
+since all Costas arrays of order n ≤ 29 are known. Additionally,      8:     end if
+algebraic methods can be used to generate incomplete UCFMs            9:     G ← RUSSO S EARCH(n, a0 ) ▷ Search Costas arrays
+(Fn∗ ) using the large Costas array database available up to order       of order n with first element a0 with Russo’s method [23]
+n ≤ 1030 [24], as shown in the lower branch of Fig. 1. These         10:     for each canonical permutation p in G do
+complete and incomplete UCFMs can thus serve as structured           11:          if p ∈ PlacedRows then
+training data for potential generative AI models.                    12:              continue
+   The predicted UCFMs can be obtained as the output of such         13:          end if
+models, as shown with F̂n in Fig. 1. Then, these F̂n s can           14:          O(p) ← P OLYMORPHS(p) ▷ Generate polymorphs
+be used to reconstruct the corresponding UCM (Ûn ) via the          15:          for each q in O(p) do
+inverse operation F −1 (·), which represents the reconstruction      16:              if q ∈/ PlacedRows and B[q[0]] > 0 then
+of a UCM from UCFM. This reconstruction perspective pro-             17:                   Place q into block at position next[q[0]]
+vides a more holistic and computationally tractable approach         18:                   next[q[0]] ← next[q[0]] + 1
+to discovering new Costas arrays, as it leverages frequency          19:                   B[q[0]] ← B[q[0]] − 1
+constraints rather than direct combinatorial enumeration. We         20:                   PlacedRows ← PlacedRows ∪{q}
+leave the prediction of UCFMs of arbitrary order n using             21:              end if
+generative AI models as future work, as it is non-trivial and        22:          end for
+beyond the scope of this paper. However, in this paper, we           23:          if B[a0 ] = 0 then
+focus on the final block of Fig. 1, F −1 (·), and present our        24:              break ▷ Block fully filled; move to next block
+detailed algorithm for the reconstruction process.                   25:          end if
+B. Reconstruction Algorithm                                          26:     end for
+                                                                     27: end for
+   The pseudocode of the reconstruction algorithm of a UCM
+                                                                     28: return Un
+from a complete UCFM, represented by the blue box in Fig.
+1 with the operation F −1 (·), is given in Algorithm 1. In this      particular, it encodes the difference triangles of the permutation
+algorithm, we first determine the number of Costas arrays of         using bitmasking, while the look-ahead process ensures that at
+the given order n from Fn using Corollary 2. Additionally, the       least one valid future column position remains available without
+block sizes and indices of Un , where each block represents          violating the uniqueness of the difference triangle. This allows
+a canonical group of Costas arrays starting with a different         pruning of infeasible branches early in the search.
+element (see Definition 2 and Example 1), are determined                Each Costas array generates up to 8 polymorphs, result-
+using the first column of Fn . Then, a canonical exhaustive          ing in 3 or 7 additional arrays depending on the diagonal
+search is initiated using the benchmark Costas array search          symmetry [13]. As applied in Russo’s method, we generate
+method proposed by Russo et al. [23] as implemented by               polymorphs from each found Costas array. However, we treat
+RU SSO SEARCH(n, a0) in Algorithm 1. Russo’s method                  them differently. Each generated polymorph is placed into the
+employs symmetry reduction, bitmasking, forward checking             corresponding block as a row in Un . When the corresponding
+(or look-ahead), and backtracking to accelerate the search. In       block in Un is fully filled, we stop the search for that block and
+                                                                     move to the next block. When all the blocks are filled based on
+                                                                     the block sizes in Fn , the reconstruction is completed. Next,
+                                                                     the performance of this reconstruction method is demonstrated,
+                                                                     and the theoretical results are validated.
+                                                                                                V. R ESULTS
+                                                                        In this section, numerical results to illustrate the theoretical
+                                                                     findings as well as the performance results of the proposed
+                                                                     reconstruction method elaborated in Section IV are presented.
+Fig. 1: A general framework to discover new Costas arrays               In Fig. 3, the complete UCFMs for 5 ≤ n ≤ 29 are illustrated
+using the UCMs/UCFMs and AI.                                         as images via heatmaps in the first 5 rows of the figure. These
+                                                                      improvements over the benchmark Russo method, highlighting
+                                                                      the efficiency of the proposed approach. Furthermore, Costas
+                                                                      arrays obtained through the proposed approach remain suit-
+                                                                      able for ISAC applications due to their ideal autocorrelation
+                                                                      properties for sensing and low cross-correlation properties for
+                                                                      multi-user communication.
+                                                                         Our observations and results suggest that any Costas array
+                                                                      of order n may exist as a row within a UCM of the same order,
+                                                                      rather than independently. This insight indicates that a unified,
+                                                                      matrix-based perspective may be more effective than classifying
+                                                                      Costas arrays as algebraic or sporadic. Thus, it facilitates a
+                                                                      potential column-by-column search method to reconstruct a
+                                                                      UCM.
+Fig. 2: Benchmark comparison results of the proposed UCM                 The proposed framework also provides a foundation for AI-
+reconstruction method with the Russo method.                          driven Costas array discovery. By integrating UCMs/UCFMs
+                                                                      with generative AI models, the search for new arrays can
+images are generated by applying (14) to the enumerated Costas        be further accelerated. Although data scarcity is a challenge,
+arrays in [20], [21], [24]. Additionally, incomplete UCFMs            data augmentation, pre-trained models used for combinational
+are generated in row 6 of Fig. 3 using Beard’s database of            or matrix-completion problems, and generative modeling offer
+algebraically generated Costas arrays [24]. In Fig. 3, the color      promising strategies for Costas array discovery.
+scale is normalized based on the maximum UCFM value in
+each image, where brighter and darker regions indicate higher                                         R EFERENCES
+frequencies and lower frequencies, respectively. Rows 1 − 5 of         [1] J. P. Costas, “A study of a class of detection waveforms having nearly
+this figure validate the horizontal, vertical, and diagonal reflec-        ideal range—doppler ambiguity properties,” Proceedings of the IEEE,
+tion symmetries of UCFMs given in Theorem 2. Incomplete                    vol. 72, no. 8, pp. 996–1009, 1984.
+                                                                       [2] F. Güleç and E. Afacan, “Usage of costas arrays in low probability of
+UCFMs still show the same symmetries since the database                    intercept radars,” in 2015 23nd Signal Processing and Communications
+includes the polymorphs of the algebraically constructed Costas            Applications Conference (SIU). IEEE, 2015, pp. 347–350.
+arrays.                                                                [3] J. Yao, R. Jiang, Z. Liu, and X. Wang, “Optimum frequency hop patterns
+                                                                           constructed on a golomb costas array using two-dimension circular shift,”
+   In Fig. 2, the mean runtimes (left axis, log scale) of the              IEEE Trans. Aerosp. Electron. Syst., 2024.
+proposed reconstruction method and Russo’s method in [23]              [4] N. Touati, C. Tatkeu, A. Rivenq, C. Thierry, and Y. El Hillali, “Multi-
+are depicted for 4 ≤ n ≤ 17. Each data point of this plot is               user radar waveforms based on doubly coded costas signals,” IET Radar,
+                                                                           Sonar & Navigation, vol. 11, no. 2, pp. 277–284, 2017.
+the average of the 10 runs for n < 13 and 3 runs for n ≥ 13            [5] B. Correll Jr, J. K. Beard, and C. N. Swanson, “Costas array waveforms
+on a Dell PowerEdge T640 server, equipped with dual Intel                  for closely spaced target detection,” IEEE Trans. Aerosp. Electron. Syst.,
+Xeon Gold 2.1 GHz processors, and 128 GB RAM. The codes                    vol. 56, no. 2, pp. 1045–1076, 2019.
+                                                                       [6] D. Xing, C. Zhang, and Y. Zhang, “A phase-coded fmcw-based integrated
+were implemented in Python 3.12, and no parallel processing                sensing and communication system design for maritime search and
+was employed. Fig. 2 (right axis) shows the improvement in the             rescue,” Sensors, vol. 25, no. 17, p. 5403, 2025.
+mean runtime of the proposed method, calculated as 100× 1−            [7] S. V. Maric and E. L. Titlebaum, “A class of frequency hop codes with
+                                                                           nearly ideal characteristics for use in multiple-access spread-spectrum
+E{tU/F }/E{tRusso } , where E{·} is the expectation operator,              communications and radar and sonar systems,” IEEE Transactions on
+and tU/F and tRusso are the runtimes of the proposed and Russo             Communications, vol. 40, no. 9, pp. 1442–1447, 1992.
+methods, respectively.                                                 [8] S. V. Maric and O. Moreno, “Using costas arrays to construct frequency
+                                                                           hop patterns for ofdm wireless systems,” in 2006 40th Annual Conference
+   For small orders (4 ≤ n ≤ 9), the performance is signif-                on Information Sciences and Systems. IEEE, 2006, pp. 505–507.
+icantly higher with respect to Russo’s method with a peak              [9] J. Yao, R. Jiang, X. Wang, and Z. Liu, “Orthogonal pattern division
+improvement of 59% at n = 5. After this peak, the performance              multiple access utilizing optimal frequency hopping patterns constructed
+                                                                           with welch costas arrays,” IEEE Transactions on Green Communications
+gain decreases but stabilizes around 15% for n ≥ 13. Even                  and Networking, 2024.
+with only the exploitation of the first column of Fn and              [10] J. Yao, R. Jiang, and W. Heng, “Algebraic construction of optimal
+the block structure of Un , there is a significant improvement             frequency hopping patterns based on welch costas arrays,” IEEE Trans-
+                                                                           actions on Vehicular Technology, vol. 69, no. 2, pp. 1841–1854, 2019.
+in the performance. While parallel processing can enhance             [11] S. Lu et al., “Integrated sensing and communications: Recent advances
+performance, a significant algorithmic improvement can be                  and ten open challenges,” IEEE Internet of Things Journal, vol. 11, no. 11,
+achieved by fully exploiting the residual frequency structure              pp. 19 094–19 120, 2024.
+                                                                      [12] S. W. Golomb and H. Taylor, “Constructions and properties of costas
+in Fn to reconstruct Un .                                                  arrays,” Proceedings of the IEEE, vol. 72, no. 9, pp. 1143–1163, 1984.
+                                                                      [13] K. Drakakis, “A review of costas arrays,” Journal of Applied Mathematics,
+             VI. D ISCUSSION AND C ONCLUSION                               vol. 2006, no. 1, p. 026385, 2006.
+                                                                      [14] S. W. Golomb and G. Gong, “The status of costas arrays,” IEEE Trans.
+   This paper presents a holistic approach using UCMs and                  Inf. Theory, vol. 53, no. 11, pp. 4260–4265, 2007.
+UCFMs to analyze and discover new Costas arrays. Their                [15] J. K. Beard, “Singular value decomposition of a matrix representation
+structural properties and theoretical foundations are examined,            of the costas condition for costas array selection,” IEEE Trans. Aerosp.
+                                                                           Electron. Syst., vol. 57, no. 2, pp. 1139–1161, 2020.
+and a reconstruction-based search method is proposed to obtain        [16] J. Jedwab and L. Yen, “Costas cubes,” IEEE Trans. Inf. Theory, vol. 64,
+UCMs from UCFMs. Numerical results demonstrate significant                 no. 4, pp. 3144–3149, 2017.
+                 n=5                          n=6                           n=7                          n=8                          n=9
+
+
+
+
+                n = 10                        n = 11                       n = 12                       n = 13                        n = 14
+
+
+
+
+                n = 15                        n = 16                       n = 17                       n = 18                        n = 19
+
+
+
+
+                n = 20                        n = 21                       n = 22                       n = 23                        n = 24
+
+
+
+
+                n = 25                        n = 26                       n = 27                       n = 28                        n = 29
+
+
+
+
+                n = 30                        n = 45                      n = 176                      n = 230                       n = 248
+
+
+
+
+Fig. 3: Complete UCFMs (Fn ) for 5 ≤ n ≤ 29 (rows 1-5) and incomplete UCFMs for n = 30, 45, 176, 230, 248 (only row 6).
+[17] L. Warnke, B. Correll, and C. N. Swanson, “The density of costas arrays          Aerosp. Electron. Syst., vol. 43, no. 2, pp. 522–538, 2007.
+     decays exponentially,” IEEE Trans. Inf. Theory, vol. 69, no. 1, pp. 575–    [23] J. C. Russo, K. G. Erickson, and J. K. Beard, “Costas array search
+     581, 2022.                                                                       technique that maximizes backtrack and symmetry exploitation,” in 2010
+[18] J.Torres and I.Rubio, “Multidimensional costas arrays and their periodic-        44th Annual Conf. on Inf. Sci.s and Sys. (CISS). IEEE, 2010, pp. 1–8.
+     ity,” IEEE Trans. Inf. Theory, vol. 69, no. 8, pp. 5032–5040, 2023.         [24] J. Beard, “Costas arrays and enumeration to order 1030,” IEEE Dataport,
+[19] K. Drakakis et al., “Results of the enumeration of costas arrays of order        2017. [Online]. Available: https://dx.doi.org/10.21227/H21P42
+     27,” IEEE Trans. Inf. Theory, vol. 54, no. 10, pp. 4684–4687, 2008.         [25] J. Yoon, J. Jordon, and M. Schaar, “Gain: Missing data imputation
+                                                                                      using generative adversarial nets,” in International conference on machine
+[20] K. Drakakis, F. Iorio, and S. Rickard, “The enumeration of costas arrays
+                                                                                      learning. PMLR, 2018, pp. 5689–5698.
+     of order 28 and its consequences.” Adv. Math. Commun., vol. 5, no. 1,
+                                                                                 [26] S. Wang et al., “Generative adversarial matrix completion network based
+     pp. 69–86, 2011.
+                                                                                      on multi-source data fusion for mirna–disease associations prediction,”
+[21] K. Drakakis, F. Iorio, S. Rickard, and J. Walsh, “Results of the enumer-         Briefings in Bioinformatics, vol. 24, no. 5, p. bbad270, 2023.
+     ation of costas arrays of order 29.” Adv. Math. Commun., vol. 5, no. 3,     [27] I. J. Goodfellow et al., “Generative adversarial nets,” Advances in neural
+     pp. 547–553, 2011.                                                               information processing systems, vol. 27, 2014.
+[22] J. K. Beard, J. C. Russo, K. G. Erickson, M. C. Monteleone, and M. T.
+     Wright, “Costas array generation and search methodology,” IEEE Trans.
+

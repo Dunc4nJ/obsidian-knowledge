@@ -1,0 +1,1232 @@
+                                             A SAT Solver + Computer Algebra Attack on the
+                                                  Minimum Kochen–Specker Problem
+
+                                                            Zhengyu Li1 , Curtis Bright2 , Vijay Ganesh1
+                                                   1
+                                                       School of Computer Science, Georgia Institute of Technology.
+                                                          2
+                                                            School of Computer Science, University of Windsor.
+arXiv:2306.13319v7 [quant-ph] 9 Apr 2024
+
+
+
+
+                                                  Contributing authors: brian.li@gatech.edu; cbright@uwindsor.ca;
+                                                                     vganesh45@gatech.edu;
+
+
+                                                                                    Abstract
+                                               One of the fundamental results in quantum foundations is the Kochen–Specker
+                                               (KS) theorem, which states that any theory whose predictions agree with quantum
+                                               mechanics must be contextual, i.e., a quantum observation cannot be understood
+                                               as revealing a pre-existing value. The theorem hinges on the existence of a
+                                               mathematical object called a KS vector system. While many KS vector systems
+                                               are known, the problem of finding the minimum KS vector system in three
+                                               dimensions (3D) has remained stubbornly open for over 55 years.
+                                               To address the minimum KS problem, we present a new verifiable proof-producing
+                                               method based on a combination of a Boolean satisfiability (SAT) solver and a
+                                               computer algebra system (CAS) that uses an isomorph-free orderly generation
+                                               technique that is very effective in pruning away large parts of the search space. Our
+                                               method shows that a KS system in 3D must contain at least 24 vectors. We show
+                                               that our sequential and parallel Cube-and-Conquer (CnC) SAT+CAS methods
+                                               are significantly faster than SAT-only, CAS-only, and a prior CAS-based method
+                                               of Uijlen and Westerbaan. Further, while our parallel pipeline is somewhat slower
+                                               than the parallel CnC version of the recently introduced Satisfiability Modulo
+                                               Theories (SMS) method, this is in part due to the overhead of proof generation.
+                                               Finally, we provide the first computer-verifiable proof certificate of a lower bound
+                                               to the KS problem with a size of 40.3 TiB in order 23.
+
+
+
+
+                                           1 Introduction
+                                           Quantum Mechanics (QM) is often described as one of the most successful physical
+                                           theories of all time, and yet many questions regarding the very foundations of QM
+
+
+                                                                                        1
+remain unresolved. To address these foundational issues, many interpretations of QM
+(i.e., mappings from mathematical formalisms of QM to physical phenomena) have been
+proposed. Hidden-variable theories are attempts at understanding counterintuitive
+QM phenomena through a deterministic lens by positing the existence of (possibly)
+unobservable physical entities or hidden variables [1] that standard QM theory does
+not account for (and hence is deemed incomplete). Over the years, many constraints
+have been imposed on hidden-variable theories, e.g., Bell’s inequalities that rule out
+the possibility of local hidden-variable theories that are also in agreement with the
+predictions of QM [2]. In a similar vein, Simon Kochen and Ernst Specker [3] proved
+their famous Kochen–Specker (KS) theorem in 1967 (and independently by John Bell
+in 1966 [4]) that essentially asserts that non-contextual hidden variable theories cannot
+reproduce the empirical predictions of QM.
+     The KS theorem rules out non-contextual hidden-variable theories via the existence
+of a finite set of three-dimensional vectors, referred to as a KS vector system [3]. A
+KS vector system (or simply a KS system) is a combinatorial object that witnesses a
+contradiction between non-contextuality (i.e., the assumption that observables can be
+assigned values prior to measurement and independent of measurement context) and
+the SPIN axiom of QM. The first KS vector system, discovered in 1967, contains 117
+vectors [3]. Another theorem that relies on the existence of KS systems in an essential
+way is the “Free Will” theorem of John Conway and Simon Kochen [5].
+     Since the publication of Kochen and Specker’s theorem in 1967, physicists and
+mathematicians have wondered about the cardinality of the smallest-sized KS vector
+system (see Table 2 and Section 3). Finding the minimum KS system, referred to as the
+minimum KS problem, is not only of scientific and historical interest but also has direct
+applications in quantum information processing [6]. For example, finding a minimum
+KS system could enable applications in the security of quantum cryptographic protocols
+based on complementarity [7], zero-error classical communication [8], and dimension
+witnessing [9]. Further, the large size of all known KS systems has hindered physicists
+from using them for empirical tests of the KS theorem, similar to the empirical tests
+of Bell’s theorem [10].
+
+1.1 Two definitions of the Kochen-Specker System
+There are two definitions of the KS system widely used in literature. The “original”
+KS set definition used in this paper (Section 2) contains only the vectors necessary
+to prove the KS theorem mathematically. This “original” definition of a KS set is
+the one originally used by Kochen and Specker themselves. KS systems developed
+by this definition are commonly referred to as “original KS systems” [11]. However,
+from an experimental perspective, another definition that requires additional vectors
+in the KS system is used, since constructing the set in practice would involve vectors
+not explicitly needed in the mathematical proof. Specifically, this definition requires
+that every pair of vectors in a 3-dimensional KS set belongs to a set of 3 mutually
+orthogonal vectors. KS systems developed by this alternative definition are commonly
+referred to as “extended KS systems” [11].
+    Both definitions are well-known and used extensively in the literature. For examples,
+the ‘original’ definition used in this paper is also used in [12], [13], [14], [15], [5], [16],
+
+
+                                              2
+                  Discoverers             Original System   Extended System
+                  Kochen, Specker [3]     117               192
+                  Schütte [15]           33                49
+                  Peres [26]              33                57
+                  Conway, Kochen [14]     31                51
+Table 1: Size of 3-dimensional KS systems and how they differ based on the definition
+used, as discussed in Subsection 1.1. In addition, Pavičić and Megill [27] discovered
+many other unique 3-dimensional extended KS systems with 51, 53, 54, 55, 57, 69, etc.
+vectors through automated generation.
+
+
+[17], [18], [19], while the other definition is used in [11], [20], [21], [22], [23], [24], [25].
+As a result of the difference in the two definitions, the lower bound on the original KS
+system and the extended KS system are also different, as shown in Table 1.
+    John Conway has stressed the problem of finding the minimum number of three-
+dimensional vectors necessary to prove the “Free Will theorem” in public lectures on
+the topic (see [17]). Thus, knowing the smallest ‘original’ KS set is of interest since such
+a set would correspond to a proof of the Free Will theorem using the fewest number of
+three-dimensional directions. This in a certain sense would lead to the ‘simplest’ proof
+of the theorem. We believe the question of the minimal size of an ‘original’ KS set is
+theoretically interesting (independent of what the minimal size of an ‘experimental’
+KS set is). In this paper, we investigate the lower bound of the original KS system.
+However, the paradigm proposed in this paper is easily adaptable and scalable, and
+the approach can be applied to both definitions given the appropriate SAT encoding
+of the problem.
+
+1.2 The SAT+CAS Paradigm for Hard Combinatorial Problems
+In recent years we have witnessed the dramatic impact of satisfiability (SAT) solvers—
+computer programs that take as input Boolean logic formulas and decide whether they
+have solutions—in areas as diverse as AI, software engineering, program verification,
+program synthesis, and computer security [28, 29]. Unfortunately, despite these fantastic
+achievements of SAT solvers, they struggle with certain problems such as those
+containing many symmetries [30] or those requiring the usage of more advanced
+mathematical theories than propositional logic [31]. Much work has been done to
+remedy these drawbacks, including the development of sophisticated symmetry breaking
+techniques [32] and the development of solvers that support richer logic such as “SAT
+modulo theories” or SMT solvers [33]. However, the mathematical support of SMT
+solvers is quite limited when compared with the vast mathematical functionality
+available in a modern computer algebra system (CAS).
+    In response to this need for a solver that combines the efficient search capabilities
+of SAT solvers with the mathematical knowledge available in CASs, a new kind of
+solving methodology was developed in 2015 by Zulkoski, Ganesh, and Czarnecki [34]
+and independently by Ábrahám [35]. This SAT+CAS solving methodology has been
+successfully applied to many diverse problems, including circuit verification [36, 37],
+automatic debugging [38], finding circuits for matrix multiplication [39], computing
+directed Ramsey numbers [40], and verifying mathematical conjectures [41]. For other
+
+
+                                               3
+                     Discoverers                       Year   Bound
+                     Kochen, Specker [3]               1967   ≤ 117
+                     Jost [43]                         1976   ≤ 109
+                     Conway, Kochen [14]               1990   ≤ 31
+                     Arends, Ouaknine, Wampler [17]    2009   ≥ 18
+                     Uijlen, Westerbaan [18]           2016   ≥ 22
+                     Li, Bright, Ganesh [44]           2022   ≥ 23
+                     Li, Bright, Ganesh [45] /
+                                                       2023   ≥ 24
+                     Kirchweger, Peitl, Szeider [19]
+Table 2: A chronology of the bounds on the size of the minimum KS vector system in
+three dimensions. This table should not be regarded as a comprehensive catalog of
+all three-dimensional KS systems (Section 3); rather, it is a chronological overview
+highlighting the advancements in reducing the size of the minimal 3-D KS system in
+line with its initial definition. The present work (presented at CanaDAM 2023) was
+performed independently of Kirchweger, Peitl, Szeider (presented at IJCAI 2023).
+
+
+work in the intersection of symbolic computation and satisfiability checking, see
+Matthew England’s summary [42] of the SC-Square project. In short, the SAT+CAS
+methodology has found wide application in diverse fields that somehow require solving
+hard combinatorial problems.
+    In this paper, we use the SAT+CAS solving methodology (see Figure 1) to dra-
+matically improve the performance of the search for KS systems compared to all
+previous approaches developed to prove lower bounds for the minimum KS problem
+(see Section 1.4). This is made possible via a combination of the powerful search and
+learning algorithms used in modern SAT solvers with an “isomorph-free exhaustive
+generation” approach that prevents the duplicate exploration of isomorphic parts of
+the search space by the solver. For example, such an approach was recently used to
+resolve the Lam’s problem from projective geometry [46]. Although isomorph-free
+exhaustive generation has been used extensively in combinatorial enumeration, it has
+only recently been combined with SAT solving [47, 48].
+    The traditional approach to preventing a SAT solver from repeatedly exploring
+isomorphic parts of a search space is via the use of symmetry breaking techniques [30].
+One such symmetry breaking approach is to add “static” constraints to the input
+formula at the beginning of the search aimed at reducing the size of the search
+space [49, 50]. Unfortunately, such an approach can be quite expensive in the sense
+that the number of added constraints can be large (e.g., exponential in the number
+of variables of the formula that encodes the problem-at-hand). Another approach
+is to “dynamically” break symmetries during the solver’s search [30, 51] such as in
+the SAT modulo symmetries (SMS) paradigm [52, 53]. Our approach is similar in
+that it also dynamically adds constraints to the problem during the solving process.
+However, an important difference is that the SAT+CAS paradigm is more general since
+it goes beyond breaking symmetries. For example, in the resolution of the smallest
+counterexample of the Williamson conjecture, we used the Discrete Fourier Transform
+(DFT) as part of the CAS computations [54].
+
+
+
+
+                                            4
+                                                        Simplifier
+
+                     CNF                        CaDiCaLCaDiCaL
+                                                       +       Simplified
+                   Instance                       CASPreprocessorInstance
+
+
+
+              KS Vector System                  Orderly Generation
+                                                  via SAT+CAS
+
+                                                                 Blocking
+                  Embeddability                     CAS
+                                                                 Clause
+                    Checker
+
+            Z3 SMT           KS                     Partial
+                                                   Solution          MapleSAT
+             Solver       Candidates
+
+
+
+
+Fig. 1: A flowchart of our SAT+CAS based tool MathCheck for solving the KS
+problem in the sequential setting. The CNF instance encoding the KS problem (see
+Section 4) is simplified using CaDiCaL+CAS. The simplified instance is passed to the
+MapleSAT+CAS tool (see Section 5) either sequentially or in parallel using Cube-
+and-Conquer (CnC). Finally, an embeddability checker applies the SMT solver Z3 to
+determine whether the candidates are embeddable (see Section 6).
+
+
+1.3 Automated Verification of Results
+Verification is of utmost importance in the context of computer-assisted proofs, given
+the mathematical nature of such computations—especially for nonexistence proofs.
+Fortunately, the SAT+CAS paradigm naturally lends itself to automated verification,
+given the fact that all modern SAT solvers produce verifiable proofs. By contrast, all
+previous computer-assisted proofs of lower bounds for the minimum KS problem are
+not verifiable.
+    Since our problem requires the solver to perform an exhaustive search, the validity of
+our nonexistence result is crucially dependent on the encodings and the computational
+tools that we use. For example, our nonexistence result crucially relies on the correctness
+of the SAT solver’s search and the computer algebra system’s isomorph-free exhaustive
+generation routine. Fortunately, our SAT+CAS method generates verifiable certificates
+that allow an independent third party to certify that the SAT solver’s search is
+exhaustive and also that the facts provided by the isomorph-free generation are correct.
+Thus, one does not need to trust either the SAT solver or the CAS to trust that our
+results are correct—instead, one only needs to trust the correctness of the proof verifier.
+This is quite significant, as SAT solvers and CASs are complicated pieces of software
+that typically cannot be guaranteed to be bug-free. By contrast, a proof verifier is a
+
+
+
+                                            5
+much simpler piece of software that can be formally checked. In Section 9, we provide
+details on the verification techniques that we used to certify our results.
+
+1.4 Our Contributions
+ • Proof-producing SAT+CAS with Orderly Generation (OG) Method:
+   In this paper, we present the design and implementation of a verifiable proof-
+   producing SAT+CAS system with orderly generation (OG) aimed at combinatorial
+   problems (as part of the SAT+CAS tool, MathCheck1 ), thus showing that the
+   minimum KS system must contain at least 24 vectors. Also, we extend our work
+   to complex vectors in three dimensions (3D), and thus establish a lower bound of
+   24 for both the real and complex KS problem.
+ • Speedup over Competing Methods: We show that our sequential and parallel
+   Cube-and-Conquer (CnC) SAT+CAS methods are significantly faster than SAT-
+   only, CAS-only, and prior CAS-based methods by [18]. Further, while our pipeline
+   is somewhat slower than the recently introduced SMS method, this is in part due
+   to the generation of verifiable proofs by our methods which added some additional
+   complexity and slowed down our method.
+ • Formal Verification of Results: Finally, our approach provides a formal
+   verification of the lower bound of 24 for the minimum KS problem in 3D by
+   verifying all certificates computed by the SAT+CAS solvers in all orders up to and
+   including order 23 (see Section 9). By contrast, [19] describe a method to verify
+   their result, but they only report having verified 5% of the proofs in order 23.
+
+2 Background
+In this section, we introduce several fundamental concepts from quantum foundations
+such as the SPIN axiom, 010-colorability, the KS theorem, and the KS vector system.
+For a deeper dive, we refer the reader to the QM section in the Stanford Encyclopedia
+of Philosophy [1]. We assume that the reader is familiar with Boolean logic and SAT
+solvers. While we provide a very brief overview of cube-and-conquer SAT solvers, we
+refer the reader to the Handbook of Satisfiability [28] for a comprehensive overview.
+
+2.1 The KS Theorem
+Informally, the KS theorem states that there is a contradiction between the SPIN axiom
+of standard QM and the assumption of non-contextuality. The Stanford Encyclopedia
+of Philosophy provides a comprehensive background to the KS theorem and stresses
+its importance in the foundations of QM [1]. The proof of the KS theorem crucially
+relies on the existence of a KS vector system (see Figure 2). More precisely, exhibiting
+the existence of a KS vector system proves the KS theorem, which essentially states
+that the unit sphere is not 010-colorable (defined below).
+Spin of an Elementary Particle: Spin is an intrinsic form of angular momentum of
+elementary particles whose existence can be inferred from the Stern–Gerlach experi-
+ment [55]. In our context, a spin-1 particle is shot through a magnetic field in a given
+
+ 1
+     Code at https://github.com/BrianLi009/MathCheck
+
+
+
+                                                6
+                                                                                                                        2.0
+
+                                                                                                                        1.5
+
+                                                                                                                        1.0
+                                                                                                                        0.5
+                                                                                                                              Z
+                                                                                                                    0.0
+                                                                                                                   −0.5
+                                                                                                                   −1.0
+                                                                                                                   −1.5
+                                                                                                                   −2.0
+                                                                                                                  2.0
+                                                                                                            1.5
+                                                                                                      1.0
+                                                                                                0.5
+                     −2.0
+                            −1.5                                                            0.0
+                                   −1.0                                                         Y
+                                          −0.5                                          −0.5
+                                                  0.0                                −1.0
+                                                 X      0.5
+                                                              1.0                −1.5
+                                                                    1.5
+                                                                          2.0 −2.0
+
+
+
+
+Fig. 2: The 31 vectors of the smallest known KS system in three dimensions (discovered
+by John Conway and Simon Kochen circa 1990). For simplicity, the vectors have been
+scaled to lie on the cube with vertices (±2, ±2, ±2) instead of the unit sphere.
+
+
+direction and continues undisturbed, deflects up, or deflects down—corresponding to
+3 possible angular momentum states, namely 0, 1, and −1. Thus, the square of this
+measurement is 0 or 1.
+SPIN axiom: The SPIN axiom of QM states that the squared spin components of a
+spin-1 particle are 1, 0, 1 in three pairwise orthogonal directions of measurement. Thus,
+the observable corresponding to the question “is the squared spin 0?” measured in three
+mutually orthogonal direction always produces yes in exactly one direction and no in
+the other two orthogonal directions. We use the dual of the above form in the present
+work, i.e., the ‘010’ convention rather than ‘101’, following Uijlen and Westerbaan. The
+SPIN axiom follows from the postulates of QM and is experimentally verifiable [56].
+KS Vector System: A KS vector system can be represented in multiple ways and we
+describe it as a finite set of points on a sphere. As a consequence of the SPIN axiom,
+the squared-spin measurements along opposite directions must yield the same outcome.
+Therefore, two collinear vectors are considered to be equivalent. To define a KS vector
+system, we first formally define a vector system and the notion of 010-colorability. For
+
+
+
+                                                               7
+the purposes of this paper, we limit ourselves to the 3D version of the KS problem as
+the size of the minimum KS system in higher dimensions is already known [57].
+Definition 1 (Vector System). A vector system is a finite set of non-collinear
+points on the unit sphere in R3 .
+     A {0, 1}-coloring of a vector system is an assignment of 0 and 1 to each vector in
+the system. The colorings of interest to us are described in the following definition.
+Definition 2 (010-Colorability of Vector Systems). A vector system is 010-
+colorable if there exists an assignment of 0 and 1 to each point such that:
+  1. No two orthogonal points are assigned 1.
+  2. Three mutually orthogonal points are not all assigned 0.
+Definition 3 (KS Vector System). A KS vector system is one that is not
+010-colorable.
+Definition 4 (Orthogonality Graph). For a vector system K, define its orthog-
+onality graph GK = (V, E), where V = K, E = { (v1 , v2 ) : v1 , v2 ∈ K and v1 · v2 =
+0 }.
+     Essentially, the vertices of GK are the vectors in K, and there is an edge between two
+vertices exactly when their corresponding vectors are orthogonal. Similarly, the notion
+of 010-colorability can be translated from a vector system to an orthogonality graph.
+Definition 5 (010-colorability of Graphs). A graph G is 010-colorable if there
+is a {0, 1}-coloring of the vertices such that the following conditions are satisfied
+simultaneously:
+  1. No two adjacent vertices are colored 1.
+  2. For each triangle, the vertices are not all colored 0.
+     It is not always the case that an arbitrary graph has a corresponding vector system,
+but if one does exist then we say that such a graph is embeddable.
+Definition 6 (Embeddable Graph). A graph G = (V, E) is embeddable if it is a
+subgraph of an orthogonality graph for some vector system.
+     Being embeddable implies the existence of a vector system K whose vectors have
+a one-to-one correspondence with the vertices of G, such that adjacent vertices are
+assigned to orthogonal vectors. An example of an unembeddable graph is the cyclic
+graph C4 on 4 vertices, as the orthogonality constraints force a pair of opposite vertices
+to be mapped to collinear vectors (which are not allowed in this context).
+Definition 7 (KS Graph). An embeddable and non-010-colorable graph is called a
+KS graph.
+Observation 1. There exists a KS vector system if and only if there exists a KS graph.
+Definition 8 (KS Candidates). A KS Candidate is a satisfying assignment
+generated by the SAT+CAS solver.
+     If a KS candidate is also embeddable, then it is a KS graph. As described in Section 6,
+our solver dynamically blocks all minimal unembeddable subgraphs up to order 12, and
+hence our KS candidates are graphs that do not contain any unembeddable subgraphs
+of order up to 12.
+
+
+
+
+                                             8
+2.2 The Minimum KS Problem
+The minimum KS problem is to find a KS vector system of minimum cardinality,
+that is, a system with the fewest number of vectors in three-dimensional space (or
+equivalently a KS graph with the fewest number of vertices). Every KS system has an
+associated KS graph, so if a KS graph with cardinality n does not exist then a lower
+bound on the minimum KS problem is at least n + 1.
+
+2.3 Cube-and-conquer
+The cube-and-conquer SAT solving paradigm was developed in [58] to solve hard
+combinatorial problems. The method applies two (possibly) different types of SAT
+solvers in two stages: First, a “cubing solver” splits a SAT instance into a large number
+of distinct subproblems specified by cubes—formulas of the form x1 ∧ · · · ∧ xn where xi
+are literals. Second, a “conquering solver” solves each subproblem under the assumption
+that its associated cube is true (more precisely, the conjunction of the original instance
+and the cube).
+    The cube-and-conquer method has empirically been shown to be effective at
+quickly solving large satisfiability problems when the cubing solver generates many
+cubes encoding subproblems of similar difficulty. It has since been applied to solve
+huge combinatorial problems such as the Boolean Pythagorean triples problem [59],
+the computation of Schur number five [60], and a SAT-based resolution of Lam’s
+problem [46].
+
+3 Previous Work
+Over the last 55+ years, many mathematicians and physicists such as Roger Penrose,
+Asher Peres, and John Conway have attempted to find a minimum 3-dimensional KS
+system (see Table 2). The first KS system was constructed in 1967 and it contained 117
+vectors [3]. A KS system with 109 vectors was found by Res Jost [43] in 1976. Peres
+found a KS system of size 33 in 1991, and Schütte found a KS system of size 33 in
+1996. The current smallest known KS system in three dimensions contains 31 vectors
+and was discovered by John Conway and Simon Kochen circa 1990 (see Figure 2).
+All these discoveries were made analytically, without the assistance of computational
+methods. Recently, Pavičić and Megill [27] applied an automated generation approach
+to robustly generate KS systems in odd dimensions. This approach led to the discovery
+of many more three-dimensional KS systems.
+    In 2011, Arends, Ouaknine, and Wampler proved several interesting properties of
+KS graphs and leveraged them to computationally establish that a KS system must
+contain at least 18 vectors [17]. Seven years later, Uijlen and Westerbaan showed
+that a KS system must have at least 22 vectors [18]. This computational effort used
+around 300 CPU cores for three months and relied on the nauty software package [61]
+to exhaustively search for KS graphs. Pavičić, Merlet, McKay, and Megill [57] have
+improved a variation of the KS problem, one in which each vector is part of a mutually
+orthogonal triple (or a mutually orthogonal d-tuple in d dimensions). Under this
+restriction, they show a KS system must have at least 30 vectors in d = 3 dimensions,
+
+
+                                            9
+and in d ≥ 4 dimensions the minimum KS system has 18 vectors. However, in three
+dimensions the gap between the lower and upper bounds of a KS system remains
+significant and the minimum size remains unknown.
+    Another way of measuring the size of a d-dimensional KS system is the number of
+mutually orthogonal “contexts” (cliques of size d in the orthogonality graph). Lisoněk,
+Badzia̧g, Portillo, and Cabello [62] found a six-dimensional KS system with seven
+contexts and showed this is the simplest possible KS system allowing a symmetry
+parity proof of the KS theorem. This KS system was later experimentally used by
+Cañas et al. [6] to perform measurements verified to arise from a quantum system
+rather than a classical system.
+    Preliminary versions of the present work were announced at the 2022 SC-Square
+workshop, as well as at the 2023 Southeastern International Conference on Combi-
+natorics, Graph Theory and Computing, and at CanaDAM 2023. At the former two
+venues, we presented searches for KS systems with up to 22 vectors, and at CanaDAM
+2023 we presented our work that extends this to a search for KS systems with up to
+23 vectors. In each case the searches were exhaustive and no KS systems were found.
+Thus, a KS system in three dimensions must contain at least 24 vectors.
+    Kirchweger, Peitl, and Szeider [19] completed an independent search for KS systems
+establishing a lower bound of 24 vectors with a similar approach as SAT+CAS but
+with an SMS solver and an alternate definition of canonicity. Also, they do not use OG,
+as their definition of canonical does not satisfy property (2) from Sec. 5, but otherwise
+the SMS approach is similar in that it combines a SAT solver with a canonical checking
+routine. Their approach can also be used to generate proof certificates, though the
+certificate verification was not performed with the exception of 5% of the certificates
+in the order 23 search. By constrast, ours formally verifies all results.
+
+4 SAT Encoding of the Minimum KS Problem
+As stated earlier, every KS vector system K can be converted into a KS graph GK .
+Each vector in K is assigned to a vertex in GK , so that if two vectors are orthogonal,
+then their corresponding vertices are connected.
+    We say a KS graph is minimal if the only subgraph that is also a KS graph is itself.
+Arends, Ouaknine, and Wampler [17] proved that a three-dimensional minimal KS
+graph must satisfy the following properties:
+  1. The graph does not contain the 4-cycle graph C4 as a subgraph.
+  2. Each vertex of the graph has a minimum degree 3.
+  3. Every vertex is part of a 3-cycle triangle graph C3 .
+We encode these three properties and the non-010-colorability of the KS graph in
+conjunctive normal form (CNF), as described below. If a SAT solver produces solutions
+for such an encoding, then these solutions are equivalent to graphs that satisfy all of
+the above-mentioned four constraints.
+    A simple undirected graph of order n has n2 potential edges, and we represent each
+                                                
+
+edge as a Boolean variable. The edge variable eij is true exactly when the vertices i and
+j are connected, where 1 ≤ i < j ≤ n. For convenience, we let both eij and eji denote
+the same variable since the graphs we consider are undirected. We also use the n3
+
+
+
+                                           10
+triangle variables tijk denoting that distinct vertices i, j, and k are mutually connected.
+In Boolean logic this is expressed as tijk ↔ (eij ∧ eik ∧ ejk ) which in conjunctive
+normal form is expressed via the four clauses ¬tijk ∨ eij , ¬tijk ∨ eik , ¬tijk ∨ ejk , and
+¬eij ∨ ¬eik ∨ ¬ejk ∨ tijk . Again, the indices i, j, and k of the variable tijk may be
+reordered arbitrarily for notational convenience.
+
+4.1 Encoding the Squarefree Constraint
+To encode the property that a KS graph must be squarefree, we construct encodings
+that prevent the existence of any squares in the graph. Observe that three squares can
+be formed on four vertices. Therefore, for every choice of four vertices i, j, k, l, we use
+clauses ¬eij ∨ ¬ejk ∨ ¬ekl ∨ ¬eli , ¬eij ∨ ¬ejl ∨ ¬elk ∨ ¬eki , and ¬eil ∨ ¬elj ∨ ¬ejk ∨ ¬eki
+to encode the fact that a solution produced by the solver must be squarefree. By
+enumerating all possible choices of four vertices and constructing the above CNF
+formula, we force the graph to be squarefree. The total number of clauses used is 3 · n4 .
+                                                                                            
+
+
+4.2 Encoding the Minimum Degree Constraint
+For each vertex i, to ensure that i is connected to at least three other vertices, we take
+each subset  S of {1, . . . , i − 1, i + 1, . . . , n} with cardinality n − 3 and construct the
+clause j∈S eij . By enumerating over all such subsets we enforce a minimum degree
+       W
+of 3 on vertex i. Thus, constructing similar formulae for all vertices 1 ≤ i ≤ n, enforces
+that any vertex in the graph       has a degree       of at least 3. The total number of clauses
+used is therefore n · n−1       =       n−1
+                                              .
+                                           
+                       n−3        n  ·   2
+
+
+4.3 Encoding the Triangle Constraint
+We encode the property that every vertex is part of a triangle as follows: for each
+vertex i, we require 2 other distinct vertices to form a triangle, and there are n−1      2
+possible triangles containing i. At leastWone of those triangles must be present in the KS
+graph—this is encoded by the clause j,k∈S tijk where S is {1, . . . , i − 1, i + 1, . . . , n}
+and j < k. Using this clause for each 1 ≤ i ≤ n ensures that every vertex is part of a
+triangle and hence there are n triangle clauses.
+
+4.4 Encoding the Noncolorability Constraint
+Recall that the key property of a KS graph is that it is non-010-colorable. As stated
+earlier, a graph is non-010-colorable if and only if for all {0, 1}-colorings of the graph,
+a pair of color-1 vertices is connected or a set of three color-0 vertices are mutually
+connected.
+    For each {0, 1}-coloring, a KS graph has a set V0 of color-0 vertices and a set V1 of
+color-1 vertices. Given a specific such coloring, the clause
+                                     _                _
+                                            eij ∨              tijk
+                                   i,j∈V1           i,j,k∈V0
+                                     i<j             i<j<k
+
+
+
+
+                                                11
+encodes that this coloring is not a 010-coloring of a graph—since either a pair of color-1
+vertices is connected or three color-0 vertices are mutually connected. Note that we
+have to generate such a clause for all possible colorings, and conjunct them together to
+obtain a non-colorability constraint for graphs of order n. An assignment that satisfies
+such a constraint corresponds to a graph that is not 010-colorable under any possible
+coloring. Observe that in order n the total number of such clauses is 2n .
+    Fortunately, an empirical observation allows cutting the size of the formula dra-
+matically: {0, 1}-colorings with more than ⌈ n2 ⌉ color-1 vertices are unlikely to be
+010-colourings and in practice are not useful in blocking 010-colourable graphs. Put
+differently, by dropping the constraints with |V1 | ≥ ⌈ n2 ⌉ we reduce the formula size
+drastically (making the formula easier to solve) and the corresponding increase in the
+number of satisfying assignments is small enough that these candidates can be ruled
+out via post-processing (Section 9). In fact, for graphs up to order 23, no additional
+satisfying assignments (or candidate KS graphs) were generated.
+
+4.5 Encoding Static Isomorphism Blocking Clauses
+Following [63], we use symmetry breaking constraints that enforce a lexicographical
+order among rows of the graph’s adjacency matrix. These small number of additional
+constraints enable us to statically block many isomorphic graphs.
+       Given an adjacency matrix A of a graph, we define Ai,j as the ith row of A without
+columns i and j. Codish et al. prove that up to isomorphism every graph can be
+represented by an adjacency matrix A for which Ai,j is lexicographically equal or
+smaller than Aj,i for all 1 ≤ i < j ≤ n.
+       We express that Ai,j = [x1 , x2 , . . . , xn ] is lexicographically equal or less than
+Aj,i = [y1 , y2 , . . . , yn ] using 3n − 2 clauses and auxiliary variables a1 , . . . , an−1 [64].
+The clauses are ¬xk ∨ yk ∨ ¬ak−1 , ¬xk ∨ ak ∨ ¬ak−1 , and yk ∨ ak ∨ ¬ak−1 for k = 1,
+. . . , n − 1. The literal ¬a0 is omitted and the clause ¬xn ∨ yn ∨ ¬an−1 is also included.
+
+5 Orderly Generation via SAT+CAS
+The symmetry breaking constraints described in Section 4.5 do not block all isomorphic
+copies of adjacency matrices. Thus, a crucial part of the MathCheck pipeline is the
+use of a SAT+CAS combination of a SAT solver and an isomorph-free generation
+routine (the CAS part). The orderly isomorph-free generation approach was developed
+independently by Read et al. [65] and Faradvzev et al. [66]. It relies on the notion of a
+canonical representation of an adjacency matrix.
+Definition 9 (Canonical Graph). An adjacency matrix M of a graph is canonical
+if every permutation of the graph’s vertices produces a matrix lexicographically greater
+than or equal to M , where the lexicographical order is defined by concatenating the
+above-diagonal entries of the columns of the adjacency matrix starting from the left.
+    An intermediate matrix of A is a square upper-left submatrix of A. If A is of
+order n then its intermediate matrix of order n − 1 is said to be its parent, and A is
+said to be a descendant of its intermediate matrices.
+    The OG method is based on the following two consequences of Definition 9:
+ (1) Every isomorphic class of graphs only has exactly one canonical representative.
+
+
+                                               12
+              Order   Squarefree + Min. Degree 2   Min. Unembed.   Runtime
+               4–9                 164                    0          30 s
+                10                 563                    2         4.1 m
+                11               3,257                    5         1.3 h
+                12              23,699                   10          27 h
+Table 3: Counts for the number of minimal unembeddable graphs in orders up to 12
+and the computation time for the embeddability check.
+
+
+ (2) If a matrix is canonical, then its parent is also canonical.
+    Note that the contrapositive of the second property implies that if a matrix is not
+canonical, then all of its descendants are not canonical. The OG process only generates
+canonical matrices and they are built starting from the upper-left. Therefore, any
+noncanonical intermediate matrix that is encountered during an OG exhaustive search
+can be discarded, as none of its descendants will be canonical.
+    As described in Figure 1, in our SAT+CAS implementation, when the SAT solver
+finds an intermediate matrix the canonicity of this matrix is determined by a canonicity-
+checking routine implemented in the MathCheck system. If the matrix is noncanonical,
+then a “blocking” clause is learned which removes this matrix (and all of its descendants)
+from the search. Otherwise, the matrix may be canonical and the SAT solver proceeds
+as normal.
+    When a matrix is noncanonical, the canonicity-checking routine also provides
+a “witness” of this fact (a permutation of the vertices that produces a lex-smaller
+adjacency matrix). We combine this process with the symmetry breaking clauses of
+Codish et al. that canonical matrices can be shown to satisfy [63, Def. 8].
+    The OG technique provides a speedup that seems to increase exponentially in the
+order n of the KS graph—see Table 4, which provides experimental running times
+comparing the SAT+CAS approach against SAT-only and CAS-only approaches. These
+timings were run on an Intel Xeon E5-2667 CPU and the CAS compared against was
+the nauty graph generator [61] with the same configuration from [18]. More details on
+our experimental setup can be found in Section 8.
+    As described in Figure 1, we simplify the SAT instance using the SAT solver
+CaDiCaL [67] before solving the instance using MapleSAT [68].
+
+6 Embeddability Checking
+We refer to the solutions generated by the SAT solver as KS candidates. Note that we
+have to additionally check whether a KS candidate is embeddable in order to detect
+whether it is a KS graph (and hence corresponds to a KS vector system). Hence, we
+perform an embeddability check on every KS candidate generated by the SAT+CAS
+solver of MathCheck.
+    Operationally, a graph G is said to be embeddable if every pair of adjacent G-
+vertices can be mapped to two orthogonal vectors on the unit sphere in R3 (refer to
+Definition 6). Otherwise, we say that G is unembeddable.
+    Our embeddability checking algorithm consists of two parts. The first part is
+an integration of the vector assignment algorithm of [18] that finds all possible vec-
+tor assignments describing the orthogonal relations between the vectors vi in a KS
+
+
+                                           13
+candidate defined by a set of edges E. A vector assignment is a set of edge pairs
+C = {(eij , eik ), (elm , eln ), . . . } ⊆ E 2 where each pair of edges share one common vertex
+and each pair is disjoint from each other, meaning the same edge cannot exist in more
+than one pair. Each pair (eij , eik ) in C can be interpreted as a cross product relation-
+ship between the vectors vi , vj , and vk , since the presence of eij and eik in the KS
+graph means that vector vi must be orthogonal to both vj and vk in any embedding
+of the candidate.
+
+
+
+
+                    (a)                                               (b)
+Fig. 3: The only two minimal nonembeddable graphs of order 10. These are the
+smallest squarefree graphs that are not embeddable.
+
+
+     The second part of the algorithm applies an SMT solver to determine the satisfia-
+bility of a system of nonlinear equations generated from a particular vector assignment
+as described below. More precisely, an assignment generated by Uijlen and Wester-
+baan’s algorithm is converted into a set of cross and dot product equations, and these
+equations are passed to the theorem prover Z3 [69] that solves the equations over the
+real numbers. We denote the vector corresponding to vertex vi as Vi in Z3, where Vi is
+a 3-tuple of real numbers.
+     Given a specific vector assignment generated by the previous algorithm, the system
+of constraints is as follows:
+   1. If (eij , eik ) ∈ C, we add the cross product constraint Vi = Vj × Vk .
+   2. If eij is one of the edges of E that is not contained in any of the pairs of C, we
+       add the dot product constraint Vi · Vj = 0.
+   3. If i ≠ j then Vi must not be collinear with Vj , so we add the noncollinearity
+       constraint Vi × Vj ̸= ⃗0.
+     A free vector is one that has not been fixed as the cross product of two other
+vectors. Of all possible assignments, we first choose the one with the least number of
+free vectors, since in practice such an assignment is likely to be solved more quickly.
+     It is important to note that for any vector assignment, each edge of the KS graph
+is encoded into either constraint 1 or 2, making the encoding shorter and more efficient
+than the naive encoding. Constraint 3 requires two vectors to be noncollinear rather
+than only being nonequal since we do not enforce vectors to have unit length for
+
+
+                                              14
+reasons of efficiency. This is a harmless optimization since vectors can be projected
+onto the unit sphere without disturbing these constraints.
+    We also fix two orthogonal vectors to be the standard vectors (1, 0, 0) and (0, 1, 0)
+to cut down on the number of free variables. To check whether a graph is embeddable,
+we use Z3 to determine whether these nonlinear arithmetic constraints are satisfiable
+over the real numbers. Z3 applies a CDCL-style algorithm to decide the satisfiability
+of such systems [70]. If a solution is found, it is an assignment of vertices to vectors
+that satisfies all orthogonality constraints and the graph is therefore embeddable.
+    Embeddability checking of large graphs can be further optimized by precomputing
+minimal unembeddable graphs, as defined below.
+Definition 10 (Minimal Unembeddable Graph). An unembeddable graph G is
+said to be a minimal unembeddable graph if any proper subgraph of G is embeddable.
+    A graph is unembeddable if and only if it contains a minimal unembeddable sub-
+graph. To optimize embeddability checking, we precomputed all minimal unembeddable
+graphs of orders up to and including 12. We only consider squarefree graphs with a
+minimum degree of 2 or greater, as the square graph C4 is minimally unembeddable
+itself, and a graph containing a vertex of degree 0 or 1 is not minimally unembeddable.
+We implement the unembeddable subgraph blocking technique as part of MathCheck.
+If a graph contains one of the 17 minimal unembeddable graphs up to order 12 as
+a subgraph, the graph is blocked dynamically and is not considered as a satisfying
+assignment by MathCheck. This technique leads to a significant reduction of the
+number of satisfying assignment (candidates) generated by the SAT+CAS solver.
+
+7 Parallelization
+In prior applications of the CnC technique [71, 72], the cubing solver generates a
+collection of cubes before the conquering solver is invoked. Subsequently, each of these
+subproblems is solved using the conquering solver in parallel. However, this approach
+presents two primary challenges. Firstly, the generated cubes might exhibit imbalanced
+solving times, especially since the cubing solver does not have the ability to call
+the CAS to incorporate isomorph-free generation. Secondly, the proof size for each
+subproblem also varies, making it difficult to allocate an appropriate amount of memory
+to individual cores. In MathCheck, we implement a slight modification of traditional
+CnC practices to resolve the above challenges. In addition, we use a new CnC solver
+AlphaMapleSAT [73] that provides significant speedup for the cubing process.
+    In our proposed method, the cubing solver of AlphaMapleSAT operates on
+a much smaller CNF instance obtained by omitting all non-colorability constraints
+(Section 4.4). This approach is substantiated by empirical evidence suggesting that the
+same set of cubes can be obtained even without the non-colorability constraints. Alpha-
+MapleSAT iteratively generates cubes until the total number of cubes surpasses a
+predefined cutoff, which is based on available computational resources. Following cube
+generation, each subproblem is processed by the simplifcation solver (CaDiCaL with
+OG), and then it is passed to the conquering solver (MapleSAT with OG) and solved
+in parallel. To efficiently manage the termination of each subproblem, a termination
+strategy is implemented: if the proof size for a subproblem exceeds 7 GiB, the problem
+
+
+
+                                           15
+               n    SAT+CAS          SMS       CAS-only     SAT-only
+               17       0.3 m        0.2 m       25.2 m          9.0 m
+               18       1.8 m        1.2 m      455.4 m        266.4 m
+               19       9.0 m        8.4 m     9506.4 m     11,705.8 m
+               20     140.5 m      100.8 m      timeout        timeout
+               21    1945.0 m     1574.4 m      timeout        timeout
+Table 4: SAT+CAS vs. SMS, CAS-only (nauty), and SAT-only: The total CPU time
+(in minutes) compared on orders 17 ≤ n ≤ 21. All tools are sequential. For higher
+orders, CAS-only and SAT-only time out at 12,000 minutes.
+
+
+                     Number of Cubes              Total CPU time
+               n    SAT+CAS     SMS            SAT+CAS      SMS
+               22      26,646      18,659          932 h        628.1 h
+               23     173,097     313,665       12,116 h     11,921.8 h
+Table 5: Parallel CnC SAT+CAS vs. parallel SMS: The number of cubes and total
+CPU time for the parallel versions of SAT+CAS and the SAT Modulo Symmetries
+tool on orders 22 ≤ n ≤ 23.
+
+
+is further divided into more cubes and solved accordingly. This iterative process
+continues until every subproblem can be resolved with proof sizes under 7 GiB. We
+overcome the challenges posed by varying proof sizes by implementing this slight
+modification and it allows us to verify all generated proof certificates with at most
+4 GiB of memory allocation.
+
+8 Results
+8.1 Experimental Setup
+Results in Table 4 were conducted on a cluster of Intel E5-2683 v4 Broadwell @ 2.1GHz
+CPUs, each with access to 4 GiB of RAM and running 64-bit CentOS Linux 7. Results
+in Table 5 were conducted on a cluster of Dual Intel Xeon Gold 6226 CPUs @ 2.7 GHz
+(24 cores/node). We used the g++ compiler version 9.3.0 with option -O3 to compile
+the SAT solvers used. 24 CPUs were used to solve and verify order 22 (in about 4
+days wall clock time), and 240 CPUs were used for order 23 (in about 7 days wall
+clock time). To compare MathCheck against other approaches, we computed the
+total CPU time used by all processes in the solving process, including simplification,
+cubing, SAT solving, CAS queries, and embeddability checking.
+
+8.2 Key Findings
+Tables 4 and 5 contain our experimental results. As can be seen from Table 4, the
+sequential version of MathCheck outperforms the sequential SAT-only (MapleSAT)
+
+
+                                         16
+                   (a)                                            (b)
+Fig. 4: The only two KS candidates up to order 23 that do not contain minimal
+nonembeddable graphs up to and including order 14. These two graphs are determined
+to be unembeddable by Z3.
+
+
+and CAS-only (nauty) tools. Further, the sequential MathCheck is comparable to
+sequential SMS on orders 17 to 21, even with proof production switched on. (Note
+that we are using the results reported by the SMS authors [19] which did not include
+generating proofs.)
+    The sequential MathCheck also outperforms the parallel tool of [18]. For example,
+for order 21, sequential MathCheck takes about 32.4 hours while their tool took 3
+months on 300 CPUs in 2014 (the exact kind of CPUs used are not specified). Further,
+their tool does not solve orders 22 or greater.
+    For higher orders of KS (i.e., 22 and 23), we do not expect the sequential versions of
+MathCheck and SMS to scale in a reasonable amount of time, and hence we compare
+only their parallel CnC versions (Table 5). The authors of SMS also do not report
+on the performance of their sequential version for orders 22 and 23. In comparison
+to SMS, our approach was hindered due to our generating and verifying all proof
+certificates—requiring us to ensure each proof certificate did not grow too large in order
+to permit effective verification. Such an approach requires splitting each cube whose
+proof certificate grows too large, and this additional splitting slows down our approach.
+    Our method benefits from dynamically blocking minimal unembeddable subgraphs
+up to order 12, which enables MathCheck to generate significantly fewer KS candi-
+dates compared to [19]. Specifically, we generate a single candidate in order 22 and
+41 candidates in order 23, while Kirchweger et al. generates 88,282 and 3,747,950
+candidates respectively.
+    We compared our KS candidates with Uijlen and Westerbaan’s findings, and verified
+their conclusion that there is no KS system with strictly less than 22 vectors. In order
+20, we found four additional KS candidates that were not present in the collection of
+Uijlen and Westerbaan, indicating that their search missed some KS candidates. We
+present one of the missing graphs in Figure 5. We verified that these four additional
+graphs satisfy the constraints of a KS candidate and therefore would be KS systems
+were they embeddable, but unfortunately, they are not.
+
+
+                                           17
+    Another notable question we address is the existence of a complex KS vector system.
+Specifically, is there a KS graph that can be embedded over the complex sphere? We
+employ a similar embeddability verification pipeline as mentioned earlier, with the
+distinction that vectors now may possess complex number coordinates. We discover
+that each KS graph up to order 23 either contains a complex unembeddable subgraph
+or is determined to be unembeddable over the complex numbers via Z3. Therefore, we
+conclude that the minimum size for both the real and complex KS system are at least
+24.
+
+
+
+
+Fig. 5: One of the four graphs with 20 vertices that were not present in Uijlen
+and Westerbaan’s enumeration. The four graphs satisfy all constraints mentioned in
+Section 4, but are not embeddable, and therefore do not constitute a KS system.
+
+
+
+
+9 Verification of Results
+In order to verify the computations produced by MathCheck, we use DRAT proof
+logging which is standard in all modern SAT solvers. This makes it possible for a
+third-party proof verifier to provide an independent certification of the correctness
+of the solver’s conclusion (assuming the input Boolean formula correctly encodes the
+minimum KS problem). A DRAT proof consists of a trace of the clauses learned by
+the solver during its execution. A proof verifier checks that each clause can be derived
+from the previous clauses using simple rules known to be logically consistent. The CAS-
+derived noncanonical blocking clauses cannot be verified using the normal rules, so we
+specially tag them to be verified separately. Specifically, they are justified via a CAS-
+derived permutation that, when applied to the blocked adjacency matrix, produces
+a lex-smaller adjacency matrix—and therefore provides a witness that the blocked
+matrix is noncanonical and is safe to block. Similarly, the unembeddable subgraph
+blocking clauses are justified by a CAS-derived permutation that when applied to the
+
+
+                                           18
+blocked subgraph transforms it into one of the minimal unembeddable subgraphs (see
+Section 6).
+    The CAS-derived clauses in the DRAT proof are prefixed by the character ‘t’
+to signify they should be trusted and we modified DRAT-trim [74] to trust such
+clauses following the approach first used in [75]. The trusted CAS-derived clauses are
+separately verified by a permutation-applying Python script that applies the witnesses
+produced by the CAS to verify the blocked matrices are noncanonical or unembeddable.
+Similarly, when a KS candidate is found, the solver learns a trusted clause blocking
+the candidate (so that the search continues until all candidates have been found). The
+DRAT proof ends with the empty clause, which by definition is not satisfiable. If the
+verifier is indeed able to verify the empty clause then we can have confidence that the
+SAT solver’s search missed no candidates without needing to trust the solver.
+    All results have been certified. The uncompressed proofs for order 22 are about
+6.1 TiB in total, and 40.3 TiB for order 23. The certification for orders 22 and 23
+required using CnC (as described in Sec. 7) to ensure that each DRAT proof could be
+verified with at most 4 GiB of memory.
+    All KS candidates produced by our method have been extensively checked. For
+example, each KS candidate is passed into a verification script implemented using the
+NetworkX [76] graph package to verify that they satisfy all encoded constraints (see
+Section 4). Further, we test the embeddability pipeline by performing a verification on
+all squarefree graphs of order up to 12 with minimal vertex degree 2. Specifically, if a
+graph is embeddable and corresponds to a set of vectors, we check that no pair of vectors
+in the set are collinear, and a pair of vectors are orthogonal if their corresponding
+vertices are connected.
+
+10 Conclusion
+We give a computer-assisted proof showing that a KS vector system in three dimensions
+must contain at least 24 vectors. Crucially, our proof is verifiable by an independent
+third-party proof checker. In addition, we provide a computational speedup of over four
+orders of magnitude over the previously used approach of Uijlen and Westerbaan [18].
+For the first time, we successfully implemented and applied the SAT+CAS paradigm
+along with orderly isomorph-free generation to provide a robust pipeline for problems
+in quantum foundations. The validity of our work is further confirmed by Kirchweger,
+Peitl, Szeider [19], who performed an independent search for KS systems with up to
+23 vectors with a similar approach as our technical report [77] using a SAT modulo
+symmetries (SMS) solver. Compared to previous work, our approach is less error-
+prone since we use heavily-tested proof-generating SAT solvers such as MapleSAT and
+CaDiCaL. We verified the produced proofs using independent proof checkers, meaning
+our result does not rely on the correctness of MapleSAT or CaDiCaL.
+    Finding the minimum KS system has remained stubbornly open for over 55 years.
+It is not only a problem of great importance to quantum foundations, but has direct
+applications to various fields of quantum information processing, such as quantum
+cryptographic protocols [7], zero-error classical communication [8], and dimension
+witnessing [9]. As a consequence, a wide variety of techniques have been developed to
+
+
+
+                                           19
+address this question over the past several decades. We add a novel class of techniques
+to this body of work.
+    The SAT+CAS paradigm has been successfully used to resolve a number of
+mathematical problems in combinatorics, number theory, and geometry that had
+previously remained unsolved for many decades [39, 41, 46]. With this work, we extend
+the reach of the SAT+CAS paradigm, for the first time, to resolving combinatorial
+questions in the realm of quantum foundations.
+
+Code Availability
+The MathCheck pipeline is open-source and can be accessed at https://github.com/
+BrianLi009/MathCheck.
+
+Acknowledgements
+This research was enabled in part by support provided by Compute Ontario
+(https://www.computeontario.ca/) and the Digital Research Alliance of Canada
+(alliancecan.ca).
+
+References
+ [1] Held, C.: The Kochen-Specker Theorem. Metaphysics Research Lab, Stanford
+     University (2000). https://plato.stanford.edu/entries/kochen-specker/
+
+ [2] Bell, J.S.: Speakable and Unspeakable in Quantum Mechanics: Collected Papers
+     on Quantum Philosophy. Cambridge University Press, Cambridge (2004). https:
+     //doi.org/10.1017/CBO9780511815676
+
+ [3] Kochen, S., Specker, E.P.: The Problem of Hidden Variables in Quantum
+     Mechanics. Journal of Mathematics and Mechanics 17, 59–87 (1967) https:
+     //doi.org/10.1007/978-94-010-1795-4 17
+
+ [4] Bell, J.S.: On the problem of hidden variables in quantum mechanics. Rev. Mod.
+     Phys. 38, 447–452 (1966) https://doi.org/10.1103/RevModPhys.38.447
+
+ [5] Conway, J., Kochen, S.: The free will theorem. Foundations of Physics 36, 1441–
+     1473 (2006) https://doi.org/10.1007/s10701-006-9068-6
+
+ [6] Cañas, G., Arias, M., Etcheverry, S., Gómez, E.S., Cabello, A., Xavier, G.B., Lima,
+     G.: Applying the simplest Kochen-Specker set for quantum information processing.
+     Physical Review Letters 113(9) (2014) https://doi.org/10.1103/physrevlett.113.
+     090404
+
+ [7] Cabello, A., D’Ambrosio, V., Nagali, E., Sciarrino, F.: Hybrid ququart-encoded
+     quantum cryptography protected by Kochen-Specker contextuality. Physical
+     Review A 84(3), 030302 (2011) https://doi.org/10.1103/PhysRevA.84.030302
+
+
+                                           20
+ [8] Cubitt, T.S., Leung, D., Matthews, W., Winter, A.: Improving zero-error classical
+     communication with entanglement. Physical Review Letters 104(23), 230503
+     (2010) https://doi.org/10.1103/PhysRevLett.104.230503
+
+ [9] Gühne, O., Budroni, C., Cabello, A., Kleinmann, M., Larsson, J.-Å.: Bounding
+     the quantum dimension with contextuality. Physical Review A 89(6), 062107
+     (2014) https://doi.org/10.1103/PhysRevA.89.062107
+
+[10] Santos, E.: Critical analysis of the empirical tests of local hidden-variable theories.
+     Phys. Rev. A 46, 3646–3656 (1992) https://doi.org/10.1103/PhysRevA.46.3646
+
+[11] Larsson, J.-Å.: A kochen-specker inequality. Europhysics Letters 58(6), 799 (2002)
+
+[12] Kochen, S., Specker, E.P.: The problem of hidden variables in quantum mechanics.
+     In: The Logico-Algebraic Approach to Quantum Mechanics, pp. 293–328. Springer,
+     Dordrecht (1975). https://doi.org/10.1007/978-94-010-1795-4 17
+
+[13] Peres, A.: Two simple proofs of the Kochen–Specker theorem. Journal of Physics A:
+     Mathematical and General 24(4), 175 (1991) https://doi.org/10.1088/0305-4470/
+     24/4/003
+
+[14] Peres, A.: Quantum theory: concepts and methods 72 (1997) https://doi.org/10.
+     1007/0-306-47120-5
+
+[15] Bub, J.: Schütte’s tautology and the Kochen–Specker theorem. Foundations of
+     Physics 26(6), 787–806 (1996) https://doi.org/10.1007/bf02058633
+
+[16] Cabello, A.: How many questions do you need to prove that unasked questions
+     have no answers? International Journal of Quantum Information 04(01), 55–61
+     (2006) https://doi.org/10.1142/s021974990600161x
+
+[17] Arends, F., Ouaknine, J., Wampler, C.W.: On searching for small Kochen-Specker
+     vector systems (2011). https://doi.org/10.1007/978-3-642-25870-1 4
+
+[18] Uijlen, S., Westerbaan, B.: A Kochen-Specker system has at least 22 vec-
+     tors. New Generation Computing 34(1), 3–23 (2016) https://doi.org/10.1007/
+     s00354-016-0202-5
+
+[19] Kirchweger, M., Peitl, T., Szeider, S.: Co-Certificate Learning with SAT Modulo
+     Symmetries. International Joint Conferences on Artificial Intelligence Organization,
+     California. Main Track, to appear (2023). https://doi.org/10.48550/arXiv.2306.
+     10427
+
+[20] Pavičić, M.: Arbitrarily exhaustive hypergraph generation of 4-, 6-, 8-, 16-, and
+     32-dimensional quantum contextual sets. Physical Review A 95(6), 062121 (2017)
+
+[21] Budroni, C., Cabello, A., Gühne, O., Kleinmann, M., Larsson, J.-Å.: Kochen-
+     specker contextuality. Reviews of Modern Physics 94(4), 045007 (2022)
+
+
+                                            21
+[22] Held, C.: Kochen–Specker theorem. In: Compendium of Quantum Physics,
+     pp. 331–335. Springer, Berlin, Heidelberg (2009). https://doi.org/10.1007/
+     978-3-540-70626-7 104
+
+[23] Pavičić, M.: Hypergraph contextuality. Entropy 21(11), 1107 (2019)
+
+[24] Pavičić, M., Merlet, J.-P., McKay, B., Megill, N.D.: Kochen–Specker vectors.
+     Journal of Physics A: Mathematical and General 38(7), 1577 (2005)
+
+[25] Pavičić, M.: Quantum contextuality. Quantum 7, 953 (2023)
+
+[26] Peres, A.: Two simple proofs of the Kochen–Specker theorem. Journal of Physics
+     A: Mathematical and General 24(4), 175–178 (1991) https://doi.org/10.1088/
+     0305-4470/24/4/003
+
+[27] Pavicic, M., Megill, N.D.: Automated generation of arbitrarily many Kochen-
+     Specker and other contextual sets in odd-dimensional Hilbert spaces. Phys.
+     Rev. A 106(6), 060203–1 (2022) https://doi.org/10.1103/PhysRevA.106.L060203
+     arXiv:2202.08197 [quant-ph]
+
+[28] Biere, A., Heule, M., Maaren, H., Walsh, T. (eds.): Handbook of Satisfiability.
+     IOS Press, Amsterdam (2021). https://doi.org/10.3233/faia336
+
+[29] Ganesh, V., Vardi, M.Y.: On the Unreasonable Effectiveness of SAT Solvers.
+     Cambridge University Press, Cambridge (2020). https://doi.org/10.1017/
+     9781108637435.032
+
+[30] Metin, H., Baarir, S., Colange, M., Kordon, F.: CDCLSym: Introducing Effective
+     Symmetry Breaking in SAT Solving. Springer, New York (2018). https://doi.org/
+     10.1007/978-3-319-89960-2 6
+
+[31] Bright, C., Kotsireas, I., Ganesh, V.: When satisfiability solving meets symbolic
+     computation. Communications of the ACM 65(7), 64–72 (2022) https://doi.org/
+     10.1145/3500921
+
+[32] Aloul, F.A., Sakallah, K.A., Markov, I.L.: Efficient Symmetry Breaking for Boolean
+     Satisfiability. Morgan Kaufmann Publishers Inc., San Francisco, CA, USA (2003).
+     https://dl.acm.org/doi/10.5555/1630659.1630699
+
+[33] Barrett, C., Fontaine, P., Tinelli, C.: The Satisfiability Modulo Theories Library
+     (SMT-LIB). www.SMT-LIB.org (2016)
+
+[34] Zulkoski, E., Ganesh, V., Czarnecki, K.: MathCheck: A Math Assistant via a
+     Combination of Computer Algebra Systems and SAT Solvers. Springer, Cham
+     (2015). https://doi.org/10.1007/978-3-319-21401-6 41
+
+[35] Ábrahám, E.: Building bridges between symbolic computation and satisfiability
+     checking (2015). https://doi.org/10.1145/2755996.2756636
+
+
+                                          22
+[36] Kaufmann, D., Biere, A.: Improving AMulet2 for verifying multiplier circuits
+     using SAT solving and computer algebra. International Journal on Software Tools
+     for Technology Transfer (2023) https://doi.org/10.1007/s10009-022-00688-6
+
+[37] Mahzoon, A., Große, D., Scholl, C., Konrad, A., Drechsler, R.: Formal verification
+     of modular multipliers using symbolic computer algebra and boolean satisfiability.
+     In: Proceedings of the 59th ACM/IEEE Design Automation Conference. ACM,
+     New York (2022). https://doi.org/10.1145/3489517.3530605
+
+[38] Mahzoon, A., Große, D., Drechsler, R.: Combining symbolic computer algebra and
+     boolean satisfiability for automatic debugging and fixing of complex multipliers.
+     In: 2018 IEEE Computer Society Annual Symposium on VLSI (ISVLSI), pp.
+     351–356 (2018). https://doi.org/10.1109/ISVLSI.2018.00071
+
+[39] Heule, M.J.H., Kauers, M., Seidl, M.: New ways to multiply 3×3-matrices. Journal
+     of Symbolic Computation 104, 899–916 (2021) https://doi.org/10.1016/j.jsc.2020.
+     10.003
+
+[40] Neiman, D., Mackey, J., Heule, M.: Tighter bounds on directed Ramsey num-
+     ber R(7). Graphs and Combinatorics 38(5) (2022) https://doi.org/10.1007/
+     s00373-022-02560-5
+
+[41] Bright, C., Ganesh, V., Heinle, A., Kotsireas, I., Nejati, S., Czarnecki, K.:
+     MathCheck2: A SAT+CAS verifier for combinatorial conjectures (2016). https:
+     //doi.org/10.1007/978-3-319-45641-6 9
+
+[42] England, M.: SC-Square: Overview to 2021. In: Bright, C., Davenport, J. (eds.)
+     Proceedings of the 6th SC-Square Workshop, pp. 1–6 (2022). https://ceur-ws.org/
+     Vol-3273/invited1.pdf
+
+[43] Jost, R.: Measures on the finite dimensional subspaces of a Hilbert space:
+     remarks to a theorem by A. M. Gleason. Studies in Mathematical Physics:
+     Essays in Honour of Valentine Bergmann, 209–228 (1976) https://doi.org/10.
+     1515/9781400868940-011
+
+[44] Li, Z., Bright, C., Ganesh, V.: An sc-square approach to the minimum kochen-
+     specker problem. In: Uncu, A.K., Barbosa, H. (eds.) Proceedings of the 7th
+     SC-Square Workshop Co-located with the Federated Logic Conference, SC-
+     Square@FLoC 2022, as a Part of the 11th International Joint Conference on
+     Automated Reasoning, IJCAR 2022, Haifa, Israel, August 12, 2022. CEUR
+     Workshop Proceedings, vol. 3458, pp. 55–66. CEUR-WS.org, ??? (2022). https:
+     //ceur-ws.org/Vol-3458/paper6.pdf
+
+[45] Zhengyu Li, V.G. Curtis Bright: A sat solver and computer algebra attack on the
+     minimum kochen-specker problem. In: Proceedings of the AAAI Conference on
+     Artificial Intelligence (2024)
+
+
+
+                                          23
+[46] Bright, C., Cheung, K.K.H., Stevens, B., Kotsireas, I., Ganesh, V.: A SAT-
+     based Resolution of Lam’s Problem. AAAI Press, California USA (2021). https:
+     //doi.org/10.1609/aaai.v35i5.16483
+
+[47] Junttila, T., Karppa, M., Kaski, P., Kohonen, J.: An adaptive prefix-assignment
+     technique for symmetry reduction. Journal of Symbolic Computation 99, 21–49
+     (2020) https://doi.org/10.1016/j.jsc.2019.03.002
+
+[48] Savela, J., Oikarinen, E., Järvisalo, M.: Finding Periodic Apartments via Boolean
+     Satisfiability and Orderly Generation. EasyChair, UK (2020). https://doi.org/10.
+     29007/k8jd
+
+[49] Crawford, J.M., Ginsberg, M.L., Luks, E.M., Roy, A.: Symmetry-breaking
+     predicates for search problems. In: Proceedings of the Fifth International Con-
+     ference on Principles of Knowledge Representation and Reasoning. KR’96, pp.
+     148–159. Morgan Kaufmann Publishers Inc., San Francisco, CA, USA (1996).
+     https://dl.acm.org/doi/10.5555/3087368.3087386
+
+[50] Heule, M.J.H.: Optimal symmetry breaking for graph problems. Mathe-
+     matics in Computer Science 13(4), 533–548 (2019) https://doi.org/10.1007/
+     s11786-019-00397-5
+
+[51] Sellmann, M., Hentenryck, P.V.: Structural Symmetry Breaking. Professional
+     Book Center, California (2005). http://ijcai.org/Proceedings/05/Papers/1121.pdf
+
+[52] Kirchweger, M., Szeider, S.: SAT Modulo Symmetries for Graph Generation.
+     Schloss Dagstuhl, Dagstuhl, Germany (2021). https://doi.org/10.4230/LIPIcs.CP.
+     2021.34
+
+[53] Kirchweger, M., Scheucher, M., Szeider, S.: A SAT Attack on Rota’s Basis
+     Conjecture. Schloss Dagstuhl - Leibniz-Zentrum für Informatik (2022). https:
+     //doi.org/10.4230/LIPICS.SAT.2022.4
+
+[54] Bright, C., Kotsireas, I., Ganesh, V.: Applying computer algebra systems with
+     SAT solvers to the Williamson conjecture. Journal of Symbolic Computation 100,
+     187–209 (2020) https://doi.org/10.1016/j.jsc.2019.07.024
+
+[55] Gerlach, W., Stern, O.: Der experimentelle nachweis der richtungsquantelung im
+     magnetfeld. Zeitschrift für Physik 9, 349–352 (1922) https://doi.org/10.1007/
+     BF01326983
+
+[56] Huang, Y.-F., Li, C.-F., Zhang, Y.-S., Pan, J.-W., Guo, G.-C.: Experimental
+     test of the Kochen-Specker theorem with single photons. Physical Review Letters
+     90(25) (2003) https://doi.org/10.1103/physrevlett.90.250401
+
+[57] Pavičić, M., Merlet, J.-P., McKay, B., Megill, N.D.: Kochen–Specker vectors.
+     Journal of Physics A: Mathematical and General 38(7), 1577–1592 (2005) https:
+
+
+                                          24
+    //doi.org/10.1088/0305-4470/38/7/013
+
+[58] Heule, M.J.H., Kullmann, O., Wieringa, S., Biere, A.: Cube and conquer:
+     Guiding CDCL SAT solvers by lookaheads (2011). https://doi.org/10.1007/
+     978-3-642-34188-5 8
+
+[59] Heule, M.J.H., Kullmann, O., Marek, V.W.: Solving and verifying the boolean
+     pythagorean triples problem via cube-and-conquer. In: Creignou, N., Le Berre, D.
+     (eds.) Theory and Applications of Satisfiability Testing – SAT 2016, pp. 228–245.
+     Springer, Cham (2016). https://doi.org/10.1007/978-3-319-40970-2 15
+
+[60] Heule, M.: Schur number five. In: Proceedings of the AAAI Conference on Artificial
+     Intelligence, vol. 32. AAAI Press, California (2018). https://doi.org/10.1609/aaai.
+     v32i1.12209
+
+[61] McKay, B.D., Piperno, A.: Practical graph isomorphism, II. Journal of Symbolic
+     Computation 60, 94–112 (2014) https://doi.org/10.1016/j.jsc.2013.09.003
+
+[62] Lisoněk, P., Badzia̧g, P., Portillo, J.R., Cabello, A.: Kochen-Specker set with seven
+     contexts. Physical Review A 89(4) (2014) https://doi.org/10.1103/physreva.89.
+     042101
+
+[63] Codish, M., Miller, A., Prosser, P., Stuckey, P.J.: Constraints for symmetry
+     breaking in graph representation. Constraints 24(1), 1–24 (2019) https://doi.org/
+     10.1007/s10601-018-9294-5
+
+[64] Knuth, D.E.: The Art of Computer Programming, Volume 4, Fascicle 6: Satisfia-
+     bility. Addison-Wesley Professional, Massachusetts (2015). https://dl.acm.org/
+     doi/abs/10.5555/2898950
+
+[65] Read, R.C.: Every one a winner or how to avoid isomorphism search when
+     cataloguing combinatorial configurations. Elsevier, Amsterdam (1978). https:
+     //doi.org/10.1016/S0167-5060(08)70325-X
+
+[66] Faradžev, I.A.: Constructive enumeration of combinatorial objects (1978)
+
+[67] Biere, A., Fazekas, K., Fleury, M., Heisinger, M.: CaDiCaL, Kissat, Paracooba,
+     Plingeling and Treengeling Entering the SAT Competition 2020. University of
+     Helsinki, Helsinki (2020). http://hdl.handle.net/10138/318754
+
+[68] Liang, J.H., Ganesh, V., Poupart, P., Czarnecki, K.: Learning Rate Based Branch-
+     ing Heuristic for SAT Solvers (2016). https://doi.org/10.1007/978-3-319-40970-2
+     9
+
+[69] de Moura, L., Bjørner, N.: Z3: An efficient SMT solver (2008). https://doi.org/10.
+     1007/978-3-540-78800-3 24
+
+[70] Jovanović, D., de Moura, L.: Solving non-linear arithmetic (2012). https://doi.
+
+
+                                            25
+    org/10.1007/978-3-642-31365-3 27
+
+[71] Heule, M.J.H., Kullmann, O., Marek, V.W.: Solving very hard problems: Cube-
+     and-conquer, a hybrid SAT solving method. In: IJCAI, vol. 17, pp. 228–245 (2017).
+     https://doi.org/10.24963/ijcai.2017/683
+
+[72] Heule, M.J.H., Kullmann, O., Marek, V.W.: Solving and verifying the boolean
+     Pythagorean triples problem via cube-and-conquer. In: International Conference
+     on Theory and Applications of Satisfiability Testing, pp. 228–245. Springer, Cham
+     (2016). https://doi.org/10.1007/978-3-319-40970-2 15
+
+[73] Jha, P., Li, Z., Lu, Z., Bright, C., Ganesh, V.: AlphaMapleSAT: An MCTS-based
+     Cube-and-Conquer SAT Solver for Hard Combinatorial Problems. arXiv preprint
+     arXiv:2401.13770 (2024)
+
+[74] Wetzler, N., Heule, M.J.H., Hunt, W.A.: DRAT-trim: Efficient checking and
+     trimming using expressive clausal proofs. In: Lecture Notes in Computer Sci-
+     ence vol. 8561, pp. 422–429. Springer, Cham (2014). https://doi.org/10.1007/
+     978-3-319-09284-3 31
+
+[75] Bright, C., Cheung, K.K.H., Stevens, B., Kotsireas, I., Ganesh, V.: Nonexistence
+     certificates for ovals in a projective plane of order ten. In: Lecture Notes in
+     Computer Science vol. 12126, pp. 97–111. Springer, Cham (2020). https://doi.
+     org/10.1007/978-3-030-48966-3 8
+
+[76] Hagberg, A.A., Schult, D.A., Swart, P.J.: Exploring Network Structure, Dynamics,
+     and Function using NetworkX, Pasadena, CA USA (2008). https://www.osti.gov/
+     biblio/960616
+
+[77] Li, Z., Bright, C., Ganesh, V.: A SAT Solver + Computer Algebra Attack on
+     the Minimum Kochen–Specker Problem. Technical report, https://cs.curtisbright.
+     com/reports/nmi-ks-preprint.pdf (2022)
+
+
+
+
+                                         26
+

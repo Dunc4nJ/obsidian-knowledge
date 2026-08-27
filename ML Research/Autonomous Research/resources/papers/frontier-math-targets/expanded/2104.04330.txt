@@ -1,0 +1,2321 @@
+                                            EQUIANGULAR LINES IN EUCLIDEAN SPACES: DIMENSIONS 17 AND 18
+
+                                                               GARY R.W. GREAVES, JEVEN SYATRIADI, AND PAVLO YATSYNA
+
+
+
+
+                                                    Abstract. We show that the maximum cardinality of an equiangular line system in 17 dimensions
+                                                    is 48, thereby solving a longstanding open problem. Furthermore, by giving an explicit construc-
+                                                    tion, we improve the lower bound on the maximum cardinality of an equiangular line system in
+                                                    18 dimensions to 57.
+arXiv:2104.04330v2 [math.CO] 31 Jan 2023
+
+
+
+
+                                                                                         1. Introduction
+                                              A set of lines each passing through the origin of Euclidean space is called an equiangular line
+                                           system if the angle between any pair of lines is the same. Given d, we would like to know N (d), the
+                                           maximum cardinality of an equiangular line system in Rd . This problem dates back to a paper of
+                                           Haantjes [20] from 1948, where the results N (3) = N (4) = 6 were reported. The study of equiangular
+                                           line systems largely developed in the 1970s due to the advent of the linear algebraic approach of
+                                           Seidel et al. [26, 28, 32]. In particular, in 1973, the value of N (d) was known for all d ⩽ 13, d = 15,
+                                           and d = 21, 22, 23.
+                                              Recently, the authors solved the problem for dimensions 14 and 16 [18]. However, up until now,
+                                           and despite a considerable amount of research in the past 50 years, determining the value of N (17)
+                                           had remained an open problem. Our main result is the following
+                                           Theorem 1.1. N (17) = 48 and N (18) ⩾ 57.
+                                              Our work disproves part of a conjecture of Lin and Yu [27, Conjecture 3] that asserts N (18) = 56;
+                                           at the same time we verify another part of their conjecture that asserts N (17) = 48.
+                                              Many of the largest constructions of equiangular line systems are found by carefully select-
+                                           ing blocks from the famous Witt design. Recently, the lower bound for N (18) was improved by
+                                           Szöllősi [34] and again by Lin and Yu [27] by exactly this method. In contrast, the configuration of
+                                           57 equiangular lines in R18 that is presented below was found using vectors from integer lattices.
+                                              In addition to the recent developments in R18 , there have been many developments relating to
+                                           the sequence (N (d))d∈N in the last few years, including improvements to the upper bounds for N (d)
+                                           where d = 14, 16, 17, 18, 19, 20 [1, 2, 16, 17, 18, 19]. There have also been various recent improvements
+                                           to upper bounds for N (d) for d ⩾ 24 using semidefinite programming, see [14, 24, 25, 31, 38].
+                                              The asymptotic behaviour of N (d) is quadratic in d with a general upper bound of d(d + 1)/2 [26,
+                                           Theorem 3.5] and a general lower bound of (32d2 + 328d + 29)/1089 [17, Corollary 2.8]. One can
+                                           also consider the related problem of, for fixed α ∈ (0, 1), finding Nα (d), the maximum number of
+                                           lines in Rd through the origin with pairwise angle arccos α. In a series of recent papers [3, 4, 22], the
+                                           problem of determining the value of limd→∞ Nα (d)/d was investigated extensively and completely
+                                           resolved in [23].
+                                              In Table 1 below, including the improvements from this paper, we give the currently known
+                                           values or lower and upper bounds for N (d) for d at most 43. (See Sequence A002853 in The On-Line
+                                           Encyclopedia of Integer Sequences [33].)
+
+                                              2020 Mathematics Subject Classification. Primary 05B40; Secondary 05B20.
+                                              Key words and phrases. Equiangular lines, dimensions 17 and 18, compatible polynomials, eigenspace angles,
+                                           polynomial interlacing.
+                                              The first author was supported in part by the Singapore Ministry of Education Academic Research Fund (Tier 1);
+                                           grant numbers: RG29/18 and RG21/20.
+                                              The third author was supported in part by the project PRIMUS/20/SCI/002 from Charles University.
+                                                                                                   1
+        d 2 3 4 5 6 7–14 15 16 17 18            19   20 21 22 23 – 41       42      43
+       N (d) 3 6 6 10 16 28 36 40 48 57–60 72–74 90–94 126 176 276 276 – 288 344
+       Table 1. Bounds for the sequence N (d) for 2 ⩽ d ⩽ 43. A single number is given
+       in the cases where the exact number is known. The improvements from this paper,
+       N (17) = 48 and N (18) ⩾ 57 are included.
+
+
+
+    Let L be an equiangular line system of cardinality n in Rd with n > d. Suppose {v1 , . . . , vn } is
+a set of unit vectors spanning each line in L. For any two distinct vectors vi and vj (with i 6= j)
+the inner product vi⊺ vj is equal to ±α for some α ∈ (0, 1). Thus, the Gram matrix G for this set
+of vectors has diagonal entries equal to 1 and off-diagonal entries equal to ±α. The {0, ±1}-matrix
+S = (G − I)/α is called the Seidel matrix corresponding to the set of lines L. Note that changing
+the direction of our spanning vectors vi corresponds to conjugating S with a diagonal {±1}-matrix.
+Furthermore, since G is positive semidefinite with rank at most d, the smallest eigenvalue of S is
+−1/α with multiplicity at least n − d.
+    We follow the approach taken by the authors in [18]. First, using geometric and modular restric-
+tions, we produce all polynomials that could potentially be the characteristic polynomial of a Seidel
+matrix that corresponds to 49 equiangular lines in R17 . Once we have this list of candidate charac-
+teristic polynomials, we consider potential sets of characteristic polynomials for the corresponding
+principal submatrices for each polynomial in the list. The extra difficulties we encountered in our
+endeavour to rule out 49 equiangular lines in R17 were twofold. Firstly, the number of candidate
+characteristic polynomials is much larger than the numbers in [18] one obtains for dimensions 14
+and 16. Secondly, there are candidate characteristic polynomials that pass all of the necessary con-
+ditions that were developed in [18]. The main tool we developed to overcome these difficulties was
+the notion of compatibility for polynomials, which we define in Section 4. To produce our exhaustive
+lists of candidate characteristic polynomials, we use the polynomial enumeration algorithm of [18,
+Section 2.3], which we have implemented in Magma [5] and Mathematica [29]. A supplementary
+file containing Magma code for all the computations performed in this paper is available online [15].
+The total running time of all the computations used in this paper is less than 9 hours running on a
+modern PC.
+    The outline of this paper is as follows. In Section 2, we exhibit systems of 57 equiangular lines in
+R18 obtained from integer lattices. In Section 3, we produce all candidate characteristic polynomials
+of Seidel matrices that correspond to putative systems of 49 equiangular lines in R17 . In Section 4,
+we introduce the notion of compatibility for polynomials and in Section 5, we define interlacing
+characteristic polynomials. From this point we are able to start ruling out some of the candidate
+characteristic polynomials from Section 3. Finally, in Sections 6, 7, 8, we gradually introduce
+more tools that allow us to rule out the remaining candidate characteristic polynomials. Tables of
+polynomials and certificates referenced in the main text are given in the appendix.
+
+               2. A construction of 57 equiangular lines in 18 dimensions
+   In this section, we present some constructions of sets of 57 equiangular lines in R18 . The Witt
+design [37] (see also [35, Example 6.6]) is a collection B of 759 8-subsets of P = {0, . . . , 23}. Denote
+by ei the standard basis vector of RP whose ith entry is  Pequal to 1. Let B0 be the subset of blocks
+of B that contain 0. Denote by eP the all-ones vector: i∈P ei . For each B ∈ B0 , define the vector
+                                               X
+                                     vB := 4       ei − 4e0 − eP .
+                                               i∈B
+
+Note that vectors vB have just two distinct entries, equal to −1 and 3. For each i ∈ {1, . . . , 23},
+define the vector wi := 8ei + 4e0 − eP . Then the lines spanned by the vectors in V := {vB : B ∈
+B0 } ∪ {wi : i ∈ {1, . . . , 23}} form 276 equiangular lines in R23 (each vector in V is orthogonal to
+4e0 + eP ). The previous largest known equiangular line systems consisting of 54 and 56 lines in R18
+                                                     2
+were both found by “searching inside the Witt design” [27, 34], i.e., finding subsets W ⊂ V such
+                                                                                                   18
+that the vectors in W form a set of spanning vectors for a system of equiangular lines in R      √ .
+   In contrast, our constructions, presented below, consist of integer vectors of length 10. We
+begin by constructing the set L0 = {v ∈ Z18 : v⊺ v = 10}, which has cardinality 36,808,740. Next,
+                                                                                            ⊺
+we pick at random a vector v1 ∈ L0 . Then we form the subset L1 := {v ∈ L0 : v v1 = ±2}. We
+                                                                                        ⊺
+again, pick at random a vector v2 ∈ L1 and form the subset L2 := {v ∈ L1 : v v2 = ±2}. Repeat
+this process until we have v1 , . . . , v18 , where vi ∈ Li−1 and Li := {v ∈ Li−1 : v⊺ vi = ±2}, for
+each i ∈ {1, . . . , 18}. If v1 , . . . , v18 are not linearly independent then we start the process again.
+Otherwise, we form a graph G whose vertex set is L18 where two vectors v and w are adjacent
+if v⊺ w = ±2. The vectors v1 , . . . , v18 together with a clique from G form spanning vectors for a
+system of equiangular lines in R18 . The sets of 57 vectors in Figures 1, 2, 3, and 4 were found by
+following the process described above.
+  2 2 0 0 + 0 0 0 0 0 0 0 0 0 0 0 0 − 0 − 0 − 0 0 + 0 0 + + + + + + + + + − + 0 0 + + − 0 0 0 0 + − − 0 0 0 − 0 0 +
+   0 0 2 2 0 0 0 0 0 0 0 0 0 − 0 0 −+ 0 0 + 0 0 −−−− 0 0 −−+ 0 + 0 0 0 0 + −+−− + 0 +− 0 0 0 0 −− 0 0 − 0
+ 0 −+ 0 2 2 − 0 0 0 0 0 − 0 0 0 + 0 0 0 − 0 + 0 +−− 0 0 +− 0 0 0 0 + 0 −−++− 0 −+++ 0 + 0 0 −+ 0 0 0 0
+ 0 −+− 0 0 2 2 +−− 0 − 0 0 0 0 0 0 ++− 0 0 − 0 − 0 0 0 + 0 + 0 +−− 0 − 0 0 0 − 0 + 0 0 + 0 + 0 0 + 0 0 0 0
+ + 0 0 0 0 0 0 0 2 2 0 0 0 0 + − 0 0 0 0 0 + + + − + − − − 0 + 0 − 0 0 − 0 + − 0 + 0 0 + − 0 0 + + 0 0 − 0 + 0 0 +
+ − 0 0 0 + − 0 0 + − 2 + 0 0 + − 0 0 − 0 0 + + − − − 0 0 0 0 0 0 + + + + + + + + − − 0 0 0 0 0 0 0 0 0 0 0 0 + + +
+  0 − 0 − 0 0 − − 0 0 0 2 0 0 0 + − 0 + − + 0 + − 0 0 − 0 0 0 0 + − − 0 0 0 + + + 0 + − − 0 0 0 0 0 + + + + + − − +
+  0 0 + 0 0 0 0 0 0 0 − − 2 + 0 0 − 0 + + − 0 0 0 − + 0 − 0 + 0 + 0 0 − + + 0 + − 0 + 0 − + 0 0 0 + 0 + − 0 − 0 + +
+ 0 0 − 0 0 + 0 0 −++ 0 0 2 0 0 0 0 0 0 0 + 0 +− 0 0 + 0 −−+++− 0 −+ 0 − 0 0 0 − 0 +− 0 −+−−++−+ 0
+                                                                                                                   
+ 0 − 0 ++ 0 +− 0 0 0 0 0 + 2 + 0 0 + 0 0 +− 0 0 − 0 −+ 0 0 − 0 +−−+ 0 0 0 0 +− 0 0 −++− 0 − 0 0 0 + 0 0
+ + 0 + − − + + 0 0 0 0 − − 0 − 2 0 0 0 − + 0 + + 0 − + − − + 0 − − + 0 + 0 + + 0 − 0 0 0 − + + 0 0 + 0 0 − 0 0 + 0 
+ − + 0 + 0 0 − + 0 0 0 0 0 − − 0 2 − + + 0 + 0 + 0 0 − − + + 0 0 0 0 0 − 0 0 + 0 0 0 0 − − + − + − + + + 0 0 + 0 0 
+ 0 0 0 0 0 0 0 0 0 0 0 +−− 0 − 0 2 0 − 0 0 + 0 0 0 + 0 ++ 0 0 − 0 −−−−+−++− 0 0 0 0 − 0 0 − 0 +−++ 0
+ − + 0 0 − 0 0 + − + + 0 0 0 + 0 0 + − − − − − 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 + + + + + + + + + + + + + + + + +
+  0 0 0 0 0 + − + 0 0 0 − 0 0 0 0 0 − + − + 0 0 − − + 0 + + + + − 0 + − 0 + − 0 0 0 − 0 + − 0 0 0 + − − + + + − 0 +
+  0 0 0 0 0 + 0 0 − + 0 0 + 0 0 − + 0 + 0 + + + − 0 − − 0 + − + 0 0 − + 0 − 0 0 − − 0 + 0 + − + − 0 + − 0 0 − 0 + +
+   + 0 + 0 + 0 0 0 0 0 + 0 −+ − 0 0 0 + + 0 0 0 0 0 + + +− 0 −+ − 0 + 0 + − 0 − 0 0 + + 0 − + +−+ 0 + 0 0 + −+
+   0 0 0 − 0 + 0 + +−− + 0 0 0 0 −−− 0 + +− + + 0 0 + + 0 −−−+ 0 0 0 0 0 −+ 0 + 0 +−−− 0 0 + 0 −+ + 0 +
+
+
+
+         Figure 1. The matrix F1 consisting of 57 (column) vectors in Z18 . The entries ±
+         should be replaced with ±1 entries in the obvious way.
+
+   The Seidel matrix S1 = F1⊺ F1 /2−5I57 corresponding to F1 has characteristic polynomial CharS1 (x) =
+(x + 5)39 (x − 4)(x − 7)(x − 9)2 (x − 11)9 (x − 13)4 (x − 15). Thus the 57 vectors in Figure 1 span 57
+equiangular lines in R18 .
+ 2 2 2 0 0 −+−++ 0 0 0 −+ 0 0 0 0 − 0 0 0 0 0 +−−−+++−++−++ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   0 − 0 2 2 + 0 − 0 0 0 0 0 0 − 0 0 + 0 0 0 0 +−+ + −+ − 0 0 0 0 0 0 0 0 0 + 0 −−−+ 0 0 − 0 0 0 0 0 +− + 0 0
+  0 0 0 − + 2 2 0 + 0 0 0 0 0 0 0 0 + 0 0 0 0 0 0 0 − + 0 0 0 0 0 0 + − 0 0 0 0 − + + − + 0 − − + + − − − 0 − − + +
+  0 0 + 0 0 − 0 2 2 0 0 0 0 + 0 + − 0 0 + 0 0 0 − − + + + + + − 0 − 0 0 + 0 0 0 0 0 0 0 0 − + − 0 0 + 0 − + − + − +
+  0 0 0 + − 0 0 0 + 2 2 0 0 0 0 0 0 + 0 0 0 0 0 0 0 − + 0 0 0 0 0 0 − + 0 0 0 0 − − + − + 0 + + − − − − + 0 − − − −
+ 0 0 0 0 0 0 0 + 0 0 + 2 2 −+ 0 0 − 0 − 0 0 0 0 0 0 0 +−+−−+−−+++ 0 − 0 −−+ 0 0 0 0 0 ++ 0 0 +− 0 0
+  0 0 0 0 0 0 0 0 0 + 0 0 0 2 2 0 0 0 0 0 − − 0 0 0 − 0 0 − 0 0 + + − − 0 − + + 0 + − + − + 0 − + + 0 − 0 + 0 0 − −
+  0 0 0 0 0 0 0 0 0 + 0 0 0 0 0 2 2 0 0 0 − + 0 0 0 − 0 0 − 0 0 − − + + 0 − − + 0 − − + + + 0 − + − 0 + 0 − 0 0 − +
+  0 − + 0 0 0 0 0 0 0 − 0 0 0 0 − + 2 2 0 0 0 − 0 0 0 0 + + 0 0 + 0 − + 0 + + − − + 0 0 0 + − 0 0 0 0 + + 0 + + − +
+                                                                                                                   
+ + 0 0 0 0 + − 0 0 0 + − + 0 0 0 0 − + 2 2 0 0 + − + 0 + 0 0 0 0 + + + 0 0 0 + 0 0 0 0 0 + + + + + − + − 0 0 0 0 0 
+  0 − + + − 0 0 + − 0 0 0 0 0 0 0 0 0 0 − 2 − − 0 0 − − 0 0 + + − 0 0 0 − 0 − − + + 0 0 + − 0 − + 0 0 0 0 − − + 0 −
+ − + 0 0 0 0 − 0 0 0 0 − + + 0 0 0 + − − 0 2 − 0 0 0 + + 0 − + − 0 0 0 − + + 0 + + 0 0 0 + + 0 − − 0 0 − + 0 0 0 0 
+  0 + 0 + − + 0 0 − 0 + − + − 0 0 0 0 + 0 0 − 2 0 + 0 + 0 0 + − 0 − − 0 − 0 − 0 0 + 0 0 − + − 0 0 − + − − + 0 + 0 +
+ + 0 − 0 0 0 + − 0 0 0 + − 0 − + − 0 + 0 0 0 0 2 0 0 + + 0 0 0 − − 0 0 0 − + − + 0 − − − 0 0 0 − + + 0 0 − 0 0 − −
+ − + 0 0 0 0 + 0 0 0 0 0 0 0 − + − 0 0 0 0 0 0 + 2 0 0 + 0 + + + + 0 + + 0 0 + + + + + + 0 + 0 0 0 + 0 + 0 + 0 + +
+ − 0 0 + − 0 0 − 0 + − − + 0 0 − + 0 + − 0 + 0 − − + 0 0 + + − 0 − 0 0 + − 0 + + 0 − − 0 − 0 0 0 + 0 − 0 − + − + 0 
+  0 0 − 0 0 0 − 0 + −+ + − 0 + 0 0 0 − 0 0 0 − 0 + 0 −+ + + − 0 0 0 +− +− + + 0 0 0 0 0 −−−+ −−− 0 + 0 0 0
+  − 0 + +− + 0 0 0 − 0 0 0 − 0 − + 0 0 0 0 −− + 0 0 0 0 −−−− 0 + 0 −− 0 0 0 0 + + 0 −+ −− 0 + 0 + + 0 −− 0
+
+
+
+         Figure 2. The matrix F2 consisting of 57 (column) vectors in Z18 . The entries ±
+         should be replaced with ±1 entries in the obvious way.
+
+   The Seidel matrix S2 = F2⊺ F2 /2 − 5I57 corresponding to F2 in Figure 2 has characteristic poly-
+nomial CharS2 (x) = (x + 5)39 (x − 7)4 (x − 9)(x − 11)5 (x − 13)6 (x2 − 25x + 152).
+   The systems of 57 equiangular lines in R18 given by S1 and S2 above were found by searching
+inside integer lattices as described above. However, we do not know if the Seidel matrices S1 and
+S2 can also be found using lines spanned by vectors derived from blocks of the Witt design.
+Question 2.1. Can the systems of equiangular lines corresponding to S1 and S2 be found inside the
+Witt design?
+   A set of 72 equiangular lines in R19 , known as Asche’s lines (see [17, Example 5.19]) is con-
+structed by forming spanning vectors vB from certain blocks B ∈ B of the Witt design. While
+                                                          3
+we cannot answer Question 2.1, we can find configurations of 57 equiangular lines that are not a
+subset of Asche’s lines. We exhibit two such configurations in Figures 3 and 4. The Seidel matrix
+corresponding to Asche’s lines has characteristic polynomial (x + 5)53 (x − 13)16 (x − 19)3 . Thus, by
+interlacing (see Theorem 4.3), the Seidel matrix corresponding to any subset of 57 lines of Asche’s
+lines, would have (x − 13) as a factor of its characteristic polynomial.
+
+ 2 2 0 + 0 0 −+ 0 0 0 0 0 0 0 − 0 0 − 0 0 0 0 +−−+−−−−+−−+++++++ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   0 0 2 2 0 0 0 0 + 0 0 −+ 0 0 − 0 0 − 0 0 0 0 −+ −+ −+ + + −− 0 0 0 0 0 0 0 0 −−−−−−+ + + 0 0 0 0 0 0 0
+ − + 0 0 2 2 0 0 0 0 + 0 − + 0 + 0 0 0 + 0 − 0 − − − + 0 0 0 0 0 0 − + − 0 0 0 0 0 + − − + 0 0 0 0 0 + − + 0 0 0 0 
+ 0 0 − 0 +− 2 2 + 0 0 0 + 0 − 0 − 0 0 0 + 0 0 + 0 0 0 −+− 0 0 0 0 0 0 −− 0 0 0 ++ 0 0 −−− 0 0 − 0 0 −− 0 0
+ 0 0 0 0 − 0 0 0 2 2 0 0 0 + 0 −−+ 0 0 0 − 0 0 ++ 0 − 0 0 − 0 0 −+ 0 +−− 0 0 0 0 + 0 ++ 0 +−+−−+ 0 + 0
+  0 0 + 0 0 0 0 0 0 0 2 2 − 0 − 0 0 0 + 0 − − 0 0 0 0 − 0 + 0 − − 0 + 0 + + 0 0 0 0 − − 0 − − 0 0 − − − − 0 0 − − −
+  0 0 − 0 0 0 0 0 0 0 0 + 2 2 + 0 0 0 + − − 0 − 0 − + 0 0 0 0 0 0 0 − 0 + 0 − + − + − 0 − 0 0 − + 0 0 0 + + + 0 − +
+ − + + − 0 0 − + + − 0 0 0 0 2 0 0 + − 0 0 0 0 + − 0 0 + 0 0 0 0 − 0 − 0 + − 0 − 0 + + + 0 − + 0 + 0 0 0 0 0 − − −
+  0 0 0 + 0 0 + − + 0 + 0 0 + + 2 0 0 0 0 + − 0 0 0 + 0 0 − + 0 0 − + + + 0 + + 0 − 0 + + + − 0 + 0 + 0 0 0 − − + +
+                                                                                                                   
+ − + 0 0 0 + 0 0 0 + + − 0 0 0 0 2 0 0 0 0 0 0 + + + − 0 + + 0 + − 0 + − − 0 0 + + − 0 0 0 + 0 − + − 0 + + − − − 0 
+  0 0 0 0 − − 0 0 0 0 0 0 0 0 0 + + 2 0 + 0 0 + 0 0 0 − 0 0 0 + + − − 0 − + 0 − − + + 0 0 − 0 − + − − − − + 0 + + +
+ 0 0 0 0 −+ 0 0 0 + 0 −+ 0 0 0 −− 2 + 0 0 0 0 −− 0 −++−+− 0 − 0 0 ++−− 0 + 0 − 0 +− 0 0 0 −+ 0 + 0 0
+  0 0 0 + + 0 + − − + 0 0 0 + 0 0 − 0 0 2 0 − + 0 0 0 − 0 − − + 0 0 + − 0 + − 0 + + 0 0 0 − 0 0 − + + 0 + + + 0 0 −
+ + − 0 0 0 0 0 0 0 + + 0 + − 0 0 0 − 0 0 2 0 0 + − + + + 0 + + + 0 0 0 0 0 0 − + + 0 − 0 0 − + + 0 0 − − 0 + + − −
+  0 0 0 0 0 0 0 0 0 0 + 0 0 + − 0 0 0 0 + + 2 − 0 − 0 − 0 0 − − − − 0 0 0 0 + − 0 + − + − + + 0 + 0 + − 0 − 0 0 + −
+ 0 0 +−−++− 0 0 0 − 0 0 + 0 + 0 0 0 − 0 2 + 0 0 0 −+− 0 0 0 −−+ 0 0 −+− 0 0 −+ 0 0 0 −+− 0 0 +− 0 0
+  +−− 0 0 0 0 0 0 + 0 0 0 0 0 0 0 −−− 0 + + + 0 −−+ + 0 −−−− 0 − +− 0 − 0 0 −+ 0 −− 0 − 0 + 0 +− 0 +−
+  +− 0 − 0 +−+ − 0 −+ 0 0 0 + 0 + 0 0 0 0 +− 0 0 0 − 0 0 0 + − 0 +−− 0 + 0 0 − 0 + − 0 − 0 + + −−− +− 0 −
+
+
+
+         Figure 3. The matrix F3 consisting of 57 (column) vectors in Z18 . The entries ±
+         should be replaced with ±1 entries in the obvious way.
+
+
+ 2 2 0 0 0 0 0 0 0 0 0 0 0 + 0 +− 0 + 0 0 +−−−−+−−++−+−−+++− 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+   0 0 2 2 + + 0 0 0 0 0 0 0 0 + 0 0 + 0 0 0 + + ++ −+ −+ + 0 0 0 0 0 0 0 0 0 −−+ −+ + −−+ + + − 0 0 0 0 0 0
+ 0 0 0 0 2 2 + 0 0 0 −− 0 0 0 − 0 0 0 0 0 +− 0 0 0 0 0 0 0 −−−− 0 0 0 0 0 −−−+−−++− 0 0 0 −−++− 0
+  0 0 0 0 0 0 2 2 0 0 − 0 0 + 0 0 0 0 0 − + − 0 + − + + − 0 0 − + 0 0 − − 0 0 0 − + + + + 0 0 0 0 − − 0 − + 0 0 0 −
+ 0 ++− 0 0 0 + 2 2 0 0 0 0 −− 0 0 0 0 −+ 0 +− 0 0 0 + 0 0 0 − 0 − 0 −+ 0 ++−− 0 ++ 0 0 0 0 − 0 0 +−+ 0
+ + 0 0 0 0 0 0 0 + − 2 2 + 0 + 0 0 0 0 − 0 − 0 0 0 − + + 0 − − − 0 − − 0 − − 0 0 0 0 0 − 0 0 + + 0 0 − 0 0 + − − −
+ − 0 + − 0 0 0 + 0 0 0 0 2 0 0 0 0 0 − + 0 − − 0 0 − + − − + − 0 + 0 0 + − 0 − + − 0 0 0 + 0 + 0 − − 0 0 0 − + + +
+ 0 0 +− 0 −− 0 0 0 −+ 0 2 0 0 ++ 0 0 0 + 0 −+−− 0 0 0 0 − 0 −−−− 0 +− 0 + 0 +− 0 0 −− 0 0 ++ 0 0 0 0
+ 0 0 0 0 −++ 0 −+ 0 0 + 0 2 0 0 − 0 −+ 0 −−+ 0 0 + 0 − 0 0 0 + 0 0 ++− 0 +− 0 + 0 +− 0 0 +−++++ 0 0
+                                                                                                                   
+  0 0 − + 0 0 0 + 0 0 0 − 0 0 0 2 + 0 0 0 0 0 − 0 0 − − 0 + + + 0 − 0 + + 0 − + 0 + 0 + + + + + + − 0 − + − 0 0 − −
+  0 0 − + − 0 0 0 0 0 + 0 0 0 − 0 2 0 + − + + + 0 0 0 0 − 0 0 − 0 0 + − + 0 − 0 0 − 0 − 0 − 0 0 − − 0 − + − + + + +
+ + − 0 0 0 0 + 0 − + 0 0 + − 0 0 − 2 0 0 0 0 0 0 0 + − 0 0 0 0 − − 0 0 0 0 − − − 0 − 0 0 + − + − 0 − − + + − − 0 +
+ 0 0 0 0 0 +−+ 0 0 0 0 0 + 0 0 0 − 2 −+ 0 − 0 0 +++++ 0 0 −−++−− 0 0 0 0 0 − 0 −− 0 +−+++ 0 0 + 0
+ 0 + 0 0 0 0 0 0 −+ 0 0 − 0 0 + 0 0 + 2 +−−+− 0 0 0 0 0 0 − 0 + 0 −− 0 − 0 0 +−− 0 − 0 −−+ 0 0 0 +−− 0
+ + + 0 0 0 0 0 0 + − − + − 0 0 0 0 0 − 0 2 0 0 + + 0 0 − − − 0 + − 0 + + + 0 0 0 + 0 − − 0 0 0 0 0 − − 0 0 0 0 − +
+  0 0 0 0 − 0 0 + 0 0 0 − 0 − − 0 + 0 + 0 0 0 0 − + 0 0 0 − − + + − − − + 0 0 − − − + − 0 0 + + 0 + + 0 − + − − 0 −
+  +− 0 0 +− 0 0 + −+ −−+ + + +− 0 0 0 0 0 −− 0 0 −+ −− 0 0 + 0 0 0 +−− 0 − 0 0 + −+ −+ 0 0 0 0 0 0 +−
+  +−− + +−+ − 0 0 0 0 0 0 0 − 0 + 0 0 0 0 − 0 0 −+ 0 − 0 + + − 0 0 0 − + + + 0 0 − 0 + 0 0 − 0 −+ + + + + 0 −
+
+
+
+         Figure 4. The matrix F4 consisting of 57 (column) vectors in Z18 . The entries ±
+         should be replaced with ±1 entries in the obvious way.
+
+   The Seidel matrices S3 = F3⊺ F3 /2 − 5I57 and S4 = F4⊺ F4 /2 − 5I57 corresponding to F3 and F4 (see
+Figures 3 and 4) have characteristic polynomials CharS3 (x) = (x + 5)39 (x − 11)11 (x − 15)(x2 − 19x +
+76)(x2 − 20x + 87)2 and CharS4 (x) = (x + 5)39 (x − 11)13 (x2 − 18x + 57)(x3 − 34x2 + 361x − 1136).
+We note that we are able to find numerous other configurations of 57 equiangular lines in R18 whose
+corresponding Seidel matrices have more than seven distinct eigenvalues. The four configurations
+given here in Figures 1, 2, 3, and 4, are the four that we found that have precisely seven distinct
+eigenvalues. We do not know if there are Seidel matrices corresponding to 57 equiangular lines in
+R18 having fewer than seven distinct eigenvalues.
+   The automorphism group of a Seidel matrix S is the group of all signed permutation matrices
+P such that S = P SP ⊺ , where we do not make a distinction between P and −P . Using the computer
+algebra system Magma [5], we find that the Seidel matrices S1 , S2 , S3 and S4 each has a trivial
+automorphism group.
+
+3. Candidate characteristic polynomials for 49 equiangular lines in 17 dimensions
+   In this section, we produce a list of polynomials that could potentially be the characteristic
+polynomial of a Seidel matrix that corresponds to a system of 49 equiangular lines in R17 . Let L
+be an equiangular line system of cardinality 49 in R17 and let S be the Seidel matrix corresponding
+to L. The Seidel matrix S is a symmetric matrix with real entries, which means that each zero
+of its characteristic polynomial CharS (x) := det(xI − S) is real. In other words, CharS (x) is a
+                                                          4
+totally-real polynomial. Moreover, since every entry of S is an integer, each coefficient of CharS (x)
+is also an integer.
+   By [26, Theorem 3.4] together with [28, Lemma 6.1], [26, Theorem 4.5], and [18, Lemma 3.1],
+the Seidel matrix S must have smallest eigenvalue equal to −5 and 9 must be an eigenvalue with
+multiplicity at least 4. We record this result as a theorem.
+Theorem 3.1. Let S be a Seidel matrix corresponding to 49 equiangular lines in R17 . Then
+                                 CharS (x) = (x + 5)32 (x − 9)4 φ(x),
+for some monic polynomial φ of degree 13 in Z[x] all of whose zeros are greater than −5.
+               Pn
+   Let p(x) = i=0 ai xn−i be a monic polynomial in Z[x]. Following [18], we say p is type 2 if 2i
+divides ai for all i ⩾ 0 and weakly type 2 if 2i−1 divides ai for all i ⩾ 1.
+Lemma 3.2 ([18, Lemma 2.7]). Let S be a Seidel matrix of order n and k be an odd integer. Then
+CharS (x + k) = CharS−kI (x) is weakly type 2. Furthermore, if n is even then CharS (x + k) is type
+2.
+  The following lemma deals with the factorisation of type-2 and weakly-type-2 polynomials.
+Lemma 3.3 ([18, Lemma 2.8]). Let p ∈ Z[x] be a monic polynomial. Suppose p = qr where
+q, r ∈ Z[x]. Then
+     (a) p is type 2 if and only if q and r are both type 2;
+     (b) p is weakly type 2 if and only if q and r are both weakly type 2 and at least one of them is
+         type 2.
+   Denote by Sn the set of all Seidel matrices of order n. Given a positive integer e, define the
+set Pn,e = {CharS (x) mod 2e Z[x] : S ∈ Sn }. We will require the following upper bound on the
+cardinality of Pn,e for odd n.
+Theorem 3.4 ([19, Corollary 3.13]). Let n be an odd integer and e be a positive integer. Then the
+cardinality of Pn,e is at most 2( 2 )+1 .
+                                 e−2
+
+
+
+
+Remark 3.5. It turns out that for reasonably small values of n and e (e.g., n ⩽ 49 and e ⩽ 7),
+with n large enough compared to e, equality holds in Theorem 3.4. For fixed n and e, by randomly
+generating Seidel matrices of order n and computing their characteristic polynomials modulo 2e Z[x],
+we can obtain a lower bound on the cardinality of Pn,e . If we find that this lower bound is equal to
+  e−2
+2( 2 )+1 then, by Theorem 3.4, we must have obtained all elements of Pn,e . In particular, for n = 47
+and 49, we can explicitly construct the set Pn,7 using this method. We use P49,7 in Lemma 3.6 and
+P47,7 is used in Lemma 7.1 and Lemma 8.3. Note that, for e larger than 7, it becomes computationally
+infeasible to compute Pn,e .
+   Let S be a Seidel matrix corresponding to an equiangular line system of cardinality
+                                                                             P13       49 in R17 . In
+                                                                                       13−t
+view of Theorem 3.1, the next step is to find feasible polynomials for φ(x) = t=0 bt x      where
+                                 CharS (x) = (x + 5)32 (x − 9)4 φ(x).
+Obviously b0 = 1. And we can find b1 and b2 , using tr S = 0 and tr S 2 = 49 · 48 = 2352 together
+with Newton’s identities: b1 = −124, and b2 = 7074.
+   By Lemma 3.2, the polynomial
+                            CharS (x − 1) = (x + 4)32 (x − 10)4 φ(x − 1)
+is weakly type 2. By Lemma 3.3, the polynomial φ(x − 1) is also weakly type 2. Thus, we need to
+find all totally-real, integer polynomials φ(x) with the following properties:
+     (i) b0 = 1, b1 = −124, and b2 = 7074,
+    (ii) φ(x − 1) is weakly type 2.
+   (iii) (x + 5)32 (x − 9)4 φ(x) belongs to a congruence class in P49,7 . (See Remark 3.5.)
+                                                  5
+   In order to enumerate the candidate characteristic polynomial for S, we employ an algorithm
+developed by McKee and Smyth (see [30, Section 3], [19, Section 4.3] or [18, Section 2.3]). We
+use this algorithm to generate totally-real (weakly)-type-2 polynomials whose top three coefficients
+are fixed, which comes up frequently throughout this paper. Before we present the results of our
+enumeration of candidate characteristic polynomial for S, let us note that the number of totally-real,
+monic, integer polynomials of fixed degree and whose top three coefficients are also fixed is finite.
+                                                          Qd
+Indeed, suppose p(x) = xd +c1 xd−1 +c2 xd−2 +· · · = i=1 (x−λi ) is a totally-real integer polynomial.
+Then, using Newton’s identities, we have that λ2i ⩽ c21 − 2c2 for each i ∈ {1, . . . , d}. Furthermore,
+since ci is a (multivariate) polynomial in λ1 , . . . , λd , we can bound ci by functions of c1 and c2 for
+each i ∈ {3, . . . , d}.
+   We list the result of our computations in the following lemma.
+Lemma 3.6. Let S be a Seidel matrix corresponding to 49 equiangular lines in R17 . Then CharS (x)
+is in one of the sets
+    A = {(x + 5)32 (x − 9)16 (x − 16)}
+    B = {(x + 5)32 (x − 8)(x − 9)8 (x2 − 20x + 95)4 , (x + 5)32 (x − 8)(x − 9)12 (x2 − 22x + 113)2 }
+                                                                        
+        
+          (x + 5)32 (x − 7)(x − 9)14 (x − 12)(x − 15),                  
+                                                                         
+        
+                  32                         12           2             
+                                                                         
+        
+          (x + 5)    (x − 7)(x  − 8)(x  −  9)   (x  − 11)   (x − 15),   
+                                                                         
+        
+                  32        13          2   2                           
+                                                                         
+        
+          (x + 5)    (x − 9)   (x − 11)   (x  −  21x   + 92),           
+                                                                         
+                  32        2                 10            2         2 
+           (x + 5) (x − 7) (x − 8)(x − 9) (x − 11) (x − 13) ,
+    C=
+        
+          (x + 5)32 (x − 9)13 (x − 13)2 (x2 − 17x + 64),                
+                                                                         
+        
+                  32        12          3 2                             
+                                                                         
+        
+          (x + 5)    (x − 9)   (x − 11)   (x  −  19x   + 72),           
+                                                                         
+        
+                  32                10           4   2                  
+                                                                         
+        
+          (x + 5)    (x − 7)(x  − 9)   (x  − 11)   (x  −  19x  + 76),   
+                                                                         
+                  32                10           6                      
+           (x + 5) (x − 4)(x − 9) (x − 11)
+or is one of the 164 polynomials listed in Table 2, one of the 11 polynomials listed in Table 4, or
+one of the 8 polynomials listed in Table 6.
+   Using a modern PC, it takes about 2 hours and 30 minutes to find all 194 polynomials of
+Lemma 3.6. The computations were executed in Magma [5], with the output independently verified
+using Mathematica [29].
+   In the statement of Lemma 3.6, we have put the 194 polynomials of Lemma 3.6 into six groups.
+The grouping is based on the techniques we use to show that they cannot be the characteristic
+polynomial of any Seidel matrix. First note that [16, Remark 5.5.] immediately precludes the
+existence of a Seidel matrix with characteristic polynomial in A. The rest of the paper is devoted to
+ruling out the remaining polynomials from Lemma 3.6. From Section 5, we will gradually introduce
+necessary conditions for a polynomial to be the characteristic polynomial of a Seidel matrix. The
+next polynomials to be ruled out are those from the set B (see Lemma 5.3). Followed by the
+polynomials of Table 2 (see Lemma 5.4), Table 4 (see Lemma 5.6), and Table 6 (see Lemma 5.7).
+Since they require the most work, the polynomials in C, will be dealt with last, in Lemmas 5.8, 6.3,
+6.4, 6.5, 7.1, 7.3, 8.2, and 8.3 where the sophistication of the techniques required for each polynomial
+steadily increases.
+
+                              4. Angle vectors and compatibility
+  In this section, we introduce angle vectors and define the notion of compatibility for polynomials.
+Let M be a real symmetric matrix of order n. We write Λ(M ) for the set of distinct eigenvalues of
+M and define the polynomial                        Y
+                                    MinM (x) :=         (x − λ),
+                                                   λ∈Λ(M)
+
+which is the minimal polynomial of M . For each λ ∈ Λ(M ), denote by E(λ) the eigenspace of λ and
+let {e1 , . . . , en } be the standard basis of Rn . Denote by Pλ the orthogonal projection of Rn onto
+E(λ). For a vector v, we write v(i) to denote its ith entry.
+                                                    6
+Theorem 4.1 (Spectral Decomposition Theorem). Let M be a real symmetric matrix. Then
+                                          X
+                                    M=         λPλ .
+                                                 λ∈Λ(M)
+
+  Denote by αλ the angle vector for λ ∈ Λ(M ), that is, for each i ∈ {1, . . . , n},
+                                           αλ (i) = ||Pλ ei ||.
+Define
+                                QuoM (x) := CharM (x)/ MinM (x),
+and denote by M [i] the principal submatrix of M obtained by deleting its ith row and column.
+Proposition 4.2 (See [8, (4.2.8)] or [12]). Let M be a real symmetric matrix of order n. Then, for
+each i ∈ {1, . . . , n}, we have
+                                                          X α2 (i)
+                                                                λ
+                                 CharM[i] (x) = CharM (x)           .
+                                                               x−λ
+                                                              λ∈Λ(M)
+
+   Cauchy’s interlacing theorem, below, provides bounds for the eigenvalues of principal submatrices
+of M .
+Theorem 4.3 ([7, 11, 21]). Let M be a real symmetric matrix having eigenvalues λ1 ⩽ λ2 ⩽ · · · ⩽ λn
+and suppose M [i], for some i ∈ {1, . . . , n}, has eigenvalues µ1 ⩽ µ2 ⩽ · · · ⩽ µn−1 . Then
+                                λ1 ⩽ µ1 ⩽ λ2 ⩽ · · · ⩽ λn−1 ⩽ µn−1 ⩽ λn .
+                                           Qe                       Qe
+     Given e ∈ N and polynomials f (x) = i=0 (x − λi ) and g(x) = i=1 (x − µi ) such that λ0 ⩽ λ1 ⩽
+· · · ⩽ λe , and µ1 ⩽ µ2 ⩽ · · · ⩽ µe , we say that g interlaces f if λ0 ⩽ µ1 ⩽ λ1 ⩽ · · · ⩽ µe ⩽ λe .
+Note that, if a polynomial f(x) interlaces CharM (x) then we can write f(x) = QuoM (x)f (x), where
+f (x) is a monic integer polynomial that interlaces MinM (x).
+     Given a polynomial p(x) ∈ Q[x], we denote its derivative by p′ (x). In the next result, we give a
+convenient expression for the entries of an angle vector.
+Lemma 4.4. Let M be a real symmetric matrix of order n. Let i ∈ {1, . . . , n} and suppose that
+CharM[i] (x) = QuoM (x) · fi (x) for some polynomial fi (x) ∈ Z[x]. Then, for each λ ∈ Λ(M ), we
+have
+                                                s
+                                                   fi (λ)
+                                       αλ (i) =             .
+                                                  Min′M (λ)
+Proof. By Proposition 4.2,
+                                                                X       α2λ (i)
+                               CharM[i] (x) = CharM (x)                         .
+                                                                        x−λ
+                                                              λ∈Λ(M)
+
+Dividing both sides by QuoM (x), we obtain
+                                                           X       α2λ (i)
+                                   fi (x) = MinM (x)                       .
+                                                                   x−λ
+                                                          λ∈Λ(M)
+
+Thus, for each λ ∈ Λ(M ), we have
+                                                          Y
+                                  fi (λ) = α2λ (i)                (λ − µ).
+                                                     µ∈Λ(M)\{λ}
+
+On the other hand, we also have
+                                               X            Y
+                               Min′M (x) =                           (x − µ).
+                                             λ∈Λ(M) µ∈Λ(M)\{λ}
+
+Therefore, α2λ (i) = fi (λ)/ Min′M (λ). The statement of the lemma follows since, by definition, αλ (i)
+is nonnegative.                                                                                      
+                                                      7
+  The next result generalises the fact that a unit eigenvector of a simple eigenvalue λ can be
+expressed in terms of the angle vector of λ. See [9] for a survey on a related result.
+Lemma 4.5. Let M be a real symmetric matrix of order n and let λ be an eigenvalue of M of
+multiplicity e. Let u1 , u2 , . . . , ue be an orthonormal basis for the eigenspace E(λ). For all i ∈
+{1, . . . , n}, we have that
+                                                            e
+                                                            X
+                                                α2λ (i) =         u2k (i).
+                                                            k=1
+
+Proof. Firstly, we can write
+                                                        ⊺                    ⊺
+                                             Pλ = u1 u1 + · · · + ue ue .
+Hence, for each i ∈ {1, . . . , n} we have
+                                         Pλ ei = u1 (i)u1 + · · · + ue (i)ue .
+Therefore,
+                                                            e X
+                                                            X e                                  e
+                                                                                                 X
+               α2λ (i) = kPλ ei k2 = hPλ ei , Pλ ei i =               uk (i)ul (i)huk , ul i =         u2k (i)
+                                                            k=1 l=1                              k=1
+
+since u1 , . . . , ue are orthonormal.                                                                           
+
+   Two Seidel matrices S1 and S2 are called switching-equivalent if there exists a diagonal {±1}-
+matrix D such that S2 = DS1 D. Note that switching-equivalent matrices are similar and hence
+have the same characteristic polynomials. By Lemma 4.4, switching-equivalent matrices also share
+the same angle vector for each eigenvalue. Furthermore, a Seidel matrix S can be “switched”
+(conjugated by a diagonal matrix of ±1s) so that the angle vector of a simple eigenvalue becomes a
+unit eigenvector.
+Corollary 4.6. Let S be a Seidel matrix and let λ be a simple eigenvalue of S, i.e., with multiplicity
+1. Then there exists a Seidel matrix Ŝ switching-equivalent to S such that
+                                                    Ŝαλ = λαλ .
+   Before we introduce compatibility for polynomials, we need the next result. Denote by Σ(M ) the
+set of simple eigenvalues of M and define the polynomial
+                                                  Y
+                                    SimM (x) :=        (x − λ).
+                                                            λ∈Σ(M)
+
+Note that SimM (x) is in Z[x].
+Lemma 4.7 (cf. [18, Lemma 4.3]). Let M be an integer symmetric matrix of order n, let ξ(x) ∈ Z[x]
+be a factor of SimM (x), and set q(x) = MinM (x)/ξ(x). Denote by Ξ the set of zeros of ξ(x). Then
+for all i, j ∈ {1, . . . , n}, there exists δ ∈ {±1}Ξ such that
+                                           X
+                                               q(λ)δ(λ)αλ (i)αλ (j) ∈ Z.
+                                          λ∈Ξ
+
+Proof. For each λ ∈ Ξ, denote by uλ a unit eigenvector for λ. By Theorem 4.1, we have
+                                              X           ⊺
+                                     q(M ) =     q(λ)uλ uλ .
+                                                        λ∈Ξ
+
+The lemma then follows from Lemma 4.5 together with the fact that q(M ) is an integer matrix. 
+
+   By Lemma 4.4, there is a correspondence between the characteristic polynomial CharM[i] (x)
+of a principal submatrix of M and the set of angle vector entries {αλ (i) : λ ∈ Λ(M )}. Let
+                                                            8
+f(x) = QuoM (x)f (x) be a monic integer polynomial that interlaces CharM (x). For each λ ∈ Λ(M ),
+define the angle αλ (f) of f(x) with respect to λ as
+                                                  s
+                                                     f (λ)
+                                        αλ (f) :=             .
+                                                    Min′M (λ)
+Note that, since f(x) interlaces CharM (x), we always have f (λ)/ Min′M (λ) ⩾ 0 when λ ∈ Λ(M ).
+Furthermore, by Lemma 4.4, we have αλ (CharM[i] ) = αλ (i) for all λ ∈ Λ(M ) and i ∈ {1, . . . , n}.
+Now we can introduce the notion of compatibility for polynomials. Let g(x) 6= f(x) be a monic
+integer polynomial that interlaces CharM (x). In view of Lemma 4.7, given a factor ξ(x) ∈ Z[x] of
+SimM (x) with zero-set Ξ, we say that the polynomials f(x) and g(x) are ξ-compatible with respect
+to M if there exists δ ∈ {±1}Ξ such that
+                     X
+(1)                      q(λ)δ(λ)αλ (f)αλ (g) ∈ Q, where q(x) = MinM (x)/ξ(x).
+                     λ∈Ξ
+
+If f(x) and g(x) are ξ-compatible with respect to M for every factor ξ(x) ∈ Z[x] of SimM (x) then
+we say that f(x) and g(x) are compatible with respect to M . When it is clear which matrix
+compatibility is taken with respect to, we merely say that f(x) and g(x) are compatible. Note that
+our definition of compatibility differs from the corresponding definition in [18].
+    We can strengthen the notion of compatibility for Seidel matrices in the following way. Let
+q(x) ∈ Z[x] and let S be a Seidel matrix of order n odd. Then, by [16, Lemma 2.1], we have that the
+off-diagonal entries of S k are odd for all k ⩾ 1. It follows that the parity of each off-diagonal entry
+of q(S) is equal to the parity of q(1) + q(0). Let f(x) and g(x) be distinct monic integer polynomials
+that interlace CharS (x). Given a factor ξ(x) ∈ Z[x] of SimS (x) with zero-set Ξ, we say that the
+polynomials f(x) and g(x) are ξ-Seidel-compatible with respect to S if there exists δ ∈ {±1}Ξ
+such that
+            X
+(2)             q(λ)δ(λ)αλ (f)αλ (g) ≡ q(1) + q(0) (mod 2), where q(x) = MinS (x)/ξ(x).
+           λ∈Ξ
+
+   If f(x) and g(x) are ξ-Seidel-compatible with respect to S for every factor ξ(x) ∈ Z[x] of SimS (x)
+then we say that f(x) and g(x) are Seidel-compatible with respect to S. For a Seidel matrix S of
+order n even, we define Seidel-compatibility just the same as compatibility. That is, f(x) and g(x)
+are ξ-Seidel-compatible with respect to S if and only if f(x) and g(x) are ξ-compatible with respect
+to S. For convenience with exposition below, we consider all polynomials to be Seidel-compatible
+with themselves.
+   In the sequel, we use repeatedly the following corollary of Lemma 4.7.
+Corollary 4.8. Let S be a Seidel matrix of order n. Let X and Y be principal submatrices of S of
+order n − 1. Then CharX (x) and CharY (x) are Seidel-compatible.
+Proof. If CharX (x) = CharY (x) then we are done. Hence, we suppose that CharX (x) 6= CharY (x).
+Note that there exist distinct i, j ∈ {1, . . . , n} such that X = S[i] and Y = S[j]. By definition and
+by Lemma 4.4, we have αλ (CharX ) = αλ (i) and αλ (CharY ) = αλ (j). Let ξ(x) ∈ Z[x] be a factor of
+SimS (x) and let q(x) = MinS (x)/ξ(x). By Lemma 4.7, CharX (x) and CharY (x) are ξ-compatible
+with respect to S and hence, they are compatible with respect to S. If n is even then CharX (x) and
+CharY (x) are Seidel-compatible by above definition. Otherwise, if n is odd then, by Lemma 4.7,
+and by the parities of the off-diagonal entries of q(S) (see [16, Lemma 2.1]), there exists δ ∈ {±1}Ξ
+such that (2) holds. Therefore, CharX (x) and CharY (x) are Seidel-compatible.                        
+   Empirically, we find that checking compatibility for polynomials in this paper can be quite com-
+putationally expensive, since it requires arithmetic in potentially high-degree number fields (as high
+as degree 120 over Q). Next we establish some tools that will enable us to more efficiently check
+compatibility.
+   Let M be an integer symmetric matrix and ξ(x) be an irreducible factor of SimM (x) having zero-
+set Ξ. Let q(x) = MinM (x)/ξ(x), λ ∈ Ξ, and suppose f(x) = QuoM (x)f (x) and g(x) = QuoM (x)g(x)
+                                                   9
+are monic integer polynomials that interlace CharM (x). Note that we can write
+                                                     p                     p
+                                                       f g(λ)      δ ∗ (λ) f g(λ)
+(3)                q(λ)δ(λ)αλ (f)αλ (g) = δ(λ)q(λ)               =
+                                                   | Min ′M (λ)|         ξ ′ (λ)
+where δ ∗ (λ)/ Min′M (λ) = δ(λ)/| Min′M (λ)|. Since f (λ)/ Min′M (λ) ⩾ 0 and g(λ)/ Min′M (λ) ⩾ 0, we
+have f g(λ) = f (λ)g(λ) ⩾ 0. Thus, the square root of f g(λ) is a real number.
+Lemma 4.9. Let M be an integer symmetric matrix and ξ(x) be an irreducible factor of SimM (x)
+having zero-set Ξ. Let f(x) = QuoM (x)f (x) and g(x) = QuoM (x)g(x) be distinct monic integer
+polynomials that interlace CharM (x). Suppose that there exists a polynomial h(x) ∈ Q[x] such that
+h2 (λ) = f g(λ) for all λ ∈ Ξ. Then f(x) and g(x) are ξ-compatible.
+Proof. Let π(x) ∈ Q[x] be the unique polynomial of degree atpmost |Ξ| − 1 such that π(x) ≡ h(x)
+mod ξ(x). For each λ ∈ Ξ, we have that π(λ) = h(λ) = δ ∗ (λ) f g(λ) where δ ∗ ∈ {±1}Ξ . Consider
+the |Ξ| distinct interpolation points (λ, π(λ)) for λ ∈ Ξ. Then we can write π(x) as the unique
+interpolation polynomial in Lagrange form
+                                               X
+                                       π(x) =      π(λ)Lλ (x),
+                                                λ∈Ξ
+
+where, for each λ ∈ Ξ, the polynomial Lλ (x) is the Lagrange polynomial
+                                                 Y x−µ
+                                     Lλ (x) =               .
+                                                       λ−µ
+                                                 µ∈Ξ\{λ}
+
+Let ω be the coefficient of x|Ξ|−1 in π(x) and by (3), observe that
+                                                 p
+                        X π(λ)         X δ ∗ (λ) f g(λ) X
+                   ω=                =                  =     q(λ)δ(λ)αλ (f)αλ (g)
+                             ξ ′ (λ)           ξ ′ (λ)
+                        λ∈Ξ          λ∈Ξ                   λ∈Ξ
+
+where q(x) = MinM (x)/ξ(x) and δ ∗ (λ)/ Min′M (λ) = δ(λ)/| Min′M (λ)| for all λ ∈ Ξ. Since ω ∈ Q,
+the polynomials f(x) and g(x) are ξ-compatible.                                                
+   Let K be the splitting field of ξ(x) and let Gal(K/Q) be the Galois group of K over Q. The
+Galois group Gal(K/Q) acts transitively on Ξ, the set of zeros of ξ(x). Thus for all λ, µ ∈ Ξ, there
+exists σ ∈ Gal(K/Q) such that σ(λ) = µ. We will use this fact in the proof of Proposition 4.10 and
+Lemma 4.12.
+Proposition 4.10. Let M be an integer symmetric matrix and ξ(x) be an irreducible factor of
+SimM (x) having zero-set Ξ. Let f(x) = QuoM (x)f (x) and g(x) = QuoM (x)g(x) be distinct monic
+integer polynomials that interlace CharM (x). Let ρ(x) be the minimal polynomial of f g(λ) over Q
+for some λ ∈ Ξ and suppose that ρ(x2 ) is reducible over Q. Then f(x) and g(x) are ξ-compatible.
+                                     p                                                       p
+Proof. Let e be the degree of Q( f g(λ)) over Q. Note that the minimal polynomial of f g(λ)
+divides ρ(x2 ), which has degree 2 deg ρ. This implies that e divides 2 deg ρ and moreover,
+                                                                                         pe < 2 deg ρ
+          2
+since ρ(x ) is reducible over Q. On    p the other hand, e ⩾ deg ρ since Q(f g(λ)) ⊆ Q( f g(λ)). It
+follows that e = deg ρ p and thus Q( f g(λ)) = Q(f g(λ)) ⊆ Q(λ). Hence, there exists a polynomial
+h(x) ∈ Q[x] such that f g(λ) = h(λ), which implies that f g(λ) = h2 (λ). Let µ ∈ Ξ and let K be
+the splitting field of ξ(x). There exists σ ∈ Gal(K/Q) such that σ(λ) = µ. Hence, we obtain
+                                                    
+                              σ (f g (λ)) = σ h2 (λ) =⇒ f g (µ) = h2 (µ).
+Therefore, we have h2 (λ) = f g(λ) for all λ ∈ Ξ and, by Lemma 4.9, we conclude that f(x) and g(x)
+are ξ-compatible.                                                                               
+   Proposition 4.10 provides us with a more computationally efficient method to show that two
+polynomials are compatible. Furthermore, we can also use the above to check Seidel-compatibility.
+Indeed, if n is even, there is nothing more to do. For n odd, we can first construct the polynomial h(x)
+from the proof of Proposition 4.10 and the polynomial π(x) in the proof of Lemma 4.9. Using (3), we
+                                                   10
+see that ω from the proof of Lemma 4.9 is the same as the left hand side of (2). Thus, to check Seidel-
+compatibility, we can check if ω has the same parity as q(1) + q(0), where q(x) = MinM (x)/ξ(x).
+Example 4.11. Suppose S is a Seidel matrix with
+                      CharS (x) = (x + 5)32 (x − 9)13 (x − 11)2 (x2 − 21x + 92).
+Then we have
+                          MinS (x) = (x + 5)(x − 9)(x − 11)(x2 − 21x + 92),
+                         QuoS (x) = (x + 5)31 (x − 9)12 (x − 11),
+                          SimS (x) = x2 − 21x + 92.
+Let f (x) = x4 − 36x3 + 454x2 − 2356x + 4241 and g(x) = x4 − 36x3 + 454x2 − 2348x + 4169.
+                                                                                       √    Then
+f(x) = QuoS (x)f (x) and g(x) = QuoS (x)g(x) both interlace CharS (x). Let λ = (21 − 73)/2 be
+a zero of SimS (x). Then the minimal polynomial of f g(λ) is ρ(x) = x2 − 10521x + 5308416 and
+ρ(x2 ) = (x2 − 123x + 2304)(x2 + 123x + 2304). By Proposition 4.10, f(x) and g(x) are compatible.
+For h(x) = 9x − 33 we have f g(λ) = h2 (λ). It follows that π(x) = h(x) = 9x − 33 and ω = 9.
+Finally, since q(1) + q(0) = 975, where q(x) = Min S (x)   3     2
+                                               SimS (x) = x − 15x − x + 495, we see that f(x) and
+g(x) are Seidel-compatible.
+  Next we develop tools to show that two polynomials are not Seidel-compatible.
+Lemma 4.12. Let M be an integer symmetric matrix and ξ(x) be an irreducible factor of SimM (x)
+having zero-set Ξ and splitting field K. Let f(x) = QuoM (x)f (x) and g(x) = QuoM (x)g(x) be
+distinct monic integer polynomials that interlace CharM (x). Let ρ(x) be the minimal polynomial of
+                                                                 2
+         p Q for some λ ∈ Ξ. Suppose that deg ρ = |Ξ| and ρ(x ) is irreducible
+f g(λ) over
+                                                                           Ξ
+                                                                                  over Q. Further,
+suppose f g(λ) 6∈ K and q(x) = MinM (x)/ξ(x). Then, for each δ ∈ {±1} ,
+                   X                                X
+                       q(λ)δ(λ)αλ (f)αλ (g) ∈ Q =⇒      q(λ)δ(λ)αλ (f)αλ (g) = 0.
+                   λ∈Ξ                                     λ∈Ξ
+
+                     Ξ
+Proof. Let δ ∈ {±1} such that
+                                     X
+                                           q(λ)δ(λ)αλ (f)αλ (g) ∈ Q,
+                                     λ∈Ξ
+
+i.e., f(x) and g(x) are ξ-compatible. For any λ, µ ∈ Ξ there exists σ ∈ Gal(K/Q) such that σ(λ) = µ.
+Since ρ (f g(λ)) = 0, we obtain ρ (f g(µ)) = 0. Since ρ(x) is irreducible over Q, we conclude that ρ is
+the minimal polynomial of f g(λ) over Q for all λ ∈ Ξ.
+    Next, for any λ ∈ Ξ we have Q(f g(λ)) ⊆ Q(λ). Since the degree of ρ(x) is equal to |Ξ| and
+ρ(x) is the minimal polynomial of f g(λ), we have Q(f g(λ)) = Q(λ). Now suppose that there exist
+distinct µ, ν ∈ Ξ such that f g(µ) = f g(ν). We can write µ = π(f g(µ)) for some π(x) ∈ Q[x], since
+Q(f g(µ)) = Q(µ). Take σ ∈ Gal(K/Q) such that σ(µ) = ν, which yields us ν = π(f g(ν)). However,
+this leads us to µ = π(f g(µ)) = π(f g(ν)) = ν, which is a contradiction. It follows that
+                                                Y
+                                        ρ(x) =     (x − f g(λ)) .
+                                                λ∈Ξ
+
+Additionally, K is the splitting field of ρ(x).
+   Let L be the splitting field of ρ(x2 ) over Q, which contains K. We have a tower of
+                                                                                    p fields Q ⊆ K ⊆ L
+where L is Galois over Q so L is Galois over K. Hence, if σ ∈ Gal(L/K) then σ             f g(λ) is equal
+          p              p                                                                   p
+to either f g(λ) or − f g(λ) for each      p λ ∈ Ξ. Since K/Q is a normal extension, if f g(λ) does
+not belong to K for some λ ∈ Ξ then f g(λ) does not belong to K for all λ ∈ Ξ.
+                                                                    p             p
+   For a fixed λ ∈ Ξ, there exists σ ∈ Gal(L/K) such that σ           f g(λ) = − f g(λ). Otherwise,
+  p                                                       p
+if f g(λ) is fixed by all elements of Gal(L/K) then f g(λ) ∈ K, which is a contradiction. Using
+                                                      11
+(3), we write
+                                                                p
+                                      X                 δ ∗ (λ) f g(λ)
+                                 ω=       ωλ where ωλ =
+                                                              ξ ′ (λ)
+                                      λ∈Ξ
+      ∗           ′                 ′
+and δ     (λ)/ MinM (λ) = δ(λ)/| MinM (λ)| for all λ ∈ Ξ.Take any σ ∈ Gal(L/K) such that σ(ωµ ) =
+−ωµ for some µ ∈ Ξ. Then we can partition the set Ξ into two setsPI+ and I− such that  P σ(ωλ ) = ωλ
+for all λ ∈ I+ and σ(ωµ ) = −ωµ for all µ ∈ I− . This implies that µ∈I− ωµ = 0 and λ∈I+ ωλ = ω
+since σ(ω) = ω. We then apply the same procedure on I+ , where we take any σ ∈ Gal(L/K) such
+that σ(ωµ ) = −ωµ for some µ ∈ I+ . Since |Ξ| is finite, after finitely many steps on partitioning I+ ,
+we arrive at the last subset
+                       P     I where the only possible partition is I+ = ∅ and I− = I. Therefore,
+we conclude that ω = λ∈Ξ ωλ = 0.                                                                    
+  Now we have the following corollary of Lemma 4.12.
+Corollary 4.13. Let S be a Seidel matrix of order n odd, ξ(x) be an irreducible factor of SimS (x)
+having zero-set Ξ, and let q(x) = MinS (x)/ξ(x). Let f(x) = QuoS (x)f (x) and g(x) = QuoS (x)g(x)
+be distinct monic integer polynomials that interlace CharS (x). Let ρ(x) be the minimal polynomial
+of f g(λ) over Q for some λ ∈ Ξ. Suppose that deg ρ = |Ξ| and ρ(x2 ) is irreducible over Q. Let G
+and H be the Galois groups of ρ(x) and ρ(x2 ) over Q, respectively, and suppose that |G| < |H|. If
+q(1) + q(0) is odd then f(x) and g(x) are not Seidel-compatible.
+Proof. Let K ⊆ L be splitting fields of ρ(x) and ρ(x2 ) over Q, respectively. If K =         ∼
+                                                                                   pL then G = H.
+Since |G| < |H|, we
+                 p conclude that Kpis a proper subfield of L and it follows that f g(λ) is not in
+K. Otherwise, if f g(λ) ∈ K then f g(λ) ∈ K for all λ ∈ Ξ, which will imply that K = L. Next,
+suppose that f(x) and g(x) are Seidel-compatible. Then, by definition, there exists δ ∈ {±1}Ξ such
+that                       X
+                      ω :=     q(λ)δ(λ)αλ (f)αλ (g) ≡ q(1) + q(0) (mod 2).
+                               λ∈Ξ
+This implies that ω is rational. By Lemma 4.12, we must have ω = 0. Therefore, q(1) + q(0) is
+even.                                                                                      
+Example 4.14. Suppose S is a Seidel matrix with
+                        CharS (x) = (x + 5)32 (x − 9)14 (x − 11)(x2 − 23x + 116).
+Then we have
+                           MinS (x) = (x + 5)(x − 9)(x − 11)(x2 − 23x + 116),
+                           QuoS (x) = (x + 5)31 (x − 9)13 ,
+                           SimS (x) = (x − 11)(x2 − 23x + 116).
+Let f (x) = x4 − 38x3 + 508x2 − 2810x + 5363 and g(x) = x4 − 38x3 + 508x2 − 2802x + 5291. Then
+f(x) = QuoS (x)f (x) and g(x) = QuoS (x)g(x) both interlace
+                                                        √     CharS (x). Let ξ(x) = x2 − 23x + 116
+be an irreducible factor of SimS (x) and λ = (23 − 65)/2 be a zero of ξ(x). Then the minimal
+polynomial of f g(λ) is ρ(x) = x2 − 11105x + 1433600 and ρ(x2 ) is irreducible over Q. Furthermore,
+the Galois groups of ρ(x) and ρ(x2 ) are G = S2 and H = D4 , respectively. Hence 2 = |G| < |H| = 8.
+Finally, q(1) + q(0) = 975, where q(x) = Min S (x)    3     2
+                                          SimS (x) = x − 15x − x + 495. Therefore, by Corollary 4.13,
+the polynomials f(x) and g(x) are not Seidel-compatible.
+   Note that, in Corollary 4.13, we cannot take the condition |G| < |H| for granted, since for
+example, we have the polynomials ρ1 (x) = x3 − 11x2 + 27x − 13, ρ2 (x) = x4 − 14x3 + 34x2 − 14x + 1,
+and ρ3 (x) = x4 − 14x3 + 45x4 − 29x + 4. These polynomials have the property that ρi (x2 ) is
+irreducible over Q and the Galois group of ρi (x) is isomorphic to that of ρi (x2 ) for each i ∈ {1, 2, 3}.
+Furthermore, the polynomials ρ1 (x2 ), ρ2 (x2 ), and ρ3 (x2 ) have the Galois groups S3 , D4 , and S4 ,
+respectively.
+                                                     12
+                          5. Interlacing characteristic polynomials
+   Our main approach for showing that a Seidel matrix S having a certain spectrum does not exist
+is to consider the principal submatrices of S and their characteristic polynomials. The next result
+is a condition on the sum of the characteristic polynomials of principal submatrices of a matrix.
+Theorem 5.1 ([36, Page 116]). Let M be a real symmetric matrix of order n. Then
+                                      n
+                                      X
+(4)                                         CharM[i] (x) = Char′M (x).
+                                      i=1
+
+   Since every Seidel matrix S of order n has zero trace and the trace of S 2 is n(n − 1), we have the
+following.
+Lemma 5.2 ([19, LemmaPe 5.4]). Let S be a Seidel matrix of order n. Suppose S has minimal
+polynomial MinS (x) = i=0 ai xe−i . Then, for all j ∈ {1, . . . , n},
+                                                            e−1
+                                                            X
+                                  CharS[j] (x) = QuoS (x)          bi xe−1−i ,
+                                                             i=0
+
+where b0 = 1, b1 = a1 , b2 = a2 + n − 1, and bi ∈ Z for i ∈ {3, . . . , e − 1}.
+   Let p(x) ∈ Z[x] be a monic totally-real polynomial of degree n and suppose S is a Seidel matrix
+such that CharS (x) = p(x). By Lemma 5.2, for each i ∈ {1, . . . , n}, we have CharS[i] (x) = QuoS (x) ·
+                                   Pe−1
+f (x) for some polynomial f (x) = t=0     bt xe−1−t where b0 = 1, b1 = a1 , and b2 = a2 + n − 1. We
+want to find an exhaustive list of all possibilities for the polynomial CharS[i] (x).
+   Define the polynomial Rad(p, x) derived from p(x) as
+                                                          p(x)
+                                     Rad(p, x) :=                      .
+                                                     gcd(p(x), p′ (x))
+Note that MinS (x) = Rad(p, x) and QuoS (x) = gcd(p(x), p′ (x)).
+  By Lemma 3.2, the polynomial CharS[i] (x − 1) is weakly type 2 and is type 2 if n − 1 is even. By
+Lemma 3.3, the polynomial f (x − 1) is also weakly type 2 and is type 2 if n − 1 is even. Thus, we
+                                                            Pe−1
+need to find all totally-real, integer polynomials f (x) = t=0 bt xe−1−t with the following properties:
+     (i) b0 = 1, b1 = a1 , b2 = a2 + n − 1,
+    (ii) f (x) interlaces Rad(p, x),
+   (iii) f (x − 1) is weakly type 2 and is type 2 if n − 1 is even,
+   (iv) gcd(p(x), p′ (x)) · f (x) is in a congruence class of Pn−1,7 , if n − 1 is odd. (See Remark 3.5.)
+  Let F be the set of polynomials satisfying these properties. Each polynomial in the set
+                               F := {gcd(p(x), p′ (x)) · f (x) : f (x) ∈ F }
+is called an interlacing characteristic polynomial for p(x). In many of the lemmas below, we
+will need to find all the interlacing characteristic polynomials of certain polynomials. To do this, we
+employ the polynomial generation algorithm of [18, Section 2.3] to construct F.
+Lemma 5.3. There does not exist a Seidel matrix S whose characteristic polynomial is equal to any
+of the polynomials in B (from Lemma 3.6).
+Proof. Both polynomials in B do not have any interlacing characteristic polynomials.                
+                                                           Pn−1
+   The coefficient vector of a polynomial h(x) = t=0 ct xn−1−t of degree n − 1 is defined to
+be the (row) vector (c0 , c1 , . . . , cn−1 ). Given a set H of polynomials each of degree n − 1, the
+coefficient matrix A(H) is defined as the |H| × n matrix whose rows are the coefficient vectors for
+each polynomial in H. We write x ⩾ 0 to indicate that all entries of the vector x are nonnegative.
+The polynomial equation (4) can be viewed as a linear system: x⊺ A = b⊺ , where x ⩾ 0. Indeed,
+for a real symmetric matrix M of order n, let X = {CharM[i] (x) : i ∈ {1, . . . , n}} and let x be the
+vector indexed by elements of X such that the entry indexed by p(x) ∈ X equals the cardinality
+                                                      13
+of the set {i ∈ {1, . . . , n} : CharM[i] (x) = p(x)}. If A = A(X) is the coefficient matrix for the
+polynomials in X and b is the coefficient vector for Char′M (x), then (4) becomes x⊺ A = b⊺ .
+   Farkas’ Lemma (see [10] or [18, Theorem 4.1]) allows us to demonstrate that there is no vector
+x ⩾ 0 satisfying x A = b , by finding a vector y ∈ Rn such that Ay ⩾ 0 and y b < 0. We call
+                    ⊺         ⊺                                                     ⊺
+                                                                         ⊺      ⊺
+such a vector y a certificate of infeasibility for the linear system x A = b , x ⩾ 0. Note that
+one can find certificates of infeasibility using linear programming techniques.
+   Consider the set F of interlacing characteristic polynomials for p(x). By Theorem 5.1, if there
+exists a Seidel matrix S such that CharS (x) = p(x) then there exist nonnegative integers nf for each
+f(x) ∈ F such that
+                                           X
+(5)                                             nf · f(x) = p′ (x).
+                                        f(x)∈F
+
+   Let n be the vector indexed by F whose f(x)-entry is nf , for each f(x) ∈ F and let A = A(F). Then
+n ⩾ 0 is a solution to the linear system n⊺ A = b⊺ where b is the coefficient vector for p′ (x). We
+call the vector n an interlacing configuration for F. Thus, to show that no Seidel matrix S exists
+having CharS (x) = p(x), it suffices to show that there does not exist an interlacing configuration for
+F. Hence, it suffices to provide a certificate of infeasibility c for the linear system above. We call c
+a certificate of infeasibility for p(x).
+Lemma 5.4. There does not exist a Seidel matrix S whose characteristic polynomial is equal to any
+of the polynomials in Table 2.
+Proof. Each polynomial in Table 2 has a certificate of infeasibility listed in Table 3.               
+   Most of the computation time used in this paper was dedicated to finding the interlacing char-
+acteristic polynomials in order to prove Lemma 5.4. We make the following remark about the
+computation time taken for Lemma 5.4.
+Remark 5.5. The total time to compute the interlacing characteristic polynomials for each of the
+164 polynomials of Table 2 took about 6 hours and 17 minutes. The time taken varied dramatically
+for the 164 polynomials. As we can see in Figure 5, there are six outliers, which correspond to
+the indices 65, 87, 88, 90, 101, and 112 in Table 2. The vast majority of the computation time
+was spent on finding the interlacing characteristic polynomials for these six candidate characteristic
+polynomials.
+   Suppose the linear system n⊺ A = b⊺ has at least one nonnegative real solution. Then a subset
+W ⊂ F is called a warranted subset of interlacing characteristic polynomials if there is no nonnega-
+tive solution n to the subsystem n⊺ B = b⊺ , where the matrix B is obtained from A by removing the
+rows corresponding to the polynomials in W. If W consists of a single polynomial w(x) then we call
+w(x) a warranted interlacing characteristic polynomial. Equivalently, an interlacing characteristic
+polynomial w(x) ∈ F is called warranted if the w(x)-entry of every interlacing configuration for F is
+positive. We can show that W ⊂ F is warranted by providing a certificate of infeasibility c for F\W.
+We call such a c a certificate of warranty for the subset W. Equivalently, the entries of Ac that
+correspond to W are negative, while the rest of the entries of Ac, which correspond to the entries
+of Bc, are nonnegative.
+   Once we have a warranted subset of interlacing characteristic polynomials W ⊂ F, we know
+that, for any interlacing configuration n for F, the entry nf ⩾ 1 for some f ∈ W. Furthermore, by
+Corollary 4.8, if nf > 0 then f must be Seidel-compatible with some polynomials in the warranted
+subset W. Let C ⊂ F be the subset of polynomials that are Seidel-compatible with at least one
+polynomial from W. Instead of looking for solutions to (5), we need only restrict our attention to
+solving the system
+                                         X
+(6)                                          nf · f(x) = p′ (x).
+                                         f∈C
+
+Similar to the above, to show that no Seidel matrix S exists having CharS (x) = p(x), such that
+W is a warranted subset of interlacing characteristic polynomials for p(x), it suffices to provide a
+                                                   14
+                                    2,000
+
+                                    1,800
+
+             Time taken (seconds)   1,600
+
+                                    1,400
+
+                                    1,200
+
+                                    1,000
+
+                                     800
+
+                                     600
+
+                                     400
+
+                                     200
+
+                                       00   20   40   60     80     100   120    140      160
+                                                        Index (Table 2)
+
+        Figure 5. A bar chart to display the time taken to compute the interlacing char-
+        acteristic polynomial for each of the 164 polynomials in Lemma 5.4.
+
+
+certificate of infeasibility c for the linear system (6). We call c a certificate of infeasibility for
+p(x) with respect to W.
+   Given a putative characteristic polynomial for a Seidel matrix, we first find its interlacing charac-
+teristic polynomials. If no certificate of infeasibility exists, then we look for warranted polynomials
+or warranted subsets consisting of two polynomials. We find warranted subsets by removing them
+from the set of interlacing characteristic polynomials and then finding a certificate of infeasibility
+for the remaining subset of interlacing characteristic polynomials.
+Lemma 5.6. There does not exist a Seidel matrix S whose characteristic polynomial is equal to any
+of the 11 polynomials in Table 4.
+Proof. For each polynomial p(x) in Table 4, the corresponding linear system has at least one non-
+negative real solution. In Table 5, we list two warranted interlacing characteristic polynomials f(x)
+and g(x) for each p(x) and their certificates of warranty. However, for each p(x) we have that f(x)
+is not Seidel-compatible with g(x), which contradicts Corollary 4.8.                               
+
+  The computations required in Lemma 5.6 (to compute the interlacing characteristic polynomials
+and check Seidel-compatibility) take about 2 minutes and 5 seconds in total.
+Lemma 5.7. There does not exist a Seidel matrix S whose characteristic polynomial is equal to any
+of the eight polynomials in Table 6.
+Proof. For each polynomial in Table 6 there exists a warranted polynomial f(x), listed in Table 7
+together with its certificate of warranty. Next we find all interlacing characteristic polynomials that
+are Seidel-compatible with f(x) and we find that there is no solution to (6). The Seidel-compatible
+interlacing characteristic polynomials and the certificate of infeasibility with respect to f(x) are listed
+in Table 8.                                                                                              
+                                                         15
+   The computations required in Lemma 5.7 (to compute the interlacing characteristic polynomials
+and Seidel-compatible subsets) take about 2 minutes and 16 seconds in total.
+   In the remainder of this paper we are solely occupied with ruling out the remaining set C of 8
+polynomials from Lemma 3.6. The total time required to compute the interlacing characteristic
+polynomials and Seidel-compatible subsets for the remainder of this paper’s results takes less than
+five minutes on a modern PC.
+Lemma 5.8. There does not exist a Seidel matrix S with characteristic polynomial
+                       CharS (x) = (x + 5)32 (x − 9)13 (x − 11)2 (x2 − 21x + 92).
+Proof. Suppose a Seidel matrix S has characteristic polynomial
+                       CharS (x) = (x + 5)32 (x − 9)13 (x − 11)2 (x2 − 21x + 92).
+There are 51 interlacing characteristic polynomials and the set
+                   {(x + 5)31 (x − 9)12 (x − 11)(x4 − 36x3 + 454x2 − 2356x + 4241),
+                    (x + 5)31 (x − 9)12 (x − 11)2 (x3 − 25x2 + 179x − 379)}.
+is warranted with certificate (−17507602, 0, 0, −9281, −1031). From the 51 interlacing characteristic
+polynomials, we keep only those polynomials that are Seidel-compatible with at least one of the
+polynomials in the set above. As a result, we are left with five polynomials:
+               f1 (x) = (x + 5)31 (x − 9)12 (x − 11)(x4 − 36x3 + 454x2 − 2364x + 4281),
+               f2 (x) = (x + 5)31 (x − 9)12 (x − 11)(x4 − 36x3 + 454x2 − 2356x + 4241),
+               f3 (x) = (x + 5)31 (x − 9)12 (x − 11)2 (x3 − 25x2 + 179x − 379),
+               f4 (x) = (x + 5)31 (x − 9)14 (x − 11)(x2 − 18x + 49),
+               f5 (x) = (x + 5)31 (x − 3)(x − 9)13 (x − 11)(x2 − 24x + 139).
+These five polynomials are pairwise Seidel-compatible and we find that there are seven possible
+interlacing configurations (nf1 , nf2 , nf3 , nf4 , nf5 ):
+                        (2, 43, 1, 3, 0), (6, 34, 7, 2, 0), (6, 37, 4, 1, 1), (6, 40, 1, 0, 2),
+                           (10, 25, 13, 1, 0), (10, 28, 10, 0, 1), (14, 16, 19, 0, 0).
+                               √                 √                   
+Let (λ1 , . . . , λ5 ) = (21 − 73)/2, (21 + 73)/2, 11, −5, 9 be a 5-tuple of the five distinct eigenval-
+ues of S. Firstly, we compute the following angles
+    2                                                  √                             √              
+     αλ1 (f1 ) α2λ2 (f1 ) α2λ3 (f1 )         (949 + 107√ 73)/97236 (949 − 107√ 73)/97236 1/9
+   α2λ (f2 ) α2λ (f2 ) α2λ (f2 )  (803 − 29 73)/48618                      (803 + 29√ 73)/48618 1/36
+    21                2       3                       √                                             
+   α (f3 ) α2 (f3 ) α2 (f3 ) =  (511 − 5 73)/16206                                               0 
+    λ2 1             λ2      λ3                        √                    (511 + 5 √
+                                                                                        73)/16206      .
+   αλ (f4 ) α2λ (f4 ) α2λ (f4 ) (3869 + 385 73)/48618 (3869 − 385 73)/48618 7/36
+        1              2       3                          √                             √
+     α2λ1 (f5 ) α2λ2 (f5 ) α2λ3 (f5 )       (6059 + 427 73)/48618 (6059 − 427 73)/48618 1/9
+Note that                                        √                      √
+                                          83 − 17 73 ⊺ 83 + 17 73 ⊺
+                  (S + 5I)(S − 9I) =                  uu +                   vv + 32Pλ3
+                                               2                      2
+where u and v are unit eigenvectors corresponding to the eigenvalues λ1 and λ2 , respectively and
+Pλ3 is the orthogonal projection onto E(λ3 ). Clearly, the matrix (S + 5I)(S − 9I) must be an integer
+matrix. For each of the seven possible interlacing configurations (nf1 , nf2 , nf3 , nf4 , nf5 ), we observe
+that both nf2 and nf3 are positive, while we also have that αλ3 (f3 ) = 0. Suppose that the interlacing
+configuration is one of the seven possibilities. Let i, j ∈ {1, . . . , 49} such that CharS[i] (x) = f2 (x)
+and CharS[j] (x) = f3 (x). Since αλ3 (f3 ) = 0, by Lemma 4.5, we obtain
+                                             √                                √                     !
+                                   83 − 17 73                          83 + 17 73
+(7)     (S + 5I)(S − 9I)i,j = ±                  αλ1 (f2 )αλ1 (f3 ) ±             αλ2 (f2 )αλ2 (f3 ) .
+                                           2                                2
+                                                          16
+                                                          √
+However, the right hand side of (7) is equal to either ±65 73/219 or ±11/3. This contradicts the
+condition that (S + 5I)(S − 9I) is an integer matrix.                                         
+
+                              6. Angle vectors with entries equal to 0
+   Before we can rule out the remaining seven polynomials from Lemma 3.6, we need to introduce
+some extra tools. We use O and J to denote the zero matrix and all-ones matrix respectively, the
+dimensions of these matrices should be clear from the context. We will write Jn to denote the
+all-ones matrix of order n. Let M be a real symmetric matrix of order n. For k ∈ {1, . . . , n} and a
+subset {i1 , . . . , ik } ⊂ {1, . . . , n}, denote by M [i1 , . . . , ik ] the principal submatrix of M obtained by
+deleting its rows and columns indexed by the set {i1 , . . . , ik }.
+Lemma 6.1. Let M be a real symmetric matrix of order n with eigenvalue λ. Let v1 , . . . , vm be
+linearly independent λ-eigenvectors of M and let k < n be a positive integer. Suppose that vj (i) = 0
+for all i ∈ {1, . . . , k} and for all j ∈ {1, . . . , m}. For each j ∈ {1, . . . , m}, remove the first k entries of
+vj to obtain the vector vj∗ . Then v1∗ , . . . , vm   ∗
+                                                        are linearly independent λ-eigenvectors of the principal
+submatrix M [1, . . . , k].
+Proof. Clearly, the vectors v1∗ , . . . , vm
+                                           ∗
+                                              retain linear independence from v1 , . . . , vm . Let N be the
+n × m matrix whose ith column is vi and let N ∗ be the (n − k) × m matrix whose ith column is vi∗ .
+Observe that, we have M N = λN . Furthermore, writing M and N as block matrices yields
+                                                                                        
+                  O                            A         B            O         BN ∗
+                       = λN  =    M   N    =                             =                       .
+                λN ∗                           B ⊺
+                                                    M [1, . . . , k] N ∗   M [1, . . . , k]N ∗
+It follows that M [1, . . . , k]N ∗ = λN ∗ , as required.                                                         
+
+   Combining Lemma 4.4, 4.5, and 6.1, we have the following lemma.
+Lemma 6.2. Let M be a real symmetric matrix of order n with eigenvalue λ of multiplicity m.
+Suppose there exists a k-subset I of {1, . . . , n} such that for each i ∈ I, the principal submatrix M [i]
+has an eigenvalue λ of multiplicity m or m + 1. Then M has a principal submatrix of order n − k
+with eigenvalue λ of multiplicity at least m.
+Proof. If for some i ∈ {1, . . . , n}, the principal submatrix M [i] has eigenvalue λ of multiplicity m or
+m + 1, then we have the corresponding angle αλ (i) = 0 by Lemma 4.4. Without loss of generality,
+suppose that I = {n − k + 1, . . . , n}. For each i ∈ I, the principal submatrix M [i] has eigenvalue λ
+of multiplicity m or m + 1. Let u1 , u2 , . . . , um be an orthonormal basis of the eigenspace E(λ). By
+Lemma 4.5, we have that
+                       m
+                       X
+                             u2j (i) = α2λ (i) = 0 =⇒ u1 (i) = u2 (i) = · · · = um (i) = 0
+                       j=1
+
+for all i ∈ I. Let u∗1 , u∗2 , . . . , u∗m ∈ Rn−k be vectors such that for all i ∈ {1, . . . , n − k} and
+j ∈ {1, . . . , m}, we have u∗j (i) = uj (i). By Lemma 6.1, the vectors u∗1 , u∗2 , . . . , u∗m are linearly
+independent λ-eigenvectors of the principal submatrix M ∗ = M [n − k + 1, . . . , n]. Therefore, the
+principal submatrix M ∗ has eigenvalue λ of multiplicity at least m.                                      
+
+Lemma 6.3. There does not exist a Seidel matrix S with characteristic polynomial
+                          CharS (x) = (x + 5)32 (x − 7)(x − 9)14 (x − 12)(x − 15).
+Proof. Suppose a Seidel matrix S has characteristic polynomial
+                          CharS (x) = (x + 5)32 (x − 7)(x − 9)14 (x − 12)(x − 15).
+There are 36 interlacing characteristic polynomials and one of them is warranted:
+                        f(x) = (x + 5)31 (x − 7)(x − 9)13 (x3 − 31x2 + 291x − 757)
+                                                         17
+with certificate of warranty (−60980320, 0, 0, −26357, −2396). Out of the 36 interlacing characteristic
+polynomials, only three are Seidel-compatible with f(x):
+
+                      f1 (x) = (x + 5)31 (x − 7)(x − 9)13 (x − 15)(x2 − 16x + 51),
+                      f2 (x) = (x + 5)31 (x − 7)(x − 9)13 (x3 − 31x2 + 291x − 757),
+                      f3 (x) = (x + 5)31 (x − 9)14 (x3 − 29x2 + 247x − 531).
+
+These three polynomials are pairwise Seidel-compatible and we find that there is only one possible
+interlacing configuration (nf1 , nf2 , nf3 ) = (9, 36, 4). By Lemma 6.2, we conclude that there exists a
+Seidel matrix Sb of order 4 with eigenvalue 7. This is a contradiction since tr Sb2 = 12 < 72 .       
+
+Lemma 6.4. There does not exist a Seidel matrix S with characteristic polynomial
+
+                    CharS (x) = (x + 5)32 (x − 7)(x − 8)(x − 9)12 (x − 11)2 (x − 15).
+
+Proof. Suppose a Seidel matrix S has characteristic polynomial
+
+                    CharS (x) = (x + 5)32 (x − 7)(x − 8)(x − 9)12 (x − 11)2 (x − 15).
+
+There are 56 interlacing characteristic polynomials and the set
+
+            {(x + 5)31 (x − 7)(x − 9)11 (x − 11)(x4 − 38x3 + 512x2 − 2874x + 5583),
+             (x + 5)31 (x − 9)11 (x − 11)(x5 − 45x4 + 778x3 − 6442x2 + 25397x − 37673)}.
+
+is warranted with certificate (−114666126726, 0, 0, −29336361, −3575825, −437857). From the 56
+interlacing characteristic polynomials, we keep only those polynomials that are Seidel-compatible
+with at least one of the polynomials in the set above. As a result, we are left with eight polynomials:
+
+         f1 (x) = (x + 5)31 (x − 7)(x − 9)12 (x − 11)(x − 15)(x2 − 14x + 41),
+         f2 (x) = (x + 5)31 (x − 7)(x − 9)11 (x − 11)(x4 − 38x3 + 512x2 − 2874x + 5583),
+         f3 (x) = (x + 5)31 (x − 9)12 (x − 11)(x4 − 36x3 + 454x2 − 2364x + 4201),
+         f4 (x) = (x + 5)31 (x − 9)12 (x − 11)(x4 − 36x3 + 454x2 − 2356x + 4129),
+         f5 (x) = (x + 5)31 (x − 9)11 (x − 11)(x5 − 45x4 + 778x3 − 6442x2 + 25397x − 37673),
+         f6 (x) = (x + 5)31 (x − 9)12 (x − 11)(x4 − 36x3 + 454x2 − 2348x + 4089),
+         f7 (x) = (x + 5)31 (x − 7)(x − 9)12 (x − 11)2 (x2 − 18x + 53),
+         f8 (x) = (x + 5)31 (x − 9)12 (x − 11)(x4 − 36x3 + 454x2 − 2332x + 3961).
+
+For these eight polynomials, there is only one possible interlacing configuration (nf1 , nf2 , . . . , nf8 ) =
+(0, 42, 0, 0, 0, 0, 1, 6). The three polynomials that correspond to the nonzero entries in the interlacing
+configuration are pairwise Seidel-compatible. By Lemma 6.2, we conclude that there exists a Seidel
+matrix Sb of order 6 with eigenvalue 7. This is a contradiction since tr Sb2 = 30 < 49 = 72 .                
+
+Lemma 6.5. There does not exist a Seidel matrix S with characteristic polynomial
+
+                   CharS (x) = (x + 5)32 (x − 7)2 (x − 8)(x − 9)10 (x − 11)2 (x − 13)2 .
+
+Proof. Suppose a Seidel matrix S has characteristic polynomial
+
+                   CharS (x) = (x + 5)32 (x − 7)2 (x − 8)(x − 9)10 (x − 11)2 (x − 13)2 .
+
+There are 17 interlacing characteristic polynomials and one of them is warranted:
+
+                 (x + 5)31 (x − 7)2 (x − 9)9 (x − 11)2 (x − 13)(x3 − 25x2 + 191x − 439)
+                                                     18
+with certificate of warranty (−1368582672, 0, 0, −369129, −41014, −4558). Using Seidel-compatibility,
+we reduce from 17 to eight polynomials:
+
+ f1 (x) =(x + 5)31 (x − 7)(x − 9)9 (x − 11)(x − 13)(x5 − 43x4 + 718x3 − 5802x2 + 22577x − 33547),
+ f2 (x) =(x + 5)31 (x − 7)2 (x − 9)9 (x − 11)2 (x − 13)(x3 − 25x2 + 191x − 439),
+ f3 (x) =(x + 5)31 (x − 7)(x − 9)10 (x − 11)(x − 13)(x4 − 34x3 + 412x2 − 2086x + 3659),
+ f4 (x) =(x + 5)31 (x − 7)2 (x − 9)9 (x − 11)2 (x − 13)(x3 − 25x2 + 191x − 431),
+ f5 (x) =(x + 5)31 (x − 7)(x − 9)10 (x − 11)(x − 13)(x4 − 34x3 + 412x2 − 2078x + 3571),
+ f6 (x) =(x + 5)31 (x − 7)(x − 9)9 (x − 11)2 (x − 13)(x2 − 12x + 31)(x2 − 20x + 95),
+ f7 (x) =(x + 5)31 (x − 7)(x − 9)10 (x − 11)2 (x − 13)(x3 − 23x2 + 159x − 321),
+ f8 (x) =(x + 5)31 (x − 7)(x − 9)10 (x − 11)2 (x − 13)(x3 − 23x2 + 159x − 313).
+
+These eight polynomials are pairwise Seidel-compatible and we find that there are 193 possible
+interlacing configurations. Furthermore, each interlacing configuration (nf1 , nf2 , . . . , nf8 ) has the
+property that nf2 + nf4 + nf6 + nf7 + nf8 = 33. By Lemma 6.2, we conclude that there exists a
+Seidel matrix Sb of order 16 with eigenvalue 11 of multiplicity at least 2. This is a contradiction since
+tr Sb2 = 16 · 15 = 240 < 242 = 2 · 112 .                                                                
+
+
+
+           7. Common interlacing and matrices with two simple eigenvalues
+   Let M be a real symmetric matrix of order n. It follows immediately from Lemma 4.3 (Cauchy’s
+interlacing theorem) that, for all i, j ∈ {1, . . . , n}, the polynomial CharM[i,j] (x) interlaces both
+CharM[i] (x) and CharM[j] (x). This seemingly innocuous proposition can be leveraged to help us
+rule out two of the candidate characteristic polynomials from Lemma 3.6. See Lemma 7.1 and
+Lemma 8.3.
+
+Lemma 7.1. There does not exist a Seidel matrix S with characteristic polynomial
+
+                           CharS (x) = (x + 5)32 (x − 4)(x − 9)10 (x − 11)6 .
+
+Proof. Suppose a Seidel matrix S has characteristic polynomial
+
+                           CharS (x) = (x + 5)32 (x − 4)(x − 9)10 (x − 11)6 .
+
+There are five interlacing characteristic polynomials and one of them is warranted:
+
+                          (x + 5)31 (x − 5)(x − 9)9 (x − 11)5 (x2 − 14x + 37)
+
+with certificate of warranty (11984, 0, 0, 67). Using Seidel-compatibility, we reduce from five to two
+polynomials:
+
+                      f1 (x) = (x + 5)31 (x − 7)(x − 9)9 (x − 11)5 (x2 − 12x + 23),
+                      f2 (x) = (x + 5)31 (x − 5)(x − 9)9 (x − 11)5 (x2 − 14x + 37).
+
+We find that there is only one possible interlacing configuration (7, 42).
+   The polynomial f2 (x) has 28 interlacing characteristic polynomials. We find a warranted inter-
+lacing characteristic polynomial of f2 (x):
+
+                 (x + 5)30 (x − 9)8 (x − 11)4 (x2 − 16x + 59)(x3 − 18x2 + 91x − 134)
+                                                    19
+with certificate of warranty (−632673042, 0, 0, −330026, −37186, −4649). Using Seidel-compatibility,
+we reduce from 28 to seven polynomials:
+             f2,1 (x) = (x + 5)30 (x − 3)(x − 5)2 (x − 9)8 (x − 10)(x − 11)5 ,
+             f2,2 (x) = (x + 5)30 (x − 6)(x − 9)8 (x − 11)4 (x2 − 14x + 37)2 ,
+             f2,3 (x) = (x + 5)30 (x − 9)8 (x − 11)4 (x2 − 16x + 59)(x3 − 18x2 + 91x − 134),
+             f2,4 (x) = (x + 5)30 (x − 3)(x − 7)(x − 9)8 (x − 11)5 (x2 − 13x + 34),
+             f2,5 (x) = (x + 5)30 (x − 9)8 (x − 11)4 (x2 − 12x + 23)(x3 − 22x2 + 151x − 318),
+             f2,6 (x) = (x + 5)30 (x − 7)(x − 9)8 (x − 11)4 (x4 − 27x3 + 249x2 − 889x + 978),
+             f2,7 (x) = (x + 5)30 (x − 5)(x − 9)9 (x − 11)4 (x3 − 20x2 + 113x − 142).
+These seven polynomials are pairwise Seidel-compatible and we find that there are 16 possible
+interlacing configurations (nf2,1 , . . . , nf2,7 ):
+             (0, 16, 27, 2, 1, 2, 0), (0, 19, 24, 2, 0, 2, 1), (2, 14, 27, 1, 3, 1, 0), (2, 17, 24, 1, 2, 1, 1),
+             (2, 20, 21, 1, 1, 1, 2), (2, 22, 18, 1, 0, 5, 0), (2, 23, 18, 1, 0, 1, 3), (4, 12, 27, 0, 5, 0, 0),
+             (4, 15, 24, 0, 4, 0, 1), (4, 18, 21, 0, 3, 0, 2), (4, 20, 18, 0, 2, 4, 0), (4, 21, 18, 0, 2, 0, 3),
+             (4, 23, 15, 0, 1, 4, 1), (4, 24, 15, 0, 1, 0, 4), (4, 26, 12, 0, 0, 4, 2), (4, 27, 12, 0, 0, 0, 5).
+Furthermore, only f2,5 (x), f2,6 (x), and f2,7 (x) interlace both f1 (x) and f2 (x). Suppose (nf2,1 , . . . , nf2,7 )
+is an interlacing configuration for f2 (x). It follows that nf2,5 + nf2,6 + nf2,7 ⩾ 7 since there is only one
+possible interlacing configuration (7, 42) for CharS (x). However, each of the 16 possible interlacing
+configurations above satisfies nf2,5 + nf2,6 + nf2,7 < 7, which is a contradiction.                               
+
+   Next we provide a result for matrices that have two simple eigenvalues that will help us eliminate
+some potential interlacing configurations. We denote Schur (Hadamard, or entrywise) multiplication
+for two vectors v and w as v ◦ w.
+Lemma 7.2. Let M be an integer symmetric matrix of order n. Suppose λ and µ are simple
+eigenvalues of M such that (x − λ)(x − µ) ∈ Z[x] is irreducible. Set
+                                              Y
+                                     q(x) =         (x − ν).
+                                                         ν∈Λ(M)
+                                                         ν6∈{λ,µ}
+                                                                                       ⊺
+Suppose that M αλ = λαλ and all entries of the matrix 2q(λ)αλ αλ are in R\Z. Then there exists
+a unique δ ∈ {±1}n such that δ(1) = 1 and
+                                                   ⊺                               ⊺
+                                       q(λ)αλ αλ + q(µ)(δ ◦ αµ )(δ ◦ αµ )
+is an integer matrix. Furthermore, δ ◦ αµ is a µ-eigenvector of M and, for all i, j ∈ {1, . . . , n} such
+that αλ (i) = αλ (j), we have δ(i) = δ(j).
+Proof. Set
+                                                        ⊺                                  ⊺
+                                  Ψ(δ) := q(λ)αλ αλ + q(µ)(δ ◦ αµ )(δ ◦ αµ ) .
+Clearly there must exist δ ∈ {±1}n such that δ(1) = 1 and Ψ(δ) = q(M ) is an integer matrix.
+Indeed, take δ = δ0 ∈ {±1}n such that δ0 (1) = 1 and δ0 ◦ αµ is a unit eigenvector for µ. It remains
+to show that such δ is unique.
+    Suppose that δ1 ∈ {±1}n satisfies δ1 (1) = 1 and Ψ(δ1 ) = q(M ) is an integer matrix where
+δ1 (j) 6= δ0 (j) for some j > 1. Then, by considering the entry (1, j) of Ψ(δ), we conclude that both
+                                    q(λ)αλ (1)αλ (j) ± q(µ)αµ (1)αµ (j) ∈ Z,
+which is not possible since each entry of the matrix 2q(λ)αλ α⊺λ is not an integer.
+                                                             20
+  Let K = Q(λ) be the splitting field of (x − λ)(x − µ). Take σ ∈ Gal(K/Q) such that σ(µ) = ν.
+Let i, j ∈ {1, . . . , n} such that αλ (i) = αλ (j). By Lemma 4.4, we have
+                                         fi (λ)      fj (λ)
+                                                  =           .
+                                        Min′M (λ)   Min′M (λ)
+Applying the automorphism σ and using Lemma 4.4 again yields αµ (i) = αµ (j). Suppose, to the
+contrary, that δ(i) 6= δ(j) then δ(i) + δ(j) = 0. It follows that
+                                 Ψ(δ)1,i + Ψ(δ)1,j = 2q(λ)αλ (1)αλ (i)
+
+is an integer, which is a contradiction. Therefore, we have δ(i) = δ(j), as required.                   
+
+   We use Lemma 7.2 in the subsequent nonexistence results. One important utility of Lemma 7.2,
+as shown in the forthcoming proofs, is that it allows us to exhaustively check for all possibilities for
+δ.
+Lemma 7.3. There does not exist a Seidel matrix S with characteristic polynomial
+                   CharS (x) = (x + 5)32 (x − 7)(x − 9)10 (x − 11)4 (x2 − 19x + 76).
+Proof. Suppose a Seidel matrix S has characteristic polynomial
+                   CharS (x) = (x + 5)32 (x − 7)(x − 9)10 (x − 11)4 (x2 − 19x + 76).
+There are 99 interlacing characteristic polynomials and one of them is warranted:
+               (x + 5)31 (x − 7)(x − 9)9 (x − 11)3 (x4 − 34x3 + 408x2 − 2030x + 3543)
+
+with certificate of warranty (0, 0, 0, −31002, −10684, −1527). Using Seidel-compatibility, we reduce
+from 99 to five polynomials:
+           f1 (x) = (x + 5)31 (x − 7)(x − 9)9 (x − 11)3 (x4 − 34x3 + 408x2 − 2030x + 3543),
+           f2 (x) = (x + 5)31 (x − 9)9 (x − 11)3 (x2 − 16x + 59)(x3 − 25x2 + 187x − 411),
+           f3 (x) = (x + 5)31 (x − 7)(x − 9)9 (x − 11)3 (x4 − 34x3 + 408x2 − 2022x + 3455),
+           f4 (x) = (x + 5)31 (x − 9)11 (x − 11)3 (x3 − 23x2 + 151x − 289),
+           f5 (x) = (x + 5)31 (x − 7)2 (x − 9)9 (x − 11)4 (x2 − 16x + 43).
+These five polynomials are pairwise Seidel-compatible and we find that there are two possible inter-
+lacing configurations (nf1 , nf√     2 , nf3 , nf4 , nf5 ):√(24, 12, 6, 0, 7) and
+                                                                                 (27, 11, 2, 1, 8).
+   Let (λ1 , . . . , λ6 ) = (19 − 57)/2, (19 + 57)/2, −5, 7, 9, 11 be a 6-tuple of the six distinct eigen-
+values of S. Firstly, we compute the following angles
+                   2                                       √                          √            
+                     αλ1 (f1 ) α2λ2 (f1 )             (323 + √  57)/39102         (323 − √  57)/39102
+                  α2λ (f2 ) α2λ (f2 ) (437 − 39 57)/52136 (437 + 39 57)/52136
+                   21             2                         √                           √          
+                  α (f3 ) α2 (f3 ) = (589 + 22 57)/19551 (589 − 22 57)/19551 .
+                   λ2 1         λ2                          √                           √          
+                  αλ (f4 ) α2λ (f4 )  (95 + 11 57)/3192                        (95 − 11√ 57)/3192 
+                        1          2                           √
+                     α2λ1 (f5 ) α2λ2 (f5 )           (969 + 3 57)/13034 (969 − 3 57)/13034
+   By Corollary 4.6, without loss of generality, we can assume that αλ1 is an eigenvector for S with
+eigenvalue λ1 . Using the angles calculated above, we can check that 2(λ1 + 5)(λ1 − 7)(λ1 − 9)(λ1 −
+11)αλ1 α⊺λ1 does not contain any element in Z. By Lemma 7.2, there exists δ ∈ {±1}49 such that
+δ(1) = 1 and αλ1 is orthogonal to δ ◦ αλ2 . Furthermore, instead of checking 248 possibilities for
+δ, we need only check 24 possibilities for δ. However, we find that for the two possible interlacing
+configurations (24, 12, 6, 0, 7) and (27, 11, 2, 1, 8) there does not exist a δ ∈ {±1}49 such that αλ1 is
+orthogonal to δ ◦ αλ2 , which contradicts Lemma 7.2.                                                   
+                                                    21
+                                         8. Euler graphs
+   In this section, we introduce one last tool that will enable us to dispose of the last two remaining
+polynomials from Lemma 3.6. Let S be a Seidel matrix and denote by Γ(S) the underlying graph
+of S: the graph whose adjacency matrix is given by (J − I − S)/2. The switching class of S is
+defined as the set consisting of all underlying graphs Γ(DSD) where D is a diagonal matrix with
+entries in {±1}. An Euler graph is a graph all of whose vertices have even degree. Seidel [32]
+showed that if n is odd then there is precisely one Euler graph in the switching class of S. Let m
+be a positive integer. If A and B are integer matrices of the same size, then A ≡m B indicates that,
+for all i and j, the (i, j)-entry of A is congruent to the (i, j)-entry of B modulo m.
+Lemma 8.1. Let S be a Seidel matrix of order n odd. Let λ, µ, and ν be integers with λ and µ
+odd. Then the underlying graph of S is the unique Euler graph contained in the switching class of S
+if and only if
+                              (S − λI)(S − µI) ≡4 (n − 2 − λ − µ)J and
+                     (S − λI)(S − µI)(S − νI) ≡4 (n − 2 − λ − µ)(n − 1 − ν)J.
+Proof. Let S = J − I − 2A. Expanding (S − λI)(S − µI), we obtain
+  (S − λI)(S − µI) =(n − 2 − λ − µ)J + (λ + 1)(µ + 1)I + 2(λ + µ + 2)A + 4A2 − 2(JA + AJ).
+Since λ and µ are odd, it follows that
+(8)                    (S − λI)(S − µI) ≡4 (n − 2 − λ − µ)J − 2(JA + AJ).
+Suppose the underlying graph of S is the unique Euler graph contained in the switching class of S.
+Note that JA ≡2 AJ ≡2 O, since A is the adjacency matrix of an Euler graph. Then from (8), it is
+clear that
+                               (S − λI)(S − µI) ≡4 (n − 2 − λ − µ)J.
+Therefore,
+                (S − λI)(S − µI)(S − νI) ≡4 (n − 2 − λ − µ)J(J − (ν + 1)I − 2A)
+                                           ≡4 (n − 2 − λ − µ)(J 2 − (ν + 1)J − 2JA)
+                                           ≡4 (n − 2 − λ − µ)(n − 1 − ν)J.
+  Conversely, suppose that
+(9)                           (S − λI)(S − µI) ≡4 (n − 2 − λ − µ)J
+(10)                 (S − λI)(S − µI)(S − νI) ≡4 (n − 2 − λ − µ)(n − 1 − ν)J.
+From (9), we have
+         (S − λI)(S − µI)(S − νI) ≡4 (n − 2 − λ − µ)(n − 1 − ν)J − 2(n − 2 − λ − µ)JA.
+Combining with (10), we obtain
+                      2(n − 2 − λ − µ)JA ≡4 O =⇒ (n − 2 − λ − µ)JA ≡2 O
+Since n, λ, and µ are all odd, n − 2 − λ − µ is also odd. It follows that JA ≡2 O and therefore, the
+underlying graph of S is an Euler graph, which is unique in the switching class of S.             
+
+Lemma 8.2. There does not exist a Seidel matrix S with characteristic polynomial
+                      CharS (x) = (x + 5)32 (x − 9)12 (x − 11)3 (x2 − 19x + 72).
+Proof. Suppose a Seidel matrix S has characteristic polynomial
+                      CharS (x) = (x + 5)32 (x − 9)12 (x − 11)3 (x2 − 19x + 72).
+                                                  22
+There are 53 interlacing characteristic polynomials for CharS (x), two of which are f3 (x) and f4 (x):
+                f3 (x) = (x + 5)31 (x − 9)11 (x − 11)2 (x4 − 34x3 + 404x2 − 1966x + 3323),
+                f4 (x) = (x + 5)31 (x − 9)11 (x − 11)2 (x4 − 34x3 + 404x2 − 1966x + 3339).
+The set {f3 (x), f4 (x)} is warranted with certificate (−37937620, 0, 0, −29081, −5816). However,
+f3 (x) and f4 (x) are not Seidel-compatible. Hence we can consider Seidel-compatibility with f3 (x)
+and f4 (x) separately. From the 53 interlacing characteristic polynomials CharS (x), only three are
+Seidel-compatible with f3 (x):
+                f3 (x) = (x + 5)31 (x − 9)11 (x − 11)2 (x4 − 34x3 + 404x2 − 1966x + 3323),
+               f10 (x) = (x + 5)31 (x − 9)11 (x − 11)3 (x3 − 23x2 + 151x − 297),
+               f41 (x) = (x + 5)31 (x − 9)11 (x − 11)2 (x − 13)(x3 − 21x2 + 131x − 215).
+These three polynomials are pairwise Seidel-compatible but we find that there is only one possible
+solution to (6): (91/2, 1, 5/2), which is a contradiction. On the other hand, only four out of the 53
+polynomials are Seidel-compatible with f4 (x):
+                f1 (x) = (x + 5)31 (x − 9)11 (x − 11)2 (x4 − 34x3 + 404x2 − 1966x + 3291),
+                f4 (x) = (x + 5)31 (x − 9)11 (x − 11)2 (x4 − 34x3 + 404x2 − 1966x + 3339),
+               f24 (x) = (x + 5)31 (x − 9)11 (x − 11)2 (x4 − 34x3 + 404x2 − 1942x + 3075),
+               f32 (x) = (x + 5)31 (x − 3)(x − 7)(x − 9)11 (x − 11)3 (x − 13).
+These four polynomials are pairwise Seidel-compatible and we find that there are two possible
+interlacing configurations (nf√    1 , nf4 , nf24 , nf32√): (16, 28, 4, 1) and
+                                                                             (17, 28, 0, 4).
+   Let (λ1 , . . . , λ5 ) = (19 − 73)/2, (19 + 73)/2, 11, −5, 9 be a 5-tuple of the five distinct eigen-
+values of S. Firstly, we compute the following angles
+    2                                                       √                           √       
+      αλ1 (f1 ) α2λ2 (f1 ) α2λ3 (f1 )               (219 + 23√73)/14016 (219 − 23√73)/14016 1/8
+    α2λ (f4 ) α2λ (f4 ) α2λ (f4 )   (803 − 65 73)/56064 (803 + 65 73)/56064 1/32
+    21                                                       √                           √      
+   αλ (f24 ) α2λ (f24 ) α2λ (f24 ) = (3723 + 71 73)/56064 (3723 − 71 73)/56064 1/32 .
+                         2        3
+
+        1               2        3                            √                            √
+     α2λ1 (f32 ) α2λ2 (f32 ) α2λ3 (f32 )                (73 + 73)/876              (73 − 73)/876 0
+   By Corollary 4.6, without loss of generality, we can assume that αλ1 is an eigenvector for S with
+eigenvalue λ1 . Using the angles calculated above, we can check that 2(λ1 +5)(λ1 −9)(λ1 −11)αλ1 α⊺λ1
+does not contain any element in Z. By Lemma 7.2, there exists δ ∈ {±1}49 such that δ(1) = 1
+and αλ1 is orthogonal to δ ◦ αλ2 . Furthermore, instead of checking 248 possibilities for δ, we need
+only check 23 possibilities for δ. We find that, out of the two possible interlacing configurations
+(16, 28, 4, 1) and (17, 28, 0, 4), for only (16, 28, 4, 1) does there exist a δ ∈ {±1}49 such that δ(1) = 1
+and αλ1 is orthogonal to δ ◦ αλ2 . Furthermore, this δ is unique.
+   Suppose S has interlacing configuration (nf1 , nf4 , nf24 , nf32 ) = (16, 28, 4, 1). Let I1 = {1, . . . , 16},
+I4 = {17, . . . , 44}, I24 = {45, . . . , 48}, and I32 = {49} and fix the ordering such that αλi (j) =
+αλi (fk ) for each i ∈ {1, . . . , 5} and each j ∈ Ik . Suppose we switch S to Sǫ such that the underlying
+graph of Sǫ is the unique Euler graph contained in the switching class of S. Let Tǫ = (Sǫ + 5I)(Sǫ −
+9I)(Sǫ − 11I) and by Lemma 8.1, we have Tǫ ≡4 3J. We find that there exists an ǫ ∈ {±1}49 such
+that ǫ(1) = 1 and
+                                                                                                             
+                                                                                      7J16   −J −13J −9J
+                                                                                   −J      7J28 −5J 15J 
+     Tǫ = η(ǫ ◦ αλ1 )(ǫ ◦ αλ1 ) + η(ǫ ◦ δ ◦ αλ2 )(ǫ ◦ δ ◦ αλ2 ) =                                            ,
+                                    ⊺                                      ⊺
+                                                                                  −13J −5J 31J4          3J 
+                                                                                      −9J 15J       3J    39
+                        √                                 √
+where η = 3(157 − 73)/2 and η = 3(157 + 73)/2. Furthermore, such an ǫ is unique. Indeed, any
+diagonal {±1}-matrix D satisfying DTǫ D ≡4 Tǫ is either ±I. Set u = ǫ ◦ αλ1 and v = ǫ ◦ δ ◦ αλ2 .
+Let a = (a1 , . . . , a49 )⊺ , b = (b1 , . . . , b49 )⊺ , and c = (c1 , . . . , c49 )⊺ be an orthonormal basis for the
+                                                         23
+eigenspace E(λ3 ). By Lemma 4.5, the entries ai , bi , and ci satisfy a2i + b2i + c2i = 1/8 for all i ∈ I1 ,
+a2i + b2i + c2i = 1/32 for all i ∈ I4 ∪ I24 , and a49 = b49 = c49 = 0. By the Cauchy-Schwarz inequality,
+(11)                        (a2i + b2i + c2i )(a2j + b2j + c2j ) ⩾ (ai aj + bi bj + ci cj )2
+for all i, j ∈ {1, . . . , 49}. Now, by Lemma 8.1,
+                                     3      √      ⊺  3      √      ⊺
+           (Sǫ + 5I)(Sǫ − 9I) = (17 − 5 73)uu + (17 + 5 73)vv + 32Pλ3
+                                     2
+                                                     2    
+                                       −J16  J      J   3J
+                                      J    2J28 −4J 3J 
+                                  =  J
+                                                            + 32(aa⊺ + bb⊺ + cc⊺ ) ≡4 3J.
+                                            −4J 2J4 −9J 
+                                        3J   3J −9J      3
+From (11), we have
+                 −4 ⩽ 32(ai aj + bi bj + ci cj ) ⩽ 4 for all i, j ∈ I1 ,
+                 −1 ⩽ 32(ai aj + bi bj + ci cj ) ⩽ 1 for all i, j ∈ I4 ∪ I24 ,
+                 −2 ⩽ 32(ai aj + bi bj + ci cj ) ⩽ 2 for all i ∈ I1 and for all j ∈ I4 ∪ I24 .
+Therefore,
+                                                                                            
+                                                M1,1                  M1,4     M1,24       O
+                                               M1,4
+                                                  ⊺
+                                                                      J28       −J         O
+(12)
+                               ⊺    ⊺    ⊺    
+                          32(aa + bb + cc ) =  ⊺                                            
+                                                M1,24                 −J        J4         O
+                                                 O                     O        O          0
+where the entries of M1,1 are −4, 0, or 4 and the entries of M1,4 and M1,24 are −2 or 2.
+  Let (a17 , b17 , c17 ) = (a, b, c) for some a, b, c ∈ R. Using (12), for i, j ∈ I4 we have
+                                                                                      1
+                          a2i + b2i + c2i = a2j + b2j + c2j = ai aj + bi bj + ci cj =    ,
+                                                                                      32
+from which it follows that (ai , bi , ci ) = (aj , bj , cj ). Similarly, for i ∈ I4 and j ∈ I24 , we have
+                                                                                    1
+                        a2i + b2i + c2i = a2j + b2j + c2j = −(ai aj + bi bj + ci cj ) =,
+                                                                                    32
+from which it follows that (ai , bi , ci ) = (−aj , −bj , −cj ). So far, we have obtained
+                                 ⊺
+                               a = (a1 , . . . , a16 , a, . . . , a, −a, −a, −a, −a, 0),
+                                    | {z } | {z }
+                                             16           28
+                                 ⊺
+                               b = (b1 , . . . , b16 , b, . . . , b, −b, −b, −b, −b, 0),
+                                    | {z } | {z }
+                                            16           28
+                                 ⊺
+                               c = (c1 , . . . , c16 , c, . . . , c, −c, −c, −c, −c, 0).
+                                    | {z } | {z }
+                                            16           28
+
+Similarly again, using (12), for i ∈ I1 , we have
+                                                          1                           1
+                    a2i + b2i + c2i = 4(a2 + b2 + c2 ) =     and aai + bbi + cci = ± .
+                                                          8                          16
+Therefore, (ai , bi , ci ) = ±2(a, b, c) for all i ∈ I1 . Finally, consider the matrix BE(λ3 ) = [a b c].
+Since the dimension of E(λ3 ) is 3 so is the rank of BE(λ3 ) . However, the row space of BE(λ3 ) is
+generated by (a, b, c), which is a contradiction.                                                      
+   Finally, we dismiss the most stubborn candidate characteristic polynomial for a Seidel matrix
+corresponding to 49 equiangular lines in R17 .
+Lemma 8.3. There does not exist a Seidel matrix S with characteristic polynomial
+                        CharS (x) = (x + 5)32 (x − 9)13 (x − 13)2 (x2 − 17x + 64).
+                                                           24
+Proof. Suppose a Seidel matrix S has characteristic polynomial
+                         CharS (x) = (x + 5)32 (x − 9)13 (x − 13)2 (x2 − 17x + 64).
+There are 26 interlacing characteristic polynomials and one of them is warranted:
+                     (x + 5)31 (x − 9)12 (x − 13)(x4 − 34x3 + 408x2 − 2022x + 3503)
+with certificate of warranty (−12716952, 0, 0, −7781, −864). Using Seidel-compatibility, we reduce
+from 26 to six polynomials:
+                f1 (x) = (x + 5)31 (x − 9)12 (x − 13)(x4 − 34x3 + 408x2 − 2022x + 3503),
+                f2 (x) = (x + 5)31 (x − 7)(x − 9)12 (x − 13)2 (x2 − 14x + 37),
+                f3 (x) = (x + 5)31 (x − 9)12 (x − 13)(x4 − 34x3 + 408x2 − 2014x + 3415),
+                f4 (x) = (x + 5)31 (x − 9)12 (x − 13)(x4 − 34x3 + 408x2 − 2006x + 3295),
+                f5 (x) = (x + 5)31 (x − 3)(x − 9)12 (x − 11)(x − 13)(x2 − 20x + 95),
+                f6 (x) = (x + 5)31 (x − 9)13 (x − 11)(x − 13)(x2 − 14x + 29).
+These six polynomials are pairwise Seidel-compatible and we find that there are thirteen possible
+interlacing configurations (nf1 , nf2 , nf3 , nf4 , nf5 , nf6 ):
+                  (30, 3, 16, 0, 0, 0), (33, 1, 12, 3, 0, 0), (34, 2, 11, 1, 1, 0), (37, 0, 7, 4, 1, 0),
+                  (37, 2, 8, 1, 0, 1), (38, 1, 6, 2, 2, 0), (39, 2, 5, 0, 3, 0), (40, 0, 4, 4, 0, 1),
+                  (41, 1, 3, 2, 1, 1), (42, 0, 1, 3, 3, 0), (42, 2, 2, 0, 2, 1), (43, 1, 0, 1, 4, 0),
+                       (44, 1, 0, 2, 0, 2).
+                                   √            √               
+Let (λ1 , . . . , λ5 ) = (17 − 33)/2, (17 + 33)/2, 13, −5, 9 be a 5-tuple of the five distinct eigenval-
+ues of S. Firstly, we compute the following angles
+       2                                             √                    √                 
+       αλ1 (f1 ) α2λ2 (f1 ) α2λ3 (f1 )           (33 − 2 √33)/2871   (33 + 2 √33)/2871     1/27
+      α2λ (f2 ) α2λ (f2 ) α2λ (f2 )  (33 − 2 33)/319               (33 + 2 √33)/319      0 
+       21                2           3                √                                     
+      α (f3 ) α2 (f3 ) α2 (f3 )  (165 + 19 33)/7656 (165 − 19 33)/7656 1/18
+       λ2 1             λ2          λ3               √                    √                 .
+      α (f4 ) α2 (f4 ) α2 (f4 ) =  (495 − 33)/5742                (495 +    33)/5742    1/27
+       λ2 1                                                                                 
+      α (f5 ) α2 (f5 ) α2 (f5 )  (165 + 19√33)/2088 (165 − 19√33)/2088 5/54
+                         λ2          λ3
+          λ1             λ2          λ3                   √                   √
+       α2λ1 (f6 ) α2λ2 (f6 ) α2λ3 (f6 )        (627 + 107 33)/5742 (627 − 107 33)/5742 4/27
+   Using Lemma 7.2, we can reduce from 13 possible interlacing configurations to just three. Indeed,
+by Corollary 4.6, without loss of generality, we can assume that αλ1 is an eigenvector for S with
+eigenvalue λ1 . Using the angles calculated above, we can check that 2(λ1 +5)(λ1 −9)(λ1 −13)αλ1 α⊺λ1
+does not contain any element in Z. By Lemma 7.2, there exists δ ∈ {±1}49 such that δ(1) = 1 and
+αλ1 is orthogonal to δ ◦ αλ2 . Furthermore, instead of checking 248 possibilities for δ, we need only
+check 25 possibilities for δ. Now, out of the 13 possible interlacing configurations, for only
+                              (33, 1, 12, 3, 0, 0), (37, 0, 7, 4, 1, 0), (40, 0, 4, 4, 0, 1)
+do there exist a δ ∈ {±1}49 such that δ(1) = 1 and
+                                      3           √           ⊺    3          √                           ⊺
+     (S + 5I)(S − 9I)(S − 13I) = (67 + 19 33)αλ1 αλ1 + (67 − 19 33)(δ ◦ αλ2 )(δ ◦ αλ2 )
+                                      2                            2
+is an integer matrix and αλ1 is orthogonal to δ ◦ αλ2 . Furthermore, this δ is unique for each of the
+three interlacing configurations.
+   First suppose that S has interlacing configuration (nf1 , nf2 , nf3 , nf4 , nf5 , nf6 ) = (33, 1, 12, 3, 0, 0).
+Let I1 = {1, . . . , 33}, I2 = {34}, I3 = {35, . . . , 46}, and I4 = {47, 48, 49} and fix the ordering such
+that αλi (j) = αλi (fk ) for each i ∈ {1, . . . , 5} and each j ∈ Ik . Suppose we switch S to Sǫ such
+that the underlying graph of Sǫ is the unique Euler graph contained in the switching class of S. Let
+                                                            25
+Tǫ = (Sǫ + 5I)(Sǫ − 9I)(Sǫ − 13I) and by Lemma 8.1, we have Tǫ ≡4 J. We find that there exists
+ǫ ∈ {±1}49 such that ǫ(1) = 1 and
+                                                                                                       
+                                                                            J33    −3J       5J     9J
+                                                                         −3J        9     −15J −27J 
+     Tǫ = η(ǫ ◦ αλ1 )(ǫ ◦ αλ1 ) + η(ǫ ◦ δ ◦ αλ2 )(ǫ ◦ δ ◦ αλ2 ) =                                      ,
+                                  ⊺                                   ⊺
+                                                                          5J −15J 9J12            13J 
+                                                                            9J −27J 13J            17J3
+                           √                                √
+where η = 3(67 + 19 33)/2 and η = 3(67 − 19 33)/2. Furthermore, such an ǫ is unique. Indeed,
+any diagonal {±1}-matrix D satisfying DTǫ D ≡4 Tǫ is either ±I. Set u = ǫ◦αλ1 and v = ǫ◦δ ◦αλ2 .
+Let a = (a1 , . . . , a49 )⊺ and b = (b1 , . . . , b49 )⊺ be an orthonormal basis for the eigenspace E(λ3 ). By
+Lemma 4.5, the entries ai and bi satisfy a2i + b2i = 1/27 for all i ∈ I1 ∪ I4 , a34 = b34 = 0, and
+a2i + b2i = 1/18 for all i ∈ I3 . By the Cauchy-Schwarz inequality,
+(13)                                    (a2i + b2i )(a2j + b2j ) ⩾ (ai aj + bi bj )2
+for all i, j ∈ {1, . . . , 49}. Now, by Lemma 8.1,
+                                            √            √
+                                      3 − 13 33 ⊺ 3 + 13 33 ⊺
+             (Sǫ + 5I)(Sǫ − 9I) =              uu +          vv + 72Pλ3
+                                       2              2       
+                                        1/3J33 −J −J −7/3J
+                                       −J      3   3J    7J 
+                                   =  −J
+                                                                + 72(aa⊺ + bb⊺ ) ≡4 3J.
+                                               3J −J12    −J 
+                                        −7/3J 7J    −J   1/3J3
+From (13), we have
+                −8/3 ⩽ 72(ai aj + bi bj ) ⩽ 8/3,                                        for all i, j ∈ I1 ∪ I4 ;
+                −4 ⩽ 72(ai aj + bi bj ) ⩽ 4,                                                  for all i, j ∈ I3 ;
+              √                            √
+            −4 6/3 ⩽ 72(ai aj + bi bj ) ⩽ 4 6/3,                              for all i ∈ I1 ∪ I4 and j ∈ I3 .
+Consequently, we have
+                                                                                         
+                                                 M1,1                    O     O     M1,4
+                                                O                       0     O      O 
+                                72(aa + bb ) =                                           
+                                     ⊺    ⊺
+(14)                                            O                       O    M3,3    O 
+                                                  ⊺
+                                                 M1,4                    O     O     M4,4
+where the entries of the matrices M1,1 and M4,4 of order 33 and 3 respectively are −4/3 or 8/3, the
+entries of M1,4 are −8/3 or 4/3 and the entries of the matrix M3,3 of order 12 are −4, 0, or 4.
+   Let (a1 , b1 ) = (a, b) for some a, b ∈ R. Using (14), for i ∈ I1 ∪ I4 and j ∈ I3 , we have a2i a2j = b2i b2j ,
+from which it follows that
+(15)                              a2i (a2j + b2j ) = b2j (a2i + b2i ) =⇒ 3a2i = 2b2j ;
+(16)                              a2j (a2i + b2i ) = b2i (a2j + b2j ) =⇒ 2a2j = 3b2i .
+   Using (15) we see that a2i = a2 for all i ∈ I1 ∪ I4 and b2j = 3a2 /2 for all j ∈ I3 . Similarly, from
+(16) we have b2i = b2 for all i ∈ I1 ∪ I4 and a2j = 3b2 /2 for all j ∈ I3 . Therefore,
+                           (a ◦ a) = (a2 , . . . , a2 , 0, 3b2 /2, . . . , 3b2 /2, a2 , a2 , a2 ),
+                                    ⊺
+                                      | {z } |                      {z          }
+                                                33                       12
+                           (b ◦ b) = (b2 , . . . , b2 , 0, 3a2 /2, . . . , 3a2 /2, b2 , b2 , b2 ).
+                                    ⊺
+                                      | {z } |                      {z          }
+                                                33                       12
+                                                            2        2
+Since a and b are unit vectors, we must have a = b = 1/54. Based on the entries of M1,1 in (14)
+we have
+                                          4   8                  1      1
+                    72(a1 ai + b1 bi ) = − or   =⇒ aai + bbi = −    or
+                                          3   3                  54    27
+                                                                26
+for all i ∈ I1 \ {1}. The options are ai = ±a and bi = ±b and it is easy to check that only ai = a
+and bi = b are possible. Similarly, if i ∈ I4 then ai = −a and bi = −b based on the entries of M1,4
+in (14). Furthermore, if i ∈ I3 then
+                                                                        3
+                            aai + bbi = 0 =⇒ aai bi = −bb2i =⇒ ai bi = − ab
+                                                                        2
+as a 6= 0. Therefore,
+                                                         3
+                                  a · b = 33ab + 0 − 12 · ab + 3ab = 18ab.
+                                                         2
+Since a2 = b2 = 1/54, then ab = ±1/54. Hence we obtain a · b = ±1/3, which contradicts the fact
+that a and b are orthogonal.
+   Secondly, suppose that S has interlacing configuration (nf1 , nf2 , nf3 , nf4 , nf5 , nf6 ) = (37, 0, 7, 4, 1, 0).
+Let I1 = {1, . . . , 37}, I3 = {38, . . . , 44}, I4 = {45, . . . , 48}, and I5 = {49} and fix the ordering such
+that αλi (j) = αλi (fk ) for each i ∈ {1, . . . , 5} and each j ∈ Ik . Suppose we switch S to Sǫ such
+that the underlying graph of Sǫ is the unique Euler graph contained in the switching class of S. Let
+Tǫ = (Sǫ + 5I)(Sǫ − 9I)(Sǫ − 13I) and by Lemma 8.1, we have Tǫ ≡4 J. We find that there exists
+an ǫ ∈ {±1}49 such that ǫ(1) = 1 and
+                                                                                                          
+                                                                             J37    5J       9J     −7J
+                                                                            5J     9J7     13J −19J 
+    Tǫ = η(ǫ ◦ αλ1 )(ǫ ◦ αλ1 ) + η(ǫ ◦ δ ◦ αλ2 )(ǫ ◦ δ ◦ αλ2 ) =                                          ,
+                                  ⊺                                    ⊺
+                                                                            9J     13J     17J4 −31J 
+                                                                             −7J −19J −31J           33
+                           √                                √
+where η = 3(67 + 19 33)/2 and η = 3(67 − 19 33)/2. Furthermore, such an ǫ is unique. Indeed,
+any diagonal {±1}-matrix D satisfying DTǫ D ≡4 Tǫ is either ±I. Set u = ǫ◦αλ1 and v = ǫ◦δ ◦αλ2 .
+Let a = (a1 , . . . , a49 )⊺ and b = (b1 , . . . , b49 )⊺ be an orthonormal basis for the eigenspace E(λ3 ). By
+Lemma 4.5, the entries ai and bi satisfy a2i + b2i = 1/27 for all i ∈ I1 ∪ I4 , a2i + b2i = 1/18 for all
+i ∈ I3 , and a249 + b249 = 5/54. By the Cauchy-Schwarz inequality,
+(17)                                  (a2i + b2i )(a2j + b2j ) ⩾ (ai aj + bi bj )2
+for all i, j ∈ {1, . . . , 49}. Now, by Lemma 8.1,
+                                           √             √
+                                     3 − 13 33 ⊺ 3 + 13 33 ⊺
+            (Sǫ + 5I)(Sǫ − 9I) =              uu +          vv + 72Pλ3
+                                      2               2       
+                                       1/3J37 −J −7/3J 1/3J
+                                      −J     −J7   −J     3J 
+                                  =                                  ⊺ ⊺
+                                     −7/3J −J 1/3J4 17/3J  + 72(aa + bb ) ≡4 3J.
+                                        1/3J   3J  17/3J −11/3
+From (17), we have
+                −8/3 ⩽ 72(ai aj + bi bj ) ⩽ 8/3,                                       for all i, j ∈ I1 ∪ I4 ;
+                −4 ⩽ 72(ai aj + bi bj ) ⩽ 4,                                                  for all i, j ∈ I3 ;
+              √                            √
+            −4 6/3 ⩽ 72(ai aj + bi bj ) ⩽ 4 6/3,                         for all i ∈ I1 ∪ I4 and j ∈ I3 ;
+             √                               √
+           −4 10/3 ⩽ 72(ai a49 + bi b49 ) ⩽ 4 10/3,                                      for all i ∈ I1 ∪ I4 ;
+             √                               √
+           −4 15/3 ⩽ 72(ai a49 + bi b49 ) ⩽ 4 15/3,                                             for all i ∈ I3 .
+Consequently, we have
+                                                                                         
+                                              M1,1              O        M1,4        M1,5
+                                              O               M3,3       O          M3,5 
+                              72(aa + bb ) =                                             
+                                   ⊺    ⊺
+(18)                                         M1,4
+                                                ⊺
+                                                                O        M4,4        M4,5 
+                                                ⊺                ⊺         ⊺
+                                              M1,5             M3,5      M4,5        20/3
+                                                          27
+where the entries of M1,1 , M1,5 , and M4,4 are −4/3 or 8/3, the entries of M1,4 and M4,5 are −8/3
+or 4/3, and the entries of M3,3 and M3,5 are −4, 0, or 4. Note that the matrices M1,1 , M3,3 , and
+M4,4 have orders 37, 7, and 4 respectively.
+   Let (a1 , b1 ) = (a, b) for some a, b ∈ R. Using (18), for i ∈ I1 ∪ I4 and j ∈ I3 , we have a2i a2j = b2i b2j .
+Following the same reasoning as for the previous interlacing configuration, we obtain
+                        (a ◦ a) = (a2 , . . . , a2 , 3b2 /2, . . . , 3b2 /2, a2 , a2 , a2 , a2 , a249 ),
+                                 ⊺
+                                   | {z } |                   {z          }
+                                             37                    7
+                        (b ◦ b) = (b , . . . , b , 3a /2, . . . , 3a2 /2, b2 , b2 , b2 , b2 , b249 ).
+                                         2         2     2
+                                 ⊺
+                                   | {z } |                {z          }
+                                             37                    7
+
+    We observe that a and b are both nonzero. Otherwise, by Lemma 6.1, there would be a Seidel
+matrix Sb of order 8 with eigenvalue 13 of multiplicity at least one. This is a contradiction since
+tr Sb2 = 56 < 169 = 132 .
+    Now let i ∈ I1 \ {1} and hence,
+                                                  4    8                  1      1
+                       72(a1 ai + b1 bi ) = −       or   =⇒ aai + bbi = −    or
+                                                  3    3                  54    27
+based on the entries of M1,1 in (18). The options are ai = ±a and bi = ±b. We can exclude the
+possibility ai = −a and bi = −b, otherwise aai + bbi = −1/27.
+   Suppose ai = a and bi = −b so we have aai + bbi = a2 − b2 . If a2 − b2 = 1/27 then b = 0, which
+is a contradiction. If a2 − b2 = −1/54 then a2 = 1/108 and b2 = 1/36. However, this implies that
+37b2 > 1, which contradicts that b is a unit vector.
+   Similarly, suppose ai = −a and bi = b so we have aai + bbi = b2 − a2 . If b2 − a2 = 1/27 then
+a = 0, which is a contradiction. If b2 − a2 = −1/54 then a2 = 1/36 and b2 = 1/108. However, this
+implies that 37a2 > 1, which contradicts that a is a unit vector. Thus, we conclude that ai = a and
+bi = b for all i ∈ I1 . In a similar fashion, we also conclude that ai = −a and bi = −b for all i ∈ I4
+based on the entries of M1,4 in (18).
+   Furthermore, if i ∈ I3 then from aai + bbi = 0 we derive ai bi = −3ab/2 since a, b 6= 0. Combining
+with a · b = 0, we obtain
+                                                                 
+                                                   3721 2 1
+(19)                                   a249 b249 =     a      − a2 .
+                                                    4      27
+Since a and b are unit vectors, we obtain
+                                                               
+                                    21 2              21 1         11 61 2
+(20)               a249 = 1 − 41a2 −   b = 1 − 41a2 −       − a2 =    − a ,
+                                     2                2 27         18   2
+                                                         
+                                    21              1        21    61 2 14
+(21)               b249 = 1 − 41b2 − a2 = 1 − 41      − a2 − a2 =     a − .
+                                    2              27         2     2     27
+But together (20) and (21) are inconsistent with (19). Therefore, we arrive at a contradiction.
+   Lastly, suppose we have (40, 0, 4, 4, 0, 1) as the interlacing configuration. Here we employ differ-
+ent strategy compared with the previous two interlacing configurations. There are 73 interlacing
+characteristic polynomials corresponding to the polynomial f6 (x). We note that the corresponding
+entry in the interlacing configuration is 1 so suppose CharS[1] (x) = f6 (x). For i ∈ {2, . . . , 49} we
+have CharS[i] (x) = f1 (x), f3 (x), or f4 (x). It follows that CharS[1,i] (x) interlaces both f6 (x) and
+CharS[i] (x). Out of the 73 polynomials, only 25 interlace at least one of f1 (x), f3 (x), f4 (x). Among
+them are
+               f6,2 (x) = (x + 5)30 (x − 9)12 (x − 11)(x4 − 31x3 + 321x2 − 1245x + 1506),
+               f6,3 (x) = (x + 5)30 (x − 9)12 (x − 11)(x4 − 31x3 + 321x2 − 1241x + 1462),
+where the set {f6,2 (x), f6,3 (x)} is warranted with certificate (5716582502, 0, 0, 1614215, 145454,
+13175). However, we also have that f6,2 (x) and f6,3 (x) are not Seidel-compatible. Hence, we can
+                                                              28
+consider Seidel-compatibility with f6,2 (x) and f6,3 (x) separately. From the 25 polynomials, only two
+are Seidel-compatible with f6,2 (x):
+              f6,1 (x) = (x + 5)30 (x − 9)12 (x − 13)(x2 − 14x + 29)(x2 − 15x + 46),
+              f6,2 (x) = (x + 5)30 (x − 9)12 (x − 11)(x4 − 31x3 + 321x2 − 1245x + 1506).
+But we have a certificate of infeasibility (38051376, 0, 0, 10571, 823, 3). On the other hand, only four
+out of the 25 polynomials are Seidel-compatible with f6,3 (x):
+              f6,1 (x) = (x + 5)30 (x − 9)12 (x − 13)(x2 − 14x + 29)(x2 − 15x + 46),
+              f6,3 (x) = (x + 5)30 (x − 9)12 (x − 11)(x4 − 31x3 + 321x2 − 1241x + 1462),
+             f6,11 (x) = (x + 5)30 (x − 9)12 (x − 13)(x4 − 29x3 + 285x2 − 1047x + 982),
+             f6,18 (x) = (x + 5)30 (x − 9)12 (x − 11)(x4 − 31x3 + 321x2 − 1209x + 1046).
+But we have a certificate of infeasibility (−7998906611, 0, 0, −2236872, −195255, −17128). Therefore,
+we arrive at a contradiction.                                                                      
+
+  Thus the proof of Theorem 1.1 is complete.
+
+                                           9. Conclusion
+   Our proof of N (17) = 48 consists of two main parts. First we enumerate all the polynomials that
+can potentially be the characteristic polynomial of a Seidel matrix corresponding to an equiangular
+line system of cardinality 49 in R17 . We find that there are 194 such polynomials. Second, we
+show that none of these polynomials can be the characteristic polynomial of a Seidel matrix. In
+principle, this technique can be applied in general to find which polynomials can be the characteristic
+polynomial of a Seidel matrix that corresponds to an equiangular line system of cardinality n in Rd .
+However, the amount of computation required to generate all of the polynomials in the first part can
+become too expensive for various combinations of n and d. Furthermore, given a list of candidate
+characteristic polynomials, it can be very challenging to determine whether or not there exists a
+corresponding Seidel matrix for each of the polynomials. For example, to show that the polynomial
+(x + 5)32 (x − 9)16 (x − 16) cannot be the characteristic polynomial of a Seidel matrix, it is necessary
+to show the nonexistence of a strongly regular graph of order 49 [16]. The question of the existence
+of certain strongly regular graphs is a notoriously difficult problem - an entire paper was devoted to
+showing the nonexistence of a strongly regular graph of order 49 [6], which was implicitly required
+to show that N (17) = 48.
+   If we apply our techniques to the next open case, dimension 18, we can enumerate all the candidate
+characteristic polynomials that correspond to a Seidel matrix for an equiangular line system of
+cardinality 60 in R18 . However, our current techniques cannot dispose of all the candidates that
+we find. In particular, the polynomial (x + 5)42 (x − 11)15 (x − 15)3 , which was first identified in
+[16] as a candidate for the characteristic polynomial for a putative Seidel matrix, corresponds to an
+equiangular line system of cardinality 60 in R18 . Looking further, enumerating all candidates for
+characteristic polynomials of a putative Seidel matrix for an equiangular line system of cardinality
+59 in R18 may be possible on a super computer, but it appears to be out of reach of our current
+methods using a personal computer.
+   Lastly, we believe the methods we use may have more general applications for studying the
+existence of Hermitian matrices whose entries are restricted to a certain discrete ring and whose
+eigenvalues are geometrically constrained.
+
+                                     10. Acknowledgements
+   We are grateful to Yufei Zhao for his comments on an earlier version of this paper and to the
+referees, whose comments led to various improvements to this paper.
+                                                   29
+                                                  References
+ 1. J. Azarija and T. Marc, There is no (75, 32, 10, 16) strongly regular graph, Linear Algebra Appl. 557, 62–83
+    (2018).
+ 2. J. Azarija and T. Marc, There is no (95, 40, 12, 20) strongly regular graph, J. Combin. Des. 28(4), 294–306
+    (2020).
+ 3. I. Balla, F. Draxler, P. Keevash, and B. Sudakov, Equiangular lines and spherical codes in Euclidean space,
+    Invent. Math. 211(1), 179–212 (2018).
+ 4. B. Bukh, Bounds on equiangular lines and on related spherical codes, SIAM J. Discrete Math. 30(1), 549–554
+    (2016).
+ 5. W. Bosma, J. Cannon, and C. Playoust, The Magma algebra system. I. The user language, J. Symbolic Comput.
+    24, 235–265 (1997).
+ 6. F.C. Bussemaker, W.H. Haemers, R. Mathon, and H.A. Wilbrink, A (49, 16, 3, 6) strongly regular graph does not
+    exist, European J. Combin. 10, 413–418 (1989).
+ 7. A.-L. Cauchy, Sur l’équation à l’aide de laquelle on détermine les inégalités séculaires des mouvements des
+    planètes. In Œuvres complètes, IIième Série, Gauthier-Villars, Paris, 1829.
+ 8. D. Cvetković, P. Rowlinson, and S. Simić, Eigenspaces of graphs, Encyclopedia of Mathematics and its Applica-
+    tions, vol. 66, Cambridge University Press, Cambridge, 1997.
+ 9. P.B. Denton, S.J. Parke, T. Tao, and X. Zhang, Eigenvectors from eigenvalues: A survey of a basic identity in
+    linear algebra, Bull. Amer. Math. Soc. 59, 31–58 (2022).
+10. J. Farkas, Theorie der einfachen Ungleichungen, J. Reine Angew. Math. 124, 1–27 (1902).
+11. S. Fisk, A very short proof of Cauchy’s interlace theorem for eigenvalues of Hermitian matrices, Amer. Math.
+    Monthly 112(2), 118–118 (2005).
+12. C.D. Godsil and B.D. McKay, Spectral conditions for the reconstructibility of a graph, J. Combin. Theory Ser. B
+    30(3), 285–289 (1981).
+13. C. Godsil and G. Royle, Algebraic graph theory, vol. 207 of Graduate Texts in Mathematics, Springer-Verlag, New
+    York, 2001.
+14. A. Glazyrin and W.-H. Yu, Upper bounds for s-distance sets and equiangular lines, Adv. Math. 330, 810–833
+    (2018).
+15. G.R.W. Greaves, Magma companion code and computations from the paper “Equiangular lines in Euclidean
+    spaces: dimensions 17 and 18”, https://github.com/grwgrvs/equiangular17/ .
+16. G.R.W. Greaves, Equiangular line systems and switching classes containing regular graphs, Linear Algebra Appl.
+    536, 31–51 (2018).
+17. G. Greaves, J. Koolen, A. Munemasa and F. Szöllősi, Equiangular lines in Euclidean spaces, J. Combin. Theory
+    Ser. A 138, 208–235 (2016).
+18. G.R.W. Greaves, J. Syatriadi, and P. Yatsyna, Equiangular lines in low dimensional Euclidean spaces, Combina-
+    torica 41(6), 839–872 (2021).
+19. G.R.W. Greaves and P. Yatsyna, On equiangular lines in 17 dimensions and the characteristic polynomial of a
+    Seidel matrix, Math. Comp. 88(320), 3041–3061 (2019).
+20. J. Haantjes, Equilateral point-sets in elliptic two- and three-dimensional spaces, Nieuw Arch. Wiskd. 22, 355–362
+    (1948).
+21. S.-G. Hwang, Cauchy’s interlace theorem for eigenvalues of Hermitian matrices, Amer. Math. Monthly 111(2),
+    157–159 (2004).
+22. Z. Jiang and A. Polyanskii, Forbidden Subgraphs for Graphs of Bounded Spectral Radius, with Applications to
+    Equiangular Lines, Israel J. Math. 236(1), 393–421 (2020).
+23. Z. Jiang, J. Tidor, Y. Yao, S. Zhang, and Y. Zhao, Equiangular lines with a fixed angle, Ann. of Math. 194(3),
+    729–743 (2021).
+24. E. King and X. Tang, New upper bounds for equiangular lines by pillar decomposition, SIAM J. Discrete Math.
+    33(4), 2479–2508 (2019).
+25. D. de Laat, F.C. Machado, F.M. de Oliveira Filho and F. Vallentin, k-point semidefinite programming bound for
+    equiangular lines, Math. Program. (2021).
+26. P.W.H. Lemmens and J.J. Seidel, Equiangular lines, J. Algebra 24(3), 494–512 (1973).
+27. Y.-C. Lin and W.-H. Yu, Saturated configuration and new large construction of equiangular lines, Linear Algebra
+    Appl. 588, 272–281 (2020).
+28. J.H. van Lint and J.J. Seidel, Equilateral point sets in elliptic geometry, Indag. Math. 28(3), 335–348 (1966).
+29. Wolfram Research, Inc., Mathematica, Version Number 10.0, Champaign, IL (2014).
+30. J.F. McKee and C.J. Smyth, Salem numbers of trace −2 and traces of totally positive algebraic integers, Algo-
+    rithmic number theory, 327–337, Lecture Notes in Comput. Sci., 3076, Springer, Berlin, 2004.
+31. T. Okuda and W.-H. Yu, A new relative bound for equiangular lines and nonexistence of tight spherical designs
+    of harmonic index 4, European J. Combin. 53, 96–103 (2016).
+32. J.J. Seidel, Graphs and two-graphs, in: Proc. 5th Southeastern Conf. on Combinatorics, Graph Theory, and
+    Computing, Utilitas Mathematica Publishing Inc., Winnipeg, Canada, 1974.
+
+
+                                                         30
+33. N.J.A. Sloane (editor), The On-Line Encyclopedia of Integer Sequences. Published electronically at
+    https://oeis.org/.
+34. F. Szöllősi, A remark on a construction of D. S. Asche, Discrete Comput. Geom. 61(1), 120–122 (2019).
+35. D.E. Taylor, Regular 2-graphs, Proc. London Math. Soc. 35, 257–274 (1977).
+36. R.C. Thompson, Principal submatrices V: Some results concerning principal submatrices of arbitrary matrices,
+    J. Res. Natl. Bur. Standards Sect. B 72(2), 115–125 (1968).
+37. E. Witt, Die 5-fach transitiven Gruppen von Mathieu, Abhandlungen aus dem Mathematischen Seminar der
+    Universität Hamburg, vol. 12, Springer, 256–264 (1937).
+38. W.-H. Yu, New bounds for equiangular lines and spherical two-distance sets, SIAM J. Discrete Math. 31(2),
+    908–917 (2017).
+
+                                           Appendix A. Tables
+  In this appendix we provide tables of polynomials, certificates of infeasibility, and certificates of
+warranty referenced in Lemma 3.6, Lemma 5.4, Lemma 5.6, and Lemma 5.7.
+Index   Candidate characteristic polynomial
+    1   (x + 5)32 (x − 9)14 (x3 − 34x2 + 369x − 1292)
+    2   (x + 5)32 (x − 9)14 (x3 − 34x2 + 369x − 1280)
+    3   (x + 5)32 (x − 9)12 (x5 − 52x4 + 1062x3 − 10664x2 + 52713x − 102724)
+    4   (x + 5)32 (x − 9)13 (x − 11)(x3 − 32x2 + 323x − 1028)
+    5   (x + 5)32 (x − 9)12 (x5 − 52x4 + 1062x3 − 10656x2 + 52569x − 102092)
+    6   (x + 5)32 (x − 9)12 (x5 − 52x4 + 1062x3 − 10652x2 + 52481x − 101608)
+    7   (x + 5)32 (x − 8)(x − 9)12 (x4 − 44x3 + 710x2 − 4972x + 12737)
+    8   (x + 5)32 (x − 9)12 (x5 − 52x4 + 1062x3 − 10648x2 + 52393x − 101140)
+    9   (x + 5)32 (x − 9)12 (x5 − 52x4 + 1062x3 − 10648x2 + 52425x − 101428)
+   10   (x + 5)32 (x − 9)12 (x5 − 52x4 + 1062x3 − 10644x2 + 52321x − 100832)
+   11   (x + 5)32 (x − 9)13 (x4 − 43x3 + 675x2 − 4569x + 11200)
+   12   (x + 5)32 (x − 9)12 (x2 − 22x + 109)(x3 − 30x2 + 293x − 928)
+   13   (x + 5)32 (x − 9)12 (x5 − 52x4 + 1062x3 − 10644x2 + 52353x − 101120)
+   14   (x + 5)32 (x − 9)14 (x − 13)(x2 − 21x + 96)
+   15   (x + 5)32 (x − 7)(x − 9)11 (x − 11)(x4 − 43x3 + 679x2 − 4665x + 11756)
+   16   (x + 5)32 (x − 9)13 (x4 − 43x3 + 675x2 − 4565x + 11164)
+   17   (x + 5)32 (x − 7)(x − 9)12 (x − 13)(x3 − 32x2 + 331x − 1108)
+   18   (x + 5)32 (x − 9)12 (x2 − 22x + 113)(x3 − 30x2 + 289x − 892)
+   19   (x + 5)32 (x − 9)12 (x − 11)2 (x3 − 30x2 + 281x − 824)
+   20   (x + 5)32 (x − 9)11 (x − 11)(x5 − 50x4 + 980x3 − 9414x2 + 44331x − 81896)
+   21   (x + 5)32 (x − 9)12 (x − 11)(x4 − 41x3 + 611x2 − 3915x + 9096)
+   22   (x + 5)32 (x − 9)12 (x5 − 52x4 + 1062x3 − 10636x2 + 52161x − 100024)
+   23   (x + 5)32 (x − 7)(x − 9)12 (x − 11)(x3 − 34x2 + 373x − 1304)
+   24   (x + 5)32 (x − 9)12 (x2 − 22x + 113)(x3 − 30x2 + 289x − 888)
+   25   (x + 5)32 (x − 8)(x − 9)10 (x3 − 31x2 + 311x − 1009)2
+   26   (x + 5)32 (x − 9)12 (x5 − 52x4 + 1062x3 − 10632x2 + 52073x − 99556)
+   27   (x + 5)32 (x − 9)12 (x2 − 24x + 139)(x3 − 28x2 + 251x − 716)
+   28   (x + 5)32 (x − 7)2 (x − 9)10 (x − 11)3 (x2 − 23x + 124)
+   29   (x + 5)32 (x − 9)10 (x − 11)(x6 − 59x5 + 1430x4 − 18230x3 + 128957x2 − 480063x + 734908)
+   30   (x + 5)32 (x − 9)11 (x6 − 61x5 + 1530x4 − 20190x3 + 147793x2 − 568885x + 899524)
+   31   (x + 5)32 (x − 9)12 (x5 − 52x4 + 1062x3 − 10632x2 + 52105x − 99908)
+   32   (x + 5)32 (x − 9)12 (x2 − 20x + 87)(x3 − 32x2 + 335x − 1148)
+   33   (x + 5)32 (x − 7)(x − 9)10 (x − 11)(x2 − 22x + 113)(x3 − 30x2 + 293x − 932)
+   34   (x + 5)32 (x − 9)11 (x2 − 20x + 95)2 (x2 − 21x + 100)
+   35   (x + 5)32 (x − 9)12 (x5 − 52x4 + 1062x3 − 10628x2 + 51969x − 98896)
+   36   (x + 5)32 (x − 9)10 (x − 11)2 (x5 − 48x4 + 902x3 − 8304x2 + 37481x − 66400)
+   37   (x + 5)32 (x − 9)12 (x2 − 18x + 73)(x3 − 34x2 + 377x − 1360)
+   38   (x + 5)32 (x − 9)11 (x6 − 61x5 + 1530x4 − 20186x3 + 147653x2 − 567289x + 893584)
+   39   (x + 5)32 (x − 9)13 (x − 13)(x3 − 30x2 + 285x − 848)
+   40   (x + 5)32 (x − 7)(x − 9)10 (x − 11)(x5 − 52x4 + 1066x3 − 10764x2 + 53509x − 104704)
+   41   (x + 5)32 (x − 9)10 (x − 11)(x2 − 20x + 95)(x4 − 39x3 + 555x2 − 3421x + 7712)
+   42   (x + 5)32 (x − 9)12 (x − 13)(x4 − 39x3 + 555x2 − 3413x + 7664)
+   43   (x + 5)32 (x − 7)(x − 9)10 (x2 − 20x + 95)2 (x2 − 23x + 128)
+   44   (x + 5)32 (x − 9)11 (x − 11)2 (x4 − 39x3 + 551x2 − 3341x + 7340)
+                                                                                         Continued on next page
+
+                                                       31
+                                    Table 2 – continued from previous page
+ 45   (x + 5)32 (x − 9)11 (x − 11)(x5 − 50x4 + 980x3 − 9402x2 + 44091x − 80708)
+ 46   (x + 5)32 (x − 9)12 (x5 − 52x4 + 1062x3 − 10624x2 + 51897x − 98572)
+ 47   (x + 5)32 (x − 9)10 (x − 11)2 (x5 − 48x4 + 902x3 − 8300x2 + 37441x − 66316)
+ 48   (x + 5)32 (x − 7)(x − 9)11 (x − 11)(x − 12)(x3 − 31x2 + 307x − 965)
+ 49   (x + 5)32 (x − 9)11 (x − 11)(x5 − 50x4 + 980x3 − 9402x2 + 44123x − 81028)
+ 50   (x + 5)32 (x − 9)12 (x − 12)(x2 − 18x + 73)(x2 − 22x + 113)
+ 51   (x + 5)32 (x − 9)11 (x − 11)(x5 − 50x4 + 980x3 − 9402x2 + 44123x − 80996)
+ 52   (x + 5)32 (x − 9)12 (x − 11)(x − 13)(x3 − 28x2 + 247x − 692)
+ 53   (x + 5)32 (x − 9)10 (x3 − 29x2 + 271x − 811)(x4 − 41x3 + 619x2 − 4079x + 9908)
+ 54   (x + 5)32 (x − 7)2 (x − 9)12 (x − 12)(x − 13)2
+ 55   (x + 5)32 (x − 9)10 (x − 11)2 (x5 − 48x4 + 902x3 − 8296x2 + 37337x − 65768)
+ 56   (x + 5)32 (x − 9)11 (x − 11)(x5 − 50x4 + 980x3 − 9398x2 + 44011x − 80312)
+ 57   (x + 5)32 (x − 9)12 (x − 11)(x4 − 41x3 + 611x2 − 3899x + 8920)
+ 58   (x + 5)32 (x − 7)(x − 8)(x − 9)9 (x − 11)3 (x3 − 31x2 + 307x − 965)
+ 59   (x + 5)32 (x − 7)(x − 9)11 (x − 11)2 (x3 − 32x2 + 327x − 1048)
+ 60   (x + 5)32 (x − 8)(x − 9)10 (x − 11)2 (x2 − 18x + 73)(x2 − 22x + 113)
+ 61   (x + 5)32 (x − 9)11 (x − 11)(x5 − 50x4 + 980x3 − 9398x2 + 44043x − 80664)
+ 62   (x + 5)32 (x − 9)11 (x − 11)(x5 − 50x4 + 980x3 − 9398x2 + 44043x − 80632)
+ 63   (x + 5)32 (x − 9)12 (x5 − 52x4 + 1062x3 − 10620x2 + 51841x − 98504)
+ 64   (x + 5)32 (x − 8)(x − 9)11 (x − 11)(x − 13)(x3 − 29x2 + 267x − 775)
+ 65   (x + 5)32 (x − 9)9 (x − 11)(x2 − 20x + 95)(x5 − 48x4 + 906x3 − 8408x2 + 38373x − 68920)
+ 66   (x + 5)32 (x − 9)10 (x3 − 31x2 + 311x − 1009)(x4 − 39x3 + 559x2 − 3481x + 7928)
+ 67   (x + 5)32 (x − 9)10 (x − 11)2 (x5 − 48x4 + 902x3 − 8292x2 + 37249x − 65284)
+ 68   (x + 5)32 (x − 9)12 (x5 − 52x4 + 1062x3 − 10616x2 + 51721x − 97620)
+ 69   (x + 5)32 (x − 9)10 (x − 11)2 (x5 − 48x4 + 902x3 − 8292x2 + 37281x − 65572)
+ 70   (x + 5)32 (x − 9)10 (x − 11)2 (x2 − 22x + 113)(x3 − 26x2 + 217x − 580)
+ 71   (x + 5)32 (x − 9)10 (x − 11)(x6 − 59x5 + 1430x4 − 18214x3 + 128493x2 − 475631x + 721004)
+ 72   (x + 5)32 (x − 9)11 (x2 − 20x + 95)(x4 − 41x3 + 615x2 − 3979x + 9292)
+ 73   (x + 5)32 (x − 9)11 (x − 13)(x5 − 48x4 + 906x3 − 8396x2 + 38149x − 67876)
+ 74   (x + 5)32 (x − 7)2 (x − 9)9 (x − 11)4 (x2 − 21x + 100)
+ 75   (x + 5)32 (x − 7)(x − 9)9 (x − 11)2 (x5 − 50x4 + 984x3 − 9522x2 + 45287x − 84668)
+ 76   (x + 5)32 (x − 7)(x − 9)10 (x − 11)2 (x4 − 41x3 + 615x2 − 3987x + 9404)
+ 77   (x + 5)32 (x − 9)10 (x − 13)(x2 − 17x + 68)(x2 − 20x + 95)2
+ 78   (x + 5)32 (x − 9)10 (x − 11)2 (x2 − 16x + 59)(x3 − 32x2 + 331x − 1104)
+ 79   (x + 5)32 (x − 9)10 (x − 11)2 (x5 − 48x4 + 902x3 − 8288x2 + 37193x − 65104)
+ 80   (x + 5)32 (x − 9)11 (x6 − 61x5 + 1530x4 − 20170x3 + 147157x2 − 562217x + 876448)
+ 81   (x + 5)32 (x − 9)9 (x − 11)2 (x6 − 57x5 + 1334x4 − 16406x3 + 111817x2 − 400449x + 588752)
+ 82   (x + 5)32 (x − 9)10 (x − 11)2 (x2 − 20x + 87)(x3 − 28x2 + 255x − 752)
+ 83   (x + 5)32 (x − 9)10 (x − 11)2 (x5 − 48x4 + 902x3 − 8288x2 + 37225x − 65392)
+ 84   (x + 5)32 (x − 9)10 (x − 11)2 (x2 − 20x + 95)(x3 − 28x2 + 247x − 688)
+ 85   (x + 5)32 (x − 9)10 (x − 11)(x6 − 59x5 + 1430x4 − 18210x3 + 128393x2 − 474835x + 719024)
+ 86   (x + 5)32 (x − 7)3 (x − 9)8 (x − 11)4 (x2 − 23x + 128)
+ 87   (x + 5)32 (x − 9)9 (x − 11)(x7 − 68x6 + 1961x5 − 31080x4 + 292299x3 − 1630868x2 + 4997515x − 6487424)
+ 88   (x + 5)32 (x − 9)9 (x − 11)(x3 − 29x2 + 271x − 811)(x4 − 39x3 + 559x2 − 3489x + 8000)
+ 89   (x + 5)32 (x − 9)11 (x − 13)(x2 − 18x + 73)(x3 − 30x2 + 293x − 928)
+ 90   (x + 5)32 (x − 7)(x − 9)9 (x − 11)(x − 13)(x2 − 20x + 95)(x3 − 28x2 + 255x − 752)
+ 91   (x + 5)32 (x − 9)10 (x − 11)(x2 − 19x + 80)(x2 − 20x + 95)2
+ 92   (x + 5)32 (x − 9)12 (x − 11)2 (x3 − 30x2 + 281x − 796)
+ 93   (x + 5)32 (x − 9)10 (x − 11)2 (x5 − 48x4 + 902x3 − 8284x2 + 37121x − 64796)
+ 94   (x + 5)32 (x − 9)11 (x − 11)2 (x4 − 39x3 + 551x2 − 3325x + 7196)
+ 95   (x + 5)32 (x − 9)11 (x − 11)(x5 − 50x4 + 980x3 − 9386x2 + 43771x − 79124)
+ 96   (x + 5)32 (x − 9)12 (x − 11)(x − 13)2 (x2 − 15x + 52)
+ 97   (x + 5)32 (x − 9)9 (x − 11)2 (x6 − 57x5 + 1334x4 − 16402x3 + 111709x2 − 399493x + 585980)
+ 98   (x + 5)32 (x − 9)10 (x − 11)2 (x2 − 18x + 73)(x3 − 30x2 + 289x − 892)
+ 99   (x + 5)32 (x − 9)10 (x − 11)2 (x5 − 48x4 + 902x3 − 8284x2 + 37153x − 65084)
+100   (x + 5)32 (x − 7)(x − 9)8 (x − 11)3 (x5 − 48x4 + 906x3 − 8404x2 + 38309x − 68668)
+101   (x + 5)32 (x − 9)9 (x − 11)(x7 − 68x6 + 1961x5 − 31076x4 + 292147x3 − 1628724x2 + 4984227x − 6456932)
+102   (x + 5)32 (x − 9)10 (x − 12)(x3 − 29x2 + 271x − 811)2
+103   (x + 5)32 (x − 7)2 (x − 9)8 (x − 11)2 (x − 12)(x2 − 20x + 95)2
+104   (x + 5)32 (x − 9)10 (x − 11)3 (x4 − 37x3 + 495x2 − 2835x + 5864)
+105   (x + 5)32 (x − 9)10 (x − 11)2 (x5 − 48x4 + 902x3 − 8280x2 + 37049x − 64472)
+                                                                                        Continued on next page
+                                                     32
+                                    Table 2 – continued from previous page
+106   (x + 5)32 (x − 9)11 (x − 11)(x − 13)(x4 − 37x3 + 499x2 − 2895x + 6056)
+107   (x + 5)32 (x − 7)(x − 9)9 (x − 11)3 (x4 − 39x3 + 555x2 − 3405x + 7576)
+108   (x + 5)32 (x − 9)10 (x − 11)2 (x2 − 18x + 73)(x3 − 30x2 + 289x − 888)
+109   (x + 5)32 (x − 9)9 (x − 11)2 (x6 − 57x5 + 1334x4 − 16398x3 + 111601x2 − 398521x + 583064)
+110   (x + 5)32 (x − 7)(x − 9)10 (x − 11)2 (x − 13)(x3 − 28x2 + 251x − 712)
+111   (x + 5)32 (x − 8)(x − 9)8 (x − 11)2 (x3 − 29x2 + 271x − 811)2
+112   (x + 5)32 (x − 9)9 (x − 11)(x2 − 20x + 95)(x5 − 48x4 + 906x3 − 8392x2 + 38085x − 67656)
+113   (x + 5)32 (x − 7)2 (x − 8)(x − 9)6 (x − 11)4 (x2 − 20x + 95)2
+114   (x + 5)32 (x − 9)10 (x − 11)3 (x4 − 37x3 + 495x2 − 2831x + 5820)
+115   (x + 5)32 (x − 9)10 (x − 11)2 (x5 − 48x4 + 902x3 − 8276x2 + 36961x − 63988)
+116   (x + 5)32 (x − 9)9 (x − 11)3 (x2 − 17x + 68)(x3 − 29x2 + 267x − 775)
+117   (x + 5)32 (x − 9)9 (x − 11)3 (x5 − 46x4 + 828x3 − 7286x2 + 31331x − 52636)
+118   (x + 5)32 (x − 9)10 (x − 11)2 (x5 − 48x4 + 902x3 − 8276x2 + 36993x − 64340)
+119   (x + 5)32 (x − 9)10 (x − 11)2 (x2 − 18x + 69)(x3 − 30x2 + 293x − 932)
+120   (x + 5)32 (x − 9)8 (x − 11)2 (x7 − 66x6 + 1847x5 − 28400x4 + 259039x3 − 1401034x2 + 4158953x − 5225156)
+121   (x + 5)32 (x − 7)2 (x − 9)8 (x − 11)4 (x − 13)(x2 − 17x + 68)
+122   (x + 5)32 (x − 7)(x − 9)8 (x − 11)3 (x2 − 18x + 73)(x3 − 30x2 + 293x − 932)
+123   (x + 5)32 (x − 9)10 (x − 11)2 (x5 − 48x4 + 902x3 − 8272x2 + 36873x − 63520)
+124   (x + 5)32 (x − 9)10 (x − 11)2 (x5 − 48x4 + 902x3 − 8272x2 + 36905x − 63872)
+125   (x + 5)32 (x − 9)10 (x − 11)2 (x2 − 20x + 95)(x3 − 28x2 + 247x − 672)
+126   (x + 5)32 (x − 7)(x − 9)8 (x − 11)4 (x4 − 37x3 + 499x2 − 2903x + 6128)
+127   (x + 5)32 (x − 9)8 (x − 11)2 (x2 − 16x + 59)(x2 − 20x + 95)(x3 − 30x2 + 293x − 928)
+128   (x + 5)32 (x − 9)9 (x − 11)2 (x2 − 17x + 64)(x2 − 20x + 95)2
+129   (x + 5)32 (x − 7)2 (x − 9)8 (x − 11)5 (x2 − 19x + 80)
+130   (x + 5)32 (x − 9)10 (x − 11)2 (x5 − 48x4 + 902x3 − 8268x2 + 36801x − 63212)
+131   (x + 5)32 (x − 9)9 (x − 11)2 (x6 − 57x5 + 1334x4 − 16386x3 + 111245x2 − 395093x + 572428)
+132   (x + 5)32 (x − 9)10 (x − 11)2 (x − 12)(x4 − 36x3 + 470x2 − 2628x + 5297)
+133   (x + 5)32 (x − 9)8 (x − 11)4 (x2 − 16x + 59)(x3 − 28x2 + 251x − 724)
+134   (x + 5)32 (x − 7)(x − 9)8 (x − 11)3 (x5 − 48x4 + 906x3 − 8388x2 + 37989x − 67084)
+135   (x + 5)32 (x − 9)8 (x − 11)3 (x2 − 15x + 52)(x2 − 20x + 95)2
+136   (x + 5)32 (x − 9)7 (x − 11)3 (x3 − 29x2 + 271x − 811)(x4 − 35x3 + 451x2 − 2533x + 5228)
+137   (x + 5)32 (x − 9)10 (x − 11)2 (x − 12)(x2 − 18x + 73)2
+138   (x + 5)32 (x − 7)4 (x − 9)6 (x − 11)6 (x − 12)
+139   (x + 5)32 (x − 9)11 (x − 11)3 (x3 − 28x2 + 243x − 632)
+140   (x + 5)32 (x − 9)10 (x − 11)2 (x5 − 48x4 + 902x3 − 8264x2 + 36729x − 62888)
+141   (x + 5)32 (x − 9)9 (x − 11)4 (x4 − 35x3 + 443x2 − 2401x + 4712)
+142   (x + 5)32 (x − 8)(x − 9)8 (x − 11)4 (x4 − 36x3 + 470x2 − 2628x + 5297)
+143   (x + 5)32 (x − 7)(x − 9)9 (x − 11)3 (x4 − 39x3 + 555x2 − 3389x + 7400)
+144   (x + 5)32 (x − 8)(x − 9)8 (x − 11)4 (x2 − 18x + 73)2
+145   (x + 5)32 (x − 7)4 (x − 8)(x − 9)4 (x − 11)8
+146   (x + 5)32 (x − 9)10 (x − 11)4 (x3 − 26x2 + 209x − 516)
+147   (x + 5)32 (x − 7)(x − 9)9 (x − 11)4 (x3 − 28x2 + 247x − 668)
+148   (x + 5)32 (x − 9)9 (x − 11)3 (x5 − 46x4 + 828x3 − 7270x2 + 31043x − 51404)
+149   (x + 5)32 (x − 7)(x − 9)7 (x − 11)5 (x4 − 35x3 + 447x2 − 2465x + 4948)
+150   (x + 5)32 (x − 9)8 (x − 11)4 (x2 − 18x + 73)(x3 − 26x2 + 217x − 580)
+151   (x + 5)32 (x − 9)10 (x − 11)2 (x5 − 48x4 + 902x3 − 8256x2 + 36553x − 61936)
+152   (x + 5)32 (x − 9)8 (x − 11)4 (x5 − 44x4 + 758x3 − 6380x2 + 26193x − 41920)
+153   (x + 5)32 (x − 7)(x − 9)8 (x − 11)5 (x3 − 26x2 + 213x − 544)
+154   (x + 5)32 (x − 7)2 (x − 9)7 (x − 11)6 (x2 − 17x + 64)
+155   (x + 5)32 (x − 9)8 (x − 11)4 (x2 − 20x + 95)(x3 − 24x2 + 183x − 436)
+156   (x + 5)32 (x − 9)8 (x − 11)4 (x − 12)(x2 − 16x + 59)2
+157   (x + 5)32 (x − 7)2 (x − 9)6 (x − 11)7 (x2 − 15x + 52)
+158   (x + 5)32 (x − 9)9 (x − 11)4 (x4 − 35x3 + 443x2 − 2385x + 4568)
+159   (x + 5)32 (x − 8)(x − 9)6 (x − 11)6 (x2 − 16x + 59)2
+160   (x + 5)32 (x − 9)10 (x − 11)4 (x3 − 26x2 + 209x − 500)
+161   (x + 5)32 (x − 9)9 (x − 11)5 (x3 − 24x2 + 179x − 412)
+162   (x + 5)32 (x − 5)(x − 9)8 (x − 11)6 (x2 − 17x + 68)
+163   (x + 5)32 (x − 7)(x − 9)8 (x − 11)6 (x2 − 15x + 48)
+164   (x + 5)32 (x − 9)10 (x − 11)4 (x3 − 26x2 + 209x − 488)
+                                                                                         Continued on next page
+
+
+
+                                                      33
+                             Table 2 – continued from previous page
+             Table 2: List of 164 candidate characteristic polynomials for 49 equiangular
+             lines in R17 .
+
+
+
+
+Index   Certificate of infeasibility
+    1   (−5488432, 0, 0, −2469, −274)
+    2   (−63703708, 0, 0, −31134, −4447)
+    3   (0, 0, 0, 0, −24516, −11277, −2933)
+    4   (64094624850, 0, 0, 13282715, 1315121, 131512)
+    5   (0, 0, 0, 0, −32892, −14918, −3771)
+    6   (0, 0, 0, 2179953, 598246, 95219, 12792)
+    7   (0, 0, 0, 0, −46941, −21298, −5385)
+    8   (0, 0, 0, 2020374, 527071, 75373, 8375)
+    9   (0, 0, 0, 0, −186488, −84667, −21412)
+   10   (0, 0, 0, 2213481, 577512, 82588, 9177)
+   11   (0, 0, 0, 262395, 85409, 13919)
+   12   (0, 0, 0, 0, −50486, −22673, −5606)
+   13   (0, 0, 0, 0, −166968, −76347, −19567)
+   14   (0, 0, 0, −761, −407)
+   15   (0, 0, 0, 0, 0, 48433, 27206, 8450)
+   16   (43568416850, 0, 0, 8939852, 867947, 86794)
+   17   (418335562857, 0, 0, 50603993, 5042602, 533922, 59325)
+   18   (0, 0, 0, 2951038, 757444, 105637, 11738)
+   19   (2170237224, 0, 0, 518291, 54779, 5899)
+   20   (0, 0, 0, −102473516, −26628634, −4344437, −608687, −79085)
+   21   (0, 0, 0, 3027878, 841889, 137248, 19051)
+   22   (0, 0, 0, 3424439, 942309, 150950, 20564)
+   23   (−350855974043, 0, 0, −36070743, −2365294, −118265, 0)
+   24   (0, 0, 0, 19725270, 5270911, 802935, 104149)
+   25   (0, 0, 0, 27926, 10159, 2010)
+   26   (0, 0, 0, 2358490, 648675, 103793, 14105)
+   27   (0, 0, 0, 0, −11689, −5069, −1158)
+   28   (−4870391404, 0, 0, −1228192, −147036, −17299)
+   29   (0, 0, 0, 0, 0, 0, 0, −2769, −2722)
+   30   (0, 0, 0, 0, 0, 49785, 28128, 8819)
+   31   (0, 0, 0, 2693660, 663478, 83879, 7626)
+   32   (0, 0, 0, 2151377, 521244, 62701, 4824)
+   33   (0, 0, 0, 0, 0, 2730500, 1336652, 374346, 80967)
+   34   (0, 0, 0, −3968275, −1342119, −230256)
+   35   (0, 0, 0, 0, −21822, −9463, −2157)
+   36   (0, 0, 0, 0, −1569046, −573439, −115384, −17518)
+   37   (4598007557155, 0, 0, 531045255, 47338744, 4256617, 386966)
+   38   (0, 0, 0, 0, −3978492, −1477259, −314027, −53170)
+   39   (20419347700, 0, 0, 4029188, 354569, 32233)
+   40   (0, 0, 0, 0, 0, 5733949, 2909745, 855377, 195699)
+   41   (0, 0, 0, 0, 0, 14228263, 7055510, 2012098, 444987)
+   42   (0, 0, 0, 5766425, 1554289, 240786, 31992)
+   43   (400497673181, 0, 0, 46699387, 3348961, 186053, 0)
+   44   (695180798312, 0, 0, 89011625, 8091966, 735633, 66876)
+   45   (0, 0, −83458849775, −11996698757, −1188052506, −118190915, −11828260, −1191996)
+   46   (0, 0, 0, 0, −21332, −9279, −2128)
+   47   (0, 0, 0, 0, 0, −48253, −17954, 0)
+   48   (0, 0, −61036254227, −8328939996, −759497210, −69872634, −6493326, −610484)
+   49   (0, 0, 0, −3673067283, −954462930, −155719105, −21817365, −2834629)
+   50   (0, 0, 0, 3242353, 857188, 128112, 16317)
+   51   (0, 0, 0, −136206225, −35394372, −5774558, −809058, −105118)
+   52   (0, 0, 0, 0, 8891029, 3501307, 607418)
+   53   (0, 0, 0, 0, 0, 5173067, 2563924, 730730, 161530)
+   54   (−43386189, 0, 0, −21122, −1920)
+                                                                            Continued on next page
+
+                                                  34
+                                  Table 3 – continued from previous page
+ 55   (0, 0, 0, −103422864, −26769889, −4290940, −589184, −74958)
+ 56   (0, 0, 0, −100965325, −26236718, −4280496, −599729, −77921)
+ 57   (−1299165141433, 0, 0, −149992114, −13410925, −1221759, −113651)
+ 58   (0, 0, 11091944806, 1414982133, 88436388, 0, −1403751, −356509)
+ 59   (−2370518793825, 0, 0, −304205617, −28068180, −2673161, −267316)
+ 60   (0, 0, 0, 0, −1329832, −537956, −127678, −24303)
+ 61   (0, 0, −77300917310, −10532936094, −956541670, −87328370, −8017435, −740071)
+ 62   (0, 0, 0, −3659439217, −950921617, −155141345, −21736416, −2824112)
+ 63   (0, 0, 0, 1667190, 446418, 67961, 8668)
+ 64   (0, 0, −27280263472, −3518058798, −293088094, −25041704, −2203669, −200334)
+ 65   (0, 0, 0, 0, 0, 0, −1064222, 0, 285444, 160397)
+ 66   (0, 0, 0, 0, 0, 2337512, 1158887, 330521, 73173)
+ 67   (0, 0, 0, 0, −1531587, −589537, −129964, −22695)
+ 68   (0, 0, 0, 0, −35406, −15155, −3334)
+ 69   (0, 0, 0, −71612334, −18804223, −3075477, −431366, −56080)
+ 70   (0, 0, 0, 0, 0, −12974, 0, 4359)
+ 71   (0, 0, 0, 0, 0, 4677012, 2215622, 593361, 122148)
+ 72   (0, 0, 0, −379426866, −98595447, −16085678, −2253718, −292816)
+ 73   (0, 0, 0, 0, −1001181, −347490, −65629, −9371)
+ 74   (−18918837294, 0, 0, −5728490, −787474, −108085)
+ 75   (0, 0, 0, −15349003083, −3936212014, −661763942, −97017114, −13355954, −1781204)
+ 76   (0, 0, 0, 0, 0, −60315, −31871, −8411)
+ 77   (0, 0, 0, 3059218, 768048, 97759, 8888)
+ 78   (0, 0, 0, −314129288, −78844475, −12081240, −1578458, −190430)
+ 79   (0, 0, 0, −64158067, −16846854, −2755344, −386464, −50242)
+ 80   (0, 0, 0, 0, −1704397, −620000, −127433, −20664)
+ 81   (0, 0, 0, 0, 0, 2880320, 1487377, 443235, 102448)
+ 82   (0, 0, 0, 0, 0, 262016, 152699, 49290)
+ 83   (0, 0, 0, −106796999, −28043138, −4586523, −643306, −83633)
+ 84   (0, 0, 0, 0, −6215064, −2516920, −598732, −114475)
+ 85   (0, 0, 0, 0, 0, 955948, 429395, 105520, 19167)
+ 86   (48031592256, 0, 0, 11040701, 1115611, 115408)
+ 87   (0, 0, 0, 0, 0, 0, −2143032, −1241360, −401833, −97740)
+ 88   (0, 0, 0, 0, 0, 0, −14047613, −8488569, −2909072, −758148)
+ 89   (0, 0, 0, 0, −1552628, −531841, −97912, −13407)
+ 90   (0, 0, 0, 0, 0, 0, −2618443, −1505910, −482407, −115715)
+ 91   (1617153799881, 0, 0, 197697391, 16639510, 1426243, 125110)
+ 92   (7063410652, 0, 0, 1589426, 144494, 13135)
+ 93   (0, 0, 0, −114103753, −29961502, −4900266, −687311, −89354)
+ 94   (0, 0, 0, 0, 31817, 13173, 2468)
+ 95   (0, 0, 0, 0, −10677039, −3964370, −842610, −142646)
+ 96   (0, 0, 0, 22638, 7941, 1375)
+ 97   (0, 0, 0, 0, 0, 6344046, 3245585, 956303, 218771)
+ 98   (0, 0, 0, −495338005, −121177788, −17614437, −2088461, −208847)
+ 99   (0, 0, 0, −393778194, −103398759, −16911081, −2371948, −308363)
+100   (0, 0, 0, 0, 0, 0, 12429, 8163, 2762)
+101   (0, 0, 0, 0, 0, 0, 0, 0, 1119, 1234)
+102   (−3885730122, 0, 0, −718522, −32660, −1)
+103   (−992098071642, 0, 0, −118216298, −9445854, −744219, −57247)
+104   (565131071791, 0, 0, 85703268, 9084766, 985095, 109456)
+105   (0, 0, 0, −138176827, −36282640, −5934101, −832316, −108205)
+106   (0, 0, 0, 0, −1213093, −449831, −95266, −15983)
+107   (0, 0, 0, 89931451, 24948054, 4341823, 647628, 89588)
+108   (0, 0, −19060138333, −2884207282, −300173384, −30699551, −3100964, −310097)
+109   (0, 0, 0, 0, 0, 9599576, 4809061, 1377672, 305452)
+110   (0, 0, −27750045610, −4064194735, −408278612, −41428056, −4245277, −439167)
+111   (0, 0, 0, 1087426, 314758, 52603, 7448)
+112   (0, 0, 0, 0, 0, 0, −1337775, −752950, −233517, −53538)
+113   (−2169430180, 0, 0, −198141, 4, 0, 0)
+114   (289768164194, 0, 0, 45345884, 5038432, 559825, 62203)
+115   (0, 0, 0, −70323109, −18465693, −3020109, −423600, −55070)
+                                                                           Continued on next page
+                                               35
+                                  Table 3 – continued from previous page
+116   (0, 0, 0, −89288753, −23286483, −3710063, −501572, −62051)
+117   (0, 0, 0, 0, 0, −15046, −7958, −2003)
+118   (0, 0, −55007201398, −7858513065, −756481319, −73298937, −7158493, −705767)
+119   (0, 0, 0, 0, −7607112, −2990049, −680855, −123814)
+120   (0, 0, 0, 0, 0, 0, −2570051, −1576448, −546592, −143665)
+121   (64738987904, 0, 0, 7963177, 461283, 0, −6621)
+122   (0, 0, −312204467074, −43839706334, −4468167233, −463940452, −49178872, −5332649, −592516)
+123   (0, 0, 0, −62996931, −16541959, −2705478, −379470, −49333)
+124   (0, 0, −34501373844, −4771922844, −433811167, −39437379, −3585216, −325929)
+125   (0, 0, 0, −1169094984, −287376982, −42813875, −5458939, −645630)
+126   (0, 0, 12829413037, 1887211369, 175111560, 14517041, 907320, 0)
+127   (0, 0, 0, 0, 0, 0, 0, −37148, −30261, −13559)
+128   (−178847202626, 0, 0, −25013595, −2273963, −206724, −18793)
+129   (1111960200, 0, 0, 365603, 48288, 6898)
+130   (0, 0, 0, −112031224, −29417295, −4811260, −674827, −87731)
+131   (0, 0, 0, 0, 0, 4443929, 2128486, 571736, 117372)
+132   (0, 0, −34375141077, −4754463451, −432223950, −39293087, −3572098, −324737)
+133   (0, 0, 0, 864770601, 222403153, 33916787, 4279939, 475548)
+134   (0, 0, 0, −3973255445, −998404736, −161564034, −22554302, −2924465, −362979)
+135   (0, 0, 0, 6247855, 1847930, 310209, 44003)
+136   (0, 0, 0, 0, 0, 0, 0, 0, 1137, 1309)
+137   (1294707168, 0, 0, 237202, 10317, 0)
+138   (39494208, 0, 0, 21372, 1645)
+139   (11007285490, 0, 0, 2883349, 285481, 28548)
+140   (0, 0, 0, 0, −16028637, −6112248, −1330674, −230596)
+141   (72932423060, 0, 0, 11832901, 1179751, 117975, 11798)
+142   (0, 0, 0, 0, −2848088, −1208753, −297136, −57413)
+143   (0, 0, 0, −364965233, −96892815, −15887789, −2230938, −290213)
+144   (0, 0, 0, −55660, −20011, −3553)
+145   (−1400886, 0, 0, −911, 0)
+146   (−2655400442, 0, 0, −824349, −91594, −10178)
+147   (163604694365, 0, 0, 26168863, 2536575, 246500, 23855)
+148   (0, 0, 0, −316467666, −81782200, −12927692, −1754267, −221407)
+149   (0, 0, 0, −411875739, −126767583, −24943894, −4253740, −676710)
+150   (0, 0, 0, 0, 0, 0, 2204, 2101)
+151   (0, 0, 0, 0, −2336823, −882211, −189036, −32146)
+152   (0, 0, 0, 0, −8943902, −3542882, −788607, −138366)
+153   (0, 0, 0, −2568167, −756561, −121188, −16321)
+154   (1294235800, 0, 0, 373032, 20725, −1)
+155   (0, 0, 0, 0, −1467454, −617730, −151051, −29543)
+156   (949975748, 0, 0, 235960, 21451, 1950)
+157   (0, 0, 0, 24726, 11067, 2893)
+158   (0, 0, 0, 1421580, 478465, 97821, 16654)
+159   (−364383063, 0, 0, −124960, −13884, −1543)
+160   (519279994, 0, 0, 161166, 17908, 1989)
+161   (0, 0, 0, −4803, −1591, −145)
+162   (−64725455, 0, 0, −25323, −2681, −298)
+163   (−3135702600, 0, 0, −1171021, −104988, −8077)
+164   (0, 0, 0, −84876, −27407, −2492)
+                    Table 3: Certificates of infeasibility for each polynomial in Table 2.
+
+
+
+
+           Index   Candidate characteristic polynomial
+               1   (x + 5)32 (x − 9)14 (x − 11)(x2 − 23x + 116)
+               2   (x + 5)32 (x − 9)14 (x3 − 34x2 + 369x − 1264)
+               3   (x + 5)32 (x − 9)12 (x2 − 20x + 95)(x3 − 32x2 + 327x − 1068)
+               4   (x + 5)32 (x − 9)12 (x5 − 52x4 + 1062x3 − 10636x2 + 52193x − 100376)
+               5   (x + 5)32 (x − 9)12 (x2 − 20x + 95)(x3 − 32x2 + 327x − 1052)
+               6   (x + 5)32 (x − 9)12 (x − 11)2 (x3 − 30x2 + 281x − 812)
+                                                                   Continued on next page
+                                                36
+                         Table 4 – continued from previous page
+              7 (x + 5)32 (x − 9)12 (x − 11)2 (x3 − 30x2 + 281x − 808)
+              8 (x + 5)32 (x − 8)(x − 9)11 (x − 11)3 (x2 − 20x + 83)
+              9 (x + 5)32 (x − 7)(x − 9)10 (x − 11)3 (x3 − 30x2 + 285x − 852)
+             10 (x + 5)32 (x − 9)11 (x − 11)2 (x − 13)(x3 − 26x2 + 213x − 556)
+             11 (x + 5)32 (x − 5)(x − 9)12 (x − 11)2 (x − 12)(x − 13)
+         Table 4: List of 11 candidate characteristic polynomials for 49 equiangular
+         lines in R17 .
+
+
+
+
+Index   Warranted polynomials and certificates of warranty
+        (x + 5)31 (x − 9)13 (x4 − 38x3 + 508x2 − 2810x + 5363)
+        (−28491688, 0, 0, −13311, −1663)
+    1
+        (x + 5)31 (x − 9)13 (x − 11)(x3 − 27x2 + 211x − 481)
+        (−71206868, 0, 0, −31318, −3131)
+        (x + 5)31 (x − 9)13 (x4 − 38x3 + 508x2 − 2802x + 5339)
+        (−31466028, 0, 0, −15413, −2201)
+    2
+        (x + 5)31 (x − 9)13 (x4 − 38x3 + 508x2 − 2794x + 5267)
+        (−32393128, 0, 0, −14283, −1428)
+        (x + 5)31 (x − 9)11 (x6 − 56x5 + 1273x4 − 15008x3 + 96523x2 − 319816x + 423835)
+        (3081463054228, 0, 0, 329213615, 23608945, 1311608, 0)
+    3
+        (x + 5)31 (x − 9)11 (x2 − 20x + 95)(x4 − 36x3 + 458x2 − 2428x + 4485)
+        (0, 0, 0, 0, −239073, −107333, −26537)
+        (x + 5)31 (x − 9)11 (x6 − 56x5 + 1273x4 − 15000x3 + 96371x2 − 319088x + 423571)
+        (0, 0, 0, 576862162, 159550736, 25867427, 3614120)
+    4
+        (x + 5)31 (x − 9)11 (x6 − 56x5 + 1273x4 − 15000x3 + 96371x2 − 319056x + 423347)
+        (−900198292671, 0, 0, −70576836, 0, 678324, 136910)
+        (x + 5)31 (x − 9)11 (x6 − 56x5 + 1273x4 − 14992x3 + 96139x2 − 316952x + 417243)
+        (15798865000678, 0, 0, 1810892027, 159441460, 14258992, 1296273)
+    5
+        (x + 5)31 (x − 9)11 (x2 − 20x + 95)(x4 − 36x3 + 458x2 − 2412x + 4405)
+        (0, 0, 0, 8229987, 1467053, 0, −42311)
+        (x + 5)31 (x − 9)11 (x − 11)(x2 − 14x + 41)(x3 − 31x2 + 303x − 921)
+        (7723650238, 0, 0, 1795746, 177797, 17779)
+    6
+        (x + 5)31 (x − 9)11 (x − 11)2 (x2 − 14x + 41)(x2 − 20x + 83)
+        (1681764478, 0, 0, 411472, 45720, 5079)
+        (x + 5)31 (x − 9)11 (x − 11)(x5 − 45x4 + 778x3 − 6426x2 + 25189x − 37289)
+        (8311896038, 0, 0, 1932968, 192633, 19927)
+    7
+        (x + 5)31 (x − 9)11 (x − 11)2 (x4 − 34x3 + 404x2 − 1974x + 3347)
+        (2513477598, 0, 0, 614905, 68323, 7591)
+        (x + 5)31 (x − 9)10 (x − 11)2 (x5 − 43x4 + 710x3 − 5618x2 + 21257x − 30675)
+        (−615702770, 0, 0, −180140, −22209, −2468)
+    8
+        (x + 5)31 (x − 9)10 (x − 11)3 (x4 − 32x3 + 358x2 − 1672x + 2753)
+        (−3736443160, 0, 0, −1027960, −114217, −12691)
+        (x + 5)31 (x − 7)(x − 9)9 (x − 11)2 (x5 − 45x4 + 782x3 − 6534x2 + 26113x − 39709)
+        (1614272396498, 0, 0, 236406108, 23278501, 2290900, 221701)
+    9
+        (x + 5)31 (x − 9)9 (x − 11)2 (x6 − 52x5 + 1097x4 − 12000x3 + 71603x2 − 220076x + 270467)
+        (693739600051, 0, 0, 103053553, 10456851, 1071550, 110851)
+        (x + 5)31 (x − 9)10 (x − 11)(x − 13)(x5 − 41x4 + 650x3 − 4970x2 + 18293x − 25869)
+        (0, 0, 0, 0, 28753, 11854, 2194)
+  10
+        (x + 5)31 (x − 9)10 (x − 11)2 (x2 − 20x + 95)(x3 − 23x2 + 155x − 317)
+        (0, 0, 0, 4052423, 1116206, 173878, 22882)
+        (x + 5)31 (x − 9)11 (x − 11)(x − 13)(x4 − 32x3 + 362x2 − 1696x + 2789)
+        (−5637966054, 0, 0, −1233304, −103494, −8625)
+  11
+        (x + 5)31 (x − 9)11 (x − 11)2 (x2 − 16x + 43)(x2 − 18x + 73)
+        (−27025283304, 0, 0, −5833300, −470427, −37635)
+          Table 5: Pairs of Seidel-incompatible warranted interlacing characteristic poly-
+          nomials together with certificates of warranty for each of the polynomials listed
+          in Table 4.
+
+
+
+
+                                              37
+         Index Candidate characteristic polynomial
+             1 (x + 5)32 (x − 9)12 (x − 11)(x4 − 41x3 + 611x2 − 3919x + 9140)
+             2 (x + 5)32 (x − 9)12 (x5 − 52x4 + 1062x3 − 10640x2 + 52249x − 100508)
+             3 (x + 5)32 (x − 7)2 (x − 9)11 (x − 11)2 (x2 − 25x + 152)
+             4 (x + 5)32 (x − 9)12 (x5 − 52x4 + 1062x3 − 10628x2 + 52001x − 99248)
+             5 (x + 5)32 (x − 9)13 (x − 11)(x − 12)(x2 − 20x + 83)
+             6 (x + 5)32 (x − 9)11 (x − 11)2 (x4 − 39x3 + 551x2 − 3321x + 7160)
+             7 (x + 5)32 (x − 5)(x − 8)(x − 9)10 (x − 11)4 (x − 13)
+             8 (x + 5)32 (x − 9)11 (x − 11)4 (x2 − 17x + 56)
+         Table 6: List of 8 candidate characteristic polynomials for 49 equiangular lines
+         in R17 .
+
+
+
+
+ Index       Warranted polynomial and certificate of warranty
+             (x + 5)31 (x − 9)11 (x − 11)(x5 − 45x4 + 778x3 − 6442x2 + 25477x − 38329)
+        1
+             (0, 0, 0, 1746419, 491392, 81630, 11528)
+             (x + 5)31 (x − 9)11 (x6 − 56x5 + 1273x4 − 15000x3 + 96339x2 − 318544x + 421459)
+        2
+             (0, 0, 0, 2578890, 690376, 105095, 13403)
+             (x + 5)31 (x − 7)(x − 9)10 (x − 11)(x5 − 47x4 + 854x3 − 7466x2 + 31161x − 49015)
+        3
+             (49638392174, 0, 0, 10008058, 946709, 90162)
+             (x + 5)31 (x − 9)11 (x6 − 56x5 + 1273x4 − 14992x3 + 96155x2 − 317304x + 419371)
+        4
+             (0, 0, 0, 3772987, 1029536, 162478, 21753)
+             (x + 5)31 (x − 9)12 (x5 − 47x4 + 850x3 − 7342x2 + 30061x − 46531)
+        5
+             (−30845693350, 0, 0, −6031794, −513344, −42779)
+             (x + 5)31 (x − 9)10 (x − 11)2 (x5 − 43x4 + 710x3 − 5602x2 + 21065x − 30211)
+        6
+             (0, 0, 0, 15489527, 4414523, 731381, 103163)
+             (x + 5)31 (x − 9)9 (x − 11)3 (x5 − 41x4 + 646x3 − 4870x2 + 17497x − 23889)
+        7
+             (−4146865216, 0, 0, −1459666, −205965, −26866)
+             (x + 5)31 (x − 9)10 (x − 11)3 (x2 − 14x + 37)(x2 − 18x + 69)
+        8
+             (13345166, 0, 0, 9135, 610)
+          Table 7: Warranted interlacing characteristic polynomials together with cer-
+          tificates of warranty for each of the polynomials listed in Table 6.
+
+
+
+
+Index     Seidel-compatible interlacing characteristic polynomials and certificate of infeasibility
+          (x + 5)31 (x − 9)11 (x6 − 56x5 + 1273x4 − 15000x3 + 96275x2 − 317328x + 415699)
+          (x + 5)31 (x − 7)(x − 9)11 (x − 11)2 (x3 − 27x2 + 215x − 493)
+          (x + 5)31 (x − 9)11 (x − 11)(x5 − 45x4 + 778x3 − 6442x2 + 25477x − 38329)
+    1     (x + 5)31 (x − 9)12 (x − 11)(x4 − 36x3 + 454x2 − 2332x + 3929)
+          (x + 5)31 (x − 9)12 (x5 − 47x4 + 850x3 − 7326x2 + 29629x − 43715)
+          (x + 5)31 (x − 9)11 (x − 11)(x2 − 22x + 113)(x3 − 23x2 + 159x − 313)
+          (−733717562599, 0, 0, −88445449, −8599751, −854743, −87218)
+          (x + 5)31 (x − 9)12 (x5 − 47x4 + 850x3 − 7350x2 + 30141x − 46283)
+          (x + 5)31 (x − 9)11 (x6 − 56x5 + 1273x4 − 15000x3 + 96339x2 − 318544x + 421459)
+    2     (x + 5)31 (x − 9)12 (x5 − 47x4 + 850x3 − 7342x2 + 29981x − 45651)
+          (x + 5)31 (x − 9)12 (x5 − 47x4 + 850x3 − 7318x2 + 29437x − 42539)
+          (1986879326641, 0, 0, 183663110, 8328599, 0, −81386)
+          (x + 5)31 (x − 7)(x − 9)11 (x − 11)2 (x3 − 27x2 + 215x − 493)
+          (x + 5)31 (x − 7)(x − 9)10 (x − 11)(x5 − 47x4 + 854x3 − 7466x2 + 31161x − 49015)
+          (x + 5)31 (x − 7)(x − 9)12 (x − 11)(x3 − 29x2 + 251x − 591)
+          (x + 5)31 (x − 7)(x − 9)10 (x − 11)2 (x4 − 36x3 + 458x2 − 2420x + 4397)
+    3
+          (x + 5)31 (x − 7)(x − 9)10 (x − 11)2 (x4 − 36x3 + 458x2 − 2420x + 4429)
+          (x + 5)31 (x − 7)(x − 9)11 (x − 11)(x2 − 24x + 139)(x2 − 14x + 37)
+          (x + 5)31 (x − 7)(x − 9)11 (x − 11)2 (x3 − 27x2 + 215x − 445)
+          (0, 0, 0, 58308, 28387, 9164)
+                                                                        Continued on next page
+
+
+
+                                                 38
+                                     Table 8 – continued from previous page
+                  (x + 5)31 (x − 9)11 (x6 − 56x5 + 1273x4 − 14992x3 + 96155x2 − 317304x + 419371)
+                  (x + 5)31 (x − 9)12 (x5 − 47x4 + 850x3 − 7334x2 + 29869x − 45291)
+                  (x + 5)31 (x − 9)13 (x4 − 38x3 + 508x2 − 2754x + 4843)
+             4    (x + 5)31 (x − 9)12 (x5 − 47x4 + 850x3 − 7310x2 + 29277x − 41779)
+                  (x + 5)31 (x − 9)12 (x5 − 47x4 + 850x3 − 7310x2 + 29341x − 42483)
+                  (x + 5)31 (x − 9)12 (x − 13)(x4 − 34x3 + 408x2 − 1990x + 3119)
+                  (877829032285, 0, 0, 0, −19643059, −4005362, −619899)
+                  (x + 5)31 (x − 9)12 (x5 − 47x4 + 850x3 − 7342x2 + 30061x − 46531)
+                  (x + 5)31 (x − 9)12 (x − 11)(x4 − 36x3 + 454x2 − 2316x + 3881)
+             5
+                  (x + 5)31 (x − 3)(x − 9)12 (x − 11)2 (x2 − 22x + 113)
+                  (0, 0, 0, 17473, 5644, 889)
+                  (x + 5)31 (x − 9)10 (x − 11)2 (x5 − 43x4 + 710x3 − 5602x2 + 21049x − 30131)
+                  (x + 5)31 (x − 9)10 (x − 11)2 (x5 − 43x4 + 710x3 − 5602x2 + 21065x − 30211)
+                  (x + 5)31 (x − 7)(x − 9)10 (x − 11)3 (x3 − 25x2 + 183x − 367)
+                  (x + 5)31 (x − 9)11 (x − 11)2 (x − 13)(x3 − 21x2 + 131x − 247)
+                  (x + 5)31 (x − 9)10 (x − 11)2 (x2 − 18x + 73)(x3 − 25x2 + 187x − 395)
+             6
+                  (x + 5)31 (x − 9)10 (x − 11)2 (x5 − 43x4 + 710x3 − 5578x2 + 20553x − 27611)
+                  (x + 5)31 (x − 9)11 (x − 11)2 (x4 − 34x3 + 404x2 − 1934x + 2939)
+                  (x + 5)31 (x − 9)11 (x − 11)2 (x4 − 34x3 + 404x2 − 1926x + 2931)
+                  (x + 5)31 (x − 9)11 (x − 11)3 (x3 − 23x2 + 151x − 241)
+                  (0, 0, 0, 0, 39830, 17496, 3881)
+                  (x + 5)31 (x − 9)9 (x − 11)3 (x5 − 41x4 + 646x3 − 4870x2 + 17497x − 23889)
+                  (x + 5)31 (x − 5)(x − 9)9 (x − 11)4 (x − 11)3 (x3 − 25x2 + 191x − 431)
+             7
+                  (x + 5)31 (x − 9)10 (x − 11)3 (x4 − 32x3 + 358x2 − 1624x + 2449)
+                  (0, 0, 0, −312193, −119497, −23881)
+                  (x + 5)31 (x − 9)10 (x − 11)3 (x2 − 14x + 37)(x2 − 18x + 69)
+             8
+                  (−11430609, 0, 0, −7006, 0)
+                 Table 8: Lists of Seidel-compatible interlacing characteristic polynomials to-
+                 gether with certificates of infeasibility for each polynomial in Table 6 with
+                 respect to its warranted polynomial in Table 7.
+
+
+
+
+   Division of Mathematical Sciences, School of Physical and Mathematical Sciences, Nanyang Techno-
+logical University, 21 Nanyang Link, Singapore 637371, Singapore
+   Email address: gary@ntu.edu.sg
+
+   Division of Mathematical Sciences, School of Physical and Mathematical Sciences, Nanyang Techno-
+logical University, 21 Nanyang Link, Singapore 637371, Singapore
+   Email address: jeve0002@e.ntu.edu.sg
+
+   Department of Algebra, Faculty of Mathematics and Physics, Charles University, Sokolovská 83,
+18600 Praha 8, Czech Republic
+   Email address: yatsyna@karlin.mff.cuni.cz
+
+
+
+
+                                                     39
+

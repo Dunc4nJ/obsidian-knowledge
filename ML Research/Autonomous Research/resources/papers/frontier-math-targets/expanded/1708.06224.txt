@@ -1,0 +1,1117 @@
+                                           A SUBSPACE CODE OF SIZE 333 IN THE SETTING OF A BINARY
+                                                       q-ANALOG OF THE FANO PLANE
+
+                                           DANIEL HEINLEIN, MICHAEL KIERMAIER, SASCHA KURZ, AND ALFRED WASSERMANN⋆
+arXiv:1708.06224v5 [math.CO] 22 Mar 2019
+
+
+
+
+                                                   Abstract. We show that there is a binary subspace code of constant dimension 3
+                                                   in ambient dimension 7, having minimum subspace distance 4 and cardinality 333,
+                                                   i.e., 333 ≤ A2 (7, 4; 3), which improves the previous best known lower bound of 329.
+                                                   Moreover, if a code with these parameters has at least 333 elements, its automorphism
+                                                   group is in one of 31 conjugacy classes.
+                                                       This is achieved by a more general technique for an exhaustive search in a ﬁnite
+                                                   group that does not depend on the enumeration of all subgroups.
+                                                   Keywords: Finite groups, ﬁnite projective spaces, constant dimension codes, sub-
+                                                   space codes, subspace distance, combinatorics, computer search.
+                                                   MSC: 51E20; 05B07, 11T71, 94B25
+
+
+
+
+                                                                                  1. Introduction
+                                              Since the seminal paper of Kötter and Kschischang [29] there is a still growing interest
+                                           in subspace codes, which are sets of subspaces of the Fq -vector space Fnq together with
+                                           a suitable metric. If all subspaces, which play the role of the codewords, have the same
+                                           dimension, say k, then one speaks of constant dimension codes. The, arguably, most
+                                           commonly used distance measures for subspace codes, motivated by an information-
+                                           theoretic analysis of the Koetter-Kschischang-Silva model, see e.g. [36], are the subspace
+                                           distance
+                                              dS (U, W ) := dim(U + W ) − dim(U ∩ W ) = 2 · dim(U + W ) − dim(U ) − dim(W )
+                                           and the injection distance
+                                                              dI (U, W ) := max {dim(U ), dim(W )} − dim(U ∩ W ),
+                                           where U and W are subspaces of Fnq . For constant dimension codes we have dS (U, W ) =
+                                           2dI (U, W ), so that the subsequent results are valid for both distance measures. By
+                                           Aq (n, d; k) we denote the maximum cardinality of a constant dimension code in Fnq with
+                                           subspaces of dimension k and minimum subspace distance d. From a mathematical
+                                           point of view, one of the main problems of subspace coding is the determination of the
+                                           exact value of Aq (n, d; k) or the derivation of suitable bounds, at the very least.
+                                              Currently, there are just a very few, but nevertheless very powerful, general construc-
+                                           tion methods available, see e.g. [16, 24] for the details of the Echelon-Ferrers and the
+                                           linkage construction. Besides that, several of the best known constant dimension codes
+                                           for moderate parameters have been found by prescribing a subgroup of the automor-
+                                           phism group of the code, see e.g. [30]. However, the prescribed subgroups have to be
+                                           chosen rather skillfully, since there are many possible choices and some groups turn out
+                                           to permit only small codes.
+                                             ⋆
+                                                All authors are with the Department of Mathematics, Physics, and Computer Science, Univer-
+                                           sity of Bayreuth, Bayreuth, GERMANY. Email: ﬁrstname.lastname@uni-bayreuth.de The work was
+                                           supported by the ICT COST Action IC1104 and grants KU 2430/3-1, WA 1666/9-1 – “Integer Lin-
+                                           ear Programming Models for Subspace Codes and Finite Geometry” – from the German Research
+                                           Foundation.
+                                                                                            1
+2       DANIEL HEINLEIN, MICHAEL KIERMAIER, SASCHA KURZ, AND ALFRED WASSERMANN⋆
+
+
+   Here, we aim to develop a systematic approach, i.e., we want to check all groups,
+exceeding some problem-dependent cardinality. For some fixed parameters q, n, k, and
+d this is a finite problem – in theory. As the problem for the exact determination of
+Aq (n, d; k) is finite too, one quickly reaches computational limits. Even the generation of
+all possible groups becomes computationally intractable for rather moderate parameters.
+In this paper we describe a toolbox of theoretical and computational methods how to
+determine the best constant dimension codes admitting an arbitrary automorphism
+group of reasonable size, partially overcoming the inherent combinatorial explosion of
+the problem.
+   Most of the techniques will be rather general. However, for our numerical computa-
+tions we will focus on the specific set of parameters of A2 (7, 4; 3), which is the smallest
+undecided case for binary constant dimension codes.1 Prior to this paper, the best
+known bounds were 329 ≤ A2 (7, 4; 3) ≤ 381.2 During our systematic approach we
+found a corresponding code of cardinality 333. In the language of projective geometry,
+see e.g. [17, 19] for recent surveys, those codes correspond to collections of planes in
+PG(6, 2) mutually intersecting in at most a point. 381 such planes would correspond
+to a binary q-analog of the Fano plane, whose existence is still unknown. In dimension
+n = 13 a binary q-analog of a Steiner system was shown to exist in [6]. For our pa-
+rameters in dimension n = 7 it was shown recently in [27] that a (still) possible binary
+q-analog of the Fano plane has an automorphism group of order at most 2.
+   With respect to the concrete parameters, the main contributions of our paper are:
+Theorem 1. Let C be a set of planes in PG(6, 2) mutually intersecting in at most
+a point. If |C| ≥ 329, then the automorphism group of C is conjugate to one of
+the 33 subgroups of GL(7, 2) given in Appendix B. The orders of these groups are
+11 21 32 47 51 63 72 811 92 121 141 161 denoting the number of cases as exponent. Moreover, if
+|C| ≥ 330 then |Aut(C)| ≤ 14 and if |C| ≥ 334 then |Aut(C)| ≤ 12.
+Theorem 2. In PG(6, 2), there exists a set C of 333 planes mutually intersecting in at
+most a point. Hence,
+                                A2 (7, 4; 3) ≥ 333.
+The set C is given explicitly in Appendix C. Its automorphism group Aut(C) is isomor-
+phic to the Klein four-group. It is the group G4,6 in Appendix B.
+  The remaining part of the paper is structured as follows. In Section 2 we review the
+previous work done on binary constant dimension codes for our parameters n = 7, d = 4,
+and k = 3. Preliminaries and utilized methods are described in Section 3. In Section 4, a
+method is described how to determine whether a code with a prescribed automorphism
+group and size exists. In our analysis of the possible groups (eventually) admitting
+a code of size at least 329, we start with groups of prime power order in Section 5
+and continue with groups of non-prime-power order in Section 6. The modifications
+described in Section 7 of a code of size 329 yield the code mentioned in Theorem 2
+and Appendix C. We draw conclusions and mention some open problems for further
+    1
+n The parameters n, k, and d have      to satisfy 1 ≤ k ≤ n,
+                                                             nd ≡ 0 (mod 2), and 2 ≤ d ≤ 2k. Taking all
+ k q
+     k-dimensional subspaces of Fn    q yields Aq (n, 2; k) = k q . The case d = 2k corresponds to partial
+k-spreads, i.e., trivially intersecting unions of k-dimensional subspaces of Fn q . For q = 2 the maximum
+possible cardinalities are known for n < 11 and the smallest undecided case is 129 ≤ A2 (11, 8; 4) ≤ 132,
+see e.g. [5, 31, 32]. The ﬁrst non-trivial and non-spread case A2 (6, 4; 3) = 77 was treated in [26]. The
+corresponding ﬁve isomorphism types of optimal codes have been classiﬁed by a mixture of theoretical
+arguments and severe computer computations.
+   2See http://subspacecodes.uni-bayreuth.de and the corresponding technical manual [23] for an
+on-line table of known bounds on Aq (n, d; k).
+        A SUBSPACE CODE OF SIZE 333 IN THE SETTING OF A BINARY FANO PLANE                    3
+
+
+research in Section 8. The groups corresponding to Theorem 1, as well as the code of
+size 333 of Theorem 2, are listed in the appendix.
+
+                                    2. Previous work
+   The upper bound A2 (7, 4; 3) ≤ 2667/7 = 381 can be concluded by observing that
+there are 2667 2-dimensional subspaces in F72 and every codeword contains seven 2-
+dimensional subspaces.
+   Equality is attained if each 2-dimensional subspace is covered by exactly one code-
+word. This would be a binary q-analog Steiner triple system S2 (2, 3, 7). In the limiting
+case ‘q = 1’ such a structure is well known and corresponds to subsets of {1, . . . , n}. It
+is the famous Fano plane. The only known q-analogs of Steiner systems have parameters
+S2 (2, 3, 13) [6]. The existence question for a 2-analog Steiner triple system S2 (2, 3, 7)
+has been tackled in several research papers, see e.g. [14, 15, 18, 21, 25, 28, 34, 35, 38, 39].
+In [8,27] the authors eliminated all but one non-trivial group as possible automorphism
+groups of a binary q-analog of the Fano plane, so that the automorphism group is known
+to be at most of order two.
+   Relaxing the condition “equal” to “at most”, we arrive at binary constant dimension
+codes with parameters n = 7, d = 4, and k = 3. The construction of [16] gives
+A2 (7, 4; 3) ≥ 289. In 2008 Etzion and Vardy [30] found a code of cardinality 294.
+A code of cardinality 304 was found in [30] via the prescription of a cyclic group of
+order 21. Prescribing a cyclic group of order 15 and modifying corresponding codes
+yields A2 (7, 4; 3) ≥ 329 [10]. In the sequel, an explicit, computer-free construction of (a
+different) code of size 329 was presented in [25, 33]. For more details on the underlying
+expurgation-augmentation method see [1]. Hitherto, all known examples of codes of
+cardinality 329 only admit the trivial automorphism.
+   In the following, we use a similar approach and reformulate the corresponding problem
+as an integer linear programming problem, see Section 7, and succeed to construct a
+code of cardinality 333 starting from a code of size 329.
+
+                                     3. Preliminaries
+   Let V = Fnq be the standard vector space of dimension n ≥ 3. Let C be a set of
+subspaces of V and K be a subspace of V . The fundamental theorem of projective
+geometry [2, 3] states that the set of order preserving isometries is PΓL(V ). Let q = 2
+throughout this paper. Then we have PΓL(Fn2 ) = GL(Fn2 ) and, after choosing a basis
+of V , the elements in this group can be represented as matrices. By
+                        U g = g −1 U g   and     U G = {U g | g ∈ G}
+we denote the conjugation of U ≤ PΓL(V
+                                    V  ) with g ∈ PΓL(V ) and G ≤ PΓL(V ).
+   For the bijective map r that maps k to binary k×n matrices in reduced row echelon
+form with rank k and the operation RREF that maps
+                                                 a matrix to its reduced row echelon
+form, the operation of M ∈ GL(V ) on K ∈ Vk is given by matrix multiplication
+r −1 (RREF(r(K) · M )).
+   An element M ∈ PΓL(V ) is called automorphism of C if M stabilizes C, i.e., C ·M =
+C. A subgroup U ≤ PΓL(V ) is called an automorphism group of C if each M ∈ U is an
+automorphism of C and it is called the automorphism group of C, Aut(C), if it contains
+all automorphisms of C.
+   For a subgroup U ≤ PΓL(V ),
+              K · U = {K · M | M ∈ U }         and   C · U = {K · U | K ∈ C}
+4   DANIEL HEINLEIN, MICHAEL KIERMAIER, SASCHA KURZ, AND ALFRED WASSERMANN⋆
+
+
+denote the orbits of K and C. The orbit space of all k-dimensional subspaces of V and
+U ≤ PΓL(V ) is denoted as Vk /U .
+  By Aq (n, d; k; U ) we denote the maximum size of a constant dimension code C in Vk
+                                                                                       
+
+with subspace distance at least d and U ≤ Aut(C). Note that Aq (n, d; k; I) = Aq (n, d; k)
+where I is the identity subgroup in PΓL(V ).
+  This paper uses two obvious but far reaching observations.
+Observation 3.
+    (1) Aq (n, d; k; M ) ≥ Aq (n, d; k; N ) for M ≤ N ≤ PΓL(V ) and
+    (2) Aq (n, d; k; U g ) = Aq (n, d; k; U ) for all g ∈ PΓL(V ).
+   For example the 32, 252, 031 groups (or elements) of order two in PΓL(F72 ) = GL(F72 )
+fall in just three conjugacy classes.
+   Occasionally, we will mention abstract types of groups. We use Zn for the cyclic
+group, Dn for the dihedral group, Qn for the quaternion group of order n, An for the
+alternating group, and Sn for the symmetric group on n elements. × denotes a direct
+product and ⋊ denotes a (not necessarily unique) semidirect product of groups.
+   Given the abstract type of a group, we can obtain precise information on the abstract
+types of its subgroups from the Small Groups library [4], implemented in the computer
+algebra system Magma, containing all groups with order at most 2000 except 1024.
+   For an orbit space X · G the orbit type is a number cn1 1 · . . . · cnmm with the meaning
+that X · G contains exactly ni orbits of cardinality ci for i ∈ {1, . . . , m} and no other
+orbits.
+   Using the observations above one can exclude all supergroups and their conjugates of a
+group U as automorphism group of a subspace code of size at least 329, as soon as U can
+be excluded as possible automorphism group of such a code with the Kramer-Mesner
+like computation method of Section 4. With this, the general idea is to (implicitly)
+consider all possible groups of automorphisms.
+   In order to formalize our approach from a more general point of view, we introduce
+a conjugation-invariant and monotone mapping P. For a group U ≤ G we set
+     • P(U ) = 0, if A2 (7, 4; 3; U ) ≤ κ, where we use κ = 328 in this paper,
+     • P(U ) = 1, if there is a code with code size > κ such that U is contained in its
+       automorphism group or the computation was aborted after, say, Λ hours. In
+       this paper we use Λ = 48.
+Our strategy now is to systematically determine P (U ) for all subgroups U ≤ G from
+the bottom up where we can stop the search, i.e. set P (U ) = 0, in the following cases:
+    (1) If U contains a subgroup whose order is in S ⊆ N and P(H) = 0 for all groups
+        H ≤ G of order |H| ∈ S.
+    (2) If U contains a subgroup whose abstract type is in the set T and P(H) = 0 for
+        all groups H ≤ G of type t ∈ T .
+    (3) If U contains a subgroup H with P(H) = 0.
+Since only cardinalities of subgroups of U need to be known in Step (1), the theorems
+of Sylow and Hall, see [20, Section 4.2 and Thm. 9.3.1] are applied. If the abstract type
+of U is known, the Small Groups library can give the desired information for Step (1).
+If Step (1) was not successful, then one can refine to the abstract type of U in Step (2).
+Finally, the concrete conjugacy class of U has to be known for Step (3). Since Step (3)
+is the computationally most expensive step, the more specialized and computationally
+cheap tests of Step (1) and Step (2) are introduced.
+   If P(U ) is still undecided after all three steps, then the optimization problem from
+Section 4 has to be solved.
+        A SUBSPACE CODE OF SIZE 333 IN THE SETTING OF A BINARY FANO PLANE                                   5
+
+
+   From the group-theoretic point of view it remains to describe how the conjugacy
+classes of groups are generated. For p-Sylow groups we need a single example since
+all of these groups are conjugate. For cyclic subgroups we describe some shortcuts in
+Section 3.2. Except for orders 16, 32, and 64 the built-in functions of Magma are sufficient
+to produce the required list of conjugacy classes of groups for our parameters. For the
+remaining powers of two we provide a general algorithmic tool in Subsection 3.1. Here,
+the idea is to extend a list of groups, having P(·) = 1, to a complete list L of larger
+groups of a desired order u such that all groups of order u which are not conjugate to
+elements of L have P(·) = 0.
+   We remark, that the definition of P(U ) easily generalizes to the determination of
+Aq (n, d; k; U ). Observation 3 gives the necessary monotonicity and conjugation invari-
+ance.
+3.1. Generating groups up to conjugacy. Let f : {A ≤ G} → {0, 1} be a map such
+that f (A) ≥ f (B) for all A ≤ B and f (A) = f (Ag ) for all g ∈ G,
+Lemma 4. Let G be a finite group. Furthermore, let t, u be integers with t | u | |G|
+such that any subgroup of G of order u contains a normal subgroup of order t.
+  Suppose that the set T consists of all conjugacy classes of subgroups T ≤ G of order t
+such that f (T ) = 1. Let TN be a transversal of the orbits under the action of G. Let
+                 U = {U NG (T ) | (T, NG (T )) ∈ TN , T ≤ U ≤ NG (T ), |U | = u}.
+Then, f (U ) = 0 for all U ≤ G with |U | = u and U G 6∈ U .
+Proof. Assume there is a U ≤ G \ U with cardinality u and f (U ) = 1, then it contains
+a normal subgroup T of cardinality t and by monotony f (T ) = 1. It follows that
+(T, NG (T )) represents a conjugacy class in T . Moreover, since T is a normal subgroup in
+U and NG (T ) is the largest subgroup of G having T as a normal subgroup, U ≤ NG (T ).
+Hence, U NG (T ) ∈ U , contradicting the assumption.                                    
+ Remark: If u/t is a prime, then TN can be restricted to the conjugacy classes of
+NG (T ) operating on its cyclic subgroups.
+   The requirements of this lemma on t and u may be fulfilled in certain constellations
+with the help of the Sylow Theorems see e.g. [20, Section 4.2] or the Theorem of Hall,
+see [20, Theorem 9.3.1]. If neither the Sylow theorems nor the Hall theorem can be
+applied, the Small Groups library [4] may be of help. For example, it contains the
+information that any group of order 20 has a normal subgroup of order 5 or 10. Also,
+any group of order 40 has a normal subgroup of order 2, 5, 10, or 20.
+   We will use Lemma 4 to handle the possible automorphism groups of order 16, 32,
+and 64.
+3.2. Techniques for an exhaustive search in a finite group. Since we apply this
+technique to G = GL(F72 ), we profit from the special group structure of GL(Fnq ). First,
+all elements up to conjugacy can be generated by the normal forms, e.g., the Frobenius
+normal form [37]3.
+   Secondly, given an element c ∈ G, the check if a group U ≤ G contains a conjugate
+of a cyclic subgroup C = hci is easy.
+   We denote the eigenspace for the eigenvalue 1, i.e., the fixed-point space, by eig(C, 1).
+Note that dim(eig(C, 1)) is invariant in the conjugacy class C G . If for fixed integers m
+                                                                 1 0 0 0 0 0 0 1 0 0 0 0 0 0
+                                                                   0 0 1 0 0 0 0       1 0 1 1 1 1 1
+                                                             *                                        +
+  3The group G                                                   0 1 0 0 0 0 0 1 1 0 1 1 1 1
+                4,6 from Appendix B may also be written as        0 0 0 0 1 0 0  ,  1 0 1 1 1 1 0  , where
+                                                                   0 0 0 1 0 0 0     1 1 0 1 1 0 1
+                                                                   0 0 0 0 0 0 1     0 0 1 0 1 0 0
+                                                                   0 0 0 0 0 1 0     0 1 0 1 0 0 0
+the ﬁrst generator is in Frobenius normal form.
+6   DANIEL HEINLEIN, MICHAEL KIERMAIER, SASCHA KURZ, AND ALFRED WASSERMANN⋆
+
+
+and n all cyclic subgroups C ≤ G with |C| = m and dim(eig(C, 1)) = n are excluded,
+then all groups U ≤ G having an element c of order m and dim(eig(hci, 1)) = n can be
+excluded as well. Furthermore this test replaces the expensive test for containment up
+to conjugacy.
+   In the remainder of this paper, we will simply speak of the dimension of the fixed-
+point space and use it in the context of cyclic groups and their conjugacy classes.
+
+4. An integer linear programming formulation for constant dimension
+                  codes with prescribed automorphisms
+    In [30], a computational method based on the Kramer-Mesner approach for large
+subspace codes with prescribed automorphism group is presented. We adopt a similar
+method using an integer linear program (ILP) that provides lower and upper bounds
+on A2 (7, 4; 3; U ) for a prescribed automorphism subgroup U ≤ G.
+          7       7
+    Let F32 and F22 denote the set of all 3-dimensional subspaces and 2-dimensional
+subspaces in F72 . For a given group U of prescribed automorphisms, let T3 (U ) be a
+                                    7
+transversal of the orbit space F32 /U and T2 (U ) be a transversal of the orbit space
+F 7 
+  2 /U . By t(K, U ) ∈ T3 (U ) we denote the representative of the orbit containing
+   2
+        7
+K ∈ F32 . As variables we choose xK ∈ {0, 1}, where xK = 1 if and only if the entire
+orbit K · U for K ∈ T3 (U ) is contained in the code. The incidences are modeled with
+M U = (mT,K )T ∈T2 (U ),K∈T3 (U ) where
+                             mT,K = |{W ∈ K · U | T ≤ W }|.
+Finding best constant dimension codes having this group of automorphisms can be
+formulated as an ILP, which easily generalizes to the determination of Aq (n, d; k; U ):
+                                 X
+        ILP(U ) = max                 |K · U |·xK
+                                  K∈T3 (U )
+
+                   s.t.                       MUx ≤ 1
+                                                  xK ∈ {0, 1}           ∀K ∈ T3 (U )
+By replacing the binary xK ∈ {0, 1} by the weaker constraint 0 ≤ xK ≤ 1 we obtain
+the so-called linear programming (LP) relaxation.
+   In case mT,K ≥ 2, the corresponding variable xK is trivially zero and consequently
+the orbit K · U is not in the code.
+   In order to compute P(U ) for a given group, we first compute the optimal target value
+z of the LP-relaxation, which can always be done in reasonable time. If z < κ + 1 = 329
+for the LP, then P(U ) = 0. Otherwise we try to solve ILP(U ). If an integral solution
+with target value at least κ + 1 is found, or the computer search is abandoned after
+reaching a certain time limit, then P(U ) = 1. Otherwise we set P(U ) = 0.
+4.1. Using the automorphisms of the orbit space. The prescription of a group
+                                       7
+U ≤ GL(F72 ) yields the orbit space F32 /U , which in turn has automorphisms. It is well
+                                    7
+known that NGL(F72 ) (U ) ≤ Aut( F32 /U ). These automorphisms can be used to reduce
+the overall solving time of the ILP.
+                            7
+   For this, let O(U ) := ( F32 /U )/NGL(F72 ) (U ) and t(o, U ) be an arbitrary orbit of O(U )
+                  7
+containing o ∈ F32 /U . For a K in t(o, U ) the ILP from above is extended to ILPo by
+adding the constraint xt(K,U ) = 1.
+   We will solve the |O(U )| problems ILPo . Thanks to the automorphisms this is suf-
+ficient to solve the initial ILP: P(U ) = 0 ⇔ max{z(ILPo ) | o ∈ O} < κ + 1, where
+        A SUBSPACE CODE OF SIZE 333 IN THE SETTING OF A BINARY FANO PLANE                     7
+
+
+z(·) denotes the objective value. After choosing an ordering {o1 , . . . , o|O(U )| } = O(U ),
+processing ILPoi yields additional information for the problems ILPoi+1 , . . . , ILPo|O(U )| .
+If z(ILPoi ) ≥ κ + 1 then we finish with P(U ) = 1, else no orbit in oi is part of any
+code with size at least κ + 1 and can be excluded in the following ILPo by adding the
+constraint
+                        xt(K,U ) = 0 for a K ∈ o′ for all o′ ∈ o.                          (1)
+Therefore, the arrangement of these subproblems is important. The goal is to have a
+small overall solving time, hence we sort {ILPo | o ∈ O} in decreasing size of |o| and in
+case of equality decreasing in the number of forced codewords. The first sorting criterion
+ensures few remaining automorphisms, due to the orbit-stabilizer theorem, whereas the
+second criterion ensures small computation times due to the fixtures.
+   To decrease the overall solving time even further, after determining the order of ILPo ,
+we assume that P(U ) will be 0 and generate all problems with the implied exclusions
+of (1) beforehand and start solving them in parallel. If there is an o ∈ O with z(ILPo ) ≥
+κ + 1, then our assumption was wrong and we return P(U ) = 1.
+
+                          5. Groups of prime power order
+   We first start to consider groups of prime power order. Due to | GL(F72 )| = 221 · 34 ·
+5 · 72 · 31 · 127 it suffices to consider the primes 2, 3, 5, 7, 31, and 127. All necessary
+conjugates of subgroups were computed using Magma.
+
+5.1. Groups of order 5, 31, or 127. From the factorization of | GL(F72 )| it follows
+that there is exactly one subgroup of GL(F72 ) up to conjugacy of order 5, 31, and 127.
+   The group of order 127 yields codes of maximum size 254 [30, 38].
+   The group of order 31 yields an orbit space of the 3-dimensional subspaces of type
+31381 . The orbit space on the 2-dimensional subspaces has the type 11 3186 . Solving the
+corresponding ILP yields a code of size 279 which is also the maximum cardinality for
+this automorphism group.
+   The group of order 5 has orbit type 11 52362 on the 3-dimensional subspaces and
+1 5532 on the 2-dimensional subspaces. Unfortunately, this ILP is too difficult to solve
+ 7
+
+in reasonable time. Thus only G5,1 (cf. Appendix B) remains.
+
+5.2. Groups of order 3a or 7a . All groups of order 7 are cyclic so that they can
+be computed using the Frobenius normal form. There are three non-conjugate groups.
+One of them can only yield codes of size at most 296 whereas the other two could not
+be excluded in reasonable time. A nontrivial element in the excluded group has a 4-
+dimensional fixed-point space and any non-trivial element of the non-excluded groups
+has 1-dimensional fixed-point spaces.
+   Since the maximum power of the prime 7 is 49 in | GL(F72 )|, there is exactly one
+subgroup of order 49 up to conjugacy. Using the Sylow theorems, it has to contain at
+least one subgroup of any conjugacy class of order 7. In particular it has to contain a
+conjugate to the previously excluded group of order 7. Therefore the group of order 49
+cannot yield larger codes than 296.
+   The same can be performed for the groups of order 3. There are exactly three
+conjugacy classes of subgroups of order 3. One yields codes of cardinality at most 255.
+The other two groups could not be excluded in reasonable time.
+   There are exactly 4 groups of order 9 in the group GL(F72 ) up to conjugacy. Two
+of them contain the previously excluded group of order 3 and hence can only yield a
+largest code cardinality of 255. The other two groups of order 9 cannot be excluded.
+They have abstract type Z9 and Z3 × Z3 .
+8   DANIEL HEINLEIN, MICHAEL KIERMAIER, SASCHA KURZ, AND ALFRED WASSERMANN⋆
+
+
+   There are 3 conjugacy classes of groups of order 27. One of them contains a conjugate
+of the excluded group of order 3. With the methods of Section 4, we see that both groups
+yield codes of maximum size 309.
+   The unique conjugacy class of groups of order 81 contains a conjugate of the excluded
+group of order 3 and can therefore yield only codes of size at most 255.
+   Thus only G7,1 , G7,2 , G3,1 , G3,2 , G9,1 , and G9,2 (cf. Appendix B) remain.
+5.3. Groups of order 2a . There are 3 conjugacy classes of groups of order 2 in GL(F72 ).
+The first cannot be excluded and has a 4-dimensional fixed-point space. The second
+can only yield codes of size 298 and has an 5-dimensional fixed-point space. The third
+can only yield codes of size 106 and has a 6-dimensional fixed-point space, cf. [30].
+   There are 42 conjugacy classes of subgroups of order 4 in the group GL(F72 ). All but
+8 contain at least one already excluded group of order 2, cf. [8]. One of the remaining
+8 groups can yield codes of size at most 327.
+   There are 867 conjugacy classes of subgroups of order 8 in the group GL(F72 ). All but
+38 contain an already excluded group of order 2. All but 11 of the remaining groups
+can be excluded computationally.
+   For the subgroups of order 16, we apply the technique described in the Section 3.1.
+Since a subgroup of index 2 is necessarily a normal subgroup, see e.g. [20, Cor. 2.2.1],
+Lemma 4 can be applied for t = 8 and u = 16. Up to conjugacy there are exactly 50
+subgroups of order 16 of the group GL(F72 ) such that no contained 2-subgroup is already
+excluded. Solving the corresponding ILPs from Section 4 shows that these 50 subgroups
+can yield codes of cardinality at most 329 and exactly one group attains this bound.
+   This group is of type (Z4 × Z2 ) ⋊ Z2 , see G16,1 in the appendix, and it will play a
+major role in the process of finding the code of cardinality 333. In fact, there are up to
+isomorphism exactly 12 codes of size 329 under prescription of G16,1 . Each code has the
+orbit type 11 22 49 88 1614 and each of the 12 isomorphism classes has 16 codes, summing
+up to a total of 192 codes, which have G16,1 as automorphism group.
+   Stepping the 2-Sylow ladder further up by applying Lemma 4 to G16,1 with t = 16
+and u = 32, we found a group of order 32 that yields a code of size 327 and by applying
+Lemma 4 to this group, we found a group of order 64 that yielded a code of size 317.
+   Thus only G2,1 , G4,1 , . . . , G4,7 , G8,1 , . . . , G8,11 , and G16,1 (cf. Appendix B) remain.
+
+                        6. Groups of non-prime-power order
+   Using the Sylow theorems [20, Thm. 4.2.1], we conclude from the results in Section 5
+that we only have to consider groups with an order that divides 24 · 32 · 5 · 7.
+   In the following we give a summary of the computer search. The full list of remaining
+orders in the sequence that we utilized can be found in Appendix A.
+   We considered all remaining orders in the sequence of increasing size. All conjugacy
+classes of groups with the orders 6, 10, 12, 14, 15, 18, 21, 24, 28, and 56 had to be
+computed. Applying the ILP in Section 4 give that codes larger than 328 are not
+possible except the group order is 6, 12, or 14. More precisely, only G6,1 , G6,2 , G6,3 ,
+G12,1 , and G14,1 (cf. Appendix B) remain. In particular all groups of type A4 were
+excluded, i.e., none of them is an automorphism group of a code of size at least 329.
+The groups of order 36 were computed but then theoretically excluded since they contain
+an excluded group of prime order or contain a subgroup of type A4 .
+   Next, using the Theorem of Hall [20, Thm. 9.3.1] each group of the solvable orders 30,
+42, 70, 84, 90, 105, 126, 140, 210, 252, 280, 315, 560, and 630 has a subgroup that was
+previously excluded. The groups of order 20, 40, 45, 60, 63, 120, 144, 168, 180, 240, 360,
+420, 720, 840, 1008, 1260, and 1680 could be excluded using the Small Groups library [4].
+The orders 48, 72, 80, 112, 336, and 504 could be excluded along the same lines using
+       A SUBSPACE CODE OF SIZE 333 IN THE SETTING OF A BINARY FANO PLANE               9
+
+
+a refined analysis, e.g. the groups of order 48 contain a subgroup of the excluded order
+24 or a subgroup of type A4 . The group orders 35, 2520, and 5040 had to be computed
+but all of them contain an excluded group of prime order. The last two orders, i.e.,
+2520 and 5040, had to be computed because the Hall Theorem [20, Thm. 9.3.1] is not
+applicable since these orders are non-solvable numbers and the Small Groups library
+does not contain data about groups of these orders.
+   To sum up, only G6,1 , G6,2 , G6,3 , G12,1 , and G14,1 (cf. Appendix B) remain.
+
+                  7. Modifying codes to get cardinality 333
+   Since we found an automorphism group of order 16 that yields a code C of size 329,
+i.e., G16,1 in Appendix B, we searched for codes having large intersection with C and
+automorphism groups U ≤ G16,1 .
+   Therefore, using nonnegative integers c and c′ , we add the constraint
+                                  X
+                                            |T · U | · xT ≥ c
+                            T ∈{t(K,U )|K∈C}
+
+to ILP(U ). This constraint restricts the exchangeability of U -orbits.
+   By choosing the neighborhood parameter c = 300 and U = I, this ILP yielded a code
+of size 333, cf. Appendix C. Further investigation showed that the code of size 333 has
+the automorphism group G4,6 ≤ G16,1 of order 4, see Appendix B.
+   It turned out that it would have been sufficient to choose U = G4,6 and c = 327 to
+get a code that is extendible to a code of cardinality 333 having G4,6 as automorphism
+group. In fact, removing two fixed spaces allows to add two other fixed spaces and two
+orbits of size two.
+   35 3-subspaces of this code of size 333 are subspaces of the hyperplane in which each
+vector has zero as first entry. Omitting these 35 subspaces yields a code of size 298 in
+the affine geometry AG(6, 2) [40].
+
+                                   8. Conclusions
+   In this paper we have considered the problem of the determination of A2 (7, 4; 3),
+which is the first open case for binary constant dimension codes. Prior to this paper
+the best known bounds were 329 ≤ A2 (7, 4; 3) ≤ 381. All of the previously known con-
+stant dimension codes of size 329 have a trivial automorphism group. By an indirect
+systematic approach we have determined all groups that can be a subgroup of the auto-
+morphism group of a constant dimension code in F72 with minimum subspace distance
+d = 4 that consists of at least 329 planes. This way we found the unique group of order
+16 that permits such a code of size 329. While not improving the lower bound for the
+code size, the presence of automorphisms can be beneficial in the decoding process. At
+this place we remark that we are not able to determine the number of conjugacy classes
+of all subgroups of order 16 in GL(F72 ). Without the systematic approach this group
+might never have been found. Modifying the mentioned code of size 329 we found a
+code of cardinality 333 with an automorphism group of order 4, which currently is the
+best known construction of a constant dimension code in F72 with minimum subspace
+distance 4 and codewords of dimension 3.
+   The gap to the upper bound 381 is still tremendous. However, a lot of effort has been
+put into the determination of A2 (7, 4; 3) by various researchers. Still the upper bound
+381 can only be excluded for automorphism groups of order larger than 2. New insights
+are needed to computationally obtain stronger bounds. Our results indicate that, for
+these specific parameters, good codes either have to have small automorphism groups
+or their size is quite distant to the value of the anticode bound, i.e., 381.
+10   DANIEL HEINLEIN, MICHAEL KIERMAIER, SASCHA KURZ, AND ALFRED WASSERMANN⋆
+
+
+   In principle the techniques presented in that paper are widely applicable. However,
+the inherent combinatorial explosion for constant dimension codes does not allow too
+many feasible parameters for not too large groups. For q = 2 the next open cases are
+1326 ≤ A2 (8, 4; 3) ≤ 1493 and 4801 ≤ A2 (8, 4; 4) ≤ 6477, see [9, 23]. For A2 (8, 4; 3) e.g.
+the group G16,1 performs pretty bad and the LP relaxation gives an upper bound of 1292.
+Over the ternary field the first open case is 754 ≤ A3 (6, 4; 3) ≤ 784, see [26, Theorem 2]
+or [12,13]. Using the systematic approach we were able to reproduce the best known size
+754, but unfortunately no improvement above that has been found. First experiments
+did not yield larger codes than already known in the three parameter sets mentioned
+above. To get an idea of the combinatorial complexity we note that the number of
+solids in F82 is given by 84 2 = 200,787. For groups of orders around 20 the corresponding
+integer linear programs cannot be solved exactly by standard solvers in reasonable time.
+Even the exclusion of the existence of 381 planes in F72 with minimum subspace distance
+4 that admit an automorphism of order 2 is currently out of reach [27].
+   We have applied the presented algorithmic approach to a closely related combinatorial
+structure. A t-(v, k, λ)q packing design is a set of k-dimensional subspaces of Fvq such
+that every t-dimensional subspace is covered at most λ times. The 2-(6, 3, 2)2 packing
+design of cardinality 180 with an automorphism group of order 9 from [11] was quickly
+rediscovered using the presented algorithmic approach. The packing design is indeed
+optimal, which can be shown using a Johnson-type     argument.    For 2-(7, 3, λ)2 packing
+designs the cardinality is upper bounded by λ 72 2 / 32 2 = 381λ. If the upper bound
+                                                        
+
+is attained we have a design. For λ = 3 such a design exists, see [7], and for λ = 1
+the maximum cardinality equals A2 (7, 4; 3). Using our algorithmic approach we found a
+group of order 27, isomorphic to the Heisenberg group over F3 , that admits a 2-(7, 3, 2)2
+packing design of cardinality 741, i.e., just 21 away from the upper bound 762. For 2-
+(6, 3, 3)3 packing designs we found an example of cardinality 2368 > 2262 = 3 · 754
+using a group of order 132 .
+   The presented algorithmic approach is applicable for a much wider class of combina-
+torial objects. The only requirements are that P is constant on conjugacy classes and
+monotone as defined in Section 3. In [22] the method was applied to find sets of m4
+solids and m3 planes in F72 such that every plane is covered at most once.
+
+
+                                          References
+ [1] J. Ai, T. Honold, and H. Liu. The expurgation-augmentation method for constructing good plane
+     subspace codes. arXiv preprint 1601.01502, 2016.
+ [2] E. Artin. Geometric algebra. Interscience Publishers, Inc., New York-London, 1957.
+ [3] R. Baer. Linear algebra and projective geometry. Academic Press Inc., New York, N. Y., 1952.
+ [4] H. U. Besche, B. Eick, and E. O’Brien. Small Groups library. visited on Dec. 12, 2016.
+ [5] A. Beutelspacher. Partial spreads in ﬁnite projective spaces and partial designs. Mathematische
+     Zeitschrift, 145(3):211–229, 1975.
+ [6] M. Braun, T. Etzion, P. R. J. Östergård, A. Vardy, and A. Wassermann. Existence of q-analogs
+     of Steiner systems. Forum Math. Pi, 4:e7, 14, 2016.
+ [7] M. Braun, A. Kerber, and R. Laue. Systematic construction of q-analogs of t − (v, k, λ)-designs.
+     Des. Codes Cryptogr., 34(1):55–70, 2005.
+ [8] M. Braun, M. Kiermaier, and A. Nakić. On the automorphism group of a binary q-analog of the
+     Fano plane. European J. Combin., 51:443–457, 2016.
+ [9] M. Braun, P. R. J. Östergård, and A. Wassermann. New lower bounds for binary constant dimen-
+     sion subspace codes. Experimental Mathematics, pages 1–5, 2016.
+[10] M. Braun and J. Reichelt. q-analogs of packing designs. J. Combin. Des., 22(7):306–321, 2014.
+[11] M. Buratti, M. Kiermaier, S. Kurz, A. Nakić, and A. Wassermann. q-analogs of group divisible
+     designs. arXiv preprint 1804.11172, 2018.
+[12] A. Cossidente and F. Pavese. On subspace codes. Des. Codes Cryptogr., 78(2):527–531, 2016.
+         A SUBSPACE CODE OF SIZE 333 IN THE SETTING OF A BINARY FANO PLANE                           11
+
+
+[13] A. Cossidente, F. Pavese, and L. Storme. Geometrical aspects of subspace codes. In Network
+     Coding and Subspace Designs, pages 107–129. Springer, 2018.
+[14] T. Etzion. A new approach to examine q-Steiner systems. arXiv preprint 1507.08503, 2015.
+[15] T. Etzion. On the structure of the q-Fano plane. arXiv preprint 1508.01839, 2015.
+[16] T. Etzion and N. Silberstein. Error-correcting codes in projective spaces via rank-metric codes and
+     Ferrers diagrams. IEEE Trans. Inform. Theory, 55(7):2909–2919, 2009.
+[17] T. Etzion and L. Storme. Galois geometries and coding theory. Des. Codes Cryptogr., 78(1):311–
+     350, 2016.
+[18] T. Etzion and A. Vardy. On q-analogs of Steiner systems and covering designs. Adv. Math. Com-
+     mun., 5(2):161–176, 2011.
+[19] M. Greferath, M. O. Pavčević, N. Silberstein, and M. Á. Vázquez-Castro. Network Coding and
+     Subspace Designs. Springer, 2018.
+[20] M. Hall Jr. The theory of groups. Macmillan New York, 1959.
+[21] O. Heden and P. A. Sissokho. On the existence of a (2, 3)-spread in V (7, 2). Ars Combin., 124:161–
+     164, 2016.
+[22] D. Heinlein, T. Honold, M. Kiermaier, and S. Kurz. Generalized vector space partitions. Australas.
+     J. Combin., 73(1):162–178, 2019.
+[23] D. Heinlein, M. Kiermaier, S. Kurz, and A. Wassermann. Tables of subspace codes. arXiv preprint
+     1601.02864, 2016.
+[24] D. Heinlein and S. Kurz. Asymptotic bounds for the sizes of constant dimension codes and an
+     improved lower bound. In International Castle Meeting on Coding Theory and Applications, pages
+     163–191. Springer, 2017.
+[25] T. Honold and M. Kiermaier. On putative q-analogues of the Fano plane and related combinatorial
+     structures. In Dynamical systems, number theory and applications, pages 141–175. World Sci. Publ.,
+     Hackensack, NJ, 2016.
+[26] T. Honold, M. Kiermaier, and S. Kurz. Optimal binary subspace codes of length 6, constant
+     dimension 3 and minimum distance 4. Contemp. Math., 632:157–176, 2015.
+[27] M. Kiermaier, S. Kurz, and A. Wassermann. The order of the automorphism group of a binary
+     q-analog of the Fano plane is at most two. Des. Codes Cryptogr., 86(2):239–250, 2018.
+[28] M. Kiermaier and M. O. Pavčević. Intersection numbers for subspace designs. J. Combin. Des.,
+     23(11):463–480, 2015.
+[29] R. Koetter and F. Kschischang. Coding for errors and erasures in random network coding. IEEE
+     Trans. Inform. Theory, 54(8):3579–3591, 2008.
+[30] A. Kohnert and S. Kurz. Construction of large constant dimension codes with a prescribed min-
+     imum distance. In Mathematical methods in computer science, volume 5393 of Lecture Notes in
+     Comput. Sci., pages 31–42. Springer, Berlin, 2008.
+[31] S. Kurz. Improved upper bounds for partial spreads. Des. Codes Cryptogr., 85(1):97–106, 2017.
+[32] S. Kurz. Packing vector spaces into vector spaces. Australas. J. Combin., 68(1):122–130, 2017.
+[33] H. Liu and T. Honold. Poster: A new approach to the main problem of subspace coding. In
+     9th International Conference on Communications and Networking in China (ChinaCom 2014,
+     Maoming, China, Aug. 14–16), pages 676–677, 2014. Full paper available as arXiv:1408.1181.
+[34] K. Metsch. Bose-Burton type theorems for ﬁnite projective, aﬃne and polar spaces. In Surveys
+     in combinatorics, 1999 (Canterbury), volume 267 of London Math. Soc. Lecture Note Ser., pages
+     137–166. Cambridge Univ. Press, Cambridge, 1999.
+[35] M. Miyakawa, A. Munemasa, and S. Yoshiara. On a class of small 2-designs over GF(q). J. Combin.
+     Des., 3(1):61–77, 1995.
+[36] D. Silva, F. Kschischang, and R. Koetter. A rank-metric approach to error control in random
+     network coding. IEEE Trans. Inform. Theory, 54(9):3951–3967, 2008.
+[37] A. Storjohann. An O(n3 ) algorithm for the Frobenius normal form. In Proceedings of the 1998
+     International Symposium on Symbolic and Algebraic Computation, pages 101–105. ACM, 1998.
+[38] S. Thomas. Designs over ﬁnite ﬁelds. Geom. Dedicata, 24(2):237–242, 1987.
+[39] S. Thomas. Designs and partial geometries over ﬁnite ﬁelds. Geom. Dedicata, 63(3):247–253, 1996.
+[40] J. Zumbrägel. Designs and codes in aﬃne geometry. arXiv preprint 1605.03789, 2016.
+
+
+              Appendix A. The remaining non-prime-power orders
+  As stated in Section 6, we list here all non-prime-power numbers which divide 24 · 32 ·
+5·7. They have to be considered as size of a subgroup in the group GL(F72 ) to determine
+an exhaustive list of groups such that no other group of non-prime-power order than
+12   DANIEL HEINLEIN, MICHAEL KIERMAIER, SASCHA KURZ, AND ALFRED WASSERMANN⋆
+
+
+these listed here is an automorphism group of a code of size at least 329. In parentheses
+we note the line of reasoning: “Small Groups library” means that the abstract type is
+used to show the existence of already excluded subgroups. “Hall, solvable order” means
+that the Theorem of Hall [20, Theorem 9.3.1] is used to show the existence of already
+excluded subgroups. Moreover “due to groups of prime order” means that the group has
+a subgroup that is excluded within Section 5.
+
+
+      6 there are 12 subgroups of order 6 up to conjugacy in the group GL(F72 ). 9
+        are excluded due to groups of prime order. The 3 remaining groups cannot be
+        excluded.
+     10 there are 3 subgroups of order 10 up to conjugacy in the group GL(F72 ). 2 are
+        excluded due to groups of prime order. The remaining group yields codes of size
+        up to 306.
+     12 there are 96 subgroups of order 12 up to conjugacy in the group GL(F72 ). 80 are
+        excluded due to groups of prime order. All but 1 group could be excluded, it is
+        of type Z3 ⋊ Z4 .
+     14 there are 4 subgroups of order 14 up to conjugacy in the group GL(F72 ). 2 are
+        excluded due to groups of prime order. One could be excluded and the other
+        yields codes of size at most 332. The remaining group is of abstract type Z14 .
+        One of these two groups could be solved in less then 60 seconds with an optimal
+        value of 301. The other one was much harder and the technique described in
+        Subsection 4.1 was applied. The orbit type is 11 24 730 14828 and after removing
+        the trivially forbidden orbits 11 24 728 14632 . The normalizer has order 168 and
+        the normalizer-orbit type is 11 413 62 1250 making a total of 66 subproblems.
+     15 there are 3 subgroups of order 15 up to conjugacy in the group GL(F72 ). 1 is
+        excluded due to groups of prime order. The remaining groups could be excluded.
+     18 there are 16 subgroups of order 18 up to conjugacy in the group GL(F72 ). 13 are
+        excluded due to groups of prime order. The remaining groups could be excluded.
+     20 each group of order 20 contains a group of order 10 (Small Groups library)
+     21 there are 8 subgroups of order 21 up to conjugacy in the group GL(F72 ). 5 are
+        excluded due to groups of prime order. The remaining groups could be excluded.
+     24 there are 525 subgroups of order 24 up to conjugacy in the group GL(F72 ). 488
+        are excluded due to groups of prime order. The types of these groups are: 14
+        times S4 , 19 times Z2 × A4 , 2 times SL(2, 3), and 2 times (Z6 × Z2 ) ⋊ Z2 . All
+        but the two groups of type SL(2, 3) contain an excluded Z12 , Z6 × Z2 , or A4 .
+        The remaining two groups could be excluded computationally.
+     28 there are 9 subgroups of order 28 up to conjugacy in the group GL(F72 ). 8 are
+        excluded due to groups of prime order. The remaining group is of type Z14 × Z2
+        but could be excluded computationally.
+     30 each group of order 30 contains a group of order 10 (Hall, solvable order)
+     35 there is 1 subgroup of order 35 up to conjugacy in the group GL(F72 ). It is
+        excluded due to groups of prime order.
+     36 there are 61 subgroups of order 36 up to conjugacy in the group GL(F72 ). 59 are
+        excluded due to groups of prime order. The remaining groups are both of type
+        Z3 × A4 and contain an excluded A4 .
+     40 each group of order 40 contains a group of order 10 (Small Groups library)
+     42 each group of order 42 contains a group of order 21 (Hall, solvable order)
+     45 each group of order 45 contains a group of order 15 (Small Groups library)
+     48 each group of order 48 contains a subgroup of order 24 or a subgroup of abstract
+        type A4 (Small Groups library)
+     A SUBSPACE CODE OF SIZE 333 IN THE SETTING OF A BINARY FANO PLANE              13
+
+
+  56 there are 38 subgroups of order 56 up to conjugacy in the group GL(F72 ). 26 are
+     excluded due to groups of prime order. One group is of type Z14 × Z2 × Z2 and
+     contains an excluded Z14 . The remaining 11 groups are of type Z2 ×Z2 ×Z2 ×Z7
+     but could be excluded computationally.
+  60 each group of order 60 contains a group of order 10 (Small Groups library)
+  63 each group of order 63 contains a group of order 21 (Small Groups library)
+  70 each group of order 70 contains a group of order 10 (Hall, solvable order)
+  72 each group of order 72 contains a group of order 36 or a subgroup of abstract
+     type Z12 (Small Groups library)
+  80 each group of order 80 contains a subgroup of order 10 or a subgroup of abstract
+     type Z2 × Z2 × Z2 × Z2 , which yields codes of size at most 313 (Small Groups
+     library)
+  84 each group of order 84 contains a group of order 28 (Hall, solvable order)
+  90 each group of order 90 contains a group of order 10 (Hall, solvable order)
+ 105 each group of order 105 contains a group of order 15 (Hall, solvable order)
+ 112 each group of order 112 contains a subgroup of order 28 or a subgroup of abstract
+     type Z2 × Z2 × Z2 × Z2 (Small Groups library)
+ 120 each group of order 120 contains a group of order 10 (Small Groups library)
+ 126 each group of order 126 contains a group of order 63 (Hall, solvable order)
+ 140 each group of order 140 contains a group of order 28 (Hall, solvable order)
+ 144 each group of order 144 contains a group of order 36 (Small Groups library)
+ 168 each group of order 168 contains a group of order 21 (Small Groups library)
+ 180 each group of order 180 contains a group of order 36 (Small Groups library)
+ 210 each group of order 210 contains a group of order 10 (Hall, solvable order)
+ 240 each group of order 240 contains a group of order 10 or order 15 (Small Groups
+     library)
+ 252 each group of order 252 contains a group of order 28 (Hall, solvable order)
+ 280 each group of order 280 contains a group of order 35 (Hall, solvable order)
+ 315 each group of order 315 contains a group of order 63 (Hall, solvable order)
+ 336 each group of order 336 contains a subgroup of order 48 or a subgroup of abstract
+     type A4 or Q16 (Small Groups library)
+ 360 each group of order 360 contains a group of order 10 (Small Groups library)
+ 420 each group of order 420 contains a group of order 28 (Small Groups library)
+ 504 each group of order 504 contains a subgroup of order 63 or a subgroup of abstract
+     type D14 (Small Groups library)
+ 560 each group of order 560 contains a group of order 35 (Hall, solvable order)
+ 630 each group of order 630 contains a group of order 10 (Hall, solvable order)
+ 720 each group of order 720 contains a group of order 10 or order 45 (Small Groups
+     library)
+ 840 each group of order 840 contains a group of order 10 (Small Groups library)
+1008 each group of order 1008 contains a group of order 36 or order 63 (Small Groups
+     library)
+1260 each group of order 1260 contains a group of order 10 (Small Groups library)
+1680 each group of order 1680 contains a group of order 10 or order 15 (Small Groups
+     library)
+2520 there are 7 subgroups of order 2520 up to conjugacy in the group GL(F72 ). All
+     are excluded due to groups of prime order.
+5040 there are 4 subgroups of order 5040 up to conjugacy in the group GL(F72 ). All
+     are excluded due to groups of prime order. None of them is solvable.
+14    DANIEL HEINLEIN, MICHAEL KIERMAIER, SASCHA KURZ, AND ALFRED WASSERMANN⋆
+
+
+                                            Appendix B. The surviving groups
+  By Gn,m we denote the groups corresponding to Theorem 1. Here n denotes the
+order of Gn,m and m is a consecutive index. To the right of each group Gn,m we list
+the abstract type of Gn,m .
+G1,1 = I                                                                           Z1
+
+                             
+      * 11 01 00 00 00 00 00 +
+       0 0 1 0 0 0 0
+G2,1 = 
+        00 00 10 10 01 00 00 
+                                                                                  Z2
+                0 0 0 0 1 1 0
+                0 0 0 0 0 0 1
+
+                             
+      * 11 10 00 00 00 00 00 +
+       0 0 1 1 0 0 0
+G3,1 = 
+        00 00 10 00 01 01 00 
+                                                                                  Z3
+                0 0 0 0 1 0 0
+                0 0 0 0 0 0 1
+
+                             
+      * 11 10 00 00 00 00 00 +
+       0 0 1 1 0 0 0
+G3,2 = 
+        00 00 10 00 01 00 00 
+                                                                                  Z3
+                0 0 0 0 0 1 0
+                0 0 0 0 0 0 1
+
+                             0 0 0 1 1 1 1
+      * 00 01 11 00 10 01 00    0 1 1 1 0 1 0 +
+       0 0 1 1 0 0 0 1 0 0 1 1 0 1
+G4,1 =  0 0 0 1 0 0 0,0 0 0 1 0 0 0
+       1 0 1 1 0 0 0 0 0 1 0 1 1 0                                         Z2 × Z2
+                0 0 0 1 0 1 0         1 0 1 1 1 1 1
+                0 0 0 0 0 0 1         0 0 0 0 0 0 1
+
+                             0 1 0 0 0 1 1
+      * 11 00 00 11 01 11 01    1 1 1 1 0 1 0 +
+       0 0 1 1 0 1 0 1 1 1 0 0 1 1
+G4,2 =  1 0 1 1 0 0 0,1 0 1 1 1 1 0
+       1 0 1 0 1 0 0 1 0 1 0 0 1 0                                         Z2 × Z2
+                1 0 1 0 0 1 0         1 0 1 0 1 0 0
+                0 1 1 0 1 0 0         1 1 0 1 1 1 0
+
+                             0 0 1 1 1 0 0
+      * 11 11 01 01 01 10 00    1 0 1 1 1 1 0 +
+       0 1 1 0 0 1 0 1 0 0 1 1 0 0
+G4,3 =  1 0 1 0 1 0 0,1 1 1 1 0 1 0
+       1 0 1 1 0 0 0 1 1 1 0 1 1 0                                         Z2 × Z2
+                1 0 1 1 1 1 0         1 1 1 1 1 0 0
+                0 1 0 1 1 1 1         1 0 1 1 1 0 1
+
+                              0 0 1 0 1 1 0
+      * 11 11 11 01 00 11 10         0 0 1 0 0 1 1        +
+       0 1 0 1 1 1 1 1 0 0 1 0 1 0
+G4,4 = 
+        11 11 00 10 10 00 11  ,  00 11 11 10 01 11 11 
+                                                                            Z2 × Z2
+                1 1 0 1 0 1 1         0 1 1 1 1 0 1
+                0 0 0 1 1 0 1         1 0 1 0 1 1 1
+
+                              0 0 1 0 1 1 0
+      * 10 10 11 00 10 01 11         0 0 1 0 0 1 1        +
+       0 1 0 1 0 0 1 1 0 0 1 0 1 0
+G4,5 = 
+        00 00 00 10 01 00 00  ,  00 11 11 10 01 11 11 
+                                                                            Z2 × Z2
+                0 0 0 0 0 1 0         0 1 1 1 1 0 1
+                0 0 0 1 0 1 1         1 0 1 0 1 1 1
+
+                             1 1 0 0 0 1 0
+      * 00 00 10 00 01 00 00    1 1 0 1 1 0 1 +
+       1 0 0 0 0 0 0 0 1 1 0 0 1 0
+G4,6 =  0 1 0 1 1 0 0,1 0 0 1 0 0 1
+       0 1 0 0 0 0 0 1 0 0 0 1 0 1                                         Z2 × Z2
+                0 1 0 0 1 1 0         1 0 0 1 1 1 1
+                1 0 1 1 1 0 1         0 1 0 0 0 1 1
+
+                             
+      * 10 11 01 00 00 00 00 +
+       0 0 1 0 0 0 0
+G4,7 = 
+        00 00 00 10 11 01 00 
+                                                                                  Z4
+                0 0 0 0 0 1 1
+                0 0 0 0 0 0 1
+
+                             
+      * 00 10 01 00 00 00 00 +
+       0 0 0 1 0 0 0
+G5,1 = 
+        10 10 10 10 01 00 00 
+                                                                                  Z5
+                0 0 0 0 0 1 0
+                0 0 0 0 0 0 1
+
+                             0 1 1 1 1 0 0
+      * 01 11 00 00 10 11 00    1 1 1 1 0 0 0 +
+       0 1 1 1 1 0 0 0 1 0 0 1 1 0
+G6,1 =  0 0 0 1 0 0 0,0 1 1 1 0 1 0
+       1 0 0 0 1 1 0 0 0 1 1 0 0 0                                             S3
+                1 1 0 0 1 0 0         1 0 1 0 1 1 0
+                0 0 0 0 0 0 1         0 0 0 0 0 0 1
+
+                             1 0 1 1 0 1 0
+      * 11 11 00 11 01 10 00    1 0 1 0 1 0 0 +
+       0 0 0 1 1 1 0 0 0 0 0 1 1 0
+G6,2 =  1 1 1 0 0 0 0,1 1 0 0 1 1 0
+       1 0 1 0 1 1 0 1 0 0 0 0 0 0                                             S3
+                0 1 1 0 1 1 0         0 1 1 1 1 1 0
+                0 0 0 0 0 0 1         0 0 0 0 0 0 1
+             A SUBSPACE CODE OF SIZE 333 IN THE SETTING OF A BINARY FANO PLANE        15
+
+
+             1 0 0 0 1 0 0
+         *     1 0 0 1 1 1 0    +
+             1 1 1 0 1 0 0
+G6,3 =       1 0 1 1 1 0 0
+             1 1 1 0 0 0 0                                                         Z6
+               0 1 1 0 1 1 0
+               0 0 0 0 0 0 1
+
+             0 1 0 0 0 0 0
+         *     0 0 1 0 0 0 0    +
+             1 0 1 0 0 0 0
+G7,1 =       0 0 0 0 1 0 0
+             0 0 0 0 0 1 0                                                         Z7
+               0 0 0 1 1 0 0
+               0 0 0 0 0 0 1
+
+             0 1 0 0 0 0 0
+         *     0 0 1 0 0 0 0    +
+             1 0 1 0 0 0 0
+G7,2 =       0 0 0 0 1 0 0
+             0 0 0 0 0 1 0                                                         Z7
+               0 0 0 1 0 1 0
+               0 0 0 0 0 0 1
+
+             1 1 1 0 1 0 0 0 0 1 0 1 1 1 0 1 0 0 0 1 1
+         *    1 0 0 0 0 1 0   1 0 0 1 0 0 0   1 1 1 0 0 1 1 +
+             0 0 0 1 0 0 0 1 1 0 0 0 0 1 1 0 0 0 0 1 1
+G8,1 =       0 0 1 0 0 0 0,0 1 1 0 1 1 1,0 1 0 0 0 0 1
+             1 1 1 1 1 1 0 0 0 1 1 1 0 1 0 0 0 0 1 0 0               Z2 × Z2 × Z2
+               1 0 1 0 1 0 0        1 1 1 0 0 1 1    1 0 0 1 0 0 0
+               0 0 0 0 0 0 1        1 0 0 1 1 1 1    1 1 1 1 0 1 1
+
+             1 0 0 1 1 1 1 1 0 1 0 1 1 0 1 0 1 1 1 0 1
+         *    0 0 1 1 0 1 1   0 0 1 0 1 0 0   1 0 0 0 0 1 1 +
+             0 0 0 0 1 1 0 0 0 0 1 0 0 1 1 1 1 0 0 1 1
+G8,2 =       0 1 1 1 1 0 0,0 0 0 0 1 1 1,1 0 1 1 0 1 1
+             0 1 0 1 0 0 1 0 1 0 1 0 0 1 0 0 0 0 1 0 0               Z2 × Z2 × Z2
+               0 1 1 1 0 0 1        0 1 1 0 1 1 0    1 0 0 1 1 0 0
+               0 1 0 0 0 1 1        0 0 1 0 1 1 1    0 1 1 0 0 0 1
+
+             1 0 1 1 0 0 0 1 0 1 1 0 0 1 0 0 1 0 1 1 1
+         *    1 0 0 0 1 1 1   1 0 0 0 0 1 1   0 1 1 1 0 0 1 +
+             1 0 0 0 0 1 1 1 0 1 1 1 1 0 0 0 0 1 0 0 1
+G8,3 =       0 0 0 1 1 0 0,1 0 0 0 1 1 0,0 1 1 1 1 0 0
+             0 1 1 0 0 0 0 0 1 0 1 0 0 1 0 0 0 0 1 0 0                     Z4 × Z2
+               0 0 0 0 1 1 1        1 1 1 1 0 0 0    1 1 0 0 0 0 1
+               1 0 1 0 1 1 0        0 0 0 0 0 0 1    0 1 0 1 1 0 0
+
+             1 0 0 1 1 1 1 0 0 0 1 1 1 0 1 0 0 0 1 0 0
+         *    1 1 0 1 0 1 0   1 1 0 0 0 0 1   1 0 1 1 1 1 0 +
+             1 1 1 0 0 1 1 0 0 0 0 0 1 0 1 1 0 1 1 1 0
+G8,4 =       1 1 0 0 0 0 0,0 1 0 1 1 1 0,0 1 0 0 1 0 1
+             1 0 1 0 0 1 1 0 0 0 0 1 0 0 0 0 0 0 1 0 0                         Q8
+               0 0 1 1 0 1 1        1 1 0 1 1 1 0    0 1 0 1 0 1 1
+               0 1 0 0 0 1 1        0 1 1 0 0 0 1    1 0 1 0 0 1 0
+
+             0 0 1 0 0 1 1 0 0 0 1 1 1 0 0 1 1 1 0 1 0
+         *    1 1 0 0 0 0 0   0 1 1 1 1 0 0   1 1 1 0 0 1 1 +
+             0 0 0 0 1 1 1 0 1 0 0 0 0 1 1 0 0 0 0 1 1
+G8,5 =       1 0 1 0 1 0 1,0 1 1 1 1 0 1,0 0 0 1 1 0 0
+             1 1 1 1 1 1 0 1 0 1 0 0 1 1 0 0 0 0 1 0 0                         Q8
+               1 0 1 1 0 1 1        1 0 1 0 1 0 0    1 1 1 1 1 0 0
+               1 1 0 0 1 1 0        1 1 1 1 1 1 1    1 0 1 0 1 1 0
+
+             1 1 0 1 1 0 1 0 0 0 1 1 1 0 1 1 0 1 1 0 1
+         *    1 1 1 1 1 0 1   0 1 0 1 1 1 1   0 0 1 0 0 0 0 +
+             1 1 0 0 0 0 0 0 0 0 0 1 1 0 0 1 0 0 0 0 0
+G8,6 =       0 1 0 1 0 1 1,1 0 1 0 0 0 0,0 0 0 1 1 0 0
+             0 1 0 1 0 0 1 0 0 1 1 1 0 1 0 0 0 0 1 0 0                         D8
+               0 0 0 1 1 0 0        0 0 0 1 1 0 1    0 1 0 1 0 1 1
+               1 0 1 0 0 1 0        1 0 0 1 1 1 1    0 1 1 0 1 0 1
+
+             0 0 1 0 0 1 1 0 1 0 0 0 1 1 1 0 1 1 0 0 1
+         *    1 1 0 0 0 0 0   1 1 0 0 0 0 1   1 1 1 0 0 1 1 +
+             1 1 0 0 1 0 0 1 1 1 1 1 0 0 1 0 0 0 0 1 1
+G8,7 =       1 0 0 1 1 0 0,0 0 0 0 1 1 1,1 1 0 1 1 1 1
+             0 1 1 0 0 0 0 0 1 0 1 0 0 1 0 0 0 0 1 0 0                     Z4 × Z2
+               0 0 0 1 1 0 0        1 0 0 0 0 1 1    1 1 1 1 1 0 0
+               0 1 1 0 0 0 1        1 1 0 0 0 1 0    0 1 1 0 1 0 1
+
+             1 0 0 1 1 1 1 0 0 0 1 0 1 0 1 0 0 0 1 0 0
+         *    1 1 0 1 0 1 0   0 1 0 1 1 1 1   1 0 1 1 1 1 0 +
+             1 1 1 0 0 1 1 1 0 0 1 1 0 0 1 1 0 1 1 1 0
+G8,8 =       1 1 0 0 0 0 0,1 1 0 0 0 0 0,0 1 0 0 1 0 1
+             1 0 1 0 0 1 1 0 0 0 0 1 0 0 0 0 0 0 1 0 0                     Z4 × Z2
+               0 0 1 1 0 1 1        0 1 0 0 1 0 0    0 1 0 1 0 1 1
+               0 1 0 0 0 1 1        0 1 1 0 0 0 1    1 0 1 0 0 1 0
+
+             0 0 1 0 0 1 1 0 1 1 0 0 0 1 0 0 0 1 0 1 0
+         *    1 1 1 0 0 1 1   0 1 0 1 0 1 1   1 0 0 0 1 1 1 +
+             1 1 0 1 1 1 0 0 0 0 0 0 1 0 1 1 1 0 1 1 1
+G8,9 =       1 0 0 0 0 1 0,1 1 1 0 0 1 0,0 1 1 1 1 0 0
+             0 1 0 1 0 0 1 0 0 1 1 1 0 1 0 0 0 0 1 0 0                         D8
+               0 0 1 1 0 1 1        0 0 1 0 0 0 0    1 1 1 1 1 0 0
+               0 1 1 0 1 0 1        1 1 0 1 0 0 1    1 0 1 0 0 1 0
+
+              1 0 0 0 0 0 0 1 0 0 1 0 1 1 0 0 0 1 0 1 0
+          *     0 0 1 0 1 0 0        1 1 0 0 1 0 1    1 0 0 0 1 1 1   +
+              0 0 0 1 0 0 1 1 0 0 1 1 0 0 1 1 1 0 1 1 1
+G8,10 =       1 0 0 0 0 1 0,1 0 0 0 1 1 0,0 1 1 1 1 0 0
+              0 1 0 1 0 0 1 0 0 1 1 1 0 1 0 0 0 0 1 0 0                        D8
+                1 0 0 1 0 0 0        1 0 1 1 1 1 0    1 1 1 1 1 0 0
+                1 0 1 0 0 1 0        0 0 1 0 0 1 1    1 0 1 0 0 1 0
+
+              0 0 1 1 1 0 0
+          *    0 1 0 0 0 0 1 +
+              0 0 1 0 1 0 1
+G8,11 =       1 1 0 0 1 0 1
+              0 1 0 1 0 0 1                                                        Z8
+                1 1 1 1 1 0 1
+                0 1 0 0 0 1 1
+16    DANIEL HEINLEIN, MICHAEL KIERMAIER, SASCHA KURZ, AND ALFRED WASSERMANN⋆
+
+
+                             
+      * 11 00 11 11 01 10 00 +
+       0 0 1 1 1 0 0
+G9,1 = 
+        11 11 00 01 11 10 00 
+                                                                                           Z9
+               0 1 0 0 0 1 0
+               0 0 0 0 0 0 1
+
+                             0 1 0 0 0 1 0
+      * 01 10 00 00 00 11 00    1 0 1 0 0 0 0 +
+       0 1 1 0 0 1 0 1 0 1 0 0 1 0
+G9,2 =  1 1 0 0 1 0 0,0 1 1 1 1 0 0
+       1 1 0 1 1 0 0 0 0 0 1 0 1 0                                                 Z3 × Z3
+               0 1 0 0 0 0 0      0 1 1 0 0 1 0
+               0 0 0 0 0 0 1      0 0 0 0 0 0 1
+
+              1 0 0 0 0 1 1 1 0 0 0 0 0 0 1 0 0 0 0 1 1
+          *    0 0 0 1 1 0 1   1 1 0 0 0 1 1   0 1 0 1 1 1 1 +
+              1 1 1 1 1 0 0 1 0 1 0 1 0 1 1 0 1 1 1 0 0
+G12,1 =       1 1 0 0 1 1 0,1 0 0 1 0 0 0,1 1 0 0 0 1 1
+              0 0 0 0 0 0 1 0 0 0 0 1 0 0 1 0 0 0 1 0 0                          Z3 ⋊ Z4
+                0 0 0 0 1 1 1      0 0 0 0 0 1 0   1 0 0 0 0 1 0
+                0 0 0 0 1 0 0      0 0 0 0 0 0 1   0 0 0 0 0 1 0
+
+              0 1 1 1 1 0 0
+          *    0 1 1 0 0 0 0 +
+              0 1 1 0 1 0 0
+G14,1 =       0 1 0 0 0 0 0
+              0 0 1 0 1 1 0                                                              Z14
+                1 0 1 0 0 1 0
+                0 0 0 0 0 0 1
+
+              0 0 1 0 1 0 0 0 0 1 1 0 1 1
+          *    1 0 0 0 1 0 0   1 0 1 1 1 0 1 +
+              0 0 0 1 0 1 0 0 1 1 1 1 1 0
+G16,1 =       0 1 0 0 0 0 1,0 0 1 1 0 1 0
+              1 0 1 0 1 1 1 1 1 1 1 0 1 0                                   (Z4 × Z2 ) ⋊ Z2
+                1 0 1 0 0 1 0      1 0 0 1 0 1 1
+                0 0 1 1 1 1 1      0 0 1 0 0 0 0
+
+
+           Appendix C. The code of size 333 in the binary Fano setting
+   The code of size 333 is printed below. Since the group G4,6 of Appendix B is its
+automorphism group we print only one representative in each orbit. The orbit type is
+19 226 468 . Each row represents one subspace and each number represents a column in
+the reduced row echelon form matrix corresponding to the subspace by multiplying the
+                                           a
+entries in the column with powers of 2: b ↔ a · 20 + b · 21 + c · 22 . For example, the first
+                                           c
+line in the representatives of order 4, i.e., 0102004, is the orbit of subspaces:
+                                   0 1 0 0 0 0 0 
+                                  im 0 0 0 1 0 0 0    · G4,6
+                                                       0000001
+     9 fixed blocks:
+ 0 1 2 4 4 1 2
+ 1 0 1 2 4 6 0
+ 1 1 2 4 6 3 3
+ 1 2 0 4 6 0 1
+ 1 2 1 3 4 5 7
+ 1 2 1 4 4 2 5
+ 1 2 2 4 7 1 3
+ 1 2 4 0 0 2 0
+ 1 2 4 2 7 7 0
+     26 representatives of orbits of length 2:
+ 0 1 0 2 1 4 0
+ 1 0 2 4 4 5 3
+ 1 1 1 2 4 3 4
+ 1 1 2 2 1 2 4
+ 1 1 2 3 3 4 6
+ 1 2 0 4 5 7 1
+ 1 2 1 0 4 1 0
+ 1 2 1 1 4 6 0
+ 1 2 1 2 4 7 3
+ 1 2 1 4 3 3 6
+ 1 2 3 0 4 2 6
+ 1 2 4 1 1 1 6
+ 1 2 4 2 3 7 5
+ 1 2 4 2 4 1 5
+ 1 2 4 2 5 7 7
+      A SUBSPACE CODE OF SIZE 333 IN THE SETTING OF A BINARY FANO PLANE   17
+
+1 2 4 3 3 4 5
+1 2 4 3 4 2 2
+1 2 4 3 7 7 4
+1 2 4 4 1 0 5
+1 2 4 4 1 6 4
+1 2 4 4 2 2 5
+1 2 4 5 1 3 0
+1 2 4 5 3 4 6
+1 2 4 5 5 0 5
+1 2 4 5 7 7 5
+1 2 4 6 3 5 7
+ 68 representatives of orbits of length 4:
+0 1 0 2 0 0 4
+0 1 0 2 4 6 7
+0 1 1 0 2 2 4
+0 1 1 1 2 4 0
+0 1 1 2 0 3 4
+0 1 2 0 2 4 0
+0 1 2 1 4 5 7
+0 1 2 2 2 4 1
+0 1 2 2 3 4 4
+0 1 2 4 1 6 1
+0 1 2 4 4 3 5
+0 1 2 4 4 7 3
+1 0 0 2 1 4 6
+1 0 0 2 3 4 2
+1 0 0 2 4 2 7
+1 0 1 2 4 1 3
+1 0 2 0 4 6 7
+1 0 2 1 0 3 4
+1 0 2 1 2 4 7
+1 0 2 4 3 5 5
+1 0 2 4 4 4 6
+1 1 0 2 2 0 4
+1 1 0 2 4 5 2
+1 1 2 1 4 3 0
+1 1 2 2 4 0 5
+1 1 2 4 2 1 0
+1 1 2 4 2 3 1
+1 2 0 0 3 1 4
+1 2 0 2 2 4 6
+1 2 0 2 4 2 2
+1 2 0 3 4 1 3
+1 2 1 0 3 2 4
+1 2 1 0 4 7 5
+1 2 1 1 4 1 5
+1 2 1 2 1 4 2
+1 2 1 4 0 2 6
+1 2 1 4 5 0 7
+1 2 2 0 4 3 3
+1 2 2 4 2 1 7
+1 2 2 4 6 0 5
+1 2 3 1 4 6 5
+1 2 3 4 2 4 1
+1 2 3 4 4 1 3
+1 2 3 4 6 1 0
+1 2 4 0 2 6 6
+1 2 4 0 4 1 6
+1 2 4 1 1 5 7
+1 2 4 1 2 6 5
+1 2 4 1 5 3 3
+1 2 4 2 4 3 0
+1 2 4 2 6 7 2
+1 2 4 3 5 4 4
+1 2 4 3 7 2 7
+18   DANIEL HEINLEIN, MICHAEL KIERMAIER, SASCHA KURZ, AND ALFRED WASSERMANN⋆
+
+1 2 4 4 0 6 7
+1 2 4 4 3 4 3
+1 2 4 4 4 0 1
+1 2 4 4 6 0 6
+1 2 4 5 1 2 2
+1 2 4 5 3 1 1
+1 2 4 5 6 6 3
+1 2 4 6 0 5 0
+1 2 4 6 0 7 3
+1 2 4 6 1 3 4
+1 2 4 6 2 4 0
+1 2 4 6 5 1 7
+1 2 4 7 0 0 7
+1 2 4 7 4 0 4
+1 2 4 7 7 5 4
+

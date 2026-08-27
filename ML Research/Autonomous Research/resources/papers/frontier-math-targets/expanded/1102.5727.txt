@@ -1,0 +1,1256 @@
+                                                                                 Open problems in Costas arrays
+                                                                                           Konstantinos Drakakis∗
+                                                                                               UCD CASL
+                                                                                    Email: Konstantinos.Drakakis@ucd.ie
+                                                                                                  November 26, 2024
+arXiv:1102.5727v1 [math.CO] 28 Feb 2011
+
+
+
+
+                                                                                                          Abstract
+                                                    A collection of open problems in Costas arrays is presented, classified into several categories, along with the
+                                                 context in which they arise.
+
+
+                                          1      Introduction
+                                          Costas arrays are square arrays of dots/1s and blanks/0s, such that there exists exactly one dot per row and
+                                          column (that is, they are permutation arrays), and such that a) no four dots not lying on a straight line form a
+                                          parallelogram, b) no four dots lying on a straight line form two equidistant pairs, and c) no three dots lying on a
+                                          straight line are equidistant. They appeared for the first time in 1965 in the context of SONAR detection ([18],
+                                          and later [19] as a journal publication), when J. P. Costas, disappointed by the poor performance of SONARs, used
+                                          them to describe a novel frequency hopping pattern for SONAR systems with optimal auto-correlation properties
+                                          (namely auto-correlation sidelobes of height at most 1). At that stage their study was entirely empirical and
+                                          application-oriented. In 1984, however, after the publication of the two main construction methods for Costas
+                                          arrays by S. Golomb [58], still the only ones of general applicability available today, they officially acquired their
+                                          present name and they became an object of mathematical interest and study.
+                                              The present author, along with his collaborators, has published numerous journal publications over the past
+                                          six years on several aspects of Costas arrays, namely their theory, their properties, their enumeration, and their
+                                          applications, in which many questions about them were settled. However, many old questions, along with several
+                                          new ones emerging in the course of the author’s research, have remained open, defying all attempts to answer them.
+                                          The most important and promising amongst those are collected in this work, in the hope that it will get researchers
+                                          interested in Costas arrays and willing to contribute further with their efforts.
+                                              Inevitably, the selection of the material and its presentation were influenced by the author’s own preferences
+                                          and views. Although a conscientious effort towards impartiality was made, the broad ground rule was set that
+                                          this study is intended to be centered around Costas arrays themselves, as opposed to an object or application
+                                          which Costas arrays are related to. Accordingly, the selection of the various open problems presented was based
+                                          on their potential advancement of our knowledge of Costas arrays themselves, be it in the direction of their theory
+                                          or their applications, rather than on the advancement of some research area (e.g. SONAR/RADAR systems or
+                                          cryptography) through the introduction (or further application) of Costas arrays in it.
+                                              An attempt has been made to group the problems presented into families, representing thematic units. Once
+                                          more, it should be stressed that this grouping is, to some extent, subjective, as it will be seen that some problems
+                                          would naturally fit in several groups: in such cases, the choice was based on the problem’s main context and
+                                          orientation.
+                                              This is not the first time a compilation of open problems in Costas arrays is attempted. In 2006, Prof. S. Rickard
+                                          presented a brief list to the IMA conference [79], while the present author published a review on Costas arrays [33],
+                                          cataloguing some open problems as well. In 2007, S. Golomb and G. Gong published another brief work on the
+                                          status of Costas arrays [61]. None of these lists, however, is of length comparable to the current one. Furthermore,
+                                          these works, published at least three years ago, do not cover the significant recent developments in the subject.
+                                               Address: UCD CASL, University College Dublin, Belfield, Dublin 4, Ireland.
+                                              ∗ The author is also affiliated with the School of Electronic, Electrical & Mechanical Engineering, University College Dublin, Ireland.
+
+
+
+
+                                                                                                               1
+2    Why Costas arrays? Some motivation
+RADAR/SONAR systems detect the the distance and velocity of targets around them by periodically transmitting
+a waveform W and listening for reflections R. In an ideal noiseless environment, R is an exact copy of W , attenuated
+and shifted in frequency and time. The time delay indicates the distance of the target, while the frequency shift,
+through the Doppler effect, its velocity (assuming that the frequency content of W is narrowband enough for the
+Doppler effect, which is multiplicative, to be well approximated by a uniform additive shift for all frequencies).
+   The simplest way to detect the time and frequency shifts is by applying a matched filter: R is cross-correlated
+with shifted versions of W for various time and frequency shifts, and the pair of shifts corresponding to the maximal
+cross-correlation are the true shifts sought:
+                                                                              Z +∞
+                    (s∗t , s∗f ) = argmax |ψ(st , sf )| , where ψ(st , sf ) =      (Fsf W )(t − st )R(t)dt.        (1)
+                               (st ,sf )                               −∞
+
+Here, st and sf denote the time and frequency shifts, respectively, and the operator Fsf maps W to the signal
+obtained by translating every positive frequency of W ’s spectrum by sf to the right and every negative frequency
+by sf to the left (so that Fsf W remains real).
+    This simple idea fails to work in practice, because all real media are incoherent: phase delay varies with
+frequency, hence waveforms tend to spread while traveling in the medium [19], so that, by the time R reaches the
+receiver, it may look so different from W that coherent processing becomes inappropriate.
+    J. P. Costas’s idea [19] was to discard the unreliable phase information, and carry out the cross-correlation
+based on the energy contents of W and R alone. Consider a waveform of the form:
+                                                                                   
+                                                        ak           k−1 k
+                             W (t) = A cos φk + 2π f0 + f1 t , t ∈            T, T ,                          (2)
+                                                          n               n      n
+where k ∈ [n], T is the time duration of the pulse, f0 , f1 are two predetermined frequencies, φk are phases suitably
+chosen so that the phase of W is continuous in t (φ1 = 0 may be chosen), and a : [n] → [n] is a bijection. This is a
+frequency hopping waveform whose instantaneous frequency is
+                                                                        
+                                               ak             k−1 k
+                                  f (t) = f0 + f1 , t ∈            T, T , k ∈ [n].                                (3)
+                                               n                n     n
+W is completely determined by a, given that f0 , f1 , and T are set.
+    Costas’s idea amounts effectively to placing an energy content detector before the matched filter, thus recon-
+structing a from W , and similarly for R: the signals fed to the matched filter can then each be abstracted as a 2D
+infinite sequence, representing the time-frequency plane. This sequence is full of 0s/blanks (energy is not present),
+except for a n × n square that corresponds to a permutation array (whose 1s/dots denote that energy is present
+there). The filter overlays the two 2D sequences, shifts one with respect to the other by v rows vertically and u
+columns horizontally, and counts how many pairs of dots overlap: this is the value of the cross-correlation Ψ at
+(u, v) (compare with Definition 2 below). In the absence of noise, R is an exact copy of W , only shifted in time and
+frequency, so the matched filter will have found the correct shift parameters when the cross-correlation becomes
+equal to n.
+    When noise is present, however, some of R’s dots may have shifted irregularly, gone altogether missing, or even
+new dots may have appeared: R will no longer be an exact copy of W , and the maximal cross-correlation will no
+longer be n. One will have no alternative than to design the filter to locate the maximal cross-correlation (whose
+value will no longer be known a priori) and return the shift parameters corresponding to it. This maximum may no
+longer be unique and/or one of the (former) sidelobes may have grown taller than the main lobe. Unfortunately,
+both cases result in spurious target detection.
+    What should the form of a (or the corresponding array A) be in order to minimize the probability of spurious
+detections? In the absence of noise, the cross-correlation is just a shifted form of the autocorrelation of A, A needs
+to be chosen in such a way as to suppress the height of the autocorrelation sidelobes relatively to the main lobe of
+height n as much as possible:
+                                          A = A∗ = argmin max ΨA,A (u, v).
+                                                       A       (u,v)
+
+Choosing any pair of dots in A, there exists a shift (their distance vector) moving one on top of the other, so
+sidelobes of height 1 will exist no matter what. If, however, it is stipulated that distance vectors be unique, there
+
+                                                           2
+will be no sidelobe of height 2 or more. This, however, is precisely the Costas property (compare with Definition 1
+below)! Autocorrelation is known as auto-ambiguity in the SONAR/RADAR community, and waveforms with the
+Costas property are said to have ideal thumbtack auto-ambiguity [19, 64].
+    Why should the optimal A be a permutation array, as we assumed (summarily and without any further expla-
+nation) above? Would using twice the same frequency, or using two frequencies simultaneously, not improve the
+autocorrelation? Costas argued on basic engineering principles that indeed it would not [19].
+    Why, finally, is the full force of the Costas property needed (if indeed it is)? Would sidelobes of height 2 or
+more, but still much shorter than the main lobe, not be enough? Indeed they might not, but for a reason we have
+not mentioned so far: even if such a signal performed well under noise conditions, as discussed above, there is still
+the issue of multipath interference. In the real world R will most likely be the sum of attenuated and shifted noisy
+versions of W (by different attenuation and shift parameters) representing echoes from different reflection paths,
+which may add up constructively at the receiver: the taller the sidelobes of W are, the easier it is for them to add
+up to a significantly tall sidelobe in R.
+
+
+3     Basics on Costas arrays
+Throughout this work, [n] will stand for the set of the first n positive integers {1, . . . , n}, n ∈ N, and obvious
+modifications will also be used, such as [n] − 1 = {0, 1, . . . , n − 1} etc. It will also be convenient to consider primes
+to be included in prime powers as a subset (unless explicitly excluded).
+
+3.1    Definition of the Costas property
+Simply put, a Costas array is a square arrangement of dots and blanks, such that there is exactly one dot per row
+and column, and such that all vectors between dots are distinct.
+Definition 1. Let f : [n] → [n] be a bijection. f is said to have the Costas property or the distinct differences
+property iff the collection of vectors {(i − j, f (i) − f (j)) : 1 ≤ j < i ≤ n}, called the distance vectors, are all distinct,
+or, equivalently, iff
+
+           ∀i, j, k such that 1 ≤ i, j, i + k, j + k ≤ n : f (i + k) − f (i) = f (j + k) − f (j) ⇒ i = j or k = 0,         (4)
+
+in which case f is called a Costas permutation. The corresponding Costas array Af is the square n × n array where
+the elements at (f (i), i), i ∈ [n] are equal to 1 (dots), while the remaining elements are equal to 0 (blanks):
+                                                       (
+                                                         1 if i = f (j);
+                                         Af = [aij ] =                   , j ∈ [n].                              (5)
+                                                         0 otherwise
+
+In view of this correspondence, the terms “Costas arrays” and “Costas permutations” will be used interchangeably.
+n is refereed to as the order of the Costas permutation/array.
+    The Costas property is invariant under rotations of the array by 90o , horizontal and vertical flips, and flips
+around the diagonals, hence a Costas array of order n > 2 gives birth to an equivalence class (EC) that contains
+either eight Costas arrays, or four if the array happens to be symmetric; in the latter case, we the EC is called
+symmetric. Note also that both the domain and the range of f can be translated, without affecting the definition
+of the Costas property: in particular, considering [n] − 1 instead of [n] for both the domain and the range proves
+occasionally to be a more suitable convention.
+Definition 2. Let f, g : [n] → [n] where n ∈ N∗ , and let u, v ∈ Z. The cross-correlation between f and g at (u, v)
+is defined as
+                           Ψf,g (u, v) = |{(f (i) + v, i + u) : i ∈ [n]} ∩ {(g(i), i) : i ∈ [n]}|.             (6)
+    Informally, the cross-correlation can be visualized in the following way: first, the two Costas arrays are placed
+on top of each other, and then the first is translated by v units vertically and u horizontally. The number of pairs
+of overlapping dots is the value of the cross-correlation Ψ at (u, v).
+    It should perhaps be stated explicitly that in all definitions above, addition stands for ordinary addition in Z,
+not modular addition. It should also be noted that Definition 1 can be rephrased in the following three equivalent
+ways as follows: a bijection f : [n] → [n] is a Costas permutation iff
+
+                                                              3
+   • the collection of vectors {(f (i) − f (j), i − j) : i, j ∈ [n], i > j} does not contain any duplications, namely iff
+     all vectors therein, known as the distance vectors, are distinct, which, geometrically, means that no two of
+     them can have both the same length and the same slope; or
+   • its auto-correlation range consists of exactly three values, namely {n, 1, 0} (this is based on the description
+     in Section 2).
+    The first variant is equivalent, in turn, to the definition given in the Introduction: no four dots can form a
+parallelogram, or else a pair of equal distance vectors would exist, violating the Costas property (note that the
+cases of four dots lying on a straight line and equidistant in pairs, or of three equidistant dots on a straight line,
+are considered to be limit cases of a completely “flattened” parallelogram and are also forbidden by the definition).
+
+3.2     Construction algorithms
+There exist two two main algorithms for the construction of Costas arrays, based on the algebraic theory of finite
+fields. They are known as the Golomb and Welch methods, and each actually comprising several submethods. They
+are stated below without proofs, but all details can be found in [33, 43, 58, 59, 64]. A further semi-empirical method
+relying on these two, known as the Rickard method, must also be mentioned alongside them, as it is currently the
+only additional method that has successfully led to the discovery of previously unknown Costas arrays (four so
+far, namely two of order 29, one of order 36, and one of order 42) [78]. They are all presented below, classified
+according to their applicability (this classification, also presented in [43], is compatible with and an improvement
+of the classification presented in [94]).
+
+3.2.1   Generated Costas arrays
+Definition 3. An infinite family of Costas arrays will be characterized as “generated” iff its members are con-
+structed by an algorithm whose applicability is determined by a sufficient condition involving only the order of the
+array.
+   The following is an exhaustive list of the families of generated Costas arrays currently known:
+Theorem 1 (Exponential Welch construction W1exp (p, α, c)). Let p be a prime, let α be a primitive root of the
+finite field F(p) of p elements, and let c ∈ [p − 1] − 1 be a constant; then, the function f : [p − 1] → [p − 1] where
+f (i) = αi−1+c mod p is a bijection with the Costas property.
+    Note that the inverse of a W1exp -permutation, corresponding to the transpose of the corresponding W1exp array,
+is not expressible by this formula for different α and c, but rather by swapping i and f (i). This construction is
+known as the Logarithmic Welch construction W1log . The two constructions together form the Welch construction
+W1 . It can be shown that the two sets of Exponential and Logarithmic Welch arrays are disjoint for p > 5 [37]: in
+particular, W1 -arrays for p > 5 are never symmetric. As there are p−1 ways to choose c and φ(p−1) ways to choose
+α (φ stands for Euler’s function), there are 2(p − 1)φ(p − 1) W1 -arrays in total. The property that cyclic shifts of a
+W1exp permutation (or, equivalently, of the columns of a W1exp array) lead to a new W1exp array isknown as     single
+                                                                       exp                                p−1
+periodicity. Furthermore, it can be directly verified that, if f is a W1 permutation, then f (i) + f i +           =p
+                                                                                                            2
+for all i ∈ 2 (or, equivalently, the right half of a W1exp array is the same as its left half, only flipped upside
+             p−1 
+
+down); this is known as anti-reflective symmetry.
+Theorem 2 (Exponential Welch construction W2exp (p, α)). Let p be a prime, and let α be a primitive root of the
+finite field F(p) of p elements; then, the corresponding W1 (p, α, 0) function g : [p − 1] → [p − 1] satisfies g(1) = 1
+and, consequently, the function f : [p − 3] → [p − 3] where f (i) = g(i + 1) − 1, i ∈ [p − 2], is a bijection with the
+Costas property.
+Theorem 3 (Golomb construction G2 (p, m, α, β)). Let p be a prime, m ∈ N, and let α, β be primitive roots of
+the finite field F(pm ) of q = pm elements; then, the function f : [q − 2] → [q − 2] where αf (i) + β i = 1 is a bijection
+with the Costas property.
+   For a given q, there are φ2 (q − 1)/m G2 -arrays in total, and they are symmetric iff either α = β, this special
+case being known as the Lempel construction [33], or else whenever q = r2 and β = αr [37].
+
+                                                            4
+Theorem 4 (Golomb construction G3 (p, m, α, β)). Let p be a prime, m ∈ N, and let α, β be primitive roots of
+the finite field F(pm ) of q = pm elements with the property that α + β = 1; then, the corresponding G2 (p, m, α, β)
+function g : [q − 2] → [q − 2] satisfies g(1) = 1, and, consequently, the function f : [q − 3] → [q − 3] where
+f (i) = g(i + 1) − 1, i ∈ [q − 3], is a bijection with the Costas property.
+Theorem 5 (Golomb construction G4 (m, α, β)). Let m ∈ N, and let α, β be primitive roots of the finite field
+F(2m ) of q = 2m elements with the property that α + β = 1; then, the corresponding G2 (2, m, α, β) function
+g : [q − 2] → [q − 2] satisfies g(1) = 1, g(2) = 2, and, consequently, the function f : [q − 4] → [q − 4] where
+f (i) = g(i + 2) − 2, i ∈ [q − 4], is a bijection with the Costas property.
+     The inclusion of G3 - and G4 -constructions amongst the generated families is far from obvious. Indeed, both
+rely on the existence of two primitive roots in a finite field summing up to 1, and this seems to be an applicability
+condition involving more parameters than the order of the finite field, in violation of Definition 3. It has been
+proved [20], however, that every finite field contains at least one pair of primitive roots summing up to 1, so this
+is, in fact, not an applicability condition.
+
+3.2.2   Emergent Costas arrays
+Definition 4. An infinite family of Costas arrays will be characterized as “predictably emergent” iff a) its members
+are constructed through a transformation of generated Costas arrays; b) the Costas property of the members of
+the family cannot be asserted by a condition involving the order of the array alone; and c) the Costas property
+of the members of the family can be asserted by a condition involving the order of the array and some additional
+parameters.
+Theorem 6 (Exponential Welch construction W3exp (p)). Let p be a prime such that 2 is a primitive element of
+the finite field F(p); then, the corresponding W1 (p, 2, 0) function g : [p − 1] → [p − 1] satisfies g(1) = 1, g(2) = 2,
+and, consequently, the function f : [p − 3] → [p − 3] where f (i) = g(i + 2) − 2, i ∈ [p − 3], is a bijection with the
+Costas property.
+Theorem 7 (Golomb construction G∗4 (p, m, α, β)). Let p > 2 be a prime, m ∈ N, and let α, β be primitive roots
+of the finite field F(pm ) of q = pm elements with the properties that α + β = 1 and a2 + b−1 = 1; then, the
+corresponding G2 (p, m, α, β) function g : [q − 2] → [q − 2] satisfies g(1) = 1, g(2) = q − 2, and, consequently, the
+function f : [q − 4] → [q − 4] where f (i) = g(i + 2) − 1, i ∈ [q − 4], is a bijection with the Costas property.
+Theorem 8 (Golomb construction G∗∗         4 (p, m, α)). Let p > 2 be a prime, m ∈ N, and let α be a primitive root of
+the finite field F(pm ) of q = pm elements with the property that α + α2 = 1; then, the corresponding G2 (p, m, α, α)
+function g : [q − 2] → [q − 2] satisfies g(1) = 2, g(2) = 1, and, consequently, the function f : [q − 4] → [q − 4] where
+f (i) = g(i + 2) − 2, i ∈ [q − 4], is a bijection with the Costas property.
+   This method is labeled as T4 in [59, 64], but a different label is used here to improve uniformity.
+Theorem 9 (Golomb construction G∗5 (p, m, α, β)). Let p be a prime and m ∈ N∗ , and let α, β be primitive
+elements of the finite field F(q) with the properties that α + β = 1 and α2 + β −1 = 1; then, it can be shown
+that these conditions always imply that b2 + a−1 = 1 as well, whence the corresponding G2 (p, m, α, β) function
+g : [q−2] → [q−2] satisfies g(1) = 1, g(2) = q−2, and g(q−2) = 2, and, consequently, the function f : [q−5] → [q−5]
+where f (i) = g(i + 3) − 3, i ∈ [q − 5], is a bijection with the Costas property.
+    Regarding W3exp , it is not known for which primes p 2 is a primitive root, although necessary conditions for this
+to occur can easily be found (e.g. 2 should not be a square). It is not even known whether 2 is a primitive root for
+infinitely many primes p (this is a special case of Artin’s Conjecture [67]). Sufficient conditions for the existence of
+primitive roots with the required properties for G∗4 , G∗∗        ∗
+                                                         4 , and G5 are, similarly, unknown [59, 64].
+
+Definition 5. An infinite family of Costas array will be characterized as “unpredictably emergent” iff a) its
+members are constructed through a transformation of generated Costas arrays; and b) the Costas property of the
+members of the family cannot be asserted by any condition other than direct verification.
+Heuristic 1 (Golomb construction G1 (p, m, α, β)). Let p be a prime, m ∈ N, α, β be primitive roots of the finite
+field F(pm ) of q = pm elements, and let g : [q − 2] → [q − 2] be the corresponding G2 (p, m, α, β). It may hold true
+that the function f : [q − 1] → [q − 1] such that f (1) = 1 and f (i) = g(i − 1) + 1, i ∈ [q − 2] + 1, is a bijection with
+the Costas property.
+
+                                                            5
+   This simply adds a corner dot to a G2 -Costas array.
+Heuristic 2 (Golomb construction G0 (p, m, α, β)). Let p be a prime, m ∈ N, α, β be primitive roots of the finite
+field F(pm ) of q = pm elements, and let g : [q − 2] → [q − 2] be the corresponding G2 (p, m, α, β). It may hold true
+that the function f : [q] → [q] such that f (1) = 1, f (q) = q, and f (i) = g(i − 1) + 1, i ∈ [q − 2] + 1, is a bijection
+with the Costas property.
+   This simply adds two anti-diametrical corner dots to a G2 -Costas array.
+Heuristic 3 (Welch construction W0 (p, α, c)). Let p be a prime, α be a primitive root of the finite field F(p) of p
+elements, c ∈ [p − 1] − 1 be a constant, and let g : [p − 1] → [p − 1] be the corresponding W1 (p, α, c). It may hold
+true that the function f : [p] → [p] such that f (1) = 1, and f (i) = g(i − 1) + 1, i ∈ [p − 1] + 1, is a bijection with
+the Costas property.
+   This simply adds a corner dot to a W1 -Costas array.
+Heuristic 4 (Rickard Welch construction RW0 (p, α, c, t)). Let p be a prime, let α be a primitive root of the finite
+field F(p) of p elements, let c ∈ [p − 1] − 1 and t ∈ [p − 2] + 1 be constants, and let g : [p − 1] → [p − 1] be the
+corresponding W1exp (p, α, c) function. Consider the expansion g : [p − 1] → [p], and the function gt : [p − 1] → [p]
+where gt (i) = (g(i) + t − 1) mod p + 1. Observe that t does not belong to the range of gt , so it may hold true that
+f : [p] → [p], where f (i) = gt (i), i ∈ [p − 1], and f (p) = t, is a bijection with the Costas property.
+    To understand better how this method works, start with a (p − 1) × (p − 1) W1exp array and add a blank row
+at the bottom, thus forming a p × (p − 1) array. By cyclically shifting the rows of this array t times, we obtain a
+new p × (p − 1) array where row t is now blank. By appending a column to the right, then, with a dot in row t we
+construct a new permutation array, which may have the Costas property.
+Heuristic 5 (Rickard Golomb construction RG1 (p, m, α, β, t1 , t2 )). Let p be a prime, m ∈ N, let α, β be primitive
+roots of the finite field F(pm ) of q = pm elements, let t1 , t2 ∈ [q − 3] + 1 and let g : [q − 2] → [q − 2] be the
+corresponding G2 (p, m, α, β) function. Consider the function gt1 ,t2 : [q − 1]\{t1 } → [q − 1]\{t2} where gt1 ,t2 (i) =
+(g((i − t1 − 1) mod (q − 1) + 1) + t2 − 1) mod (q − 1) + 1. It may hold true that f : [q − 1] → [q − 1], where
+f (i) = gt1 ,t2 (i), i ∈ [q − 1]\{t1 }, and f (t1 ) = t2 , is a bijection with the Costas property.
+   This method can also be better understood in terms of operations on a Costas array. Start with a (q −2)×(q −2)
+G2 array and add a blank row at the bottom and a blank column to the right, thus forming a (q − 1) × (q − 1) array.
+By cyclically shifting the columns of this array t1 times and the rows t2 times, we obtain a new (q − 1) × (q − 1)
+array where column t1 and row t2 is now blank. By adding a dot at position (t2 , t1 ), then, we construct a new
+permutation array, which may have the Costas property.
+   Note that Rickard Costas arrays can naturally be considered to include G1 and W0 Costas arrays as special
+cases, although in Definitions 4 and 5 above we excluded the parameters that would lead to such an inclusion, in
+order to keep the available construction methods as disjoint as possible.
+
+3.2.3   Sporadic Costas arrays
+Definition 6. A Costas array will be characterized as “sporadic” iff it is neither generated nor emergent.
+    Sporadic Costas arrays of order n exist for 6 ≤ n ≤ 27. A single sporadic Costas array of order 27 exists, the
+existence of which was first announced in [48] and was first noted by J.K. Beard. It is currently the largest sporadic
+Costas array known. It is not known whether Costas arrays of order n exist for all n ∈ N, but, given the list of
+the methods above, it is clear that, unless sporadic Costas arrays exist in abundance, in particular at the orders
+where generated or emergent Costas arrays do not exist, this cannot happen. The smallest values of n for which
+no Costas array of order n is currently known are n = 32 and 33 [33].
+
+3.3     Known Costas arrays
+The following families of Costas arrays are known at present:
+   • All Costas arrays of orders n ≤ 29 have been found through exhaustive search [6, 43, 44, 48, 80].
+
+
+                                                           6
+                            n     C(n)        n       C(n)      n           C(n)         n          C(n)
+                            1      1/1       10    2160/28     19       10240/12        28         712/0
+                            2      2/1       11    4368/36     20         6464/8        29        164/10
+                            3      4/2       12    7852/34     21        3536/16        30       ≥ 664/8
+                            4     12/2       13   12828/50     22        2052/10        31         ≥ 8/0
+                            5     40/4       14   12752/46     23         872/20        32           ≥0
+                            6   116/10       15   19612/62     24          200/0        33           ≥0
+                            7   200/20       16   21104/40     25           88/4
+                            8   444/18       17   18276/38     26           56/4
+                            9   760/20       18   15096/20     27         204/14
+
+Table 1: The number of Costas arrays per order 1 ≤ n ≤ 32: the numbers shown after the slash are the numbers
+of symmetric Costas arrays (there are two symmetric Costas arrays per EC for orders n > 2); the ≥ notation is
+used for orders not yet enumerated, to signify that there may be more arrays in addition to the ones known so far.
+
+                   1        2       4         8        5           10        9               7         3        6
+                       1        2        4        -3       5            -1         -2             -4        3
+                            3       6         1        2           4         -3          -6            -1
+                                7        3        6        1            2          -7             -3
+                                    4         8        5           -1        -2          -4
+                                         9        7        3            -5         1
+                                              8        5           -1        -2
+                                                  6        1            2
+                                                       2           4
+                                                           5
+
+                           Table 2: A Costas permutation along with its difference triangle
+
+
+   • Costas arrays generated by the algebraic construction techniques mentioned above are available for infinitely
+     many orders.
+    Table 1 shows the number of known Costas arrays per order n. Note the main “lobe” formed by orders
+1 ≤ n ≤ 26: the number of Costas arrays monotonically increases for 1 ≤ n ≤ 16 and monotonically decreases
+for 16 ≤ n ≤ 26. The majority of Costas arrays in the orders lying towards the interior of the lobe are sporadic
+Costas arrays: for example, only 16 out of the 10240 Costas arrays of order 19 are algebraically constructed (they
+are W0 -arrays, to be precise). The situation is reversed towards the edges of the lobe, where there are only two
+sporadic ECs for n = 26 [80] (the paper actually reports three sporadic ECs, but one of them turns out to be
+constructible by the Rickard method), while all Costas arrays of orders n ≤ 5 are algebraically constructed.
+    There are two major online sources of information for Costas arrays:
+   • Dr. J.K. Beard has prepared a database of all Costas arrays of orders n ≤ 500, which is freely available on
+     his website [101];
+   • The webpage set up by Prof. Scott Rickard and his associates [100] contains not only most papers on Costas
+     arrays published in the literature, but also a freely available Matlab toolbox on Costas arrays [94].
+
+3.4    The difference triangle
+As mentioned in Section 3.1, a permutation f of order n has the Costas property iff all distance vectors {(f (i) −
+f (j), i − j) : i, j ∈ [n], i > j} are distinct. In order to verify this property more easily, these vectors can be grouped
+together according to their second coordinate: within each such group, all first coordinate values must be distinct.
+In other words, setting i − j = k, the collection of distance vectors can be rewritten as T (f ) = {tk (f ), k ∈ [n − 1]}
+where tk (f ) = (f (j + k) − f (j) : j ∈ [n − k]). T is said to be the difference triangle of f and tk its kth row, because
+of the way tk can be stacked one below the other to form a triangular shape, as in Table 2. The Costas property
+then is equivalent to ascertaining that no tk contains duplicate entries (this is indeed the case in Table 2).
+
+
+
+                                                               7
+                                                   n−1
+                                                   X        
+                                                    n−k           n
+    According to what has been stated so far,                =       comparisons of pairs of values in the difference
+                                                       2          3
+                                              k=1
+are required to verify the Costas property. The entries of the triangle, however, exhibit strong
+                                                                                              correlation,
+                                                                                                           and this
+                                                                                               n−1
+number can be drastically reduced: W. Chang proved in 1987 [15] that if tk , k = 1, . . . ,           do not contain
+                                                                                                 2
+any duplication,
+               then the remaining tk are automatically duplication-free as well. A further improvement within
+            n−1
+the first         was later proposed in [3].
+             2
+
+4     Core problems in the theory of Costas arrays
+4.1    Existence of Costas arrays
+The first and foremost requirement for the well-posedness of a mathematical problem is a proof that a solution
+to this problem exists (or else any search for a solution would be futile). Accordingly, a requirement for the
+mathematical study of Costas arrays is a result determining which orders they exist in and do not exist in. In
+particular, do Costas arrays exist in all orders? This question was asked for the first time by S. Golomb and H.
+Taylor in 1984 [64] and remains open ever since:
+Problem 1. Determine the number C(n) of Costas arrays of order n ∈ N∗ . In particular, is C(n) > 0 for all
+n > 0? If not, determine the set X = {n ∈ N∗ : C(n) = 0}.
+    A notable attempt to compute C(n) is due to W. Correll Jr. [17]. Let P(n) stand for the set of all permutations
+of order n, let D(n) be the set of all pairs (i, j), 1 ≤ i < j ≤ n, let T (n) = {((i1 , j1 ), (i2 , j2 )) ∈ D(n) × D(n) :
+j1 − i1 = j2 − i2 }, and let I(n) = 2T (n) . Finally, for any i ∈ I(n), let F (i, n) = {f ∈ P(n) : ∀((i1 , j1 ), (i2 , j2 )) ∈
+i, f (j1 ) − f (i1 ) = f (j2 ) − f (i2 )}, which essentially represent “hyperplanes” in the space P(n). Note that
+
+                                               [                                 [
+                              P(n)\C(n) =              F (i, n) ↔ n! − C(n) =            F (i, n) ,                       (7)
+                                              i∈I(n)                            i∈I(n)
+
+but also that elements of I(n) are related by inclusion:
+
+                                      ∀i1 , i2 ∈ I(n), i1 ∩ i2 ⊂ ij ⊂ i1 ∪ i2 , j = 1, 2.                                 (8)
+
+Such a structure is known as a (finite) lattice [91], and it allows one to express | ∪i∈I(n) F (i, n)| in terms of the
+individual |F (i, n)| through the Möbius Inversion Formula [91], which is simply a generalized version of the well
+known Inclusion-Exclusion Principle. Unfortunately, neither the exact lattice structure of I(n) nor the exact value
+of |F (i, n)| for an arbitrary i ∈ I(n) are simple to compute, so this approach remains mainly of theoretical value.
+
+    To simplify the problem somewhat, consider the question of whether C(n) > 0 for a fixed but arbitrary n. This
+is a decision problem, admitting only “yes” or “no” as an answer. Today, the only certain answers that can be
+given to this question are positive answers, which can be given only at those n where Costas arrays have been
+constructed or found through exhaustive enumeration. In particular, it cannot be positively said for any n > 1 that
+C(n) = 0, although there exist plenty of n for which no Costas array is currently known, the smallest two being
+n = 32 and 33 (see, for example, [33, 43, 64], and virtually any publication on Costas arrays). Arguing at a high
+level and in computer-scientific terms, computing the answer to this decision problem involves some computational
+complexity expressed in terms of n. At present, this is extremely high, essentially O(n!), as the only procedure
+known to yield a guaranteed answer is exhaustive search, whereby every permutation of order n is tested for the
+Costas property [43, 48]; though there are, of course, shortcuts, the computation remains of exponential complexity.
+Can one hope for better? Assuming a candidate for a Costas permutation of order n is provided by an oracle, the
+actual verification of the Costas property is very fast, involving O(n3 ) comparisons [3, 92], namely of polynomial
+complexity. These two facts prove that this decision problem lies in NP [57]. Is this the best that can be hoped
+for?
+Problem 2. Let E(n) stand for the decision problem “Is C(n) > 0?”. What is the computational complexity of
+E(n) expressed in terms of n? In particular, is E NP-complete?
+
+
+                                                               8
+4.2    Bound on the number of Costas arrays
+Existence of Costas arrays in all orders is equivalent to establishing a positive lower bound for C(n). Of considerable
+importance would also be an upper bound of C(n). Trivially, C(n) < n!, and, unfortunately, the best possible
+result published today [33] does not represent a considerable improvement, as it states that
+                                                    
+                                       C(n)          1
+                                              =O          ⇔ C(n) = O((n − 1)!).                                     (9)
+                                          n!         n
+
+(It should be noted that the proof of this result, due to D. Huw Davies, was presented in the present author’s
+review paper on Costas arrays [33] and given a nonexisting citation in the literature due to a misunderstanding. It
+later transpired that D. Huw Davies’s paper, which the present author was privately handed and consulted for his
+review [33], was, in fact, never published. The proof itself is an excellent instance of the probabilistic method [1].)
+    Though this result is enough to establish that the set of Costas arrays of order n represents asymptotically a set
+of zero density within the set of all permutations of order n, namely that lim C(n)/n! → 0, the rate of convergence
+to 0 it gives is too slow compared to what is observed in practice, where C(n)/n!, n ∈ [29] seems to decay to 0
+monotonically and at an exponential rate. Two notable efforts towards obtaining an improved bound should be
+mentioned, both relying on the concept of “degrees of freedom”.
+    The first method [92] focuses on the entries of the difference triangle of a Costas permutation. After estimating
+the number of independent comparisons of pairs of entries in the difference triangle that need to be carried out in
+order to ascertain that a permutation has the Costas property, it estimates the probability of a repeated entry in
+some row of the difference triangle, and finally estimates the probability C(n)/n! under the simplifying assumption
+that pairs of repeated entries occur independently. Simplifying slightly, the following formula was reached:
+                                      n3
+                                                  √          n2
+                                                                                   
+                      C(n)         K 12
+                           ≈    1−        ⇔ C(n) ≈ 2π exp −K    − n + (n + 0.5) ln(n) ,                                   (10)
+                       n!          n                         12
+
+using Stirling’s approximation. K was selected in [92] after fitting the curve to the (then) known values of C(n),
+n ∈ [17], and was found to be K ≈ 1. Amazingly, this estimate for C(n) can easily be verified to remain valid
+throughout the entire main “lobe” of n ∈ [26] (see Section 3.3). On the downside, though, not only is it not
+rigorous, but it also erroneously predicts that lim C(n) = 0.
+    The second, due to the present author, is inspired by the first, and especially by the underlying principle of
+“degrees of freedom” it introduces, but it looks for them in a different context. More precisely, this concept is now
+defined [23] as the smallest k ≤ n such that there exist i1 < i2 < . . . < ik ∈ [n] with the property that, for any
+arbitrary collection of values f1 , . . . , fk ∈ [n], the set of functions {f : [n] → [n] : f (ij ) = fj , j ∈ [k]} contains at
+most one Costas permutation. Clearly, it follows that
+
+                                                                   C(n)      1
+                                        C(n) ≤ (n − k + 1)! ⇔           ≤          ,                                      (11)
+                                                                    n!    (n − k)!
+
+which, depending on the asymptotic behavior of k = k(n), may prove the asymptotic decay of C(n)/n! to 0 at an
+exponential rate. Indeed, the present author conjectured in [23] that k = 3 independent of n for all “large” n (more
+precisely, n ≥ 24).
+   In any case, three interesting problems have emerged:
+Problem 3. Determine the “degrees of freedom” of Costas arrays of order n, as defined in the second approach
+above. If possible, improve on this definition.
+Problem 4. Determine a bound for C(n) that reflects more closely the actual rate of decay of C(n)/n! observed
+in practice. Furthermore, prove or disprove that C(n)/n! converges to 0 monotonically.
+
+4.3    Sporadic Costas arrays
+Virtually all published results on Costas arrays concern algebraically constructed Costas arrays. Almost nothing is
+known about sporadic Costas arrays, a fact reflecting the inability to deduce properties of Costas arrays based on
+the definition alone. The enumeration of orders 28 and 29 revealed no sporadic Costas arrays there, and these are
+the first orders larger than order 5 where this occurs [43, 44]. There is, then, the possibility that sporadic Costas
+
+                                                              9
+arrays cease to exist from a certain order onwards. If so, the situation would be reminiscent of the classification
+of finite simple groups, which were found to consist of finitely many infinite families plus a finite number of some
+sporadic groups [95]. There is also the possibility that they constitute examples of generally applicable but still
+unknown construction techniques.
+Problem 5. Settle the status of sporadic Costas arrays: are they finitely many? Are there new generally applicable
+construction techniques that produce them?
+
+
+   A curious phenomenon associated with sporadic Costas arrays is the existence of twin Costas arrays:
+Definition 7. Let f : [n] → [n] be a Costas permutation, and let g1 , g2 : [n] → [n] be defined through the relations
+gj (i) = f (i − 1) + 1, i = 2, . . . , n + 1, j = 1, 2, g1 (1) = g2 (n + 2) = 1, and g2 (1) = g1 (n + 2) = n + 2. If g1 , g2 are
+also Costas permutations, they will be called twin Costas permutations.
+   The only known example of twin Costas arrays, as is directly verifiable over the database, is generated out of a
+sporadic Costas array of order n = 21.
+Problem 6. Settle the status of twin Costas arrays: is the only known example the only one in existence?
+Otherwise, are there finitely/infinitely many pairs of twin Costas arrays? Can they be systematically constructed?
+
+
+    Another result related to sporadic Costas arrays is yet another question first asked by S. Golomb and H. Taylor
+in 1984 [64]: are there Costas arrays representing configuration of non-attacking queens on the (generalized n × n)
+chessboard? This question still remains open for n > 1. However, it is now known [39] that, if such a Costas
+permutation exists, then it has to be sporadic. It is also known [25] that such a configuration is constructible on
+an infinite array. Refining the original question, then,
+Problem 7. Do (sporadic) Costas arrays of finite order n > 1 exist, which also represent configurations of non-
+attacking queens on an n × n chessboard? If yes, how many are they, and can they be systematically constructed?
+    There can only be finitely many such arrays: this follows from a surprising connection with honeycomb arrays
+[8] (more about this in Section 8.2).
+
+   The final question about sporadic Costas arrays is one for which data is very limited. It has been shown [40]
+that G2 permutations contain G2 sub-permutations, in the following sense:
+Definition 8. Let f : [n] → [n] be a permutation. If a1 , a2 ∈ N and b1 , b2 , l ∈ N∗ exist such that the sets
+Sj = {aj + bj i : i ∈ [l]}, j = 1, 2 are both subsets of [n] and satisfy f (S1 ) = S2 , then g : [l] → [l], g(i) =
+(f (a1 + b1 i) − a2 )/b2 is said to be a sub-permutation of f .
+Problem 8. Is it true that for any Costas permutation g there exists a Costas permutation f such that g is a
+sub-permutation of f ? Is this true, in particular, for specific families of Costas permutations (e.g. sporadic)?
+
+4.4    Cycle structure of Costas permutations
+The iterative composition of G2 permutations has some interesting properties: for example [23], in any extension
+field whose size is a power of a prime number whose exponent contains an odd factor, Lempel G2 permutations are
+obtainable through the iterative composition of other G2 permutations! This suggests a closer study of the cycles
+of Costas permutations. Indeed, cycles have normally been part of any classical study of families of permutations,
+but have not been studied thoroughly in the context of Costas permutations.
+Definition 9. Let f : [n] → [n] be a permutation, and let I : [n] → [n] be the identity: I(i) = i. Let f (0) = I,
+and, for any k ∈ N, let f (k+1) = f (f (k) ), in the sense that, for any i ∈ [n], f (k+1) (i) = f (f (k) (i)). The cycle of i
+under f is the set {f (k) (i) : k ∈ N}, which is necessarily finite, containing at most n elements.
+    As an example, let us determine the cycles of the W1 permutation f = [1, 2, 4, 8, 5, 10, 9, 7, 3, 6]: clearly
+f (i) = i for i = 1, 2, 5, so each of these three points forms its own cycle with a single element. Further,
+f (3) = 4, f (4) = 8, f (8) = 7, f (7) = 9, f (9) = 3, and f (6) = 10, f (10) = 6, leading to the cycles (3, 4, 8, 7, 9)
+
+
+                                                              10
+and (6, 10). Consequently, we can write f = (1)(2)(5)(3, 4, 8, 7, 9)(6, 10) to show the cycle structure of f explicitly.
+Note that the order in which the cycles appear is immaterial; furthermore, the elements within a cycle can be
+cyclically shifted at will.
+     Consider now f (2) . Given the cycle notation of f , it is easy to determine it values: for any i, we simply locate
+its cycle, and the value f (2) (i) will be the element of the cycle lying two positions to the right of i, for example
+f (2) (7) = 3. More generally, for any k, the value f (k) (i) will be the element of the cycle lying k positions to the
+right of i. It follows that f (k) = I iff k is a multiple of the least common multiple of the cycle lengths of f , which,
+in this case, is 2 · 5 = 10.
+Problem 9. Describe the cycle structure of Costas permutations. In particular,
+    • Determine the cycle structure of a particular Costas permutation;
+    • Determine the existence/absence of cycles of a particular length in a specific Costas permutation, or a family
+      thereof;
+    • Determine the longest cycle in a specific Costas permutation, or a family thereof;
+    • Determine the smallest k for which f (k) = I for a specific Costas permutation f , or a family thereof.
+
+
+5     Problems related to the algebraic construction techniques
+5.1    Disjointness of the algebraic construction techniques
+The large number of algebraic constructions available for Costas arrays begs the question whether they all are
+genuinely distinct: can one rely on the fact that the sets of Costas arrays produced by each method do not overlap,
+at least for large enough orders? Or is it possible, for example, for a Costas array to be simultaneously Wi and Gi ,
+for some i ∈ [4] − 1, or even, assuming p and p + 2 are twin primes, to be simultaneously W1 (p) and G3 (p + 2)?
+Such questions were addressed in [38], where a comparison between all possible pairs of methods was attempted:
+most pairs were shown to be incompatible, at least for large enough orders, but for some pairs it was not possible
+to reach a conclusion.
+    Analysis of the Costas arrays database suggests that all methods discussed in Section 3.2 produce distinct
+Costas arrays for orders n > 5. Hence, the question remains:
+Problem 10. Are the construction methods discussed in Section 3.2 pairwise disjoint for orders n > 5?
+
+5.2    Scope of “dot addition” methods
+All unpredictably emergent construction techniques described in Section 3.2 rely on the addition of a new dot
+(usually, but not always, a corner dot) to and already existing Costas array. In “low” orders, these methods
+have scored some major successes: for example, the only two known Costas arrays ECs of order 19 prior to their
+enumeration, and the only one of order 31, are W0 arrays. Moreover, the Rickard construction techniques yielded
+two new RW0 ECs of order 29, and one new RG1 EC in orders 36 and 42, respectively [78].
+   In higher orders, however, the story is quite different: the Rickard constructions fail to yield any further new
+Costas arrays up to order 100 [78], and the present author verified that this is the case up to order 300. Moreover, in
+the same search G1 and W0 arrays were also considered, and none were found above orders 52 and 53, respectively
+(the discovery of the latter was published in [96]).
+Problem 11. Determine the scope of the unpredictably emergent construction techniques discussed in Section 3.2.
+In particular, is it the case that, for each method amongst them, a N ∈ N can be found, such that this method
+produces no Costas arrays of order n > N ?
+
+5.3    Alternative construction techniques
+Considerable effort has been expended towards the discovery of construction techniques for Costas arrays. This
+area is undoubtedly dominated by the algebraic construction techniques discussed in Section 3.2, and the difficulty
+associated with discovering new constructions can perhaps be appreciated by the fact that several other proposed
+
+
+                                                           11
+techniques either fail to work or are equivalent to the existing ones. For example, J.K. Beard’s spin-add technique
+[5] or polynomial generators [4] are equivalent to the unpredictably emergent methods, while Popovic’s construction
+[76] is, in fact, a rediscovery of the Logarithmic Welch Costas arrays.
+    An unfortunate side-effect of the long and honored academic tradition of publishing successful research is that
+researchers are doomed to try out unsuccessful ideas time and again. It is safe to say that it is not possible to
+know the full range of candidates for Costas arrays generation methods that have been tested and failed, though a
+published record of them would be invaluable, as it would permit researchers not to repeat mistakes of the past.
+
+   For example, let us consider the simple idea of “interlacing” two Costas arrays:
+Definition 10. Let A1 = [a1ij ] be an n × n array, and let A2 = [a2ij ] be either an n × n or an be an (n − 1) × (n − 1)
+array. Let A = [aij ] be the array defined by
+                                           
+                                             a1 , j+1 , i mod 2 = j mod 2 = 1;
+                                            i+1
+                                           
+                                              2     2
+                                     aij = a2i , j ,    i mod 2 = j mod 2 = 0;
+                                           
+                                             2 2
+                                           0,          otherwise.
+
+A is said to result from interlacing A1 and A2 .
+    Unfortunately, interlacing Costas arrays fails to produce a new Costas array as long as the order of either array
+is 3 or above: the case of equisized A1 and A2 was treated already in 1985 [55], while the case of sizes differing by
+1 was treated in [49]. The idea is that when size is large enough, both arrays contain a common distance vector.
+As interlacing rescales distance vectors by a factor of 2 without distorting the arrays, a parallelogram is formed.
+
+   An even simpler obvious candidate for a construction technique is concatenation: given A1 and A2 Costas
+arrays, is                                                 
+                                                    A1 0
+                                             A=
+                                                     0 A2
+a Costas array? Unfortunately, the argument used in [49, 55] is no longer applicable here, since A1 and A2 may be
+of arbitrary sizes. A stronger result would be needed, namely that any two “large enough” Costas arrays have a
+common distance vector. This seems likely to be the case, but no rigorous proof exists today.
+    Note that, assuming (without loss of generality) that A1 is no larger than A2 , concatenation works for infinitely
+many orders if A1 is 1 × 1 or 2 × 2 (examples are W1 arrays with c = 0 and G2 arrays with α + β = 1, especially in
+fields of characteristic 2). However, the largest concatenated array in the database for which A1 is 3 × 3 is a 7 × 7
+Costas array.
+Problem 12. Is it the case that any two “large enough” Costas arrays have a distance vector in common? It may
+suffice that the smallest of the two be at least 3 × 3 and the largest at least 5 × 5.
+
+   Note that this question was studied in [39], but only for algebraically constructed Costas arrays.
+
+    Having considered a method that fails to deliver, and a method that most likely fails to deliver, let us end
+with a completely different approach that still looks promising, namely a stochastic search for Costas arrays using
+genetic algorithms. The underlying idea is to start with a random permutation and, through a sequence of (possibly
+random) mutations, eventually reach a Costas permutation.
+    A simple way to implement this search is through a “gradient descent” approach: after defining a metric/weight
+to measure how much a permutation deviates from the Costas property, a mutation is applied on it (from within
+a pre-specified set of permissible mutations) so as to decrease this metric (ideally, as much as possible). If this
+can happen under many different mutations, one is applied at random. If no mutation can achieve this, a random
+mutation is applied, or the procedure restarts with a new random permutation. The procedure runs until a Costas
+permutation is reached.
+    A simple such metric is the total sum of the number of repeated entries within each row of the difference triangle
+of the permutation: for example, if a row contains three equal entries, this contributes two repetitions to the sum.
+Permissible mutations can be all possible rearrangements of the values of the permutation so that at least a certain
+pre-specified number of values do not get reassigned: for example, assuming the order is n, demanding that at
+
+
+                                                          12
+least n − 2 values do not get reassigned is equivalent to considering all pairwise swaps; demanding that at least
+n − 3 values do not get reassigned is equivalent to considering all 3-tuple swaps (which includes pairwise swaps as
+a subset); and so on. Alternatively, each recorded repetition in the difference triangle can be associated with the
+three or four values of the permutation giving rise to it, and then the values showing the most such “hits” can be
+deranged amongst themselves.
+    Stochastic searches were considered in [42, 34, 84, 81], in which several different algorithms were tested. The
+general conclusion was that, although they performed adequately for “low” orders, they consistently failed to
+recover any Costas arrays in “higher” orders within a reasonable time interval (more specifically, in orders above
+15, allowing for a runtime up to 1 hour). As is the case with all genetic algorithms, success is heavily dependent
+upon the selection of a suitable metric and set of permissible mutations.
+Problem 13. Develop a stochastic search method for Costas arrays which works in large enough orders of interest
+(in particular, in orders 30, 31, 32, and 33).
+
+
+6     Inverse problems
+Most publications discussing properties of Costas arrays prove statements of the form: “If a Costas array is in
+family F , then it has property P ”. For example, a T4 array represents a configuration of non-attacking kings on a
+chessboard [39]; a W1 array is singly periodic; a W1 array has anti-reflective symmetry [13]; the special subfamily
+of symmetric G2 permutations of order r2 − 2 discussed in [37] have r fixed points; and so on. There are very few
+statements, if any, of the form: “If a Costas array has property P , then it must be a member of family F .” These
+problems will be referred to as inverse problems, and they have proved extremely difficult to treat so far.
+
+6.1    Single periodicity
+A quick search in the database identifies sporadic arrays possessing anti-reflective symmetry, so this property does
+not characterize W1 arrays. However, no singly periodic Costas array other than W1 arrays is known; it is only
+known that a Costas array of odd order cannot be singly periodic [64]. Quoting then a problem out of [64] once
+more:
+Problem 14. Is it true that every singly periodic Costas array is a W1 array?
+   A significant step towards the solution of this problem was taken in [63], where the concept of a circular Costas
+array was introduced:
+Definition 11. A permutation f : [n] − 1 → [n] − 1 is said to be circular Costas, for all k ∈ [n − 1], all vectors
+f (i + k) − f (i), i ∈ [n] − 1 are distinct mod(n + 1), when i + k is considered modn.
+    Clearly, every W1 permutation is circular Costas, but the converse may not be true. It was shown in [63] that,
+if a circular Costas permutation of order n exists, then n + 1 must be a prime.
+
+6.2    Cyclic shifts when blank columns/rows are added
+It was mentioned earlier, in Section 3.2 and in connection with the Rickard construction [78], that W1exp arrays
+have the property that, if a blank row is added at the top and then rows are cyclically shifted, the resulting array,
+which is no longer square, still has the Costas property; and similarly, that G2 arrays have the property that, if
+a blank row and a blank column are added at the top and at the side, and then rows and columns are cyclically
+shifted, the resulting array, which is square but no longer represents a permutation, still has the Costas property.
+These properties are direct consequences of the definitions. Are, however, the converse statements true?
+Problem 15. Let a Costas array have the property that, if a blank row is added at the top, then any cyclic shift of
+the rows leads to a (non-square) array with the Costas property. Is such a Costas array necessarily a W1exp array?
+Problem 16. Let a Costas array have the property that, if a blank row and a blank column is added at the top
+and at the side, respectively, then any cyclic shift of the rows and columns leads to a (square but non-permutation)
+array with the Costas property. Is such a Costas array necessarily a G2 array?
+
+
+
+                                                         13
+7     Problems related to properties of Costas arrays
+7.1    Parity populations of G2 arrays in characteristic 2
+It was mentioned in Section 5.3 that interlacing two Costas arrays cannot lead to a new Costas array, as long as
+the order of either array is 3 or above. An interlaced array is considerably constrained, as its dots can only lie in
+positions whose coordinates are both even or both odd (this is a direct consequence of the definition). How close
+do algebraically constructed Costas arrays get to this state? Let ee, eo, oe, and oo stand for the number of dots
+of the Costas array whose coordinates are both even, even and odd, odd and even, and both odd, respectively: it
+was found in [40] that, for G2 and W1 arrays, these four quantities, called the parity populations, were not only
+as equal as they could be (with the significant exception of W1 arrays constructed in F(p), p ≡ 3 mod 4, where
+they were found to depend on the class number), but they were also independent of the primitive root(s) used.
+The latter was no longer the case, however, for G2 arrays constructed in fields of characteristic 2, where the parity
+populations varied across the various G2 arrays in the family.
+Problem 17. Determine the parity populations of G2 arrays constructed in fields of characteristic 2.
+    Some numerical results relevant to this problem can be found in [32].
+
+7.2    Fixed points
+It was mentioned in Section 6 that a special subfamily of symmetric G2 permutations of order q − 2, q a square
+                                     √
+prime power, have asymptotically q dots on their main diagonal. This is an interesting result, as diagonals of
+Costas arrays are Golomb rulers [30], and it is conjectured that the largest number of dots a Golomb ruler of a
+given length can contain is asymptotically equal to the square root of its length [30]: consequently, this subfamily is
+asymptotically optimally dense. Unfortunately, this turns out not to be a new construction technique for Golomb
+rulers, but rather equivalent to a classical one [30].
+    This result motivates the study of the number of fixed points of other Costas permutations. For example, setting
+f (i) = i and β = αr for some r such that (r, q − 1) = 1 in Theorem 3, and then setting αi = x, it follows that the
+number of fixed points of this G2 permutation equals the number of roots of xr + x = 1 in F(q), excepting x = 1.
+Far more interesting, though, is the case of W1 permutations: setting f (i) = i in Theorem 1 it follows that the
+number of fixed points of a W1 permutation equals the number of roots i of
+
+                                  i ≡ αi−1+c mod p ⇔ i ≡ Cαi mod p, C = αc−1 .                                    (12)
+
+    This is a transcendental equation over a finite field, and, to the best of our knowledge, there is no precedent of
+any relevant published work in the literature. The closest question considered is whether, for a given i, there exists
+a primitive root α such that i ≡ αi mod p, which is, in effect, the inverse problem, and has been answered in the
+affirmative (see [66, 69, 97] and references therein).
+Problem 18. Let q be a prime power and r be such that (r, q − 1) = 1. Determine the number of roots x of the
+equation xr + x = 1 in F(q).
+Problem 19. Let p be a prime, C ∈ F∗ (p), and α a primitive root of F(p). Determine the number of roots
+i ∈ [p − 1] of i ≡ Cαi mod p.
+    Some numerical results relevant to this problem can be found in [32]. Moreover, a stochastic model relating the
+solution of this problem to Lambert’s function can be found in [31].
+
+7.3    Forbidden positions
+Consider overlaying all known Costas arrays of order n. Are there any positions of the n× n square grid not covered
+by a dot? These positions, called forbidden positions, can simplify the enumeration of Costas arrays whenever they
+exist, as any permutation array featuring a dot in a forbidden position is automatically disqualified from being
+Costas. A search over the database proves that there is a single forbidden position in order 3 (namely the midpoint
+(2,2) of the grid), that there are no forbidden positions in orders 4 ≤ n ≤ 24, and that forbidden positions appear
+again in orders 25, 26, 27, and 29 [43, 44] (clearly, there can be no forbidden positions in orders of the form p − 1,
+p prime, due to the single periodicity of the W1 construction which applies there).
+
+                                                          14
+    Unfortunately, forbidden positions have so far only been determined after the complete enumeration of a certain
+order, not before, with the exception of order 3. Though this order is trivially small, there is a brief and elegant
+argument that can be used, which may be generalizable to higher orders. Indeed, the first row of the difference
+triangle of a permutation f of order 3 contains only two entries, namely f (2) − f (1) and f (3) − f (2), which are
+equal iff
+
+         f (2) − f (1) = f (3) − f (2) ⇔ 2f (2) = f (1) + f (3) ⇔ 3f (2) = f (1) + f (2) + f (3) = 6 ⇔ f (2) = 2.
+
+The key fact in this argument is that symmetric (polynomial) expressions over the values of f are the same for all
+permutations f : in this case, f (1) + f (2) + f (3) = 1 + 2 + 3 = 6. Can this technique be used for higher orders as
+well?
+Problem 20. Determine the forbidden positions for Costas arrays of a certain order without resorting to enumer-
+ation.
+
+7.4    Cross-correlation of G2 and W1 arrays
+Cross-correlation is one of the aspects of Costas arrays that has attracted considerable attention, in view of its
+importance in applications. More specifically, the optimal suppression of sidelobes exhibited by waveforms described
+by Costas arrays is, in practice, only half of the waveform’s desirable behavior. As many RADAR/SONAR systems
+may be operating within the same geographical area and in the same frequency spectrum, provisions should be
+made to minimize cross-interference resulting from waveform collisions [50, 72]. The obvious solution is to select
+Costas arrays from within a family where pairwise cross-correlation of Costas arrays is uniformly bounded by as
+low as possible a bound. It would not be an exaggeration to say, then, that low cross-correlation is the “second
+half” of the definition of Costas arrays that find their way in practical RADAR/SONAR systems applications.
+    Perhaps the first result relevant to the cross-correlation of Costas arrays was the demonstration by A. Freedman
+and N. Levanon [55] in 1985 that any two Costas arrays of the same order (trivially small orders excepted) must
+have a maximal cross-correlation of at least 2, and hence that ideal cross-correlation and ideal auto-correlation
+are incompatible properties. The study of cross-correlations became more focused in later years, with the work
+by W. Chang and K. Scarbrough in 1989 [16], which demonstrated that there exist sets of Welch Costas arrays
+whose pairwise cross-correlation is ideal, provided that only a strip of the correlation surface around the origin is
+considered, and not the entire surface. Later, in 1994, S. Maric, I. Seskar, and E. Titlebaum [72] studied the cross-
+correlation of Welch Costas arrays more thoroughly, providing a table with the maximal observed cross-correlation
+between any two Welch Costas arrays of order p − 1, p prime (effectively a first version of our Table ?? below), and
+                                                             p−1
+showing that this cross-correlation is bounded above by            . The conference version of this work had appeared
+                                                               2
+in ICASSP 1990 [93], where the authors had already observed that some primes corresponded to local minima in
+the table, and had identified them to be safe primes.
+    An important part of the puzzle was still missing, though, namely cross-correlation results for Golomb Costas
+arrays. The subject had been considered by D. Drumheller and E. Titlebaum in 1991 [50], who suggested an upper
+bound that is, unfortunately, not always tight. Then, S. Rickard, in his Master’s thesis in 1993 [77], extended
+the cross-correlation tables for Welch arrays of [93] and offered the corresponding results for Golomb arrays. He
+observed a surprising link between the Welch and Golomb results (given the two construction methods are so
+dissimilar), confirmed the special role of the safe primes for the Golomb results as well, and asked whether this link
+could be explained, though he did not offer any explanation.
+    A unified presentation and formal justification of all aspects of cross-correlation of Costas arrays mentioned
+above was attempted in [41]. Though this publication went indeed considerably beyond its predecessors, it too did
+not succeed in explaining all observed results: many of them are listed in [41] as conjectures supported by empirical
+evidence and awaiting formal proof.
+Problem 21. Let p stand for a prime and q for a prime power. Define ΨW1 (p) = max  max  Ψf1 ,f2 (u, v) and
+                                                                                           (u,v)     pr
+                                                                                                   f1 6= f2
+                                                            pr
+ΨG2 (q) = max max  Ψf1′ ,f2′ (u, v), where the notation f1 6= f2 denotes that f1 and f2 must be produced by different
+          (u,v) (f1 6=f2 )
+              ′  ′
+
+primitive roots.
+   Prove that, with respect to ΨW1 (p) and ΨG2 (p), primes p can be classified into three groups:
+
+                                                           15
+                                             p−1                                                     p−1
+   • For non-safe primes p 6= 19 (such that        is not a prime, that is), ΨW1 (p) = ΨG2 (p) + 1 =     , where t
+                                              2                                                       t
+      is the smallest prime such that p ≡ 1 mod (2t).
+                                                                      p−1     19 − 1
+   • p = 19 is the only prime for which ΨW1 (p) = ΨG2 (p) =               =6=        , 3 being the smallest prime t
+                                                                       t        3
+      such that 19 ≡ 1 mod (2t).
+                           p−1
+   • Primes p such that        is also a prime (safe primes, that is) correspond to local minima of both ΨW1 (p)
+                            2
+      and ΨG2 (p).
+Produce a formula for the values of these local minima.
+   Furthermore, prove that, with respect to ΨG2 (q), prime powers q can be classified into three groups:
+                                                q−1                                     q−1
+   • For prime powers q 6= 16 such that neither         nor q − 1 is a prime, ΨW1 (q) =         − 1, where t is either
+                                                   2                                       t
+      the smallest prime such that q ≡ 1 mod (2t), if q is odd, or such that q ≡ 1 mod t, if q is even.
+                                                                 q−1
+   • q = 16 is the only prime power for which ΨG2 (q) =              = 5, where 3 is the smallest prime t such that
+                                                                  t
+     16 ≡ 1 mod t.
+                                         q−1
+   • Prime powers q such that either           is prime (in which case, as can be easily verified, q = 3m for some
+                                           2
+      prime m) or q − 1 is prime (in which case q = 2m for some prime m and q − 1 is a Mersenne prime) correspond
+      to local minima of ΨG2 (q).
+Produce a formula for the values of these local minima.
+   Assuming p is a non-safe prime, show that ΨW1 (p) = max
+                                                        pr
+                                                           Ψf1 ,f2 (0, 0). Assuming q 6= 16, 19 is a non-safe
+                                                                (f1 6=f2 )
+prime power such that q − 1 is not prime, show that ΨG2 (q) = Ψf1′ ,f2′ (0, 0), where f1′ and f2′ are G2 permutations
+generated in F(q), such that, assuming the former is generated by primitive roots α and β, the latter is generated
+                                                                           p−1
+by αr and β, where r is defined through the requirements that a) r = λ           + 1; b) (r, q − 1) = 1; c) λ = 1 or 2;
+                                                                             w
+and d) w is the smallest possible (such an r is guaranteed to exit).
+   Full details regarding the formulation of this detailed and complex conjecture can be found in [41]. The cross-
+correlation of Costas arrays within the same EC was considered in [35].
+   The consideration of cross-correlation suggests that not all Costas arrays may be equally suitable for RADAR/SONAR
+applications. Another criterion to consider is the maximal hop between consecutive dots/frequencies in a Costas
+array, as the farther apart two frequencies lie, the more the response of frequency hopping filter deviates from the
+ideal response when hopping between them [28].
+
+7.5    A necessary property for G2 -arrays
+It was mentioned above that a necessary property of W1 arrays is their anti-reflective symmetry: every W1 array
+is anti-reflective, but there are some sporadic Costas arrays that are anti-reflective as well. A necessary property
+for G2 arrays generated in finite fields of odd characteristic was published in [24]: letting q be the size of the field,
+it follows that, for any G2 permutation f ,
+                                                                                               q−1
+                     f (µ + i) − f (µ − i) ≡ i[f (µ + 1) − f (µ − 1)] mod (q − 1), where µ =       .                (13)
+                                                                                                2
+Verification over the database suggest that this property may also be sufficient for G2 arrays, as no non-G2 Costas
+array was found to satisfy it.
+Problem 22. Find a necessary property, similar in nature to anti-reflective symmetry and (13), for G2 arrays
+generated in finite fields of characteristic 2.
+
+
+
+                                                           16
+8     Problems related to variants and generalizations of Costas arrays
+Costas arrays are predominantly characterized by their optimal autocorrelation property, and as such they are
+only one out of the many different mathematical objects defined around this particular principle (each in its own
+distinct context) and considered in the literature. Examples include Sidon sets (also known as Golomb rulers)
+[30, 82], RADAR/SONAR sequences (also known as Golomb rectangles) [14, 56, 65, 73, 74, 82, 83, 99], Golomb
+rectangles [83], honeycomb arrays [8, 10, 64], as well as arrays of dots where “half” of the Costas property hold,
+namely where all linear segments connecting pairs of dots either have distinct lengths or distinct slopes (but
+not necessarily both) [51, 68, 75, 98]. Further examples include generalizations of the Costas property in higher
+dimensions [27, 53] and in the continuum [26, 29, 47]. Some Costas arrays were also found found to yield Almost
+Perfect Nonlinear (APN) permutations [36, 45], which find applications in cryptography. An extensive study of
+signals built for “good correlation” (in various contexts) is presented in [62].
+
+8.1    Golomb rectangles
+Progressive relaxation of the constraints present in the definition of Costas arrays leads to new mathematical
+objects. For example, binary m × n arrays such that there be exactly one dot per column, and such that the range
+of their (horizontal only) autocorrelation consists only of the three values {n, 1, 0} are known as RADAR/SONAR
+arrays/sequences [56, 74, 82] and find applications in RADAR/SONAR systems. One step further, in extended
+RADAR sequences blank columns are also allowed [73].
+    The next natural step in this process is to abolish any restriction on the number and position of the dots in the
+array other than the distinct differences property itself.
+Definition 12. A Golomb rectangle [83] is a rectangular array of N > 2 dots and blanks such that its auto-
+correlation range consists of exactly three values: {N, 1, 0}.
+    Such configurations also have found important application in cryptography, and specifically in the distribution
+of cryptographic keys over sensor networks [9]. Nevertheless, virtually nothing is known about the mathematical
+properties of these objects.
+Problem 23. Let C(m, n, N ) stand for the number of m × n Golomb rectangles containing N dots. Calculate
+C(m, n, N ), and, in particular, for given m and n, find the maximal N for which C(m, n, N ) > 0. Conversely, for
+a given N , find the smallest values of m and n for which C(m, n, N ) > 0.
+    The latter question has received considerable attention in the literature in connection with (optimal) RADAR/SONAR
+arrays [14, 65, 74, 99]: for an m×n RADAR/SONAR array (which has n dots, one per column), what is the maximal
+n for a given m (or effective bounds thereof)?
+
+8.2    Honeycomb arrays
+A honeycomb array [10, 64] is the equivalent of a Costas array on a hexagonal grid. Ordinary rectangular arrays
+are implicitly understood as conforming to a square grid: elements are neatly arranged in rows and columns, and
+each element (except for those at the border of the array) has four natural neighbors, namely those lying above,
+below, to the left, and to the right, as if a square frame is drawn around each element and elements whose frames
+share an edge are defined to be neighbors. In a hexagonal grid, on the other hand, the frame around each element is
+a regular hexagon, so there are three natural directions associated with the grid, and six neighbors to each
+                                                                                                         √ element
+(except for those at the border). The side of the regular hexagon can be assumed to be of length 1/ 3, so that
+centers of neighboring hexagons are at distance 1 apart.
+    The definition now is straightforward:
+Definition 13. Let r ∈ N, and consider a hexagonal array of hexagonal cells, whose elements are dots and blanks,
+such that its side consist of r hexagons (and its diameter by 2r + 1 hexagons), and such that there be exactly one
+dot per row in each natural direction of the grid (that is, a total of 2r + 1 dots). This will be a honeycomb array
+iff either of the following equivalent conditions holds:
+    • no two linear segments connecting pairs of dots (assumed to lie at the center of the cell they lie in) have both
+      the same length and the same slope; or
+
+
+                                                          17
+   • assuming two copies of the array are placed on top of each other, and one is shifted with respect to the other
+     to any position (but not rotated, and so that overlapping cells overlap perfectly and not in part), the number
+     of pairs of overlapping dots can only be 0, 1, or 2r + 1 (this is a restatement of the auto-correlation Definition
+     2 in the hexagonal setting).
+    Fortunately, there is a bijective correspondence between the hexagonal and the square grid [8, 10, 64], which
+allows the definition of honeycomb arrays as a subfamily of Costas arrays. Indeed, position a honeycomb array
+so that its diameter is horizontal, and align rows on top of the diameter along the right (to have a common start
+with the diameter), and rows below the diameter along the left (to have a common end with the diameter). In this
+arrangement, two of the three natural directions of the honeycomb array now correspond to rows and columns,
+while the third corresponds to diagonals along the bottom left–top right direction. Naturally, this is not a complete
+square array yet, as some square cells on the top left and bottom right corner are missing, but they can be added
+containing blanks. Thus, a honeycomb array of radius r has been mapped into a Costas array of order 2r + 1, and
+the mapping can be inverted.
+Definition 14. A honeycomb array is a Costas array with the extra property that every diagonal along the bottom
+left–top right direction contains exactly one dot.
+    A major and surprising result is that no honeycomb array with 2r + 1 ≥ 1289 dots exists [8] (or, equivalently,
+of radius r ≥ 644), and, consequently, only finitely many honeycomb arrays exist. Specifically, only 12 (up to
+symmetry) are known today, and it is conjectured that no other exists [10].
+Problem 24. Enumerate all honeycomb arrays.
+    Note that a Costas array configuration of non-attacking queens on the chessboard (see Problem 7) is a special
+case of a honeycomb array, where each diagonal along the perpendicular direction, namely bottom right–top left,
+also contains exactly one dot. Thus, there can be at most finitely many such Costas arrays as well.
+
+8.3    Relation between Costas arrays and Golomb rulers
+Golomb rulers owe their name to the studies of Prof. S. Golomb, who demonstrated an important application in
+graph labeling [60]. They have important applications in engineering, for example in radio-frequency allocation
+for avoiding third-order interference [2], in generating convolutional self-orthogonal codes [86], in the formation
+of optimal linear telescope arrays in radio-astronomy [7] etc., as well as an inherent mathematical interest. Even
+earlier, they had also been studied in the context of Fourier series [89].
+    A Golomb ruler (or Sidon set, or B2 -sequence) is a collection of distinct integers such that all pairwise differences
+between them are also distinct. It can be visualized as a vector of dots and blanks, so that an element of the vector
+is a dot iff its position corresponds to one of the selected integers. Clearly, overlaying two copies of the vector,
+sliding one of the copies, and counting the number of pairs of overlapping dots leads to a count of either 0, 1, or of
+the total number of dots, if the two copies overlap perfectly. Hence, Golomb rulers are 1D analogs of Costas arrays.
+Without loss of generality, it can be assumed that the Golomb ruler contains m integers, the smallest of which is
+0 and the largest n.
+Definition 15. Let m ∈ N∗ , let f : [m] → N be strictly increasing, and let f (1) = 0 and n = f (m). The range
+of f is a Sidon set (or a B2 -sequence) iff all differences f (i) − f (j), 0 ≤ j < i ≤ n are distinct. In that case, the
+vector v : [n + 1] − 1 → {0, 1} such that v(f (i)) = 1, i ∈ [m] and 0 elsewhere is a Golomb ruler. n is the length of
+the Golomb ruler, and m its number of points.
+   The two fundamental problems in the field are to determine a) the maximal possible m for a fixed n, and b) the
+minimal possible n for a fixed m. Golomb rulers satisfying either of these two extremes are called optimal (and,
+more specifically, optimally dense in the former case, and optimally short in the latter).
+Problem 25. Provide exact formulas for the length of optimally short Golomb rulers of a given number of points,
+and for the number of points of optimally dense Golomb rulers of a given length.
+    Several inequalities
+                √        involving m and n have been proposed for optimal Golomb rulers [21, 52, 70]: they essentially
+state that m ≈ n ⇔ n ≈ m2 . Furthermore, several construction techniques are available for Golomb rulers, which
+work for infinitely many (but not all) values of m, namely the Erdös-Turan [52], Ruzsa-Lindström [70, 71, 87],
+
+
+                                                           18
+Bose-Chowla [11, 12], and Singer [90] constructions. A very comprehensive online resource about Golomb rulers is
+J.B. Shearer’s webpage on Golomb rulers [88], where all optimal known optimal Golomb rulers are posted, while
+an overview of the theory of Golomb rulers and their construction techniques is provided in A. Dimitromanolakis’s
+Diploma Thesis [21], and also in [30]. It should be mentioned that considerable effort has been put into the
+enumeration of optimal Golomb rulers, just like in Costas arrays (see, for example, [22, 85, 102]).
+     Efforts have been made to relate Golomb rulers and Costas arrays directly, by converting one object into the
+other. A procedure was described in [46, 82] whereby any n × n Costas array (or a Golomb rectangle, more
+generally) can be converted into a Golomb ruler by adding at least n − 2 blank rows at the bottom and then
+stacking its columns in order one below the other. It was also determined empirically in [46] that for some Costas
+arrays less than n − 2 blank rows could be added with the same effect. A more elegant approach which involves
+tiling the integer plane using a binary array possessing distinct differences and then applying an unfolding operator
+is described in [54].
+Problem 26. Convert efficiently a Costas array (or Golomb rectangle) into a Golomb ruler and vice versa. In
+particular, for a given Costas array (or a family thereof), determine the minimal number of blank rows that must
+be added at the bottom in order to form a Golomb ruler by stacking its columns in order one below the other.
+
+
+9     Conclusion
+After brief reports on recent research progress in various aspects of Costas arrays, a total of 26 open problems were
+proposed, and specifically:
+    • nine core theoretical problems;
+    • four problems related to the algebraic construction techniques;
+    • three inverse problems;
+
+    • six problems related to properties; and
+    • four problems on variants and generalizations.
+   This quite diverse selection, which naturally reflects the present author’s experience and preferences, is intended
+to motivate researchers to consider working on the fascinating subject of Costas arrays.
+
+
+Acknowledgements
+This material is based upon works supported by the Science Foundation Ireland under Grant No. 08/RFP/MTH1164.
+
+
+References
+ [1] N. Alon and J. Spencer. “The probabilistic method.” Wiley-Interscience, 2000.
+ [2] W.C. Babcock, Intermodulation interference in radio systems/frequency of occurrence and control by channel
+     selection, Bell System Technical Journal, Volume 31, 1953, pp. 63–73.
+ [3] L. Barker, K. Drakakis, and S. Rickard. “On the complexity of the verification of the Costas property.”
+     Proceedings of the IEEE, Volume 97, Issue 3, March 2009, pp. 586–593.
+ [4] J.K. Beard. “Costas array generator polynomials in finite fields.” Conference on Information Signals and
+     Systems, Princeton University, USA, 2008.
+ [5] J.K. Beard. “Generating Costas arrays to order 200.” Conference on Information Signals and Systems, Prince-
+     ton University, USA, 2006.
+ [6] J.K. Beard, J.C. Russo, K.G. Erickson, M.C. Monteleone, and M.T. Wright. “Costas arrays generation and
+     search methodology.” IEEE Transactions on Aerospace and Electronic Systems, Volume 43, 2007, pp. 522–538.
+
+
+                                                         19
+ [7] F. Biraud, E. Blum, and J. Ribes. “On optimum synthetic linear arrays with application to radioastronomy.”
+     IEEE Transactions on Antennas and Propagation, Volume 22, Issue 1, 1974, pp. 108–109.
+ [8] S.R. Blackburn, T. Etzion, K.M. Martin, and M.B. Paterson. “Two-Dimensional Patterns With Distinct
+     Differences — Constructions, Bounds, and Maximal Anticodes.” IEEE Transactions On Information Theory,
+     Volume 56, Issue 3, March 2010, pp. 3961–3972.
+ [9] S.R. Blackburn, T. Etzion, K.M. Martin, and M.B. Paterson. “Distinct Difference Configurations: Multihop
+     Paths and Key Predistribution in Sensor Networks.” IEEE Transactions On Information Theory, Volume 56,
+     Issue 8, August 2010, pp. 1216–1229.
+[10] S.R. Blackburn, A. Panoui, M.B. Paterson, and D.R. Stinson. “Honeycomb arrays.” The Electronic Journal
+     of Combinatorics, Volume 17, 2010.
+[11] R.C. Bose. “An affine analogue of Singers theorem.” Journal of the Indian Mathematical Society, Volume 6,
+     1942, pp. 1-15.
+[12] R.C. Bose and S. Chowla. “Theorems in the additive theory of numbers.” Commentarii Mathematici Helvetici,
+     Volume 37, 1962-63, pp. 141–147.
+[13] C. Brown, M. Cenki, R. Games, J. Rushanan, O. Moreno, and P. Pei. “New enumeration results for Costas
+     arrays.” IEEE International Symposium on Information Theory, pp. 405, January 1993.
+[14] A. Blokhuis and H.J. Tiersma. “Bounds for the size of RADAR arrays.” IEEE Transactions On Information
+     Theory, Volume 34, Issue 1, pp. 164–167, January 1988.
+[15] W. Chang. “A remark on the definition of Costas arrays.” Proceedings of the IEEE, Volume 75, Issue 4, pp.
+     522–523, April 1987.
+[16] W. Chang and K. Scarbrough. “Costas arrays with small number of crosscoincidences.” IEEE Transactions on
+     Aerospace and Electronic Systems, Volume 25, Issue 1, pp. 109–113, January 1989.
+[17] W. Correll Jr. “A closed form expression for the number of Costas arrays of arbitrary order.” 41st Asilomar
+     Conference on Signals, Systems and Computers, Pacific Grove, CA, USA, November 2008.
+[18] J.P. Costas. “Medium constraints on sonar design and performance.” Technical Report Class 1 Rep.
+     R65EMH33, GE Co., 1965.
+[19] J.P. Costas. “A study of detection waveforms having nearly ideal range-doppler ambiguity properties.” Pro-
+     ceedings of the IEEE, Volume 72, Issue 8, pp. 996–1009, August 1984.
+[20] S. Cohen and G. Mullen. “Primitive elements in finite fields and Costas arrays.” Applicable Algebra in Engi-
+     neering, Communication and Computing, Volume 2, 1991, pp. 45–53.
+[21] A. Dimitromanolakis. “Analysis of the Golomb ruler and the Sidon set problems, and determination of large,
+     near-optimal Golomb rulers.” Diploma thesis, Department of Electronic and Computer Engineering, Technical
+     University of Crete (2002, available online in English at http://www.cs.toronto.edu/ apostol/golomb/).
+[22] A. Dollas, W.T. Rankin, and D. McCracken. “A new algorithm for Golomb ruler derivation and proof of the
+     19 mark ruler.” IEEE Transactions On Information Theory, Volume 44, Issue 1, January 1998, pp. 379–382.
+[23] K. Drakakis. “On the degrees of freedom of Costas permutations and other constraints.” Advances in Mathe-
+     matics of Communications.
+[24] K. Drakakis. “A structural constraint for Golomb Costas arrays.” IEEE Transactions on Information Theory,
+     Volume 56, Issue 11, November 2010, pp. 5762–5764.
+[25] K. Drakakis. “On the existence of infinite size Costas arrays configurations of nonattacking queens on the
+     chessboard.” International Journal of Combinatorics, Volume 2010.
+
+
+
+
+                                                       20
+[26] K. Drakakis. “Cauchy’s functional equation and nowhere continuous/everywhere dense Costas bijections in
+     Euclidean spaces.” (accepted for publication in) “Functional equations in mathematical analysis — Editors:
+     J. Brzdek and Th.M. Rassias.” Springer.
+[27] K. Drakakis. “On the generalization of the Costas property in higher dimensions.” Advances in Mathematics
+     of Communications, Volume 4, Issue 1, 2010, pp. 1–22.
+[28] K. Drakakis. “On the hops present in Costas permutations.” IEEE Transactions on Information Theory, Volume
+     56, Issue 3, 2010, pp. 1271–1277.
+[29] K. Drakakis. “On Costas sets and Costas clouds.” Abstract and Applied Analysis, Volume 2009.
+[30] K. Drakakis. “A review of the available construction methods for Golomb rulers.” Advances in Mathematics
+     of Communications, Volume 3, Issue 3, August 2009, pp. 235–250.
+
+[31] K. Drakakis. “A stochastic model for the number of fixed points of a Welch Costas permutation.” Ars Com-
+     binatoria, Volume 92, July 2009, pp. 33–52.
+[32] K. Drakakis. “Three challenges in Costas arrays.” Ars Combinatoria, Volume 89, October 2008, pp. 167–182.
+[33] K. Drakakis. “A review of Costas arrays.” Journal of Applied Mathematics, Volume 2006.
+[34] K. Drakakis. “Computer-assisted search for Costas arrays.” IET Irish Signals and Systems Conference 2005,
+     pp. 136–144.
+[35] K. Drakakis, R. Gow, J. Healy, and S. Rickard. “Cross-correlation properties of Costas arrays and their images
+     under horizontal and vertical flips.” Mathematical Problems in Engineering, Volume 2008.
+[36] K. Drakakis, R. Gow, and G. McGuire. “APN Permutations on Zn and Costas Arrays.” Discrete Applied
+     Mathematics, Volume 157, Issue 15, August 2009, pp. 3320–3326.
+[37] K. Drakakis, R. Gow, and L. O’Carroll. “On the symmetry of Welch- and Golomb-constructed Costas arrays.”
+     Discrete Mathematics, Volume 309, Issue 8, April 2009, pp. 2559–2563.
+[38] K. Drakakis, R. Gow, and S. Rickard. “On the disjointness of algebraically constructed Costas arrays.” (ac-
+     cepted for publication in) Journal of Algebra and its Applications.
+[39] K. Drakakis, R. Gow, and S. Rickard. “Common distance vectors between Costas arrays.” Advances in Math-
+     ematics of Communications, Volume 3, Issue 1, February 2009, pp. 35–52.
+[40] K. Drakakis, R. Gow, and S. Rickard. “Parity properties of Costas arrays defined via finite fields.” Advances
+     in Mathematics of Communications, Volume 1, Issue 3, August 2007, pp. 323–332.
+[41] K. Drakakis, R. Gow, S. Rickard, J. Sheekey, and K. Taylor. “On the maximal cross-correlation of algebraically
+     constructed Costas arrays.” (accepted for publication in) IEEE Transactions on Information Theory.
+[42] K. Drakakis, J. Healy, and S. Rickard. “A stochastic analysis approach in the search for Costas arrays.”
+     International Journal of Applied Mathematics and Engineering Sciences, Volume 2, Issue 1, January-June
+     2008, pp. 73–88.
+[43] K. Drakakis, F. Iorio, and S. Rickard. “The enumeration of Costas arrays of order 28 and its consequences.”
+     Advances in Mathematics of Communications, Volume 5, Issue 1, 2011, pp. 69–86.
+[44] K. Drakakis, F. Iorio, S. Rickard, and J. Walsh. “Results of the enumeration of Costas arrays of order 29.”
+     (Advances in Mathematics of Communications.)
+[45] K. Drakakis, G. McGuire, and V. Requena. “On the Nonlinearity of Exponential Welch Costas Functions.”
+     IEEE Transactions on Information Theory, Volume 56 , Issue 3, March 2010, pp. 1230–1238.
+[46] K. Drakakis and S. Rickard. “On the construction of nearly optimal Golomb rulers by unwrapping Costas
+     arrays.” Contemporary Engineering Sciences, Volume 3, Issue 7, 2010, pp. 295–309.
+
+
+                                                        21
+[47] K. Drakakis and S. Rickard. “On the generalization of the Costas property in the continuum.” Advances in
+     Mathematics of Communications, Volume 2, Issue 2, 2008, pp. 113–130.
+[48] K. Drakakis, S. Rickard, J. Beard, R. Caballero, F. Iorio, G. O’Brien, and J. Walsh. “Results of the enumeration
+     of Costas arrays of order 27.” IEEE Transactions on Information Theory, Volume 54, Issue 10, October 2008,
+     pp. 4684–4687.
+[49] K. Drakakis, S. Rickard, and R. Gow. “Interlaced Costas arrays do not exist.” Mathematical Problems in
+     Engineering, Volume 2008.
+[50] D. Drumheller and E. Titlebaum. “Cross-Correlation Properties of Algebraically Constructed Costas Arrays.”
+     IEEE Transactions on Aerospace and Electronic Systems, Volume 27, Issue 1, pp. 2–10, January 1991.
+[51] P. Erdös, R. Graham, I.Z. Ruzsa, and H. Taylor. “Bounds for arrays of dots with distinct slopes or lengths.”
+     Combinatorica, Volume 12, Issue 1, pp. 39–44, 1992.
+[52] P. Erdös and P. Turan. “On a problem of Sidon in additive number theory and some related problems.” Journal
+     of the London Mathematical Society, Volume 16, 1941, pp. 212–215 — followed by Addendum (by P. Erdös),
+     ibid. Volume 19, 1944, pp. 208.
+[53] T. Etzion. “Combinatorial designs with Costas arrays properties.” Discrete Mathematics, Volume 93, pp.
+     143–154, 1991.
+[54] T. Etzion. “Sequence folding, lattice tiling, and multidimensional coding.” (in www.arxiv.org)
+[55] A. Freedman and N. Levanon. “Any two N × N Costas signals must have at least one common ambiguity
+     sidelobe if N > 3—A proof.” Proceedings of the IEEE, Volume 73, Issue 10, pp. 1530–1531, October 1985.
+[56] R.A. Games. “An algebraic construction of SONAR sequences using M-sequences.” SIAM Journal on Algebraic
+     and Discrete Methods, Volume 8, Issue 4, pp. 753–761, October 1987.
+[57] M.R. Garey and D.S. Johnson. “Computers and Intractability: A Guide to the Theory of NP-Completeness.”
+     W.H. Freeman & Co., 1979.
+[58] S. Golomb. “Algebraic constructions for Costas arrays.” Journal Of Combinatorial Theory Series A, Volume
+     37, Issue 1, pp. 13–21, 1984.
+[59] S. Golomb. “The T4 and G4 constructions for Costas arrays.” IEEE Transactions on Information Theory,
+     Volume 38, Issue 4, pp. 1404–1406, July 1992.
+
+[60] S. Golomb. “How to number a graph.” Graph Theory and Computing (R.C. Read, editor), Academic Press,
+     New York, 1977, pp. 23-37.
+[61] S. Golomb and G. Gong. “The status of Costas arrays.” IEEE Transactions on Information Theory, Volume
+     53, Issue 11, pp. 4260–4265, November 2007.
+[62] S. Golomb and G. Gong. “Signal design for good correlation.” Cambridge, 2005.
+[63] S. Golomb and O. Moreno. “On periodicity properties of Costas arrays and a conjecture on permutation
+     polynomials.” IEEE Transactions on Information Theory, Volume 42, Issue 6, November 1996, pp. 2252–2253.
+[64] S. Golomb and H. Taylor. “Constructions and properties of Costas arrays”, Proceedings of the IEEE, Vol. 72,
+     pp. 1143–1163, 1984.
+[65] J. Hamkins and K. Zeger. “Improved bounds on maximum size binary RADAR arrays, IEEE Transactions on
+     Information Theory, Volume 43, Issue 3, pp. 997–1000, May 1997.
+[66] J. Holden and P. Moree. “Some heuristics and results for small cycles of the discrete logarithm.” Mathematics
+     of Computation, Volume 75, Number 253, pp. 419–449, 2005.
+[67] K. Ireland and M. Rosen. “A Classical Introduction to Modern Number Theory.” 2nd edition, Springer, 1990.
+
+
+                                                         22
+[68] H. Lefmann and T. Thiele. “Point sets with distinct distances.” Combinatorica, Volume 15, Issue 3, pp.
+     379–408, 1995.
+[69] M. Levin, C. Pomerance, and K. Soundararajan. “Fixed points for discrete logarithms.” Proceedings of the
+     Ninth Algorithmic Number Theory Symposium (ANTS IX), Springer Lectures Notes in Computer Science
+     6197, pp. 6–15, 2010.
+[70] B. Lindström. “An inequality for B2 -sequences.” Journal of Combinatorial Theory, Volume 6, 1969, pp. 211–
+     212.
+[71] B. Lindström. “Finding finite B2 -sequences faster.” Mathematics of Computation, Volume 67, 1998, pp. 1173–
+     1178.
+[72] S. Maric, I. Seskar, and E. Titlebaum. “On Cross-Ambiguity Properties of Welch-Costas Arrays When Applied
+     in SS/FH Multiuser Radar and Sonar Systems.” IEEE Transactions on Aerospace and Electronic Systems,
+     Volume 30, Issue 4, pp. 489–493, October 1994.
+[73] O. Moreno, S.W. Golomb, and C. Corrada. “Extended SONAR sequences.” IEEE Transactions on Information
+     Theory, Volume 43, Issue 6, pp. 1999–2005, November 1997.
+[74] O. Moreno, R.A. Games, and H. Taylor. “SONAR sequences from Costas arrays and the best known sonar
+     sequences with up to 100 symbols.” IEEE Transactions on Information Theory, Volume 39, Issue 6, pp. 1985–
+     1987, September 1993.
+[75] R.E. Peile and H. Taylor. “Sets of points with pairwise distinct slopes.” Computers and Mathematics with
+     Applications, Volume 39, pp. 109–115, 2000.
+[76] B. Popovic. “New constructions of Costas sequences.” Electronics Letters, Volume 25, Issue 1, pp. 40–41,
+     January 1989.
+[77] S. Rickard. “Large sets of frequency hopped waveforms with nearly ideal orthogonality properties.” Masters
+     thesis, MIT, 1993.
+[78] S. Rickard. “Searching for Costas arrays using periodicity properties.” IMA International Conference on Math-
+     ematics in Signal Processing at The Royal Agricultural College,” Cirencester, UK, 2004.
+[79] S. Rickard. “Open problems in Costas arrays.” IMA International Conference on Mathematics in Signal Pro-
+     cessing at The Royal Agricultural College,” Cirencester, UK, 2006.
+[80] S. Rickard, E. Connell, F. Duignan, B. Ladendorf and A. Wade. “The enumeration of Costas arrays of size
+     26.” Conference on Information Signals and Systems, Princeton University, USA, 2006.
+[81] S. Rickard and J. Healy. “Stochastic search for Costas arrays.” Conference on Information Signals and Systems,
+     Princeton University, USA, 2006.
+[82] J.P. Robinson. “Golomb rectangles as folded rulers.” IEEE Transactions on Information Theory, Volume 43,
+     Issue 1, Janueary 1997, pp. 290–293.
+[83] J.P. Robinson. “Golomb rectangles.” IEEE Transactions on Information Theory, Volume 31, Issue 6, November
+     1985, pp. 781–787.
+[84] J.P. Robinson. “Genetic Search for Golomb Arrays.” IEEE Transactions On Information Theory, Volume 46,
+     Issue 3, May 2000, pp. 1170–1173.
+[85] J.P. Robinson. “Optimum Golomb rulers.” IEEE Transactions On Computers, Volume 28, Issue 12, December
+     1979, pp. 943–944.
+[86] J.P. Robinson and A.J. Bernstein. “A class of binary recurrent codes with limited error propagation.” IEEE
+     Transactions on Information Theory, Volume 13, Issue 1, 1967, pp. 106–113.
+[87] I.Z. Ruzsa. “Solving a linear equation in a set of integers I.” Acta Arithmetica, Volume LXV, Issue 3, 1993,
+     pp. 259–282.
+
+                                                        23
+[88] J.B. Shearer’s webpage on Golomb rulers:
+     http://www.research.ibm.com/people/s/shearer/grtab.html.
+[89] S. Sidon. “Ein Satz über trigonometrische Polynome und seine Anwendungen in der Theorie der Fourier-
+     Reihen.” Mathematische Annalen, Volume 106, 1932, pp. 536–539 (in German).
+
+[90] J. Singer. “A theorem in finite projective geometry and some applications to number theory.” Transactions of
+     the American Mathematical Society, Volume 43, 1938, pp. 377–385.
+[91] R.P. Stanley. “Enumerative combinatorics, Volume I.” Cambridge, 1997.
+[92] J. Silverman, V. Vickers, and J. Mooney. “On the Number of Costas arrays as a function of array size.”
+     Proceedings of the IEEE, Volume 76, Issue 7, pp. 851–853, July 1988.
+[93] E. Titlebaum and S. Maric. “Multiuser SONAR properties for Costas array frequency hop coded signals.” In
+     Proceedings of IEEE ICASSP 1990, pp. 2727–2730, 1990.
+[94] K. Taylor, S. Rickard, and K. Drakakis. “Costas Arrays: Survey, Standardization and MATLAB Toolbox.”
+     ACM Transactions on Mathematical Software, Volume 37, Issue 4, Dec 2010.
+[95] R.A. Wilson. “The finite simple groups.” Graduate Texts in Mathematics 251, Springer-Verlag, 2009.
+[96] Z. Ye, J. Ouyang, and R. He. “The discovery of 53 × 53 Costas arrays.” Natural Science Journal of Xiangtan
+     University, Volume 17, Issue 4, Dec 1995, pp. 120–122 (in Chinese).
+[97] W.P. Zhang. “On a problem of Brizolis.” Pure and Applied Mathematics, Volume 11 (suppl.), pp. 1–3, 1995
+     (in Chinese).
+[98] W.P. Zhang. “A note on arrays of dots with distinct slopes.” Combinatorica, Volume 13, Issue 1, pp. 127–128,
+     1993.
+[99] Z. Zhang and C. Tu. “New bounds for the sizes of RADAR arrays.” IEEE Transactions on Information Theory,
+     Volume 40, Issue 5, pp. 1672–1678, September 1994.
+[100] http://www.costasarrays.org
+[101] http://jameskbeard.com/jameskbeard/
+[102] http://www.distributed.net/OGR/en
+
+
+
+
+                                                       24
+

@@ -1,0 +1,1496 @@
+                                                               How Much Cache Does Reasoning Need?
+                                                                 Depth–Cache Tradeoffs in KV-Compressed Transformers
+
+                                                                                           Xiao Wang
+                                                                                      FujianAI42@163.com
+
+
+                                                                                                Abstract
+arXiv:2604.17935v1 [cs.LG] 20 Apr 2026
+
+
+
+
+                                                    The key-value (KV) cache is the dominant memory bottleneck during Transformer inference, yet
+                                               little is known theoretically about how aggressively it can be compressed before multi-step reasoning
+                                               degrades. We study this question through k-hop pointer chasing under a shared KV cache of size s,
+                                               attention dimension m, H heads, p-bit precision, and a locality-respecting cache controller (a minimal
+                                               restriction satisfied by all standard KV-compression methods). We give three results.
+                                                    (1) Product depth lower bound (conjectured).  √ We conjecture that any such Transformer        solving
+                                               k-hop pointer chasing on n tokens (n ≥ 4k, s ≤ n/4) requires L = Ω ⌈k/s⌉ · ⌈log2 n/(Hmp)⌉ , and we
+                                               isolate the sole remaining gap as a specific probabilistic step on the joint distribution of the algorithm’s
+                                               cache trace and the pointer chain (Open Problem 1). The product structure—cache reachability and per-
+                                               window bandwidth multiply, not compete—is the central technical feature.    We prove unconditionally (i) a
+                                               matching upper bound L = O min(k, ⌈k/s⌉ · ⌈log2 (2s)⌉) · ⌈log2n/(mp)⌉ via windowed pointer doubling,
+                                               and (ii) the max-bound L = Ω max(⌈k/s⌉, ⌈log2 n/(Hmp)⌉) √on the full parameter range; closing the
+                                               conjecture amounts to upgrading max to a product in the s ≤ n/4 regime.
+                                                    (2) Bandwidth barrier. The product bound is quantitatively binding only in the narrow or low-precision
+                                               regime (Hmp ≲ log n). We formalize this limitation as a barrier theorem: any depth lower bound provable
+                                               via per-window distinguishability counting—a class that includes reachability arguments, bandwidth
+                                               arguments, and their combinations—cannot exceed ⌈k/s⌉ in the Hmp ≥ log2 n regime. Breaking this
+                                               barrier would require fundamentally different proof techniques, e.g., unconditional communication-
+                                               complexity lower bounds for pointer chasing. We view this as a structural obstacle on the road to
+                                               characterizing depth in standard LLM configurations.
+                                                    (3) Sharp error behavior and adaptive–oblivious separation. Under random cache selection, we
+                                               establish a two-regime characterization of joint success probability over T = ⌈log2 k⌉ stages of windowed
+                                               pointer doubling: with oblivious caches, Pr[E ] ≤ (s/(n − T ))T + 2T 3 /n (exponential decay in T ); with
+                                               adaptive locality-respecting caches, Pr[E ] = s/n exactly (matching upper and lower bounds), independent
+                                               of T . The resulting Ω((n/s)T −1 ) separation quantifies why heavy-hitter eviction qualitatively dominates
+                                               random eviction for multi-hop reasoning (Liu et al., 2025; Ananthanarayanan et al., 2026).
+                                                    Together, these results give a sharp picture of what current proof techniques can and cannot establish
+                                               for cache-constrained reasoning. The central open problem is to close the gap between the unconditional
+                                               max-bound and the conjectured product-bound; we identify the specific technical step required and survey
+                                               candidate routes for closure.
+
+
+                                         1    Introduction
+                                         As context windows in large language models scale beyond 100K tokens, the key–value (KV) cache has
+                                         become the dominant memory bottleneck during inference (Shi et al., 2024). This has driven extensive work
+                                         on cache compression through eviction (Zhang et al., 2023; Liu et al., 2023; Li et al., 2024; Cai et al., 2024),
+                                         quantization (Liu et al., 2024), and merging (Wang et al., 2024); these methods report 80–90% compression
+                                         with limited degradation on standard benchmarks.
+
+
+
+                                                                                                    1
+     Yet mounting empirical evidence shows that multi-hop reasoning degrades far faster than single-hop
+retrieval under the same compression rates (Ananthanarayanan et al., 2026; Liu et al., 2025; Cai et al., 2025).
+This raises a sharp question: how much cache must be retained for multi-step reasoning to remain possible?
+     We formalize this through k-hop pointer chasing and study the depth required to solve it under a
+shared KV cache of size s. Our main positive result is an unconditional max-bound lower bound, plus a
+conjectured product lower bound: cache reachability (∼ k/s sequential windows) and per-window bandwidth
+(∼ log n/(Hmp) layers per window) should multiply rather than compete. We identify the precise probabilistic
+step (⋆) needed to turn the conjecture into a theorem and leave it as Open Problem 1; we also give a narrow
+unconditional partial result in the extreme low-precision subregime s · 2mp < 8 under an additional query-only
+controller assumption (Remark 4.13). Our other main results (the matching upper bound, the bandwidth
+barrier, and the adaptive-vs-oblivious error analysis) are unconditional.
+     The product bound is, however, quantitatively binding only in a specific parameter regime—when
+precision is low or models are narrow enough that Hmp ≲ log n. In standard LLM configurations (H = 32,
+m = 128, p = 16, giving Hmp ∼ 6.5 · 104 ≫ log n), the bandwidth factor ceilings at 1 and the bound reduces
+to the cache-reachability constraint L ≥ ⌈k/s⌉ alone. This raises the natural question: can the product structure
+be sharpened to bind in the standard LLM regime?
+     Our second contribution answers: not via a broad class of current proof techniques. We formalize a barrier
+theorem showing that any depth lower bound provable via per-window distinguishability counting—a class
+that encompasses reachability arguments, bandwidth counting, and their combinations—saturates at ⌈k/s⌉
+whenever Hmp ≥ log2 n. The barrier is structural: multi-head attention (H ≥ 2) makes per-layer bandwidth
+(Hmp) exceed per-token state capacity (mp), so any counting-based per-window argument ceilings within a
+single layer. Breaking this barrier would require either translating unconditional communication-complexity
+lower bounds for pointer chasing (Nisan and Wigderson, 1993; Yehudayoff, 2020; Mao et al., 2025) into
+Cache-Transformer depth lower bounds without the MPC conjecture (an open problem) or genuinely different
+proof techniques.
+     Our third contribution is a sharp, two-regime analysis of error behavior under random cache selec-
+tion, which partially explains the empirical “hallucination cliff” of Ananthanarayanan et al. (2026). The
+joint success probability of windowed pointer doubling over T = ⌈log2 k⌉ stages admits qualitatively dif-
+ferent scaling in two regimes: for oblivious caches (chosen without seeing π), direct enumeration gives
+Pr[E ] ≤ (s/(n − T ))T + 2T 3 /n, exhibiting exponential decay in T (Theorem 3.8). For adaptive locality-
+respecting caches, the joint probability is exactly s/n, independent of T , and is matched by an explicit
+“chain-tracking” controller (Theorem 3.9). The resulting separation, Ω((n/s)T −1 ) between adaptive and
+oblivious, quantitatively explains the empirical observation (Liu et al., 2025) that heavy-hitter (adaptive)
+eviction qualitatively outperforms random or recency-based eviction on multi-hop reasoning tasks.
+
+Contributions.
+  1. Product lower bound (Conjecture 3.1): We conjecture that for any locality-respecting controller, L =
+     Ω(⌈k/s⌉ · ⌈log2 n/(Hmp)⌉), binding in the narrow-model regime. We provide (i) an unconditional max-
+     bound L = Ω(max(⌈k/s⌉, ⌈log2 n/(Hmp)⌉)) from reachability and output bandwidth, (ii) an identified
+     proof strategy via exit-based distinguishability counting, reducing the conjecture to a probabilistic step
+     on the joint distribution of cache trace and pointer chain, and (iii) partial progress closing the gap in
+     sub-regimes.
+                                                                                                    
+  2. Matching upper bound (Theorem 3.2): L = O min(k, ⌈k/s⌉ · ⌈log2 (2s)⌉) · ⌈log2 n/(mp)⌉ via win-
+     dowed pointer doubling.
+   3. Bandwidth barrier (Theorem 3.6): Any per-window distinguishability-based argument cannot prove
+      L = ω(⌈k/s⌉) when Hmp ≥ log2 n.
+
+
+                                                       2
+    4. Three-part error analysis under random caches (Theorems 3.8, 3.9, Corollary 3.10): Under
+       oblivious caches, Pr[all T stages succeed] ≤ (s/(n − T ))T + 2T 3 /n—exponential decay in T . Under
+       adaptive locality-respecting caches, the same probability is Θ(s/n), tight with an explicit construction.
+       This gives an Ω((n/s)T −1 ) separation between adaptive and oblivious, explaining why heavy-hitter
+       eviction dominates random eviction empirically.
+
+Relation to prior work. Sanford et al. (2024) proved O(log k) depth suffices for k-hop pointer chasing
+with full cache (s = n), and Ω(log k) is necessary under an MPC conjecture. Their analysis does not address
+cache constraints and assumes infinite precision. The two results are complementary: theirs is conditional
+and cache-oblivious; ours is unconditional (modulo locality) but finite-precision. In the s = n limit, our
+bound gives L ≥ ⌈log2 n/(Hmp)⌉, which for Hmp = O(log n) matches Ω(log n) ≥ Ω(log k); in larger Hmp,
+our bound is weaker and cannot recover their Ω(log k), reflecting the bandwidth barrier. Peng et al. (2024)
+use communication complexity to prove a related inability of shallow Transformers to compose functions
+(e.g., grandparent lookup on a genealogy), giving unconditional impossibility for low-depth models on
+pointer-chasing-like tasks; their work focuses on depth vs. domain size rather than depth vs. cache size,
+and does not address KV compression. Haris and Onak (2025) prove a Θ(nd) space lower bound (for
+d = Ω(log n); in the low-dimensional regime d = o(log n) they show Ω(d · ed )) for KV cache compression
+in attention-based autoregressive Transformers via a reduction from communication complexity, using a
+Johnson-Lindenstrauss-style construction; this is orthogonal to our depth-vs-cache tradeoff, focusing on
+whether sublinear space suffices at all rather than on the interaction between depth and cache size. The
+concurrent empirical study (Ananthanarayanan et al., 2026) independently observed phase-transition-like
+behavior in multi-hop accuracy under compression.
+
+
+2    Setup
+Definition 2.1 (Cache-Restricted Transformer). An (L, H, m, p, s)-Cache-Transformer operates on N tokens
+under p-bit arithmetic: every weight entry, every intermediate activation entering a subsequent layer’s input
+(queries, keys, values, attention-output vectors, and token representations) is drawn from a finite set Q p of
+cardinality at most 2 p per coordinate. The softmax attention weights themselves are computed in continuous
+arithmetic and are not required to be p-bit quantized; only the attention outputs (the m-dimensional vectors
+                                                                                                       (ℓ)
+fed into the residual connection) are rounded to Q m    p before the next layer. Representations Xi ∈ Q p are
+                                                                                                             m
+
+indexed by layer ℓ ∈ {0, . . . , L} and token i ∈ [N]. At each layer ℓ ≥ 1, attention is restricted to a shared
+subset S(ℓ) ⊆ [N] with |S(ℓ) | ≤ s. Tokens outside S(ℓ) are strictly inaccessible at layer ℓ: their key–value pairs
+are deleted and contribute exactly zero to attention. The subset S(ℓ) is chosen by a deterministic function
+Cℓ of all layer-(ℓ − 1) representations. Element-wise MLPs between layers are unrestricted in computation
+but their outputs are quantized to Q p coordinatewise before the next layer. For token positions j that do not
+participate in attention at layer ℓ (i.e., the query at position j attends to no keys, equivalently the attention
+                                        (ℓ)     (ℓ−1)
+output at position j is zero), we set X j = X j       (representation carried forward unchanged via the residual
+connection); this convention is standard and captures the behavior of evicted-token slots in KV-compression
+systems.
+
+    This induces a finite state space: each m-dimensional attention-output vector takes one of at most 2mp
+values.
+Remark 2.2 (Modeling assumptions). The finite-precision assumption reflects hardware reality: FP16, BF16,
+INT8 are standard, with p = 8–16. The counting argument (Lemma 4.2) requires only that each coordinate
+lies in a finite set of size ≤ 2 p ; floating-point formats such as BF16 satisfy this with p = 16, regardless
+of exponent/mantissa split. The hard cache boundary models physical KV cache eviction, where deleted
+
+                                                        3
+tokens’ keys and values are removed from GPU memory. Our bounds do not apply to soft compression (value
+quantization, token merging) or to infinite-precision theoretical models.
+Remark 2.3 (Per-head cache budgets). Definition 2.1 assumes a shared cache S(ℓ) across all heads. If instead
+                                 (ℓ)        (ℓ)
+each head h has its own cache Sh with |Sh | ≤ sh , the query aggregates attention outputs across all heads, so
+                                                                 S (ℓ)
+the set of tokens that can influence it in one layer is the union h Sh , of size at most ∑h sh . Redistributing a
+fixed total budget ∑h sh across heads does not alter the bounds; only the total capacity matters.
+
+Definition 2.4 (k-hop pointer chasing, PCn,k ). Input: a permutation π : [n] → [n] (where [n] = {1, 2, . . . , n}),
+encoded as n input tokens at positions 1, . . . , n (token at position i holds the pair (i, π(i))), plus a query token
+at a separate position indexed 0 (so the total number of token positions is n + 1, indexed {0, 1, . . . , n}; the
+query position 0 is not in π’s domain). The chain is defined by z0 := 1 and zt+1 := π(zt ) for t ≥ 0, so zt ∈ [n]
+for all t. Output: zk = π k (1). Unless stated, we assume n ≥ 4k.
+
+
+3     Main Results
+We state the four main theorems; proofs appear in Section 4.
+
+3.1   Product lower bound (conjectured)
+Conjecture 3.1 (Product depth lower bound). There exist universal constants c > 0 and n0 ≥ 1 such that for
+all n ≥ n0 , any (L, H, m, p, s)-Cache-Transformer with a locality-respecting cache controller (Definition 4.6)
+                                                           √
+solving PCn,k correctly on all inputs with n ≥ 4k and s ≤ n/4 satisfies
+                                                               
+                                                    k      log2 n
+                                           L ≥ c·       ·           .                                       (1)
+                                                    s      Hmp
+         √
+For s > n/4, we conjecture only the unconditional max-bound of Proposition 4.4; whether the product
+structure extends to this regime is open (see Open Problem 2 in Section 8). Note that in this regime, the
+cache-reachability factor from Proposition 4.4 is ⌈(k − 1)/s⌉ rather than ⌈k/s⌉, a unit-level difference; the
+strengthening to ⌈k/s⌉ in Lemma 4.16 uses the cycle-structure restriction and therefore applies only in the
+     √
+s ≤ n/4 regime.
+
+    We refer to this as Conjecture 3.1 throughout; all downstream corollaries that rely on the product bound
+are flagged explicitly as conditional on it.
+
+Evidence for Conjecture 3.1. We provide three independent pieces of partial evidence:
+1. Matching upper bound within O(H log s) (Theorem 3.2): windowed pointer doubling achieves L =
+   O(⌈k/s⌉ · ⌈log2 (2s)⌉ · ⌈log2 n/(mp)⌉). The lower bound in Conjecture 3.1 matches this upper bound up
+   to a multiplicative factor of O(H log s), which vanishes at s = O(1) and H = 1.
+2. Consistency with all known algorithms: every correct algorithm we have analyzed satisfies the conjectured
+   bound—either via an exit-based argument (Section 4) or via an intrinsic cost argument (serial chain-
+   tracking has L = Θ(k log n/(mp)) ≥ ⌈k/s⌉ · ⌈log2 n/(Hmp)⌉ since sH ≥ 1).
+3. Partial unconditional lower bound: we prove in Section 4 the max-bound L ≥ max(⌈k/s⌉, ⌈log2 n/(Hmp)⌉)
+   unconditionally (Proposition 4.4), and the conjecture additionally holds unconditionally in the restricted
+   subregime s·2mp < 8 under the stronger query-only controller assumption (Remark 4.13, “Partial progress”
+   paragraph). The gap between the unconditional max-bound and the conjectured product-bound is exactly
+   one multiplicative factor of ⌈log2 n/(Hmp)⌉ or of ⌈k/s⌉, whichever is smaller.
+
+                                                          4
+    Closing Conjecture 3.1—either by direct proof or by disproof and replacement—is the central technical
+question left open by this work; we discuss it as Open Problem 1 in Section 8.
+    This conjectured bound is strictly stronger than the unconditional L ≥ max(⌈k/s⌉, ⌈log2 n/(Hmp)⌉):
+cache and bandwidth bottlenecks would interact multiplicatively through the sequential dependency of the
+pointer chain, rather than competing. The locality restriction is essential for the bandwidth factor; without it,
+only the cache-reachability factor ⌈k/s⌉ can be proved (Lemma 4.1).
+Theorem 3.2 (Matching upper bound). For any n, k, s with 1 ≤ s ≤ n, there exists a single-head (L, 1, m, p, s)-
+Cache-Transformer solving PCn,k with
+                                                                             
+                         L = O min k, ⌈k/s⌉ · ⌈log2 (2s)⌉ · ⌈log2 n/(mp)⌉ .
+
+(We use ⌈log2 (2s)⌉ ≥ 1 to ensure the bound is non-vacuous at s = 1, where the min degenerates to the serial
+cost O(k · ⌈log2 n/(mp)⌉).)
+                                   log n
+    The two bounds combine to ks · Hmp   ≲ L ≲ ks · log s · log n
+                                                             mp , a multiplicative gap of O(H log s), which
+vanishes at s = O(1) and H = 1.
+Corollary 3.3 (Minimum cache formula, conditional on Conjecture 3.1). Conditional on Conjecture 3.1 and
+                  √
+in its regime (s ≤ n/4, n ≥ 4k), to achieve depth L with a locality-respecting controller,
+                                                               
+                                                    k k log2 n
+                                     s = Ω max        ,              .
+                                                    L L · Hmp
+The first term (cache reachability) dominates when Hmp ≥ log2 n; the second (bandwidth) dominates in
+narrow or low-precision models and is conditional on the product bound of Conjecture 3.1. Unconditionally
+(from Proposition 4.4), only the weaker s = Ω(k/L) is guaranteed.
+Corollary 3.4 (Depth transition at critical cache size). Define s⋆ = n⌈log2 k⌉/k. Assume k → ∞ with
+k = o(n/ log n) (which ensures both s⋆ = ω(log k) and s⋆ = o(n), so s⋆ is a non-trivial threshold in (log k, n))
+and mp = Ω(log n) (a realistic LLM precision regime). Then up to logarithmic factors:
+  • For s ≥ s⋆ : windowed pointer doubling achieves L = O((k/s) log s · log n/(mp)), and the ratio (L/k) =
+    O((log s log n)/(s · mp)) = o(1) under the precision assumption, so L = o(k).
+  • For s < s⋆ : any correct algorithm requires L ≥ ⌈k/s⌉; the serial strategy achieves L = O(k log n/(mp)) =
+    O(k).
+Below s⋆ , the upper-bound strategy we know (serial chain-tracking) incurs L = Θ(k log n/(mp)) = Θ(k),
+while the (unconditional) reachability lower bound L ≥ ⌈k/s⌉ leaves a gap: the upper-bound parallelism
+advantage over RNNs disappears in the known algorithm, but the lower bound at s ≫ 1 does not rule out
+faster parallel algorithms in principle. For s = O(1) specifically, ⌈k/s⌉ = Θ(k) matches the serial upper
+bound, giving a tight Θ(k) characterization in that sub-regime—comparable to RNNs (which are stuck at
+Θ(k) under (Sanford et al., 2024)’s conditional lower bound requiring RNN width O(N/k6 )).
+
+3.2   When the product bound binds: the bandwidth barrier
+For standard LLM configurations (H = 32, m = 128, p = 16, so Hmp ≈ 6.5 · 104 ), the bandwidth factor
+⌈log2 n/(Hmp)⌉ equals 1 for any realistic n (up to n ≤ 2Hmp ≫ 1019000 ), and Conjecture 3.1 reduces to the
+cache-reachability bound L ≥ ⌈k/s⌉ alone—a near-trivial consequence of the fact that the query token’s
+reachable set grows by at most s per layer.
+    It is natural to ask whether the bandwidth factor can be strengthened. We show that, within a natural
+class of proof techniques, it cannot: any lower bound obtainable via per-window distinguishability counting
+saturates at ⌈k/s⌉ when Hmp ≥ log2 n.
+
+                                                       5
+Definition 3.5 (Per-window distinguishability counting argument). A lower-bound proof is a per-window
+distinguishability counting argument if it decomposes L ≥ W · B, where W = Ω(⌈k/s⌉) is a number of
+windows and B is a per-window depth bound of the form
+                                                           
+                                                   log2 M j
+                                            B ≥               ,
+                                                    Hmp
+
+where M j is a lower bound, at window j, on the number of distinct per-window outputs zτ j that the algorithm
+                                                                                  (ℓ   )
+must distinguish among inputs sharing a common pre-window query-state X0 j−1 . This class includes the
+proof strategy for Conjecture 3.1, all reachability-plus-counting combinations, and finite-precision adaptations
+of (Sanford et al., 2024)’s technique.
+
+Theorem 3.6 (Bandwidth barrier). Let A be any per-window distinguishability counting argument (Defini-
+tion 3.5) applied to PCn,k . Then for each window j, the per-window output count M j satisfies M j ≤ n, so the
+bandwidth factor B derived from A satisfies B ≤ ⌈log2 n/(Hmp)⌉. In particular, when Hmp ≥ log2 n, B ≤ 1,
+and A yields at most L ≥ W = O(⌈k/s⌉), matching the cache-reachability bound.
+    Furthermore, the barrier is structural: any modification of PCn,k that keeps per-window output within [n]
+inherits M j ≤ n and the same saturation.
+
+Remark 3.7 (On the conceptual depth of the barrier). In some sense, Theorem 3.6 is a direct consequence
+of the fact that the per-window output lies in [n], making it look tautological. However, its role is to
+formalize a class of proof techniques (Definition 3.5) and show that the entire class ceilings at ⌈k/s⌉ when
+Hmp ≥ log2 n. This is analogous to formalizing “natural proofs” in circuit complexity: once the class is
+defined, the impossibility within that class is near-immediate, but the formalization itself identifies what
+bypass mechanisms are needed. Our “eight handles” analysis (Section 4.4) systematically confirms that no
+bypass we could identify escapes the class.
+
+Proof. The per-window output of PCn,k is zτ j = π τ j (1) ∈ [n], which takes at most n distinct values as π varies
+(regardless of any conditioning). By the definition of M j (Definition 3.5) as a lower bound on the support size
+of zτ j under some conditioning, we have M j ≤ n. The inequality B ≤ ⌈log2 n/(Hmp)⌉ is then immediate, and
+equals 1 when Hmp ≥ log2 n. The modification claim is immediate: any task with per-window output in a set
+of size ≤ n gives M j ≤ n.
+
+     We discuss in Section 8 what it would take to break this barrier: translating unconditional communication-
+complexity lower bounds for pointer chasing (Nisan and Wigderson, 1993; Yehudayoff, 2020; Mao et
+al., 2025) into Cache-Transformer depth lower bounds without the MPC conjecture (an open problem) or
+genuinely different proof techniques not of the form in Definition 3.5. The barrier is not a proof gap in our
+work; it is a structural obstacle on the current road to depth lower bounds in the standard LLM regime.
+
+3.3   Error amplification under random cache selection
+The empirical observation (Ananthanarayanan et al., 2026) that multi-hop accuracy drops precipitously
+under random cache selection can be partially explained by bounds on the joint success probability of
+windowed pointer doubling. We analyze this algorithm: at each of T = ⌈log2 k⌉ stages, the algorithm needs
+to find a destination dt = π t (1) (for simplicity of exposition we take a consecutive-destination chain; the
+pointer-doubling structure is analogous) in a cache Ct ⊆ [n] of size s. The algorithm succeeds at stage t if
+dt ∈ Ct , and succeeds overall (event E ) if all T stages succeed.
+     We establish three results: a tight exponential bound for oblivious caches, a tight stage-1-dominated
+bound for adaptive caches matched by an explicit construction, and a quantitative separation between the two.
+
+
+                                                        6
+Theorem 3.8 (Oblivious caches: exponential decay in T ). Let π ∼ Unif(Sn ) with n ≥ T + 1. For any oblivious
+cache selection (each Ct chosen without access to π; the Ct may share common randomness),
+                                                        T
+                                                               2T 3
+                                                
+                                                    s
+                                      Pr[E ] ≤              +       .
+                                                  n−T           n
+In the sub-regime where the main term dominates the error term—precisely when sT ≥ 2T 3 nT −1 (equivalently
+(s/n)T ≥ 2T 3 /n)—the bound exhibits exponential decay in T of rate (s/n)T . Outside this sub-regime (e.g.,
+s = o(n) with T = ω(1) and sT growing slower than T 3 nT −1 ) the error term 2T 3 /n dominates and the bound
+degenerates to O(T 3 /n).
+Theorem 3.9 (Adaptive caches: tight Θ(s/n)). Let π ∼ Unif(Sn ) with n ≥ T + 1. For any locality-respecting
+adaptive cache controller (Definition 4.6),
+                                                                s
+                                                      Pr[E ] ≤ .
+                                                                n
+Moreover, this is tight: there is an explicit locality-respecting adaptive controller (“chain-tracking”) achieving
+Pr[E ] ≥ s/n, matching the upper bound with exact equality.
+Corollary 3.10 (Adaptive-oblivious separation). In the regime sT ≥ 2T 3 nT −1 (equivalently, s ≥ (2T 3 )1/T ·
+                   √
+n(T −1)/T ) and T ≤ n/2, in which the main term of Theorem 3.8 dominates the error term, the optimal
+adaptive success probability exceeds the best oblivious success probability by a factor of at least
+                                            opt
+                                      Pr[E ]adaptive
+                                                           
+                                                            n T −1
+                                            opt       ≥ Ω            .
+                                      Pr[E ]oblivious       s
+Outside this regime, the separation is Ω(s/T 3 ), still a non-trivial multiplicative gap.
+Remark 3.11 (What this says about adaptive vs. oblivious eviction). Theorems 3.8 and 3.9 together give a
+sharp answer to why adaptive (heavy-hitter, attention-score) eviction outperforms oblivious (recency, random)
+baselines in practice, as reported by Liu et al. (2025): the two regimes exhibit qualitatively different scaling
+behavior with chain length. Under uniform random cache selection—the worst case for the algorithm—
+oblivious caches see joint success probability decay as (s/n)T , while adaptive caches see decay as only s/n
+(no T dependence). The adaptive controller exploits the structure that learning early chain values reveals
+later ones via locality. Our bound is non-asymptotic and parameter-free: it applies to any locality-respecting
+controller, and the achievability construction demonstrates the bound cannot be improved beyond constants.
+Remark 3.12 (Relation to empirical observations). At n = 16, s = 8, k = 8 (Figure 1c), empirical joint
+success under random (oblivious) cache is ≈ 17.5%. The main term of Theorem 3.8 gives (s/(n − T ))T =
+(8/13)3 ≈ 23.3%, which consistently upper-bounds the good-chain success probability Pr[E good ]; however,
+Theorem 3.8’s full bound (s/(n − T ))T + 2T 3 /n ≈ 361% is vacuous (exceeds 1) at this small n due to the error
+term. We distinguish two senses of “non-vacuous”: (a) bound < 1, requiring only 2T 3 /n < 1, i.e., n > 2T 3
+(n ≥ 55 for T = 3); (b) main term dominates error term, i.e., (s/n)T > 2T 3 /n, equivalently sT /nT −1 > 2T 3 ,
+i.e., n < sT /(T −1) /(2T 3 )1/(T −1) [equivalently n > 2T 3 /(s/n)T in the fixed-ratio parameterization]. For T = 3
+and s/n = c constant, this gives n > 2T 3 /cT = 54/c3 ; e.g., c = 1/2 requires n > 432, while c ≈ 1 (near-full
+cache) gives n ≳ 54. In sense (a) the theorem rules out 100% success; in sense (b) the theorem’s (s/n)T
+decay rate is the informative feature. The main term alone empirically upper-bounds good-chain success for
+all n ≥ T + 1. Quantitative sharpness of the full bound requires moderate-to-large n.
+
+When the bandwidth factor binds quantitatively. In the barrier regime (Hmp ≥ log2 n), the product
+bound of Conjecture 3.1 would reduce to ⌈k/s⌉ and coincide with the cache-reachability bound. In the
+narrow-model regime (Hmp < log2 n: e.g., H = 1, m = 4, p = 4 giving Hmp = 16; or single-head INT4 with
+m = 16, p = 4, H = 1), the bandwidth factor is strictly greater than 1 and the conjectured product structure is
+quantitatively binding. This regime is increasingly relevant for quantized and edge-deployed models.
+
+                                                         7
+4     Proofs
+4.1    Cache reachability
+The first ingredient is a size bound on the set of input tokens on which the query-token representation can
+functionally depend. This set grows by at most s per layer, reflecting the fact that the cache at each layer adds
+s new indices to the query’s reachable support.
+Lemma 4.1 (Reachability). Define the functional-dependence set Dℓ (0)(π) ⊆ [N] of the query token at layer
+                                                                   (ℓ)
+ℓ, for each input π, as the minimal set of input tokens such that X0 (π) is a function of {x j (π) : j ∈ Dℓ (0)(π)}
+together with the (deterministic) weights and cache-selection rules. The set is defined pointwise in π (not
+as a single fixed set covering all π), which is the right notion for adaptive controllers where the reachable
+support varies with the input. Then
+
+                                                 Dℓ (0) ⊆ Dℓ−1 (0) ∪ S(ℓ) ∪
+                                                                                               [
+                           D0 (0) = {0},                                                                     Dℓ−1 ( j),
+                                                                                              j∈S(ℓ)
+
+and in particular
+                                                 |DL (0)| ≤ 1 + L · s.                                                            (2)
+                                                                                                       (ℓ)                (ℓ−1)
+Proof. The first inclusion is immediate from the attention update rule: X0 is computed from X0                     and the
+                                (ℓ)                                     (ℓ−1)       (ℓ)
+keys/values of tokens j ∈ S , which in turn are functions of X j              . So X0 depends only on layer-(ℓ − 1)
+                                           (ℓ)
+representations of tokens in {0} ∪ S , each of which depends only on inputs in Dℓ−1 ( j).
+                                                                                              S
+    For the size bound (2), the naive induction on the recursion above does not work: j∈S(ℓ) Dℓ−1 ( j) can be
+                                                                                                                         ′
+as large as |S(ℓ) | · max j |Dℓ−1 ( j)|. Instead, we argue differently. For each layer ℓ′ ∈ {1, . . . , L}, let Nℓ′ = S(ℓ )
+be the set of cache-accessible token indices at that layer. We claim
+                                                                            L
+                                                                            [
+                                               DL (0) ⊆ {0} ∪                      Nℓ′ .                                          (3)
+                                                                           ℓ′ =1
+                                                                                                   ′
+Given (3), the size bound follows immediately: |DL (0)| ≤ 1 + ∑Lℓ′ =1 |S(ℓ ) | ≤ 1 + Ls.
+   To prove (3), we show by induction on ℓ that for every token i ∈ [N],
+                                                                           ℓ
+                                                                           [
+                                                Dℓ (i) ⊆ {i} ∪                    Nℓ′ .                                           (4)
+                                                                          ℓ′ =1
+
+Base case ℓ = 0: D0 (i) = {i}, trivially contained in the right-hand side. Inductive step: by the recursion,
+Dℓ (i) ⊆ Dℓ−1 (i) ∪ S(ℓ) ∪ j∈S(ℓ) Dℓ−1 ( j). By the inductive hypothesis applied to i and to each j ∈ S(ℓ) = Nℓ ,
+                          S
+
+                                                 ℓ−1
+                                                 [                                                      ℓ−1
+                                                                                                        [
+                              Dℓ−1 (i) ⊆ {i} ∪           Nℓ′ ,           Dℓ−1 ( j) ⊆ { j} ∪                     Nℓ′ .
+                                                 ℓ′ =1                                                  ℓ′ =1
+
+Taking the union with Nℓ and using { j} ⊆ Nℓ for j ∈ Nℓ :
+                                                                 ℓ−1
+                                                                 [                         ℓ
+                                                                                           [
+                                     Dℓ (i) ⊆ {i} ∪ Nℓ ∪                 Nℓ′ = {i} ∪               Nℓ′ .
+                                                                 ℓ′ =1                     ℓ′ =1
+
+    Observe that Lemma 4.1 does not depend on how the caches S(ℓ) are chosen—adaptive or oblivious,
+data-dependent or not—because the cache sets enter the bound as sets of indices, and the union argument is
+index-based. This is crucial for the trace-equivalence argument (Lemma 4.10) below.
+
+                                                                   8
+4.2     Bandwidth bound via counting
+Lemma 4.2 (Distinguishability bound). Fix any layer ℓ0 and any value x ∈ Q m
+                                                                           p . Over all inputs π such that
+ (ℓ )
+X0 0 (π) = x, and over all adaptive cache choices, the set
+                                          (ℓ0 +B)                    (ℓ )
+                             ΣB (x) :=    X0       (π) : π such that X0 0 (π) = x
+
+has cardinality at most 2B·Hmp .
+
+Proof. At each layer ℓ, the query-token update takes the form
+                                                                                 !
+                                                             H
+                                    (ℓ)           (ℓ−1)            (ℓ,h) (ℓ,h)
+                                   X0 = φℓ       X0     +   ∑     a0 WO              ,
+                                                            h=1
+
+                                                                    (ℓ,h)
+where φℓ is the deterministic MLP+quantization map and a0                   ∈ Qm
+                                                                               p is the quantized attention output of
+                                                                                         (ℓ,h)
+head h. By Definition 2.1, every intermediate activation—including each a0 —is quantized to p bits per
+coordinate before use, so |Q m       mp
+                              p | ≤ 2 . The softmax attention weights may themselves be computed in
+                                                            (ℓ,h)
+continuous arithmetic, but the attention output vectors a0 are rounded to Q m     p before being added via the
+residual connection; our bound applies to these outputs, not to the internal softmax computation.
+                         (ℓ−1)                         (ℓ)                            (ℓ,1)        (ℓ,H)
+    Thus, given a fixed X0     , the next-layer value X0 is determined by the tuple (a0 , . . . , a0 ) ∈ (Q m H
+                                                                                                            p) ,
+                                                                  (ℓ )
+of which there are at most (2mp )H = 2Hmp . Iterating from X0 0 = x for B layers gives |ΣB (x)| ≤ (2Hmp )B =
+2B·Hmp . (Note that the trivial bound |ΣB (x)| ≤ |Q m     mp also holds for all B ≥ 1, since Σ (x) ⊆ Q m . The
+                                                     p|=2                                     B        p
+B-dependent form 2   B·Hmp  is looser in absolute terms when BH ≥ 1, but it is the form required downstream:
+we use this lemma to prove a lower bound on B, so expressing the reachable-state count as growing with B is
+essential—the trivial 2mp bound is independent of B and cannot force B to be large.)
+
+Remark 4.3 (Why this avoids the softmax objection). We make no claim about how softmax computes
+attention weights. Those weights can be continuous, data-dependent, and arbitrarily complex. Our bound
+applies to the output of attention—an m-dimensional vector quantized to p bits—not to the internal mechanism.
+This is a physical constraint: GPU hardware represents attention outputs in finite precision.
+
+4.3     Sequential windows
+Before presenting the full proof strategy, we record an unconditional lower bound that follows from Lem-
+mas 4.1 and 4.2 alone (no invocation of Lemma 4.11 or Lemma 4.14):
+
+Proposition 4.4 (Unconditional max-bound). Any (L, H, m, p, s)-Cache-Transformer solving PCn,k correctly
+on all inputs with n ≥ 4k satisfies
+                                                                         
+                                    k−1     log2 n                        log2 n
+                     L ≥ max             ,            ≥ max ⌈k/s⌉ − 1,              .
+                                     s      Hmp                           Hmp
+
+Proof. Cache-reachability factor. Fix any π with cycle of 1 of length > k (such π exist for n ≥ k + 1), so
+that z0 = 1, z1 , . . . , zk are pairwise distinct. For the algorithm to output zk (π) = π(zk−1 (π)) correctly, its
+                                (L)                                                                          (L)
+final query-token state X0 must depend on the value π(zk−1 ). By Lemma 4.1 (applied at layer L), X0 is
+determined by π only through π|TL (π) ; in particular, dependence on π(zk−1 ) requires zk−1 ∈ TL (π). Iterating
+the same argument for zk−2 , zk−3 , . . . (since knowing zk−1 = π(zk−2 ) likewise requires zk−2 ∈ TL , and so
+on), we obtain {z0 , z1 , . . . , zk−1 } ⊆ TL (π). These k positions are distinct, so |TL (π)| ≥ k. Combined with
+Lemma 4.1’s upper bound |TL (π)| ≤ 1 + Ls, we get 1 + Ls ≥ k, i.e., L ≥ ⌈(k − 1)/s⌉.
+
+                                                        9
+                                                                                                                       (L)
+     Output-bandwidth factor. A correct algorithm determines zk from the final query-token state X0 , so the
+               (L)
+map π 7→ X0 (π) must take at least n distinct values: for each target value v ∈ [n], there exists a permutation
+πv ∈ Sn with zk (πv ) = v. For v ̸= 1: pick any k + 1 distinct elements 1 = a0 , a1 , . . . , ak−1 , ak = v of [n] (valid
+since n ≥ 4k ≥ k + 1); set πv (ai ) = ai+1 for i = 0, . . . , k − 1, and extend πv arbitrarily to a bijection on [n]. Then
+zi (πv ) = ai for i = 0, . . . , k, so zk = v. For v = 1: take πv with a cycle of length exactly k on {1, a1 , . . . , ak−1 }
+(for any distinct a1 , . . . , ak−1 ∈ [n] \ {1}), i.e., πv (1) = a1 , πv (ai ) = ai+1 for i = 1, . . . , k − 2, and πv (ak−1 ) = 1;
+then zi (πv ) = ai for i = 1, . . . , k − 1 and zk (πv ) = 1 = v. Distinct v’s require distinct final states. By Lemma 4.2
+                                             (0)        (0)
+applied from the fixed initial state X0 , |ΣL (X0 )| ≤ 2L·Hmp , hence 2LHmp ≥ n, i.e., L ≥ ⌈log2 n/(Hmp)⌉.
+
+    Conjecture 3.1 would strengthen this max to a product. The proof strategy occupying the rest of this
+section (Lemmas 4.11–4.19) implements the exit-based argument outlined in Section 3; the probabilistic step
+(⋆) of Lemma 4.11 is left as Open Problem 1. The ⌈(k − 1)/s⌉ cache-reachability factor of Proposition 4.4 is
+strengthened to ⌈k/s⌉ via the sequential-windows argument (Lemma 4.16); since ⌈(k − 1)/s⌉ ≥ ⌈k/s⌉ − 1,
+this is a unit-level refinement and does not affect asymptotics.
+
+Definition 4.5. Partition the chain into W = ⌈k/s⌉ windows. Window j ∈ {1, . . . ,W } covers chain positions
+z( j−1)s , . . . , zmin( js,k) ; its boundary output is zmin( js,k) . For brevity write τ j := min( js, k), so window j’s output
+is zτ j .
+
+Handling adaptive cache: trace equivalence under a locality assumption
+A subtle issue is that the cache controller Cℓ is defined (Definition 2.1) as a deterministic function of all
+layer-(ℓ − 1) representations, not just those in Dℓ−1 (0). A maximally adversarial controller could in principle
+read representations of tokens it has not yet cached, and thereby leak information about out-of-cache tokens
+into its subsequent cache choices. We rule this out with a natural restriction:
+
+Definition 4.6 (Locality-respecting controller). A cache controller Cℓ is locality-respecting if, for every π, the
+                                                    (ℓ−1)                                                    ′
+set S(ℓ) (π) depends only on the representations {X j     (π) : j ∈ Tℓ (π)}, where Tℓ (π) := {0} ∪ ℓ′ <ℓ S(ℓ ) (π)
+                                                                                                    S
+
+is the cache support up to layer ℓ − 1. (This recursive definition is well-defined, as shown in Proposition 4.8
+below.)
+
+Remark 4.7 (Relation to Definition 2.1). Definition 2.1 (model) permits Cℓ to depend on all N representations
+at layer ℓ − 1; Definition 4.6 (locality) further restricts this to positions the algorithm has already touched.
+Our lower bounds (Proposition 4.4, Conjecture 3.1, Theorem 3.6) apply to the locality-respecting class (a
+strict subclass); our upper bound (Theorem 3.2) is realized by a locality-respecting algorithm and hence
+                                                                                (ℓ−1)
+applies to both classes. For positions j ∈ Tℓ \ S(ℓ−1) , the representation X j       is carried forward from the
+last layer at which j participated in attention (residually unchanged); these are the “ghost states” for evicted
+tokens, consistent with KV compression systems in practice.
+
+Proposition 4.8 (Well-definedness of the recursion). The recursive definition is well-defined: for each
+                                                                   (ℓ)
+ℓ ∈ {0, 1, . . . , L}, Tℓ (π), S(ℓ) (π), and all representations X j (π) are deterministic functions of π|Tℓ (π) .
+                                                                                                                 (0)
+Proof. By strong induction on ℓ. For ℓ = 0: T0 (π) = {0} (constant, not a function of π at all); X j (π) = x j (π)
+                                                                                (0)
+is the identity embedding, depending on π only at position j, so X j for j ∈ T0 depends on π|T0 .
+                                                                                              ′
+     For ℓ ≥ 1: assume the proposition holds for all ℓ′ < ℓ. Then Tℓ−1 (π) = {0} ∪ ℓ′ <ℓ−1 S(ℓ ) (π) is a function
+                                                                                      S
+                                                                                                   (ℓ−2)
+of π|Tℓ−2 (π) by the inductive hypothesis applied to ℓ − 1, and S(ℓ−1) (π) is a function of {X j         (π) : j ∈
+Tℓ−1 (π)} by locality. Hence Tℓ (π) = Tℓ−1 (π) ∪ S  (ℓ−1) (π) is a function of π|Tℓ−1 (π) .
+
+
+
+                                                               10
+                               (ℓ)
+    Representations X j for j ∈ Tℓ are computed by attention over S(ℓ) (π) ⊆ Tℓ (π) (by definition of Tℓ ),
+using as keys/values the layer-(ℓ − 1) representations at positions in S(ℓ) . By the inductive hypothesis, these
+representations are functions of π|Tℓ−1 ⊆ π|Tℓ , completing the induction.
+
+    Under this restriction, the controller at layer ℓ only examines representations of tokens it has already
+accessed at some earlier layer. This restriction is satisfied by essentially all KV-compression methods
+(H2O, SnapKV, StreamingLLM, PyramidKV, heavy-hitter variants), and is physically natural: reading
+representations outside the cache would require loading them, defeating the purpose of cache compression.
+We briefly discuss the fully adversarial case in Open Problem 3 in the Discussion section. The lower bounds
+below implicitly assume a locality-respecting controller; this is made explicit in Conjecture 3.1.
+Definition 4.9 (Cache trace). For a fixed algorithm and a fixed input π, the cache trace is T (π) :=
+(S(1) (π), . . . , S(L) (π)), and its support is T (π) := {0} ∪ Lℓ=1 S(ℓ) (π). By Lemma 4.1, |T (π)| ≤ 1 + Ls.
+                                                               S
+
+Lemma 4.10 (Trace equivalence). Fix any algorithm with a locality-respecting controller. Suppose π1 , π2
+                                                                                     (ℓ)         (ℓ)
+satisfy π1 |T (π1 ) = π2 |T (π1 ) . Then T (π1 ) = T (π2 ), T (π1 ) = T (π2 ), and X j (π1 ) = X j (π2 ) for all ℓ ∈
+                                                  (L)               (L)
+{0, . . . , L} and j ∈ T (π1 ). In particular, X0 (π1 ) = X0 (π2 ).
+Proof. Write T1 := T (π1 ). We prove by induction on ℓ ∈ {0, 1, . . . , L} the joint claim
+                   ′                 ′                            (ℓ′ )            (ℓ′ )
+        (Hℓ ): S(ℓ ) (π2 ) = S(ℓ ) (π1 ) for all ℓ′ ≤ ℓ, and X j (π2 ) = X j (π1 ) for all ℓ′ ≤ ℓ and j ∈ T1 .
+                                                                                                      (0)
+   Base case ℓ = 0. The representation claim holds by hypothesis and because X j is a fixed function of x j .
+The cache claim is vacuous at ℓ′ = 0.
+   Inductive step ℓ − 1 ⇒ ℓ. Assume (Hℓ−1 ).
+                                                                                (ℓ−1)
+   Step 1: Cache selection matches. By locality, S(ℓ) (π) depends only on {X j        (π) : j ∈ Tℓ (π)}. By
+             ′             ′                                                                                 (ℓ−1)     (ℓ−1)
+(Hℓ−1 ), S(ℓ ) (π2 ) = S(ℓ ) (π1 ) for ℓ′ < ℓ, so Tℓ (π2 ) = Tℓ (π1 ) =: Tℓ⋆ ⊆ T1 . By (Hℓ−1 ), X j (π2 ) = X j (π1 )
+          ⋆                                                                               (ℓ)
+for j ∈ Tℓ . So the controller’s input tuple is identical under π1 and π2 , hence S (π2 ) = S (π1 ).(ℓ)
+
+    Step 2: Representations on T1 match. With S(ℓ) (π1 ) = S(ℓ) (π2 ) =: S(ℓ) ⊆ T1 , for any j ∈ T1 the update
+                                 (ℓ)          (ℓ−1)            (ℓ−1)
+                                                                          (π), Ki (π),Vi (π)) : i ∈ S(ℓ) }
+                                                                                                             
+                           X j (π) = fℓ X j           (π), {(Xi
+                       (ℓ−1)                                                     (ℓ−1)
+receives inputs X j             (with j ∈ T1 , equal by (Hℓ−1 )) and Xi                    for i ∈ S(ℓ) ⊆ T1 (also equal). Hence
+  (ℓ)            (ℓ)
+X j (π2 ) = X j (π1 ).
+                                                         (L)               (L)
+    This closes the induction. Since 0 ∈ T1 , X0 (π1 ) = X0 (π2 ).
+                                                                                                                        (ℓ−1)
+   The locality assumption is exactly what lets Step 1 close: under a general controller, reading X j                           for
+       / T1 could distinguish π1 from π2 and cause S(ℓ) to diverge.
+some j ∈
+Lemma 4.11 (Existence of a chain-exiting permutation). Fix any algorithm with a locality-respecting
+controller. Suppose L ≤ n/(8s), n ≥ 4k, and τ j ≥ 2 (which excludes only the corner case τ j = 1, i.e., j = 1
+together with min(s, k) = 1). Then there exists a permutation π1 and an index t ⋆ ∈ (τ j−1 , τ j ] such that
+zt ⋆ −1 (π1 ) ∈
+              / T1 := T (π1 ).
+Proof sketch of Lemma 4.11. By Lemma 4.1 and the hypothesis L ≤ n/(8s), |T (π)| ≤ 1 + Ls ≤ n/4 for every
+π, whenever n ≥ 8. We sketch a probabilistic argument; see Remark 4.13 for a discussion of the remaining
+technical step.
+    Under the assumption τ j ≥ 2, let σ j := τ j − 1 ≥ 1 (we use σ j throughout this proof and Remark 4.13 to
+avoid confusion with the window-boundary index τ j−1 , which in general differs from τ j − 1 when s ≥ 2). So
+
+                                                                  11
+zσ j is well-defined and, by distinctness (below), is not the fixed starting position z0 = 1 (which is always in
+T for a correct algorithm; see the proof of Lemma 4.14, Part (c)). Average over π ∼ Unif(Sn ) and consider
+Pr[zσ j (π) ∈ T (π)]. Two facts:
+  • Distinctness. Let Dchain be the event that z0 , . . . , zk are pairwise distinct, equivalently, the cycle of
+     π containing 1 has length > k. For π ∼ Unif(Sn ), the cycle length of 1 is uniform on {1, . . . , n}, so
+     Pr[Dchain ] = 1 − k/n ≥ 3/4.
+ • Marginal of endpoint. Conditional on Dchain and on σ j ≥ 1, by symmetry within the cycle, zσ j (π) is
+   uniform on [n] \ {1}.
+The desired conclusion Pr[zσ j ∈ T ] < 1 would follow from:
+
+                                                                  E[|T (π)|]   n/4
+                      (⋆)      Pr[zσ j (π) ∈ T (π) | Dchain ] ≤              ≤     < 1/3,
+                                                                    n−1        n−1
+giving Pr[zσ j ∈ T ] ≤ 1/3 + 1/4 = 7/12 < 1. Existence of some π1 with zσ j (π1 ) ∈
+                                                                                  / T (π1 ) then follows, and
+        ⋆
+taking t ≤ τ j to be the first chain position outside T (π1 ) proves the lemma.
+
+Remark 4.12 (Corner case τ j = 1). When τ j = 1—that is, j = 1 together with min(s, k) = 1 (so either s = 1
+or k = 1)—Lemma 4.11 is vacuously false: the only candidate t ⋆ = 1 requires z0 = 1 ∈     / T (π), which fails for
+any correct algorithm because 1 ∈ TL is forced by reading π(1) (proof of Lemma 4.14, Part (c)). However,
+this does not affect the proof strategy for Conjecture 3.1: we can directly establish a per-window cost
+ℓ1 − ℓ0 ≥ B − 1 for window 1 (with ℓ0 := 0) via the bandwidth argument alone. Using the definition of ℓ j
+given in the proof strategy below (ℓ j is the earliest layer at which |Tℓ | ≥ τ j , see Section 4.3), window 1’s
+cache support must grow to |Tℓ1 | ≥ 1 = τ1 , which holds already at ℓ1 = 0 since T0 = {0} has size 1; but to
+                                                                                      (0)       (ℓ⋆ )
+additionally determine z1 = π(1) ∈ [n] requires, by Lemma 4.2 applied from X0 , that X0 1 at some layer
+ℓ⋆1 ≤ L takes at least n distinct values, giving ℓ⋆1 ≥ ⌈log2 n/(Hmp)⌉ = B. Such ℓ⋆1 exists and satisfies ℓ⋆1 ≤ L:
+                   (L)
+the final state X0 must determine zk , and for k ≥ 1 distinguishing any two π, π ′ with zk (π) ̸= zk (π ′ ) requires
+   (L)         (L)          (L)
+X0 (π) ̸= X0 (π ′ ), so X0 takes at least n distinct values (all n outputs are realized; see Proposition 4.4’s
+output-bandwidth argument for the explicit construction). Hence L ≥ ℓ⋆1 ≥ B. For k = 1: W = 1 and this
+already establishes the product bound L ≥ B = ⌈k/s⌉ · B (trivially, since ⌈1/s⌉ = 1). For s = 1, k ≥ 2: combine
+with the j ≥ 2 windows handled by Lemma 4.11 to obtain the full W · B product bound.
+Remark 4.13 (A technical gap in Lemma 4.11). The proof sketch above reduces Lemma 4.11 to inequality
+(⋆). Establishing (⋆) requires controlling the joint distribution of (T (π), zσ j (π)) conditional on Dchain , where
+σ j := τ j − 1. Both quantities are π-measurable, and for an adaptive, label-sensitive algorithm they are not
+independent in general: the algorithm’s cache trajectory could in principle correlate with specific chain values.
+A naive union bound yields only Pr[zσ j ∈ T |D] ≤ E[|T |]/ Pr[D] ≤ n/3, which is too weak; tightening to (⋆)
+appears to require either a second-moment argument specific to the input distribution or a Yao-principle
+reduction against an explicit adversary.
+     Status of Conjecture 3.1. Lemmas 4.1, 4.2, 4.14, 4.16, 4.19 are proved without hidden probabilistic
+assumptions. Lemma 4.17 (Window incompressibility) depends on Lemma 4.11 (it invokes the existence of a
+window- j exit) and therefore inherits the gap. The proof strategy of Section 4.3 is therefore complete modulo
+(⋆): establishing (⋆)—either by proving it for the uniform distribution or by exhibiting an adversarial family
+on which the conclusion of Lemma 4.11 holds directly—would turn Conjecture 3.1 into a theorem. Closing
+the gap is stated as Open Problem 1 in Section 8.
+     Partial progress: unconditional cache-coverage bound in a restricted parameter subregime, under
+a stronger controller assumption. We can establish Lemma 4.11 unconditionally under (i) the additional
+parameter hypothesis s·2mp < 8 (equivalent to mp < 3−log2 s) and (ii) the stronger controller assumption that
+                                                            (ℓ−1)                               (ℓ−1)
+Cℓ is a deterministic function of the query-token state X0        alone (rather than of all {X j      : j ∈ Tℓ } as in
+
+
+                                                         12
+Definition 4.6). This query-only controller class is strictly narrower than locality-respecting but still includes
+all known KV-compression heuristics that dispatch cache selection from a single “read-head” computation.
+Under (ii), the cache at each layer Cℓ takes at most 2mp distinct values across possible query states, yielding
+at most s · 2mp distinct (state, slot) pairs, hence at most s · 2mp distinct positions in [n] that can ever appear in
+the cache at layer ℓ across different π. Summed over ℓ layers: at most ℓ · s · 2mp distinct (layer, position) pairs.
+For chain-in-trace (zt (π) ∈ T (π) for all π ∈ D and all t ≤ τ j − 1), every chain value zt (π) for every π must
+be a (layer, position) pair reached. Over π, zt takes ∼ n distinct values, so we need ℓ · s · 2mp ≥ n − 1, i.e.,
+ℓ ≥ (n − 1)/(s · 2mp ). Combined with the hypothesis L ≤ n/(8s) of Lemma 4.11: under (i) s · 2mp < 8, we get
+ℓ ≥ (n − 1)/(s · 2mp ) > (n − 1)/8 > n/(8s) ≥ L for s ≥ 1 and n ≥ 2, contradicting ℓ ≤ L—so exit exists. The
+subregime s · 2mp < 8 is restrictive; it captures only very low-precision scenarios (e.g., p = 1, m = 3, s = 1,
+giving mp = 3). This counting argument does not extend to moderate mp (the cumulative cache coverage
+L · s · 2mp grows beyond n, permitting chain-in-trace without contradicting the layer budget), and it does
+not directly extend to general locality-respecting controllers (where Cℓ can depend on all representations at
+positions in Tℓ , so the cache-choice space is 2mp|Tℓ | rather than 2mp ).
+     We flag this gap explicitly here, rather than obscure it, to give the reader an accurate picture of which
+parts of the argument are rigorous and which depend on a yet-unverified probabilistic step.
+Lemma 4.14 (Adversarial permutation with preserved trace). Fix any algorithm with a locality-respecting
+controller. Fix a reference π1 and exit index t ⋆ ∈ (τ j−1 , τ j ] with u := zt ⋆ −1 (π1 ) ∈
+                                                                                           / T1 := T (π1 ), as provided by
+Lemma 4.11. Define the target set
+
+                                 D := [n] \ T1 ∪ {z0 , . . . , zk }(π1 ) ∪ π1 (T1 ) ,
+                                                                                      
+
+of size |D| ≥ n − 2(1 + Ls) − (k + 1). For each d ∈ D, there is a permutation πd such that:
+  (a) πd |T1 = π1 |T1 ;
+                                                                                                 (ℓ)             (ℓ)
+   (b) by (a) and Lemma 4.10, T (πd ) = T (π1 ), T (πd ) = T1 , and X0 (πd ) = X0 (π1 ) for all ℓ;
+   (c) zt ⋆ (πd ) = d, and distinct d, d ′ ∈ D yield distinct zt ⋆ (since zt ⋆ (πd ) = d).
+Proof. Construction of πd . For d ∈ D, observe π1−1 (d) ∈
+                                                        / T1 : if π1−1 (d) ∈ T1 , then d ∈ π1 (T1 ), contradicting
+d∈/ π1 (T1 ). Define
+
+                 πd (u) := d,            πd (π1−1 (d)) := π1 (u),                                          / {u, π1−1 (d)}.
+                                                                                πd (x) := π1 (x) for all x ∈
+
+This is a value-swap (transposition in the codomain) of π1 , hence a permutation. Both modified positions lie
+in [n] \ T1 , so πd |T1 = π1 |T1 , giving (a). Part (b) follows from (a) by Lemma 4.10.
+       Part (c). We track the chain of πd up to step t ⋆ . By Lemma 4.11, there exists an exit step in window
+ j, so (taking π1 to realize this) the π1 -orbit of z0 = 1 has length at least t ⋆ , i.e., z0 , z1 , . . . , zt ⋆ −1 are pairwise
+distinct under π1 . The chain up to zt ⋆ −1 is the same under πd as under π1 : this uses that πd agrees with π1 on
+positions z0 , z1 , . . . , zt ⋆ −2 . To see this: first note z0 = 1 ∈ T1 . This is because a correct algorithm must compute
+                                                                                                   (L)
+z1 = π(1) as part of any multi-hop chain for k ≥ 1; by Lemma 4.1, X0 depends on π only through π|TL ,
+so the state cannot depend on π(1) unless 1 ∈ TL . Since the same argument applies at the first layer where
+the chain is consulted—and in particular whenever π1 has a chain-in-trace prefix of positive length—1 ∈ T1 .
+Now, πd changes π1 only at u = zt ⋆ −1 (π1 ) and at π1−1 (d); neither of these positions lies on the π1 -chain
+prefix z0 , . . . , zt ⋆ −2 . For u = zt ⋆ −1 : excluded by definition of t ⋆ (the first chain position outside T1 ; all earlier
+z0 , . . . , zt ⋆ −2 either lie in T1 or precede u in the orbit, and u itself is the (t ⋆ − 1)-th iterate, not an earlier one).
+For π1−1 (d): we have d ∈              / {z1 , . . . , zk }(π1 ) by construction, which (together with π1 ’s injectivity on the orbit)
+             −1
+gives π1 (d) ∈         / {z0 , . . . , zk−1 }(π1 ), in particular not among z0 , . . . , zt ⋆ −2 . Hence πd |{z0 ,...,zt ⋆ −2 } = π1 |{z0 ,...,zt ⋆ −2 } ,
+and the πd -chain from z0 coincides with the π1 -chain up to zt ⋆ −1 , with zt ⋆ (πd ) = πd (zt ⋆ −1 ) = πd (u) = d by
+construction.
+
+                                                                          13
+    At step t ⋆ : zt ⋆ (πd ) = πd (zt ⋆ −1 (πd )) = πd (u) = d.
+    For distinct d, d ′ ∈ D, we get distinct zt ⋆ values, as claimed.
+
+Remark 4.15 (Stopping at t ⋆ vs. reaching τ j ). Lemma 4.14 gives distinctness of zt ⋆ , not directly zτ j . When
+t ⋆ = τ j , this is what we want. When t ⋆ < τ j , the chain continues from d for τ j −t ⋆ more steps before reaching
+zτ j , and a priori two different d, d ′ ∈ D could produce the same zτ j through a chain collision (e.g., if d lies in
+a 2-cycle of π1 ).
+       We avoid this in two steps, both developed in the proof of Lemma 4.17:
+
+ (i) Fix the first-exit step t0⋆ by pigeonhole. The set N of permutations with a window- j exit partitions by
+     first-exit step into N = t∈(τ j−1 ,τ j ] Nt (at most s parts). By pigeonhole at least one Nt0⋆ has density
+                                  F
+
+     ≥ 1/s within N . Restrict to π1 ∈ Nt0⋆ .
+                                                                            √
+(ii) Restrict further to π1 with no short non-principal cycles. For s ≤ n/4, permutations with all non-
+     principal cycles of length > s form a positive-density subset of the conditioned ensemble.
+
+    Both restrictions reduce the set of valid reference permutations we may choose, but once a single valid
+π1 is fixed, the clean-target counting of Lemma 4.17 gives distinct zτ j values across the entire clean set of
+targets—no 1/s loss propagates to the distinct-value count. The O(H log s) gap between Conjecture 3.1 and
+Theorem 3.2 is thus attributable entirely to the upper bound’s log2 (2s) factor (from windowed doubling’s
+inner loop), not to the lower-bound proof.
+                                                                  √
+Lemma 4.16 (Windows are sequential). Assume n ≥ 4k and s ≤ n/4. Suppose the algorithm, at layer ℓ j ,
+                                 (ℓ )
+produces a representation X0 j that determines zτ j . Then ℓ j · s ≥ τ j = min( js, k). In particular, ℓ j ≥ j when
+                                 √
+js ≤ k. (Outside the regime s ≤ n/4, Proposition 4.4 unconditionally gives ℓ j · s ≥ τ j − 1; the unit-level
+strengthening here follows the proof strategy of Lemma 4.17.)
+                              (ℓ )
+Proof. By Lemma 4.1, X0 j depends only on inputs in Dℓ j (0) ⊆ T (π). Suppose for contradiction ℓ j s < τ j .
+Then |T (π)| ≤ 1 + ℓ j s < 1 + τ j , so the chain z0 , z1 , . . . , zτ j contains at least one token zt ∈ / T (π).
+      Fix such a π = π1 additionally satisfying the cycle-structure restriction of Lemma 4.17 (all non-principal
+                                                                                                                      √
+cycles of π1 have length > s). Such π1 exist in the conditioned ensemble with positive density for s ≤ n/4.
+Take the smallest t ∈ {1, . . . , τ j } with zt−1 (π1 ) ∈   / T1 := T (π1 ). Since n ≥ 4k and |T1 | ≤ 1 + ℓ j s ≤ 1 + Ls, the
+complement D := [n] \ (T1 ∪ {z0 , . . . , zk } ∪ π1 (T1 )) has size |D| ≥ n − 2(1 + Ls) − (k + 1) ≥ n/2 − k − O(1)
+in the regime L ≤ n/(8s) (otherwise L ≥ k/s already holds and the lemma is vacuous).
+      Apply Lemma 4.14 to π1 and target d ∈ D: it yields πd with πd |T1 = π1 |T1 , T (πd ) = T (π1 ), and
+by part (c), zt ⋆ (πd ) = d. Since d ∈     / {z0 , . . . , zk }(π1 ), we have zt ⋆ (πd ) = d ̸= zt ⋆ (π1 ). By Lemma 4.10,
+  (ℓ j )        (ℓ j )
+X0 (πd ) = X0 (π1 ).
+      We now convert this distinctness at t ⋆ into distinctness at τ j for at least one d ∈ D. When t ⋆ = τ j :
+immediate. When t ⋆ < τ j : by the clean-target counting in the proof of Lemma 4.17, under the cycle-structure
+                                                                                                           τ −t ⋆
+restriction on π1 , at most s values of d ∈ D (“orbit hits u” case) fail to satisfy zτ j (πd ) = π1 j (d); the “orbit
+hits π1−1 (d)” case is excluded by the cycle restriction. Since |D| ≥ n/2 − k − O(1) > s in the regime n ≥ 4k
+           √                                                                    τ −t ⋆                                  τ −t ⋆
+and s ≤ n/4, at least one clean d ∈ D exists; for it zτ j (πd ) = π1 j (d) ̸= zτ j (π1 ) (by injectivity of π1 j
+                                                      (ℓ )          (ℓ )
+together with d ̸= zt ⋆ (π1 )). Combined with X0 j (πd ) = X0 j (π1 ), this contradicts the assumption. Hence
+ℓ js ≥ τ j.
+
+    Lemma 4.16 is only a statement about the earliest layer at which window j’s output can appear. To get
+the lower bound on total depth, we also need to control the number of layers that window j consumes after
+window j − 1’s output has been resolved. This is the content of Lemma 4.17 and Lemma 4.19 below.
+
+
+
+                                                             14
+Lemma 4.17 (Window incompressibility). Assume n ≥ 4k and that the cache controller is locality-respecting
+(Definition 4.6). For any window index j ∈ {1, . . . ,W }, there exist a layer ℓ† ≤ L and a value x† ∈ Q m
+                                                                                                         p such
+                             (ℓ† )
+that, letting Π† := {π : X0 (π) = x† }:
+                                        (0)
+   (i) for j = 1: ℓ† = 0 and x† = X0 is the fixed initial state (so Π† = Sn );
+  (ii) for j ≥ 2: ℓ† = ℓ j−1 (the resolution layer of window j − 1).
+                                                      √
+In both cases, under the additional hypothesis s ≤ n/4, zτ j takes at least ⌊n/2⌋ − k − O(s) distinct values
+as π ranges over Π† . In particular, this is ≥ n/4 for n ≥ n0 sufficiently large.
+Proof. By Lemma 4.11 (conditional on step (⋆), Remark 4.13), there exists a reference π1 with window- j
+chain exit. The exit index t ⋆ ∈ (τ j−1 , τ j ] provided by Lemma 4.11 is not generally τ j , so we need an additional
+step to fix t ⋆ . By the pigeonhole argument of Remark 4.15, among the permutations N satisfying the exit
+property, there exists at least one exit index t0⋆ ∈ (τ j−1 , τ j ] such that |Nt0⋆ |/|N | ≥ 1/s; we restrict attention to
+such π1 ∈ Nt0⋆ . We do not assume t0⋆ = τ j .
+                                              (ℓ† )
+    Set ℓ† per cases (i)/(ii) and x† := X0 (π1 ) (in case (i), x† is the constant initial state, automatically).
+    Apply Lemma 4.14 to this π1 with exit index t ⋆ = t0⋆ . It produces a target set D of size ≥ n − 2(1 +
+Ls) − (k + 1) ≥ n/2 − k − O(1). Lemma 4.14(c) gives zt0⋆ (πd ) = d with distinctness across d ∈ D, and
+                           (ℓ† )
+Lemma 4.14(b) gives X0 (πd ) = x† , so πd ∈ Π† .
+    The conclusion we want is distinctness of zτ j , not of zt0⋆ . When t0⋆ = τ j these coincide. When t0⋆ < τ j ,
+distinct zt0⋆ values could in principle produce coinciding zτ j via chain collision after the exit step. We now
+                                                                √
+count collision-inducing targets under the hypothesis s ≤ n/4.
+    For d ∈ D: Lemma 4.14 constructs πd by swapping values of π1 at u := zt0⋆ −1 (π1 ) and wd := π1−1 (d)
+only. Write ∆ := τ j − t0⋆ ≤ s − 1. The chain of πd starting from d = zt0⋆ (πd ) follows π1 ’s iterations from d
+until it hits one of the two swapped positions. Call d ∈ D clean if the π1 -orbit d, π1 (d), π12 (d), . . . , π1∆−1 (d)
+is disjoint from {u, wd }. For clean d, πd ’s chain from d coincides with π1 ’s chain from d for the first ∆
+iterations, yielding zτ j (πd ) = π1∆ (d), which is an injective function of d since π1 is a permutation.
+    We bound |D \ clean| by two contributions:
+ (i) Orbit hits u: π1r (d) = u for some r ∈ [0, ∆ − 1], i.e., d ∈ {π1−r (u) : r ∈ [0, ∆ − 1]}, at most ∆ ≤ s values.
+(ii) Orbit hits wd = π1−1 (d): π1r (d) = π1−1 (d) for some r ∈ [0, ∆ − 1], i.e., π1r+1 (d) = d, i.e., d lies in a
+     π1 -cycle of length dividing r + 1 ∈ [1, ∆]. The number of such d ∈ [n] is at most ∑ℓ divides some r+1∈[1,∆] ℓ ·
+     cℓ (π1 ) ≤ ∑ℓ≤∆ ℓ · cℓ (π1 ) ≤ ∆ · n ≤ sn in worst case, where cℓ (π1 ) is the number of π1 -cycles of length ℓ.
+     This worst-case bound is too weak.
+To control (ii), we restrict attention to reference permutations π1 whose non-principal cycles all have length
+> s. For uniform π1 ∈ Sn conditioned on Dchain (cycle of 1 has length > k), the probability of having no
+non-principal cycle of length ≤ s is a positive density ρs > 0 (not uniform in s: ρs decreases as s grows,
+                                      √
+but positivity for each fixed s ≤ n/4 is what we need). By classical cycle-structure asymptotics (e.g.,
+Arratia–Tavaré), the number of cycles of each length ℓ is approximately Poisson with mean 1/ℓ for ℓ ≤ n1/2 ,
+so the probability of having zero non-principal cycles of length ≤ s satisfies ρs ≈ ∏sℓ=1 e−1/ℓ ≥ (es)−1 for
+       √                                           √
+s = o( n) (valid under our precondition s ≤ n/4). Thus a valid reference permutation π1 (one satisfying
+both the exit condition of Lemma 4.11 and the cycle-structure restriction) exists so long as the first-exit-step
+pigeonhole density 1/s combined with ρs ≥ (es)−1 gives positive probability; this holds throughout the
+precondition regime. Once a valid π1 is fixed, neither the first-exit-step pigeonhole nor the cycle-structure
+restriction propagates into the distinct-value count of zτ j (see final paragraph of proof and Remark 4.15).
+    Under this restriction, contribution (ii) vanishes (no short non-principal cycles), so |D \ clean| ≤ s. Hence
+|clean| ≥ |D| − s ≥ n/2 − k − s, and the injective map d 7→ π1∆ (d) on clean d gives ≥ n/2 − k − s distinct
+values of zτ j (πd ) on Π† . Note: the first-exit-step pigeonhole and cycle-structure restriction only reduce the
+
+                                                           15
+number of valid reference permutations π1 ; once a single valid π1 is fixed, the distinct-value count of zτ j over
+the resulting {πd : d ∈ clean} ⊆ Π† is |clean| directly, with no 1/s factor. Thus the distinct-value count is
+                                        √
+≥ n/2 − k − s ≥ n/4 in the regime s ≤ n/4 and n ≥ 4k for n sufficiently large.
+            √
+    For s > n/4, the cycle-restriction argument degrades and the product bound is not guaranteed by this
+proof strategy; we fall back to Proposition 4.4, consistent with the regime condition of Conjecture 3.1.
+
+Remark 4.18 (Effect on Conjecture 3.1’s constant). The distinct-value count n/2 − k − s ≥ n/4 gives a
+bandwidth factor of ⌈log2 (n/4)/(Hmp)⌉ = ⌈(log2 n − 2)/(Hmp)⌉, matching Ω(log2 n/(Hmp)) up to an
+additive O(1) in the numerator. No log s loss appears in the distinct-value count. (The O(H log s) gap between
+Conjecture 3.1 and Theorem 3.2 is therefore attributable to the upper bound’s log2 (2s) factor from windowed
+doubling’s inner loop, not to the lower-bound proof strategy.) In particular, Conjecture 3.1’s statement
+                                                                                                    √
+L = Ω(⌈k/s⌉ · ⌈log n/(Hmp)⌉) holds (modulo (⋆)) with a universal constant c in the regime s ≤ n/4.
+                                                      √
+Lemma 4.19 (Per-window cost). For n ≥ 4k, s ≤ n/4, and a locality-respecting controller, any correct
+algorithm must satisfy ℓ j − ℓ j−1 ≥ B − 1 for every j ∈ {1, . . . ,W }, where
+                                                                
+                                                         log2 n
+                                                B :=
+                                                         Hmp
+
+and ℓ0 := 0. More precisely, B′ := ℓ j − ℓ j−1 ≥ ⌈log2 (⌊n/2⌋ − k − s)/(Hmp)⌉ ≥ ⌈(log2 n − 2)/(Hmp)⌉ ≥
+B − 1; the additive −1 is O(1) and is absorbed into the universal constant. No log2 s loss appears.
+                                              √
+Proof. By Lemma 4.17, in the regime s ≤ n/4 there exist ℓ† and x† such that zτ j takes at least M :=
+                                                        (ℓ† )
+⌊n/2⌋ − k − s ≥ n/4 distinct values on Π† := {π : X0 (π) = x† }, for n ≥ n0 sufficiently large. In case j ≥ 2,
+ℓ† = ℓ j−1 ; in case j = 1, ℓ† = 0 = ℓ0 .
+    A correct algorithm maps each distinct zτ j to a distinct final query-token state (otherwise two inputs with
+                                                                                                                  (ℓ )
+different correct answers would produce the same output), so in particular at layer ℓ j , the representation X0 j
+must take at least M distinct values on Π† . By Lemma 4.2 with starting state x† and B′ := ℓ j − ℓ† layers of
+evolution,
+                                                              ′
+                                         M ≤ |ΣB′ (x† )| ≤ 2B Hmp ,
+which gives B′ ≥ ⌈log2 M/(Hmp)⌉ ≥ ⌈(log2 n − 2)/(Hmp)⌉ ≥ B − 1 where B := ⌈log2 n/(Hmp)⌉. Thus
+ℓ j − ℓ j−1 ≥ B − 1 (with ℓ0 = 0 for j = 1); the additive −1 is absorbed into the universal constant of
+Conjecture 3.1.
+
+Remark 4.20 (Dense regime n = O(k)). The adversarial construction of Lemma 4.17 requires n ≥ 4k. In the
+dense regime n = O(k), Proposition 4.4’s unconditional bound L ≥ max(⌈(k − 1)/s⌉, ⌈log2 n/(Hmp)⌉) still
+applies, giving L = Ω(⌈k/s⌉). The strengthening from ⌈(k − 1)/s⌉ to ⌈k/s⌉ via Lemma 4.16 applies in the
+          √
+same s ≤ n/4 regime as Conjecture 3.1 (since Lemma 4.16’s proof also invokes the clean-target counting
+of Lemma 4.17); in particular, this unit-level strengthening requires the cycle-structure restriction and is not
+claimed for general s.
+
+Proof strategy for Conjecture 3.1, modulo (⋆). Assuming the conclusion of Lemma 4.11 (exit exists at every
+                                           √
+window) and the regime n ≥ 4k, s ≤ n/4, we combine Lemma 4.16 and Lemma 4.19. Setting ℓ0 := 0,
+define ℓ j as the earliest layer ℓ ∈ {0, 1, . . . , L} such that |Tℓ (π)| ≥ τ j + 1 for every π in some non-empty
+set Π†j relevant to window j (the set of π satisfying Dchain and consistent with a fixed prefix state x† at the
+resolution layer of window j − 1, as in Lemma 4.17). This definition makes ℓ j well-defined for every j ≤ W :
+since |TL (π)| ≥ τ j + 1 for some π ∈ Π†j is necessary for a correct algorithm (by Lemma 4.1 applied to that π’s
+chain through zτ j to the final output zk ), the set of layers satisfying the condition is non-empty and contains L;
+its minimum is ℓ j . Moreover, ℓ j is monotone in j (since τ j is), so ℓ0 ≤ ℓ1 ≤ · · · ≤ ℓW ≤ L. With this definition,
+
+                                                         16
+Lemma 4.16 gives ℓ j · s ≥ τ j (rephrased: at layer ℓ j , |Tℓ j | ≤ 1 + ℓ j s must be ≥ τ j + 1, i.e., ℓ j · s ≥ τ j ), and
+Lemma 4.19 gives ℓ j − ℓ j−1 ≥ B − 1 where B := ⌈log2 n/(Hmp)⌉.
+      Now combine:
+      (a) Sequentiality (Lemma 4.16): ℓ j · s ≥ τ j for each j; in particular ℓW ≥ W when τW = k.
+      (b) Per-window cost (Lemma 4.19): ℓ j −ℓ j−1 ≥ B−1 for each j ∈ {1, . . . ,W }, where B := ⌈log2 n/(Hmp)⌉.
+      Summing (b) over j = 1, . . . ,W with ℓ0 = 0 gives
+                                  W                                          
+                                                              k    log2 n       1
+                   L ≥ ℓW = ∑ (ℓ j − ℓ j−1 ) ≥ W · (B − 1) ≥    ·          · 1−     .
+                            j=1                               s    Hmp          B
+                                      √
+For n ≥ n0 := 100 (which ensures n/4 ≤ n/16, hence k + s ≤ n/4 + n/16 ≤ n/3, hence ⌊n/2⌋ − k − s ≥
+n/6 ≥ n0 /6 ≥ 16) and log2 n > Hmp (so that B ≥ 2; this is the condition for the bandwidth factor to be
+non-trivial—otherwise ⌈log2 n/(Hmp)⌉ = 1 and the product bound reduces to cache reachability, already
+covered by Proposition 4.4), we have 1 − 1/B ≥ 1/2, yielding
+                                                                
+                                                   1 k      log2 n
+                                            L ≥ ·        ·           ,
+                                                   2 s      Hmp
+                                                      √
+i.e., Conjecture 3.1’s statement with c = 1/2. For s > n/4, the product-structure statement is not guaranteed
+by this proof strategy and we fall back to Proposition 4.4’s max-bound, as stipulated in the Conjecture 3.1
+precondition.
+     The derivation uses the conclusion of Lemma 4.11 (existence of exit at every window); since Lemma 4.11
+is left as Open Problem 1, this establishes Conjecture 3.1 modulo (⋆) rather than unconditionally. No log2 s
+loss appears in this derivation: the clean-target counting of Lemma 4.17 reduces the set of valid reference
+permutations (via first-exit-step pigeonhole and cycle-structure restriction), but once a single valid π1 is fixed,
+the distinct-value count of zτ j is Ω(n) directly.
+
+Why the product (not max) bound holds. The fact that each of the W windows requires B layers between
+resolutions, not just total, is what gives the product W · B rather than max(W, B). Lemma 4.19 is essential:
+window j’s resolution cannot be pipelined within the B layers devoted to window j − 1, because to distinguish
+among the Ω(n/s) possible values of zτ j requires B fresh layers past ℓ j−1 .
+
+4.4     Remarks on Theorem 3.6
+The proof of Theorem 3.6 was given in Section 3 following the theorem statement. Here we collect additional
+commentary on the barrier and the search for bypasses.
+Remark 4.21 (Breaking the barrier). Theorem 3.6 does not rule out lower bounds outside the class of
+Definition 3.5. Three natural avenues remain:
+1. Unconditional communication-complexity lower bounds: the pointer chasing problem has been studied in
+   multi-party communication models. Nisan and Wigderson (1993) proved a Ω̃(n/k2 ) lower bound on the
+   k-round randomized communication complexity of k-hop pointer chasing; (Yehudayoff, 2020) improved
+   this to Ω̃(n/k − k log n), essentially matching Klauck’s earlier randomized lower bound and tight up to
+   the k log n additive term relative to Nisan-Wigderson’s Õ(n/k) upper bound; (Mao et al., 2025) closed
+   the remaining log n gap to Ω(n/k + k) via gadgetless lifting. These CC bounds are unconditional. What
+   remains open is the lifting: translating such a CC bound into an unconditional Cache-Transformer depth
+   lower bound without invoking (Sanford et al., 2024)’s MPC-conjecture reduction, which would bypass
+   Definition 3.5.
+
+
+                                                            17
+                                                                 (ℓ)                                       (ℓ)
+2. Joint-state arguments: counting over the joint state (Xi )i∈S(ℓ) rather than the single state X0 . The
+   joint state has capacity smp > Hmp whenever s > H, potentially escaping the per-layer bandwidth limit.
+                                       (L)
+   However, in the PCn,k task only X0 decodes to the output, so arguments coupling to joint cache states
+   require additional task structure (e.g., requiring multiple output tokens or global statistics).
+3. Information-theoretic multi-output tasks: tasks whose output is Ω(Hmp) bits (e.g., requiring Ω(Hmp/ log n)
+   chain values as simultaneous outputs at layer L) can give L ≥ log(output)/(Hmp) = Ω(1) from informa-
+   tion alone. Such tasks deviate from PCn,k as stated, but may be natural models of multi-hop reasoning in
+   different settings.
+Each of these is a distinct open problem.
+Remark 4.22 (Exhaustive search for bypass arguments). We considered eight alternative approaches to
+escape the barrier within counting-based arguments: (i) asymmetric rounds (parallel reasoning at multiple
+token positions); (ii) adversarial online streaming (cache commitment before seeing the rest of the input);
+(iii) query/cache capacity asymmetry (smp vs mp); (iv) counting distinguishability at non-query tokens;
+(v) pebbling-game time-space tradeoffs; (vi) direct-sum and XOR lemmas for independent task instances;
+(vii) communication-complexity fooling-set arguments, in particular round-elimination lower bounds for
+pointer chasing of the Duris et al. (1987) style; and (viii) average-case (random-π) hardness. Each approach
+either saturates at ⌈k/s⌉ or yields a strictly weaker bound (e.g., (vii) via unconditional MPC bounds gives
+log k/s, weaker than k/s for k ≥ 2). We omit the detailed case-by-case analysis; the unified conclusion is the
+per-window structural limit formalized by Theorem 3.6.
+
+4.5     Proof sketch of Theorem 3.2
+Serial construction. At each of k outer layers, the query token performs a single content-based lookup: its
+current slot encodes the current zt , keys encode token identities i, values encode payloads π(i), and the
+attention output becomes the next zt+1 . Implementing one lookup requires O(⌈log2 n/(mp)⌉) sub-layers
+to encode/decode n-ary pointers in m-dimensional p-bit vectors (standard construction, e.g., via binary
+decomposition). Total: L = O(k⌈log2 n/(mp)⌉).
+    Windowed pointer doubling. Partition the chain into W = ⌈k/s⌉ windows of size s each. Within each
+                                                       t
+window, apply pointer doubling: at stage t, compute π 2 on the window’s starting token using ⌈log2 s⌉ stages,
+so window j consumes O(⌈log2 s⌉ · ⌈log2 n/(mp)⌉) layers. Total: L = O(⌈k/s⌉ · ⌈log2 s⌉ · ⌈log2 n/(mp)⌉).
+Take the minimum of the serial and windowed costs.
+
+4.6     Proofs of Theorems 3.8, 3.9, and Corollary 3.10
+Fix π ∼ Unif(Sn ). Let zt := π t (1) for t ≥ 0, with z0 = 1. The cache at stage t is Ct ⊆ [n], |Ct | = s. Success at
+stage t is Et := {zt ∈ Ct }, joint success is E := ∩t=1
+                                                     T E.
+                                                         t
+
+
+4.6.1    Oblivious case: exponential decay (Theorem 3.8)
+The key idea is direct enumeration of (z1 , . . . , zT ) trajectories rather than a chain-rule decomposition. Because
+π is uniform, any fixed distinct trajectory has probability (n − T )!/n!; the joint hit event is a union over
+trajectories lying in C1 × · · · ×CT .
+
+Proof of Theorem 3.8. Condition on the caches C1 , . . . ,CT (oblivious, so independent of π). Define
+                      
+               A := (a1 , . . . , aT ) ∈ C1 × · · · ×CT : a1 , . . . , aT distinct, at ̸= 1 for all t .
+
+Trivially |A| ≤ sT .
+
+
+                                                         18
+    For any (a1 , . . . , aT ) ∈ A, Pr[z1 = a1 , . . . , zT = aT ] is the probability that π(1) = a1 , π(a1 ) = a2 , . . . ,
+π(aT −1 ) = aT . These are T consistent constraints on the bijection π (consistent because 1, a1 , . . . , aT are
+distinct), giving probability (n − T )!/n! = 1/(n(n − 1) · · · (n − T + 1)).
+    Let E good := {z1 , . . . , zT distinct, all ̸= 1} ∩ E and E bad := E \ E good . Then
+                                                                                                                  T
+                                                                            sT
+                                                                                                        
+                        good                          |A|                                                    s
+                 Pr[E          | {Ct }] =                            ≤              ≤                                  ,
+                                          n(n − 1) · · · (n − T + 1)   (n − T + 1)T                         n−T
+
+using n(n − 1) · · · (n − T + 1) ≥ (n − T + 1)T ≥ (n − T )T for n ≥ T + 1.
+    For E bad : this requires zi = z j for some i < j, or zi = 1 for some i. For the first, zi = z j ⇐⇒ π j−i (zi ) = zi ;
+by exchangeability of uniform permutations, Pr[π m (y) = y] for any fixed y equals the probability that y lies in
+a cycle of length dividing m, which is at most m/n. Hence Pr[zi = z j ] ≤ ( j − i)/n. Summing with exact value:
+                         −1
+∑1≤i< j≤T ( j −i) = ∑Td=1   d(T −d) = T (T −1)(T +1)/6, giving ∑i< j Pr[zi = z j ] ≤ T (T 2 −1)/(6n) ≤ T 3 /(6n).
+For the second, Pr[zi = 1] = Pr[π i (1) = 1] ≤ i/n; summing ∑Ti=1 i/n = T (T + 1)/(2n) ≤ T 2 /n. In total,
+
+                                               T3 T2    T 3 + 6T 2   T3
+                                Pr[E bad ] ≤      +   ≤            ≤                           (T ≥ 6),
+                                               6n   n       6n       3n
+with a trivial explicit bound for T ≤ 5. Using the uniform bound Pr[E bad ] ≤ 2T 3 /n (valid for all T ≥ 1) for
+simplicity, we combine:
+                                                                                          T
+                                                                                                   2T 3
+                                                                                
+                                                  good              bad              s
+                                  Pr[E ] = Pr[E          ] + Pr[E         ] ≤                  +        .
+                                                                                    n−T             n
+
+(A sharper wrapper constant T 3 /(3n)+ lower-order replaces 2T 3 /n for T ≥ 6, but does not change the
+asymptotic character of the bound.) Taking expectation over {Ct } (which has no π-dependence) preserves
+the bound.
+
+4.6.2   Adaptive case: upper bound (Theorem 3.9, upper bound)
+The upper bound uses the fact that at stage 1, any locality-respecting controller’s cache C1 is independent of
+π(1) (because C1 reads only positions in T0 = {0}, which is disjoint from π’s domain [n]).
+
+Proof of Theorem 3.9, upper bound. At stage 1, the trace T0 = {0} (only the query token is accessible before
+any attention computation), so π|T0 is vacuous. Hence C1 is a deterministic function of the empty string, i.e.,
+constant. Therefore C1 ⊥ π, and since E ⊆ E1 = {π(1) ∈ C1 },
+
+                                                                          |C1 |   s    s
+                                    Pr[E ] ≤ Pr[π(1) ∈ C1 ] =                   ≤   ≤     ,
+                                                                           n      n   n−T
+using that π(1) is uniform on [n] under π ∼ Unif(Sn ), |C1 | ≤ s, and n ≥ T + 1.
+
+4.6.3   Adaptive case: matching achievability (Theorem 3.9, lower bound)
+We exhibit an explicit locality-respecting adaptive controller whose joint success probability matches the
+upper bound s/n of Theorem 3.9 with exact equality. The strategy is “chain-tracking”: at stage 1, gamble
+s − 1 random slots plus the query’s source position 1 to learn π(1); after a hit, the subsequent chain is
+deterministically known to the controller.
+
+Proof of Theorem 3.9, lower bound. Define the controller A⋆ as follows:
+ • Stage 1: C1 = {1, a1 , a2 , . . . , as−1 } for any fixed distinct ai ∈ [n] \ {1}. Note 1 ∈ C1 .
+
+                                                                19
+ • Stage t ≥ 2: If E1 , . . . , Et−1 all occurred (stage t − 1 cache Ct−1 ∋ zt−1 ), then by induction z1 , . . . , zt−1 ∈
+   Tt−1 , and controller has read π at these positions. In particular, controller knows zt = π(zt−1 ). Set Ct ∋ zt
+   (other s − 1 slots arbitrary).
+  • If any earlier Ei failed, set Ct arbitrarily (the joint event E has already failed).
+     Locality check: At stage t ≥ 2, Ct depends only on π|{1,z1 ,...,zt−1 } ⊆ π|Tt−1 (all indices in prior caches).
+Locality holds.
+     Success probability: Under A⋆ , if π(1) ∈ C1 then stage 1 succeeds (z1 = π(1) ∈ C1 = E1 ), and the
+chain-tracking induction at subsequent stages deterministically maintains zt ∈ Ct for all t ≥ 2: the controller
+has read π at all previously-visited chain positions (including zt−1 ), so it knows zt = π(zt−1 ) and places it in
+Ct . This covers the fixed-point case π(1) = 1 as well: if π(1) = 1, the controller reads this at stage 1, knows
+zt = 1 for all t, and includes 1 in every Ct , so E holds. Therefore
+                                                                     |C1 |   s
+                                      Pr[E ] ≥ Pr[π(1) ∈ C1 ] =            = .
+                                                                      n     n
+This matches the upper bound s/n of Theorem 3.9 exactly (both bounds are s/n), giving Pr[E ] = s/n.
+
+Proof of Corollary 3.10. Adaptive achieves Pr[E ] ≥ s/n (Theorem 3.9, achievability), while oblivious gives
+Pr[E ] ≤ (s/(n − T ))T + 2T 3 /n. In the regime sT ≥ 2T 3 nT −1 (equivalently (s/n)T ≥ 2T 3 /n), the main
+term dominates the error term: since (s/(n − T ))T ≥ (s/n)T ≥ 2T 3 /n, we have (s/(n − T ))T + 2T 3 /n ≤
+2 · (s/(n − T ))T .
+     To relate (s/(n − T ))T to (s/n)T , note s/(n − T ) = (s/n) · n/(n − T ) = (s/n) · (1 + T /(n − T )), so
+                                                                              √
+(s/(n − T ))T = (s/n)T · (1 + T /(n − T ))T . Under the mild condition T ≤ n/2 (so, using n ≥ 4 to get
+                                                2
+n − T ≥ n/2, we have (1 + T /(n − T ))T ≤ eT /(n−T ) ≤ e(n/4)/(n/2) = e1/2 ≤ 2), we have (s/(n − T ))T ≤
+2(s/n)T . Hence
+
+                              s/n               s/n      (n/s)T −1
+                                                                   = Ω (n/s)T −1 .
+                                                                                
+                                 T    3
+                                          ≥          T
+                                                       =
+                     (s/(n − T )) + 2T /n   4 · (s/n)       4
+
+Outside this regime (when 2T 3 /n dominates), the ratio is ≥ (s/n) ÷ (4T 3 /n) = Ω(s/T 3 ), which, while
+weaker than (n/s)T −1 , still separates the two asymptotically for s ≫ T 3 .
+
+
+5     Architecture Comparison
+Full attention’s depth scales as Ω(k/s) to O((k/s) log s), with a gap of O(log s). Linear attention and RNNs
+are stuck at Θ(k) regardless of cache. Full attention’s advantage depends critically on cache size.
+
+
+6     Experiments
+We validate our bounds via constructive verification: we hardcode the serial pointer-chasing algorithm directly
+into Transformer weights and measure accuracy on random permutations. This eliminates optimization
+confounds entirely—success or failure reflects theoretical possibility, not SGD’s ability to find a solution.
+
+6.1   Hardcoded Transformer (serial strategy)
+We implement the serial strategy from Theorem 3.2’s proof as explicit Transformer weights on PC16,k . Each
+layer performs one content-based lookup. We sweep k ∈ {1, 2, 4, 8, 12} and L ∈ {1, . . . , 16} with 5000 random
+permutations per configuration. Results (Figure 1a): the transition from random guess (1/n = 6.25%) to
+100% is sharp at exactly L = k.
+
+                                                          20
+                                (a) Hardcoded Transformer (oracle cache)                                           (b) Windowed PD vs Serial (k=8)
+                                        Sharp 0% 100% at L = k                                                      Cache reduces required depth
+                      1.0                                                                       1.0
+
+                      0.8                                                                       0.8
+                                                                     k=1
+                      0.6                                            k=2                        0.6                                                 Serial (need L 8)
+Accuracy
+
+
+
+
+                                                                                     Accuracy
+                                                                     k=4                                             2× depth                       WPD s=2 (need L 4)
+                                                                     k=8                                              saving                        WPD s=4 (need L 4)
+                      0.4                                            k=12                       0.4                                                 WPD s=8 (need L 3)
+                                                                     Random (1/16)
+
+                      0.2                                                                       0.2
+
+                      0.0                                                                       0.0
+                            0     2     4     6      8    10 12       14       16                     0        2      4         6        8     10   12     14     16
+                                             Transformer depth L                                                                        Depth L
+
+                                  (c) Random cache: exponential decay                                     (d) Min depth for WPD (oracle)
+                                   (dots = simulation, gray = (s/n) log2 k )                              L = k/min(s,k) · log min(s,k)
+                      1.0                                               s=8 (50%)
+                                                                                                16        16          8             8        6       4
+                                                                        s=4 (25%)
+                                                                        s=2 (12%)                                                                                15.0
+                      0.8                                                                       12        12          6             6        6       4
+                                                                                                                                                                 12.5
+Success probability
+
+
+
+
+                      0.6                                                                        8        8           4             4        3       3           10.0
+
+
+
+
+                                                                                                                                                                       Depth L
+                                                                                      Hops k
+
+
+
+
+                                                                                                 4        4           2             2        2       2           7.5
+                      0.4
+                                                                                                                                                                 5.0
+                      0.2                                                                        2        2           1             1        1       1
+                                                                                                                                                                 2.5
+                                                                                                 1        1           1             1        1       1
+                      0.0
+                                  2     4     6    8     10 12         14      16                         1           2       4        8            16
+                                              Reasoning hops k                                                            Cache size s
+
+Figure 1: Experimental validation on PC16,k (5000 random permutations per configuration, no training). (a)
+Hardcoded Transformer with oracle cache: sharp 0% → 100% transition at L = k. (b) Windowed PD vs. serial
+for k = 8: cache reduces required depth from L = 8 to L = 3–4. (c) Random (oblivious) cache: exponential
+error amplification with k, consistent with Theorem 3.8’s (s/(n − T ))T decay rate (cf. Remark 3.12 for
+numerical comparison at n = 16). (d) Minimum depth heatmap for windowed PD.
+
+
+
+
+                                                                                     21
+                                        Architecture                                        Full cache (s = n)                  Cache s < n [this work]
+                                                                                                                                Lower                         Upper
+                                        Full softmax attention                                       O(log k)†                  Ω(k/s)               O((k/s) log s)
+                                        Linear attention (small r)                                       Θ(k)                                        Θ(k)
+                                        RNN / Mamba                                                      Θ(k)                                        Θ(k)
+
+Table 1: Depth for k-hop pointer chasing. Our Ω(k/s) lower bound (Proposition 4.4) is unconditional and
+parameter-free; it is meaningful when s = o(k), reducing to the trivial Ω(1) in the full-cache limit s = n. In the
+s = n limit, the meaningful unconditional lower bound comes from the bandwidth factor Ω(log2 n/(Hmp))
+of Proposition 4.4, which for Hmp = O(log n) recovers Ω(log n) ≥ Ω(log k). Upper bound O((k/s) log s)
+assumes mp ≥ log n (standard LLM precision). †Upper bound from (Sanford et al., 2024); matching Ω(log k)
+lower bound requires the MPC conjecture. The multiplicative gap between our lower and upper bounds is
+O(H log s) in general, reducing to O(log s) when H = 1.
+
+
+6.2              Windowed pointer doubling vs. serial
+We simulate oracle windowed pointer doubling on the same task, sweeping s ∈ {1, 2, 4, 8, 16}. Results
+(Figure 1b): for k = 8, serial requires L ≥ 8, windowed PD with s = 2 achieves 100% at L = 4, and s = 8
+at L = 3. Cache size trades for depth, as predicted. Figure 2 shows the full depth–cache tradeoff with the
+O(log s) gap between lower bound and windowed PD visible.
+
+                                                                      Depth: Serial vs Windowed PD vs Lower Bound
+                                                                     Blue region = O(log s) gap between LB and WPD
+
+                                      k = 4 hops                                                          k = 8 hops                                                           k = 16 hops
+          4.00                                                                8.00                                                                 16.00
+
+                                                                                                                                                    8.00
+                                                                              4.00
+Depth L
+
+
+
+
+                                                                    Depth L
+
+
+
+
+                                                                                                                                         Depth L
+
+
+
+
+          2.00                                                                                                                                      4.00
+                                                                              2.00
+                                                                                                                                                    2.00
+                        Serial (L = k)                                                      Serial (L = k)                                                        Serial (L = k)
+                        Windowed PD (upper)                                                 Windowed PD (upper)                                                   Windowed PD (upper)
+          1.00          Lower bound k/s                                       1.00          Lower bound k/s                                         1.00          Lower bound k/s
+                 1.00         2.00            4.00   8.00   16.00                    1.00         2.00            4.00   8.00    16.00                     1.00         2.00       4.00      8.00   16.00
+                                      Cache size s                                                        Cache size s                                                          Cache size s
+
+
+Figure 2: Depth–cache tradeoff for k ∈ {4, 8, 16}. Gray dashed: serial strategy (L = k, cache-independent).
+Blue: windowed pointer doubling upper bound. Red: lower bound ⌈k/s⌉. Shaded blue region: the O(log s)
+gap between lower and upper bounds.
+
+
+6.3              Random cache: error amplification
+Figure 1c shows that under oblivious (random) cache eviction, joint success probability decays sharply with k.
+At s = 8, n = 16, k = 8, T = 3, we observe empirical success of ≈ 17.5%. The main term of Theorem 3.8’s
+upper bound is (s/(n − T ))T = (8/13)3 ≈ 23.3%, which upper-bounds the good-chain success probability
+Pr[E good ] (not Pr[E ] in general; the empirical 17.5% includes contributions from E bad not bounded by
+the main term alone). The main term matches the empirical value in order and confirms the qualitative
+(s/(n − T ))T scaling. (The full theorem bound, including the 2T 3 /n error term, exceeds 1 at this small n; see
+Remark 3.12.) Note that the simpler expression (s/n)T = 12.5% underestimates because it uses n rather than
+
+
+                                                                                                          22
+n − T in the denominator; Theorem 3.8 identifies the correct asymptotic decay rate as (s/(n − T ))T , which
+reduces to (s/n)T (1 + O(T 2 /n)) in the s/n → 0 regime.
+
+6.4   Connection to LLM behavior
+Ananthanarayanan et al. (2026) independently report a sharp hallucination cliff near 90% compression, with
+multi-hop (Hops) F1 dropping from ∼31% to near zero under aggressive compression, while single-hop
+retrieval degrades gracefully. This matches our framework qualitatively: k-hop capability is gated by a
+product bound that involves k, so multi-hop (k ≥ 4) is hit harder than single-hop (k = 1) as s shrinks. Liu
+et al. (2025) show that adaptive (heavy-hitter) eviction outperforms recency- and norm-based baselines on
+reasoning; Corollary 3.10 gives a direct quantitative explanation: adaptive controllers achieve Θ(s/n) joint
+success, while oblivious ones decay as (s/n)T , a separation factor of Ω((n/s)T −1 ). This is consistent with
+the observation that heavy-hitter-based methods, which concentrate cache on frequently-attended positions,
+provide qualitatively different error-scaling behavior than random or recency-based eviction. Caveat on
+regime. Our experiments at n = 16, T = 3 do not fall within the “tight” regime of Corollary 3.10 (which
+requires s ≥ (2T 3 )1/T · n(T −1)/T ≈ 24, exceeding n = 16); we view the empirical observations here as
+qualitative validation of the direction of the separation rather than quantitative confirmation of the (n/s)T −1
+rate. Establishing the rate empirically in the main-term-dominates regime requires moderate-to-large n (e.g.,
+for s/n = 1/2 and T = 3, roughly n > 432; see Remark 3.12).
+
+
+7     Related Work
+Transformer depth. Sanford et al. (2023) separated attention from RNNs via communication complexity.
+Sanford et al. (2024) proved Transformer–MPC equivalence. Alman and Yu (2025) gave SETH-conditional
+time bounds. Kozachinskiy et al. (2025) proved infinite-precision lower bounds. We introduce cache as a new
+parameter. Our finite-precision model is analogous to bounded-precision circuit models in computational
+complexity; the key distinction from (Sanford et al., 2024) is that their Ω(log k) holds at infinite precision
+(conditional on MPC), while our conjectured product bound addresses the finite-precision regime (under a
+locality-respecting controller, which is satisfied by all standard KV-compression methods). The two results
+are complementary: neither implies the other.
+
+KV cache compression. Eviction: (Zhang et al., 2023; Liu et al., 2023; Li et al., 2024; Cai et al., 2024).
+Reasoning-specific: (Cai et al., 2025; Du et al., 2025). Empirical: (Liu et al., 2025; Ananthanarayanan et al.,
+2026). All heuristic/empirical; we provide the first formal depth–cache tradeoff for a stylized reasoning task.
+    Recent methods employ question-aware or position-aware scoring (pseudo-query-based selection, global
+per-head budget optimization, head-aware risk-adaptive gating). In our framework, such strategies correspond
+to smarter choices of the cache set S(ℓ) within the locality-respecting class; they may improve constant
+factors in practice but are subject to the unconditional max-bound L = Ω(max(⌈k/s⌉, ⌈log2 n/(Hmp)⌉))
+(Proposition 4.4), and, if Conjecture 3.1 holds, cannot circumvent the product structure L = Ω(⌈k/s⌉ ·
+⌈log2 n/(Hmp)⌉). The locality assumption is satisfied by all practical methods. Systems that offload KV
+entries to slower storage and retrieve on demand effectively increase s per layer (at latency cost), which our
+bounds correctly capture. Soft compression (vector quantization, value merging) reduces effective precision
+or merges tokens rather than evicting them; extending our counting argument to this setting is an open
+direction.
+
+
+
+
+                                                      23
+8    Discussion
+We conjectured a product lower bound L = Ω((k/s) · log n/(Hmp)) (Conjecture 3.1) and isolated the sole
+remaining technical gap as the probabilistic step (⋆) in Remark 4.13. We unconditionally proved the max-
+bound L = Ω(max(⌈k/s⌉, ⌈log2 n/(Hmp)⌉)) (Proposition 4.4), and an unconditional matching upper bound
+L = O(⌈k/s⌉ · ⌈log2 (2s)⌉ · ⌈log2 n/(mp)⌉) via windowed pointer doubling, so if Conjecture 3.1 holds then
+the characterization is tight up to O(H log s) in the narrow-model regime. We also proved unconditionally a
+bandwidth barrier showing that the product bound cannot be sharpened in the Hmp ≥ log2 n regime by any
+per-window distinguishability-counting argument, and established that adaptive cache selection does not beat
+the oblivious bound at the first stage via a coupling argument. Theorems 3.8 and 3.9 (oblivious-vs-adaptive
+error behavior) are unconditional.
+
+What the bandwidth barrier means. Theorem 3.6 is the technically most significant structural statement
+of the paper. It explains a puzzling feature of existing cache-compression theory: why, despite decades of work
+on pointer chasing in communication complexity, we cannot get a depth lower bound for Transformers better
+than the trivial cache-reachability bound in the regime of practical interest. The barrier is that per-window
+output has log2 n bits of “capacity” (since zτ j ∈ [n]), while per-layer bandwidth is Hmp bits; the ratio ceilings
+at 1 whenever Hmp ≥ log2 n. Breaking through requires either (i) output-informational arguments that
+escape the per-window output dimension (perhaps via multi-output tasks), (ii) translating the unconditional
+pointer-chasing CC lower bounds of (Nisan and Wigderson, 1993; Yehudayoff, 2020; Mao et al., 2025)
+into Cache-Transformer depth lower bounds without the MPC reduction (an open lifting problem), or (iii)
+joint-state counting that couples to cache-wide state capacity smp > Hmp when s > H—but this in turn
+requires the task to force s cache tokens to jointly carry information.
+
+Limitations and scope. Our model assumes hard cache boundaries, p-bit precision, and a locality-
+respecting cache controller. The precision assumption is essential for Lemma 4.2 and reflects hardware
+reality. The locality assumption, which rules out controllers that examine representations outside the cache, is
+satisfied by all practical methods but is a genuine restriction relative to the most general adaptive controller.
+Our results thus complement (Sanford et al., 2024)’s infinite-precision, MPC-conditional Ω(log k), which is
+cache-oblivious but holds under unrestricted computation. When s = n (full cache), our bound gives only
+L ≥ ⌈log n/(Hmp)⌉, weaker than Ω(log k) but holding unconditionally on the controller.
+     In standard LLM configurations (large Hmp), the bandwidth factor equals 1, and our bound reduces to
+L ≥ ⌈k/s⌉ alone—which holds unconditionally (without locality) via Lemma 4.1. The full product structure
+is a structural insight—cache and bandwidth are multiplicative, not competing—that becomes quantitatively
+binding in narrow or low-precision models.
+     Pointer chasing is a worst-case model; real reasoning tasks have exploitable structure permitting more
+aggressive compression than our bounds suggest. Our experiments use n = 16 for clarity; the hardcoded
+construction’s correctness is exact (independent of n for n < 2 p ), so the sharp threshold behavior transfers to
+any n within the precision range.
+
+Concurrent work. Ananthanarayanan et al. (2026) (arXiv March 2026) is a concurrent and independent
+empirical study. Their phase-transition-like behavior in multi-hop accuracy under compression is qualitatively
+consistent with our theory but was discovered independently.
+
+Open problems.
+  1. Close the trace–chain joint-distribution gap in Lemma 4.11. The probabilistic step (⋆) in Re-
+     mark 4.13—bounding Pr[zσ j (π) ∈ T (π) | Dchain ] ≤ E[|T |]/(n − 1), where σ j := τ j − 1 is the chain
+
+
+                                                       24
+      position one step before window j’s boundary—is left unproven for adaptive, label-sensitive algorithms
+      under uniform π. Two natural approaches: (a) a second-moment analysis using that the cycle structure
+      of uniform π decouples the orbit of 1 from other positions in a controlled way, or (b) a Yao-principle
+      reduction against an explicit adversarial distribution on π that directly implies the existence of a
+                                                                                                        √
+      window- j exit. Closing this single step would turn Conjecture 3.1 into a theorem (in the s ≤ n/4
+      regime).
+                                                                    √
+   2. Extend the product bound to the large-cache regime s > n/4. Our proof strategy for Conjecture 3.1
+      relies on restricting the reference permutation’s cycle structure (proof of Lemma 4.17), which degrades
+              √
+      for s > n/4 and forces us to state the conjecture only in the complementary regime. In the large-cache
+      regime we establish only the unconditional max-bound of Proposition 4.4. It is open whether the
+                                                                            √
+      product structure ⌈k/s⌉ · ⌈log2 n/(Hmp)⌉ continues to hold for s > n/4, or whether a different lower
+      bound (e.g., a smooth interpolation between product and max in this range) is the truth.
+   3. Break the bandwidth barrier. Theorem 3.6 shows that any per-window distinguishability-based
+      argument saturates at ⌈k/s⌉ when Hmp ≥ log2 n. Three avenues remain open: (i) translating the
+      unconditional pointer-chasing CC lower bounds of (Nisan and Wigderson, 1993; Yehudayoff, 2020;
+      Mao et al., 2025) into Cache-Transformer depth lower bounds without the MPC reduction, (ii) joint-
+      state counting arguments coupling to cache-wide state capacity smp rather than single-state mp, (iii)
+      information-theoretic lower bounds on multi-output reasoning tasks that require Ω(Hmp) bits per layer
+      of coupled output.
+   4. Remove the locality restriction. Prove or disprove the product bound for fully adversarial cache
+      controllers. Our adversarial construction (Lemma 4.14) uses locality to guarantee that perturbations
+      outsideT1 are invisible to the controller; one possible path is to show the controller can “leak” at most
+      log2 ns bits per layer via its S(ℓ) choice, and to absorb this leakage into the bandwidth factor.
+   5. Close the O(H log s) gap between lower and upper bounds.
+   6. Extend the counting argument to soft compression (codebook size as effective bandwidth) and to
+      infinite-precision models.
+   7. Extend Theorems 3.8 and 3.9 beyond the uniform-random π assumption to structured or adversarial
+      inputs, which is closer to the empirical setting where pointer chains are structured (e.g., by entity
+      relations in language data). Our oblivious bound’s (s/(n − T ))T decay rate depends on the uniformity
+      of π; under structured π, both the oblivious decay rate and the adaptive-vs-oblivious separation may
+      change.
+   8. Validate on NLP multi-hop benchmarks with trained Transformers.
+   9. Determine whether the product structure extends to reasoning tasks beyond pointer chasing, e.g.,
+      Boolean formula evaluation, tree-structured lookups, or graph reachability.
+
+
+References
+Josh Alman and Hantao Yu. 2025. Fundamental limitations on subquadratic alternatives to transformers. In
+  The Thirteenth International Conference on Learning Representations (ICLR). arXiv:2410.04271.
+
+Samhruth Ananthanarayanan, Ayan Sengupta, and Tanmoy Chakraborty. 2026. Understanding the physics of
+  key-value cache compression for LLMs through attention dynamics. arXiv preprint arXiv:2603.01426.
+
+
+
+
+                                                      25
+Zefan Cai, Yichi Zhang, Bofei Gao, Yuliang Liu, Tianyu Liu, Keming Lu, Wayne Xiong, Yue Dong, Baobao
+  Chang, Junjie Hu, and Wen Xiao. 2024. PyramidKV: Dynamic KV cache compression based on pyramidal
+  information funneling. arXiv preprint arXiv:2406.02069.
+
+Zefan Cai, Wen Xiao, Hanshi Sun, Cheng Luo, Yikai Zhang, Ke Wan, Yucheng Li, Yeyang Zhou, Li-Wen
+  Chang, Jiuxiang Gu, Zhen Dong, Anima Anandkumar, Abedelkadir Asi, and Junjie Hu. 2025. R-KV:
+  Redundancy-aware KV cache compression for reasoning models. arXiv preprint arXiv:2505.24133.
+
+Wenjie Du, Li Jiang, Keda Tao, Xue Liu, and Huan Wang. 2025. Which heads matter for reasoning?
+ RL-guided KV cache compression. arXiv preprint arXiv:2510.08525.
+
+Pavol Duris, Zvi Galil, and Georg Schnitger. 1987. Lower bounds on communication complexity. Information
+  and Computation, 73(1):1–22.
+
+Themistoklis Haris and Krzysztof Onak. 2025. Compression barriers in autoregressive transformers. In
+  Proceedings of the 38th Conference on Learning Theory (COLT), volume 291 of Proceedings of Machine
+  Learning Research, pages 2757–2785. PMLR. arXiv:2502.15955.
+
+Alexander Kozachinskiy, Felipe Urrutia, Hector Jimenez, Tomasz Steifer, Germán Pizarro, Matı́as Fuentes,
+  Francisco Meza, Cristian B. Calderon, and Cristóbal Rojas. 2025. Strassen attention, split VC dimension
+  and compositionality in transformers. arXiv preprint arXiv:2501.19215.
+
+Yuhong Li, Yingbing Huang, Bowen Yang, Bharat Venkitesh, Acyr Locatelli, Hanchen Ye, Tianle Cai, Patrick
+  Lewis, and Deming Chen. 2024. SnapKV: LLM knows what you are looking for before generation. In
+  Advances in Neural Information Processing Systems 38 (NeurIPS). arXiv:2404.14469.
+
+Zichang Liu, Aditya Desai, Fangshuo Liao, Weitao Wang, Victor Xie, Zhaozhuo Xu, Anastasios Kyrillidis,
+  and Anshumali Shrivastava. 2023. Scissorhands: Exploiting the persistence of importance hypothesis
+  for LLM KV cache compression at test time. In Advances in Neural Information Processing Systems 36
+  (NeurIPS). arXiv:2305.17118.
+
+Zirui Liu, Jiayi Yuan, Hongye Jin, Shaochen Zhong, Zhaozhuo Xu, Vladimir Braverman, Beidi Chen, and
+  Xia Hu. 2024. KIVI: A tuning-free asymmetric 2bit quantization for KV cache. In Proceedings of the 41st
+  International Conference on Machine Learning (ICML), volume 235 of Proceedings of Machine Learning
+  Research, pages 32332–32344. PMLR. arXiv:2402.02750.
+
+Minghui Liu, Aadi Palnitkar, Tahseen Rabbani, Hyunwoo Jae, Kyle Rui Sang, Dixi Yao, Shayan Shabihi,
+ Fuheng Zhao, Tian Li, Ce Zhang, Furong Huang, and Kunpeng Zhang. 2025. Hold onto that thought:
+ Assessing KV cache compression on reasoning. arXiv preprint arXiv:2512.12008.
+
+Xinyu Mao, Guangxu Yang, and Jiapeng Zhang. 2025. Gadgetless lifting beats round elimination: Improved
+  lower bounds for pointer chasing. In 16th Innovations in Theoretical Computer Science Conference (ITCS),
+  volume 325 of LIPIcs, pages 75:1–75:14. arXiv:2411.10996.
+
+Noam Nisan and Avi Wigderson. 1993. Rounds in communication complexity revisited. SIAM Journal on
+ Computing, 22(1):211–219.
+
+Binghui Peng, Srini Narayanan, and Christos Papadimitriou. 2024. On limitations of the transformer architec-
+  ture. In First Conference on Language Modeling (COLM). arXiv:2402.08164.
+
+Clayton Sanford, Daniel Hsu, and Matus Telgarsky. 2023. Representational strengths and limitations of
+  transformers. In Advances in Neural Information Processing Systems 36 (NeurIPS). arXiv:2306.02896.
+
+
+                                                    26
+Clayton Sanford, Daniel Hsu, and Matus Telgarsky. 2024. Transformers, parallel computation, and log-
+  arithmic depth. In Proceedings of the 41st International Conference on Machine Learning (ICML),
+  volume 235 of Proceedings of Machine Learning Research, pages 43276–43327. PMLR. Spotlight paper.
+  arXiv:2402.09268.
+
+Luohe Shi, Hongyi Zhang, Yao Yao, Zuchao Li, and Hai Zhao. 2024. Keep the cost down: A review on
+  methods to optimize LLM’s KV-cache consumption. In First Conference on Language Modeling (COLM).
+  arXiv:2407.18003.
+
+Zheng Wang, Boxiao Jin, Zhongzhi Yu, and Minjia Zhang. 2024. Model tells you where to merge: Adaptive
+  KV cache merging for LLMs on long-context tasks. arXiv preprint arXiv:2407.08454.
+
+Amir Yehudayoff. 2020. Pointer chasing via triangular discrimination. Combinatorics, Probability and
+ Computing, 29(4):485–494.
+
+Zhenyu Zhang, Ying Sheng, Tianyi Zhou, Tianlong Chen, Lianmin Zheng, Ruisi Cai, Zhao Song, Yuandong
+  Tian, Christopher Ré, Clark Barrett, Zhangyang Wang, and Beidi Chen. 2023. H2 O: Heavy-hitter oracle
+  for efficient generative inference of large language models. In Advances in Neural Information Processing
+  Systems 36 (NeurIPS). arXiv:2306.14048.
+
+
+
+
+                                                    27
+

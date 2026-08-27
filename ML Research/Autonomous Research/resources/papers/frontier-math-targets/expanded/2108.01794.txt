@@ -1,0 +1,276 @@
+                                                                           EXPLICIT RIP MATRICES: AN UPDATE
+arXiv:2108.01794v3 [math.CO] 4 May 2022
+
+
+
+
+                                                                      KEVIN FORD, DENKA KUTZAROVA, AND GEORGE SHAKAN
+
+
+                                                  A BSTRACT. Leveraging recent advances in additive combinatorics, we exhibit explicit matrices satisfying the
+                                                  Restricted Isometry Property with better parameters. Namely, for ε “ 3.26 ¨ 10´7 , large k and k2´ε ď N ď
+                                                  k2`ε , we construct n ˆ N RIP matrices of order k with k “ Ωpn1{2`ε{4 q.
+
+
+
+
+                                                                                            1. I NTRODUCTION
+                                            Suppose 1 ď k ď n ď N and 0 ă δ ă 1. A ‘signal’ x “ pxj qN   j“1 is said to be k-sparse if x has at most k
+                                          nonzero coordinates. An n ˆ N matrix Φ is said to satisfy the Restricted Isometry Property (RIP) of order
+                                          k with constant δ if for all k-sparse vectors x we have
+                                          (1.1)                                  p1 ´ δq}x}22 ď }Φx}22 ď p1 ` δq}x}22 .
+                                          While most authors work with real signals and matrices, in this paper we work with complex matrices for
+                                          convenience. Given a complex matrix Φ satisfying (1.1), the 2n ˆ 2N real matrix Φ1 , formed by replacing
+                                          each element a ` ib of Φ by the 2 ˆ 2 matrix p ´b  a b q, also satisfies (1.1) with the same parameters k, δ.
+                                                                                               a
+                                             We know from Candès, Romberg and Tao that matrices satisfying RIP have application to sparse signal
+                                          recovery (see [7, 8, 9]). Given n, N, δ, we wish to find n ˆ N RIP matrices of order k with constant δ,
+                                          and ?with k as large as possible. If the entries of Φ are independent Bernoulli random variables with values
+                                          ˘1{ n, then with high probability, Φ will have the required properties for k of order close to δn; in different
+                                          language, this was first proved by Kashin [13].
+                                             It is an open problem to find good explicit constructions of RIP matrices; see Tao’s Weblog [17] for a
+                                          discussion of the problem. All existant explicit constructions of RIP matrices are based on number theory.
+                                          Prior to the work of Bourgain, Dilworth, Ford, Konyagin and Kutzarova [3], there were many constructions,
+                                          e.g. Kashin [12], DeVore [10] and Nelson and Temlyakov [15], producing matrices with δ small and order
+                                                                                                 ?
+                                                                                                    n log n
+                                          (1.2)                                            k«δ              .
+                                                                                                   log N
+                                                   ?
+                                             The n barrier was broken by the aforementioned authors in [3]:
+
+                                            Theorem A. [3]. There are effective constants ε ą 0, ε1 ą 0 and explicit numbers k0 , c ą 0 such that for
+                                          any positive integers k ě k0 and k2´ε ď N ď k2`ε , there is an explicit n ˆ N RIP matrix of order k with
+                                                                              1
+                                          k ě cn1{2`ε{4 and constant δ “ k´ε .
+
+                                             As reported in [4], the construction in [3] produces a value ε « 2 ¨ 10´22 . An improved construction
+                                          was presented in [4], giving Theorem A with ε “ 3.6 ¨ 10´15 . The values of ε depend on two constants
+                                          in additive combinatorics, which have since been improved. Incorporating these improvements into the
+                                          argument in [4], we will deduce the following.
+
+                                            Date: May 5, 2022.
+                                            Key words and phrases. Compressed sensing, restricted isometry property.
+                                                                                                       1
+2                              KEVIN FORD, DENKA KUTZAROVA, AND GEORGE SHAKAN
+
+Theorem 1. Let ε “ 3.26 ¨ 10´7 . There is ε1 ą 0 and effective numbers k0 , c ą 0 such that for any positive
+integers k ě k0 and k2´ε ď N ď k2`ε , there is an explicit n ˆ N RIP matrix of order k with k ě cn1{2`ε{4
+                     1
+and constant δ “ k´ε .
+  As of this writing,
+                   ? the constructions in [3] and [4] remain the only explicit constructions of RIP matrices
+which exceed the n barrier for k.
+  The proof of Theorem 1 depends on two key results in additive combinatorics. For subsets A, B of an
+additive finite group G, we write
+                  A ˘ B “ ta ˘ b : a P A, b P Bu,
+                EpA, Bq “ #tpa1 , a2 , b1 , b2 q : a1 ` b1 “ a2 ` b2 ; a1 , a2 P A; b1 , b2 P Bu.
+Also set x ¨ B “ txb : b P Bu. Here we will mainly work with the group of residues modulo a prime p.
+Proposition 1. For some c0 , the following holds. Assume A, B are subsets of residue classes modulo p, with
+0 R B and |A| ě |B|. Then
+                               EpA, b ¨ Aq “ O pminpp{|A|, |B|q´c0 |A|3 |B| .
+                          ÿ                      `                            ˘
+(1.3)
+                            bPB
+
+   This theorem, without an explicit c0 , was proved by Bourgain [2]. The first explicit version of Proposition
+1, with c0 “ 1{10430, is given in Bourgain and Glibuchuk [6], and this is the value used in the papers [3, 4].
+Murphy and Petridis [14, Lemma 13] made a great improvement, showing that Proposition 1 holds with
+c0 “ 1{3. It is conceivable that c0 may be taken to be any number less than 1. Taking A “ B we see that c0
+cannot be taken larger than 1.
+   We also need a version of the Balog–Szemerédi–Gowers lemma, originally proved by Balog and Sze-
+merédi [1] and later improved by Gowers [11]. The version we use is a later improvement due to Schoen
+[16].
+Proposition 2. For some positive c1 , c2 , c3 and c4 , the following holds. If EpA, Aq “ |A|3 {K, then there
+exists A1 , B 1 Ď A with |A1 |, |B 1 | ě c2 K|A|       1   1
+                                              c4 and |A ´ B | ď c3 K
+                                                                     c1 |A1 |1{2 |B 1 |1{2 .
+
+
+   The constants c2 , c3 are relatively unimportant. The best result to date is due to Schoen [16], who showed
+that any c1 ą 7{2 and c4 ą 3{4 is admissible. It is conjectured that c1 “ 1 is admissible. The papers [3, 4]
+used Proposition 2 with the weaker values c1 “ 9 and c4 “ 1, this deducible from Bourgain and Garaev [5,
+Lemma 2.2].
+
+                                    2. C ONSTRUCTION OF THE MATRIX
+  Our construction is identical to that in [4]. We fix an even integer m ě 100 and let p be a large prime.
+For x P Z, let ep pxq “ e2πix{p . Let
+                                              1
+(2.1)                                 ua,b “ ? pep pax2 ` bxqq1ďxďp .
+                                               p
+We take
+                                           1
+(2.2)                                α“      ,        A “ t1, 2, . . . tpα uu.
+                                          2m
+To define the set B, we take
+                                                  Z     ^
+                                  1             β log p
+                            β“       ,       r“           ,        M “ t22.01m´1 u,
+                               2.01m             log 2
+                                         EXPLICIT RIP MATRICES: AN UPDATE                                     3
+
+and let
+                              #                                                         +
+                                  r
+                                  ÿ
+(2.3)                   B“              xj p2M qj´1 : x1 , . . . , xr P t0, . . . , M ´ 1u .
+                                  j“1
+
+We interpret A , B as sets of residue classes modulo p. We notice that all elements of B are at most p{2,
+and |A ||B| lies between two constant multiples of p1`α´β “ p1`1{p402mq .
+   Given large k and k2´ε ď N ď k2`ε , let p be a prime in the interval rk2´ε , 2k2´ε s (such p exists by
+Bertrand’s postulate). Let Φp be a pˆp|A |¨|B|q matrix formed by the column vectors ua,b for a P A , b P B
+(the columns may appear in any order). We also have
+                                           1               2`ε
+(2.4)                             if ε ď      , then N ď p 2´ε ď |A ||B|.
+                                        403m
+Take Φ to be the matrix formed by the first N columns of Φp . Let n “ p. Our task is to show that Φ satisfies
+                               1
+the RIP condition with δ “ p´ε for some constant ε1 ą 0, and of order k.
+
+                                                  3. M AIN TOOLS
+Lemma 3.1. Assume that c0 ď 1 and that Proposition 1 holds. Fix an even integer m ě 100, and define
+α, A , B by (2.2) and (2.3). Suppose that p is sufficiently large in terms of m. Assume also that for some
+                                       1
+constant c5 ą 0 and constant 0 ă γ ď 4m  , B satisfies
+(3.1)                       @ S Ď B with |S| ě p0.49 , EpS, Sq ď c5 p´γ |S|3 .
+                                                                                                         ?
+Define the vectors ua,b by (2.1). Then for any disjoint sets Ω1 , Ω2 Ă A ˆ B such that |Ω1 | ď               p,
+       ?
+|Ω2 | ď p, the inequality
+                       ˇ                                               ˇ
+                       ˇ                                               ˇ     ´                   ¯
+                       ˇ ÿ                ÿ                            ˇ         1{2´ε1        2
+                       ˇ
+                       ˇ                          xua1 ,b1 , u       y
+                                                               a2 ,b2 ˇ
+                                                                       ˇ “ O   p        plog pq
+                       ˇpa1 ,b1 qPΩ1 pa2 ,b2 qPΩ2                      ˇ
+holds, where
+                                                      c0 γ 47α´23γ
+                                                       8 ´   2m
+(3.2)                                         ε1 “                      .
+                                                     1 ` 93{m ` c0 {2
+The constant implied by the O-symbol depends only on c0 , γ and m.
+   Lemma 3.1 follows by combining Lemmas 2 and 4 from [4]; the assumption of Proposition 1 is inadver-
+tently omitted in the statement of [4, Lemma 4].
+   Using Lemma 3.1, we shall show the following.
+                                                                                         1
+Theorem 2. Assume the hypotheses of Lemma 3.1, let ε “ 2ε1 ´ 2ε21 and assume that ε ď 403m . There is
+ 1
+ε ą 0 such that for sufficiently large k and k 2´ε        2`ε
+                                                   ď N ď k , there is an explicit n ˆ N RIP matrix of
+                                                 1
+order k with n “ Opk2´ε q and constant δ “ k´ε .
+  To prove Theorem 2, we first recall another additive combinatorics result from [4].
+Lemma 3.2 ([4, Theorem 2, Corollary 2]). Let M be a positive integer. For the set B Ă Fp defined in (2.3)
+and for any subsets A, B Ă B, we have |A ´ B| ě |A|τ |B|τ , where τ is the unique positive solution of
+                                                 M ´1 τ
+                                    ˆ ˙2τ ˆ              ˙
+                                       1
+                                             `               “ 1.
+                                      M            M
+4                            KEVIN FORD, DENKA KUTZAROVA, AND GEORGE SHAKAN
+
+    From [4] we have the easy bounds
+                                            ˆ                ˙
+                                 log 2                 1                        log 2
+(3.3)                                           1´               ď 2τ ´ 1 ď           .
+                                log M                log M                     log M
+Corollary 1. Take B as in (2.3) and assume Proposition 2. Then (3.1) holds with
+                                                       0.49p2τ ´ 1q
+                                                 γ“                    .
+                                                      c1 ` c4 p2τ ´ 1q
+Proof. Just like the proof of [4, Lemma 3], except that we incorporate Proposition 2. Suppose that S Ď B
+with |S| ě p0.49 and EpS, Sq “ |S|3 {K. By Proposition 2, there are sets T1 , T2 Ă S such that |T1 |, |T2 | ě
+c2 K|S|c4 and |T1 ´ T2 | ď c3 K c1 |T1 |1{2 |T2 |1{2 . By Lemma 3.2,
+
+                              c3 K c1 |T1 |1{2 |T2 |1{2 ě |T1 ´ T2 | ě |T1 |τ |T2 |τ ,
+and hence
+                                                                                    ˙2τ ´1
+                                                                         c2 p0.49
+                                                                     ˆ
+                                     c1
+                                            `            ˘τ ´1{2
+                              c3 K        ě |T1 | ¨ |T2 |        ě                           .
+                                                                          K c4
+It follows that K ě p1{c5 qp´γ for an appropriate constant c5 ą 0.                                           
+  Finally, we need a tool from [3] which states that in (1.1) we need only consider vectors x whose com-
+ponents are 0 or 1 (so-called flat vectors).
+Lemma 3.3 ([3, Lemma 1]). Let k ě 210 and s be a positive integer. Assume that for all i ‰ j we
+have xui , uj y ď 1{k. Also, assume that for some δ ě 0 and any disjoint J1 , J2 Ă t1, . . . , N u with
+|J1 | ď k, |J2 | ď k we have
+                                        ˇC                  Gˇ
+                                        ˇ ÿ           ÿ      ˇ
+                                                uj ,      uj ˇ ď δk.
+                                        ˇ                    ˇ
+                                        ˇ
+                                        ˇ                    ˇ
+                                           jPJ1      jPJ2
+                                                                 ?
+Then Φ satisfies the RIP property of order 2sk with constant 44s δ log k.
+   Now we show how to deduce Theorem 2. By Lemma 3.1 and standard bounds for Gauss sums, Φ satisfies
+                                       ?
+the conditions of Lemma 3.3 with k “ t pu and δ “ Opp´ε1 log2 pq. Let ε0 ă ε1 {2 and take s “ tpε0 u. By
+Lemma 3.3, Φ satisfies RIP with order ě p1{2`ε0 and constant Opp´ε1 {2`ε0 plog pq3 q. If ε0 is sufficiently
+close to ε1 {2, Theorem 2 follows with
+                                                   2        4ε0
+                                ε“2´                    “         ą 2ε1 ´ 2ε21 .
+                                                1 ` 2ε0   1 ` 2ε0
+    To prove Theorem 1, we take the construction in Section 2. We have (3.1) by Corollary 1. Also take
+                                   1
+             η “ 10´100 ,      c0 “ ,             c1 “ 7{2 ` η,           c4 “ 3{4 ` η,          m “ 7586.
+                                   3
+These values were optimized with a computer search. By Corollary 1 and (3.3), we have γ ě 9.182 ¨ 10´6 .
+                                 1
+It is readily verified that γ ď 4m , ε1 ą 1.631 ¨ 10´7 and ε “ 2ε1 ´ 2ε21 satisfies 3.26 ¨ 10´7 ď ε ď 403m
+                                                                                                        1
+                                                                                                           .
+Theorem 1 now follows.
+
+                                             4. ACKNOWLEDGMENTS
+  The first author was partially supported by NSF Grant DMS-1802139. The second author is supported
+by a Simons Travel grant. The third author is supported by Ben Green’s Simons Investigator Grant 376201.
+                                          EXPLICIT RIP MATRICES: AN UPDATE                                               5
+
+                                                     R EFERENCES
+ [1] A. Balog, E. Szemerédi, A statistical theorem of set addition, Combinatorica, 14 (1994), 263–268.
+ [2] J. Bourgain. Multilinear exponential sums in prime fields under optimal entropy condition on the sources. Geom. Funct. Anal.,
+     18(5):1477–1502, 2009.
+ [3] J. Bourgain, S. J. Dilworth, K. Ford, S. Konyagin, and D. Kutzarova. Explicit constructions of RIP matrices and related
+     problems. Duke Math. J., 159(1):145–185, 2011.
+ [4] J. Bourgain, S. J. Dilworth, K. Ford, S. Konyagin, and D. Kutzarova. Breaking the k2 barrier for explicit RIP matrices.
+     Symposium on the Theory of Computing (STOC ’11), (2011), 637-644.
+ [5] J. Bourgain and M. Z. Garaev. On a variant of sum-product estimates and explicit exponential sum bounds in finite fields.
+     Math. Proc. Cambridge Philos. Soc., 146(1):1–21, 2009.
+ [6] J. Bourgain and A. A. Glibichuk. Exponential sum estimate over subgroup in an arbitrary finite field. J. d’Analyse Math., to
+     appear.
+ [7] E. J. Candès. The restricted isometry property and its implications for compresses sensing. C. R. Math. Acad. Sci. Paris,
+     346:589–592, 2008.
+ [8] E. J. Candès, J. Romberg, and T. Tao. Stable signal recovery from incomplete and inaccurate measurements. Comm. Pure
+     Appl. Math., 59:1208–1223, 2006.
+ [9] E. J. Candès and T. Tao. Decoding by linear programming. IEEE Trans. Inform. Theory, 51:4203–4215, 2005.
+[10] R. DeVore. Deterministic constructions of compressed sensing matrices. J. Complexity, 23:918–925, 2007.
+[11] W. T. Gowers, A new proof of Szemerédi’s theorem, Geom. Funct. Anal. 11 (2001), 465–588.
+[12] B. S. Kashin. On widths of octahedron. Uspekhi Matem. Nauk, 30:251–252, 1975. Russian.
+[13] B. S. Kashin. Widths of certain finite-dimensional sets and classes of smooth functions. Izv. Akad. Nauk SSSR, Ser. Mat.,
+     41:334–351, 1977. Russian. English transl. in Math. USSR Izv. 11 (1978), 317–333.
+[14] B. Murphy and G. Petridis. A second wave of expanders in finite fields. Combinatorial and additive number theory. II, 215–238,
+     Springer Proc. Math. Stat., 220, Springer, Cham, 2017.
+[15] J. Nelson and V. N. Temlyakov. On the size of incoherent systems. J. Approx. Th., 163 (2011), no. 9, 1238–1245.
+[16] T. Schoen, New bounds in the Balog-Szemeredi-Gowers lemma, Combinatorica 35 (2015), no. 6, 695–701.
+[17] T. Tao. Open question: deterministic uup matrices.
+     https:https://terrytao.wordpress.com/2007/07/02/open-question-deterministic-uup-matrices/
+
+   D EPARTMENT OF M ATHEMATICS , 1409 W EST G REEN S TREET, U NIVERSITY OF I LLINOIS AT U RBANA -C HAMPAIGN ,
+U RBANA , IL 61801, USA
+   Email address: ford@math.uiuc.edu
+
+   D EPARTMENT OF M ATHEMATICS , 1409 W EST G REEN S TREET, U NIVERSITY OF I LLINOIS AT U RBANA -C HAMPAIGN ,
+U RBANA , IL 61801, USA
+   Email address: denka@math.uiuc.edu
+
+   D EPARTMENT OF M ATHEMATICS , U NIVERSITY OF OXFORD , R ADCLIFFE O BSERVATORY, A NDREW W ILES B UILDING ,
+W OODSTOCK R D , OXFORD OX2 6GG, UK
+   Email address: george.shakan@gmail.com
+

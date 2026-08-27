@@ -1,0 +1,728 @@
+arXiv:1805.12181v1 [math.CO] 30 May 2018
+
+
+
+                                                   COMPUTING SMALL UNIT-DISTANCE GRAPHS
+                                                        WITH CHROMATIC NUMBER 5
+
+                                                                             MARIJN J.H. HEULE
+
+                                             Department of Computer Science, The University of Texas at Austin
+                                             E-mail address: marijn@heule.nl
+
+
+
+
+                                                  Abstract. We present a new method for reducing the size of graphs with
+                                                  a given property. Our method, which is based on clausal proof minimiza-
+                                                  tion, allowed us to compute several 553-vertex unit-distance graphs with
+                                                  chromatic number 5, while the smallest published unit-distance graph with
+                                                  chromatic number 5 has 1581 vertices. The latter graph was constructed by
+                                                  Aubrey de Grey to show that the chromatic number of the plane is at least
+                                                  5. The lack of a 4-coloring of our graphs is due to a clear pattern enforced on
+                                                  some vertices. Also, our graphs can be mechanically validated in a second,
+                                                  which suggests that the pattern is based on a reasonably short argument.
+
+
+                                                                              1. Introduction
+                                              The chromatic number of the plane, a problem first proposed by Edward
+                                           Nelson in 1950 [17], asks how many colors are needed to color all points of the
+                                           plane such that no two points at distance 1 from each other have the same
+                                           color. Early results showed that at least four and at most seven colors are
+                                           required. By the de Bruijn–Erdős theorem, the chromatic number of the plane
+                                           is the largest possible chromatic number of a finite unit-distance graph [2]. The
+                                           Moser Spindle, a unit-distance graph with 7 vertices and 11 edges, shows the
+                                           lower bound [14], while the upper bound is due to a 7-coloring of the entire
+                                           plane by John Isbell [17].
+                                              In a recent breakthrough for this problem, Aubrey de Grey improved the lower
+                                           bound by providing a unit-distance graph with 1581 vertices with chromatic
+                                           number 5 [6]. This graph was obtained by shrinking the initial graph with
+                                           chromatic number 5 consisting of 20 425 vertices. The 1581-vertex graph is
+                                           almost minimal: at most 4 vertices can be removed without introducing a 4-
+                                           coloring of the remaining graph. The discovery by de Grey started a Polymath
+                                           project to find smaller unit-distance graphs with chromatic number 5.
+
+                                              Supported by the National Science Foundation (NSF) under grant CCF-1526760.
+                                                                                        1
+2                                MARIJN J.H. HEULE
+
+
+   In this paper, we present our first contributions in this direction and we
+describe a method to reduce the size of graphs while preserving their chromatic
+number. Our results show that this method is quite effective as it was able
+to produce unit-distance graphs with 553 vertices. Our method exploits two
+formal-methods technologies: the ability of satisfiability (SAT ) solvers to find
+a short refutation for unsatisfiable formulas (if they exist) and proof checkers
+that can minimize refutations and unsatisfiable formulas.
+   The refutations emitted by SAT solvers are hardly minimal. Depending on
+the application from which the formula originates, typically 10% to 99% of the
+refutation can be omitted. Several techniques have been developed to avoid
+checking irrelevant parts of a refutation [8]. These techniques minimize proofs
+in order to share and revalidate them. For example, the proofs of the Boolean
+Pythagorean Triples [9] and Schur Number Five [7] problems are enormous,
+even after minimization: 200 terabytes and 2 petabytes, respectively.
+   Here we use clausal-proof-minimization techniques for a different purpose:
+shrinking graphs. Given a unit-distance graph with chromatic number 5, we
+first construct a propositional formula that encodes whether there exists a valid
+4-coloring of this graph. This formula is unsatisfiable and we can use a SAT
+solver to compute a refutation. From the minimized refutation, we extract
+a subgraph that also has chromatic number 5. We then apply this process
+repeatedly to make the graph ever smaller.
+
+
+
+                                2. Preliminaries
+2.1. Chromatic Number of the Plane. The Chromatic Number of the Plane
+(CNP) asks how many colors are required in a coloring of the plane to ensure
+that there exists no monochromatic pair of points with distance 1. A graph for
+which all edges have the same length is called a unit-distance graph. A lower
+bound for CNP of k colors can be obtained by showing that a unit-distance
+graph has chromatic number k.
+   We will use three operations to construct larger and larger graphs: the
+Minkowski sum, rotation, and merge. Given two sets of points A and B, the
+Minkowski sum of A and B, denoted by A ⊕ B, equals {a + b | a ∈ A,√           b ∈ B}.
+Consider the sets of points A = √{(0, 0), (1, 0)}√  and   B  = {(0, 0), (1/2,   3/2)},
+then A ⊕ B = {(0, 0), (1, 0), (1/2, 3/2), (3/2, 3/2)}.
+   Given a positive integer i, we denote by θi the rotation around point (0, 0)
+with angle arccos( 2i−1 ) and by θik the application of θi k times. Let p be a point
+               √ 2i
+with distance i from (0, 0), then the points p and θi (p) are exactly distance
+1 apart and thus would be connected with an edge in a unit-distance graph.
+Consider again the set of points A⊕B above. The points A⊕B ∪θ3 (A⊕B) form
+    COMPUTING SMALL UNIT-DISTANCE GRAPHS WITH CHROMATIC NUMBER 5                   3
+
+
+
+
+        Figure 1. From left to right: illustrations of A, B, A ⊕ B, and
+        the Moser Spindle. The graphs shown have chromatic number
+        2, 2, 3, and 4, respectively.
+
+
+the Moser Spindle. Figure 1 shows visualizations of these sets with connected
+vertices colored differently.
+
+2.2. Propositional Formulas. We will minimize graphs on the propositional
+level. We consider propositional formulas in conjunctive normal form (CNF),
+which are defined as follows. A literal is either a variable x (a positive literal )
+or the negation x of a variable x (a negative literal ). The complement l of a
+literal l is defined as l = x if l = x and l = x if l = x. For a literal l, var (l)
+denotes the variable of l. A clause is a disjunction of literals and a formula is
+a conjunction of clauses.
+   An assignment is a function from a set of variables to the truth values 1 (true)
+and 0 (false). A literal l is satisfied by an assignment α if l is positive and
+α(var (l)) = 1 or if it is negative and α(var (l)) = 0. A literal is falsified by an
+assignment if its complement is satisfied by the assignment. A clause is satisfied
+by an assignment α if it contains a literal that is satisfied by α. Finally, a
+formula is satisfied by an assignment α if all its clauses are satisfied by α. A
+formula is satisfiable if there exists an assignment that satisfies it and otherwise
+it is unsatisfiable. Two formulas are logically equivalent if they are satisfied by
+the same assignments; they are satisfiability equivalent if they are either both
+satisfiable or both unsatisfiable.
+
+2.3. Clausal Proofs. In the following, we introduce a formal notion of clause
+redundancy. A clause C is redundant with respect to a formula F if F and F ∧C
+are satisfiability equivalent. For instance, the clause C = x∨y is redundant with
+respect to the formula F = (x∨y) since F and F ∧C are satisfiability equivalent
+(although they are not logically equivalent). This redundancy notion allows us
+to add redundant clauses to a formula without affecting its satisfiability.
+4                                    MARIJN J.H. HEULE
+
+
+   Given a formula F = {C1 , . . . , Cm }, a clausal derivation of a clause Cn from
+F is a sequence Cm+1 , . . . , Cn of clauses. Such a sequence gives rise to formulas
+Fm , Fm+1 , . . . , Fn , where Fi = {C1 , . . . , Ci }. We call Fi the accumulated for-
+mula corresponding to the i-th proof step. A clausal derivation is correct if
+every clause Ci (i > m) is redundant with respect to the formula Fi−1 and if
+this redundancy can be checked in polynomial time with respect to the size
+of the proof. A clausal derivation is a proof of a formula F if it derives the
+unsatisfiable empty clause. Clearly, since every clause-addition step preserves
+satisfiability, and since the empty clause is always false, a proof of F certifies
+the unsatisfiability of F . The proofs computed in this paper show that the
+chromatic a given graph is at least 5. We will also refer to proofs as refutations
+as they refute the existence of a valid 4-coloring.
+
+                         3. Clausal Proof Minimization
+    SAT solving techniques are not only useful to validate the chromatic number
+of a graph, but they can also help reduce the size of the graph while preserving
+the chromatic number. The method works as follows. Given a graph G with
+chromatic number k, first generate the propositional formula F that encodes
+whether the graph can be colored with k − 1 colors. This formula is unsatisfi-
+able. Most SAT solvers can emit a proof of unsatisfiability. There exist several
+checkers for such proofs, even checkers that are formally verified in the theo-
+rem provers ACL2, Coq, and Isabelle [4, 13]. We used the (unverified) checker
+DRAT-trim [8] that allows minimizing the clausal proof as well as extracting an
+unsatisfiable core, i.e., a subformula that is also unsatisfiable. From the unsat-
+isfiable core one can easily extract a subgraph G0 of G such that G0 also has
+chromatic number k.
+3.1. Encoding. We can compute the chromatic number of a graph G as follows.
+Construct two formulas, one asking whether G can be colored with k − 1 colors,
+and one whether G can be colored with k colors. Now, G has chromatic number
+k if and only if the former is unsatisfiable while the latter is satisfiable.
+   The construction of these two formulas can be achieved using the following
+encoding. Given a graph G = (V, E) and a parameter k, the encoding uses k|V |
+boolean variables xv,c with v ∈ V and c ∈ {1, . . . , k}. These variables have the
+following meaning: xv,c is true if and only if vertex v has color c. Now we can
+encode whether G can be colored with k colors:
+                   ^                                  ^         ^
+           Gk :=         (xv,1 ∨ · · · ∨ xv,k ) ∧                     (xv,c ∨ xw,c )
+                   v∈V                              {v,w}∈E c∈{1,...,k}
+  The first type of clauses ensures that each vertex has at least one color,
+while the second type of clauses forces that two connected vertices are colored
+    COMPUTING SMALL UNIT-DISTANCE GRAPHS WITH CHROMATIC NUMBER 5                    5
+
+
+differently. Additionally, we could include clauses to require that each vertex
+has at most one color. However, these clauses are redundant and would be
+eliminated by blocked clause elimination [10], a SAT preprocessing technique.
+   We added symmetry-breaking predicates [3] during all experiments to speedup
+solving and proof minimization. The color-symmetries were broken by fixing
+the vertex at (0, 0) to
+                      √ the first color, the vertex at (1, 0) to the second color, and
+the vertex at (1/2, 3/2) to the third color. These three points are at distance
+1 from each other and occurred in all our graphs. The speedup is roughly a
+factor of 24 (4 · 3 · 2), when trying to find a 4-coloring.
+   We did not explore yet whether an encoding based on Zykov contraction [18]
+would allow shorter proofs of unsatisfiability. In essence, such an encoding
+would add variables and clauses that encode for a pair of vertices whether they
+have the same color. Solving graph coloring problems using such an extended
+encoding has been successful in the past [16].
+3.2. Graph Trimming. Modern SAT solvers can emit clausal proofs. We
+used the SAT solver Glucose [1] to produce the proofs. The most commonly
+supported format for clausal proofs is DRAT, which computes the redundancy of
+clauses using the resolution asymmetric tautology check [11]. Some DRAT proof
+checkers can extract from a refutation an unsatisfiable core, i.e., a subformula
+that is still unsatisfiable. When the formula expresses a graph coloring property,
+the unsatisfiable core represents a subgraph with the same coloring property.
+The absence of the clause (xv,1 ∨· · ·∨xv,k ) in the core shows that vertex v can be
+removed, while the absence of all clauses (xv,c ∨ xw,c ) with c ∈ {1, . . . , k} show
+that edge {v, w} can be removed. When trying to find a small unit-distance
+graph with a given chromatic number, we are interested in reducing the number
+of vertices. Although the proof checker can be easily modified to ensure that
+no edges are removed, we achieved larger reductions by allowing edges to be
+deleted and then restoring edges between vertices that survived the shrinking.
+3.3. Randomization. SAT solvers and clausal-proof-minimization tools are
+deterministic. To increase the probability of finding small unit-distance graphs
+with chromatic number 5, we want to randomize the process and minimize many
+clausal proofs.
+    The proofs produced by SAT solvers depend heavily on the ordering of the
+clauses in the input file. The initial heuristic ordering of the variables is based
+on their occurrence in the input file. The earlier a variable occurs in the input
+file, the higher its place in the ordering. Although more sophisticated initial-
+ization methods have been proposed, this method is effective in practice. The
+effectiveness is caused by the typical encoding of a problem into propositional
+logic where one starts with the more important variables. However, for our
+application there are no clear important variables.
+6                             MARIJN J.H. HEULE
+
+
+   Based on these observations, we applied the following lightweight random-
+ization. First, we shuffle the input formula and apply graph trimming on the
+result. When the clausal-proof-minimization tool is no longer able to remove
+vertices from the graph, we shuffle the clauses of the current formula and pro-
+duce a new clausal proof. Then we continue graph trimming using the new
+formula and proof. This process is repeated until randomization cannot further
+reduce the size of the graph.
+
+3.4. Critical Graphs. A graph is vertex/edge critical with respect to a given
+property if removing any vertex/edge would break that property. Here we are
+interested in vertex critical graphs with respect to the chromatic number. Graph
+trimming as described above would remove most redundant vertices of the graph
+and the randomization method allows shrinking the graph even further. How-
+ever, in most cases the reduced graphs are not critical: There still exist some
+vertices that can be removed while preserving the chromatic number.
+   Both the SAT solver and the clausal-proof-minimization tool aim to find a
+relatively short argument (i.e., clausal proof) explaining why imply the fewest
+number of involved vertices. In fact, an argument can frequently be shortened
+by using redundant (non-critical) vertices.
+   In the final step we therefore make the graph critical by the following pro-
+cedure. Randomly pick a vertex from the graph and determine the chromatic
+number of the graph without it. If the chromatic number is not changed, then
+the vertex is removed from the graph. This process is repeated until all remain-
+ing vertices have been determined to be critical.
+   Instead of using this naive method to make the graph critical, we could have
+used more sophisticated tools that compute a minimal unsatisfiable core from
+the propositional formula. However, these tools did not improve the perfor-
+mance or the size in an observable way.
+
+3.5. Validation. Determining whether a set of points form a unit-distance
+graph with chromatic number 5 requires two checks: (i) does the corresponding
+graph have chromatic number 5; and (ii) is the distance between two connected
+points exactly 1. The techniques discussed in this paper can easily perform the
+first check. SAT solvers can compute valid 5-coloring for the critical graphs in
+a fraction of a second. The proofs showing that there exists no 4-coloring are
+actually quite small: between 14 000 and 19 000 clause addition steps. Proofs
+of that size can be checked in roughly a second even with formally verified
+checkers. We used the DRAT-trim tool [8] to validate them. Proofs of recently
+solved hard-combinatorial problems, such as the Pythagorean Triples and Schur
+Number Five, are much larger: roughly 1 trillion and 10 trillion clause addition
+steps, respectively [9, 7].
+    COMPUTING SMALL UNIT-DISTANCE GRAPHS WITH CHROMATIC NUMBER 5                7
+
+
+   For the second check we used a tool based on Gröbner basis, available at
+http://fmv.jku.at/dist1sqrtgb/, to validate for every edge in the graph
+that the corresponding points are exactly 1 apart. The tool produces files that
+can be validated using Singular [5] and pactrim [15]. There is no need to check
+whether all edges are present as missing edges can only decrease the chromatic
+number. Checking only the correctness of the edges in the graph is cheap. The
+total validation time for our smallest critical graphs is about a second or two.
+
+                                  4. Results
+   In this section we discuss the various techniques that we used and developed
+to obtain small unit-distance graphs with chromatic number 5. The techniques
+were originally designed for verification purposes and applying them to graph
+minimization is novel and unexpected. The main strategy is to start with a
+large graph and shrink it using clausal proof minimization. We minimized
+several large graphs with various heuristics and most reduced graphs consisted
+of 800 to 900 vertices. However, we were able to produce several graphs of
+553 vertices using three techniques. The first technique (Section 4.1) enabled
+producing graphs with less than 700 vertices consistently. Second, we obtained
+graphs with just over 600 vertices by shrinking merged copies of graphs with less
+than 700 vertices (Section 4.2). Finally, we added some points far away from
+the origin in order to eliminate more points close to the origin (Section 4.3).
+The graphs and corresponding proofs mentioned in this section are available at
+https://github.com/marijnheule/CNP-SAT.
+
+
+
+
+       Figure 2. Left, a 3-coloring of de Grey’s graph V31 . Right, a
+       4-coloring of V151 being V31 ⊕ V31 without the vertices more than
+       unit distance apart from the center.
+8                                  MARIJN J.H. HEULE
+
+
+4.1. Finding a small symmetric subgraph. The main building block of our
+graphs is de Grey’s V31 [6]: five 7-wheels with a common central vertex. The
+graph
+   √ V √31 has 31 vertices, 60 edges, is 3-colorable, andj all      points are in the field
+                                                                  k
+Q[ 3, 11]. These points can be obtain by applying θ1 θ3 on point (1, 0) around
+(0, 0) with j ∈ {0, 1, 2, 3, 4, 5} and k ∈ {−1, − 21 , 0, 12 , 1}. A visualization of this
+graph is shown in Figure 2 (left). During an early stage of the experimentation,
+we observed that the graph (V31 ⊕ V31 ⊕ V31 ) ∪ θ4 (V31 ⊕ V31 ⊕ V31 ) has chromatic
+number 5. Furthermore, all points that are further away than 2 of the center
+can be removed without affecting the chromatic number.
+
+
+
+
+        Figure 3. A 4-coloring of V1939 , which is the Minkowski sum of
+        V31 and V151 .
+    COMPUTING SMALL UNIT-DISTANCE GRAPHS WITH CHROMATIC NUMBER 5                9
+
+
+   Instead of removing the points at distance larger than 2 from the center, we
+constructed the following graph. Let V151 be the Minkowski sum of V31 and
+V31 without the points at distance larger than 1 from the center. This graph
+has 151 vertices and 510 edges and is shown in Figure 2 (right). Now let V1939
+be the Minkowski sum of V31 and V151 . This graph is shown in Figure 3. The
+graph V1939 ∪ θ4 (V1939 ) has chromatic number 5 as well.
+   We applied clausal proof minimization on the formula that encodes whether
+the graph V1939 ∪ θ4 (V1939 ) is 4-colorable. Most random probes of clausal proof
+minimization produced a subgraph of V1939 ∪ θ4 (V1939 ) with slightly more than
+800 vertices. Occasionally it produces graphs with fewer than 700 vertices, while
+never producing graphs in the range of 700 to 800 vertices.
+   Closer examination of the minimized graphs with fewer than 700 vertices
+revealed that only √a small
+                         √ fraction of the points (always less than 200 vertices)
+are in the field Q[ 3, 11]. These points originate from the subgraph V1939 ,
+while the other points originate from the subgraph θ4 (V1939 ). Other patterns
+can be observed in the graphs
+                           √ √with fewer than 700 vertices: there were at least
+12 points in the field Q[ 3, 11] at distance 2, while the graphs with more
+than 800 vertices had fewer than three such points. Hence keeping the points at
+distance 2 appears crucial to find smaller graphs. Rotation θ4 does not only add
+edges between points at distance 2 (by construction), but also between points
+at other distances. In fact, half the edges between points√in V1939 and θ (V
+                                                                      √ 4 1939
+                                                                                )
+                                                           33+1        33−1
+are due to points that are closer to the center: i.e., at 2 3 and 2 3 from
+                                                            √           √
+
+the origin. Figure 4 shows the newly introduced edges due to θ4 .
+
+
+
+
+       Figure 4. A visualization of the edges between S199 ∪ θ4 (S199 )
+       and the involved vertices. Vertices originating from S199 and
+       θ4 (S199 ) are colored yellow and blue, respectively.
+10                            MARIJN J.H. HEULE
+
+
+
+
+       Figure 5. A 4-coloring of the graph S199 , a symmetric subgraph
+       of V1939 , that occurred in several early records.
+
+                                         √ √
+  Visualizing the points in the field Q[ 3, 11] reveals that they are highly
+symmetric: both reflection in the horizontal axis and a rotation of θ1 = 60◦
+map the points onto themselves. Figure 5 shows this visualization. Shown is
+a 199-vertex graph with 888 edges at unit distance, which we call S199 . The
+minimized graphs did not fully produce S199 , but always yielded a subgraph
+that missed a handful (up to a dozen) vertices in various locations. There exist
+many 4-colorings of S199 , but we observed no clear pattern.
+  Interesting patterns emerge when merging S199 and θ4 (S199 ), as shown in
+Figure 6. Notice that points that are close to each other frequently have the
+    COMPUTING SMALL UNIT-DISTANCE GRAPHS WITH CHROMATIC NUMBER 5               11
+
+
+
+
+             Figure 6. A 4-coloring of the graph S199 ∪ θ4 (S199 ).
+
+
+same color. More importantly, roughly half of the vertices that are close to
+distance 2 from the center have the same color as the central vertex. In later
+experiments we minimized the graph V1939 ∪θ4 (S199 ), which allowed us to consis-
+tently produce unit-distance graphs with fewer than 700 vertices. We suspect
+that the above mentioned patterns contribute to the lack of a 4-coloring of
+V1939 ∪ θ4 (S199 ). Notice that V1939 has S199 as a subgraph.
+12                              MARIJN J.H. HEULE
+
+
+
+
+                                      1
+        Figure 7. A rotation by θ32 connects points at different dis-
+        tances from the origin. Left, a subgraph
+                                         √         of V√31 ⊕ V31 consisting
+                                           33+3
+        of three 7-wheels with radii 1,     6   , and 33−36  . Right, two
+        copies of that graph with one copy turned by this rotation.
+
+
+4.2. Merging Critical Graphs. In order to further produce smaller unit-
+distance graphs with chromatic number 5, we selected two critical graphs ob-
+tained earlier, merged them, and applied clausal proof minimization again.
+There are a significant number of options to merge two graphs and we ex-
+perimented with a variety of these. The most effective merging strategy in our
+experiments turned out to be rotating the graphs along the central vertex in
+such a way that a vertex in one graph at unit distance from the center is merged
+with a vertex from the other graph at unit distance. Although two different crit-
+ical graphs can be used for merging, we observed that it is also effective to merge
+two copies of the same critical graph.
+   The minimization procedure frequently produced a graph that was larger
+than both the critical graphs that were merged. Only three kinds of rotations
+occasionally resulted in smaller graphs. The first two rotations are θ1k and θ3k for
+a small value of k. These rotations clearly increase the average vertex degree by
+merging
+√          vertices and introducing edges between points at distance 1 (θ1k ) and
+       k
+  3 (θ3 ) from the origin. Most other rotations result in little interaction between
+the two critical graphs and thus hardly increase the average vertex degree.
+   The most effective√rotations introduce
+                                  √         edges between the points at distance
+                         33+3       33−3
+1 and the distances       6   and    6   from the origin, thereby increasing the
+average vertex degree significantly. Figure 7 illustrates this by showing three
+    COMPUTING SMALL UNIT-DISTANCE GRAPHS WITH CHROMATIC NUMBER 5                  13
+                                   √             √
+7-wheel graphs with the radii 1, 33+3
+                                    6  , and 33−3
+                                                6    (left) and two copies of this
+graph rotated in such a way that the points on these distances become connected
+(right). The graph on the left has average vertex degree 36 19 , while the graph of
+                                                            1
+the right has average vertex degree 120                 2
+                                    37 . A rotation by θ3 for example achieves
+                                        √    √
+this and maps point (1, 0) onto point ( 633 , 63 ). Both points are at unit distance
+from the origin and both are part of V31 and of most other graphs that we used
+in the experiments.
+
+
+
+
+        Figure 8. A visualization of a 610-vertex unit-distance graph
+        with chromatic number 5. Five colors are used for the vertices.
+        Only the center uses the fifth color (white).
+14                             MARIJN J.H. HEULE
+
+
+   The combination
+            √ √ of merging and minimization only introduced vertices in
+the field Q[ 3, 11]. The smallest graphs contained roughly 50 vertices that
+do not occur in (V31 ⊕ V31 ⊕ V31 ) and thus not in V1939 .
+   The smallest graph that we found using the techniques discussed so far con-
+tains 610 vertices and 3000 edges. This graph is shown in Figure 8 using a
+5-coloring in which only the central vertex has the fifth color. Recall that this
+graph is vertex critical. Hence our graph possesses such a coloring in which any
+vertex can be the only one with the fifth color.
+
+4.3. Minimizing the Small Part. The critical graphs found so far can be
+partitioned into two parts: a subgraph of θ4 (S199 ) and the subgraph induced
+by the remaining vertices. We refer to the former as the small part, as it
+consists typically of only 187 vertices, and to the latter as the large part. In
+all statements regarding the size of these graphs, we count the central vertex in
+both parts. All points in the smallest critical graphs are at distance 2 or less
+from the center. Several approaches have been examined in order to find unit-
+distance graphs with fewer than 600 vertices. Only one approach was effective.
+   We focussed on adding points that are further away than 2 from the√  origin
+                                                                            √ in
+order to remove more inner vertices. Adding points from the field Q[ 3, 11]
+may allow reducing the large part, but none of the experiments were successful.
+However, we were able to substantially reduce the small part using this strategy.
+The most effective approach was as follows. We first constructed the Minkowski
+sum of θ4 (S199 ) and θ4 (S199 ) and removed all points that were less or equal
+than 2 away from the origin. This graph consists of 2028 vertices. All points
+were added to the smallest critical graphs that were found in the earlier steps,
+followed by clausal proof minimization. This resulted in a dozen graphs with
+553 vertices and (on average) 2720 edges. Figure 9 shows one of these graphs,
+which we refer to as G553 . Practically all vertices that were removed during
+minimization originated from the small part. This part was reduced to 133 or
+134 vertices. The 553-vertex graphs appear less symmetric compared to the
+earlier graphs. This is caused by the few vertices that are far from the origin.
+   The unit-distance graphs with 553 vertices are vertex critical, but not edge
+critical. The proofs of unsatisfiability show that many of the edge clauses can
+be removed without introducing a 4-coloring. Randomly removing edges until
+fixpoint eliminates about 270 edges (close to 10%) of these graphs.
+   Remarkably, all critical graphs have a handful of vertices with degree 4. If
+we removed such a vertex from the graph, all its four neighbors would have a
+different color in all valid 4-colorings. Graph S199 has even 12 vertices with
+degree 4. Reducing a 553-vertex graph to become edge critical will increase the
+number vertices with degree 4 to roughly 12. These vertices tend to be evenly
+distributed between the small and large parts of the graph.
+    COMPUTING SMALL UNIT-DISTANCE GRAPHS WITH CHROMATIC NUMBER 5                  15
+
+
+
+
+        Figure 9. A visualization of a 553-vertex unit-distance graph
+        with chromatic number 5. Five colors are used for the vertices.
+        Only the center uses the fifth color (white).
+
+
+4.4. Analysis. The sizes of the small and the large parts of the 553-vertex
+graphs suggest that they play a different role in eliminating 4-colorings. We
+analyzed the 4-colorings of both parts when restricted to the key√ vertices,√ i.e,
+the ones that connect the parts. These are the vertices at distance 2√3 , 233+1
+                                                                     33−1     √ ,
+                                                                                 3
+and 2 from the origin. Recall that Figure 4 shows the interaction between these
+vertices. The 553-vertex graphs have all 24 vertices occurring in S199
+                                                                    √
+                                                                        ∪ θ4 (S
+                                                                             √ 199
+                                                                                   )
+                                                                      33−1     33+1
+at distance 2 from the original and most of the vertices at distance 2 3 , 2 3
+                                                                       √        √
+
+from the origin.
+16                              MARIJN J.H. HEULE
+
+
+                               11       6       12
+
+
+
+
+               22                       1                             13
+
+
+
+
+                                                                           7
+
+
+                                                              2
+     21                                                                        14
+
+
+
+
+                                        0
+
+
+
+
+     20                                                                        15
+                    5                                         3
+
+
+          10                                                               8
+
+
+
+
+               19                       4                             16
+
+
+
+
+                               18       9       17
+
+
+
+          Figure 10. The 420-vertex large part of G553 with the key ver-
+          tices marked with numbers.
+
+
+  Figure 10 shows the large part of G553 in which the central and key vertices
+are numbered. The other vertices in the large part significantly restrict the
+number of different 4-colorings of these key vertices. In fact, there are only
+twenty 4-colorings of these vertices such that they either have the same color as
+the central vertex or a different color. Table 1 shows the√details. The clearest
+pattern is that either the vertices v1 to v5 (at distance 233−1
+                                                             √ ) have the same
+                                                              3   √
+color as the central vertex or the vertices v6 to v10 (at distance 233+1
+                                                                     √ ) have the
+                                                                      3
+same color as the central vertex. This pattern heavily constrains the vertices
+    COMPUTING SMALL UNIT-DISTANCE GRAPHS WITH CHROMATIC NUMBER 5                           17
+
+       Table 1. A list of the twenty 4-colorings of v1 to v22 in G553 .
+       The 1s denote that the vertex has the same color as the central
+       vertex, while the 0s denote that the vertex is colored differently
+       than the central vertex. The bold 1s indicate the main pattern.
+
+  v1 v2 v3 v4 v5 v6 v7 v8 v9 v10 v11 v12 v13 v14 v15 v16 v17 v18 v19 v20 v21 v22
+   0   0   0   0   0   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1
+   0   0   0   0   0   1   1   1   1   1   0   1   0   1   1   1   1   0   1   0   1   1
+   1   0   0   0   0   1   1   1   1   1   1   1   0   1   0   1   1   1   1   0   1   0
+   0   1   0   0   0   1   1   1   1   1   1   0   1   1   0   1   0   1   1   1   1   0
+   0   0   1   0   0   1   1   1   1   1   1   0   1   0   1   1   0   1   0   1   1   1
+   0   0   0   1   0   1   1   1   1   1   1   1   1   0   1   0   1   1   0   1   0   1
+   0   0   0   0   1   1   1   1   1   1   0   1   1   1   1   0   1   0   1   1   0   1
+   1   0   0   1   0   1   1   1   1   1   1   1   0   0   0   0   1   1   0   0   0   0
+   0   1   0   0   1   1   1   1   1   1   0   0   1   1   0   0   0   0   1   1   0   0
+   0   0   1   0   0   1   1   1   1   1   0   0   0   0   1   1   0   0   0   0   1   1
+   1   1   1   1   1   0   0   0   0   0   1   1   1   1   1   1   1   1   1   1   1   1
+   1   1   1   1   1   0   0   0   0   0   1   0   1   1   1   1   1   1   0   1   0   0
+   1   1   1   1   1   1   0   0   0   0   0   0   1   0   1   1   1   1   1   1   0   1
+   1   1   1   1   1   0   1   0   0   0   0   1   0   0   1   0   1   1   1   1   1   1
+   1   1   1   1   1   0   0   1   0   0   1   1   0   1   0   0   1   0   1   1   1   1
+   1   1   1   1   1   0   0   0   1   0   1   1   1   1   0   1   0   0   1   0   1   1
+   1   1   1   1   1   0   0   0   0   1   1   1   1   1   1   1   0   1   0   0   1   0
+   1   1   1   1   1   1   0   0   1   0   0   0   1   0   0   1   0   0   1   0   0   1
+   1   1   1   1   1   0   1   0   0   1   0   1   0   0   1   0   0   1   0   0   1   0
+   1   1   1   1   1   0   0   1   0   0   1   0   0   1   0   0   1   0   0   1   0   0
+
+                                                                                   √
+                                                                                   33+1
+in the small part at those distances: Either all vertices at distance               √
+                                                                                   2 3
+                                                                                           or
+                           √
+                           33−1
+all vertices at distance    √
+                           2 3
+                                from the origin must have a different color than
+the central vertex. Other patterns can be observed as well. For example, if the
+missing two vertices would be added, then most colorings can be obtained by a
+rotation of 60 degrees.
+   In contrast, the small part hardly constrains its key vertices since as many
+as 9974 4-colorings are allowed. However, none of these many 4-colorings is
+compatible with the twenty 4-colorings of the large part.√ Enforcing the above
+mentioned pattern, i.e., either all vertices at distance 233+1
+                                                           √
+                                                             3
+                                                               or all vertices at
+           √
+distance 233−1
+            √
+              3
+                 from the origin must have a different color than the central
+vertex, reduces the number of 4-colorings of the small part to 1353.
+18                             MARIJN J.H. HEULE
+
+
+                                5. Conclusions
+   We demonstrated that clausal proof minimization can be an effective tech-
+nique to reduce the size of graphs with a given property. We used this method to
+shrink graphs while preserving the chromatic number. This resulted in a dozen
+of unit-distance graphs with chromatic number 5 consisting of 553 vertices —
+a reduction of over 1000 vertices compared to the smallest previously known
+unit-distance graph with chromatic number 5.
+   A main goal of this research is to obtain a human-understandable unit-
+distance graph with chromatic number 5. Although that goal has not been
+reached yet, the experiments produced
+                                 √         some interesting results.√ For example,
+either all vertices at distance 233−1
+                                   √
+                                     3
+                                        or all vertices at distance 233+1
+                                                                      √
+                                                                        3
+                                                                          from the
+central vertex are forced to the same color as the central vertex by the large
+part of the minimized graphs. Also, our research produced a symmetric graph
+of 199 vertices that was vital for the reduction. We will study this graph in more
+detail to determine which properties make it so useful. Moreover, we found two
+rotations that connected points at multiple distances, thus increasing the av-
+erage vertex degree of unit-distance graphs. Finding more such rotations may
+allow us to shrink the graphs even further.
+   Applying clausal-proof techniques to provide mathematical insights is an in-
+teresting twist in the discussion about the usefulness of mechanized mathemat-
+ics. It has been argued that computers are just “ticking off possibilities” [12].
+In this case, however, they reveal important patterns. The techniques described
+in this paper may actually produce the most clean and compact proof that the
+chromatic number of the plane is at least 5.
+   Finally, all graphs used in our experiments could be easily colored with 5
+colors, even the ones with many thousands of vertices. However, we observed
+that this does not hold for the graph (S199 ⊕ S199 ) ∪ θ4 (S199 ⊕ S199 ). This
+graph is 5-colorable, even when requiring two colors for the central vertex, but
+computing such a coloring is expensive. Consequently, such colorings may be
+rare and thus may contain certain patterns. This could point to the existence
+of unit-distance graphs with chromatic number 6 with thousands of vertices.
+
+
+
+                             Acknowledgements
+   The author thanks Aubrey de Grey, Jasmin Blanchette, Benjamin Kiesl,
+Victor Marek, and the reviewer for their valuable input on an earlier draft of
+this paper. The author acknowledges the Texas Advanced Computing Center
+(TACC) at The University of Texas at Austin for providing HPC resources that
+have contributed to the research results reported within this paper.
+     COMPUTING SMALL UNIT-DISTANCE GRAPHS WITH CHROMATIC NUMBER 5                            19
+
+
+                                       References
+ [1] Audemard, G., Simon, L.: Predicting learnt clauses quality in modern SAT solvers. In:
+     21st International Joint Conference on Artificial Intelligence. pp. 399–404 (2009)
+ [2] de Bruijn, N.G., Erdős, P.: A colour problem for infinite graphs and a problem in the
+     theory of relations. Nederl. Akad. Wetensch. Proc. Ser. A 54, 371–373 (1951)
+ [3] Crawford, J.M., L., G.M., Luks, E.M., Roy, A.: Symmetry-breaking predicates for search
+     problems. In: Knowledge Representation and Reasoning – KR 1996. pp. 148–159. Morgan
+     Kaufmann (1996)
+ [4] Cruz-Filipe, L., Heule, M.J.H., Hunt Jr., W.A., Kaufmann, M., Schneider-Kamp, P.:
+     Efficient certified RAT verification. In: Automated Deduction – CADE 26. pp. 220–236.
+     Springer (2017)
+ [5] Greuel, G.M., Pfister, G.: A Singular Introduction to Commutative Algebra. Springer,
+     2nd edn. (2007)
+ [6] de Grey, A.D.N.J.: The chromatic number of the plane is at least 5 (2018),
+     arXiv:1804.02385
+ [7] Heule, M.J.H.: Schur Number Five. In: Proceedings of AAAI-18. pp. 6598–6006 (2018)
+ [8] Heule, M.J.H., Hunt, Jr., W.A., Wetzler, N.D.: Trimming while checking clausal proofs.
+     In: Formal Methods in Computer-Aided Design. pp. 181–188. IEEE (2013)
+ [9] Heule, M.J.H., Kullmann, O., Marek, V.W.: Solving and verifying the Boolean
+     Pythagorean Triples problem via Cube-and-Conquer. In: SAT. pp. 228–245. Springer
+     (2016)
+[10] Järvisalo, M., Biere, A., Heule, M.J.H.: Simulating circuit-level simplifications on cnf.
+     Journal of Automated Reasoning 49(4), 583–619 (2012)
+[11] Järvisalo, M., Heule, M.J.H., Biere, A.: Inprocessing rules. In: Gramlich, B., Miller, D.,
+     Sattler, U. (eds.) IJCAR. LNCS, vol. 7364, pp. 355–370. Springer (2012)
+[12] Lamb, E.: Maths proof smashes size record: Supercomputer produces a 200-terabyte
+     proof – but is it really mathematics? Nature 534, 17–18 (June 2016)
+[13] Lammich, P.: Efficient verified (UN)SAT certificate checking. In: Automated Deduction
+     – CADE 26. pp. 237–254. Springer (2017)
+[14] Moser, L., Moser, W.: Solution to problem 10. Can. Math. Bull. 4, 187–189 (1961)
+[15] Ritirc, D., Biere, A., Kauers, M.: A practical polynomial calculus for arithmetic cir-
+     cuit verification. In: 3rd International Workshop on Satisfiability Checking and Symbolic
+     Computation (2018), to appear
+[16] Schaafsma, B., Heule, M.J.H., van Maaren, H.: Dynamic symmetry breaking by simulat-
+     ing Zykov contraction. In: Kullmann, O. (ed.) SAT 2009, LNCS, vol. 5584, pp. 223–236.
+     Springer (2009)
+[17] Soifer, A.: The Mathematical Coloring Book (2008), ISBN-13: 978-0387746401
+[18] Zykov, A.A.: On some properties of linear complexes. Matematicheskii Sbornik 24, 163–
+     188 (1949)
+
+   Department of Computer Science, The University of Texas at Austin
+   E-mail address: marijn@heule.nl
+

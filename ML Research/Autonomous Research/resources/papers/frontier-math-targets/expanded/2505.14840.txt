@@ -1,0 +1,2155 @@
+                                             Subquadratic Algorithms and Hardness for Attention with Any
+                                                                    Temperature
+                                             Shreya Gupta∗          Boyang Huang∗           Barna Saha∗         Yinzhan Xu∗          Christopher Ye∗
+
+                                                                                          June 9, 2025
+arXiv:2505.14840v1 [cs.LG] 20 May 2025
+
+
+
+
+                                                                                             Abstract
+                                                     Despite the popularity of the Transformer architecture, the standard algorithm for computing
+                                                 Attention suffers from quadratic time complexity in context length n. Alman and Song [NeurIPS
+                                                 2023] showed that when the head dimension d = Θ(log n), subquadratic
+                                                                                                              √             Attention is possible if
+                                                 and only if the inputs have small entries bounded by B = o( log n) in absolute values, under the
+                                                 Strong Exponential Time Hypothesis (SETH). Equivalently, subquadratic Attention is possible
+                                                 if and only if the softmax is applied with high temperature for d = Θ(log n). Running times of
+                                                 these algorithms depend exponentially on B and thus they do not lead to even a polynomial-time
+                                                 algorithm outside the specific range of B.
+                                                     This naturally leads to the question: when can Attention be computed efficiently without
+                                                 strong assumptions on temperature? Are there fast attention algorithms that scale polyloga-
+                                                 rithmically with entry size B? In this work, we resolve this question and characterize when fast
+                                                 Attention for arbitrary temperatures is possible. First, for all constant d = O(1), we give the
+                                                 first subquadratic Õ(n2−1/d · polylog(B)) time algorithm for Attention with large B. Our result
+                                                 holds even for matrices with large head dimension if they have low rank. In this regime, we also
+                                                 give a similar running time for Attention gradient computation, and therefore for the full LLM
+                                                 training process. Furthermore, we show that any substantial improvement on our algorithm is
+                                                                                                              ∗
+                                                 unlikely. In particular, we show that even when d = 2Θ(log n) , Attention requires n2−o(1) time
+                                                 under SETH.
+                                                     Finally, in the regime where d = poly(n), the standard algorithm requires O(n2 d) time while
+                                                 previous lower bounds only ruled out algorithms with truly subquadratic time in n. We close
+                                                 this gap and show that the standard algorithm is optimal under popular fine-grained complexity
+                                                 assumptions.
+
+
+                                         1       Introduction
+                                         Large Language Models powered by the Transformer architecture [VSP+ 17] have been at the heart
+                                         of modern AI revolution completely reshaping the landscapes of natural language processing, com-
+                                         puter vision, and multitude of other applications. The Attention mechanism is the cornerstone of
+                                         the Transformer architecture. Attention computes correlations between different tokens of the se-
+                                         quences, allowing Transformers to model dependencies regardless of the position of the tokens in the
+                                         sequences. Despite its popularity, standard algorithms for computing Attention require quadratic
+                                         time complexity, as they compute the Attention matrix explicitly.
+                                             Formally, the Attention mechanism is defined as follows. Let Q ∈ Rn×d be the query matrix,
+                                         K ∈ Rn×d the key matrix, and V ∈ Rn×d the value matrix. We call n the sequence or context
+                                             ∗
+                                             University of California, San Diego. The authors are partially supported by NSF grants 1652303, 1909046,
+                                         2112533, and HDR TRIPODS Phase II grant 2217058.
+
+
+                                                                                                 1
+length and d the head dimension. The Attention matrix is the n × n matrix obtained by applying
+softmax1 to each row of QK ⊤ . Each entry in the matrix represents the attention weight between
+a particular input token (query token Q) and output token (key token K). Finally, the Attention
+mechanism asks for the product of the Attention matrix with the value matrix V .
+    We give the formal definition below. Note that exp(X) applies exp to each entry of a matrix X.
+
+Definition 1.1 (Attention). Given input matrices Q, K, V ∈ Rn×d , Attention on Q, K, V is defined
+Attention(Q, K, V ) := D−1 AV ∈ Rn×d where A := exp(QK ⊤ )2 and D := diag(A1).
+
+   In practice, there is an input X ∈ Rn×d and weight matrices WQ , WK , WV ∈ Rd×d such that
+Q = XWQ , K = XWK , V = XWV . Since Q, K, V can be computed from X, WQ , WK , WV in
+O(nd2 ) time, we assume for simplicity that the inputs Q, K, V are given directly.
+   Typically, it suffices to approximately perform Attention computations. In particular, it is not
+necessary (or even reasonable) to expect Attention to be computed exactly due to the softmax
+operation. Thus, we study Approximate Attention as defined in [AS24a]. Typically, it suffices to
+compute the result up to polynomial precision (i.e. inverse polynomial additive error).
+
+Definition 1.2 (Approximate Attention Computation AttC(n, d, B, ε)). Given matrices Q, K, V ∈
+[−B, B]n×d and B, ε > 0, compute O ∈ Rn×d such that ∥O − Attention(Q, K, V )∥∞ < ε.
+
+    The standard (and most widely used) algorithm for Attention (even in approximate form) re-
+quires quadratic time. The algorithm begins by explicitly computing matrix product QK ⊤ , applies
+softmax to obtain D−1 A and then computes the matrix product (D−1 A)V . Using standard matrix
+multiplication, this requires O(n2 d) time. Even ignoring computation time of matrix multiplication,
+explicitly computing the A matrix already requires O(n2 ) time.
+    However, the inputs (and outputs) only have size O(nd). Indeed, an algorithm that does not
+compute A explicitly could compute Attention in O(nd) time, incurring only linear dependence
+on the context length n. This leads to the fundamental question concerning the complexity of
+Attention.
+
+                 Question 1: When can Attention be computed faster than n2 d time?
+
+    Towards answering this question, [AS24a]
+                1+o(1)
+                                            √ showed that for d = Θ(log n), Attention √ can be
+computed in n          time whenever B = o( log n). Furthermore, whenever B = Ω( log n) and
+d = Θ(log n), Attention requires n2−o(1) time under SETH, a popular hardness hypothesis.
+    Yet there remain several shortcomings in our current understanding of Attention.
+                                                                                  √      Fast algo-
+rithms for Attention are only known for inputs with small entries (i.e. B = o( log n)). Such a
+strong bound on the entries of Q, K essentially restricts the Attention mechanism to use softmax
+with high temperature (enforcing a near-uniform distribution on the key and query matrices). Tem-
+perature, denoted by T , is a key hyperparameter for Attention that dictates how random the output
+is. Formally, Attention with temperature T replaces A := exp(QK ⊤ ) with A := exp(QK ⊤ /T ) so
+that high temperature corresponds to high entropy (more likely to select keys with lower scores).
+In many tasks, temperature is a key hyperparameter with potentially significant impact on ac-
+curacy and stability [ASPD23, XYL25]. In contrastive learning, temperature has been found to
+significantly impact both the accuracy [CKNH20, WL21, HWHQ21] as well as the learned repre-
+sentations [WI20, WL21, RSY+ 21] of the model. Dynamically varying temperature throughout the
+   1                                                                    P
+      Given a vector x, applying softmax to x replaces xi with exp(xi )/ j exp(xj ).
+                                                                           √
+    2
+      In practice, a scaled dot-product attention, defined as A := (QK ⊤ / d), is also commonly used for training
+                 +
+efficiency [VSP 17].
+
+
+                                                       2
+training process can also help balance multiple training objectives [KAG22, KBS+ 23, MCD+ 23]. In
+instances where low entropy is required, no subquadratic algorithms are known.
+    Furthermore, it is generally undesirable for the running time of an algorithm to scale poorly
+with the numerical values of the input. In fact for many fundamental problems (Knapsack, All-
+Pairs Shortest Paths, 3-SUM), having small entries makes the problems much easier. For example,
+there is a simple pseudo-polynomial time dynamic programming algorithm for Knapsack, while
+designing a polynomial time algorithm for Knapsack is NP-complete.3 Therefore, in this work we
+study algorithms for Attention that scale polynomially with the representation length of the entries.
+Equivalently, the algorithm should scale polylogarithmically with the entry size B.
+    Currently, the only known algorithms for Attention beyond the standard O(n2 d) algorithm is
+Alman and Song’s algorithm [AS24a] which scales exponentially with the entry size B. Following
+the terminology of pseudo-polynomial time, we will call an algorithm that is subquadratic but
+scaling polynomially (or worse) with the numerical value of the input pseudo-subquadratic. We
+call an algorithm that is subquadratic and scales logarithmically with the numerical value of the
+inputs (non-pseudo-)subquadratic, or simply subquadratic. Following from our above discussion,
+the question of whether (non-pseudo-)subquadratic algorithms for Attention exist remains open.4
+Even if d = O(1), there is a tantalizing gap between the O(n2 ) upper bound and the Ω(n) lower
+bound.
+
+          Question 2: Is there a truly (non-pseudo-)subquadratic algorithm for Attention?5
+
+    In our work, we resolve this question for almost all regimes of head dimension d, including the
+setting d = Θ(log n) previously studied [AS24a]. Our first result makes progress towards resolving
+this question by developing a fast algorithm whenever the head dimension is small. In particular,
+we show that there is an algorithm for Attention in truly sub-quadratic time for constant d.6
+
+Theorem 1.3. Let d = O(1). There is an algorithm that computes AttC(n, d, B, ε) in Õ(n2−1/d ·
+polylog(B/ε)) time.
+
+   The result also generalizes to the case where the matrices Q, K have low rank.
+
+Theorem 1.4. Let r = O(1). There is an Õ nd + n2−1/r · polylog(B/ε) time algorithm computing
+                                                                       
+
+AttC(n, d, B, ε) where r = min(rank(Q), rank(K)).
+
+    We complement this algorithm with a subquadratic algorithm for Attention Gradient Com-
+putation similar to [AS24b]. In the training process, gradient descent tunes the weight matrices
+WQ , WK , WV according to the input data. When d = O(1), we give a subquadratic running time
+for computing the Attention gradient. In particular, we obtain a truly (non-pseudo-)subquadratic
+algorithm for the full LLM training process in this regime.
+
+Theorem 1.5 (Informal Theorem 4.3). The Attention gradient can be computed with O(d) calls to
+AttC(n, d, B, ε/Θ(ndB 3 )) with O(nd2 ) overhead. In particular, if d = O(1) the Attention gradient
+can be computed in Õ(n2−1/d polylog(B/ε)) time.
+   3
+     An algorithm runs in pseudo-polynomial time if its running time is polynomial in the numerical value of the
+input. A polynomial time algorithm must be polynomial in the length of the input.
+   4
+     Similarly, while there are pseudo-subcubic algorithms for APSP (e.g., [SZ99, Zwi02]), there is no truly subcubic
+(O(n3−c ) for some c > 0) algorithm.
+   5
+     An algorithm runs in truly subquadratic time if it runs in O(n2−c ) time for some c > 0
+   6
+     We use Õ(·) notation to suppress polylogarithmic factors.
+
+
+
+
+                                                         3
+    We give a generic reduction from gradient computation to attention computation. Thus, to
+obtain fast LLM training, it suffices to efficiently compute Attention.
+    When d = ω(1), the above algorithms requires n2−o(1) time. Is there a truly subquadratic
+algorithm for super-constant d? [AS24a] show that n2−o(1) time is necessary when d = Ω(log n)
+under the Strong Exponential Time Hypothesis (SETH). Under the same hardness assumption we
+                                                                                        ∗
+provide a much stronger lower bound and show that Attention is hard even when d = 2Ω(log n) .
+
+Theorem 1.6 (Informal Theorem 5.4). Under SETH, AttC(n, d, B, ε) requires n2−o(1) time for
+          ∗
+d = 2Ω(log n) and B = poly(n).
+
+    It suffices to consider instances with polynomial entry size B = poly(n) since any (non-pseudo-)
+subquadratic algorithm must handle such instances in subquadratic time. Formally, we show that
+any fast algorithm for AttC(n, d, B, ε) implies a fast algorithm for (Bichromatic) Maximum Inner
+Product (Max-IP) on d-dimensional vectors with integer entries. The (Bichromatic) Max-IP problem
+asks an algorithm given two sets of vectors A, B ⊆ Zd to compute maxa∈A,b∈B a·b. Under SETH, this
+                                            ∗
+requires n2−o(1) time whenever d = 2Ω(log n) [Che18]. Furthermore, the best known algorithms for
+Max-IP run in n2−Θ(1/d) time [Yao82, AESW91, Mat92] so that any algorithm improving significantly
+over Theorem 1.3 must improve upon the best known algorithms for Max-IP. [Che18] conjectures
+that no such algorithm exists under SETH.
+    Stronger Lower Bounds for Large Head Dimension. The head dimension d can often
+be relatively large with respect to the context length n (in some cases e.g. [VSP+ 17], the head
+dimension d can even be larger than the context length n). In these settings, a large gap remains
+between the standard algorithm requiring O(n2 d) time and the known n2−o(1) lower bound. Our
+work addresses this gap and shows that the standard algorithm is conditionally optimal.
+    Our conditional lower bound depends on a natural generalization of a popular hypothesis. The
+Orthogonal Vectors (OV) problem is among the most well studied problems in fine-grained com-
+plexity. In the OV problem, an algorithm is given two sets of n vectors A, B ⊆ {0, 1}d and is asked
+to determine if there exists an orthogonal pair a ∈ A, b ∈ B such that a · b = 0. The naive algo-
+rithm for this problem requires O(n2 d) time and the current best algorithm for OV achieves truly
+subquadratic time only for d = O(log n) [AWY15a, CW16]. A central hypothesis (known as the OV
+Hypothesis) in fine-grained complexity states that there is no n2−o(1) algorithm for OV whenever
+d = ω(log n), and the OV Hypothesis is known to hold under SETH [Wil04].
+    If d = poly(n), one can compute a · b for all pairs a ∈ A, b ∈ B using a matrix product between
+an n × d matrix containing the vectors in A as rows and a d × n matrix containing the vectors of
+B as columns. The above algorithm requires O(TMUL (n, d, n)) time, where TMUL (a, b, c) is the time
+complexity for multiplying an a × b matrix with a b × c matrix. The High-Dimensional OV Hypoth-
+esis introduced by [DK21] hypothesized that when d = n, any algorithm computing OV requires
+TMUL (n, n, n)1−o(1) = nω−o(1) time, where ω < 2.3714 denotes the square matrix multiplication ex-
+ponent [ADV+ 25]. We consider a generalization of their hypothesis: the TMUL (n, d, n)1−o(1) running
+time is required for any d = poly(n). We call it the Generalized High-Dimensional OV Hypothesis.
+    Under this hypothesis, we show that the standard algorithm for computing Attention is optimal.
+Note that using fast matrix multiplication, one can easily obtain an algorithm for Attention using
+O(TMUL (n, d, n)) time.
+
+Theorem 1.7 (Informal Theorem 5.5). Under the Generalized High-Dimensional OV Hypothesis,
+AttC(n, d, B, ε) requires TMUL (n, d, n)1−o(1) time for d = poly(n).
+
+    Table 1 summarizes our results. In particular, we tightly characterize the complexity of At-
+tention (up to sub-polynomial factors) when B = poly(n) for all regimes of d except 1 ≪ d ≪
+
+
+                                                 4
+       ∗
+2Θ(log n) . Within this regime, our running time matches the best known algorithms for Max-IP
+[Yao82, AESW91, Mat92], and as mentioned earlier, significant improvements over our algorithm
+will imply improvements over the current best known algorithms for Max-IP which will be a break-
+through.
+
+            d           Upper Bound                          Lower Bound              Previous Result
+        O(1)        n2−1/d (Theorem 1.3)                        Ω(n)                       O(n2 )
+                ∗
+      2Θ(log n)              n2                       n 2−o(1) (Theorem 1.6)               Ω(nd)
+      Θ(log n)               n2                       n2−o(1) (Theorem 5.7)          n2−o(1) ([AS24a])*
+      poly(n)           TMUL (n, d, n)          TMUL (n, d, n)1−o(1) (Theorem 1.7)   n2−o(1) ([AS24a])
+
+Table 1: Summary of known results when B = poly(n) and ε = 1/poly(n). Sub-polynomial
+             are suppressed for simplicity. *For d = Θ(log n), the previous lower bound holds
+dependencies √
+when B = Ω( log n) while ours holds even when B ≥ log 2.
+
+
+1.1        Technical Overview
+
+                                                 n
+                                                                               Pwe focus on the d = 1
+In this section, we give a high level overview of our algorithm. For simplicity,
+case in this overview. Given inputs q, k, v ∈ R , our goal is to compute oi = j pi,j vj for all i where
+pi,j ∝ exp(qi kj ) are probabilities in the softmax distribution.
+     First, we show that for each i it suffices to only consider near maximal qi kj . Assume without
+loss of generality that qi > 0. Let kmax = maxj kj . Define j to be irrelevant (with respect to qi )
+if qi kj ≪ qi kmax − log(n/ε) and relevant otherwise. Therefore, exp(qi kj ) ≤ ε exp(qni kmax ) . Summing
+over all irrelevant j, pi,j ≪ ε. Since discarding such j does not significantly change the value of oi ,
+we consider only relevant j for the remainder of the overview.
+
+                        Relevant Indices →
+
+
+
+                             k1      k2    k3           k4         k5      k6   k7    k8
+
+                 Value (v)    6       1   3              8          5       7   4      2
+                  Key (k)    0.5     1.8 2.6            4.5        6.1     7.4 8.2    9.4
+                Rounding (k) −∞       4   4              7          7      10 10      10
+
+Figure 1: Rounding based algorithm for 1-dimensional Attention illustrated for qi = 1. Each point is
+placed at kj and has value vj . Points (e.g. k1 ) such that qi kj < qi kmax − log(n/ε) are irrelevant and
+discarded (in this example qi kmax − log(n/ε) = 1). Relevant points with similar kj (e.g. {k2 , k3 } or
+{k6 , k7 , k8 }) are grouped together and assigned the same (rounded) keyP   k. The width of each region
+is log(1 + ε) (in this example log(1 + ε) = 3). The algorithm outputs          pj vj where pj ∝ exp(k j ).
+
+     Combining this observation with a simple rounding scheme, we already obtain a modest im-
+provement over known algorithms for Attention [AS24a]. We illustrate this for the d = 1 case.
+Consider relevant kj such that qi kj ≥ qi kmax − log(n/ε). If we round such kj to k j such that
+qi kj ≤ qi k j ≤ qi kj + log(1 + ε), then eqi kj is a (1 + ε)-multiplicative approximation of eqi kj . This
+gives us estimates
+                P      pi,j that are good multiplicative approximations of pi,j . The algorithm then
+outputs ôi = j pi,j vj which is a (1 + ε)-multiplicative approximation of oi . Since oi = O(B), this
+
+                                                         5
+gives a εB-additive approximation of oi . To compute ôi , we need to compute the number of kj in
+     log(n/ε)
+the log(1+ε)  = O((1/ε) log(n/ε)) intervals for each qi since for all kj s that fall in the same interval
+will have the same rounded value kj . We can preprocess kj in Õ(n) time to support such interval
+counting queries in O(log n) time. Since the total number of queries is Õ(n/ε), we can compute
+AttC(n, d, B, εB) in time Õ(n/ε), or AttC(n, d, B, ε) in time Õ(nB/ε) by rescaling ε by B. Figure 1
+illustrates the rounding scheme.
+      The above rounding method gives a polynomial dependence on the entry bound B, and is only
+subquadratic when B < o(n). Although this already impoves on [AS24a]’s √        algorithm (which exhibits
+exponential dependence on B, and thus only worked for values of B = o( log n)), we would like a
+truly subquadratic algorithm for all polynomial B. To do this, we leverage the powerful polynomial
+method in algorithm design (see e.g. [Wil18, AWY15b]) that was also used in [AS24a].
+      A natural attempt to utilize the polynomial method is to approximate ex with a polynomial.
+As a simple case, by approximating ex ∼ 1 + x we can compute exp(QK T )V ∼ 11⊤ V + QK T V
+efficiently. However, it is well known that ex can only be approximated well by polynomials with
+degree p when |x| ≤ p [AA22]. For a rank d = O(1) matrix QK ⊤ , exp(QK ⊤ ) can be approximated
+                       2
+with a rank 2O(B ) matrix. Using    √ this observation (as in [AS24a]) one can obtain a subquadratic
+algorithm by assuming B = o( log n), but we would like to design fast algorithms in more general
+settings.
+      Let us see how we can handle 1-dimensional Attention. For x = O(log(n/ε)), there is a low-
+degree polynomial P such that |P (x) − exp(x)| < ε exp(x) [AS24a]. We then        P approximate p with
+p̂ by approximating exp with P . Formally, our algorithm outputs ôi =               j p̂i,j vj where p̂i,j ∝
+P (qi kj ). Here, we crucially use the observation that irrelevant indices can be discarded. Setting
+ci = maxj qi kj − O(log(n/ε)) we can approximate pi,j ∝ exp(qi kj ) ∝ exp(qi kj − ci ). For relevant
+indices qi kj − ci = O(log(n/ε)) so that p̂i,j ∝ P (qi kj − ci ) is a good approximation of pi,j .
+P We now describe how to compute ôi efficiently. In particular, we describe how to compute
+    j P (qi kj − ci )vj over relevant j noting that ôi easily follows from computing this     quantity twice
+                                                                                                   ℓ
+                                                                                        P
+(once with v and once with v replaced by 1 for normalization).P Let P (x) = ℓ m                 ℓ x and fix a
+               ℓ
+                                                                                               P
+monomial x . It suffices to compute each monomial separately as j P (qi kj −ci )vj = j,ℓ mℓ (qi kj −
+ci )ℓ vj . Then for a fixed ℓ we compute
+                                                       ℓ                             ℓ  
+                     X
+                                    ℓ
+                                              X        X  ℓ                            X  ℓ b            X
+       f (i, ℓ) :=       (qi kj − ci ) vj =       vj             qib kjb (−ci )ℓ−b =        qi (−ci )ℓ−b   kjb vj .
+                                                             b                            b
+                     j                        j        b=0                             b=0                 j
+
+We
+P can preprocess       a simple data structure in Õ(n) time for all b that answers queries ϕ(i, b) =
+             k b v in near constant time, since relevant indices lie in a continuous interval. Then, for
+   relevant j j j
+                                                 P
+each i, since P is of low degree, we compute ℓ mℓ f (i, ℓ) in Õ(1) time, thus obtaining a near-linear
+time algorithm to approximate Attention.
+     Generalizing to Higher Dimensions. What happens when we try to generalize this algorithm
+to higher dimensions? In one dimension, we knew that for each i, the set of relevant j included all
+j where qi kj ≫ qi kmax − log(n/ε). In higher dimensions, our goal is similarly to compute a set of
+relevant indices j relative to each Qi such that (1) discarding irrelevant indices outside this range
+does not significantly affect the additive error of our estimate and (2) the range of Qi · Kj is now
+sufficiently restricted so that we can use a low-degree polynomial to approximate exp(Qi · Kj ).
+     In one dimension, the set of all relevant j consists exactly of the set of sufficiently large kj (either
+in the positive or negative direction). A simple interval searching data structure can support the
+necessary queries. In d > 1 dimensions, each row of Q, K (denoted Qi , Kj ) is now a d-dimensional
+vector. Even in 2 dimensions, different Kj may be larger with respect to different Qi . Sorting all
+
+                                                                 6
+Kj with respect to each Qi already requires n2 time. Instead, the key observation is that the set of
+relevant j with respect to Qi is exactly the set of Kj contained in the half-space
+                                                                     
+                                   d
+                             x ∈ R : Qi · x ≥ max Qi · Kj − log(n/ε) .
+                                                 j
+
+This can be handled with a simplex range-searching data structure by Matoušek [Mat92]. In par-
+ticular, we can initialize the data structure using points {Kj } so that for each Qi we can query
+the data structure for the appropriate half-space. Matoušek’s data structure supports queries in
+Õ(n1−1/d ) time and computes the sum of the weights assigned to all points in the half-space. In high
+dimensions, the application of the polynomial method becomes more challenging, and we carefully
+precompute weights assigned to each point. Using appropriate queries to the data structure over
+all i, our algorithm requires Õ(n2−1/d ) time. Figure 2 illustrates the algorithm.
+
+
+
+
+Figure 2: Polynomial method algorithm for d-dimensional Attention illustrated for qi = (2, 1).
+Relevant points are in the shaded blue region. Irrelevant points are in the white region. Weights
+are omitted for clarity.
+
+    Generalizing to Low Rank Matrices. To generalize the algorithm for low-rank matrices
+Q, K with rank r, we may decompose Q = UQ VQ⊤ , K = UK VK⊤ where UQ , VQ , UK , VK are n × r
+matrices. Then, we obtain Theorem 1.4 by applying Theorem 1.3 to Q′ = UQ and K ′⊤ = VQ⊤ UK VK⊤
+which may be computed in O(nr) time.
+    Attention Gradient Computation. We revise the attention gradient computation formula,
+building on prior work [AS24b], to express the gradient as a composition of attention computations
+plus efficient matrix computations. By carefully selecting the order of the matrix operations, this
+formula can be evaluated with just attention computations and additional matrix operations taking
+O(nd2 ) time.
+    Outline. We give our algorithm in Section 3. The reduction from gradient computation to
+Attention computation is given in Section 4. Our lower bounds are presented in Section 5.
+
+1.2   Related Work
+Attention is a key bottleneck of the transformer architecture [VSP+ 17] which has become the
+predominant architecture in applications such as natural language processing.
+    Approximate Attention Computation. In an orthogonal line of work, many approximate
+notions of Attention have been studied to reduce its compute constraints with the goal of comput-
+ing an approximation in linear time [BMR+ 20, KVPF20, KKL20, ZGD+ 20, CDW+ 21, CLD+ 21,
+GSWY23, PMXA23, MGN+ 23, SYZ24]. Several works obtain provable guarantees as well as prac-
+tical improvements, such as KDEFormer [ZHDK23], HyperAttention [HJK+ 24], and PolySketch-
+Former [KMZ24]. However, these works only obtain theoretical guarantees with respect to matrix
+norms such as operator norm rather than any guarantee on the correctness of each entry.
+
+                                                     7
+    Our work follows [AS24a, AS24b] and focuses on the setting of computing Attention as exactly
+as possible (up to inverse polynomial precision in the output) and therefore obtains significantly
+stronger approximation guarantees. Indeed, our lower bounds show that linear time approximations
+do not obtain such strong approximation guarantees. In the low dimension regime d = o(log n),
+the Fast Multipole Method gives fast algorithms for the intimately related Gaussian Kernel Density
+Estimation (KDE) problem [AG24]. However, these algorithms do not apply in our regime of poly-
+nomial entries. In particular, using the standard reduction from Attention to Gaussian KDE7 the
+error produced by the known KDE algorithms is amplified so that only Attention with subpolyno-
+mial entries B = 2o(log n) can be computed efficiently, even with constant dimension d = O(1).
+    Attention with MLP Units. Many works have studied the expressive power of Transformers
+[SHT23, SHT24, SFH+ 24, YSB+ 25] for classical algorithmic problems. In an independent work
+[AY25] show that an Attention unit with input and output MLP Layers can compute OV and
+(Monochromatic) Max-IP. While the constructions are essentially identical, we reduce (Bichromatic)
+                                                                                    ∗
+Max-IP to Attention, and thus obtain a strong conditional lower bound for d = 2Θ(log n) via [Che18].
+    Rather than allowing arbitrary inputs Q, K, V ∈ Rn×d , these works consider Attention with
+MLP Units: Given inputs X ∈ Rn×d1 and WQ , WK , WV ∈ Rd1 ×d , compute Q = XWQ , K =
+XWK , V = XWV and then Attention(Q, K, V ). This preprocessing step requires only O(nd2 ) time
+and does not change the running time of our algorithm. Via a simple modification (to either our
+construction or [AY25]),8 it is possible to show that an Attention unit with MLP Units can compute
+(Bichromatic) Max-IP. Our reductions from OV naturally hold for bichromatic instances as well.
+    Alternative Settings of Attention Computation. Attention has also been studied in several
+settings, including dynamic updates [BSZ23], quantum algorithms [GSYZ23a], differential privacy
+[GSYZ23b], and I/O complexity [SY24]. Conditional lower bounds for Attention have been studied
+as well [KWH23, AS24a, AS24b, AY25].
+
+
+2       Preliminaries
+Let log denote the natural log. Let [n] = {1, 2, . . . , n}. For a matrix M ∈ Rn×m , we denote its
+(i, j)-entry by Mi,j , its transpose M ⊤ , and its inverse M −1 . Let ∥M ∥∞ := maxi,j |Mi,j | and exp(M )
+denote applying ex entry-wise to M . Let 0 and 1 denote the all zeros and all ones vectors. For a
+vector v ∈ Rn , diag(v) denotes the n × n diagonal matrix whose (i, i)-entry equals vi .
+     Fine-grained Complexity Hypotheses. We establish new fine-grained lower bounds for the
+approximate attention computation problem AttC(n, d, B, ε). These lower bounds are conditional
+on some well-known fine-grained complexity hypotheses, which we introduce below.
+     The Strong Exponential Time Hypothesis (SETH) was introduced by [IP01]. They hypothesized
+that solving k-SAT for k ≥ 3 cannot be significantly improved beyond exhaustive search.
+
+Hypothesis 2.1 (Strong Exponential Time Hypothesis (SETH)). For every ε > 0, there is a positive
+integer k ≥ 3 such that k-SAT on formulas with n variables cannot be solved in O(2(1−ε)n ) time,
+even by randomized algorithms.
+
+    SETH is a strengthening of the famous P ̸= NP conjecture and has later been used to derive
+fine-grained lower bounds for many fundamental computational problems, from string edit distance
+[BI18] to graph diameter [RV13]. Our lower bounds under SETH will proceed via reduction to the
+Orthogonal Vectors (OV) Problem and the Max-IP Problem.
+    Map x 7→ (x, 0, rx ) and y 7→ (y, ry , 0) for appropriate rx , ry so that ∥x − y∥2 = R − 2x · y for some constant R.
+    7
+    8
+    We describe how to obtain Q, K. Given sets of vectors A, B ⊂ Rd , let X ∈ Rn×2d consist of A in the first d
+columns, B in the next d columns. Let WQ = Id 0 and WK = 0 Id .
+
+
+                                                           8
+Theorem 2.2 ([Wil04]). Assuming SETH, for any δ > 0 there is a constant C such that any
+randomized algorithm solving OV in dimension d = C log n with high probability requires Ω(n2−δ )
+time.
+
+    The Max-IP problem asks to compute given sets of integer-valued vectors A, B ∈ Zd , maxa∈A,b∈B a·
+                                                                                       ∗
+b. [Che18] showed that computing Max-IP requires n2−o(1) time even when d = 2Θ(log n) .
+
+Theorem 2.3 ([Che18]). Assuming SETH, for any δ > 0 there is a constant C such that any exact
+                                           ∗
+algorithm for Max-IP in dimension d = C log n with O(log n)-bit entries requires Ω(n2−δ ) time.
+
+
+3     Fast Attention for Constant Head Dimension
+We present our algorithms for computing Attention in truly subquadratic time for constant head
+dimension d and polynomial entry size B.
+
+Theorem 1.3. Let d = O(1). There is an algorithm that computes AttC(n, d, B, ε) in Õ(n2−1/d ·
+polylog(B/ε)) time.
+
+    The algorithm naturally extends to the case when d is large but the matrices are low dimensional.
+
+3.1   Warm-up: d = 1
+For simplicity, we begin with our algorithm for the d = 1 case and explain how to generalize to the
+constant head dimension case later. Formally, we prove in this section the following result.
+
+Lemma 3.1. There is an algorithm computing AttC(n, 1, B, ε) in Õ(n · polylog(B/ε)) time.
+
+    In the above, Attention(q, k, v) is defined by viewing vectors q, k, v ∈ Rn×1 as matrices. When
+d = 1, the input is given by vectors q, k, v ∈ [−B, B]n . In the output vector, we hope to compute
+the entries                                      P qi kj
+                                                   je    vj
+                                            oi = P q k
+                                                    je
+                                                       i j
+
+
+for all i. Define the softmax probabilities
+
+                                                         eqi kj
+                                              pi,j = P        qi kj ′
+                                                         j′ e
+             P
+so that oi = j pi,j vj .
+    We begin with an overview of our algorithm. Without loss of generality, we assume qi ≥ 0 are
+non-negative for all i. In particular, if we compute Attention(|q|, k, v) and Attention(|q|, −k, v),
+where |q| is a vector where we take entrywise absolute value of q, we can recover the entries of
+Attention(q, k, v) from the two outputs. If qi ≥ 0, we read the output from Attention(|q|, k, v) and
+otherwise we read the output from Attention(|q|, −k, v).
+                                                    (i)
+    Let kmax denote the maximum value of k and pmax = maxj pi,j be the corresponding maximum
+probability for some fixed i. First, we argue that we may ignore all indices where kj ≪ kmax .
+Since all of these indices have exponentially small pi,j , ignoring these indices incurs only a small
+additive error to the output estimate ôi . Second, we argue that the remaining values of kj satisfy
+the property that qi kj lie in a small range. In particular, on this range, we use the low-degree
+
+
+
+                                                    9
+polynomial P from [AA22] to give a low-error approximation of the exponential function. Using
+this polynomial approximation, we instead compute
+                         P                    P qi kj −c    P qi kj
+                           j P (qi kj − c)vj    je       vj  je     vj
+                    ôi = P                  ≈ P q k −c = P q k = oi
+                             j P (qi kj − c)     je           je
+                                                    i j          i  j
+
+
+for some value c that guarantees qi kj − c lies in a bounded interval around 0 for the remaining values
+kj .
+     Consider a monomial mℓ xℓ of P . Then j (qi kj − c)ℓ = ℓb=0 bℓ (−c)ℓ−b qib j kjb . This allows
+                                                P                P                 P
+
+to pre-compute j kjb for all exponents b in a pre-processing phase, and then efficiently compute ôi
+                P
+using the pre-computed values. We now describe the algorithm in more detail.
+
+Step 1: Removing Irrelevant Keys. We argue that we can ignore irrelevant keys kj with only
+small additive error in the estimate.
+Definition 3.2. An index j ∈ [n] is relevant with respect to qi if qi kj ≥ maxj qi kj − log(n/ε).
+Otherwise, we say that j is irrelevant with respect to qi . When qi is clear from context, we simply
+say j is relevant (or irrelevant).
+   Since qi ≥ 0, by rearranging, note that for all irrelevant j, we have qi kj − qi kmax ≤ − log(n/ε).
+Then, we conclude
+                                      pi,j                         ε
+                                      (i)
+                                             = eqi (kj −kmax ) ≤ .
+                                     pmax                          n
+Summing over all such indices j,
+                                  X                   X              ε
+                                          pi,j ≤              p(i)
+                                                               max     ≤ ε.
+                                                                     n
+                                 irrelevant j              irrelevant j
+
+Thus, if we define                        (             pi,j
+                                  (r)
+                                              P                           j is relevant,
+                                 pi,j =           relevant j ′ pi,j ′
+
+                                           0                              o/w,
+we can obtain the guarantees for all relevant j
+                                                               (r)       pi,j
+                                               pi,j ≤ pi,j ≤                  .
+                                                                        1−ε
+Then, define
+                                                    (r)
+                                                               X (r)
+                                                  oi      =     pi,j vj
+                                                                 j
+so that
+
+                     (r)                          (r)                                         (r)
+                                    X                                             X
+                     oi − oi ≤                 (pi,j − pi,j )vj +                           (pi,j − pi,j )vj
+                                  relevant j                                 irrelevant j
+
+                                    X            ε                           X
+                             ≤                      pi,j vj +                            pi,j vj
+                                                1−ε
+                                  relevant j                              irrelevant j
+                                 ε
+                             ≤     B + εB
+                               1−ε
+                             ≤ 3εB
+where we assume ε < 21 .
+
+                                                                10
+Step 2: Polynomial Approximation of Exponential. We now show how we use polynomial
+approximations of ex to efficiently estimate attention.
+   Our goal is to approximate o(r) :
+                                                         qi kj v                    qi kj −c(qi ) v
+                                          P                          P
+                 (r)              (r)       relevant j e          j    relevant j e                  j
+                         X
+                oi =             pi,j vj = P              q   k
+                                                                    = P              q   k   −c(q  )
+                                             relevant j e               relevant j e
+                                                            i   j                      i   j     i
+                      relevant j
+
+where c(qi ) = qi ·kmax −log(n/ε). In particular, we have qi kj −c(qi ) ∈ [0, log(n/ε)] for every relevant
+j. The following result allows us to approximate the exponential function with polynomials on a
+bounded interval.
+Lemma  3.3([AA22, AS24a]).   Let W > 1 and ε < 0.1. There is a polynomial P : R → R of degree
+                 log(1/ε)
+g = Θ max log(log(1/ε)/W ) , W     such that for all x ∈ [−W, W ], we have |P (x)−exp(x)| < ε exp(x).
+Moreover, its coefficients are rationals with poly(g)-bit integer numerators and denominators and
+can be computed in poly(g)-time.
+    On this interval, by Lemma 3.3, there is a polynomial P of degree
+                                                              
+                                      log(1/ε)
+                 g = O max                            , log(n/ε)   = O (log(n/ε))
+                              log(log(1/ε)/ log(n/ε))
+                                                                                                  i j        i P (q k −c(q ))
+such that |P (x)−exp(x)| ≤ ε exp(x) for all x ∈ [0, log(n/ε)]. Then, we define p̂i,j = P            ′ P (qi kj ′ −c(qi ))
+                                                           P                             relevant j
+for relevant j and p̂i,j = 0 otherwise. Next, define ôi = j p̂i,j vj . First, we prove the desired ap-
+proximation guarantee. For all relevant j,
+                                            1 − ε (r)           1 + ε (r)
+                                                 pi,j ≤ p̂i,j ≤      p
+                                            1+ε                 1 − ε i,j
+so that
+                                              (r)                                (r)
+                                                            X
+                                       ôi − oi     ≤B                 p̂i,j − pi,j
+                                                          relevant j
+                                                                           (r)
+                                                            X
+                                                    ≤B                 4εpi,j ≤ 4εB.
+                                                          relevant j
+
+Combined with our previous bound using triangle inequality, we get
+
+                                 ∥ô − o∥∞ ≤ ô − o(r)           + o(r) − o            ≤ 7εB.                             (1)
+                                                             ∞                    ∞
+
+    Now, we describe how to compute ô efficiently. Consider a monomial mℓ xℓ of P . Then,
+                                                             ℓ  
+                                                             X  ℓ
+                                                    ℓ
+                                 mℓ (qi kj − c(qi )) = mℓ                  qib kjb (−c(qi ))ℓ−b
+                                                                       b
+                                                              b=0
+
+Summing over the indices j,
+                                                                           ℓ  
+                       X                                         X         X  ℓ b b
+                                 mℓ (qi kj − c(qi ))ℓ = mℓ                      q k (−c(qi ))ℓ−b
+                                                                              b i j
+                    relevant j                               relevant j b=0
+                                                             ℓ  
+                                                             X  ℓ b                               X
+                                                        = mℓ      q (−c(qi ))ℓ−b                         kjb
+                                                                b i
+                                                             b=0                            relevant j
+
+
+
+                                                            11
+                                b                b
+                    P
+    Let ϕ(i, b) =   relevant j kj be the sum of kj for all j relevant with respect to qi . In particular,
+                          X                                              X
+                                     P (qi kj − c(qi )) =                        P (qi kj − c(qi ))
+                        relevant j                               relevant j
+                                                                         X       X
+                                                             =                          mℓ (qi kj − c(qi ))ℓ
+                                                                 relevant j         ℓ
+                                                                                ℓ  
+                                                                 X              X           ℓ b
+                                                             =            mℓ                  qi (−c(qi ))ℓ−b ϕ(i, b).
+                                                                                            b
+                                                                     ℓ          b=0
+
+    Following similar computations we obtain
+                                                                              ℓ  
+                         X                                    X               X  ℓ
+                                P (qi kj − c(qi ))vj =                   mℓ                  qib (−c(qi ))ℓ−b ϕv (i, b)   (2)
+                                                                                        b
+                          j                                      ℓ            b=0
+
+    where ϕv (i, b) = relevant j kjb vj .
+                     P
+       The following lemmas show that we can compute ô efficiently.
+    Lemma 3.4. Let b ≥ 1 and k1 ≥ k2 ≥ . . . ≥ kn . Let q1 , . . . , qn be arbitrary. Then, ϕ(i, b), ϕv (i, b)
+    can be computed for all i in time O(n log n) time.
+    Proof. Given b, we can compute Jj=1 kjb for all 1 ≤ J ≤ n in O(n) time. Then, for each i, we use
+                                       P
+    binary search to find Ji , the maximum index j where kj ≥ maxj kj − log(n/ε)/qi , i.e., kj is relevant
+    with respect to qi . Then we assign ϕ(i, b) = Jj=1
+                                                 P i b
+                                                       kj . Over all i, this takes O(n log n) time. We can
+    ϕv (i, b) similarly.
+
+
+  Algorithm 1 VectorAttention(q, k, v)
+  Input        : vectors q, k, v ∈ [−B, B]n .
+  Parameters: error parameter ε
+  Output       : ô satisfying ∥ô − P
+                                     Attention(q, k, v)∥∞ ≤ εB.
+1 Compute a polynomial P (x) =                ℓ
+                                        ℓ mℓ x for range [0, log(n/ε)] using Lemma 3.3.
+2 Compute kmax ← maxj kj and sort {kj }.
+3 Compute ϕ(i, b), ϕv (i, b) for all 1 ≤ i ≤ n, 1 ≤ b ≤ g using Lemma 3.4.
+4 for 1 ≤ i ≤ n do
+                       P
+                          relevant j   P (qi kj −c(qi ))vj
+5      Compute ôi ←     P                                   using Lemma 3.5.
+                              relevant j P (qi kj −c(qi ))
+6 return ô
+
+
+
+    Lemma 3.5. Let P (x) = ℓ mℓ xℓ be a degree g-polynomial with poly(g)-bit coefficients. Given
+                                       P
+    qi , ϕ(i, b), ϕv (i, b), there is an algorithm computing ôi in poly(g) time.
+    Proof. We recall that                                                P
+                                                  X                j           P (qi kj − c(qi ))vj
+                                          ôi =        p̂i,j vj = P                                      .
+                                                   j                           j P (qi kj − c(qi ))
+
+    From Equation (2), we note
+                                                                            ℓ  
+                         X                                    X             X  ℓ b
+                                P (qi kj − c(qi ))vj =                   mℓ      q (−c(qi ))ℓ−b ϕv (i, b)
+                                                                               b i
+                          j                                      ℓ            b=0
+
+
+                                                                          12
+so that given access to ϕv (i, b), we can compute the numerator in poly(g)-time. Similarly, by
+accessing ϕ(i, b), we can compute the denominator as well.
+
+   To conclude the proof of Lemma 3.1, we apply Algorithm 1 with ε′ = 7B      ε
+                                                                                 so we obtain ε-
+approximation under Equation (1). In particular, the degree of the polynomial required is
+
+                             g = O log(n/ε′ ) = O (log(nB/ε)) .
+                                              
+
+
+Then, Algorithm 1 takes time Õ(n · polylog(B/ε)).
+
+3.2    Algorithm for Attention with Constant Head Dimension
+We now give a formal description of our algorithm for constant head dimension and prove Theo-
+rem 1.3. For d > 1, we require an efficient data structure for the range searching problem.
+
+Definition 3.6 (Simplex Range Searching). Preprocess a weighted point set {(k
+                                                                           P i , wi )} where ki ∈
+Rd and wi ∈ R so that given any simplex query σ, the data structure returns ki ∈σ wi .
+
+   Matoušek [Mat92] gives an efficient data structure for the simplex range searching problem. In
+our work, we will only query the data structure with halfspaces σ, which are special case of simplex
+queries (one can imagine a simplex defined by the half-space and a sufficiently large bounding box
+that contains all input points).
+
+Theorem 3.7 ([Mat92]). There is a data structure RSDS for the Simplex Range Searching problem
+for n input points in d-dimension with O(n log n) preprocessing and Õ(n1−1/d ) query time.
+
+   Given this data structure, we now present our algorithm for arbitrary head dimension
+                                                                               P        d. Our
+inputs are n × d matrices Q, K, V with entries in [−B, B]. We rewrite Oi,t = j pi,j Vj,t where
+          exp(Q ·K )
+               i    j
+pi,j = P ′ exp(Q i ·K ′ )
+                          ∝ exp(Qi · Kj ).
+         j          j
+
+
+
+Step 1: Removing Irrelevant Keys. We begin by showing that removing irrelevant keys does
+not significantly alter the quality of the approximation. Define for each i ∈ [n] the maximum
+                                         (i)                      (i)
+probability in the distribution pi,j as pmax = maxj pi,j . Let smax denote the maximum integer s
+such that the half-space           n                               o
+                                     x ∈ Rd : Qi · x ≥ s log(1 + ε)
+                                                   (i)
+contains at least one Kj vector. In particular, smax is the largest integer satisfying maxj Qi · Kj ≥
+ (i)
+smax log(1 + ε). We now define relevant and irrelevant keys analogously to the d = 1 case.
+                                                                               (i)
+Definition 3.8. Let j ∈ [n] be irrelevant with respect to Qi if Qi · Kj < smax log(1 + ε) − log(n/ε).
+Otherwise j is relevant with respect to Qi . When Qi is clear, we simply say j is irrelevant or relevant.
+
+    We argue that we can discard irrelevant indices.
+                           (r)          p
+                                       i,j
+Lemma 3.9. Define pi,j = P                        if j is relevant and 0 otherwise for all i, j ∈ [n]. Let
+                                  relevant j pi,j
+ (r)  P (r)                                              (r)
+Oi,t = j pi,j Vj,t for all i ∈ [n], t ∈ [d]. Then Oi,t − Oi,t ≤ 3εB.
+
+
+
+
+                                                   13
+Proof. First, for all i and j irrelevant to Qi , we have
+                                                                 (i)
+                     pi,j    exp(Qi · Kj )       exp(smax log(1 + ε) − log(n/ε))  ε
+                     (i)
+                         =                     ≤            (i)
+                                                                                 ≤ ,
+                    pmax   max j exp(Qi · Kj )        exp(smax log(1 + ε))        n
+
+so that                                  X                    X                  ε
+                                                  pi,j ≤                  p(i)
+                                                                           max     ≤ ε.                               (3)
+                                                                                 n
+                                   irrelevant j            irrelevant j
+
+                                   (r)  i,jp
+Thus for all relevant j, pi,j ≤ pi,j ≤ 1−ε  . Following identical arguments as in the one-dimensional
+warm-up, we obtain the desired result.
+
+Step 2: Polynomial Approximation of Exponential. Consider an entry Oi,t . We now aim
+                (r)
+to approximate Oi,t . Recall that
+                               P                                           P
+       (r)                       relevant j exp(Qi · Kj )Vj,t               relevant j    exp(Qi · Kj − c(Qi ))Vj,t
+               X (r)
+      Oi,t =    pi,j Vj,t =     P                                      =    P
+                j                  relevant j exp(Qi · Kj )                      relevant j exp(Qi · Kj − c(Qi ))
+
+                    (i)                                                            (i)
+where c(Qi ) = smax log(1 + ε) − log(n/ε). By the definition of smax , we have that for all relevant j,
+Qi · Kj − C(Qi ) ∈ [0, log(n/ε) + log(1 + ε)].
+      We then invoke Lemma 3.3 to obtain a g = polylog(n/ε)-degree polynomial P such that for all
+x ∈ [0, log(n/ε) + log(1 + ε)] ⊂ [0, 2 log(n/ε)], |P (x) − exp(x)| ≤ ε exp(x). Define for relevant j,
+                                                      (r)
+p̂i,j ∝ P (Qi · Kj − c(Qi )) as an approximation of pi,j ∝ exp(Qi · Kj − c(Qi )). For irrelevant j, set
+         (r)                          P
+p̂i,j = pi,j = 0. Then, define Ôi,t = j p̂i,j Vj,t .
+      We claim Ôi,t is a good approximation.
+
+Lemma 3.10. |Ôi,t − Oi,t | ≤ 7εB for all i ∈ [n], t ∈ [d].
+
+    This follows from identical arguments as in the 1-dimensional case. Furthermore, we present an
+algorithm that computes Ô efficiently. The key ingredient to the algorithm is the following data
+structure which again utilizes the range searching data structure of [Mat92].
+
+Lemma 3.11. Given matrices Q, K, V ∈ Rn×d there exist functions ϕ0 , . . . ϕd such that any entry
+Ôi,t can be computed with g O(d) queries to ϕ0 and ϕt and g O(d) additional time.
+     Furthermore, for each ϕt with 0 ≤ t ≤ d there is a data structure with Õ g O(d) n log n prepro-
+                                                                                             
+
+cessing and Õ g O(d) n1−1/d log(B/ε) query time.
+                                      
+
+                             P
+                               relevant j P (Qi ·Kj −c(Qi ))Vj,t
+Proof. Recall that Ôi,t =    P                                  where P is the polynomial of degree g obtained
+                                 relevant j P (Qi ·Kj −c(Qi ))
+from Lemma 3.3.
+
+
+
+
+                                                            14
+                                                                                                                               Pg           ℓ
+    We begin with describing how to compute the numerator of Ôi,t . Suppose P (x) =                                                ℓ=0 mℓ x .
+                 X
+                          P (Qi · Kj − c(Qi ))Vj,t
+             relevant j
+                      X       X
+             =                    mℓ (Qi · Kj − c(Qi ))ℓ Vj,t
+                 relevant j   ℓ
+                                                                                             d
+                 X            X                X                      ℓ                        Y
+             =        mℓ                                                           (−c(Qi ))ℓ0
+                                                                                                 (Qi,k Kj,k )ℓk Vj,t
+                                                             ℓ0 , ℓ1 , . . . , ℓd
+                  ℓ        relevant j ℓ0 +ℓ1 +...+ℓd =ℓ                                                k=1
+                                                                                  d                            d
+                 X                X                      ℓ                          Y                    X       Y
+             =        mℓ                                                (−c(Qi ))ℓ0   Qℓi,k
+                                                                                         k                               ℓk
+                                                                                                                        Kj,k Vj,t
+                                                ℓ0 , ℓ1 , . . . , ℓd
+                  ℓ        ℓ0 +ℓ1 +...+ℓd =ℓ                                             k=1           relevant j k=1
+                                                                                           d
+                 X                X                      ℓ                       Y ℓ
+             =        mℓ                                             (−c(Qi ))ℓ0    k
+                                                                                  Qi,k ϕt (i, ℓ1 , . . . , ℓd )
+                                                ℓ0 , ℓ1 , . . . , ℓd
+                  ℓ        ℓ0 +ℓ1 +...+ℓd =ℓ                                             k=1
+
+                                                                   P                    Qd    ℓk
+where we define the function ϕt (i, ℓ1 , . . . , ℓd ) =                    relevant j    k=1 Kj,k Vj,t . Similarly, define the func-
+tion
+                                                                              X         d
+                                                                                        Y     ℓk
+                                          ϕ0 (i, ℓ1 , . . . , ℓd ) =                         Kj,k
+                                                                           relevant j k=1
+
+so that
+                                                                                                         d
+  X                                X                 X                           ℓ                         Y
+       P (Qi · Kj − c(Qi )) =            mℓ                                                    (−c(Qi ))ℓ0   Qℓi,k
+                                                                                                                k
+                                                                                                                   ϕ0 (i, ℓ1 , . . . , ℓd ).
+                                                                        ℓ0 , ℓ1 , . . . , ℓd
+   j                                 ℓ         ℓ0 +ℓ1 +...+ℓd =ℓ                                             k=1
+
+    The following lemma describes how to build the appropriate data structures.
+Lemma 3.12. Let ℓ1 , . . . , ℓd be nonnegative integers. Let 0 ≤ t ≤ d. Given matrices Q, K, V , there
+
+     1−1/d
+                      O(nd + n log n) preprocessing time that answers queries ϕt (i, ℓ1 , . . . , ℓd ) in
+is a data structure with
+Õ n       log(dB/ε) time.
+
+Proof. We initialize two RSDS data structures
+                                      n      using Theoremon3.7, one with unweighted point set
+                                            Qd      ℓk
+{Kj } and one with weighted point set   Kj , k=1 Kj,k Vj,t      . By Theorem 3.7, this requires
+                                                                                                 j=1
+O(n log n) preprocessing. Computing each weight requires O(nd) time.
+                                                                                  (i)
+     Now, consider a query ϕt (i, ℓ1 , . . . , ℓd ) for some i ∈ [n]. We compute smax using binary search
+with the first RSDS data structure. Since |Qi · Kj | ≤ dB 2 there are at most O(dB 2 / log(1 + ε))
+values to search through. This requires O(log(dB/ε)) queries which requires Õ n1−1/d log(dB/ε)
+overall time by Theorem 3.7. The set of j relevant to Qi is the set of Kj such that Qi · Kj ≥
+ (i)
+smax log(1 + ε) − log(n/ε). This can easily be captured by a simplex query with the half-space
+          (i)
+Qi · x ≥ smax log(1 + ε) − log(n/ε) and thus requires one query to the second RSDS instance.
+
+    Our data structure for Lemma 3.11 is simply the combination of all data structures that answer
+queries ϕt (i, ℓ1 , . . . , ℓd ). Since P is degree g and ℓ1 + ℓ2 + . . . + ℓd ≤ ℓ ≤ g, there are at most
+(g + d)O(d) = g O(d) distinct tuples ℓ1 , . . . , ℓd since d is a constant. In particular, we
+                                                                                            can initialize all
+the necessary data structures to compute queries of ϕt in Õ g O(d) (nd + n log n) time.
+    We now show to compute an entry of Ôi,t . Note that numerator sums over ℓ, tuples ℓ0 , . . . , ℓd
+of which there are at most g O(d) summands. Each summand can be computed with one query to ϕt
+
+
+                                                                       15
+   and g O(d) additional time. Since the denominator can be computed similarly (instead querying ϕ0 )
+                                           O(d)   1−1/d
+                                                                 
+   the total time to compute Ôi,t is Õ g      n       log(dB/ε) .
+
+
+   Algorithm 2 ApproxAttention(Q, K, V )
+   Input     : vectors Q, K, V ∈ [−B, B]n .
+   Parameters: error parameter ε
+   Output    : Ô satisfying Ô − Attention(q, k, v)           ≤ 7εB.
+                                                      ∞
+            (i)
+ 7 Compute smax for all i ∈ [n] using Theorem 3.7
+                     (i)
+ 8 Compute c(Qi ) ← smax log(1 + ε) − log(n/ε) for all i ∈ [n]
+ 9 Compute a g-degree polynomial P (x) for range [0, 2 log(n/ε)] using Lemma 3.3
+10 Initialize the data structure for queries ϕt (i, ℓ1 , . . . , ℓd ) for all 0 ≤ t ≤ d using Lemma 3.11
+11 Compute Ôi,t for all (i, t) ∈ [n] × [d] using queries to Lemma 3.11
+12 return Ô
+
+
+       We bound the running time of Algorithm 2.
+
+   Lemma 3.13. ApproxAttention (Algorithm 2) runs in time Õ n2−1/d · polylog(B/ε) .
+                                                                                  
+
+   Proof. We now analyze the running time. From Lemma 3.3, we have
+                                                                
+                                        log(1/ε)
+                 g = O max                              , log(n/ε)   = O(log(n/ε)).
+                                log(log(1/ε)/ log(n/ε))
+
+   Then, to initialize all the necessary data structures, we invoke Lemma 3.11 a total of d + 1 times,
+   thus requiring preprocessing time (recall d is a constant)
+
+                                               Õ (n · polylog(1/ε)) .
+
+   Then, computing all Ôi,t requires time
+                                                                    
+                    Õ ng O(d) n1−1/d log(B/ε) = Õ n2−1/d · polylog(B/ε) .
+
+
+
+      To conclude the proof of Theorem 1.3, we run Algorithm 2 with error parameter ε′ ≤ 7Bε
+                                                                                             . We
+   note that we can generalize our result to obtain an algorithm for computing Attention when the
+   input matrices have low rank.
+
+   Theorem 1.4. Let r = O(1). There is an Õ nd + n2−1/r · polylog(B/ε) time algorithm computing
+                                                                        
+
+   AttC(n, d, B, ε) where r = min(rank(Q), rank(K)).
+
+       To prove Theorem 1.4, we require the following standard result on computing a representation
+   of low-rank matrices.
+
+   Lemma 3.14 (e.g., [HK, RV]). Let A be a n × d matrix of rank r with entries in [−B, B]. Then,
+   there is an O(ndr) time algorithm computing an n × r matrix UA and a d × r matrix VA such that
+   A = UA VA⊤ . Furthermore, UA , VA have entries bounded by poly(Bnd).
+
+
+
+
+                                                         16
+    Suppose we are given n × d input matrices Q, K of rank rQ , rK respectively. Then, we apply
+Lemma 3.14 to compute UQ , VQ , UK , VK in time O(nd max(rQ , rK )) = O(nd). Suppose without
+loss of generality rQ ≤ rK . Then, we compute
+                                         Q′ = UQ , K ′⊤ = VQ⊤ UK VK⊤
+in time O(rQ rK n) = O(n) and note that Q′ , K ′ have entries bounded by poly(Bnd).
+    We then apply Theorem 1.3 to approximate Attention(Q′ , K ′ , V ) = Attention(Q, K, V ) which
+is an instance of AttC(n, min(rQ , rK ), poly(Bnd), ε) which requires time
+                                                                    
+                                Õ n2−1/ min(rQ ,rK ) · polylog(B/ε)
+
+to compute an output Ô such that Ô − Attention(Q, K, V )   ≤ ε. This completes the proof of
+                                                           ∞
+Theorem 1.4.
+
+
+4       The Complexity of Attention Gradient Computation
+In this section, we leverage our algorithm for approximate attention computation to obtain the cor-
+responding upper bounds for approximate attention gradient computation. We begin by formalizing
+the notion of attention optimization:
+Definition 4.1 (Attention Optimization). Given input matrices A1 , A2 , A3 , E ∈ Rn×d and Y ∈
+Rd×d , find a matrix X ∈ Rd×d that minimizes the objective:
+                                                 1               2
+                                      L(X) :=      D(X)−1 AV − E F ,
+                                                 2
+where A := exp(A1 XA⊤
+                    2 ), V := A3 Y , and D(X) := diag(A1n ) ∈ R
+                                                               n×n . 9
+
+    The gradient of the objective function L(X) with respect to X is then used to optimize the
+attention mechanism by iteratively adjusting X to minimize L(X). Formally, we define the following
+approximate version of the gradient computation problem for attention optimization:
+Definition 4.2 (Approximate Gradient Computation for Attention Optimization AAttLGC(n, d, ε)).
+Given A1 , A2 , A3 , E ∈ [−B, B]n×d , Y ∈ [−B, B]d×d , and ε > 0, compute a matrix g ∈ Rd×d such
+that
+                                             dL(X)
+                                          g−             ≤ ε.
+                                               dX ∞
+
+4.1     Notation
+Throughout this section we use the following notation. We overload the diag operator. In this
+section, the diag operator indicates turning all the non-diagonal entries to zero. The ◦ operator
+indicates entry-wise multiplication. The ⊗ operator denotes the Kronecker product, as defined
+                                                                                       2    2
+by Z[(i − 1)n + ℓ, (j − 1)d + k] = X[i, j] · Y [ℓ, k] where X, Y ∈ Rn×d and Z ∈ Rn ×d . The ⊗r
+operator denotes row-wise Kronecker product, as defined by Z[i, (j − 1)d + k] = X[i, j] · Y [i, k] where
+X, Y ∈ Rn×d and Z ∈ Rn×d . We use e⟨i,j⟩ as shorthand to denote ea1i ·a2j , where a1i and a2j are
+                            2
+
+
+rows of A1 and A2 respectively. If M is a matrix, we use Mi to denote the i-th row of M , M∗,i to
+denote the i-th column of M . We use M [i][j] to denote the (i, j)-th entry of M (since our matrices
+have subscripts, the previous notation Mi,j is confusing).
+                                                                                                    A1 XA⊤
+                                                                                                            
+    9                                                                                                    2
+    [AS24b] scale the Attention matrix A by d for training efficiency, becoming A := exp               d
+                                                                                                                 . Since our
+algorithms scale polylogarithmically with entry size, we can safely ignore this scaling term.
+
+
+                                                        17
+4.2   Upper Bound on Attention Backward Computation
+We show that the backwards pass for approximate attention can be computed in time Õ n2−1/d · polylog(B/ε)
+                                                                                                          
+
+when d = O(1).
+                                                                                                      ε
+Theorem 4.3 (Formal Theorem 1.5). AAttLGC(n, d, B, ε) is reducible to O(d) calls to AAttC(n, d, B, Θ(ndB 3) )
+          2
+using O(nd ) time.
+
+Corollary 4.4. Let d = O(1). There exists an algorithm that computes AAttLGC(n, d, B, ε) in time
+Õ n2−1/d · polylog(B/ε) .
+
+Proof of Corollary 4.4. This follows directly from Theorem 4.3 and Theorem 1.3.
+
+Proof of Theorem 4.3. We begin by recalling the following definitions from [AS24b], which we will
+use to define the gradient computation formula.
+                                                                                  2   2            2
+Definition 4.5. Let A1 , A2 ∈ Rn×d be two matrices and let A = A1 ⊗ A2 ∈ Rn ×d . Let x ∈ Rd
+                                                                                           2
+be the vectorization of the matrix X ∈ Rd×d in Definition 4.1. We define Aj0 ∈ Rn×d to be the
+n × d2 size sub-block of A consisting of rows {(j0 − 1)n + j1 }nj1 =1 . Let f (x) be the n × n matrix
+whose j0 -th row, denoted f (x)j0 , is given by:
+
+                            f (x)j0 := (⟨exp(Aj0 x), 1n ⟩−1 exp(Aj0 x))⊤ .
+                                         | {z } |{z}        | {z }
+                                            n×1        n×1         n×1
+
+   Note that f (x) = exp(A1 XA⊤                     ⊤
+                                2 ) · diag(exp(A1 XA2 )1n ). Therefore f (x)Z, where Z is an n × d
+matrix, is evaluated by Attention(A1 , A2 , X).
+                                                                              2
+Definition 4.6. Let Y ∈ Rd×d denote the matrix representation of y ∈ Rd and Y∗,i0 indicate the
+i0 -th column of Y . h(y) ∈ Rn×d is defined as the matrix whose i0 -th column is h(y)i0 , which is
+defined as follows:
+                                       h(y)i0 := A3 Y∗,i0 .
+                                                |{z} |{z}
+                                                   n×d d×1
+
+   Note that throughout this section, we occasionally use h as a shorthand for h(y). It is clear that
+h(y) can be computed in TMUL (n, d, d) time.
+Definition 4.7. Let c(x) be an n × d matrix defined as follows:
+
+                                      c(x) = f (x) h(y) − E .
+                                      |{z} |{z} |{z} |{z}
+                                      n×d     n×n n×d        n×d
+
+
+    We can approximate c(y) by evaluating Attention(A1 X, A2 , h(y)) to get f (x)h(y), then sub-
+tracting E which takes O(nd) time.
+    From [AS24b] we have the following formula for attention gradient computation:
+
+         dL(x)
+               = A⊤                    ⊤        ⊤                        ⊤
+                  1 [f (x) ◦ (c(x)h(y) )]A2 − A1 f (x) diag[f (x)c(x)h(y) ]A2
+          dx
+               = A⊤                              ⊤          ⊤                       ⊤
+                  1 [f (x) ◦ ((f (x)h(y) − E)h(y) )]A2 − A1 f (x) diag[f (x)c(x)h(y) ]A2
+                = A⊤                        ⊤        ⊤                ⊤
+                   1 [f (x) ◦ (f (x)h(y)h(y) )]A2 − A1 [f (x) ◦ (Eh(y) )]A2
+                   −A⊤                         ⊤
+                     1 f (x) diag[f (x)c(x)h(y) ]A2 .
+
+
+
+
+                                                  18
+The first line comes from the characterization of the gradient as dL(x)             ⊤
+                                                                         dx = A1 p(x)A2 where p(x) =
+p1 (x) − p2 (x) (see Appendix D.4-D.6 of [AS24b]). In the notation of [AS24b], the first term corre-
+sponds to p1 (x) := f (x) ◦ q(x) := f (x) ◦ (c(x)h(y)⊤ ). The second term corresponds to p2 (x) which
+is an n × n matrix whose j0 -th column is f (x)j0 f (x)⊤                           ⊤          ⊤
+                                                         j0 q(x)j0 := f (x)j0 f (x)j0 c(x)h(y)j0 . Note that
+p2 (x) := f (x) diag[f (x)q(x)] = f (x) diag[f (x)c(x)h(y) ]. Note that q(x) = c(x)h(y)⊤ is notation
+                                                           ⊤
+
+in [AS24b] which we do not use here.
+    Let us denote
+
+                                   B1 := [f (x) ◦ (f (x)h(y)h(y)⊤ )]A2 ,
+                                   B2 := [f (x) ◦ (E)h(y)⊤ )]A2 ,
+                                   B3 := f (x) diag[f (x)c(x)h(y)⊤ ]A2 .
+
+   We now have the following formula which can clearly be computed in O(nd) time if given B1 , B2 ,
+and B3 :
+                           dL(x)
+                                  = A⊤   B1 − A⊤
+                                      1 |{z}         B 2 − A⊤
+                                                  1 |{z}        B3 .
+                                                             1 |{z}
+                             dx     |{z}       |{z}        |{z}
+                                          d×n n×d      d×n n×d      d×n n×d
+
+Note that for each attention computation we perform in order to evaluate the attention gradient,
+                     ε
+we do with ε2 = poly(d,B)n additive error.
+
+Computing B3 . Given f (x), c(x), and h(y), we can approximate B3 using a series of matrix
+multiplications and attention computations, which are illustrated below in the following equations.
+Ci denotes the intermediate matrix products from each of these matrix multiplications/attention
+computations. We compute an approximation of B3 as follows:
+
+                                   B3 = f (x) diag[f (x) c(x) h(y)⊤ ]A2
+                                                   |{z} |{z}
+                                                      n×n n×d
+
+                                       = f (x) diag[ C1 h(y)⊤ ]A2
+                                                    |{z} | {z }
+                                                      n×d   d×n
+                                       = f (x) C2 A2
+                                              |{z} |{z}
+                                               n×n n×d
+
+                                       = f (x) C3 .
+                                              |{z}
+                                               n×d
+
+We begin by computing C1 = f (x)c(x) by evaluating Attention(A1 X, A2 , c(x)). Next, we compute
+C2 = diag[C1 h(y)⊤ ], which consists of the diagonal of the matrix product C1 h(y)⊤ . Since we only
+need the diagonal entries, this step takes O(nd2 ) time. We then compute C3 = C2 A2 . As C2 is a
+diagonal matrix, this matrix multiplication can be performed in O(nd) time. Finally, we compute
+B3 = f (x)C3 by evaluating Attention(A1 X, A2 , C3 ).
+   We argue that our computed output is a good approximation of B3 . Let B f3 denote the computed
+matrix. For any matrix Z, Z indicates an approximation of Z derived by a step in our algorithm.
+                            e
+
+
+
+
+                                                      19
+Then,
+
+             B3 − B
+                  f3       ≤ f (x)C3 − AttC(A1 X, A2 , C
+                                                       f3 )
+                       ∞                                             ∞
+
+                           ≤ f (x)C3 − f (x)C
+                                            f3            + ε2
+                                                      ∞
+
+                           ≤ C3 − C
+                                  f3           + ε2
+                                         ∞
+
+                           = diag[C1 h(y)⊤ ]A2 − diag[C
+                                                      f1 h(y)⊤ ]A2   + ε2
+                                                                   ∞
+                             h                                i
+                           = diag[C1 h(y)⊤ ] − diag[C
+                                                    f1 h(y)⊤ ] A2    + ε2
+                                                                             ∞
+                                                      ⊤      f1 h(y)⊤ ]
+                           ≤ ∥A2 ∥∞    diag[C1 h(y) ] − diag[C                        + ε2
+                                                                                  ∞
+
+                           ≤ ∥A2 ∥∞ C1 h(y)⊤ − C
+                                               f1 h(y)⊤               + ε2
+                                                                 ∞
+
+                           ≤ d ∥A2 ∥∞ ∥h(y)∥∞ C1 − C
+                                                   f1                + ε2
+                                                                 ∞
+
+                           ≤ d ∥A2 ∥∞ ∥h(y)∥∞ f (x)c(x) − AttC(A1 X, A2 , c(x))
+                                                                          g                            + ε2
+                                                                                                 ∞
+
+                           ≤ d ∥A2 ∥∞ ∥h(y)∥∞ (ε2 + f (x)c(x) − f (x)c(x)
+                                                                     g                        ) + ε2
+                                                                                          ∞
+
+                           ≤ d ∥A2 ∥∞ ∥h(y)∥∞ (ε2 + c(x) − c(x)
+                                                           g                     ) + ε2
+                                                                             ∞
+                           ≤ 2dB 2 ε2 + ε2 .
+
+Above, step 1 follows from how our algorithm approximates B3 , step 2 follows from our ε2 -error
+approximation of attention and the triangle inequality, step 3 follows from the fact that f (x) is a
+stochastic matrix and distributivity of matrix multiplication, step 4 follows from our definition of
+C3 , step 5 follows from the distributivity of matrix multiplication, and step 6 follows from basic
+properties of the ∞-norm and diagonal matrices. Step 7 follows from the fact that the diag operator
+simply zeroes out the off-diagonal entries, making the off-diagonal elements of C1 h(y)⊤ and C
+                                                                                             f1 h(y)⊤
+identical. Step 8 follows from basic properties of the ∞-norm, step 9 follows from how our algorithm
+approximates C1 , step 10 follows from the triangle inequality and our ε2 approximation of attention,
+step 11 follows from similar arguments as steps 9 and 10, and step 12 follows from entry bounds.
+
+Computing B1 . We now show how to compute B1 . We begin by noting that B1 = dp=0 (f (x)(h(y)∗,p ⊗r
+                                                                                      P
+A2 )) ⊗r (f (x)h(y))∗,p , a fact we will prove later. Using this fact, we can compute B1 efficiently, as
+
+
+
+
+                                                      20
+illustrated in the following:
+                                       d
+                                       X
+                              B1 =           (f (x)(h(y)∗,p ⊗r A2 )) ⊗r (f (x)h(y))∗,p
+                                       p=0
+                                       d
+                                       X
+                                   =         (f (x)(h(y)∗,p ⊗r A2 ) ⊗r C5∗,p
+                                                    | {z }    |{z}
+                                       p=0                             n×d
+                                                            n×1
+                                       d
+                                       X
+                                   =         (f (x) C6,p ) ⊗r C5∗,p
+                                                    |{z}
+                                       p=0
+                                                       n×d
+                                       d
+                                       X
+                                   =         C7,p ⊗r C5∗,p
+                                             |{z}
+                                       p=0
+                                                     | {z }
+                                              n×d           n×1
+                                       d
+                                       X
+                                   =         C8,p .
+                                       p=0
+
+    We begin by approximating C5 = f (x)h(y) by evaluating Attention(A1 X, A2 , h(y)). Next, for
+each 1 ≤ p ≤ d, we compute the matrix C6,p = h(y)∗,p ⊗r A2 . Each matrix requires O(nd) time to
+compute, so constructing all d matrices incurs a total cost of O(nd2 ).
+    We then compute each matrix C7,p = f (x)C6,p by evaluating Attention(A1 X, A2 , C6,p ) across
+all p ∈ [d]. Computing the row-wise Kronecker products C8,p = C7,p ⊗r C5∗,p takes O(nd) time for
+each p ∈ [d], totaling O(nd2 ). Finally, summing over all C8,p requires an additional O(nd2 ) time.
+    We argue that our algorithm returns a close approximation of B1 . Let B    f1 indicate our com-
+putation of B1 . For any matrix Z, Z indicates an approximation of Z derived by a step in our
+                                       e
+algorithm.
+
+                      d
+                      X               d
+                                      X
+   f1 − B1
+   B              =         C
+                            g 8,p −         C8,p
+              ∞
+                      p=0             p=0
+                                                   ∞
+                             n                          o
+                  ≤ d max        C
+                                 g 8,p − C8,p
+                       p                            ∞
+                             n                                                   o
+                  ≤ d max        C
+                                 g 7,p ⊗r C5∗,p − C7,p ⊗r C5∗,p
+                                          ]
+                       p                                                     ∞
+                             n
+                  ≤ d max        C
+                                 g 7,p − C7,p               C
+                                                            ] 5∗,p − C5∗,p
+                       p                            ∞                        ∞
+
+                      + C 7,p − C7,p                C5∗,p ∞
+                        g
+                                              ∞
+                                                  o
+                      + C 5∗,p − C5∗,p   ∥C7,p ∥∞
+                         ]
+                                       ∞
+                         
+                  = d max ∥AttC(A1 X, A2 , C6,p ) − f (x)C6,p ∥∞ AttC(A1 X, A2 , h(y))∗,p − C5∗,p ∞
+                       p
+
+                      + ∥AttC(A1 X, A2 , C6,p ) − f (x)C6,p ∥∞ C5∗,p ∞
+                      + AttC(A1 X, A2 , h(y))∗,p − C5∗,p ∞ ∥C7,p ∥∞
+                  ≤ d max ε22 + ε2 ∥(f (x)h(y))∗,p ∥∞ + ε2 ∥f (x)(h(y)∗,p ⊗r A2 )∥∞
+                         
+                       p
+
+                  ≤ d max ε22 + ε2 ∥h(y)∥∞ + ε2 ∥h(y)∗,p ⊗r A2 ∥∞
+                         
+                       p
+
+
+
+                                                                  21
+                 ≤ d max ε22 + ε2 ∥h(y)∥∞ + ε2 ∥h(y)∗,p ∥∞ ∥A2 ∥∞
+                          
+                      p
+
+                 ≤ d ε22 + ε2 B 2 + ε2 B 3 = dε22 + dε2 B + dε2 B 2 .
+                                          
+
+Step 1 follows from our definition of C8,p , step 2 follows from the triangle inequality, and step 3
+follows from how we define C8,p . Step 4 follows from analyzing the entry-wise error in the row-wise
+Kronecker product. Let a = C7,p [i][j], b = C5∗,p [i][j], and let e1 and e2 denote the entry-wise
+approximation errors in C7,p [i][j] and C5∗,p [i][j], respectively. Then the approximated entry is
+c = (C 7,p ⊗r C5∗,p )[i][j] = (a + e1 )(b + e2 ) = ab + be1 + ae2 + e1 e2 . Therefore, the entry-wise error
+e     g       ]
+in the approximation is e   c − c = be1 + ae2 + e1 e2 , where (c = C7,p ⊗r C5∗,p )[i][j].
+    Step 5 follows from how our algorithm approximates C7,p and C5∗,p . Step 6 follows from the
+fact that Cf6 = C6 and our ϵ2 approximation of the attention computation. Step 7 follows from the
+fact that f (x) is a stochastic matrix, step 8 is based on the linearity of the Kronecker product, and
+step 9 follows from entry bounds.
+    We defined B1 := [f (x)◦(f (x)h(y)h(y)⊤ )]A2 . We now show We begin by noting that the format
+of each entry of B1 is as follows, where 1 ≤ i ≤ n and 1 ≤ j ≤ d:
+                                                                                            
+                               n       ⟨i,ℓ⟩           n      ⟨i,m⟩         d
+                             X       e                X     e             X
+                 B1 [i, j] =      Pn        ⟨i,k⟩
+                                                         Pn       ⟨i,k⟩
+                                                                               h[ℓ, p]h[m, p] A2 [ℓ, j]
+                              ℓ=0   k=0   e          m=0    k=0  e        p=0
+                               d  n
+                                                        " n                           #
+                             XX            e⟨i,ℓ⟩        X       e⟨i,m⟩
+                           =         Pn           ⟨i,k⟩
+                                                             Pn          ⟨i,k⟩
+                                                                               h[m, p] h[ℓ, p]A2 [ℓ, j].
+                             p=0 ℓ=0      k=0 e          m=0     k=0 e
+
+                                  Pd
+   We now compute the sum            p=0 C8,p and verify that
+                                                 
+                                          Xd
+                                            C8,p  [i, j] = B2 [i, j].
+                                           p=0
+
+   Let C5 = f (x)h(y). For 1 ≤ i ≤ n and 1 ≤ p ≤ d, we have:
+                                                 n
+                                                 X    e⟨i,m⟩
+                                   C5 [i, p] =       Pn     ⟨i,k⟩
+                                                                  h(y)[m, p].
+                                                 m=0  k=0 e
+
+   Let C6,p = h(y)∗,p ⊗r A2 . For 1 ≤ ℓ ≤ n and 1 ≤ j ≤ d, this gives:
+
+                                       C6,p [ℓ, j] = h(y)[j, ℓ] · A2 [ℓ, j].
+
+   We define C7,p = f (x)C6,p , so:
+                                               n
+                                               X     e⟨i,ℓ⟩
+                               C7,p [i, j] =       Pn      ⟨i,k⟩
+                                                                 h(y)[j, ℓ]A2 [ℓ, j].
+                                               ℓ=0  k=0  e
+
+   Let C8,p = f (x)C7,p ⊗r C5∗,p . Then for 1 ≤ i ≤ n, 1 ≤ j ≤ d:
+                          n                                        n
+                                                                !                            !
+                         X       e⟨i,ℓ⟩                           X    e⟨i,m⟩
+           C8,p [i, j] =     Pn        ⟨i,k⟩
+                                             h(y)[j, ℓ]A2 [ℓ, j]      Pn    ⟨i,k⟩
+                                                                                  h(y)[m, p]
+                         ℓ=0    k=0 e                             m=0  k=0 e
+                          n X
+                            n
+                          X         e⟨i,ℓ⟩          e⟨i,m⟩
+                      =           Pn      ⟨i,k⟩
+                                                · Pn     ⟨i,k⟩
+                                                               · h(y)[m, p] · h(y)[ℓ, p] · A2 [ℓ, j].
+                          ℓ=0 m=0  k=0 e           k=0 e
+
+
+
+                                                         22
+   Summing over all p, we recover:
+                                                                 d
+                                                                 X
+                                               B2 [i, j] =             C8,p [i, j].
+                                                                 p=0
+
+
+Computing B2 . We begin by noting that B2 = dp=0 [f (x)(h(y)∗,p ⊗r A2 )] ⊗r E∗,p , a fact that we
+                                                   P
+will prove later on. Using this fact, we use the following procedure to compute an approximation
+of B2 :
+
+                                            d
+                                            X
+                                   B2 =       [f (x) (h(y)∗,p ⊗r A2 )] ⊗r E∗,p
+                                                     | {z }     |{z}
+                                            p=0                             n×d
+                                                             n×1
+                                            d
+                                            X
+                                        =         [f (x) C9,p ] ⊗r E∗,p
+                                                         |{z}
+                                            p=0
+                                                         n×d
+                                            d
+                                            X
+                                        =         C10,p ⊗r E∗,p
+                                                  | {z }   |{z}
+                                            p=0
+                                                   n×d           n×1
+                                            d
+                                            X
+                                        =         C11,p .
+                                                  | {z }
+                                            p=0
+                                                   n×d
+
+    We start by approximating the set of d matrices, C9,p = h(y)∗,p ⊗r A2 . For each 1 ≤ p ≤ d,
+computing C9,p takes O(nd) time, so this takes O(nd2 ) time in total. We approximate each C10,p =
+f (x)C9,p by evaluating Attention(A1 X, A2 , C9,p ). Next, we compute all C11,p = C10,p ⊗r E∗,p which
+takes O(nd2 ) time in total. Finally, summing over C11,p takes O(nd2 ) time.
+    We now analyze the error from approximating B2 using the method we just described. For any
+matrix Z, Ze indicates an approximation of Z derived by a step in our algorithm.
+                        d
+                        X               d
+                                        X
+      B2 − B
+           f2       =         C11,p −         C
+                                              ] 11,p
+                ∞
+                        p=0             p=0
+                                                       ∞
+                               n                             o
+                    ≤ d max        C11,p − C
+                                           ] 11,p
+                         p                               ∞
+                               n                               o
+                    = d max  C10,p ⊗r E∗,p − C  ]     ⊗  E
+                                                 10,p r ∗,p
+                         p                                   ∞
+                           n                              o
+                    = d max [C10,p − C ]10,p ] ⊗r E∗,p
+                         p                              ∞
+                           n                             o
+                    ≤ d max ∥E∗,p ∥∞ C10,p − C   ]10,p
+                         p                             ∞
+                           
+                    = d max ∥E∗,p ∥∞ ∥f (x)(h(y)∗,p ⊗r A2 ) − AttC(A1 X, A2 , h(y)∗,p ⊗r A2 )∥∞
+                         p
+                           
+                    ≤ d max ε2 ∥E∗,p ∥∞
+                         p
+
+                    ≤ dε2 B.
+
+   Above, step 1 follows from our definition of C11,p , step 2 is follows from the triangle inequality,
+and step 3 follows from our definition of C11,p . Step 4 follows from the linearity of the row-wise
+
+                                                                 23
+Kronecker product and step 5 follows from the fact that the row-wise Kronecker product scales
+every element in C10,p by an element in E∗,p . Step 6 follows from how we approximate C10,p in our
+algorithm, step 7 follows from our ε2 -error approximation of attention, and step 8 follows from our
+defined entry bounds.                                                                  Pd
+    We defined B2 := [f (x) ◦ (E)h(y)⊤ )]A2 . Finally, we show that B2 =                p=0 [f (x)(h(y)∗,p ⊗r
+                                                                     Pd
+A2 )] ⊗r E∗,p , which can be proven by showing that B2 [i, j] = p=0 C11,p [i, j] for all 1 ≤ i ≤ n and
+1 ≤ j ≤ d. We note the following:
+                                                                          
+                                      n     ⟨i,ℓ⟩         d
+                                     X     e            X
+                         B2 [i, j] =     Pn      ⟨i,k⟩
+                                                            E[i, p]h[ℓ, p] A2 [ℓ, j]
+                                     ℓ=0  k=0  e         p=0
+                                          d X
+                                            n
+                                          X         e⟨i,ℓ⟩
+                                      =           Pn      ⟨i,k⟩
+                                                                E[i, p]h[ℓ, p]A2 [ℓ, j],
+                                          p=0 ℓ=0  k=0 e
+
+and it is clear that the following is true:
+                                            n
+                                           X     e⟨i,ℓ⟩
+                            C11,p [i, j] =     Pn      ⟨i,k⟩
+                                                             E[i, p]h[ℓ, p]A2 [ℓ, j].
+                                           ℓ=0  k=0 e
+
+
+Bounding Approximation Error. Now all that is left is to show our procedure gives us an
+approximation of the gradient with ε additive error. Recall that we did all the attention calculations
+                                        ]
+with ε2 =    ε
+                    additive error. Let dL(x) denote the matrix our procedure returns and let c(x)
+            poly(d,B)n                                dx
+                                                                                                  g
+be the approximation of c(x) given by Attention(A1 X, A2 , h(y)).
+           ^                                                            d                    d
+    dL(x) dL(x)                                                         X                    X
+         −                   =   A⊤       ⊤       ⊤        ⊤
+                                  1 B1 − A1 B2 − A1 B3 − (A1                  C8,p − A⊤
+                                                                                      1             C11,p − A⊤
+                                                                                                             1 f (x)C3 )
+     dx    dx
+                         ∞                                              p=0                   p=0
+                                                                                                                            ∞
+                                                                                                           
+                                                d
+                                                X                      d
+                                                                       X
+                             = A⊤
+                                1 (B1 −
+                                                     C8,p ) + (B2 −         C11,p ) + (B3 − f (x)C3 )
+                                                p=0                    p=0
+                                                                                                                ∞
+                                                       d
+                                                       X                      d
+                                                                              X
+                             ≤ n A⊤
+                                  1         (B1 −            C8,p ) + (B2 −         C11,p ) + (B3 − f (x)C3 )
+                                        ∞
+                                                       p=0                    p=0
+                                                                                                                    ∞
+                                                                                                                           
+                                                       d
+                                                       X                            d
+                                                                                    X
+                             ≤ n A⊤
+                                  1
+                                             B1 −           C8,p    + B2 −               C11,p      + ∥B3 − f (x)C3 ∥∞ 
+                                        ∞
+                                                       p=0                          p=0
+                                                                 ∞                     ∞
+                             ≤ nB( dε22 + dε2 B + dε2 B 2         + dε2 B + (2dB 2 ε2 + ε2 ))
+                             = O(ndB 3 ε2 ) = ε.
+Above, steps 1 and 2 follow from definitions and rearranging terms, step 3 follows from basic
+properties of the ∞-norm, step 4 follows from the triangle inequality, and step 5 was justified
+previously.
+
+
+
+5    New Lower Bounds for Attention
+                                                                                                                        ∗
+In this section, we prove Theorem 1.6 which shows Attention is hard even with d = 2Θ(log n) and
+Theorem 1.7 which shows that the standard algorithm is optimal for d = poly(n). We begin with a
+
+                                                               24
+generic self-reduction (Lemma 5.1) that shows it suffices to prove lower bounds for Attention without
+normalization. We also prove Theorem 5.7 which shows that Attention is hard for d = Ω(log n)
+even for constant entry size.
+    Recall that in the attention computation Attention(Q, K, V ) = D−1 AV , the diagonal matrix
+D−1 applies a normalization to each row of A. In our reductions, however, it is necessary to work
+directly with the unnormalized entries of A. As a key lemma, we show that given oracle access to
+AttC with ε-additive error approximation, one can approximately recover the row sums of A up to
+O(ε)-multiplicative errors, hence recovering the unnormalized entries of A. Specifically, if Si is the
+actual row sum of the i-th row of A, then the reduction computes an approximation Ŝi such that
+
+                                               |Ŝi − Si | < O(ε)Si .
+
+It turns out that multiplicative error approximation on the row sums is sufficient for our lower
+bound proofs.
+Lemma 5.1. Let 0 < ε = O(1). Given matrices Q, K ∈ [−B, B]n×d with B ≥ 1, we can estimate
+the row sums of A = exp(QK ⊤ ) up to O(ε)-multiplicative error in time
+
+                          O((log log n + log(dB/ε))TATTC (n + 1, d + 1, B, ε)).
+
+Proof. We use a parallel binary search approach to estimate the row sums. In order to implement
+parallel binary search, it suffices to perform the following task T :
+    Given an array of numbers c = [c1 , . . . , cn ]⊤ , output an array b ∈ {0, 1}n such that if Si ≥
+(1 + ε)ci , then bi = 1; if Si ≤ (1 − ε)ci , then bi = 0. Otherwise, bi can be arbitrary.
+    Indeed, at each round we let ci := (1 + ε)fi −1 for some fi . We use the indicator bi = 1 to perform
+binary search for the smallest fi such that (1 + ε)fi ≥ Si for all i. Such an fi gives the guarantee
+that Si ≤ (1 + ε)fi < (1 + ε)Si , which is an ε-multiplicative approximation of Si . Note that the
+value of each row sum Si belongs to the range [n exp(−B 2 d), n exp(B 2 d)], so we just need to binary
+search for the correct fi ∈ [log1+ε (n exp(−B 2 d)), log1+ε (n exp(B 2 d))]. Therefore, the number of
+rounds for binary search (i.e., for performing the task T ) is given by
+
+                        O(log2 log1+ε (n exp(2B 2 d)) = O(log log n + log(dB/ε)).
+
+   It now remains to show how to perform the task T . We claim the following:
+Claim 5.2. The task T can be completed with one oracle call to AttC(n + 1, d + 1, B, ε/100) and
+O(nd) additional time.
+
+Proof. We create the following matrices as inputs to the oracle AttC(n + 1, d + 1, B, ε):
+                                                                              
+                                                                 0 0 ··· 0
+                                                                1 0 · · · 0
+                                                1 0⊤
+                                                  
+                     ′      ln c Q       ′         d       ′
+                   Q :=              , K   :=          , V   :=  .. .. . . ..  .
+                                                                              
+                             0 0⊤d             0 n K              .  .    . . 
+                                                                 1 0 ··· 0
+Then,
+                                                        ln c QK ⊤
+                                                                 
+                                           ′     ′⊤
+                                         QK           =             ,
+                                                         0    0⊤
+                                                               d
+
+so the (i, 1)-th entry of Attention(Q′ , K ′ , V ′ ) = D′−1 A′ V ′ would be
+                                                               Si
+                                                  oi =              .
+                                                            ci + Si
+
+                                                            25
+Assume we have an (ε/100)-additive approximation of oi (denoted by ôi ). Then, we set bi = 1 if
+ôi ≥ 12 and bi = 0 otherwise. We now show that all entries of b are correctly set. If Si ≥ (1 + ε)ci ,
+then
+                                              Si             1+ε          1
+                      ôi ≥ oi − ε/100 ≥           − ε/100 ≥     − ε/100 > .
+                                           ci + Si           2+ε          2
+On the other hand, if Si ≤ (1 − ε)ci , then
+
+                                              Si             1−ε          1
+                      ôi ≤ oi + ε/100 ≤           + ε/100 ≤     + ε/100 < .
+                                           ci + Si           2−ε          2
+
+In the first inequality, we use 1+ε    1    ε                              1−ε     1    ε
+                                2+ε > 2 + 6 and in the second we use 2−ε < 2 − 6 . Thus, the
+algorithm will output bi = 1 in the former case and bi = 0 in the latter case, as desired.
+
+   This completes the proof of Lemma 5.1.
+
+5.1   Lower Bound for Attention with Small Head Dimension
+In this section, we show via a reduction from the Max-IP problem that AttC(n, d, B, ε) requires
+                               ∗
+n2−o(1) time when d = 2Ω(log n) , B = poly(n), and ε = O(1) additive approximation error. In
+particular, we note that we are able to compute Max-IP exactly even with oracle access to AttC that
+allows ε = O(1) additive error.
+
+Lemma 5.3. Let ε > 0. Max-IP(n, d, B) can be computed exactly in time
+
+                    O((log log n + log(dB/ε))TATTC (n + 1, d + 1, O(B log n), ε)).
+
+Proof. Given a δ, we choose a C = C(δ) and set d = 2C log ∗(n) . Let A = {a1 , . . . , an }, B =
+{b1 , . . . , bn } ⊆ Zd be two sets of d-dimensional integer-valued vectors with entries bounded by
+B ≥ 1. Let k = ln n and we choose the smallest integer C > 0 such that
+
+                       0.5C > 1 + logn (1 + ε) and              − 0.5C < logn (1 − ε).
+
+   Define the following matrices Q, K ∈ Rn×d :
+
+                                    a⊤                                          b⊤
+                                                                                   
+                                      1                                           1
+                                   a⊤2
+                                                                              b⊤2
+                                                                                      
+                        Q :=               ,  K := kC ·                              .           (4)
+                                                                                   
+                                     ..                                        ..
+                                     .                                         .   
+                                      a⊤
+                                       n                                        b⊤
+                                                                                 n
+
+By Lemma 5.1, we get the (1 ± ε)-multiplicative approximations of the row sums of exp(QK ⊤ ) in
+time
+                 O((log log n + log(k 2 C 2 B 2 d/ε))TATTC (n + 1, d + 1, kcB, ε)).
+Here, note that kCB = O(B log n). Note that the i-th row sum is given by
+                                         n
+                                         X                      n
+                                                                X
+                                  Si =         ekC(ai ·bj ) =         nC(ai ·bj ) .
+                                         j=1                    j=1
+
+
+
+
+                                                       26
+Let Si′ be the (1 ± ε)-multiplicative approximation for Si and let Mi := maxj ai · bj (note that all
+inner products are integers) be the maximum inner product over all vectors in B for a fixed ai ∈ A.
+We claim that Mi can be recovered exactly by
+
+                                               logn Si′
+                                                            
+                                       Mi =             + 0.5 .
+                                                  C
+
+Note that each non-maximum term on a single row can be bounded by 0 < nC(ai ·bj ) ≤ nCMi , so we
+can bound the row sum by
+                             nCMi ≤ Si ≤ n · nCMi = nCMi +1 .
+Thus, applying (1 ± ε)-approximation to the upper and lower bounds respectively we get
+
+                                (1 − ε)nCMi ≤ Si′ ≤ (1 + ε)nCMi +1 .
+
+If we can show Mi ≤ (logn Si′ )/C + 0.5 < Mi + 1 then we are done. Indeed, using our definition for
+C we get
+
+       logn Si′         CMi + 1 + logn (1 + ε)              1 + logn (1 + ε)
+                + 0.5 ≤                        + 0.5 = Mi +                  + 0.5 < Mi + 1,
+          C                      C                                 C
+and
+             logn Si′         CMi + logn (1 − ε)              logn (1 − ε)
+                      + 0.5 >                    + 0.5 = Mi +              + 0.5 > Mi .
+                C                    C                             C
+
+
+   Combining the above reduction with the conditional lower bound for Max-IP (Theorem 2.3), we
+obtain Theorem 1.6.
+
+Theorem 5.4 (Formal Theorem 1.6). Fix ε = Θ(1) and B = poly(n). For all δ > 0, there exists
+                       ∗
+C = C(δ) and d = 2C log n such that any algorithm computing AttC(n, d, B, ε) requires n2−δ time
+under SETH.
+
+5.2   Lower Bound for Attention with Large Head Dimension
+In this section, we study the case of large head dimension where d = poly(n). Through a reduction
+from the OV problem, we show that computing AAttC(n,√     d, B, ε) requires explicitly computing the
+                     ⊤
+matrix product QK when d = poly(n), B = O log n , and ε = O(1) (additive approximation
+error). Furthermore, we establish
+                                   a similar lower bound from the OV problem when d = poly(n),
+                           1
+B = O(1), and ε = O poly(n) .
+                                                                                   √
+Theorem 5.5 (Formal Theorem 1.7). Fix d = poly(n). There exists B = O( log n) and ε =
+O(1) such that any algorithm computing AttC(n, d, B, ε) requires TMUL (n, d, n)1−o(1) time under the
+Generalized High-Dimensional OV Hypothesis.
+
+   We show the following lemma to prove Theorem 5.5.
+                                                                                    √
+Lemma 5.6. The OV problem can be computed exactly with one call to AttC(n, d, B = O( log n), ε =
+O(1)) and O(nd) additional time.
+
+
+
+
+                                                 27
+Proof. Let A = {a1 , . . . , an }, B = {b1 , . . . , bn } ⊆ {0, 1}d be two sets of vectors. We chose a constant
+                                                                    1−c
+c such that ε < c < 1 and a constant k such that k < n(1+c)             . We then define Q, K ∈ Rn×d :
+
+                                                   a⊤                                              b⊤
+                                                                                                      
+                                                     1                                               1
+                         p                        a⊤2
+                                                                     p                           b⊤2
+                                                                                                         
+                   Q := − | ln k| ·                           , K := | ln k| ·                        .   (5)
+                                                                                                      
+                                                    ..                                              ..
+                                                    .                                             .   
+                                                   a⊤
+                                                    n                                              b⊤
+                                                                                                    n
+
+    Due to Lemma 5.1, we can recover the row sums of exp(QK ⊤ ) up to ε-multiplicative error in
+O ((log log n + log(dB/ε))TATTC (n + 1, d + 1, B, ε)) time. Let Si be the (1 ± ϵ)-approximation of
+the i-th row sum.
+                                               n
+                                               X                                     n
+                                                                                     X
+                             Si := (1 ± ϵ)               eln(k)(ai ·bj ) = (1 ± ϵ)         k ai ·bj ,
+                                               j=1                                   j=1
+
+which implies
+                                             n
+                                             X                                n
+                                                                              X
+                                   (1 − ϵ)         k ai ·bj ≤ Si ≤ (1 + ϵ)           k ai ·bj .
+                                             j=1                               j=1
+
+    If there are no orthogonal pairs of vectors in A and B, then ai · bj is a positive integer for all
+1 ≤ i, j ≤ n. Consequently, because 0 < k < 1, the maximum value of k ai ·bj is k. From this it
+follows that if there are no pairs of orthogonal vectors, all of the sums Si , . . . , Sn will be less than
+1 − c:
+                           n
+                           X                                   (1 + ϵ)(1 − c)   (1 + c)(1 − c)
+            Si ≤ (1 + ϵ)         k ai ·bj ≤ (1 + ϵ)nk <                       ≤                = 1 − c.
+                                                                  (1 + c)          (1 + c)
+                           j=1
+
+    On the other hand, when there are one or more pairs of orthogonal vectors in A and B, there
+will be at least one k ai ·bj = 1 and a row sum Si will exist such that Si ≥ 1 − c:
+                                                    n
+                                                    X
+                                   Si ≥ (1 − ϵ)            k ai ·bj > (1 − ϵ)1 ≥ 1 − c.
+                                                    j=1
+
+   By checking for the existence of a row sum Si that is greater than or equal to 1 − c we can
+determine whether there is a pair of orthogonal vectors in A and B.
+
+    We also show that when d = Θ(log n), Attention is hard under SETH even with constant entry
+size B.
+
+Theorem 5.7. For all δ > 0, there exists C = C(δ), d = C log n and ε = n−C such that any
+algorithm computing AttC(n, d, log 2, ε) requires Ω n2−δ time under SETH.
+
+    We show the following lemma to prove Theorem 5.7.
+
+Lemma 5.8. The OV problem on vectors of dimension d can be computed with high probability in
+time                                                                
+                                                                  1
+                Õ (log n)(d + log n)TATTC n + 1, d + 1, log 2,          .
+                                                                10n2d
+
+
+
+
+                                                               28
+   Given the above lemma, suppose we have an algorithm computing AttC. Given a δ define δ ′ = δ/2
+and let C ′ = C ′ (δ ′ ) and d = C ′ log n as required in Theorem 2.2. Then, let ε = 10n2
+                                                                                       1
+                                                                                         d = n
+                                                                                               −C for
+                                         ′
+some large constant C = C(δ) ≥ C . Any algorithm computing TATTC (n + 1, d + 1, log 2, ε) then
+requires Ω(n2−δ ) time, proving Theorem 5.7.
+Proof. Let A = {a1 , . . . , an }, B = {b1 , . . . , bn } ⊆ {0, 1}d be two sets of vectors. Define Q, K ∈ Rn×d
+to be the matrices whose rows are formed by the vectors in A and B, respectively, i.e.,
+                                               a⊤                               b⊤
+                                                                                     
+                                                  1                               1
+                                              a⊤ 2
+                                                                              b⊤2
+                                                                                        
+                      Q := log(2)                         , K := log(2)              .
+                                                                                     
+                                                 ..                              ..
+                                                 .                             .     
+                                           a⊤
+                                            n                              b⊤
+                                                                            n
+Note that                                                                    
+                                  log(2) · a1 · b1   · · · log(2) · a1 · bn
+                             ⊤
+                           QK = 
+                                        ..            ..        ..         .. .
+                                          .             .           .        .
+                                    log(2) · an · b1 · · · log(2) · an · bn
+and the i-th row sum of exp(QK ) is given by nj=1 2ai ·bi . In particular, note that all row sums
+                                   ⊤
+                                                    P
+                                                                                               1
+are integers satisfying n ≤ Si ≤ n2d . From Lemma 5.1, we can recover the row sums up to 10n2    d
+               1
+and therefore 10 -additive error in time
+                                                                                
+                                                                               1
+                   O (log log n + log(dn2d ))TATTC n + 1, d + 1, log 2,              .
+                                                                            10n2d
+            1
+Given the 10  -additive approximation of Si , we may recover Si by rounding since they are integers.
+Note that Si ≤ n2d and can therefore be represented in O(d + log n) bits.
+    If there are no orthogonal pairs of vectors in A and B, then ai · bj is a positive integer for all
+1 ≤ i, j ≤ n, which means 2ai ·bj is an even number. It follows that all of the sums S1 , . . . , Sn are
+also even numbers.
+    Conversely, when an orthogonal pair of vectors exists in A and B, we would like to detect this
+based on the sums S1 , . . . , Sn as well. Note that when ai · bj = 0 we have 2ai ·bj = 1, which may
+potentially make the sum into an odd number. However, when there are an even number of such
+orthogonal pairs, the sum remains even, and we cannot distinguish from the previous case. The
+workaround is to use a standard sampling method, so that with high probability, we include exactly
+one pair of orthogonal vectors in the sample, and therefore the corresponding sum will be odd.
+    Fix an index 1 ≤ i ≤ n such that ai ∈ A is orthogonal to some vector in B. Let b∗ be the
+last vector in B orthogonal to ai . Without loss of generality, we may assume that the zero vector
+0d ∈/ A, since we can check this in O(nd) time and immediately accepts the input if this is the case.
+Given 0d ∈ / A, we know that vector 1d is not orthogonal to any vector in A. Consider the following
+sampling procedure:
+    Construct B ′ by including each vector of B with probability 12 independently and padding with
+1d to ensure B ′ has n vectors. Note that with probability exactly 12 we have that B ′ contains an odd
+number of orthogonal vectors to ai (i.e. b∗ is included with probability 21 ). In particular, sampling
+B ′ O(log n)-times allows us to detect an odd row sum with high probability.
+    Thus, the overall algorithm requires involves O(log n) loops, where in each loop we check for an
+odd row-sum using Lemma 5.1. The overall time is therefore
+                                                                           
+                                                                         1
+                      Õ (log n)(d + log n)TATTC n + 1, d + 1, log 2,            .
+                                                                       10n2d
+
+
+
+                                                     29
+6   Conclusion
+We conclude with some open questions. The most natural question is settling the complexity of
+                              ∗
+Max-IP when 1 ≪ d ≪ 2Θ(log n) . We have shown several conditional lower bounds for Attention
+computation. Is Attention fine-grained equivalent to any well-studied problem? If such a relation-
+ship can be established, then breakthroughs on well-studied problems in fine-grained complexity
+can lead to breakthroughs on Attention computation. While this work focuses on characterizing
+the complexity of training a single Attention unit, the complexity of computing a full transformer
+remains open: perhaps the cost of computing many Attention units is less than computing each of
+them separately.
+
+
+7   Acknowledgments
+The authors would like to thank Josh Alman for helpful discussions and pointing us to the Fast
+Multipole Method.
+
+
+References
+[AA22]      Amol Aggarwal and Josh Alman. Optimal-degree polynomial approximations for ex-
+            ponentials and gaussian kernel density estimation. In 37th Computational Complexity
+            Conference (CCC), 2022. 6, 10, 11
+
+[ADV+ 25] Josh Alman, Ran Duan, Virginia Vassilevska Williams, Yinzhan Xu, Zixuan Xu, and
+          Renfei Zhou. More asymmetry yields faster matrix multiplication. In Proceedings of
+          the 2025 Annual ACM-SIAM Symposium on Discrete Algorithms (SODA), pages 2005–
+          2039. SIAM, 2025. 4
+
+[AESW91] Pankaj K. Agarwal, Herbert Edelsbrunner, Otfried Schwarzkopf, and Emo Welzl. Eu-
+         clidean minimum spanning trees and bichromatic closest pairs. Discrete and Computa-
+         tional Geometry, 6:407–422, 1991. 4, 5
+
+[AG24]      Josh Alman and Yunfeng Guan. Finer-grained hardness of kernel density estimation.
+            In Rahul Santhanam, editor, 39th Computational Complexity Conference, 2024. 8
+
+[AS24a]     Josh Alman and Zhao Song. Fast attention requires bounded entries. In Proceedings of
+            the 37th International Conference on Neural Information Processing Systems. Curran
+            Associates Inc., 2024. 2, 3, 4, 5, 6, 8, 11
+
+[AS24b]     Josh Alman and Zhao Song. The fine-grained complexity of gradient computation for
+            training large language models. arXiv preprint arXiv:2402.04497, 2024. 3, 7, 8, 17, 18,
+            19
+
+[ASPD23]    Atish Agarwala, Samuel Stern Schoenholz, Jeffrey Pennington, and Yann N. Dauphin.
+            Temperature check: theory and practice for training models with softmax-cross-entropy
+            losses. Trans. Mach. Learn. Res., 2023, 2023. 2
+
+[AWY15a] Amir Abboud, Richard Ryan Williams, and Huacheng Yu. More applications of the
+         polynomial method to algorithm design. In Proceedings of the Twenty-Sixth Annual
+         ACM-SIAM Symposium on Discrete Algorithms (SODA), pages 218–230. SIAM, 2015.
+         4
+
+                                                30
+[AWY15b] Amir Abboud, Richard Ryan Williams, and Huacheng Yu. More applications of the
+         polynomial method to algorithm design. In Proceedings of the Twenty-Sixth Annual
+         ACM-SIAM Symposium on Discrete Algorithms, SODA. SIAM, 2015. 6
+
+[AY25]      Josh Alman and Hantao Yu. Fundamental limitations on subquadratic alternatives to
+            transformers. In The Thirteenth International Conference on Learning Representations,
+            2025. 8
+
+[BI18]      Arturs Backurs and Piotr Indyk. Edit distance cannot be computed in strongly sub-
+            quadratic time (unless SETH is false). SIAM J. Comput., 47(3):1087–1097, 2018. 8
+
+[BMR+ 20] Tom B. Brown, Benjamin Mann, Nick Ryder, Melanie Subbiah, Jared Kaplan, Prafulla
+          Dhariwal, Arvind Neelakantan, Pranav Shyam, Girish Sastry, Amanda Askell, Sand-
+          hini Agarwal, Ariel Herbert-Voss, Gretchen Krueger, Tom Henighan, Rewon Child,
+          Aditya Ramesh, Daniel M. Ziegler, Jeffrey Wu, Clemens Winter, Christopher Hesse,
+          Mark Chen, Eric Sigler, Mateusz Litwin, Scott Gray, Benjamin Chess, Jack Clark,
+          Christopher Berner, Sam McCandlish, Alec Radford, Ilya Sutskever, and Dario Amodei.
+          Language models are few-shot learners. In Neural Information Processing Systems,
+          NeurIPS, 2020. 7
+
+[BSZ23]     Jan van den Brand, Zhao Song, and Tianyi Zhou. Algorithm and hardness for dynamic
+            attention maintenance in large language models. arXiv preprint arXiv:2304.02207,
+            2023. 8
+
+[CDW+ 21] Beidi Chen, Tri Dao, Eric Winsor, Zhao Song, Atri Rudra, and Christopher Ré. Scat-
+          terbrain: Unifying sparse and low-rank attention. In Neural Information Processing
+          Systems, NeurIPS, 2021. 7
+
+[Che18]     Lijie Chen. On the hardness of approximate and exact (bichromatic) maximum inner
+            product. In Proceedings of the 33rd Computational Complexity Conference (CCC), 2018.
+            4, 8, 9
+
+[CKNH20] Ting Chen, Simon Kornblith, Mohammad Norouzi, and Geoffrey E. Hinton. A simple
+         framework for contrastive learning of visual representations. In Proceedings of the 37th
+         International Conference on Machine Learning, ICML, volume 119 of Proceedings of
+         Machine Learning Research, pages 1597–1607. PMLR, 2020. 2
+
+[CLD+ 21]   Krzysztof Marcin Choromanski, Valerii Likhosherstov, David Dohan, Xingyou Song,
+            Andreea Gane, Tamás Sarlós, Peter Hawkins, Jared Quincy Davis, Afroz Mohiuddin,
+            Lukasz Kaiser, David Benjamin Belanger, Lucy J. Colwell, and Adrian Weller. Re-
+            thinking attention with performers. In International Conference on Learning Represen-
+            tations, ICLR, 2021. 7
+
+[CW16]      Timothy M. Chan and Ryan Williams. Deterministic APSP, orthogonal vectors, and
+            more: Quickly derandomizing Razborov-Smolensky. In Proceedings of the Twenty-
+            Seventh Annual ACM-SIAM Symposium on Discrete Algorithms (SODA), pages 1246–
+            1255. SIAM, 2016. 4
+
+[DK21]      Mina Dalirrooyfard and Jenny Kaufmann. Approximation algorithms for min-distance
+            problems in dags. In 48th International Colloquium on Automata, Languages, and
+            Programming ICALP, 2021. 4
+
+
+                                               31
+[GSWY23] Yeqi Gao, Zhao Song, Weixin Wang, and Junze Yin. A fast optimization view: Refor-
+         mulating single layer attention in llm based on tensor and svm trick, and solving it in
+         matrix multiplication time. arXiv preprint arXiv:2309.07418, 2023. 7
+
+[GSYZ23a] Yeqi Gao, Zhao Song, Xin Yang, and Ruizhe Zhang. Fast quantum algorithm for
+          attention computation. arXiv preprint arXiv:2307.08045, 2023. 8
+
+[GSYZ23b] Yeqi Gao, Zhao Song, Xin Yang, and Yufa Zhou. Differentially private attention com-
+          putation. arXiv preprint arXiv:2305.04701, 2023. 8
+
+[HJK+ 24]   Insu Han, Rajesh Jayaram, Amin Karbasi, Vahab Mirrokni, David Woodruff, and Amir
+            Zandieh. Hyperattention: Long-context attention in near-linear time. In The Twelfth
+            International Conference on Learning Representations, 2024. 7
+
+[HK]        John Hopcroft and Ravi Kannan. Singular value decomposition (svd). https://
+            www.cs.cmu.edu/~venkatg/teaching/CStheory-infoage/book-chapter-4.pdf. Ac-
+            cessed: 2024-12-21. 16
+
+[HWHQ21] Qianjiang Hu, Xiao Wang, Wei Hu, and Guo-Jun Qi. Adco: Adversarial contrast for
+         efficient learning of unsupervised representations from self-trained negative adversaries.
+         In IEEE Conference on Computer Vision and Pattern Recognition, CVPR, pages 1074–
+         1083. Computer Vision Foundation / IEEE, 2021. 2
+
+[IP01]      Russell Impagliazzo and Ramamohan Paturi. On the complexity of k-sat. Journal of
+            Computer and System Sciences, 62(2):367–375, 2001. 8
+
+[KAG22]     Bulat Khaertdinov, Stylianos Asteriadis, and Esam Ghaleb. Dynamic temperature scal-
+            ing in contrastive self-supervised learning for sensor-based human activity recognition.
+            IEEE Trans. Biom. Behav. Identity Sci., 4(4):498–507, 2022. 3
+
+[KBS+ 23]   Anna Kukleva, Moritz Böhle, Bernt Schiele, Hilde Kuehne, and Christian Rupprecht.
+            Temperature schedules for self-supervised contrastive methods on long-tail data. In The
+            Eleventh International Conference on Learning Representations, ICLR, 2023. 3
+
+[KKL20]     Nikita Kitaev, Lukasz Kaiser, and Anselm Levskaya. Reformer: The efficient trans-
+            former. In International Conference on Learning Representations, ICLR, 2020. 7
+
+[KMZ24]     Praneeth Kacham, Vahab Mirrokni, and Peilin Zhong. Polysketchformer: Fast trans-
+            formers via sketching polynomial kernels. In Forty-first International Conference on
+            Machine Learning, 2024. 7
+
+[KVPF20] Angelos Katharopoulos, Apoorv Vyas, Nikolaos Pappas, and François Fleuret. Trans-
+         formers are rnns: Fast autoregressive transformers with linear attention. In Interna-
+         tional Conference on Machine Learning, ICML, 2020. 7
+
+[KWH23]     Feyza Duman Keles, Pruthuvi Mahesakya Wijewardena, and Chinmay Hegde. On the
+            computational complexity of self-attention. In International Conference on Algorithmic
+            Learning Theory, pages 597–619. PMLR, 2023. 8
+
+[Mat92]     Jiří Matoušek. Efficient partition trees.     Discrete and Computational Geometry,
+            8(1):315–334, 1992. 4, 5, 7, 13, 14
+
+
+
+                                                32
+[MCD+ 23] Siladittya Manna, Soumitri Chattopadhyay, Rakesh Dey, Saumik Bhattacharya, and
+          Umapada Pal. Dystress: Dynamically scaled temperature in self-supervised contrastive
+          learning. CoRR, abs/2308.01140, 2023. 3
+[MGN+ 23] Sadhika Malladi, Tianyu Gao, Eshaan Nichani, Alex Damian, Jason D Lee, Danqi Chen,
+          and Sanjeev Arora. Fine-tuning language models with just forward passes. Advances
+          in Neural Information Processing Systems, 36:53038–53075, 2023. 7
+[PMXA23] Abhishek Panigrahi, Sadhika Malladi, Mengzhou Xia, and Sanjeev Arora. Trainable
+         transformer in transformer. In Fortieth International Conference on Machine Learning
+         (ICML), 2023. 7
+[RSY+ 21]   Joshua Robinson, Li Sun, Ke Yu, Kayhan Batmanghelich, Stefanie Jegelka, and Su-
+            vrit Sra. Can contrastive learning avoid shortcut solutions? In Advances in Neural
+            Information Processing Systems NeurIPS 34, 2021. 2
+[RV]        Tim Roughgarden and Gregory Valiant. The singular value decomposition (svd)
+            and low-rank matrix approximations. https://web.stanford.edu/class/cs168/l/
+            l9.pdf. Accessed: 2024-12-21. 16
+[RV13]      Liam Roditty and Virginia Vassilevska Williams. Fast approximation algorithms for
+            the diameter and radius of sparse graphs. In Dan Boneh, Tim Roughgarden, and Joan
+            Feigenbaum, editors, Symposium on Theory of Computing Conference, STOC. ACM,
+            2013. 8
+[SFH+ 24]   Clayton Sanford, Bahare Fatemi, Ethan Hall, Anton Tsitsulin, Mehran Kazemi,
+            Jonathan Halcrow, Bryan Perozzi, and Vahab Mirrokni. Understanding transformer
+            reasoning capabilities via graph algorithms. In Advances in Neural Information Pro-
+            cessing Systems, 2024. 8
+[SHT23]     Clayton Sanford, Daniel J. Hsu, and Matus Telgarsky. Representational strengths and
+            limitations of transformers. In Advances in Neural Information Processing Systems,
+            2023. 8
+[SHT24]     Clayton Sanford, Daniel Hsu, and Matus Telgarsky. Transformers, parallel computation,
+            and logarithmic depth. In Forty-first International Conference on Machine Learning,
+            ICML, 2024. 8
+[SY24]      Barna Saha and Christopher Ye. I/O complexity of attention, or how optimal is
+            FlashAttention? In Proceedings of the 41st International Conference on Machine Learn-
+            ing, 2024. 8
+[SYZ24]     Zhao Song, Junze Yin, and Lichen Zhang. Solving attention kernel regression problem
+            via pre-conditioner. In International Conference on Artificial Intelligence and Statistics,
+            pages 208–216. PMLR, 2024. 7
+[SZ99]      Avi Shoshan and Uri Zwick. All pairs shortest paths in undirected graphs with integer
+            weights. In Proceedings of the 40th Annual Symposium on Foundations of Computer
+            Science (FOCS), pages 605–615. IEEE Computer Society, 1999. 3
+[VSP+ 17]   Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N.
+            Gomez, Lukasz Kaiser, and Illia Polosukhin. Attention is all you need. In Neural
+            Information Processing Systems NeurIPS, 2017. 1, 2, 4, 7
+
+                                                 33
+[WI20]      Tongzhou Wang and Phillip Isola. Understanding contrastive representation learn-
+            ing through alignment and uniformity on the hypersphere. In Proceedings of the 37th
+            International Conference on Machine Learning, ICML, volume 119 of Proceedings of
+            Machine Learning Research, pages 9929–9939. PMLR, 2020. 2
+
+[Wil04]     Ryan Williams. A new algorithm for optimal constraint satisfaction and its implica-
+            tions. In Proceedings of the 31st International Colloquium on Automata, Languages and
+            Programming (ICALP), 2004. 4, 9
+
+[Wil18]     R. Ryan Williams. Faster all-pairs shortest paths via circuit complexity. SIAM J.
+            Comput., 47(5), 2018. 6
+
+[WL21]      Feng Wang and Huaping Liu. Understanding the behaviour of contrastive loss. In
+            IEEE Conference on Computer Vision and Pattern Recognition, CVPR, pages 2495–
+            2504. Computer Vision Foundation / IEEE, 2021. 2
+
+[XYL25]     Hao Xuan, Bokai Yang, and Xingyu Li. Exploring the impact of temperature scaling
+            in softmax for classification and adversarial robustness. CoRR, abs/2502.20604, 2025.
+            2
+
+[Yao82]     Andrew Chi-Chih Yao. On constructing minimum spanning trees in k-dimensional
+            spaces and related problems. Siam Journal on Computing, 11(4):721–736, 1982. 4, 5
+
+[YSB+ 25]   Gilad Yehudai, Clayton Sanford, Maya Bechler-Speicher, Orr Fischer, Ran Gilad-
+            Bachrach, and Amir Globerson. Depth-width tradeoffs in algorithmic reasoning of
+            graph tasks with transformers. CoRR, abs/2503.01805, 2025. 8
+
+[ZGD+ 20] Manzil Zaheer, Guru Guruganesh, Kumar Avinava Dubey, Joshua Ainslie, Chris Al-
+          berti, Santiago Ontañón, Philip Pham, Anirudh Ravula, Qifan Wang, Li Yang, and
+          Amr Ahmed. Big bird: Transformers for longer sequences. In Neural Information
+          Processing Systems, NeurIPS, 2020. 7
+
+[ZHDK23] Amir Zandieh, Insu Han, Majid Daliri, and Amin Karbasi. Kdeformer: Accelerating
+         transformers via kernel density estimation. In International Conference on Machine
+         Learning, pages 40605–40623. PMLR, 2023. 7
+
+[Zwi02]     Uri Zwick. All pairs shortest paths using bridging sets and rectangular matrix multi-
+            plication. J. ACM, 49(3):289–317, 2002. 3
+
+
+
+
+                                               34
+

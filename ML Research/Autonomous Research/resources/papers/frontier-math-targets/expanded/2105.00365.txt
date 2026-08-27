@@ -1,0 +1,623 @@
+                                               On α-points of q-analogs of the Fano
+                                                              plane
+                                                                             Michael Kiermaier ∗
+                                                                            Universität Bayreuth
+                                                                                    May 4, 2021
+arXiv:2105.00365v1 [math.CO] 2 May 2021
+
+
+
+
+                                                                                        Abstract
+                                                      Arguably, the most important open problem in the theory of q-analogs of designs
+                                                   is the question for the existence of a q-analog D of the Fano plane. It is undecided
+                                                   for every single prime power value q ≥ 2.
+                                                      A point P is called an α-point of D if the derived design of D in P is a geometric
+                                                   spread. In 1996, Simon Thomas has shown that there must always exist at least
+                                                   one non-α-point. For the binary case q = 2, Olof Heden and Papa Sissokho have
+                                                   improved this result in 2016 by showing that the non-α-points must form a blocking
+                                                   set with respect to the hyperplanes.
+                                                      In this article, we show that a hyperplane consisting only of α-points implies
+                                                   the existence of a partiton of the symplectic generalized quadrangle W (q) into
+                                                   spreads. As a consequence, the statement of Heden and Sissokho is generalized to
+                                                   all primes q and all even values of q.
+
+
+                                          1 Introduction
+                                          Due to the connection to network coding, the theory of subspace designs has gained a
+                                          lot of interest recently. Subspace designs are the q-analogs of combinatorial designs and
+                                          arise by replacing the subset lattice of the finite ambient set V by the subspace lattice
+                                          of a finite ambient vector space V . Arguably the most important open problem in this
+                                          field is the question for the existence of a q-analog of the Fano plane, which is a subspace
+                                          design with the parameters 2-(7, 3, 1)q . This problem has already been stated in 1972
+                                          by Ray-Chaudhuri [3, Problem 28]. Despite considerable investigations, its existence
+                                          remains undecided for every single order q of the base field.
+                                           ∗
+                                               Universität Bayreuth, Mathematisches Institut, D-95440 Bayreuth, Germany
+                                                email: michael.kiermaier@uni-bayreuth.de
+                                                homepage: http://www.mathe2.uni-bayreuth.de/michaelk/
+
+
+
+
+                                                                                            1
+   It has been shown that the smallest instance q = 2, the binary q-analog of a Fano
+plane, can have at most a single nontrivial automorphism [6, 18]. A q-analog of the
+Fano plane would be the largest possible [7, 4; 3]q constant dimension subspace code.
+However, the hitherto best known sizes of such constant dimension subspace codes still
+leave considerable gaps, namely 333 vs. 381 in the binary case [14] and 6978 vs. 7651
+in the ternary case [16].1
+   Another approach has been the investigation of the derived designs of a putative q-
+analog D of the Fano plane. A derived design exists for each point P ∈ PG(6, q) and
+is always a q-design with the parameters 1-(6, 2, 1)q , which is the same as a line spread
+of PG(5, q). Following the notation of [13], a point P is called an α-point of D if the
+derived design in P is the geometric spread, which is the most symmetric and natural
+one among the 131044 isomorphism types [21] of such spreads. For highest possible
+regularity, one would expect all points to be α-points. However, this has been shown to
+be impossible, so there must always be at least one non-α-point of D [28]. For the binary
+case q = 2, this result has been improved to the statement that each hyperplane contains
+at least a non-α-point Heden-Sissokho-2016-ArsComb124:161-164, In other words, the
+non-α-points of of a binary q-analog of the Fano plane form a blocking set with respect
+to the hyperplanes.
+   In this article, α-points will be investigated for general values of q, which will lead to
+the following theorem.
+
+Theorem 1 Let D be a q-analog of the Fano plane and assume that there exists a hy-
+perplane H such that all points of H are α-points of D. Then the following equivalent
+statements hold:
+
+ (a) The line set of the symplectic generalized quadrangle W (q) is partitionable into
+     spreads.
+
+ (b) The point set of the parabolic quadric Q(4, q) is partitionable into ovoids.
+
+     As a consequence, we will get the following generalization of the result of [13].
+
+Theorem 2 Let D be a q-analog of the Fano plane and q be prime or even. Then each
+hyperplane contains a non-α-point. In other words, the non-α-points form a blocking set
+with respect to the hyperplanes.
+
+
+2 Preliminaries
+Throughout the article, q 6= 1 is a prime power and V is a vector space over Fq of finite
+dimension v.
+
+
+
+
+ 1
+     The [7, 4; 3]3 code of size 6977 in [16] can be extended trivially by a further codeword.
+
+
+
+
+                                                      2
+2.1 The subspace lattice
+For simplicity, a subspace U of V of dimension dimFq (U ) = k will be called a k-subspace.
+The
+V  set of all k-subspaces of V is called the Graßmannian and will be denoted by
+ k q
+     . Picking the “best of two worlds”, we will prefer the algebraic dimension dimFq (U )
+over the geometric dimension dimFq (U ) − 1, but we will otherwise make heavy use of
+geometric notions, such as calling the 1-subspaces of V points, the 2-subspaces lines, the
+3-subspaces planes, the 4-subspaces solids and the (v − 1)-subspaces hyperplanes. In
+fact, the subspace lattice L(V ) consisting of all subspaces of V ordered by inclusion is
+nothing else than the finite projective geometry PG(v − 1, q) = PG(V ).2 There are good
+reasons to consider the subset lattice as a subspace lattice over the unary “field” F1 [11].
+   The number of all k-subspaces of V is given by the Gaussian binomial coefficient
+                                    ( v
+                                      (q −1)···(q v−k+1 −1)
+                                                            if k ∈ {0, . . . , v};
+                           
+                     V       v           (q k −1)···(q−1)
+                  #       =      =
+                     k q     k q      0                     otherwise.
+
+The Gaussian binomial coefficient v1 q is also known as the q-analog of the number v
+                                  
+
+and will be abbreviated as [v]q .
+  For S ⊆ L(V ) and U, W ∈ L(V ), we will use the abbreviations
+
+                                    S|U = {B ∈ S | U ≤ B},
+                                   S|W = {B ∈ S | B ≤ W } and
+                                   S|W
+                                     U = {B ∈ S | U ≤ B ≤ W }.
+
+For a point P in a plane E, the set of all lines in E passing through P is known as a
+line pencil.
+   The subspace lattice L(V ) is isomorphic to its dual, which arises from L(V ) by revers-
+ing the order. Fixing a non-degenerate bilinear form β on V , a concrete isomorphism is
+given by U 7→ U ⊥ , where U ⊥ = {x ∈ V | β(x, u) = 0 for all u ∈ U }. When addressing
+the dual of some geometric object in PG(V ), we mean its (element-wise) image under
+this map. Up to isomorphism, the image does not depend on the choice of β.
+
+2.2 Subspace designs
+Definition 2.1 Let t, v, k be integers with 0 ≤ t ≤ k ≤ v − t and λ another positive
+integer. A set D ⊆ Vk q is called a t-(v, k, λ)q subspace design if each t-subspace of V is
+contained in exactly λ elements (called blocks) of D. In the important case λ = 1, D is
+called a q-Steiner system.
+
+   The earliest reference for subspace designs is [10]. However, the idea is older, since
+it is stated that “Several people have observed that the concept of a t-design can be
+generalised [...]”. They have also been mentioned in a more general context in [12]. The
+ 2
+     In established symbols like PG(v − 1, q), the geometric dimension v − 1 is not altered.
+
+
+
+
+                                                     3
+first nontrivial subspace designs with t ≥ 2 has been constructed in [27], and the first
+nontrivial Steiner system with t ≥ 2 in [4]. An introduction to the theory of subspace
+designs can be found at [7], see also [25, Day 4].
+   Subspace designs are interlinked to the theory of network coding in various ways. To
+this effect we mention the recently found q-analog of the theorem of Assmus and Mattson
+[9], and that a t-(v, k, 1)q Steiner systems provides a (v, 2(k−t+1); k)q constant dimension
+network code of maximum possible size.
+   Classical combinatorial designs can be seen as the limit case q = 1 of subspace designs.
+Indeed, quite a few statements about combinatorial designs have a generalization to
+subspace designs, such that the case q = 1 reproduces the original statement [19, 20, 22,
+5].
+   One example of such a statement is the following [26, Lemma 4.1(1)], see also [19,
+Lemma 3.6]: If D is a t-(v, k, λ)q subspace design, then D is also an s-(v, k, λs )q subspace
+design for all s ∈ {0, . . . , t}, where
+                                                v−s
+                                                               t−s q
+                                                λs := λ k−s .
+                                                               t−s q
+
+In particular, the number of blocks in D equals
+                                                                  v 
+                                                                   t q
+                                              #D = λ0 = λ k .
+                                                                   t q
+
+So, for a design with parameters t-(v, k, λ)q , the numbers λs necessarily are integers for
+all s ∈ {0, . . . , t} (integrality conditions). In this case, the parameter set t-(v, k, λ)q is
+called admissible. It is further called realizable if a t-(v, k, λ)q design actually exists. The
+smallest admissible parameters of a q-analog of a Steiner system are 2-(7, 3, 1)q , which
+are the parameters of the q-analog of the Fano plane. This explains the significance of
+the question of its realizability.
+   The numbers λi can      V be refined as
+                                            V follows.
+                                                       Let i, j be non-negative integers with
+i + j ≤ t and let I ∈ i q and J ∈ v−j . By [26, Lemma 4.1], see also [7, Lemma 5],
+                                                 q
+the number
+                                                                   v−i−j
+                                                             
+                                                                    k−i
+                                       λi,j := #D|JI = λ           v−t q
+                                                                    k−t q
+
+only depends on i and j, but not on the choice of I and J. The numbers λi,j are
+important parameters of a subspace design. A further generalization is given by the
+intersection numbers in [20].
+   A nice way to arrange the numbers λi,j is the following triangle form.
+                                                         λ0,0
+                                               λ1,0              λ0,1
+                                      λ2,0               λ1,1               λ0,2
+                            .   ..              .   ..            ..
+                                                                       .
+                                                                                    ..
+                                                                                         .
+                     λt,0            λt−1,1              ...               λ1,t−1            λ0,t
+
+
+
+                                                          4
+For a q-analog of the Fano plane, we get:
+
+                       λ0,0 = q 8 + q 6 + q 5 + q 4 + q 3 + x2 + 1
+            λ1,0 = q 4 + q 2 + 1                    λ0,1 = q 5 + q 3 + q 2 + 1
+   λ2,0 = 1                       λ1,1 = q 2 + 1                               λ0,2 = q 2 + 1
+
+  As a consequence of the numbers λi,j , the dual design D⊥ = {B ⊥ | B ∈ D} is a
+subspace design with the parameters
+                                             v−t
+                                                  
+                                               k q
+                                t- v, v − k, v−t .
+                                                   k−t q
+
+
+  For a point P ≤ V , the derived design of D in P is
+
+                               DerP (D) = {B/P | B ∈ D|P }.
+
+By [19], DerP (D) is a subspace design with the parameters (t − 1)-(v − 1, k − 1, λ)q . In
+the case of a q-analog of the Fano plane, DerP (D) has the parameters 1-(6, 2, 1).
+
+2.3 Spreads
+A 1-(v, k, 1)q Steiner system S is just a partition of the point set of V into k-subspaces.
+These objects are better known under the name (k−1)-spread and have been investigated
+in geometry well before the emergence of subspace designs. A 1-spread is also called line
+spread.
+   A set S of k-subspaces is called a partial (k − 1)-spread if each point is covered by
+at most one element of S. The points not covered by any element are called holes. A
+recent survey on partial spreads is found in [17].
+   The parameters 1-(v, k, 1)q are admissible if and only v is divisible by k. In this case,
+spreads do always exist [24, §VI]. An example can be constructed         via field reduction:
+                                                              V
+                                                                
+We consider V as a vector space over Fqk and set S = 1 qk . Switching back to vector
+spaces over Fq , the set S is a (k − 1)-spread of V , known as the Desarguesian spread.
+   A (k − 1)-spread S is called geometric or normal if for two distinct blocks B, B 0 ∈ S,
+               0
+the set S|B+B is always a (k −1)-spread of B +B 0 . In other words, S is geometric if every
+2k-subspace of V contains either 0, 1 or [2k]
+                                            [k]q
+                                                q
+                                                  = q k + 1 blocks of S. It is not hard to see
+that the Desarguesian spread is geometric. In fact, it follows from [2, Theorem 2] that
+a (k − 1)-spread is geometric if and only if it is isomorphic to a Desarguesian spreads.
+   The derived designs of a q-analog of the Fano plane D are line spreads in PG(5, 2).
+These spreads have been classified in [21] into 131044 isomorphism types. The most
+symmetric one among these spreads is the Desarguesian spread. Following the notation
+of [13], a point P is called an α-point of the q-analog of the Fano plane D if the derived
+design in P is the geometric spread.
+
+
+
+
+                                               5
+2.4 Generalized quadrangles
+Definition 2.2 A generalized quadrangle is an incidence structure Q = (P, L, I) with
+a non-empty set of points P, a non-empty set of lines L, and an incidence relation
+I ⊆ P × L such hat
+
+  (i) Two distinct points are incident with at most a line.
+
+ (ii) Two distinct lines are incident with at most one point.
+
+(iii) For each non-incident point-line-pair (P, L) there is a unique incident point-line-
+      pair (P 0 , L0 ) with P I L0 and P 0 I L.
+
+Generalized quadrangles have been introduced in the more general setting of generalized
+polygons in [29], as a tool in the theory of finite groups.
+   A generalized quadrangle Q = (P, L, I) is called degenerate if there is a point P such
+that each point of Q is incident with a line through P . If each line of Q is incident with
+t + 1 points, and each point is incident with s + 1 lines, we say that Q is of order (s, t).
+The dual Q⊥ arises from Q by interchanging the role of the points and the lines. It is
+again a generalized quadrangle. Clearly, (Q⊥ )⊥ = Q, and Q is of order (s, t) if and only
+if Q⊥ is of order (t, s).
+   Furthermore, Q is said to be projective if it is embeddable in some Desarguesian
+projective geometry. This means that there is a Desarguesian projective geometry with
+point set P 0 , line set L0 , and point-line incidence relation I 0 such that P ⊆ P 0 , L ⊆ L0
+and for all (P, L) ∈ P ×L we have P I L if and only if P 0 I 0 L0 . The non-degenerate finite
+projective generalized quadrangles have been classified in [8, Th. 1], see also [23, 4.4.8.].
+These are exactly the so-called classical generalized quadrangles which are associated to
+a quadratic form or a symplectic or Hermitean polarity on the ambient geometry, see
+[23, 3.1.1.].
+   In this article, two of these classical generalized quadrangles will appear.
+
+  (i) The symplectic generalized quadrangle W (q) [23, 3.1.1 (iii)], consisting of the set
+      of points of PG(3, q) together with the totally isotropic lines with respect to a
+      symplectic polarity. Taking the geometry as PG(F4q ), the symplectic polarity can be
+      represented by the alternating bilinear form β(x, y) = x1 y2 −x2 y1 +x3 y4 −x4 y3 . The
+      configuration of the lines L in PG(3, q) is also known as a (general) linear complex
+      of lines, see [23, 3.1.1 (iii)] or [15, Th. 15.2.13]. Under the Klein correspondence,
+      L is a non-tangent hyperplane section of the Klein quadric.
+
+ (ii) The second one is the parabolic quadric Q(4, q), whose points P are the zeroes
+      of a parabolic quadratic form in PG(4, q), and whose lines are all the lines con-
+      tained in P. Taking the geometry as PG(F5q ), the parabolic quadratic form can be
+      represented by q(x, y) = x1 x2 + x3 x4 + x25 .
+
+Both W (q) and Q(4, q) are of order (q, q). By [23, 3.2.1] they are duals of each other,
+meaning that W (q)> ∼
+                    = Q(4, q).
+
+
+
+                                              6
+   Let Q = (P, L, I) be a generalized quadrangle. As in projective geometries, a set
+S ⊆ L is called a spread of Q if each point of Q is incident with a unique line in S.
+Dually, a set O ⊆ P is called an ovoid of Q if each line of Q is incident with a unique
+point in O. Clearly, the spreads of Q bijectively correspond to the ovoids of Q⊥ . This
+already shows the equivalence of Part (a) and (b) in Theorem 1.
+
+
+3 Proof of the theorems
+For the remainder of the article, we fix v = 7 and assume that D ⊆ V7 q is a q-analog of
+                                                                      
+
+the Fano plane. The numbers λi,j are defined as in Section 2.2.
+   By the design property, the intersection dimension of two distinct blocks B, B 0 ∈ D is
+either 0 or 1. So by the dimension formula, dim(B + B 0 ) ∈ {5, 6}. Therefore two distinct
+blocks contained in a common 5-space always intersect in a point. Moreover, a solid S
+of V contains either a single block of no block at all. We will call S a rich solid in the
+former case and a poor solid in the latter.
+Remark 3.1 By [20, Remark 4.2], the poor solids form a dual 2-(7, 3, q 4 )q subspace
+design. By the above discussion, the λ0,2 = q 2 + 1 blocks in any 5-subspace F form dual
+partial spread in F . The poor solids contained in F are exactly the holes of that partial
+spread.
+
+  We will call a 5-subspace F such that all the λ0,2 = q 2 + 1 blocks in F pass through a
+common point P a β-flat with focal point P .
+Lemma 3.2 The focal point of a β-flat is uniquely determined.
+
+Proof. Assume that P 6= Q are focal points of a β-flat F . Then all λ0,2 = q 2 + 1 > 1
+blocks in F pass through the line P + Q, contradicting the Steiner system property.
+
+Lemma 3.3 Let H be a hyperplane and P a point in H. Then P is the focal point of at
+most one β-flat in H.
+
+Proof. There are λ1,1 = q 2 + 1 blocks in H passing through P . For any β-flat F < H
+with focal point P , all these blocks are contained in F .
+  Now assume that there are two such β-flats F 6= F 0 . Then the q 2 + 1 > 1 blocks in
+                               0                                       0
+D|HP are contained in F ∩ F . This is a contradiction, since dim(F ∩ F ) ≤ 4 and any
+solid contains at most a single block.
+
+Lemma 3.4 Let F ∈ V5 q be a β-flat with focal point P .
+                        
+
+ (a) Each point Q 6= P is covered by a unique block in F .
+     (In other words: D|F /P is a line spread of F/P ∼= PG(3, q))
+ (b) A solid S of F is poor if and only if it does not contain P .
+
+ (c) For all poor solids S of F , the set {B ∩ S | B ∈ D|F } is a line spread of S.
+
+
+
+                                            7
+                                           F
+Proof. Part (a): Asthe      blocks in D| intersect each other2 only in   the point4 P , 3the
+                          F                                               3
+number of points in 1 q \ {P } covered by these blocks is (q + 1)( 1 q − 1) = q + q +
+q 2 + q = 51 q − 1. Therefore, all points in F different from P are covered by a single
+            
+
+block in DF .
+    Part (b):    The number of solids in F containing one of the q 2 + 1 blocks in F is
+(q 2 + 1) · 5−3
+                
+             4−3 q
+                    = (q 2 + 1)(q + 1) = q 3 + q 2 + q + 1.3 These solids are rich. Moreover,
+the q 4 solids in F not containing      P do not contain a block, so they are poor. As
+q 4 + (q 3 + q 2 + q + 1) = 54 q is already the total number of solids in F , the poor solids
+                              
+
+in F are precisely those not containing P .
+    Part (c): Let S be a poor solid of F . For every block B in F we have dim(B ∩ S) ≤ 2
+as S is poor, and moreover dim(B ∩ S) ≥ dim(B) + dim(S) − dim(F ) = 3 + 4 − 5 = 2
+by the dimension formula. So for all blocks B in F we get that B + S = F and B ∩ S
+is a line. By parts (a) and (b), every point of the poor solid S is contained in a unique
+block in F . Hence {B ∩ S | B ∈ D and B + S = F } is a line spread of S.
+
+Lemma 3.5 Let B, B 0 be two distinct blocks which intersect in an α-point P . Then P
+is the focal point of the β-flat B + B 0 .
+
+Proof. Since P = B ∩ B 0 is a point, F = B + B 0 is a 5-subspace. Since P is an α-point,
+we have that {B 00 /P | B 00 ∈ D|FP } is a line spread of F/P ∼     = F4q . Such a line spread
+          [4]q
+contains [2] q
+               = q 2 + 1 lines, so F contains q 2 + 1 blocks passing through P . However, the
+total number of blocks contained in F is only λ0,2 = q 2 + 1, so F is a β-flat with focal
+point P .
+
+Lemma 3.6 Let F be a 5-subspace such that all points of F are α-points. Then F is a
+β-flat.
+
+Proof. The 5-subspace F contains λ0,2 = q 2 + 1 > 1 blocks. Let B, B 0 be two distinct
+blocks in F . Then P = B ∩ B 0 is a point and F = B + B 0 . By the precondition, P is an
+α-point, so by Lemma 3.5, P is the focal point of the β-flat F .
+
+Remark 3.7 The statement of Lemma 3.6 is still true if F contains a single non-α-point
+Q. Then either all blocks contained in F pass through Q, or there are two distinct blocks
+B, B 0 in F such that P = B ∩ B 0 6= Q. In the latter case, all blocks pass through the
+α-point P as in the proof of Lemma 3.6.
+
+Lemma 3.8 Let H be a hyperplane and P an α-point contained in H. Then H contains
+a unique β-flat whose focal point is P .
+
+Proof. There are λ1,1 = q 2 + 1 > 1 blocks in H containing P . Let B, B 0 ∈ D|H
+                                                                              P . Then
+P = B ∩ B 0 . By Lemma 3.5, the α-point P is the focal point of the β-flat F = B + B 0 .
+By Lemma 3.3, the β-flat F is unique.
+ 3
+     Remember that a solid cannot contain 2 blocks.
+
+
+
+
+                                                      8
+  Now we fix a hyperplane H of V and assume that all its points are α-points.
+  By Lemma 3.6, every 5-subspace F is a β-flat. We denote its unique focal point by
+α(F ). Moreover by Lemma 3.8, each point P of H is the focal point of a unique β-flat
+F in H. We will denote this β-flat by β(P ). Clearly, the mappings
+                                                       
+                         H         H                H        H
+                    α:        →          and β :          →
+                         5 q       1 q               1 q     5 q
+
+are inverse to each other. So they provide a bijective correspondence between the points
+and the 5-subspaces of V .
+
+Lemma 3.9 Let B be a block in H.
+
+ (a) For all points P of B, B ≤ β(P ).
+
+ (b) For all 5-subspaces F in H containing B, α(F ) ≤ B.
+
+Proof. For part (a), let P be a point on B. There are λ1,1 = q 2 + 1 blocks in H passing
+through P , which equals the number λ0,2 of blocks in β(P ) (which all pass through P ).
+Therefore, B ≤ β(P ).
+  For part (b), let F be a 5-subspace containing B. All blocks in F pass through its
+focal point α(F ).
+
+  By Lemma (b), each 5-subspace and a fortiori the hyperplane H contains a poor solid
+S. This poorsolid
+                  S is fixed for the remainder of this article.
+  The set of 6−4
+             5−4 q
+                   = q + 1 intermediate 5-subspaces F with S < F < H will be denoted
+by F. For each F ∈ F, the set LF := {B ∩ S | B ∈ D and B ∈ D|F } is a line spread of
+S by Lemma 3.4(c).
+
+Lemma 3.10 The line spreads LF with F ∈ F are pairwise disjoint.
+
+Proof. Let L ∈ LF ∩ LF 0 with F, F 0 ∈ F. Then L = B ∩ S = B 0 ∩ S with B ∈ LF and
+B 0 ∈ LF 0 . So B and B 0 are two blocks passing through the same line L. The Steiner
+system property gives B = B 0 . Hence F = B + S = B 0 + S = F 0 .
+                S
+  Now let L =       F ∈F LF .
+
+Lemma 3.11 The set L consists of q 3 + q 2 + q + 1 lines of S and is partitionable into
+q + 1 line spreads of S.
+
+Proof. By Lemma 3.10, the sets LF are pairwise disjoint, so L is a set of #F · #D|F =
+(q + 1)(q 2 + 1) = q 3 + q 2 + q + 1 lines in S which admits a partition into the q + 1 line
+spreads LF with F ∈ F.
+
+Lemma 3.12 For each point P of S, L|P is a line pencil in the plane EP = β(P ) ∩ S.
+
+
+
+
+                                             9
+Proof. Let P be a point in S.
+   By Lemma 3.4(b), the poor solid S is not contained in the 5-subspace β(P ). Therefore,
+dim(β(P ) ∩ S) ≤ 3. On the other hand, as both S and β(P ) are contained in H, we have
+dim(β(P ) + S) ≤ dim(H) = 6 and therefore by the dimension formula dim(β(P ) ∩ S) =
+dim(β(P )) + dim(S) − dim(β(P ) + S) ≥ 3. Hence EP = β(P ) ∩ S is a plane.
+   Let L ∈ L|P . Then there is a block B ∈ D|H with B ∩ S = L. By Lemma 3.9(a),
+B ≤ β(P ). So L = B ∩ S ≤ β(P ) ∩ S = EP . As the disjoint union of q + 1 line spreads
+of S, L contains q + 1 lines passing through P . Therefore, these lines form a line pencil
+in EP through P .
+Lemma 3.13 The incidence structure ( S1 q , L, ⊆) is a projective generalized quadrangle
+                                          
+
+of order (s, t) = (q, q).
+Proof. Clearly, every line in L contains q + 1 points in S. By Lemma 3.11, through
+every point in S there pass q + 1 lines in L. Now let P be a point in S and L ∈ L not
+containing P .
+     By Lemma 3.10, there is a unique F ∈ F with L ∈ LF , and there is a line L00 ∈ LF
+passing through P . By Lemma 3.12, L00 < EP , so we get L 6< EP as otherwise L and
+L00 would be distinct intersecting lines in the spread LF . Moreover, L and EP are both
+contained in S, so S they cannot have trivial intersection. Therefore L ∩ EP is a point.
+     Now let P ∈ 1 q and L ∈ L with L ∩ L0 = P 0 and P + P 0 = L0 . Then L0 is a line
+               0               0
+
+through P , so L0 < EP . So necessarily P 0 = EP ∩ L and L0 = P + P 0 , showing that P 0
+and L0 are unique.
+     By Lemma 3.12 indeed L0 ∈ L, as P +P 0 is a line in EP containing P . This shows that
+P and L0 do always exist and therefore, the incidence structure ( S1 , L) is a generalized
+   0
+
+quadrangle of order (q, q).
+Lemma 3.14 ( S1 q , L) is isomorphic to W (q).
+                   
+
+Proof. By Lemma 3.13 we know that Q = ( S1 q , L, ⊆) is a finite generalized quadrangle
+                                                 
+
+of order (s, t) = (q, q) embedded in PG(S). By the classification in [8, Theorem 1] (see
+also [23, p. 4.4.8]), we know that Q is a finite classical generalized quadrangle which are
+listed in [23, p. 3.1.2]. Comparing the orders and the dimension of the ambient geometry,
+the only possibility for Q is the symplectic generalized quadrangle W (q).
+  Now we can proof our main result.
+Proof of Theorem 1. Part (a) is a direct consequence of Lemma 3.14 and Lemma 3.11.
+The equivalence of Part (a) and (b) has already been discussed in Section 2.4.
+  Theorem 2 is now a direct consequence.
+Proof of Theorem 2. We show that the statement in Theorem 1(b) is not satisfied.
+   For q prime, the only ovoids of Q(4, q) are the elliptic quadrics Q− (3, q) [1, Cor. 1].
+As any two such quadrics have nontrivial intersection, there is no partition of Q(4, q)
+into ovoids.
+   For q even, Q(4, q) does not admit a partition into ovoids by [23, 3.4.1 (i)].
+
+
+
+                                            10
+Acknowledgement
+I would like to thank Jan de Beule for his patient help with the theory of general-
+ized quadrangles during a research stay at the Vrije Universiteit Brussel (VUB) in the
+framework of WOG Coding Theory and Cryptography.
+
+
+References
+ [1]   S. Ball, P. Govaerts, and L. Storme. “On ovoids of parabolic quadrics”. In: Designs, Codes
+       and Cryptography 38.1 (Jan. 2006), pp. 131–145.
+ [2]   A. Barlotti and J. Cofman. “Finite Sperner spaces constructed from projective and affine
+       spaces”. In: Abhandlungen aus dem Mathematischen Seminar der Universität Hamburg
+       40 (Mar. 1974), pp. 231–241.
+ [3]   C. Berge and D. Ray-Chaudhuri. “Unsolved Problems”. In: Hypergraph Seminar. Hyper-
+       graph Seminar (Ohio State University, 1972). Ed. by C. Berge and D. Ray-Chaudhuri.
+       Lecture Notes in Mathematics 411. 1974, pp. 278–287. isbn: 978-3-540-06846-4.
+ [4]   M. Braun, T. Etzion, P. R. J. Östergård, A. Vardy, and A. Wassermann. “Existence of
+       q-analogs of Steiner systems”. In: Forum of Mathematics. Pi 4 (2016), e7.
+ [5]   M. Braun, M. Kiermaier, A. Kohnert, and R. Laue. “Large sets of subspace designs”. In:
+       Journal of Combinatorial Theory. Series A 147 (Apr. 2017), pp. 155–185.
+ [6]   M. Braun, M. Kiermaier, and A. Nakić. “On the automorphism group of a binary q-
+       analog of the Fano plane”. In: European Journal of Combinatorics 51 (2016), pp. 443–
+       457.
+ [7]   M. Braun, M. Kiermaier, and A. Wassermann. “q-analogs of designs: Subspace designs”.
+       In: Network Coding and Subspace Designs. Ed. by M. Greferath, M. O. Pavčević, N.
+       Silberstein, and M. Á. Vázquez-Castro. Signals and Communication Technology. Cham:
+       Springer, 2018, pp. 171–211. isbn: 978-3-319-70292-6.
+ [8]   F. Buekenhout and C. Lefèvre. “Generalized quadrangles in projective spaces”. In: Archiv
+       der Mathematik 25.1 (Dec. 1974), pp. 540–552.
+ [9]   E. Byrne and A. Ravagnani. “An Assmus-Mattson theorem for rank metric codes”. In:
+       SIAM Journal on Discrete Mathematics 33.3 (2019), pp. 1242–1260.
+[10]   P. J. Cameron. “Generalisation of Fisher’s inequality to fields with more than one el-
+       ement”. In: Combinatorics. Proceedings of the British Combinatorial Conference 1973.
+       Ed. by T. P. McDonough and V. C. Mavron. London Mathematical Society Lecture Note
+       Series 13. Cambridge: Cambridge University Press, 1974, pp. 9–13. isbn: 0-521-20454-2.
+[11]   H. Cohn. “Projective geometry over F1 and the Gaussian binomial coefficients”. In: The
+       American Mathematical Monthly 111.6 (June–July 2004), pp. 487–495.
+[12]   P. Delsarte. “Association schemes and t-designs in regular semilattices”. In: Journal of
+       Combinatorial Theory. Series A 20.2 (1976), pp. 230–243.
+[13]   O. Heden and P. A. Sissokho. “On the existence of a (2, 3)-spread in V (7, 2)”. In: Ars
+       Combinatoria 124 (2016), pp. 161–164.
+
+
+
+
+                                               11
+[14]   D. Heinlein, M. Kiermaier, S. Kurz, and A. Wassermann. “A subspace code of size 333
+       in the setting of a binary q-analog of the Fano plane”. In: Advances in Mathematics of
+       Communications 13.3 (Aug. 2019), pp. 457–475.
+[15]   J. W. P. Hirschfeld. Finite projective spaces of three dimensions. Oxford Mathematical
+       Monographs. Oxford and New York: The Clarendon Press and Oxford University Press,
+       1985. isbn: 0-19-853536-8.
+[16]   T. Honold and M. Kiermaier. “On putative q-analogues of the Fano plane and related
+       combinatorial structures”. In: Dynamical Systems, Number Theory and Applications. A
+       Festschrift in Honor of Armin Leutbecher’s 80th Birthday. Ed. by T. Hagen, F. Rupp,
+       and J. Scheurle. World Scientific, Mar. 2016, pp. 141–175. isbn: 978-981-4699-86-0.
+[17]   T. Honold, M. Kiermaier, and S. Kurz. “Partial spreads and vector space partitions”.
+       In: Network Coding and Subspace Designs. Ed. by M. Greferath, M. O. Pavčević, N.
+       Silberstein, and M. Á. Vázquez-Castro. Signals and Communication Technology. Cham:
+       Springer, 2018, pp. 131–170. isbn: 978-3-319-70292-6.
+[18]   M. Kiermaier, S. Kurz, and A. Wassermann. “The order of the automorphism group of a
+       binary q-analog of the Fano plane is at most two”. In: Designs, Codes and Cryptography
+       86.2 (Feb. 2018), pp. 239–250.
+[19]   M. Kiermaier and R. Laue. “Derived and residual subspace designs”. In: Advances in
+       Mathematics of Communications 9.1 (2015), pp. 105–115.
+[20]   M. Kiermaier and M. O. Pavčević. “Intersection numbers for subspace designs”. In: Jour-
+       nal of Combinatorial Designs 23.11 (2015), pp. 463–480.
+[21]   Z. T. Mateva and S. T. Topalova. “Line spreads of PG(5, 2)”. In: Journal of Combinatorial
+       Designs 17.1 (Jan. 2009), pp. 90–102.
+[22]   A. Nakić and M. O. Pavčević. “Tactical decompositions of designs over finite fields”. In:
+       Designs, Codes and Cryptography 77.1 (Oct. 2015), pp. 49–60.
+[23]   S. E. Payne and J. A. Thas. Finite generalized quadrangles. 2nd ed. EMS Series of
+       Lectures in Mathematics. European Mathematical Society. isbn: 978-3-03719-066-1.
+[24]   B. Segre. “Teoria di Galois, fibrazioni proiettive e geometrie non desarguesiane”. In:
+       Annali di Matematica Pura ed Applicata. Serie Quarta 64.1 (Dec. 1964), pp. 1–76.
+[25]   H. Suzuki. “Five Days Introduction to the Theory of Designs”. 1989. url: http : / /
+       subsite.icu.ac.jp/people/hsuzuki/lecturenote/designtheory.pdf.
+[26]   H. Suzuki. “On the inequalities of t-designs over a finite field”. In: European Journal of
+       Combinatorics 11.6 (1990), pp. 601–607.
+[27]   S. Thomas.“Designs over finite fields”. In: Geometriae Dedicata 24.2 (Oct. 1987), pp. 237–
+       242.
+[28]   S. Thomas. “Designs and partial geometries over finite fields”. In: Geometriae Dedicata
+       63.3 (Dec. 1996), pp. 247–253.
+[29]   J. Tits. “Sur la trialité et certains groupes qui s’en déduisent”. In: Institut des Hautes
+       Études Scientifiques. Publications Mathématiques 2 (Jan. 1959), pp. 13–60.
+
+
+
+
+                                                12
+

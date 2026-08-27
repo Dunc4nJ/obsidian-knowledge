@@ -5,9 +5,11 @@
 **Calibration:** Anthropic's zeta-zero result and the dimension-qualified Jacobian counterexample  
 **Primary objective:** find a mathematically important, precisely stated, independently checkable target whose solution or sharp improvement would attract serious attention, preferably with direct relevance to machine learning, model training, algorithms, or quantitative research.
 
+> **Round 2 adversarial revision:** This file preserves the initial candidate dossier and is no longer the canonical ranking. Three same-family T1 reviewers corrected several target statements, killed four under-specified applied entries, and added quieter exact problems with better certificate/tractability profiles. The current ranking, evidence cards, negative findings, and source locators are in [frontier-math-evidence-ledger-2026-08-27.md](frontier-math-evidence-ledger-2026-08-27.md). In particular, do not quote the Round 1 ordering below without this revision notice.
+
 ## Executive verdict
 
-The best first campaign is the **exact ReLU depth frontier for max functions and continuous piecewise-linear functions**. It has the strongest combination of a fresh live frontier, direct ML relevance, exact rational certificates, meaningful near-term rungs, and a genuinely major terminal question. The most compelling high-risk alternative is the **exact bilinear rank of 3×3 matrix multiplication**: it has a cleaner public story and stronger computational relevance, but a materially lower probability of a decisive result. The best theorem/lower-bound target squarely inside transformer theory is the **rank–depth conjecture for attention**.
+The initial review selected the **exact ReLU depth frontier for max functions and continuous piecewise-linear functions**. Round 2 no longer treats this as an uncontested first choice. It distinguishes the best quiet exact pilots (**rectilinear K28**, **Costas-32**, and the exact weighted-regression data-selection gap), the best ML flagships (terminal ReLU depth and distribution-independent SQ versus linear dimension complexity), and the highest-ceiling moonshots (**R(5,5)**, **APN-8**, field-pinned 3×3 tensor rank, and the five-dimensional kissing number).
 
 This is a ranking of **research-campaign conviction**, not a claim that the first problem is intrinsically more important than every problem below it. Conviction combines five things:
 
@@ -17,14 +19,14 @@ This is a ranking of **research-campaign conviction**, not a claim that the firs
 4. whether an output can be checked exactly and independently;
 5. whether failure on the terminal target can still yield a publishable theorem, certificate, algorithm, or counterexample.
 
-### Ranked shortlist
+### Round 1 ranked shortlist — superseded by the evidence ledger
 
 | Rank | Target | North-star result | Direct relevance | Exact-checkability | Useful partial-result floor | Overall conviction |
 |---:|---|---|---|---|---|---|
 | 1 | Exact depth of ReLU representations of `max_n` / CPWL functions | Prove all `max_n` use two hidden layers, or exhibit the first function that provably requires three | ML foundations | Very high for constructions; medium for universal lower bounds | Very high | **Highest** |
-| 2 | Exact bilinear rank of 3×3 matrix multiplication | Construct rank 22, or prove rank 23 is optimal over a specified field | ML compute, numerical algorithms | Extremely high for constructions and finite certificates | High | **Very high** |
+| 2 | Field-pinned bilinear rank of 3×3 matrix multiplication | Construct rank 22 over a named field (an upper-bound improvement only), or prove rank 23 is optimal there | Algebraic complexity; indirect compute relevance | Extremely high for constructions and finite certificates | High | **Very high** |
 | 3 | Exact diagonal Ramsey number `R(5,5)` | Determine which of 43, 44, 45, or 46 is the exact value | Finite combinatorics; search/verification methods | Extremely high for lower-bound witnesses; high for certified upper bounds | High | **Very high north-star fit** |
-| 4 | Transformer attention rank–depth lower bound | Prove or refute that long-sequence nearest-neighbor retrieval requires full attention rank regardless of depth | Transformer architecture | Medium–high once architecture and error model are pinned | High | **Very high** |
+| 4 | Transformer attention rank–depth lower bound | Prove or refute that no fixed-size, fixed-weight rank-r<d transformer solves the paper's target uniformly for every sequence length N | Transformer architecture | Medium–high once architecture and error model are pinned | High | **Very high** |
 | 5 | Five-dimensional kissing number | Prove `tau_5 = 40`, or construct 41 mutually kissing spheres | Geometry, coding/representation geometry | Very high for a construction; high for rationalized SDP certificates | Medium–high | **High** |
 | 6 | Fixed-dimensional softmax-attention time exponent | Match the `n^(2-1/d)` upper bound, or beat it, for fixed dimension and pinned accuracy/entry bounds | Attention runtime | High for algorithms; medium for conditional lower bounds | High | **High** |
 | 7 | Explicit deterministic RIP beyond the square-root bottleneck | Give a near-random-quality explicit RIP family, or a major exponent improvement | Compressed sensing, sketching, sparse ML, quant signals | Medium | High if staged correctly | **High-risk, high-ceiling** |
@@ -147,7 +149,7 @@ or
 
 - **Meaningful first result:** improve a lower bound over another finite field; lift the general-field lower bound; prove nonexistence in a large symmetry class; or reduce additions at rank 23.
 - **Field-leading result:** a general-field rank lower bound of 20 or more, or a highly structured rank-22 candidate that survives exact reconstruction and all local tests.
-- **North-star result:** exact rank 22 via an explicit decomposition, or exact rank 23 via a lower bound matching the classical upper bound.
+- **North-star result:** a rank-22 decomposition is a major upper-bound record, but exact rank 22 additionally requires a matching lower bound over the same field. Exact rank 23 requires a lower bound matching the classical upper bound.
 
 ### Why it could attract attention
 
@@ -165,7 +167,7 @@ The search space is ferocious and newly crowded. A floating-point tensor decompo
 
 ### Live frontier
 
-[Quality over Quantity in Attention Layers](https://proceedings.iclr.cc/paper_files/paper/2025/hash/9c537882044c8b5352c363e840872ddb-Abstract-Conference.html) gives a natural nearest-neighbor target computable by one full-rank attention head, while a single low-rank layer requires exponentially many heads even for short sequences. For short sequences, additional layers can compensate. For long sequences, the authors explicitly conjecture that full attention rank is necessary regardless of depth.
+[Quality over Quantity in Attention Layers](https://proceedings.iclr.cc/paper_files/paper/2025/hash/9c537882044c8b5352c363e840872ddb-Abstract-Conference.html) gives a natural nearest-neighbor target computable by one full-rank attention head, while a single low-rank layer requires exponentially many heads even for short sequences. For short sequences, additional layers can compensate. Its exact Conjecture 6 says that no **fixed-size, fixed-weight** rank-r<d multi-layer transformer approximates the target **for all sequence lengths N**. It does not rule out a different low-rank model, with size depending on N, for each fixed long N.
 
 The area is active rather than dormant. [Two (narrow) heads are better than (an arbitrarily wide) one](https://proceedings.iclr.cc/paper_files/paper/2026/hash/221ec998e345bf4a128bf6c48e1aadee-Abstract-Conference.html) proves a dimension- and precision-independent one-head impossibility for endpoint selection on graphs with cycles while two heads solve it. [The Effect of Attention Head Count on Transformer Approximation](https://proceedings.iclr.cc/paper_files/paper/2026/hash/7d72a514fc6948515af3ee69c1059776-Abstract-Conference.html) develops further head-count lower bounds.
 
@@ -173,9 +175,9 @@ The area is active rather than dormant. [Two (narrow) heads are better than (an 
 
 After copying the paper's architecture, domain, precision, approximation norm, head-rank definition, sequence-length scaling, and allowed feed-forward blocks exactly:
 
-> Prove the conjectured full-rank necessity for the long-sequence nearest-neighbor target at arbitrary depth, or construct a deep low-rank Transformer that refutes it.
+> Prove that no fixed-size, fixed-weight rank-r<d multi-layer transformer approximates the paper's target uniformly for all N, with every architectural and approximation assumption copied exactly; or give one fixed low-rank transformer family satisfying those quantifiers and refuting the conjecture.
 
-A tractable first restriction is constant depth two or three, followed by a tight rank–head–depth tradeoff.
+A depth-two or depth-three result is useful only if it is explicitly related back to the fixed-size, uniform-in-N conjecture. A fixed-N construction is a cousin result, not automatically progress on Conjecture 6.
 
 ### Win ladder
 
@@ -520,6 +522,8 @@ The verified counterexample settles the stated real case in dimensions at least 
 It remains the ultimate famous hub, but “solve RH” is a poor initial research contract: too broad, weakly staged, and difficult to falsify at the campaign level. Anthropic's success came from a precise adjacent constant with a visible theorem ladder.
 
 ## Recommended campaign portfolio
+
+> **Archival Round 1 portfolio:** retained for provenance. The canonical Round 2 portfolio is in the evidence ledger and adds rectilinear K28, Costas-32, APN-8, weighted regression data selection, and current COLT 2026 targets.
 
 If we want the highest probability of both a serious result and a north-star ceiling, I would run the following portfolio rather than bet everything on one binary outcome.
 

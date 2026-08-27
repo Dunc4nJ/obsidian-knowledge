@@ -1,0 +1,734 @@
+                                                         Joint Size and Depth Optimization of Sorting Networks✩
+
+                                                                                           José A. R. Fonollosa
+                                                   Department of Signal Theory and Communications, Universitat Politècnica de Catalunya, Barcelona, Spain
+
+
+
+
+                                        Abstract
+                                        Sorting networks are oblivious sorting algorithms with many interesting theoretical properties and practical
+arXiv:1806.00305v1 [cs.DS] 1 Jun 2018
+
+
+
+
+                                        applications. One of the related classical challenges is the search of optimal networks respect to size (number
+                                        of comparators) of depth (number of layers). However, up to our knowledge, the joint size-depth optimality
+                                        of small sorting networks has not been addressed before. This paper presents size-depth optimality results
+                                        for networks up to 12 channels. Our results show that there are sorting networks for n ≤ 9 inputs that
+                                        are optimal in both size and depth, but this is not the case for 10 and 12 channels. For n = 10 inputs, we
+                                        were able to proof that optimal-depth optimal sorting networks with 7 layers require 31 comparators while
+                                        optimal-size networks with 29 comparators need 8 layers. For n = 11 inputs we show that networks with
+                                        8 or 9 layers require at least 35 comparators (the best known upper bound for the minimal size). And for
+                                        networks with n = 12 inputs and 8 layers we need 40 comparators, while for 9 layers the best known size is
+                                        39.
+
+
+
+                                        1. Introduction
+
+                                            A sorting algorithm is data-independent or oblivious if the sequence of comparisons does not depend
+                                        on the input list. Sorting networks are oblivious sorting algorithms with many practical applications and
+                                        rich theoretical properties [12]. From the practical point of view, sorting networks are the usual choice for
+                                        simple parallel implementations in both hardware and software such as Graphics Processing Units (GPUs).
+                                        Moreover, sorting networks are also of interest for secure computing methods like secure multi-party com-
+                                        putation, circuit garbling and homomorphic encryption [4]. Other applications include median filtering,
+                                        switching circuits, and encoding cardinality constraints in propositional satisfiability problems (SAT)[1].
+                                        Interestingly, we use this cardinality constraint in this paper to perform the joint size-depth optimization of
+                                        sorting networks in a SAT framework.
+                                            From the theoretical point of view comparator networks can be studied using the combinatorial and
+                                        algebraic properties of permutations [5, 9], as well as constrained boolean monotone circuits using the
+                                        zero-one principle [12, p. 223]. In the usual representation the n input values are fed into networks of n
+                                        channels connected by comparators that swap unordered inputs from two channels. The sequence of data-
+                                        independent comparisons can be parallelized grouping independent comparators in layers. The depth of
+                                        a comparator network is the number of layers, i.e., the delay in a parallel implementation. The typical
+                                        graphical representation of a comparator network is depicted in Figure 1.
+                                            In this work we center our attention in the search of optimal sorting networks in both size (number of
+                                        comparators) and depth (number of layers) for small values of n. For large values of n, Ajtai, Komlós, and
+                                        Szermerédi [2] presented in 1983 a method to construct sorting networks that have asymptotically optimal
+                                        size and depth with O(n log n) comparators in O(log n) layers. However, despite this good asymptotic
+                                        behavior, the original AKS network and other more recent variants, are currently of little practical interest
+                                        because of the huge constant hidden in the big-O notation. Simple recursive generation algorithms as the
+
+                                          ✩ Supported by the Spanish MINECO project TEC2015-69266-P (FEDER, UE)
+
+                                           Email address: jose.fonollosa@upc.edu (José A. R. Fonollosa)
+
+                                        Preprint                                                                                                  August 22, 2018
+                            Figure 1: Comparator network of depth 3 with 5 comparators.
+
+
+
+proposed by Batcher [3] provide much better sorting networks in term of size and depth for networks of
+practical interest.
+    For small, fixed values of input n, the search for efficient sorting networks in terms of size or depth is
+a optimization quest with more than 50 years of history. For n ≤ 16 the best known networks in terms
+of size are more than 40 years old [12] but their optimality has only been recently proved for n ≤ 10 [8].
+The optimal-depth search follows a similar pattern. The best sorting networks in terms of depth for n ≤ 16
+were already known 40 years ago [12] but the optimality proofs had to wait until 1989 n ≤ 10 [13], 2013 for
+n ≤ 16 [6] and 2015 for n = 17 [8].
+    Recent optimality results are based on reducing the exponential complexity of a exhaustive search ex-
+ploiting symmetries and efficient SAT encodings. In this paper we adapt optimal-depth SAT encodings
+[6, 11, 8] to include additional cardinality constraints that limit the total number of comparators. We also
+need to reconsider some of the standard simplifications or restrictions for optimal-depth search problems
+that are not longer valid for joint size and depth optimizations. For example, we can no longer assume that
+the first layer of the network is of maximal-size.
+    A powerful symmetry-breaking tool in sorting network optimization is the use of a reduced set of prefixes
+that fix the first layers of the network reducing both the search space and the number of inputs of the sorting
+test. Bundala et al. developed in [6] an efficient generation of complete sets of two-layer prefixes on n channels
+for the specific optimal-depth problem. In our search for depth-size optimality results, we extend that work
+to consider any kind of two layer networks. Section 4 covers the symbolic generation of complete sets of two
+layers prefixes modulo symmetry for this general case.
+    A recent related work of practical interest uses an evolutionary approach [10] to search for small and
+low depth sorting networks, but the search strategy lacks completeness. Our SAT-based approach is able to
+provide similar networks with provably size-depth optimality for small networks.
+
+2. Preliminaries
+
+     A comparator network is a set of channels connected by a sequence of comparators as illustrated in
+Figure 1. Channels are depicted as horizontal lines (with the first channel at the top). Each comparator
+(i,j) compares the input values (ini , inj ) of the two connected channels (1 ≤ i < j ≤ n) and if necessary
+rearrange them such that outi = min(ini , inj ) and outj = max(ini , maxj ). The sequence of comparators
+can be grouped in maximal sets of independent comparators (layers) whose output can be computed in
+parallel. The depth of a comparator network is the number of layers. A sorting network is a comparator
+network that sorts all input sequences.
+     A key tool for the proof of correctness of sorting networks is the 0-1-principle [12]: if a sorting network
+for n channels sorts all 2n sequence of 0’s and 1’s, then it sorts every arbitrary sequence of values.
+     Another important well-known fact is that any permutation of the input channels of a comparator
+network (followed by an untangling procedure) does not change its sorting properties [12]. Parberry [13]
+use this property to fix the first layer in the search of optimal-depth lower bounds. He also mentions that
+we do not need to consider equivalent second layers up to permutation of channels. More recently, Bundala
+et al. [6] studied the characterization and symbolic representation of equivalent two layer prefixes up to
+permutation for the same optimal-depth search problem. Two networks C and C ′ are equivalent up to
+permutation, denoted by C ≈ C ′ , if there is a permutation π such that C ′ equals π(C) (after the untangling
+procedure).
+
+
+                                                        2
+3. Propositional Encodings for Joint Size and Depth Optimization of Sorting Networks
+
+   In this section we adapt the SAT encoding proposed by Codish et al. [8] including additional cardinality
+constraints that limit the total number of comparators. For completeness’ sake we include the original
+encoding and we follow a similar notation.
+ kA comparator network of depth d on n channels       is represented by a set of Boolean variables Cnd =
+                                                k
+  gi,j 1 ≤ i < j ≤ n, 1 ≤ k ≤ d , the value of gi,j indicating whether there is a comparator on channels i
+and j in layer k in the network or not.
+
+3.1. Validity encodings
+    In a valid network the comparators of each layer are independent, i.e., each channel may be used only
+once:
+
+                                               ^                                                           
+                        once ki (Cnd ) =                       k
+                                                             ¬gmin(i,j),max(i,j)     k
+                                                                                 ∨ ¬gmin(i,l),max(i,l)
+                                           1≤i6=j6=l≤n
+                                                ^
+                         valid (Cnd ) =                       once ki (Cnd )
+                                           1≤k≤d,1≤1≤n
+
+
+3.2. Sorting encodings
+    We denote the inputs into the network by the variables vi0 , with 1 ≤ i ≤ n, the variables vik , with
+1 ≤ i ≤ n and 1 ≤ k ≤ d, store the value on channel i in the network after layer k. A valid networks sorts
+if the following SAT constraints on vik gi,j
+                                         k
+                                             are satisfied:
+
+                                                   _             _
+                               used ki (Cnd ) =          k
+                                                        gj,i ∨          k
+                                                                       gi,j
+                                                  j<i            i<j
+                                                                                  
+                             update ki (Cnd ) =    ¬used ki (Cnd ) → (vik ↔ vik−1 ) ∧
+                                                   ^
+                                                           k
+                                                              → vik ↔ (vjk−1 ∨ vik−1 ) ∧
+                                                                                      
+                                                        gj,i
+                                                  1≤j<i
+                                                    ^
+                                                               k
+                                                                   → vik ↔ (vjk−1 ∧ vik−1 )
+                                                                                           
+                                                              gi,j
+                                                  i<j≤n
+
+   The update constraint describes the impact of comparators on the values vik stored on each channel after
+every layer and the following sorts equation includes all the update constraints to assure the output y for a
+specific input x, where in our case y is the sorted version x.
+
+                                     ^                              ^                               ^
+                 sorts(Cnd , x) =          (vi0 ↔ xi ) ∧                       updateki (Cnd ) ∧           (vid ↔ yi )
+                                    1≤i≤n                     1≤k≤d,1≤i≤n                          1≤i≤n
+
+
+3.3. Cardinality encoding
+    This is the contribution of this paper to the SAT encoding of sorting networks. The previous encodings
+limit the number of layers to d. In order to perform a joint depth and size optimization we include additional
+clauses to limit the total number of comparators to s.
+    Encodings of cardinality constraints into SAT have been thoroughly studied over the last few years.
+Interestingly, a good solution for our case is to use cardinality encodings based on sorting networks.
+    In a binary sorting network that takes input variables (x1 . . . xn ) and returns the sorted version in
+decreasing order (y1 . . . yn ) the output variable ys becomes true if and only if there are at least s true input
+variables. Therefore, to express x1 + . . . + xn ≤ s it suffices to add a unit clause ¬ys+1 . Standard cardinality
+encodings based on sorting networks requires O(n log2 n) clauses and variables. However, the selected
+                                                                   3
+cardinality encoding proposed by Abı́o et al. [1] reduces this to O(n log2 k) and enforces arc-consistency,
+which represents a significant optimization in our case.
+   A detailed enumeration of all the clauses and variables of the selected cardinality encoding is out of the
+scope of this paper. We assume here that we are given the cardinality variable cs+1 and the corresponding
+K cardinality clauses uk , with 1 ≤ k ≤ K
+
+
+                                           (cs+1 ; u1 , . . . , uK ) = Cards+1 (Cnd )
+
+   where cs+1 is false and all the cardinality clauses are satisfied if and only if there are s or less comparator
+variables that are true.
+
+                                                                          ^
+                                            less s+1 (Cnd ) = ¬cs+1 ∧           uk
+                                                                        1≤k≤K
+
+
+3.4. Basic encoding
+    A sorting network for n channels on d layers with s or less comparators exists if and only if the following
+constraint is satisfiable.
+                                                                         ^
+                           ϕ(n, d, s) = valid (Cnd ) ∧ less s+1 (Cnd ) ∧   sorts(Cnd , x̄)                  (1)
+                                                                           x̄∈{0,1}n
+
+
+3.5. Additional encodings
+    The basic sorting network encoding can be improved with additional constraints that restrict the search
+space or help to find conflicts quickly, as well as other optimizations described in [8]. In this subsection we
+just enumerate the additional constraints considered in our SAT encoding. The reader is refereed to [8] for
+a detailed justification.
+
+Redundant sorts clauses. The following encoding adds specific redundant sorts clauses that allows for
+    more propagations, thus conflicts can be found earlier
+
+                                            _
+                         oneDown ki,j ↔             k
+                                                   gi,ℓ                   noneDown ki,j ↔ ¬oneDown ki,j
+                                           i<ℓ≤j
+                                            _
+                            oneUp ki,j ↔            k
+                                                   gℓ,j                      noneUp ki,j ↔ ¬oneUp ki,j
+                                           i≤ℓ<j
+
+
+      Given an input x̄ = (0, 0, . . . , 0, xt , xt+1 , . . . , xt+r−1 , 1, 1, . . . , 1), for all t ≤ i ≤ t + r − 1 and at each
+      layer k, we add the following constraints to the definition of sorts
+
+                                              ^
+                                                    vik−1 ∧ noneDown ki,t+r−1 → vik
+                                            1≤k≤d
+                                                      ^
+                                                            ¬vik−1 ∧ noneUp kt,i → ¬vik
+                                                    1≤k≤d
+
+
+    Other additional constraints of interest in our case follows the necessary conditions for the last layers
+[8]. However, we can not use constraints that may force redundant comparators. In our optimal networks
+the last layer can have adjacent unused channels.
+
+
+                                                               4
+Non-redundant comparators in the last layer connect adjacent channels.
+                                        d
+                                   
+                              ϕ1 = ¬gi,j    1 ≤ i, i + 1 < j ≤ n
+
+No comparator in the penultimate layer connect two channels that are more than 3 channels apart.
+                                                      d−1
+                                                
+                                         ϕ2 =       ¬gi,j    1 ≤ i, i + 3 < j ≤ n
+
+A comparator (i, i + 2) or (i, i + 2) on the penultimate layer has implications in the last layer.
+                                     d−1      d          d−1      d
+                                                   
+                           ϕ3 =     gi,i+3 → gi,i+1   ∧ gi,i+3 → gi+2,i+3 1≤i≤n−3
+                                         d−1         d      d
+                                  ϕ4 = gi,i+2 → gi,i+1 ∨ gi+1,i+2 1 ≤ i ≤ n − 2
+
+   And we also included the additional optimizations from [7]
+
+No redundant comparators.                                ^
+                                                                   k       k+1
+                                                σ1 =             ¬gi,j ∨ ¬gi,j
+                                                     1≤k<d
+                                                    1≤i<j≤n
+
+Eager comparator placement.
+                                          ^
+                                  σ2 =               k
+                                                    gi,j → used ik−1 (Cnd ) ∨ used jk−1 (Cnd )
+                                       1<k≤d
+                                      1≤i<j≤n
+
+
+All adjacent comparators.                       ^
+                                                        1        2                d
+                                                                                          
+                                       σ3 =            gi,i+1 ∨ gi,i+1 ∨ · · · ∨ gi,i+1
+                                           1≤i<n
+
+
+Only unsorted inputs. We can remove sort constraints sorts(Cnd , x) for already sorted inputs from the
+    basic encoding. Sorted inputs always remain unchanged.
+
+    Another key tool to obtain a tractable SAT encoding is to consider a fixed prefix. If we fix the first layers
+of the networks we not only reduce the search space in term of free comparators but also the number of sort
+constraints sorts(Cnd , x) and validity clauses. In the sorting encodings we have to consider only the rest of
+the network and the remaining unsorted sequences at the output of fixed prefix.
+    We study the generation of a complete set of prefixes for our optimality results in the following section.
+
+4. Symbolic representation of two-layer prefixes
+
+    Bundala et al. [6] studied the characterization and symbolic representation of equivalent two-layer
+prefixes up to permutation for the optimal-depth search problem. The proposed symbolic representation is
+based on the observation that two-layer networks are fully characterized by the maximal-length simple path
+of each group of connected comparators. Figure 2 shows two equivalent two-layer networks (a) and (b), all
+the maximal paths of network (a′ ), and one maximal path of network (b′ ).
+    Using this observation and additional symmetry properties of maximal-length paths, Bundala et al. de-
+veloped an efficient method to generate a complete set of prefixes for the optimal-depth sorting
+                                                                                               network
+problem. The generation algorithm considered only networks with a maximal first layer (with n2 compara-
+tors) and saturated prefixes ([7], Definition 7).
+    For the joint depth-size optimization problem we can not keep those restrictions. We need to address
+the general case of isomorphic two-layer comparator networks with any number of comparators in the first
+and second layer.
+                                                             5
+    The proposed symbolic generation of a complete set of prefixes is an extension of the generation algorithm
+of Bundala et al. [7] including non-maximal first layers. We follow a similar terminology and definitions.
+    The smaller (resp. larger) channel in some comparator of the first layer is called a min-channel (respec-
+tively, a max-channel ) and an unused channel in the first layer will be called a free channels. In our case,
+we can have more than one free channel.
+Definition 1. (Bundala et al. [7]) A path in a two-layer network C is a sequence hp1 p2 . . . pk i of distinct
+channels such that each pair of consecutive channels is connected by a comparator in C.
+   The word corresponding to hp1 p2 . . . pk i is hw1 w2 . . . wk i, where:
+                                             
+                                             0 if pi is a free channel
+                                             
+                                     wi = 1 if pi is a min-channel
+                                             
+                                                2 if pi is a max-channel
+                                             
+
+    A path is maximal if it is a simple path (with no repeated nodes) that cannot be extended (in either
+direction). A network is connected if its graph representation is connected. In general, we can have connected
+networks with up to two free channels, so we need to consider one additional type of word that we will name
+Tail-word.
+Definition 2. Let C be a connected two-layer network on n channels. We will classify C and its correspond-
+ing word based on the number of unused channels in the first and second layer. In a connected two-layer
+network we can have only four different kinds of words.
+
+Head-word. If n is odd, then word(C) is the word corresponding to the maximal path in C starting with
+    the (unique) free channel. The number of Head-words on n channels is 2(n−1)/2 . Figure 3 show the
+    complete set of Head-words on n ≤ 5 channels.
+Stick-word. If n is even and C has two channels not used in layer 2, then word(C) is the lexicographically
+     smallest of the words corresponding to the two maximal paths in C starting with one of these unused
+     channels (which are reverse to one another). The number of Stick-words on (2, 4, 6, 8, 10, 12, 14, 16, ...)
+     channels is (1, 3, 4, 10, 16, 36, 64, 136, ...) respectively (OEIS A051437)1 . Figure 4 show the complete
+     set of Stick-words on n ≤ 6 channels.
+Cycle-word. If n is even and all channels are used by a comparator in layer 2, then word(C) is the
+    lexicographically smallest word corresponding to a maximal path in C that begins with two chan-
+    nels connected in layer 1. The number of Cycle-words on (2, 4, 6, 8, 10, 12, 14, 16, ...) channels is
+    (1, 2, 2, 4, 4, 9, 10, 22, ...) respectively (OEIS A053656)2 . Figure 5 show the complete set of Stick-words
+    on n ≤ 8 channels.
+Tail-word. If n is even and C has two free channels then word(C) is the lexicographically smallest of the
+     words corresponding to the two maximal paths in C starting with each of the two free channels (which
+     are reverse to one another). Each two-layer network represented by a Tail-word is equal to a Stick-word
+     network with two additional free channels and two comparators connecting each of the unused channels
+     in the second layer with these free channels. The number of Head-words on n channels is equal to
+     the number of Tail-words in n − 2 channels. Figure 6 show the complete set of Tail-words on n ≤ 8
+     channels.
+
+
+  1 The On-Line Encyclopedia of Integer Sequences, Sequence A051437
+  2 The On-Line Encyclopedia of Integer Sequences, Sequence A053656
+
+
+
+
+                                                         6
+                (a)                    (a′ )                         (b)                                (b′ )
+
+Figure 2: The two-layer networks (a) and (b) are equivalent up to permutation. The symbolic representation of both networks
+is (012, 0120, 1221, 1221c). The 4 words of this sentence are obtained from the 4 maximal paths represented in (a′ ) for each
+connected component. The path of (b) corresponding to the word 0120 is also depicted in (b′ ).
+
+
+
+
+            0                        012                      021
+
+
+
+
+         01212                      01221                    02112                     02121
+
+                                  Figure 3: Complete set of Head-words on n ≤ 5 channels.
+
+
+   The set of all possible words (not necessarily minimal with respect to lexicographic ordering) can be
+described by the following BNF-style grammar3.
+
+
+                      Word ::= Head | Tail | Stick | Cycle                                                               (2)
+                                           ∗                                                        +
+                      Head ::= 0(12 | 21)                                      Stick ::= (12 | 21)
+                                           +
+                       Tail ::= 0(12 | 21) 0                                   Cycle ::= 12(12 | 21)+
+
+To avoid ambiguity with Stick-words, we annotate Cycle-words with a c tag.
+Definition 3. A two-layer comparator network C is represented by the multi-set word(C) containing w′ =
+word(C ′ ) for each connected component C ′ of C. The set is denoted by the sentence w1 ; w2 ; . . . ; wk where
+the words are in lexicographic order.
+
+   3 We do not include the Tail-word description of a network with a single comparator in the second layer, because it is
+
+already covered by the equivalent single comparator in the first layer, Stick-word 12
+
+                                                             7
+  12
+
+
+
+
+ 1212        1221                   2112
+
+
+
+
+121212      121221                 122112                  211212
+
+              Figure 4: Complete set of Stick-words on n ≤ 6 channels.
+
+
+
+
+   12c
+
+
+
+
+  1212c        1221c                     121212c                     121221c
+
+
+
+
+12121212c    12121221c                 12122121c                   12211221c
+
+              Figure 5: Complete set of Cycle-words on n ≤ 8 channels.
+
+
+
+
+                                         8
+         0120
+
+
+
+
+       012120                   012210                       021120
+
+
+
+
+      01212120                 01212210                     01221120                    02112120
+
+                              Figure 6: Complete set of Tail-words on n ≤ 8 channels.
+
+
+   Figure 2 illustrates the case of a two-layer network with 4 connected components, one of each type.
+Definition 4. Let w be a word in the language of Equation (2), and n = |w|. The two-layer network net(w)
+has a first layer with m comparators of the form (2i − 1, 2i), with 1 ≤ i ≤ m, where:
+                                 
+                                    n
+                                 2
+                                         if w is a Stick-word or a Cycle-word
+                            m=      n−1
+                                      2   if w is a Cycle-word
+                                  n−2
+                                 
+                                      2   if w is a Tail-word
+The second layer is then defined as follows.
+  1. If w is a Stick-word or a Cycle-word, ignore the first character; then, for k = 0, . . . , n2 − 1, take
+                                                                                                
+
+     the next two characters xy of w and add a second-layer comparator between channels 2k + x and
+     2(k + 1) + y. Ignore the last character; if w is a Cycle-word, connect the two remaining channels at
+     the end. (Figure 4 and 5)
+  2. If w is a Head-word, proceed as above but start by connecting the free channel to the channel indicated
+     by the second character. (Figure 3)
+  3. If w is a Tail-word, ignore the zeros and proceed as for a Stick-word. Then connect the channel
+     indicated by second character with the second free channel, and the remaining channel indicated by the
+     penultimate character with the first free channel. (Figure 6)
+   To generate a network from a sentence, we generate the network of each word and compose them bottom-
+up as illustrated in Figure 2(a) for the sentence (012, 0120, 1221, 1221c).
+   Figure 7 depicts the 22 different 5-channel two-layer networks (up to permutation) and its corresponding
+sentences. This complete set includes the empty network (0, 0, 0, 0, 0) with no comparators, networks without
+any comparator in the second layer (0, 0, 0, 12), (0, 12, 12), and networks with the word 21c, i.e., a redundant
+comparator.
+                                                        9
+    n          3     4     5     6      7     8     9    10       11       12        13       14        15         16       17
+ |R(Hn )|      5    14    22    50      84   178   300   588    1,004     1,900    3,234     5,904    10,054     17,959   30,435
+ |R(Tn )|      2      8   14    32      58   123   211   404      698     1,305    2,223     3,996     6,812     12,046   20,372
+ |R(Tn′ )|     1      6    9    23      36    83   127   256      403       786    1,245     2,304     3,712      6,716   10,879
+ |R(Gn )|      4      8   16    20      52    61   165   152      482       414    1,378     1,024     3,780      2,627   10,187
+ |R(Sn )|      2      2    6      6     14    15    37    27       88        70      212       136       494        323    1,149
+ |R(Sn′ )|     1      2    4      5      8    12    22    21       48        50      117        94       262        211      609
+
+      n              18          19        20         21          22            23           24            25            26
+   |R(Hn )|        53,325      90,021    155,518    261,204     445,800       745,198    1,259,611     2,095,183     3,511,839
+   |R(Tn )|        35,356      59,576    102,182    171,172     290,270       483,982      813,798     1,349,972     2,252,214
+   |R(Tn′ )|       19,191      31,301     54,352     88,847     152,011       248,867      421,233       689,320     1,155,520
+   |R(Gn )|         6,422      26,796     15,906     69,498      38,392       177,388       92,989       447,765       221,836
+   |R(Sn )|           651       2,632      1,478      5,988       3,040        13,514        6,744        30,312        14,036
+   |R(Sn′ )|          411       1,367        894      3,098       1,787         6,920        3,848        15,469         7,830
+
+                     Table 1: Values of |R(Hn )|, |R(Tn )|, |R(Tn′ )|, |R(Gn )|, |R(Sn )| and |R(Sn
+                                                                                                  ′ )| for n ≤ 26.
+
+
+
+
+Lemma 1. [7]. Let C and C ′ be two-layer comparator networks on n channels. Then C ≈ C ′ if and only
+if word(C) = word(C ′ ).
+    We denote by Hnm the set of all possible n-channel two-layer network whose first layer has m comparators
+of the form (2i − 1, 2i), with 1 ≤ i ≤ m and 0 ≤ m ≤ n2 . And by Hn the union of the entire sequence.
+                                                         
+
+
+                                                                   2⌋
+                                                                  ⌊[
+                                                                   n
+
+
+                                                          Hn =          Hnm
+                                                                  m=0
+                               n
+The set Hnm with m = 2 is the set of networks with a fixed maximal first layer (denoted by Gn in [7]). The
+set of representatives of the equivalence classes of Hn and Gn is denoted by R(Hn ) and R(Gn ) respectively.
+    For a given n the set R(Hn ) can be generated from all multi-sets of valid words with a total of n channels.
+Figure 7 shows the complete R(H5 ) set. However, in the search for optimal networks we can remove prefixes
+with redundant comparators (word 12c), the empty network, and prefixes without any comparator in the
+second layer (with only the words 0 and 12 in its symbolic representation). We denote R(Tn ) the resulting
+reduced set of prefixes.
+
+4.1. Reflections
+    It is well-known that a reflection of a sorting network is also a sorting network [12, 7]. Formally, the
+reflection of comparator network C is the network C R that replaces each comparator (i, j) in C with a
+comparator (n − j + 1, n − i + 1) in C R . Note that the reflection operation is not in general a permutation.
+Therefore, we can further reduce the number of prefixes in our complete set by removing those that are
+reflections of others. In the resulting symbolic representation of the complete set of two-layers prefixes,
+denoted by R(Tn′ ), we keep the lexicographically smallest of the two sentences word(C) and word(C R ).
+    The symbolic representation word(C R ) can be obtained from word(C) swapping min-channels with max-
+channels, and then selecting the lexicographically smallest representation for each type of word and for the
+whole sentence according to definitions 2 and 3. Figure 8 shows two equivalent two-layer prefixes up to
+reflection, and the corresponding sentence representation.
+    Table 1 shows the cardinality of |R(Hn )|, |R(Tn )| and |R(Tn′ )| for n ≤ 26. For comparison, we also include
+the cardinality of |R(Gn )|, saturated prefixes |R(Sn )| and saturated prefixes without reflections |R(Sn′ )| of
+interest in the optimal-depth sorting problem [7].
+
+                                                                  10
+Theorem 1. For any n ≥ 3, the set R(Tn′ ) of two-layer comparator networks is a complete set of prefixes
+for the search of optimal sorting networks in size and depth.
+
+
+5. Results
+    Using the propositional encodings of section 3 and standard SAT solvers4, we can obtain optimal networks
+for n ≤ 10 channels in a few seconds. For n ≤ 9 channels, there are networks that are optimal in both size
+and depth (Figures 9, 10, 11, and 12).
+    For n = 10 channels, optimal-depth sorting networks with 7 layers need a minimum of 31 comparators,
+while optimal-size sorting networks with 29 comparators require 8 layers (Figures 13 and 14).
+Theorem 2. The optimum size for a sorting network on 10 channels of depth 7 is 31.
+Theorem 3. The optimum depth for a sorting network on 10 channels with 29 comparators is 8.
+    For n = 11 and n = 12 channels, we use the results of section 4 to fix the two first layers. The set of
+prefixes were also optimized with the evolutionary algorithm developed by Ehlers and Mller [11] to reduce
+the number of variables in the resulting SAT formula.
+    The absolute minimal size S(n) for n = 11 channels is currently unknown. The lower bound on S(11)
+is 33, but only networks with a minimum of 35 comparators are known. Our depth-restricted results show
+that 35 is the optimal size for sorting networks with 8 or 9 layers. For n = 12 channels the lower bound
+of S(n) is 37 and the current upper bound 39. In this case we obtain that optimal-depth sorting networks
+with 8 layers need a minimum of 40 comparators while for sorting networks with 9 layers the minimum is
+39 comparators. (Figures 20 and 21)
+                                                                                                              ′
+    For sorting networks on 11 channels with 8 layers, only 5 prefixes of the total of 403 prefixes in R(T11    )
+give a network of size 35 (Figures 15, 16, 17, 18, 19). Note that the first layer of the network on Figure 17
+is not maximal, i.e., the prefix is not an element of the set R(G11 ). For networks with s ≤ 34 comparators
+                                                                                       ′
+and d ≤ 9 layers all the propositional encodings with any of the 403 prefixes in R(T11   ) are unsatisfiable.
+Theorem 4. The optimum size for a sorting network on 11 channels of depth 8 or 9 is 35.
+    For depth-optimal sorting networks on 12 channels with 8 layers, the minimum number of comparators
+                                                                                                    ′
+is 40. This depth-restricted minimum size can be achieved with only 4 out of the 786 prefixes in R(T12 ).
+Figure 20 is an example with only 5 comparators in the first layer. We need to increment the number of
+layers to 9 to be able to obtain sorting networks on 12 channels with 39 comparators.
+Theorem 5. The optimum size for a sorting network on 12 channels of depth 8 is 40.
+   For channels with more than 12 channels of more than 9 layers, the complexity of the SAT encoding begins
+to be out of the reach of current SAT solvers in the search of complete unsatisfiability results. However, we
+can use the proposed propositional encoding to obtain good networks for a given prefix in a few seconds or
+minutes, for example, a Green-type prefix [12].
+
+6. Conclusions
+    We have addressed the joint size and depth optimization of sorting networks, to obtain depth-restricted
+minimum size results for sorting networks on n ≤ 12 channels. Our work extends the tools developed by
+Bundala et al. [7] for the search of depth-optimal networks. One of our contributions is the inclusion of size
+constraints in the propositional encoding of depth-restricted sorting networks. We have also addressed the
+symbolic representation of the general two-layer prefixes required in the proposed optimization problem.
+    We have shown that for n = 10 channels, optimal-depth sorting networks with 7 layers need a minimum
+of 31 comparators, while optimal-size sorting networks with 29 comparators require 8 layers. The minimum
+size S(n) for sorting networks on n ≥ 11 channels is currently unknown. However, our results show that 35
+is the minimum size for sorting networks on 11 channels with 8 or 9 layers, and 40 the minimum size for
+depth-optimal sorting networks on 12 channels with 8 layers.
+  4 Unsatisfiability results were checked with 3 SAT solvers: minisat, glucose, and cryptosat
+
+
+                                                             11
+        (01212)                   (01221)                   (02112)                   (02121)                  (0, 1212)
+
+
+
+
+       (0, 1221)                 (0, 2112)                 (0, 1212c)                (0, 1221c)                (0, 0120)
+
+
+
+
+       (0, 0, 012)               (0, 0, 021)              (0, 0, 0, 12)             (0, 0, 0, 12c)            (0, 0, 0, 0, 0)
+
+
+
+
+       (0, 12, 12)              (0, 12, 12c)             (0, 12c, 12c)               (012, 12)                 (021, 12)
+
+
+
+
+       (012, 12c)                (021, 12c)
+
+Figure 7: The complete set R(H5 ) of two-layer prefixes on 5 channels, including networks with redundant comparators:
+(0, 0, 0, 12c), (0, 12, 12c), (0, 12c, 12c), (012, 12c), (021, 12c), and networks without any comparator in the second layer:
+(0, 0, 0, 0, 0), (0, 0, 0, 12), (0, 12, 12). Hence, |R(H5 )| = 22 and |R(T5 )| = 22 − 5 − 3 = 14.
+
+
+
+
+                                                             12
+                                   C                        CR                        CcR
+
+Figure 8: The network C R is the reflection of C, while CcR = net(word(C R )) is the canonical permutation of network C R .
+The symbolic representation of C is (012, 0120, 1221c, 2112) while the normalized symbolic representation of C R (CcR ) is
+(0120, 021, 1221c, 2112).
+
+
+
+References
+
+References
+ [1] Ignasi Abı́o, Robert Nieuwenhuis, Albert Oliveras, and Enric Rodrı́guez-Carbonell. A parametric approach for smaller
+     and better encodings of cardinality constraints. In International Conference on Principles and Practice of Constraint
+     Programming, pages 80–96. Springer, 2013.
+ [2] M. Ajtai, J. Komlós, and E. Szemerédi. Sorting in c log n parallel steps. Combinatorica, 3(1):1–19, January 1983.
+ [3] K. E. Batcher. Sorting networks and their applications. In Proceedings of the April 30–May 2, 1968, Spring Joint
+     Computer Conference, AFIPS ’68 (Spring), pages 307–314, New York, NY, USA, 1968. ACM.
+ [4] Dan Bogdanov, Sven Laur, and Riivo Talviste. A practical analysis of oblivious sorting algorithms for secure multi-party
+     computation. In Karin Bernsmed and Simone Fischer-Hübner, editors, Secure IT Systems, pages 59–74, Cham, 2014.
+     Springer International Publishing.
+ [5] N.G. De Bruijn. Sorting by means of swappings. Discrete Mathematics, 9(4):333 – 339, 1974.
+ [6] Daniel Bundala, Michael Codish, Luı́s Cruz-Filipe, Peter Schneider-Kamp, and Jakub Závodný. Optimal-depth sorting
+     networks. CoRR, abs/1412.5302, 2014.
+ [7] Daniel Bundala and Jakub Zavodny. Optimal sorting networks. In Language and Automata Theory and Applications -
+     8th International Conference, LATA 2014, Madrid, Spain, March 10-14, 2014. Proceedings, pages 236–247, 2014.
+ [8] Michael Codish, Luı́s Cruz-Filipe, Thorsten Ehlers, Mike Müller, and Peter Schneider-Kamp. Sorting networks: To the
+     end and back again. Journal of Computer and System Sciences, 2016.
+ [9] N.G. de Bruijn. Sorting arrays by means of swaps. Indagationes Mathematicae (Proceedings), 86(2):125 – 132, 1983.
+[10] Bert Dobbelaere.       Sorterhunter. an evolutionary approach to find small and low latency sorting networks.
+     https://github.com/bertdobbelaere/SorterHunter, 2018.
+[11] Thorsten Ehlers and Mike Müller. New bounds on optimal sorting networks. In Conference on Computability in Europe,
+     pages 167–176. Springer, 2015.
+[12] Donald E. Knuth. The Art of Computer Programming, Volume 3: (2Nd Ed.) Sorting and Searching. Addison Wesley
+     Longman Publishing Co., Inc., Redwood City, CA, USA, 1998.
+[13] Ian Parberry. A computer assisted optimal depth lower bound for sorting networks with nine inputs. In Supercomputing,
+     1989. Supercomputing’89. Proceedings of the 1989 ACM/IEEE Conference on, pages 152–161, Nov 1989.
+
+
+
+
+                                                             13
+Figure 9: Optimal sorting networks on 2, 3, 4, and 5 channels with 1 layer and 1 comparator, 3 layers and 3 comparators, 3
+layers and 5 comparators, and 5 layers and 9 comparators, respectively.
+
+
+
+
+Figure 10: Optimal sorting networks on 6 channels with 5 layers and 12 comparators, and on 7 channels with 6 layers and 16
+comparators.
+
+
+
+
+                   Figure 11: Optimal sorting network on 8 channels with 6 layers and 19 comparators.
+
+
+
+
+                   Figure 12: Optimal sorting network on 9 channels with 7 layers and 25 comparators.
+
+
+
+                                                           14
+            Figure 13: Optimal sorting network on 10 channels with 7 layers and 31 comparators.
+
+
+
+
+            Figure 14: Optimal sorting network on 10 channels with 8 layers and 29 comparators.
+
+
+
+
+Figure 15: Optimal sorting network on 11 channels with 8 layers and 35 comparators. Prefix (012, 12211221c).
+
+
+
+
+                                                    15
+Figure 16: Optimal sorting network on 11 channels with 8 layers and 35 comparators. Prefix (012, 1212, 1221c).
+
+
+
+
+Figure 17: Optimal sorting network on 11 channels with 8 layers and 35 comparators. Prefix (012, 1221c, 1221c).
+
+
+
+
+Figure 18: Optimal sorting network on 11 channels with 8 layers and 35 comparators. Prefix (012, 0120, 1221c).
+
+
+
+
+                                                      16
+Figure 19: Optimal sorting network on 11 channels with 8 layers and 35 comparators. Prefix (0122112, 1221c).
+
+
+
+
+            Figure 20: Optimal sorting network on 12 channels with 8 layers and 40 comparators.
+
+
+
+
+            Figure 21: Optimal sorting network on 12 channels with 9 layers and 39 comparators.
+
+
+
+                                                    17
+

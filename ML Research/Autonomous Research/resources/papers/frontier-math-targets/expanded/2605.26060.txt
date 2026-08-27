@@ -1,0 +1,1669 @@
+                                                A finite-board reduction for the Erdős Matching Conjecture
+                                                                and the 4-uniform case via exact certificates
+                                                                           Jianfeng Hou∗1 , Caiyun Hu†1 , and Xizhi Liu‡2
+                                                                    1
+                                                                    Center for Discrete Mathematics, Fuzhou University, Fuzhou, China
+                                                 2
+                                                     School of Mathematical Sciences, University of Science and Technology of China, Hefei, Anhui, China
+arXiv:2605.26060v1 [math.CO] 25 May 2026
+
+
+
+
+                                                                                                   May 26, 2026
+
+
+                                                                                                          Abstract
+                                                      We prove the 4-uniform Erdős Matching Conjecture for every matching number s ≥ 6961. The
+                                                  proof has two parts. First, building on ideas from Frankl–Rödl–Ruciński [14], we formulate a general
+                                                  finite-board criterion for the r-uniform conjecture. The criterion has two assumptions: the (r − 1)-
+                                                  uniform cover-side bound for links with matching number at most t holds at every m ≥ nr (t), and
+                                                  a finite optimization problem for mixed-size trace configurations on an (r2 + r − 1)-vertex board.
+                                                  Together with the corresponding lower-uniformity input, this finite-board optimization implies the
+                                                  Erdős Matching Conjecture with explicit large-matching thresholds.
+                                                      Second, we verify the finite-board assumption for r = 4. The local board has 19 vertices, and the
+                                                  required inequality is decomposed into three weighted local inequalities: a leading wide layer, a 15-board
+                                                  layer, and an 11-board layer. The verification is reduced to exact finite optimization and certificate-
+                                                  validation problems: Ferrers down-set enumerations for pair and triple traces, rational Farkas-dual
+                                                  certificates for the top-star branch, integer branch-and-bound up-set hitting and pattern searches for
+                                                  the no-top-star branch, and residual-cut dual certificates for the 15-board and 11-board layers.
+
+
+
+                                           1      Introduction and statement
+                                           The Erdős Matching Conjecture is one of the central extremal problems for uniform hypergraphs. It asks
+                                           for the largest possible size of an r-graph when a matching of prescribed size is forbidden. The conjecture
+                                           was proposed by Erdős [3]; in the special case of matching number one it recovers the Erdős–Ko–Rado
+                                           theorem [5]. It is also a basic hypergraph Turán problem, with a matching as the excluded configuration,
+                                           but the expected extremal answer has two competing models rather than a single Turán-type construction.
+                                           For an r-uniform hypergraph F , let ν(F ) be its matching number. Define
+                                                                                                                 
+                                                                                                     [n]
+                                                                      mr (n, s) := max |F | : F ⊆        , ν(F ) ≤ s .
+                                                                                                      r
+                                           The Erdős Matching Conjecture predicts that, for n ≥ r(s + 1),
+                                                                               mr (n, s) = Mr (n, s) := max{ar (s), br (n, s)},                                (1)
+                                           where                                                                                
+                                                                                         rs + r − 1                         n    n−s
+                                                                         ar (s) :=                    ,       br (n, s) :=    −        .
+                                                                                             r                              r     r
+                                               ∗ Email: jfhou@fzu.edu.cn
+                                               † Email: hucaiyun.fzu@gmail.com
+                                               ‡ Email: liuxizhi@ustc.edu.cn
+
+
+
+
+                                                                                                             1
+The two examples are the complete r-graph on rs + r − 1 vertices and the family of all r-sets meeting a
+fixed s-set. These examples represent the two regimes of the problem: a dense clique-type construction
+near the minimum admissible number of vertices, and a cover-type construction when the ambient vertex
+set is large.
+Historically, the graph case r = 2 follows from the theorem of Erdős and Gallai [4]. Early large-n results
+for general uniformity go back to Bollobás, Daykin, and Erdős [2], and were subsequently strengthened in
+several directions, including work of Huang, Loh, and Sudakov [16], Frankl, Luczak, and Mieczkowska [13],
+and Frankl [7, 8, 9]. The two extremal regimes have also been studied separately: stability and cover-side
+large-n results appear in work of Frankl and Kupavskii [10, 11], while the almost-perfect, clique-side range
+was advanced by Frankl [9] and Kolupaev and Kupavskii [18]. A 2026 preprint of Frankl, Lu, Ma, and Wu
+[12] proves stability results toward the 4-uniform case and establishes the conjecture in the range n ≥ 5s
+with n sufficiently large. The present paper gives an independent certificate-based proof in an explicit
+4-uniform large-s range: all admissible n ≥ 4s + 4 once s ≥ 6961, whereas Frankl–Lu–Ma–Wu treat the
+large-n range n ≥ 5s with n sufficiently large. The case r = 3 is now known in full by Frankl [8]. Luczak
+and Mieczkowska [19] proved the all-n result for sufficiently large s, and Frankl, Rödl, and Ruciński [14]
+gave a short proof in a large-s range. Related matching and degree versions have also played an important
+role in the development of the area, for example in [1, 15, 17]. As in much of extremal set theory, shifting is
+a key structural tool; we use it in the standard compressed-family form described, for instance, in Frankl’s
+survey [6].
+For fixed r, define the transition value
+                                                                     
+                                                     rs + r − 1    n   n−s
+                      nr (s) := min n ≥ r(s + 1) :               ≤   −        .                             (2)
+                                                         r         r    r
+Thus, within the admissible range n ≥ r(s + 1), the clique term is strictly larger for n < nr (s), while the
+cover term is at least as large for n ≥ nr (s).
+The main theorem of this paper is the following.
+                                                                                                            [n]
+                                                                                                                  
+Theorem 1.1 (Main theorem). For every integer s ≥ 6961 and every n ≥ 4s + 4, every 4-graph H ⊆               4
+with ν(H) ≤ s satisfies |H| ≤ M4 (n, s), where M4 (n, s) := max 4s+3
+                                                                     n
+                                                                     , 4 − n−s
+                                                                             
+                                                                  4         4   .
+
+We did not try to optimize the lower bound on s in Theorem 1.1. The numerical constant 6961 is explicit
+and is the value delivered by the present finite verification: the local 19-board finite-board input is verified
+uniformly for all s ≥ 3481 at the two critical parameter pairs n ∈ {n4 (s) − 1, n4 (s)}, and the non-ONE
+deletion chain can reduce the matching parameter by almost a factor of two. Thus the global theorem
+follows for s ≥ 2 · 3481 − 1 = 6961.
+The proof has two layers. The first layer, Section 2, proves a general finite-board criterion for the r-
+uniform conjecture. After shifting, saturated maximalization, the critical-value reduction, and the non-
+ONE deletion chain, the global problem is reduced to two assumptions:
+                                                                 m
+                                                                      − m−t
+                                                                             
+  (i) the (r − 1)-uniform EMC gives the cover-side bound r−1              r−1 for every m-vertex link with
+      matching number at most t, for all m ≥ nr (t); and
+ (ii) a finite optimization problem for mixed-size trace configurations on an (r2 + r − 1)-vertex board,
+      arising from the two critical parameter pairs n ∈ {nr (s) − 1, nr (s)}.
+
+For r = 4, the parameter comparison in Proposition 3.2 shows that this link range is already beyond the
+3-uniform transition threshold, so the known 3-uniform theorem supplies the required lower-uniformity
+input. The finite-board input is proved on a 19-vertex local board.
+The second layer, Sections 3–8, verifies these inputs for r = 4. The 19-board inequality is decomposed
+into three weighted local inequalities: a leading wide layer, a 15-board layer, and an 11-board layer. The
+leading layer is further split into a top-star branch and a no-top-star branch. The top-star branch is certified
+by exact rational Farkas certificates; the no-top-star branch is certified by exhaustive finite searches over
+up-sets; and the lower layers are certified by residual-cut dual certificates.
+
+
+                                                       2
+All computations are presented in a certificate style. A program may be used to discover a certificate,
+but the proof cites only deterministic verification of the certificate. The Farkas certificates are checked
+after clearing denominators, in the usual linear-programming duality sense [20]. The no-top-star branch
+is reduced to finite branch-and-bound searches over principal up-closures, followed by exact arithmetic
+and rectangle-extension checks. The 15-board and 11-board layers use nonnegative integer combinations of
+local matching-obstruction rows that dominate the relevant objective coefficient-wise. The ancillary scripts
+are described in Section 9; the proof-critical success markers and the mathematical assertion certified by
+each script are stated there. All calculations and certificates are available at EMC certificate.zip.
+
+
+2     A finite-board criterion for general r
+This section is written for a fixed integer r ≥ 2. It proves the global reduction in a form that is suited to
+certificate-assisted applications. The reduction uses a selected matching rule. For every stable maximal
+property-ONE r-graph, the rule chooses one s-matching avoiding vertex 1 and contained in [rs + r − 1].
+The rule may impose extra deterministic tie-breaking conditions. For r = 4 we shall choose the matching
+so that the two residual vertices outside 1 are lexicographically minimal; this is the source of the seed
+traces in the 19-board proof.
+
+
+2.1    Critical values and the two inputs
+Let ρr denote the unique real root greater than r of
+
+                                             ρrr − (ρr − 1)r = rr .                                       (3)
+
+Lemma 2.1 (Critical value and gap). For fixed r ≥ 2, nr (s) = ρr s + o(s). Moreover, for all sufficiently
+large s, nr (s) − nr (s − 1) ≥ 2.
+
+Proof. Put                                                     
+                                             n   n−s     rs + r − 1
+                                ∆s (n) :=      −      −              .
+                                             r    r          r
+Then nr (s) is the first admissible integer n for which ∆s (n) ≥ 0, and ∆s (n) is strictly increasing in n
+                                 n
+because ∆s (n + 1) − ∆s (n) = r−1     − n−s
+                                          r−1 > 0. For fixed x > 1 and n = xs + O(1),
+
+                                           sr r
+                                ∆s (n) =      (x − (x − 1)r − rr ) + O(sr−1 ).
+                                           r!
+The function xr − (x − 1)r − rr is strictly increasing on (1, ∞), is negative at x = r, and tends to infinity.
+This gives the unique root ρr > r and the asymptotic formula.
+Let N = nr (s). Since N = ρr s + o(s) and ρr > r, the integer N − 2 is admissible for the parameter s − 1
+when s is large. A direct subtraction gives
+                                                            X r−2         
+                                         N −1    N −2     N −s−1          rs + i
+             ∆s−1 (N − 2) − ∆s (N ) = −        −       +         +
+                                         r−1      r−1       r−1    i=−1
+                                                                          r−1
+                                        rr + (ρr − 1)r−1 − 2ρr−1
+                                                              r
+                                    =                            sr−1 + o(sr−1 ).
+                                                 (r − 1)!
+                                                                             
+Using rr = ρrr − (ρr − 1)r , the numerator equals (ρr − 2) ρr−1
+                                                            r   − (ρr − 1)r−1 > 0. Hence ∆s−1 (N − 2) > 0
+for large s, and therefore nr (s − 1) ≤ N − 2.
+
+
+
+
+                                                       3
+Assumption 2.2 (Link-bound input). There is an integer slink (r) such that, for every t ≥ slink (r) and
+every m ≥ nr (t), every (r − 1)-uniform hypergraph J on m vertices with ν(J) ≤ t satisfies
+                                                           
+                                                m        m−t
+                                       |J| ≤         −          .                                    (4)
+                                               r−1       r−1
+Known input 2.3 (Frankl’s JCTA large-n theorem). We use Frankl’s 2013 JCTA theorem: for r-graphs,
+the Erdős Matching Conjecture holds whenever
+
+                                         n ≥ (2s + 1)r − s = (2r − 1)s + r.                                               (5)
+                                                                                                     n         n−s
+                                                                                                                 
+Equivalently, if H is an r-graph on n vertices with ν(H) ≤ s and (5) holds, then |H| ≤               r     −    r     .
+
+
+2.2     Stable families, property ONE, and selected matchings
+For two r-sets A = {a1 < · · · < ar } and B = {b1 < · · · < br }, write A ⪯ B if ai ≤ bi for all i. An r-graph
+F ⊆ [n]
+        
+      r   is stable if B ∈ F and A ⪯ B imply A ∈ F .
+Definition 2.4 (Property ONE). A stable r-graph F has property ONE if it has a maximum matching
+avoiding vertex 1. More generally, for an ordered r-graph, property ONE with respect to its first vertex
+means that some maximum matching avoids that first vertex.
+Lemma 2.5 (Compressing a matching away from a forbidden set). Let F be a stable r-graph on [n]. Let
+R0 ⊆ [n], and let I ′ be an initial segment of the ordered set [n] \ R0 with |I ′ | ≥ rt. If F contains a
+t-matching avoiding R0 , then F contains a t-matching avoiding R0 and contained in I ′ .
+
+Proof. Among all t-matchings avoiding R0 , choose one whose ordered union is lexicographically minimal.
+                      / I ′ , then, since |I ′ | ≥ rt, some y ∈ I ′ is unused. As I ′ is an initial segment of [n] \ R0 ,
+If it uses a vertex x ∈
+we have y < x. Let E be the matching edge containing x. Stability gives (E \ {x}) ∪ {y} ∈ F . Replacing
+E by this edge gives a lexicographically smaller matching avoiding R0 , a contradiction.
+Definition 2.6 (Selected compressed matching). Let F ⊆ [n]
+                                                                        
+                                                                      r be stable, have ν(F ) = s, and have property
+ONE. Put K := [rs+r−1]. A selected compressed matching for F is an s-matching E1 , . . . , Es ∈ F avoiding
+vertex 1 and contained in K. Such a matching exists by Lemma 2.5, applied with R0 = {1} and I ′ = K\{1},
+which is an initial segment of [n] \ {1}, since |K \ {1}| = rs + r − 2 ≥ rs.
+A selection rule S assigns one such matching to every stable property-ONE family to which the reduction
+is applied.
+Definition 2.7 (Maximality). An r-graph F with ν(F ) = s is maximal with respect to the constraint
+ν ≤ s if every missing r-set Q ∈
+                               / F satisfies ν(F ∪ {Q}) = s + 1.
+Lemma 2.8 (Stable maximalization preserving a stable core). Let F ⊆ [n]
+                                                                         
+                                                                        r be stable and satisfy ν(F ) ≤ s.
+Suppose that Q ∈ / F and ν(F ∪ {Q}) ≤ s. Then there is a stable family F ′ ⊃ F with |F ′ | = |F | + 1 and
+ν(F ) ≤ s. If, in addition, ν(F ) = s and F has property ONE, then F ′ has property ONE.
+   ′
+
+
+
+Proof. Start from F ∪ {Q} and apply the usual shifts until a stable family is reached. We use the standard
+(i, j)-shift convention: an edge is replaced by its shifted image only when that image is not already present;
+otherwise the original edge is retained. Shifts preserve cardinality and do not increase matching number.
+No old edge of the stable family F is deleted: whenever an old edge is eligible for a shift, its shifted image
+already lies in F by stability. Thus the final family contains F , has one additional edge, and has matching
+number at most s. Any matching witnessing property ONE in F remains present. Under the additional
+hypotheses ν(F ) = s and property ONE, this old s-matching avoiding vertex 1 is still maximum in F ′ ,
+since ν(F ′ ) ≤ s.
+Corollary 2.9 (Saturated stable ONE representatives). If F has maximum size among stable r-graphs on
+[n] with matching number s and property ONE, then F is maximal with respect to ν ≤ s.
+
+
+                                                           4
+Corollary 2.10 (Stable saturated counterexamples). If EMC fails for fixed (n, s) with n ≥ r(s + 1), then
+there is a counterexample F ⊆ [n]
+                                  
+                               r    which is stable, has ν(F ) = s, and is maximal with respect to ν ≤ s.
+
+Proof. Choose a largest counterexample and shift it. Shifting preserves the edge count and does not
+increase matching number. If the shifted family had matching number at most s − 1, then it would not be
+the complete r-graph because n ≥ r(s + 1); adding a missing edge would increase the matching number
+by at most one and produce a larger counterexample. Hence the matching number is exactly s. The same
+argument shows maximality.
+
+
+2.3    The trace and the local board
+Let F ⊆ [n]
+              
+            r   be stable and maximal, with ν(F ) = s, property ONE, and n ≥ N := rs + r − 1. Fix the
+                                                          Ss 2.6. Put K := [N ] and q := n − N , and define
+selected compressed matching E1 , . . . , Es from Definition
+the trace family G := {E ∩ K : E ∈ F }. Let RF := K \ i=1 Ei . Then |RF | = r − 1 and 1 ∈ RF .
+
+Lemma 2.11 (No traces of size zero or one). Every member of G has size at least two.
+
+Proof. Let E ∈ F . If E ∩ K = ∅, then E is disjoint from the selected s-matching, a contradiction. Suppose
+E ∩ K = {x}. If x ∈ RF , then E is again disjoint from the selected matching. If x ∈ Ei for some i, then
+x > 1, and stability gives (E \ {x}) ∪ {1} ∈ F ; this edge is disjoint from the selected matching, again a
+contradiction.
+Lemma 2.12 (The trace has matching number s). The mixed-size trace family G satisfies ν(G) = s.
+
+Proof. The selected edges E1 , . . . , Es lie in G, so ν(G) ≥ s. Suppose that G contains s + 1 pairwise disjoint
+traces. Among all choices of s+1 pairwise disjoint traces H1 , . . . , Hs+1 ∈ G, and all choices of corresponding
+edges Ai ∈ F with Ai ∩ K = Hi , choose one maximizing |A1 ∪ · · · ∪ As+1 |. If the Ai are pairwise disjoint,
+they form an (s + 1)-matching in F , impossible. Hence two of them meet in an outside vertex u ∈         / K.
+There is a vertex v ∈ K \ (A1 ∪ · · · ∪ As+1 ). Indeed, if the traces used all N vertices of K, then the total
+number of outside positions among the Ai would be r(s + 1) − N = r(s + 1) − (rs + r − 1) = 1, which
+cannot create an outside intersection. Replace u in one edge containing it by this unused vertex v. Since
+v < u, the new edge is coordinatewise no larger than the old one, and hence belongs to F by stability.
+Replace the corresponding trace Hi by the new exact trace Hi ∪ {v}; because v was unused in all chosen
+edges, the s + 1 selected traces remain pairwise disjoint traces of G. Moreover u is still contained in another
+chosen edge, so the union of the chosen s + 1 edges strictly increases. This contradicts the maximality of
+the choice.
+
+Lemma 2.13 (Completion closure). Let H ∈ G and |H| = j < r. Then every r-set Q with H ⊆ Q ⊆ [n]
+belongs to F . In particular, every r-set T ⊆ K containing H lies in G.
+
+Proof. Since H ∈ G, there is an edge E ∈ F with exact trace E ∩ K = H. Write E = H ∪ X0 , where
+X0 ⊆ [n] \ K and |X0 | = r − j. Suppose that Q = H ∪ X is a missing r-set. By maximality, F ∪ {Q}
+contains an (s + 1)-matching using Q, so F contains s disjoint edges disjoint from Q.
+Let S = (K \ H) ∪ X0 . Its size is |S| = (N − j) + (r − j) = rs + 2r − 1 − 2j. After deleting the vertices of
+the s disjoint edges, at least 2r − 1 − 2j ≥ r − j vertices of S remain. Choose a set Y of r − j remaining
+vertices. Then H ∪ Y ⪯ H ∪ X0 . Indeed, Y ⊆ (K \ H) ∪ X0 and |Y | = |X0 |; the elements of Y ∩ X0 form
+a sublist of X0 , while every element of Y \ X0 lies in K and is smaller than every outside vertex. Thus the
+sorted list of Y is coordinatewise no larger than the sorted list of X0 . Stability gives H ∪ Y ∈ F , and this
+edge is disjoint from the s edges above, a contradiction.
+                                                                                              q
+                                                                                    P            
+Corollary 2.14 (Exact edge-count identity). With q = n − (rs + r − 1), |F | = H∈G r−|H|            .
+
+
+
+
+                                                       5
+Proof. Every edge of F has a unique exact trace H ∈ G. Conversely, Lemma 2.13 says that every outside
+completion of a trace H is present.
+
+For H ∈ G, define the spread z(H) := |{i ∈ [s] : H ∩ Ei ̸= ∅}|. For τ ∈ [s]
+                                                                                            S
+                                                                           r , put Vτ
+                                                                                      := RF ∪ i∈τ Ei and
+Gτ := {H ∈ G : H ⊆ Vτ }. The local board has size |Vτ | = (r − 1) + r2 . Define
+                                                          q
+                                                             
+                                                                     r−|H|
+                                                    ws,q (H) :=     s−z(H)
+                                                                           .                               (6)
+                                                                    r−z(H)
+
+The denominator is the number of r-subsets τ ⊆ [s] for which H ⊆ Vτ .
+                                                            P       P
+Proposition 2.15 (Weighted double count). One has |F | = τ ∈([s]) H∈Gτ ws,q (H).
+                                                                 r
+
+
+
+                                               s−z(H)
+                                                      
+Proof. A fixed trace H is contained in exactly r−z(H)   local boards. Its total contribution is therefore
+   q
+      
+ r−|H| . Sum over H ∈ G and apply Corollary 2.14.
+
+
+Let Br := R ⊔ C1 ⊔ · · · ⊔ Cr , where |R| = r − 1 and |Ci | = r. For X ⊆ Br , write z(X) := |{i : X ∩ Ci ̸= ∅}|.
+
+Definition
+        Sr   2.16
+                (Actual selected local configurations). Fix a selection rule S. A local configuration
+L ⊆ j=2 Bjr is called actual for (r, s, q), with respect to S, if it arises from some stable maximal
+property-ONE r-graph F ⊆ [n]
+                                   
+                                 r   with ν(F ) = s, n = rs + r − 1 + q, and with the selected matching
+prescribed by S, as follows. For some τ ∈ [s]
+                                               
+                                             r , there is a bijection Vτ → Br sending RF to R and sending
+the matching edges Ei , i ∈ τ , to the columns C1 , . . . , Cr in some order, such that L is the image of Gτ .
+In particular, the identification preserves the spread z. We denote the class of such configurations by
+Aact
+  r,s,q (S).
+
+          Sr     Br
+                      
+For L ⊆    j=2    j       , define the local functional
+                                                                q
+                                                                    
+                                                    X         r−|H|
+                                                                          X           1
+                                     Φs,q (L) :=             s−z(H)
+                                                                     −             s−z(T )
+                                                                                              .            (7)
+                                                     H∈L     r−z(H)     T ∈(Br )    r−z(T )
+                                                   2≤|H|<r                      r
+                                                                          T ∈L
+                                                                            /
+
+Assumption 2.17 (Finite-board input). For the selected matching rule S, there exists sboard = sboard (r)
+such that, for every t ≥ sboard , every n ∈ {nr (t)−1, nr (t)} with q := n−(rt+r−1), and every L ∈ Aact
+                                                                                                    r,t,q (S),
+one has
+                                                   Φt,q (L) ≤ 0.                                           (8)
+Definition 2.18 (Threshold bookkeeping). Let sgap (r) be any integer such that, for all t ≥ sgap (r),
+nr (t) − nr (t − 1) ≥ 2 and nr (t) − 1 ≥ r(t + 1). Lemma 2.1 guarantees that such an integer exists. Given
+the two genuine inputs above, set
+
+                              Sr := max{r, sgap (r), slink (r), sboard (r)},         sr := 2Sr − 1.
+
+The role of the factor 2 is only to make the non-ONE deletion step quantitative: if the first property-ONE
+member in the deletion chain is not covered by Frankl’s large-n theorem, then its remaining matching
+parameter is strictly larger than s/2.
+Theorem 2.19 (Precise finite-board reduction). Fix r ≥ 2, s ≥ r, n ≥ rs + r − 1, and q = n − (rs + r − 1).
+Suppose that Φs,q (L) ≤ 0 for every actual selected local configuration L ∈ Aactr,s,q (S). Then every stable
+                                       [n]
+                                          
+maximal property-ONE r-graph F ⊆ r with ν(F ) = s, when using the selected matching rule S, satisfies
+|F | ≤ rs+r−1
+              
+          r     . Conversely, if some such F violates this bound, then some L ∈ Aact
+                                                                                  r,s,q (S) violates Φs,q (L) ≤
+0.
+
+
+                                                                6
+Proof. Apply the construction above. The complete r-graph on K = [rs + r − 1] satisfies the analogous
+identity                                    
+                                  rs + r − 1       X X               1
+                                               =                   s−z(T )
+                                                                           .
+                                      r              [s]      Vτ
+                                                 τ ∈( r ) T ∈( r ) r−z(T )
+
+Subtracting this from the weighted identity of Proposition 2.15, and cancelling r-sets that are present on
+both sides, gives a sum over local values Φs,q (Gτ ). If |F | > rs+r−1
+                                                                    r  , at least one local value is positive.
+Identifying that board with Br by a partition-preserving bijection as in Definition 2.16 gives an actual
+selected local configuration violating the finite-board inequality.
+
+
+2.4    Global implication
+Proposition 2.20 (From critical property ONE to all property ONE). Assume Assumptions 2.2 and 2.17.
+Then, for every s ≥ Sr and every n ≥ r(s + 1), every stable property-ONE r-graph F ⊆ [n]
+                                                                                         
+                                                                                      r    with ν(F ) = s
+satisfies |F | ≤ Mr (n, s).
+
+Proof. At the two critical values n ∈ {nr (s) − 1, nr (s)}, choose an extremal stable property-ONE family.
+By Corollary 2.9, it may be assumed maximal. Assumption 2.17 and Theorem 2.19 give |F | ≤ ar (s). If
+n ≤ nr (s) − 2, add isolated vertices up to nr (s) − 1; this preserves stability, matching number, and property
+ONE, and the ar (s) term is the larger candidate.
+It remains to treat n ≥ nr (s) + 1. Induct on n. Let F (n̄) := {e ∈ F : n ∈      / e} and F (n) := {e \ {n} :
+                                                                  ′
+n ∈ e ∈ F }. By Lemma 2.5, applied with R0 = {1} and I = [n − 1] \ {1}, the s-matching witnessing
+property ONE can be chosen to avoid both 1 and n, since |[n − 1] \ {1}| = n − 2 ≥ rs. Hence F (n̄) contains
+an s-matching avoiding 1, while F (n̄) ⊆ F gives ν(F (n̄)) ≤ s; thus ν(F (n̄)) = s. Also F (n̄) is stable,
+as it is the deletion of the last vertex from a stable family, and it still has property ONE. By induction,
+|F (n̄)| ≤ Mr (n − 1, s) = br (n − 1, s), because n − 1 ≥ nr (s).
+We claim that ν(F (n)) ≤ s. If the link contained s + 1 pairwise disjoint (r − 1)-sets T1 , S
+                                                                                            . . . , Ts+1 , then,
+since n ≥ nr (s) + 1 ≥ r(s + 1) + 1, there are at least s + 1 unused vertices vi ∈ [n − 1] \ i Ti . Stability
+gives Ti ∪ {vi } ∈ F , producing an (s + 1)-matching.   Thus ν(F (n)) ≤ s. Assumption 2.2, with m = n − 1
+and t = s, gives |F (n)| ≤ n−1        n−1−s
+                                           
+                            r−1   −    r−1   . Therefore
+
+                       |F | = |F (n̄)| + |F (n)|
+                                                                
+                                  n−1          n−1−s          n−1    n−1−s
+                            ≤              −               +       −
+                                    r             r           r−1     r−1
+                                            
+                                n        n−s
+                            =        −           = Mr (n, s).
+                                r           r
+
+
+
+Proposition 2.21 (Critical-n localization). Assume Assumption 2.2. If EMC fails for some s ≥ Sr , then
+it has a stable maximal counterexample with n ∈ {nr (s) − 1, nr (s)}.
+
+Proof. By Corollary 2.10, take a stable maximal counterexample. If n ≤ nr (s) − 2, add isolated vertices
+up to nr (s) − 1 and then apply Corollary 2.10 again.
+Now suppose n ≥ nr (s) + 1. The link argument in the proof of Proposition          2.20 uses only stability and
+ν(F ) ≤ s, so ν(F (n)) ≤ s, and Assumption 2.2 gives |F (n)| ≤ n−1                n−1−s
+                                                                            
+                                                                         r−1 − r−1
+                                                                                          . If F (n̄) were not a
+counterexample on n − 1 vertices, then, since n − 1 ≥ nr (s), |F (n̄)| ≤ n−1       n−1−s
+                                                                                           
+                                                                            r   −     r      . Adding gives |F | ≤
+br (n, s) = Mr (n, s), a contradiction. Hence F (n̄) is again a counterexample. Iterating reduces to n = nr (s),
+and applying Corollary 2.10 at the final parameter pair gives a stable maximal counterexample.
+
+
+
+
+                                                        7
+Lemma 2.22 (Deletion chain before the first ONE graph). Let G be an ordered r-graph with ν(G) = t.
+If G has no property ONE with respect to its first vertex, then deleting the first vertex lowers the matching
+number exactly by one. Consequently, if Fq is obtained from F by deleting the first q vertices and if
+F0 , . . . , Fq−1 have no property ONE with respect to their current first vertices, then ν(Fq ) = s − q.
+
+Proof. Let v be the first vertex of G. Since G has no property ONE, G − v contains no t-matching, so
+ν(G − v) ≤ t − 1. Conversely, every maximum t-matching of G contains v; deleting the edge containing v
+leaves t − 1 disjoint edges of G − v. Hence equality holds. Iterate.
+Proposition 2.23 (Non-ONE reduction). Assume Known Input 2.3 and the property-ONE conclusion of
+Proposition 2.20. Let F be a stable maximal counterexample with n ∈ {nr (s) − 1, nr (s)} and s ≥ sr =
+2Sr − 1. Then F cannot exist.
+
+Proof. If F has property ONE, Proposition 2.20 gives a contradiction. Assume it does not. Let Fq
+be obtained from F by deleting the first q vertices, with the remaining ordered vertex set relabelled
+increasingly. Each Fq is stable: deleting an initial segment and then relabelling preserves coordinatewise
+order. Let q0 be the first q for which Fq has property ONE.
+If no such q0 < s exists, then
+                             Lemma 2.22 gives ν(Fs ) = 0. Hence no edge is disjoint from the first s
+vertices, so |F | ≤ nr − n−s
+                      
+                          r  ≤ Mr (n, s), a contradiction. Thus q0 < s. Put
+
+                                         s′ := s − q0 ,           n′ := n − q0 .
+
+By Lemma 2.22, ν(Fq0 ) = s′ .
+We first obtain the starting estimate
+                                                                              
+                                                        n − q0               n−s
+                                         |Fq0 | ≤                    −             .                          (9)
+                                                          r                   r
+There are two cases.
+If n′ ≥ (2r − 1)s′ + r, then Frankl’s JCTA large-n theorem gives
+                                       ′  ′
+                                             n − s′
+                                                                     
+                                       n                  n − q0     n−s
+                             |Fq0 | ≤     −           =           −        ,
+                                       r        r           r         r
+
+which is (9).
+Assume now that n′ < (2r − 1)s′ + r. Since n′ = n − s + s′ , this gives n − s − r < (2r − 2)s′ . At the critical
+values under consideration we have n ≥ r(s + 1), hence (r − 1)s ≤ n − s − r < (2r − 2)s′ . Therefore
+                                                                 s
+                                                         s′ >      .                                         (10)
+                                                                 2
+Because s ≥ 2Sr −1, the integer s′ is at least Sr . Moreover, by the admissibility condition in Definition 2.18,
+nr (s) − 1 ≥ r(s + 1); since n ∈ {nr (s) − 1, nr (s)}, we have n − rs − r ≥ 0. Hence
+
+                       n′ − r(s′ + 1) = n − rs − r + (r − 1)q0 ≥ (r − 1)q0 ≥ r − 1 > 0,
+
+where q0 ≥ 1 because F itself has no property ONE. Thus Proposition 2.20 applies to Fq0 after relabelling
+its remaining ordered vertex set increasingly.
+It remains in this second case to check that (n′ , s′ ) is on the cover side. Since s′ ≥ Sr , the gap condition in
+Definition 2.18 applies to all parameters between s′ and s. For 1 ≤ q ≤ q0 , repeated use of nr (u)−nr (u−1) ≥
+2 gives nr (s) ≥ nr (s−q)+2q. Together with n ≥ nr (s)−1, this yields n−q ≥ nr (s)−1−q ≥ nr (s−q)+q−1 ≥
+nr (s − q). In particular n′ = n − q0 ≥ nr (s′ ). Hence Proposition 2.20 gives
+                                                 ′  ′
+                                                         n − s′
+                                                                                     
+                                                 n                    n − q0       n−s
+                       |Fq0 | ≤ Mr (n′ , s′ ) =     −             =            −          ,
+                                                 r          r            r            r
+
+                                                            8
+which is again (9).
+Now run inverse induction. If |Fq | ≤ n−q
+                                           n−s
+                                       r   − r , then the edges of Fq−1 not in Fq all contain the restored
+                              n−q
+                                  
+vertex, so there are at most r−1 of them. Therefore
+                                                           
+                                 n−q     n−q    n−s     n−q+1   n−s
+                      |Fq−1 | ≤        +      −      =        −      .
+                                  r−1     r      r        r      r
+
+Iterating from q = q0 to q = 0 gives |F | ≤ br (n, s) ≤ Mr (n, s), a contradiction.
+Theorem 2.24 (Finite-board criterion with explicit global inputs). Fix r ≥ 2. Assume the link-bound input
+and the finite-board input, namely Assumptions 2.2 and 2.17, for some selected matching rule S. Together
+with Lemma 2.1 and Frankl’s large-n theorem, these assumptions imply EMC for r-uniform hypergraphs
+for every s ≥ sr = 2Sr − 1 and every n ≥ r(s + 1).
+
+Proof. If EMC failed for some s ≥ sr , Proposition 2.21 would produce a stable maximal counterexample
+at n ∈ {nr (s) − 1, nr (s)}. The finite-board input and Theorem 2.19 give the critical property-ONE bound,
+and Proposition 2.20 gives all property-ONE bounds. Finally Proposition 2.23 rules out the non-ONE
+case.
+
+
+3    The two inputs for r = 4
+For the rest of the paper we specialize to r = 4. Put
+                                               
+             4s + 3                     n      n−s
+  a4 (s) :=           ,   b4 (n, s) :=     −          ,        n4 (s) := min{n ≥ 4(s + 1) : b4 (n, s) ≥ a4 (s)}.
+                4                       4        4
+
+Let ρ = ρ4 be the root of ρ4 − (ρ − 1)4 = 256. Thus ρ = 4.479166856 . . ..
+Lemma 3.1 (Explicit critical estimates for r = 4). For every s ≥ 3481,
+                                                     
+                                   25 n4 (s) − 4s − 3 ≤ 12(s − 3).                                           (11)
+
+Consequently, if n ∈ {n4 (s) − 1, n4 (s)} and q = n − (4s + 3), then all weight estimates used in Section 8
+hold. Moreover, for every s ≥ 3481,
+
+                              n4 (s) − n4 (s − 1) ≥ 2,       n4 (s) − 1 ≥ 4(s + 1).                          (12)
+
+Thus in the notation of Definition 2.18 one may take sgap (4) ≤ 3481.
+
+Proof. The proof is an exact residue-class check, included here as a finite certificate. Let
+                                                              
+                                                     112s + 39
+                                          m(s) :=                .
+                                                        25
+
+If                                                          
+                                      m(s)    m(s) − s    4s + 3
+                                           −            ≥          ,
+                                       4         4           4
+then n4 (s) ≤ m(s), which is exactly (11). For each residue a ∈ {0, 1, . . . , 24}, substitute s = a + 25u
+into the last displayed difference. This gives an integer-valued polynomial in u, equivalently a rational
+polynomial taking integer values at integer u. The shifted coefficient lists certifying the tails are verified by
+
+
+
+
+                                                         9
+the ancillary exact checker threshold/verify_r4_explicit_threshold.py; the first valid representatives
+in each residue class are:
+                                a     0      1     2      3      4
+                               sa 3025     2401 2977    2353 2929
+                                a     5      6     7      8      9
+                               sa 3505     2881 3457    2833 3409
+                                a    10     11    12     13     14
+                               sa 2785     3361 2737    3313 2689
+                                a    15     16    17     18     19
+                               sa 3265     2641 3217    2593 3169
+                                a    20     21    22     23     24
+                               sa 2545     3121 2497    3073 2449
+For every a, the corresponding polynomial is nonnegative for all s ≡ a (mod 25) with s ≥ sa . Since the
+last failure over all residues is s = 3480, inequality (11) holds for every s ≥ 3481. The same checker also
+verifies the admissibility identity below, the gap subtraction formula and monotonicity in N , the displayed
+gap lower bound, and the weight monotonicity and estimates deduced from q/(s − 3) ≤ 12/25 in Section 8.
+The admissibility inequality n4 (s) − 1 ≥ 4(s + 1) holds for every s ≥ 2, because
+
+                                                            s(s − 1)(81s2 + 95s + 26)
+                                               
+                   4s + 3         4s + 4      3s + 4
+                            −             −              =                            > 0.
+                      4              4           4                     24
+
+Thus n4 (s) > 4s + 4.
+It remains to record the gap. Put
+                                                             
+                                             N    N −s     4s + 3
+                                 ∆s (N ) :=    −        −           .
+                                             4      4         4
+
+For N = n4 (s), a direct subtraction gives
+
+  6 ∆s−1 (N − 2) − ∆s (N ) = −N 3 − 3N 2 s + 9N 2 + 3N s2 + 12N s − 26N + 255s3 − 102s2 + 45s + 18.
+                            
+
+
+The right-hand side is decreasing as a function of N throughout the interval N ≥ 4s + 4. Using N =
+n4 (s) ≤ (112s + 39)/25, it is therefore at least
+
+                                1848647s3 + 18927s2 + 516094s − 69594
+                                                                      >0
+                                                15625
+for every s ≥ 1. Since ∆s (n4 (s)) ≥ 0, we have ∆s−1 (n4 (s) − 2) > 0, hence n4 (s − 1) ≤ n4 (s) − 2.
+
+Proposition 3.2 (The link-bound input for r = 4). Assumption 2.2 holds for r = 4 with slink (4) = 1.
+
+Proof. Here the link is 3-uniform. The full 3-uniform Erdős Matching Conjecture is known: if J ⊆ [m]
+                                                                                                          
+                                3t+2 m                                                               3
+                                      , 3 − m−t
+                                                  
+and ν(J) ≤ t, then |J| ≤ max       3            3    . It remains only to note that the parameters required
+by Assumption 2.2 are already on the 3-uniform cover side. Since n4 (t) ≥ 4(t + 1) by definition and
+
+                                                               t(5t2 + 18t + 10)
+                                                    
+                          4t + 4       3t + 4       3t + 2
+                                   −            −            =                   >0
+                             3            3            3               3
+
+for every t ≥ 1, we have n3 (t)
+                               ≤ 4t + 4 ≤ n4 (t). The 3-uniform cover term is increasing in m, since its
+first difference is m
+                    2 −   m−t
+                           2     > 0. Thus, for every m ≥ n4 (t), the cover term is the larger term in the
+3-uniform theorem, and |J| ≤ m         m−t
+                                         
+                                 3 −    3   .
+
+
+
+
+                                                      10
+For the finite-board input we use the following selection rule. Given a stable maximal property-ONE
+4-graph F with ν(F ) = s, choose an s-matching avoiding 1 and contained in K = [4s + 3] such that
+the residual pair outside vertex 1 is lexicographically minimal. The set of such compressed matchings is
+nonempty by Lemma 2.5 and finite; hence one may choose a matching whose residual pair outside 1 is
+lexicographically minimal.
+Theorem 3.3 (The finite-board input for r = 4). For every s ≥ 3481, every n ∈ {n4 (s) − 1, n4 (s)}
+with q := n − (4s + 3), and every actual local configuration L ∈ Aact
+                                                                  4,s,q (S) arising from the lexicographic
+residual-pair selection rule above, one has Φs,q (L) ≤ 0.
+
+The proof is given in Sections 4–8.
+
+
+4    The 19-board setup
+
+Let F ⊆ [n]
+               
+            4    be stable and maximal, have property ONE, and satisfy ν(F ) = s. Put K := [4s + 3] and
+q := n − 4s − 3. Choose, according to the rule above, an s-matching E1 , . . . , Es avoiding vertex 1 and
+containedSin K. For each i, write Ei = {ei,0 < ei,1 < ei,2 < ei,3 } and put ai := ei,0 and bi := ei,1 . Write
+             s
+D := K \ i=1 Ei = {1, δ1 , δ2 } with δ1 < δ2 , where the pair {δ1 , δ2 } is lexicographically minimal among all
+compressed property-ONE s-matchings. Lexicographic order on residual pairs always means lexicographic
+                                                                                                     [s]
+                                                                                                         
+                           S increasingly. Let F0 := {e ∩ K : e ∈ F } be the trace family. For τ ∈ 4 , define
+order after writing the pair
+the 19-board Vτ := D ∪ i∈τ Ei . For a trace H ∈ F0 , its spread z(H) is the number of matching edges Ei
+met by H. The weight is
+                                                            q
+                                                               
+                                                          4−|H|
+                                              w(H) :=    s−z(H)
+                                                                .                                          (13)
+                                                         4−z(H)
+
+
+The general lemmas above imply that all traces have size at least two, that F0 has matching number s as a
+mixed-size family, and that every 4-set containing a present trace of size two or three is an edge of F . The
+seed statement below requires q ≥ 1. This is exactly the situation in the critical applications: if s ≥ 3481
+and n ∈ {n4 (s) − 1, n4 (s)}, then Lemma 3.1 gives n ≥ 4(s + 1) and hence q = n − (4s + 3) ≥ 1.
+
+Lemma 4.1 (Seeds). Assume q ≥ 1. For every i, D ∪ {ai } and D ∪ {bi } belong to F0 .
+
+Proof. If bi > δ2 , then the increasing list of D ∪ {bi } is coordinatewise no larger than that of Ei , because
+
+                            1 ≤ ai ,     δ1 < bi ,    δ2 < bi < ei,2 ,    bi < ei,3 .
+
+Thus stability gives D ∪ {bi } ∈ F0 .
+Assume bi < δ2 . We first show that {1, δ1 , bi } ∈ F0 . Suppose not. Since q ≥ 1, choose an outside vertex
+x ∈ / K. Then Q = {1, δ1 , bi , x} is not an edge. By maximality, F ∪ {Q} contains an (s + 1)-matching
+using Q, so F contains an s-matching disjoint from {1, δ1 , bi }. By Lemma 2.5, with R0 = {1, δ1 , bi } and
+I ′ = K \ R0 , this matching may be chosen inside K \ R0 . Since |K \ R0 | = 4s, the compressed s-matching
+uses all vertices of K \ R0 , leaving, after sorting, the residual pair {min(δ1 , bi ), max(δ1 , bi )} outside 1,
+lexicographically smaller than {δ1 , δ2 }, a contradiction. Therefore {1, δ1 , bi } ∈ F0 .
+By completion closure, every 4-set containing this trace is an edge; in particular D ∪ {bi } ∈ F0 . Finally
+D ∪ {ai } ⪯ D ∪ {bi }, so stability gives D ∪ {ai } ∈ F0 .
+Lemma 4.2 (Local matching principle). No 19-board contains five pairwise disjoint traces from F0 .
+
+Proof. Five disjoint traces in Vτ , together with the s − 4 matching edges outside the four selected columns,
+would give s + 1 pairwise disjoint members of the mixed trace family F0 , contradicting Lemma 2.12.
+
+
+
+
+                                                       11
+5     Layer 1: wide triples and wide pairs
+Fix a 19-board Vτ . Write the four vertices of a selected column Ei as 0, 1, 2, 3, where 0 denotes ai and 1
+denotes bi . A wide quad is a point of [4]4 , one value in each of the four selected columns. A wide triple is
+a point of [4]3 on a fixed three-column support, and a wide pair is a point of [4]2 on a fixed two-column
+support. Let M ⊆ [4]4 be the set of missing wide quads. Stability says that the present wide quads form a
+down-set: replacing a selected-column value by a smaller value in the same column gives, after sorting, a
+4-set coordinatewise no larger than the original one. Hence M is an up-set. For each pair support J ∈ [4]        2 ,
+                                                                                     [4]
+                                                                                        
+let PJ ⊆ [4]2 be the set of present wide F
+                                         pairs on J; for each tripleF    support I ∈  3   , let TI ⊆ [4]3
+                                                                                                          be the set
+of present wide triples on I. Set P2 := J∈([4]) PJ and T3 := I∈([4]) TI , with supports remembered. The
+                                                 2                        3
+first local inequality is
+                                           12          144
+                                               |T3 | +     |P2 | ≤ |M |.                                       (14)
+                                           25          625
+Equivalently, after clearing denominators,
+
+                                           300|T3 | + 144|P2 | ≤ 625|M |.                                        (15)
+
+The proof splits according to the upper cube U = {1, 2, 3}4 .
+
+
+5.1    Ferrers bounds for pairs and triples
+For a fixed pair support {i, j}, the present pair values form a Ferrers down-set in [4]2 . The next lemma is
+the exact finite obstruction used for such down-sets.
+Lemma 5.1 (Pair Ferrers). For every pair support {i, j}, the present pair values form a Ferrers down-set
+in [4]2 of size at most 4. Consequently |P2 | ≤ 24.
+
+Proof. The Ferrers property follows from the same coordinatewise stability observation: replacing a pair
+value or a triple value by a smaller value in the same selected column gives, after sorting the corresponding
+edge, a coordinatewise no-larger edge. Explicitly, a forbidden pair obstruction consists of two present values
+a = (a1 , a2 ), b = (b1 , b2 ) ∈ [4]2 on the same support such that a1 ̸= b1 , a2 ̸= b2 , and {aj , bj } ̸= {0, 1} for
+some j ∈ {1, 2}. The last condition means that a low value 0 or 1 is available in one support column.
+Together with the corresponding seed from Lemma 4.1 and the two full columns outside the support, such
+an obstruction gives five disjoint traces, contradicting Lemma 4.2.
+The remaining assertion is a finite enumeration. A Ferrers down-set in [4]2 is represented by a non-
+increasing height vector 4 ≥ h0 ≥ h1 ≥ h2 ≥ h3 ≥ 0. The checker pair_ferrers/verify_pair_
+ferrers.py enumerates all 70 such height vectors, tests the forbidden pair obstructions exactly, and re-
+ports pair ferrers legal downsets: 10 and pair ferrers max legal size: 4. Thus every genuine
+pair support contributes at most four present pairs. There are six pair supports.
+
+A 3-matching a, b, c ∈ [4]3 is called bad if, in every coordinate, the three values aj , bj , cj are pairwise
+distinct, and in at least one coordinate the unused value in {0, 1, 2, 3} \ {aj , bj , cj } is 0 or 1.
+Lemma 5.2 (Triple Ferrers certificate). Let T ⊆ [4]3 be a down-set containing no bad 3-matching. Then
+|T | ≤ 32. Consequently |T3 | ≤ 128.
+
+Proof. A genuine board cannot contain a bad 3-matching of wide triples. Indeed, if, in one of the three
+support columns, the three values used by the triples omit 0 or omit 1, then the corresponding seed in that
+column is disjoint from all three triples; the fourth full column is also disjoint from them. This gives five
+disjoint traces, contradicting Lemma 4.2.
+The finite assertion is checked by triple_ferrers/verify_triple_ferrers.py. A Ferrers down-set in
+[4]3 is represented by a monotone 4 × 4 height matrix. The script enumerates all 232848 such matrices,
+
+
+                                                         12
+enumerates all 2016 bad 3-matchings, reduces their down-closures to the inclusion-minimal forbidden list,
+and checks every Ferrers down-set against this list. The output reports 26893 legal down-sets, maximum
+legal size 32, and four equality diagrams. Therefore each triple support contributes at most 32 present
+triples, and there are four triple supports.
+
+The Ferrers bounds alone settle the case of many missing wide quads:
+                           12         144         12         144
+                              |T3 | +     |P2 | ≤    · 128 +     · 24 = 66.9696 < 67.
+                           25         625         25         625
+Hence (14) holds whenever |M | ≥ 67.
+
+
+5.2    The upper cube and the easy upper-matching branch
+Let U = {1, 2, 3}4 and MU = M ∩ U . The complement C = U \ MU is the present part of the upper cube.
+Lemma 5.3 (Upper matching branch). If C contains three pairwise disjoint present upper quads, then
+T3 = P2 = 0.
+
+Proof. Let Q1 , Q2 , Q3 ∈ {1, 2, 3}4 be disjoint present upper quads, and take any wide pair or triple H.
+Choose a column j ∈   / supp(H); the seed D ∪ {aj } is disjoint from H. In each coordinate the three upper
+quads use the values 1, 2, 3. There is at most one forbidden value in that coordinate: either the value used
+by H, or the seed value 0 in coordinate j. The following table chooses three distinct values, coordinatewise
+no larger than 1, 2, 3, avoiding the forbidden value:
+
+                                     forbidden f    u=1     u=2     u=3
+                                          0          1       2       3
+                                          1          0       2       3
+                                          2          1       0       3
+                                          3          1       2       0
+
+Applying this coordinatewise gives three disjoint quads Q′1 , Q′2 , Q′3 with Q′i ⪯ Qi , all avoiding both H
+and the seed. Stability gives Q′i ∈ F0 . Thus H, the seed, and the three Q′i form five disjoint traces,
+contradicting Lemma 4.2. Therefore no such H exists.
+
+It remains to consider the case |M | ≤ 66, C has no upper 3-matching, and either MU contains a full
+top-star or it does not.
+
+
+5.3    The top-star branch: an exact Farkas certificate
+A full top-star in direction 4 is S4+ := {(x1 , x2 , x3 , 3) : xi ∈ {1, 2, 3}}. By permuting the four selected
+columns, we may assume the full top-star is in direction 4, so S4+ ⊆ M . Let C top := {x ∈ [4]3 : (x, 3) ∈ / M}
+be the present part of the top slice, and let N := M ∩ ([4]3 × {0, 1, 2}) be the lower missing family. If
+c = |C top | and ℓ = |N |, then |M | = 64 − c + ℓ. Since the whole upper top-star is missing, C top is contained
+in Z := {x ∈ [4]3 : some coordinate of x is 0}, so c ≤ 37. In the range |M | ≤ 66 this gives ℓ ≤ c + 2.
+Lemma 5.4 (Top-star Farkas certificate). In the top-star branch, if |M | ≤ 66, then 300|T3 | + 144|P2 | ≤
+625|M |.
+
+Proof. Assume |M | ≤ 66. The checker constructs a labelled linear relaxation for true top-star boards. The
+variables are yx := 1x∈C top , mx,t := 1(x,t)∈N , tH := 1H∈T3 , and pH := 1H∈P2 . All variables are constrained
+by 0 ≤ xi ≤ 1. The relaxation contains only necessary inequalities for a genuine board: C top is a down-set
+contained in Z; N is a lower up-set; ℓ ≤ c + 2; top-present and lower-missing variables are compatible;
+
+
+                                                      13
+closure constraints hold for present small traces; the pair Ferrers and bad-triple cuts from Lemmas 5.1
+and 5.2 hold; residual seed cuts hold; each pair support has size at most 4; each triple support has size
+at most 32; and the deterministic ideal-forcing rows specified in Appendix A.1, item (T10), are imposed.
+Every true top-star counterexample satisfies all these constraints. More explicitly, the checker regenerates
+the following row types from the definition of the branch: upper-cube support rows and down-set rows for
+C top , compatibility rows between C top and N , lower up-set rows for N , the budget row ℓ ≤ c + 2, trace
+down-set rows, closure rows for pair and triple traces, pair-obstruction rows, bad-triple rows, diagonal
+residual seed rows, aggregate Ferrers rows on each support, and branch rows fixing |C top | = c and, when
+present, |N | = ℓ. The ideal-forcing rows are deterministic cardinality consequences: in the upper cube, a
+point whose principal down-set has size greater than c is forced absent, while a point whose principal up-set
+is too large to avoid at size c is forced present; the same principal-up-set/principal-down-set test is applied
+to N when ℓ is fixed. The certificate file supplies rational multipliers only for rows of these regenerated
+types.
+The soundness of all regenerated row types is recorded in Appendix A.1, items (T1)–(T10): stability gives
+the down-set rows, Lemma 2.13 gives the closure rows, Lemmas 5.1 and 5.2 give the Ferrers obstruction
+rows, residual seed rows come from Lemma 4.1 and Lemma 4.2, and the ideal-forcing rows are deterministic
+cardinality consequences.
+The target inequality is equivalent to
+                               dT x := 625c − 625ℓ + 300|T3 | + 144|P2 | ≤ 40000,
+because 625|M | = 625(64−c+ℓ). Write the regenerated constraints, excluding upper bounds, as Ax ≤ b. A
+common-denominator Farkas certificate for a branch consists of nonnegative multipliers λ, µ and a positive
+integer denominator D such that
+                                   AT λ + µ ≥ Dd,      bT λ + 1T µ ≤ 40000D,
+where µ is attached to the upper bounds xi ≤ 1. Dividing by D gives the desired bound for every feasible
+point. The verifier clears the common denominator, so the final check is an exact integer comparison; no
+floating-point LP optimum is part of the proof.
+The proof-critical files are
+
+                        topstar/topstar_final_lp_branch_verifier.py and
+                     topstar/verify_topstar_common_den_certificates_fast.py,
+
+and the certificate data file is
+
+                  topstar/topstar_common_den_farkas_certificates_complete.json.
+
+There are 63 branches: one for each c ∈ {0, . . . , 37} \ {23} and, in the exceptional case c = 23, one for each
+ℓ = 0, . . . , 25. The checker rebuilds the branch relaxation and verifies every listed common-denominator
+Farkas certificate. The recorded run checks all 63 branches and reports all ok=True in each range, with
+strictly positive normalized right-hand-side gaps. Hence no genuine top-star board with |M | ≤ 66 violates
+(15).
+
+
+5.4    The no-top-star branch: exact up-set searches
+The complementary branch assumes that C = U \ MU has no upper 3-matching and that MU contains
+no full top-star. This branch is handled by a finite theorem over up-sets in [4]4 . The finite objects are an
+up-set M ⊆ [4]4 of missing wide quads, pair-support down-sets PJ ⊆ [4]2 , and triple-support down-sets
+TI ⊆ [4]3 . Closure conditions and residual-seed hitting constraints encode the local matching obstruction.
+The theorem and its soundness proof are stated in Section 9; here we record its role in the layer-1 proof.
+Thus this subsection is a deferred certificate invocation: the layer-1 proof uses the statement below, and
+its finite verification and encoding soundness are completed in Section 9.
+
+
+                                                      14
+Certificate 5.5 (No-top-star residual certificate). Assume that the present upper cube U \ MU contains no
+upper 3-matching and that MU contains no full top-star. Then every genuine no-top-star 19-board satisfies
+
+                                        300|T3 | + 144|P2 | ≤ 625|M |.                                  (16)
+
+Proof. The finite statement is Theorem 9.2; the proof that every genuine board in this branch satisfies the
+finite hypotheses is Theorem 9.1. The fast proof-critical checker is
+
+                  no_topstar_exact/verify_no_topstar_exact_threshold_fast.py.
+
+It checks the recorded JSON certificates, archived exact branch-and-bound transcripts, and all inte-
+ger/rational arithmetic. The publication-grade verifier is
+
+             no_topstar_exact/verify_no_topstar_exact_threshold_certificate.py.
+
+It recompiles and reruns two deterministic C++ branch-and-bound solvers from source:
+
+                   no_topstar_exact/exact_no_topstar_hitting_solver.cpp and
+                     no_topstar_exact/exact_no_topstar_pattern_solver.cpp.
+
+Both modes use up-sets generated by principal up-closures in [4]4 ; hitting constraints are residual seed
+matchings, and all arithmetic is performed with integer bit masks. A successful full run prints the following
+audit markers:
+
+                             trace threshold checks=30
+                             critical pattern checks=9
+                             rectangle cases=72
+                             exact no topstar threshold certificate ok=True
+
+The upper-blocker subroutine prints exact upper blocker branch bound ok=True.
+
+
+5.5    Conclusion of layer 1
+Proposition 5.6 (Layer 1). On every genuine 19-board, 12         144
+                                                      25 |T3 | + 625 |P2 | ≤ |M |.
+
+
+Proof. If |M | ≥ 67, the Ferrers bounds prove the inequality. Assume |M | ≤ 66. If the present upper
+cube contains an upper 3-matching, Lemma 5.3 gives T3 = P2 = 0. If not, then we are in one of the two
+remaining branches. If MU contains a full top-star, Lemma 5.4 applies. If MU contains no full top-star,
+Certificate 5.5 applies. In both cases (15) holds, and division by 625 gives the stated inequality.
+
+
+6     Layer 2: the 15-board inequality
+                                                               S
+For a three-column subset σ ⊆ τ , define the 15-board Vσ := D ∪ i∈σ Ei . Let Tσ be the number of present
+triples of spread 2 in this 15-board, Pσ the number of present pairs of spread 1, and Mσ the number of
+missing quads of spread 3. The target is
+                                           12      144
+                                              Tσ +     Pσ ≤ Mσ ,                                        (17)
+                                           25      625
+or equivalently
+                                         300Tσ + 144Pσ ≤ 625Mσ .                                        (18)
+
+
+
+
+                                                     15
+The semantic audit for the 15-board certificate regenerates both residual and closure cuts. The particular
+displayed quotient dual below uses only residual cuts; closure rows are included in the audit for completeness
+and for consistency with the full 15-board relaxation. The fixed present quads are the three full columns
+and the six seeds D ∪ {ai }, D ∪ {bi } for i ∈ σ. The variable quads are the spread-3 quads; their missing
+indicators are denoted by mQ .
+Lemma 6.1 (15-board residual and closure rows). Let H be a spread-2 triple or a spread-1 pair in Vσ , and
+let xH be its present-trace indicator. Let R = (R1 , R2 , R3 ) be a triple of pairwise disjoint quads in the fixed
+family together with variable spread-3 quads, each disjoint from H. If V (R) is the set of variable quads in
+R, then every genuine 15-board arising as a three-column subboard of a genuine 19-board satisfies
+                                                      X
+                                              xH ≤            mQ .                                            (19)
+                                                      Q∈V (R)
+
+It also satisfies the closure rows
+                                                 xH + m Q ≤ 1                                                (20)
+for every spread-3 quad Q ⊃ H.
+
+Proof. All fixed quads are present: the full columns are matching edges and the seed quads are present by
+Lemma 4.1. If xH = 1 and all variable quads in V (R) were present, then H, R1 , R2 , R3 , together with the
+fourth full column of the ambient 19-board, would give five disjoint traces, contradicting Lemma 4.2. This
+proves (19). The closure rows (20) are exactly Lemma 2.13 applied to a present small trace H and a quad
+Q extending it.
+Proposition 6.2 (15-board certificate). For every genuine 15-board arising as a three-column subboard of
+                    12
+a genuine 19-board, 25 Tσ + 144
+                            625 Pσ ≤ Mσ . Equivalently, (18) holds.
+
+
+Proof. The certificate is a quotient dual certificate. The group S3 (D) × S3 (columns) × (S2 × S2 )3 , which
+has order 2304, is used only to quotient the invariant residual relaxation; no symmetry of the actual board
+is assumed. This group preserves the fixed present family: full columns are permuted among full columns,
+the two seed quads D ∪ {col0 } and D ∪ {col1 } in each column are exchanged by the low flip, and the high
+flip 2 ↔ 3 does not affect the seed set. For any labelled feasible assignment, averaging over this group
+preserves feasibility for the residual and closure relaxation, because these rows are regenerated in complete
+group-invariant labelled families, and it preserves the invariant objective 300Tσ + 144Pσ − 625Mσ . Thus
+it suffices to certify the inequality on orbit-average variables. The quotient has 13 missing-quad orbits, 9
+triple orbits, and 5 pair orbits. The certificate summary file
+
+                         board15/15board_quotient_certificate_summary.txt
+                                                                                                  P
+lists 20 quotient residual rows with nonnegative integer multipliers. The rows have the form xH ≤ Q mQ ,
+after quotienting. Each quotient row is the group-average image of labelled residual rows from Lemma 6.1,
+and a nonnegative combination of the 20 rows coefficient-wise dominates the objective 300Tσ + 144Pσ −
+625Mσ . Thus, if every listed quotient row is valid for genuine boards and the arithmetic domination holds,
+the inequality follows.
+The proof-critical semantic checker is
+
+                     board15/rebuild_15board_certificate_from_definition.py.
+
+It does not merely read the 20 rows. It rebuilds the labelled 15-board variables from the definition,
+constructs the symmetry group, verifies the orbit partition, regenerates all labelled residual witnesses from
+
+
+
+
+                                                       16
+Lemma 6.1, and regenerates all closure rows (20). In the released certificate it verifies
+
+                                     labelled missing variables     480
+                                      labelled triple variables     288
+                                       labelled pair variables       54
+                                    labelled residual witnesses   264402
+                                        labelled closure rows      2016
+                                       quotient residual rows       206
+                                        quotient closure rows        33
+
+and reports that the 20 listed quotient rows are among the regenerated residual rows. It then repeats
+the quotient dual arithmetic and reports minimum slack 0 in the safe direction. Therefore the listed
+nonnegative integer combination proves (18) for every labelled 15-board. The closure rows are regenerated
+as part of the semantic audit; the displayed 20-row quotient dual itself uses only residual rows.
+Corollary 6.3 (Layer 2). On every 19-board, 24       432
+                                             25 T2 + 625 P1 ≤ M3 , where T2 counts present triples of spread
+2, P1 counts present pairs of spread 1, and M3 counts missing quads of spread 3.
+
+Proof. Sum Proposition 6.2 over the four three-column subboards inside the 19-board. A spread-2 triple
+is seen in two 15-boards, a spread-1 pair is seen in three, and a spread-3 missing quad is seen in exactly
+one.
+
+
+7     Layer 3: the 11-board inequality
+For a two-column subset, define the 11-board D ∪ Ei ∪ Ej . Let T (11) count present triples of spread 1, let
+P (11) count pairs of spread 0, and let M (11) count missing quads of spread 2. The target inequality is
+                                       12 (11) 144 (11)
+                                          T   +     P   ≤ M (11) ,                                      (21)
+                                       25       625
+or, after clearing denominators,
+                                     300T (11) + 144P (11) ≤ 625M (11) .                                (22)
+Proposition 7.1 (11-board certificate). For every genuine 11-board, (21) holds.
+
+Proof.
+P       The 11-board certificate is a residual-cut dual certificate. Each residual cut has the form xH ≤
+   Q∈S(H) mQ , where H is a spread-1 triple or a spread-0 pair, and S(H) is a set of spread-2 quads arising
+from a local residual matching obstruction. The residual witness listed in the certificate has two quads: a
+Q-marked quad is a spread-2 variable quad appearing on the right-hand side, while an F -marked quad is
+one of the fixed present traces, namely a full column or one of the low seed quads D ∪ {ai }, D ∪ {bi }. If H
+is present and all Q-marked residual quads are present, then H, the two residual quads listed in the cut,
+and the two full columns outside the 11-board are five pairwise disjoint traces in the ambient 19-board.
+Thus every such row is valid for genuine boards.
+The certificate file is
+
+                          board11/dual_11board_certificate_corrected.txt.
+
+It lists 84 residual cuts with nonnegative integer weights. The proof-critical checker
+
+                             board11/rebuild_11board_residual_cuts.py
+
+
+
+
+                                                     17
+verifies the local witness attached to each listed cut and then verifies the dual arithmetic. In the released
+certificate the checker reports
+
+                                         listed residual cuts             84
+                                      spread-1 triple variables           68
+                                       spread-0 pair variables             3
+                                  spread-2 missing-quad variables        260
+                                       maximum missing load              625.
+
+After multiplying each valid residual cut by its listed weight and summing, every required spread-1 triple
+receives coefficient exactly 300, every required spread-0 pair receives coefficient exactly 144, and every
+spread-2 missing quad receives load at most 625. This proves (22).
+Corollary 7.2 (Layer 3). On every 19-board, 36       864
+                                             25 T1 + 625 P0 ≤ M2 , where T1 counts present triples of spread
+1, P0 counts present pairs of spread 0, and M2 counts missing quads of spread 2.
+
+Proof. Sum Proposition 7.1 over the six two-column subboards inside the 19-board. A spread-1 triple is
+seen in three 11-boards, a spread-0 pair is seen in six, and a spread-2 missing quad is seen in exactly
+one.
+
+
+8    The weighted 19-board inequality and the r = 4 finite-board
+     input
+For a fixed 19-board, let Tz , Pz , and Mz be the numbers of present triples, present pairs, and missing
+quads of spread z, respectively. The three layer inequalities are
+                                           12      144
+                                              T3 +     P2 ≤ M4 ,                                        (23)
+                                           25      625
+                                           24      432
+                                              T2 +     P1 ≤ M3 ,                                        (24)
+                                           25      625
+                                           36      864
+                                              T1 +     P0 ≤ M2 .                                        (25)
+                                           25      625
+Also T0 = 0, because the only spread-0 triple is D, and D together with the four full columns would be
+five disjoint traces.
+                                                                                    q
+At the critical values n ∈ {n4 (s) − 1, n4 (s)} and for s ≥ 3481, Lemma 3.1 gives s−3  ≤ 12
+                                                                                         25 . All quadratic
+                                                                  12
+estimates below follow from this bound: for example q − 1 ≤ 25 (s − 2) and q − 1 ≤ 12   25 (s − 1), and the
+remaining denominators are still larger. The relevant weights satisfy
+                                                                                  q
+                                                                                    
+                                  q      12                                       2      144
+                      w(T3 ) =        ≤      ,                        w(P2 ) = s−2    ≤      ,
+                                s−3      25                                       2
+                                                                                         625
+                               2q   24                                    3q(q − 1)     432
+              (s − 3)w(T2 ) =     ≤    ,             (s − 3)w(P1 ) =                  ≤     ,
+                              s−2   25                                 (s − 1)(s − 2)   625
+                                                            
+               s−2             3q   36                    s−2               6q(q − 1)   864
+                     w(T1 ) =     ≤    ,                         w(P0 ) =             ≤     .
+                2             s−1   25                      2                s(s − 1)   625
+
+The matching missing-quad weights are 1, 1/(s − 3), and 1/ s−2
+                                                               
+                                                             2   for spreads 4, 3, and 2.
+Theorem 8.1 (Weighted 19-board inequality). For every actual 19-board Vτ at the critical parameter
+pairs,                          X                   X
+                                        w(H) ≤             w(Q).
+                                  H∈F0 , H⊆Vτ             Q⊆Vτ , |Q|=4
+                                    |H|=2,3                 Q∈F/ 0
+
+
+                                                     18
+Proof. For spread-3 triples and spread-2 pairs, use (23); missing spread-4 quads have weight 1. For spread-2
+triples and spread-1 pairs, divide (24) by s − 3 and use the displayed estimates. For spread-1 triples and
+spread-0 pairs, divide (25) by s−2
+                                   
+                                 2   and use the displayed estimates. Finally T0 = 0, and missing quads of
+spread 0 or 1 only add nonnegative terms to the right-hand side.
+
+Proof of Theorem 3.3. Identify an actual local configuration L with its 19-board trace family. The left-
+hand side of Φs,q (L) is exactly the weighted sum of present traces of sizes two and three, and the negative
+summand in Φs,q (L) is exactly the weighted sum of missing quads. Theorem 8.1 gives Φs,q (L) ≤ 0.
+
+Proof of Theorem 1.1. For r = 4, the link input holds with slink (4) = 1 by Proposition 3.2. The explicit
+critical estimate and gap hold for all s ≥ 3481 by Lemma 3.1, and the finite-board input holds for all
+s ≥ 3481 by Theorem 3.3. Thus we may take S4 = 3481 in Definition 2.18, and the global threshold is
+
+                                           s4 := 2S4 − 1 = 6961.
+
+The general finite-board criterion, Theorem 2.24, proves the 4-uniform EMC for every s ≥ 6961 and every
+n ≥ 4(s + 1).
+
+
+9     Certificate bundle and exact verification architecture
+This section records the proof-critical finite statements verified by the ancillary certificate bundle. The
+certificate files are data, and the checkers are deterministic verifiers that regenerate finite universes or
+check integer and rational certificate arithmetic. The guiding principle is that a numerical optimizer is not
+accepted as a proof object. The proof object is one of the following exact finite certificates:
+
+ (a) an exhaustive enumeration of a finite down-set universe;
+ (b) an exact branch-and-bound proof that no up-set satisfying specified hitting constraints exists below
+     a target size;
+ (c) a Farkas certificate, namely a nonnegative rational combination of valid linear inequalities;
+ (d) a residual-cut dual certificate, namely a nonnegative integer combination of local matching obstruc-
+     tion rows.
+
+The scripts either regenerate the relevant finite universe from definitions or verify the listed certificate
+arithmetic. All proof-critical arithmetic is integer or rational arithmetic after clearing denominators.
+
+
+9.1    Top-level commands and release hygiene
+The top-level proof entry point is run_all_proof_checks.sh. It runs the explicit threshold checker and
+the publication-grade certificate verification:
+
+bash run_all_proof_checks.sh
+
+Internally this script runs the following proof-critical commands:
+
+python3 threshold/verify_r4_explicit_threshold.py
+cd certificate_bundle
+bash run_all_checks.sh --full-no-topstar
+bash run_all_checks.sh
+
+The last fast run refreshes the standard fast log after the full no-top-star log has been archived. Inside the
+certificate bundle, the fast deterministic entry point is
+
+
+                                                     19
+bash certificate_bundle/run_all_checks.sh
+
+It runs pair Ferrers, triple Ferrers, top-star Farkas certificates, 15-board semantic rebuild, 11-board semantic
+rebuild, the no-top-star upper blocker, and the fast no-top-star threshold audit. The publication-grade no-
+top-star rerun is
+
+bash certificate_bundle/run_all_checks.sh --full-no-topstar
+
+It additionally reruns the slow no-top-star C++ branch-and-bound searches from source. The released
+bundle should contain source code and certificate data only; platform-specific compiled C++ executa-
+bles are generated artifacts and are not proof artifacts. In the cleaned release, the no-top-star veri-
+fier either compiles the C++ programs unconditionally or compiles into a build directory before run-
+ning them. The submission package also contains README_REPRODUCIBILITY.md, SHA256SUMS_ALL.txt,
+SHA256SUMS_SUBMISSION.txt, and run_all_submission_checks.sh; the last script regenerates and ver-
+ifies both top-level manifests.
+
+
+9.2    Pair Ferrers checker
+The script pair_ferrers/verify_pair_ferrers.py proves Lemma 5.1. It enumerates all Ferrers down-
+sets in [4]2 by nonincreasing height vectors. For each down-set it checks whether two disjoint pair values,
+together with a seed and the two full outside columns, create a five-trace obstruction. The exact output
+of the verified run is
+
+                                     pair ferrers downsets checked: 70
+                                     pair ferrers legal downsets: 10
+                                     pair ferrers max legal size: 4
+
+This proves the supportwise bound |Pij | ≤ 4.
+
+
+9.3    Triple Ferrers checker
+The script triple_ferrers/verify_triple_ferrers.py proves Lemma 5.2. It represents down-sets in
+[4]3 by monotone 4 × 4 height matrices, enumerates all 232848 such down-sets, enumerates all 2016 bad
+3-matchings, computes the minimal forbidden down-closures, and checks every down-set. It reports 26893
+legal down-sets and maximum legal size 32. Hence every triple support contributes at most 32 present
+triples.
+
+
+9.4    Top-star Farkas certificates
+The top-star relaxation is rebuilt by topstar/topstar_final_lp_branch_verifier.py. The certificate
+data are stored in topstar/topstar_common_den_farkas_certificates_complete.json; the checker is
+topstar/verify_topstar_common_den_certificates_fast.py. For each branch the checker constructs a
+sparse rational linear system of necessary constraints. The certificate gives nonnegative rational multipliers
+for the regenerated rows and for variable upper bounds. If D is the common denominator and µ denotes
+the upper-bound multipliers, then the checker verifies AT λ + µ ≥ Dd and bT λ + 1T µ ≤ 40000D, where d is
+the objective vector for 625|C top | − 625|N | + 300|T3 | + 144|P2 . This is exactly Farkas’ lemma: every feasible
+point of the relaxation satisfies dT x ≤ 40000. The released run checks 63 branch certificates and reports
+all ok=True in every range. The shell script topstar/verify_topstar_all_ranges.sh is a convenience
+wrapper invoking topstar/verify_topstar_common_den_certificates_fast.py over all 63 branches.
+
+
+
+
+                                                       20
+9.5    No-top-star soundness
+Theorem 9.1 (No-top-star encoding and checker soundness). Every genuine no-top-star 19-board in the
+layer-1 branch gives support-indexed data (M, (PJ ), (TI )) satisfying the finite conditions (N1)–(N5) of The-
+orem 9.2. On the verification side, the proof-critical no-top-star checker verifies Theorem 9.2 for the finite
+universe specified by these conditions. In particular, every local residual configuration consisting of a present
+trace H, a seed trace disjoint from H, and three pairwise disjoint residual wide quads disjoint from both is
+one of the enumerated seed obstructions.
+
+Proof. Let M ⊆ [4]4 be the missing wide-quad set of a genuine board. For each pair support J ∈ [4]
+                                                                                                            
+                                                                                                          2
+and triple support I ∈ [4]
+                                         2              3
+                          3 , let PJ ⊆ [4] and TI ⊆ [4] be the present pair and triple value sets on those
+supports. Stability of the ambient shifted family makes the present wide quads a down-set, so M is an
+up-set. This is (N1). In the no-top-star branch after Lemma 5.3, the present upper cube C = {1, 2, 3}4 \ M
+has no upper 3-matching. This is (N2). The branch assumption that the missing upper cube contains no
+full top-star is exactly (N3), since for an up-set a full top-star in direction i is contained in M precisely
+when its minimal point lies in M .
+Again by stability, the pair and triple trace sets on each fixed support are Ferrers down-sets. The forbidden
+pair obstructions and bad triple matchings are exactly the local five-trace obstructions from Lemmas 5.1
+and 5.2; hence they cannot occur in a genuine board. This is (N4). Finally, if H is a supported trace in
+some PJ or TI , Lemma 2.13 says that every wide quad extending H is present, so no such quad lies in M .
+For a residual seed matching of H, the seed is present by Lemma 4.1; if all three residual wide quads were
+also present, then H, the seed, and those three quads would be five pairwise disjoint traces on the board,
+contradicting Lemma 4.2. Therefore M hits every residual seed matching. This is (N5).
+The completeness of the residual seed obstructions is finite and explicit. Fix H and a seed disjoint from
+H. In coordinate j, let Aj ⊆ {0, 1, 2, 3} be the values already used by H and by the seed. A residual
+triple of wide quads is disjoint from H and from the seed exactly when, in every coordinate j, its three
+values are three distinct elements of {0, 1, 2, 3} \ Aj . Thus every such residual configuration is obtained
+by choosing these three available values in each coordinate and pairing them across the four coordinates
+by permutations. This is precisely the residual matching enumeration used by the checker, and each
+enumerated matching contributes the hitting condition that at least one of its three wide quads lies in
+M.
+Theorem 9.2 (Finite no-top-star theorem). Let M ⊆ [4]4 . For each pair support J ∈ [4]
+                                                                                             
+                                                                                           2   let PJ ⊆ [4]2 ,
+                                  [4]
+                                                 3
+                                                                 F                F
+and for each triple support I ∈ 3 let TI ⊆ [4] . Write P2 := J PJ and T3 := I TI , where elements are
+remembered with their supports. Suppose that:
+
+(N1) M is an up-set in [4]4 .
+(N2) If U = {1, 2, 3}4 and C = U \ M , then C has no three pairwise disjoint upper quads.
+(N3) M ∩ U contains no full top-star; equivalently, the four points (3, 1, 1, 1), (1, 3, 1, 1), (1, 1, 3, 1), and
+     (1, 1, 1, 3) all lie outside M .
+(N4) On every pair support J, PJ is a Ferrers down-set containing no forbidden disjoint pair obstruction;
+     on every triple support I, TI is a Ferrers down-set containing no bad 3-matching.
+(N5) For every supported trace H ∈ P2 ∪ T3 , closure holds: every wide quad Q ⊇ H lies outside M . Also,
+     every residual seed matching for H is hit by M .
+
+Then 300|T3 | + 144|P2 | ≤ 625|M |.
+
+Proof. The certified proof uses exact finite consequences of (N1)–(N5).
+(C1) The upper-blocker enumeration verifies that |M | ≥ 33. Equivalently, the largest present upper cube
+down-set satisfying the no-upper-matching and no-top-star assumptions has size 48.
+(C2) For a supported trace value H, let µ(H) be the minimum |M ′ | over up-sets satisfying (N1)–(N3),
+closure for H, and all residual seed hitting constraints for H. The exact hitting solver verifies all 10 pair
+
+
+                                                       21
+orbits and 20 triple orbits of µ(H). Combining the necessary thresholds µ(H) ≤ m with the legal pair and
+triple Ferrers down-set restrictions gives, for 33 ≤ m = |M | ≤ 63, the per-support maxima
+
+                      m     33   34–35   36–41   42–47     48–49   50–55   56–59   60–63
+                    p(m)     0     0       0       0          0       0       0      1
+                    t(m)     0     1       4       7         25      26      29     29.
+
+This gives a valid upper bound because the single-trace minima are used only as necessary conditions:
+allowing traces that are individually feasible but not jointly feasible can only enlarge the admissible trace
+family. Since there are six pair supports and four triple supports, |P2 | ≤ 6p(m) and |T3 | ≤ 4t(m). This
+proves the inequality for 33 ≤ m ≤ 63.
+(C3) In the range 64 ≤ |M | ≤ 66, if no support is extremal then |T3 | ≤ 4 · 31 and |P2 | ≤ 6 · 3, which
+is enough. If an extremal support is present, the critical-pattern solver, using the orbit representatives
+specified in Appendix A.2, proves a rectangle forcing statement: an extremal pair square or triple slab
+forces one of the rectangles Rij := {q ∈ [4]4 : qi ≥ 2, qj ≥ 2} to be contained in M , while the mixed
+triple equality pattern is infeasible with |M | ≤ 66. The rectangle-extension checker then enumerates all
+72 up-set extensions of the six rectangles of total size at most 66 and recomputes the maximum legal
+trace contribution using (N4)–(N5). The worst case has |M | = 64, |T3 | = 96, and |P2 | = 4, giving
+300 · 96 + 144 · 4 − 625 · 64 = −10624 < 0.
+Finally, if |M | ≥ 67, the universal Ferrers bounds give
+
+                       300|T3 | + 144|P2 | ≤ 300 · 128 + 144 · 24 < 625 · 67 ≤ 625|M |.
+
+The theorem follows.
+
+
+9.6    No-top-star exact search programs
+The support library no_topstar_exact/no_topstar_support_library.py defines the finite objects:
+points of [4]4 , principal up-closures, the upper cube, residual seed matching constraints, rectangles Rij ,
+legal pair and triple down-sets, and the objective 300|T3 | + 144|P2 | − 625|M | for a fixed up-set M . The
+C++ hitting solver exact_no_topstar_hitting_solver.cpp minimizes |M | for a single trace value H
+under the hitting constraints. The C++ pattern solver exact_no_topstar_pattern_solver.cpp proves
+the critical pattern forcing statements. The fast checker verify_no_topstar_exact_threshold_fast.py
+checks the JSON certificate, archived exact transcripts, Python arithmetic, and rectangle-extension cases.
+The publication-grade verifier verify_no_topstar_exact_threshold_certificate.py recompiles the
+two C++ programs, reruns all 30 single-trace threshold searches and all 9 critical-pattern searches, and
+then invokes the same Python arithmetic and rectangle-extension check. The verified publication-grade
+run reports
+
+                             trace threshold checks=30
+                             critical pattern checks=9
+                             rectangle cases=72
+                             exact no topstar threshold certificate ok=True
+
+
+9.7    15-board and 11-board residual-cut certificates
+The 15-board proof-critical checker
+
+                     board15/rebuild_15board_certificate_from_definition.py
+
+rebuilds the labelled residual/closure system from Lemma 6.1. It verifies 264402 labelled residual witnesses
+and 2016 labelled closure rows, quotients them to 206 residual rows and 33 closure rows, checks that the 20
+
+
+                                                     22
+listed quotient rows occur among the regenerated rows, and verifies the nonnegative integer dual arithmetic
+for Proposition 6.2.
+The 11-board proof-critical checker board11/rebuild_11board_residual_cuts.py parses the 84 listed
+residual cuts, verifies the local matching witness for each row, and checks that the weighted sum has
+coefficient 300 on every spread-1 triple, coefficient 144 on every spread-0 pair, and load at most 625 on
+every spread-2 missing quad.
+
+
+9.8    Explicit threshold checker
+The script threshold/verify_r4_explicit_threshold.py verifies Lemma 3.1 by exact integer
+and symbolic arithmetic: the 25 residue classes modulo 25, the shifted tail coefficients, the
+displayed identities and monotonicity checks, and the weight estimates used in Section 8.  It
+prints r4 explicit threshold ok=True, r4 symbolic checks ok=True, r4 threshold S4=3481, and
+r4 global s4=6961.
+
+
+9.9    Proof-critical verification files
+
+  Component               Mathematical statement                Proof-critical checker
+  Explicit threshold      Lemma 3.1 and s4 = 6961               threshold/verify_r4_explicit_
+                                                                threshold.py
+  Pair Ferrers            |Pij | ≤ 4                            pair_ferrers/verify_pair_ferrers.
+                                                                py
+  Triple Ferrers          |Tijk | ≤ 32                          triple_ferrers/verify_triple_
+                                                                ferrers.py
+  Top-star branch         Exact Farkas certificates for the     topstar/verify_topstar_common_
+                          labelled relaxation                   den_certificates_fast.py
+  No-top-star upper       |MU | ≥ 33 in the no-top-star         no_topstar_exact/verify_no_
+  blocker                 upper branch                          topstar_upper_blocker_exact_enum.
+                                                                cpp
+  No-top-star             Theorems 9.1 and 9.2                  no_topstar_exact/verify_no_
+  thresholds and                                                topstar_exact_threshold_
+  patterns                                                      certificate.py
+  15-board                Proposition 6.2 and Lemma 6.1         board15/rebuild_15board_
+                                                                certificate_from_definition.py
+  11-board                Proposition 7.1                       board11/rebuild_11board_residual_
+                                                                cuts.py
+
+
+Acknowledgments
+J.H. was supported by the National Key R&D Program of China (No. 2023YFA1010202) and by the
+Central Guidance on Local Science and Technology Development Fund of Fujian Province (No. 2023L3003).
+X.L. was supported by the Excellent Young Talents Program (Overseas) of the National Natural Science
+Foundation of China.
+
+
+Declaration on the use of AI
+The authors used generative AI tools to assist in discussing proof strategies, checking proofs, and improving
+exposition.
+
+
+                                                     23
+References
+ [1] N. Alon, P. Frankl, H. Huang, V. Rödl, A. Ruciński, and B. Sudakov. Large matchings in uniform
+     hypergraphs and the conjectures of Erdős and Samuels. J. Combin. Theory Ser. A, 119:1200–1215,
+     2012.
+ [2] B. Bollobás, D. E. Daykin, and P. Erdős. Sets of independent edges of a hypergraph. Quart. J. Math.
+     Oxford Ser. (2), 27:25–32, 1976.
+ [3] P. Erdős. A problem on independent r-tuples. Ann. Univ. Sci. Budapest. Eötvös Sect. Math., 8:93–95,
+     1965.
+ [4] P. Erdős and T. Gallai. On maximal paths and circuits of graphs. Acta Math. Acad. Sci. Hungar.,
+     10:337–356, 1959.
+ [5] P. Erdős, C. Ko, and R. Rado. Intersection theorems for systems of finite sets. Quart. J. Math. Oxford
+     Ser. (2), 12:313–320, 1961.
+ [6] P. Frankl. The shifting technique in extremal set theory. In Surveys in Combinatorics 1987, volume
+     123 of London Math. Soc. Lecture Note Ser., pages 81–110. Cambridge Univ. Press, Cambridge, 1987.
+ [7] P. Frankl. Improved bounds for Erdős’ matching conjecture. J. Combin. Theory Ser. A, 120:1068–1072,
+     2013.
+ [8] P. Frankl. On the maximum number of edges in a hypergraph with given matching number. Discrete
+     Appl. Math., 216:562–581, 2017.
+ [9] P. Frankl. Proof of the Erdős matching conjecture in a new range. Israel J. Math., 222:421–430, 2017.
+[10] P. Frankl and A. Kupavskii. Families with no s pairwise disjoint sets. J. Lond. Math. Soc. (2),
+     95(3):875–894, 2017.
+[11] P. Frankl and A. Kupavskii. The Erdős matching conjecture and concentration inequalities. J. Combin.
+     Theory Ser. B, 157:366–400, 2022.
+[12] P. Frankl, H. Lu, J. Ma, and Y. Wu. Towards the Erdős matching conjecture for 4-uniform hypergraphs:
+     stability and applications, 2026. arXiv:2602.19230.
+[13] P. Frankl, T. Luczak, and K. Mieczkowska. On matchings in hypergraphs. Electron. J. Combin.,
+     19(2):Paper 42, 2012.
+[14] P. Frankl, V. Rödl, and A. Ruciński. A short proof of Erdős’ conjecture for triple systems. Acta Math.
+     Hungar., 151:495–509, 2017.
+[15] J. Han. Perfect matchings in hypergraphs and the Erdős matching conjecture. SIAM J. Discrete
+     Math., 30(3):1351–1357, 2016.
+[16] H. Huang, P.-S. Loh, and B. Sudakov. The size of a hypergraph and its matching number. Combin.
+     Probab. Comput., 21:442–450, 2012.
+[17] H. Huang and Y. Zhao. Degree versions of the Erdős–Ko–Rado theorem and Erdős hypergraph
+     matching conjecture. J. Combin. Theory Ser. A, 150:233–247, 2017.
+[18] D. Kolupaev and A. Kupavskii. Erdős matching conjecture for almost perfect matchings. Discrete
+     Math., 346(4):Paper No. 113304, 2023.
+[19] T. Luczak and K. Mieczkowska. On Erdős’ extremal problem on matchings in hypergraphs. J. Combin.
+     Theory Ser. A, 124:178–194, 2014.
+[20] A. Schrijver. Theory of Linear and Integer Programming. John Wiley & Sons, Chichester, 1986.
+
+
+
+                                                     24
+ A      Machine-checkable certificate specifications
+ This appendix gives the finite specifications used by the proof-critical checkers. The files named below
+ are not merely transcripts: each verifier reconstructs the finite universe and then checks that the listed
+ certificate rows belong to that reconstructed universe. In every item, variables are indicator variables and
+ are constrained to lie in [0, 1].
+
+
+ A.1     Top-star Farkas system
+ The top-star branch fixes the missing upper top-star S4+ = {(x1 , x2 , x3 , 3) : xi ∈ {1, 2, 3}} ⊆ M . Put
+ V3 := [4]3 with [4] = {0, 1, 2, 3} and Z := {x ∈ V3 : 0 ∈ x}. The top slice variables are yx := 1{(x,3)∈M
+                                                                                                        / },
+ so yx = 1 means that the top-slice quad is present. The lower missing variables are mx,t := 1{(x,t)∈M } for
+ x ∈ V3 and t ∈ {0, 1, 2}. The trace variables are tI,v for three-coordinate supports I and values v ∈ [4]3 ,
+ and pJ,u for two-coordinate supports J and values u ∈ [4]2 .
+ The verifier topstar/topstar_final_lp_branch_verifier.py generates the following row types.
+
+ (T1) Top support and down-set rows: yx ≤ 0 for x ∈     / Z, and yx ≤ yx−ei whenever xi > 0.
+ (T2) Compatibility and lower up-set rows: mx,t + yx ≤ 1; if (x, t) < (x′ , t′ ) and t′ < 3, then mx,t ≤ mx′ ,t′ ;
+      if the immediate successor is top-slice, then mx,t + yx′ ≤ 1.
+                                 P          P
+ (T3) The branch budget row         mx,t − yx ≤ 2.
+ (T4) Trace down-set rows for all pair and triple trace variables.
+ (T5) Closure rows: for every trace variable zH and every wide extension Q ⊃ H, the row is zH ≤ yQ′ if
+      Q = (Q′ , 3) is top-slice, and zH + mQ ≤ 1 if Q is lower.
+ (T6) Pair obstruction rows pJ,a + pJ,b ≤ 1, where a, b ∈ [4]2 have distinct values in each coordinate and in
+      at least one coordinate the two values are not exactly {0, 1}.
+ (T7) Bad triple rows tI,a + tI,b + tI,c ≤ 2, where a, b, c ∈ [4]3 have three distinct values in each coordinate
+      and the unused value in some coordinate is 0 or 1.
+ (T8) Residual seed rows. For a trace H, a coordinate j, and u ∈ {0, 1} not already used by H in coordinate
+      j, form the seed D ∪ {u in coordinate j}. Let R = (Q1 , Q2 , Q3 ) run over all three wide quads disjoint
+      from H and the seed P     and pairwise disjoint.
+                                               P         If Rtop is the set of top-slice quads in R, then the
+      generated row is zH + Q∈Rtop yQ − Q∈R\Rtop mQ ≤ |Rtop |.
+                                 P                     P
+ (T9) Aggregate Ferrers rows u∈[4]2 pJ,u ≤ 4 and v∈[4]3 tI,v ≤ 32 on each support.
+                                  P                                                                P
+(T10) Branch rows fixing c =         yx , and, in the exceptional branch c = 23, fixing ℓ =          mx,t . The
+      deterministic ideal-forcing rows say that a principal down-set larger than c is absent, and a principal
+      up-set too large to avoid at size c is present; the same rule is applied to lower missing variables when
+      ℓ is fixed.
+
+ Each row type is a necessary condition for a genuine top-star board. Items (T1)–(T3) encode the branch
+ assumptions, stability of the top slice, the lower up-set property for missing quads, compatibility between
+ top-present and lower-missing variables, and the budget ℓ ≤ c + 2. Item (T4) is the coordinatewise
+ stability/Ferrers condition for supported traces. Item (T5) is Lemma 2.13. Items (T6) and (T7) are the
+ local matching obstructions from Lemmas 5.1 and 5.2. Item (T8) is sound because, if the trace, the seed,
+ and all residual quads were present, they would give five disjoint traces, contradicting Lemma 4.2. Item
+ (T9) is the aggregate Ferrers bound from Lemmas 5.1 and 5.2. Item (T10) uses only cardinality: a down-set
+ of size c cannot contain a point whose principal down-set has size greater than c, and it must contain a
+ point whose principal up-set is too large to avoid; the same argument applies to fixed-size lower missing
+ up-sets.
+ For a branch, let Ax ≤ b be the regenerated
+                                          P system Ptogether with         bounds xi ≤ 1. The objective
+                                                               Pthe upper P
+ vector d is the coefficient vector of 625 yx − 625 mx,t + 300 tI,v + 144 pJ,u , and the branch target
+ is dT x ≤ 40000. The certificate file topstar/topstar_common_den_farkas_certificates_complete.
+ json lists a positive common denominator and nonnegative integer numerators for row and upper-bound
+
+
+                                                        25
+multipliers. The checker topstar/verify_topstar_common_den_certificates_fast.py verifies branch
+coverage, row-type metadata, AT λ + µ ≥ Dd, and bT λ + 1T µ ≤ 40000D by integer arithmetic.
+
+
+A.2     No-top-star finite universe
+The no-top-star branch uses the universe V4 := [4]4 and the upper cube U := {1, 2, 3}4 . The missing
+wide-quad set is an up-set M ⊆ V4 , and the present upper cube is C := U \ M . The finite theorem uses
+pair trace sets PJ ⊆ [4]2 for J ∈ [4]                                       [4]
+                                                                  3
+                                                                               
+                                   2 and triple trace sets TI ⊆ [4] for I ∈ 3 .
+
+The no-top-star threshold verifier checks the following exact finite conditions.
+
+(N1) M is an up-set in V4 .
+(N2) C contains no upper 3-matching. Equivalently, for every choice of permutations π1 , π2 , π3 of {1, 2, 3},
+     at least one of the three points (t, π1 (t), π2 (t), π3 (t)), t = 1, 2, 3, lies in M .
+(N3) M ∩ U contains no full top-star, equivalently none of (3, 1, 1, 1), (1, 3, 1, 1), (1, 1, 3, 1), (1, 1, 1, 3) lies
+     in M .
+(N4) Each PJ is a Ferrers down-set avoiding the forbidden pair obstruction from (T6), and each TI is a
+     Ferrers down-set avoiding the bad triple configuration from (T7).
+(N5) Closure and residual seed hitting hold. If a trace H is present, then every wide extension of H lies
+     outside M . For every seed disjoint from H, every residual 3-matching R = (Q1 , Q2 , Q3 ) disjoint from
+     H and the seed must be hit by M .
+
+The support library no_topstar_exact/no_topstar_support_library.py implements these objects di-
+rectly. The residual matching generator records, for each coordinate, the values occupied by H and by the
+seed, chooses three available values in that coordinate, and pairs the four coordinate choices by permuta-
+tions. Thus every labelled residual seed matching is represented.
+The C++ program no_topstar_exact/verify_no_topstar_upper_blocker_exact_enum.cpp enumer-
+ates upper-cube down-sets by 3 × 3 × 3 height matrices. It verifies an explicit witness of size 48 for
+C and exhausts all candidates of size at least 49 satisfying the four forced unit-top conditions and the
+no-upper-matching condition. This proves |MU | ≥ 33.
+For each single trace value H, the C++ hitting solver no_topstar_exact/exact_no_topstar_hitting_
+solver.cpp minimizes |M | under (N1)–(N3), closure for H, and all residual seed hitting clauses for H.
+The JSON certificate records the resulting minima for the 10 pair-trace orbits and 20 triple-trace orbits.
+These minima are combined with the exact legal Ferrers down-set lists to bound the maximum allowed
+trace contribution for every 33 ≤ |M | ≤ 63.
+For 64 ≤ |M | ≤ 66, the pattern solver no_topstar_exact/exact_no_topstar_pattern_solver.cpp
+checks the following critical patterns, up to permutation of the four coordinates. On a pair support
+(i, j), the extremal pair square is
+                                             {0, 1} × {0, 1}.
+On a triple support (i, j, k) with omitted coordinate ℓ, an extremal triple slab is one of the three down-sets
+
+              {(a, b, c) ∈ [4]3 : a ≤ 1},     {(a, b, c) ∈ [4]3 : b ≤ 1},    {(a, b, c) ∈ [4]3 : c ≤ 1}.
+
+The mixed triple equality pattern is the Ferrers down-set {(a, b, c) : 0 ≤ c < hab } with height matrix
+                                                           
+                                                 4 4 2 2
+                                               4 4 2 2
+                                          h=  2 2 0 0 .
+                                                            
+
+                                                 2 2 0 0
+
+For the pair square the solver proves minimum |M | = 64 and, under |M | ≤ 66, forces Rij ⊆ M . For the
+three slabs it proves minimum |M | = 64 and forces respectively Riℓ , Rjℓ , or Rkℓ into M . The “not rectangle”
+
+
+                                                          26
+test imposes that the minimal point of the corresponding rectangle is outside M ; since M is an up-set,
+infeasibility of that test is exactly the forcing claim. For the mixed pattern the solver proves minimum |M | =
+80, hence it is infeasible when |M | ≤ 66. The Python rectangle extension audit then enumerates all 72 up-
+set extensions of the six rectangles of total size at most 66 and recomputes the best legal trace contribution
+using (N4)–(N5). The success marker is exact no topstar threshold certificate ok=True.
+
+
+A.3      The 15-board quotient certificate
+The labelled 15-board has point set D0 , D1 , D2 , A0 , . . . , A3 , B0 , . . . , B3 , C0 , . . . , C3 . The fixed present
+quads are the three full columns A0 A1 A2 A3 , B0 B1 B2 B3 , C0 C1 C2 C3 and the six seed quads D0 D1 D2 Ai ,
+D0 D1 D2 Bi , D0 D1 D2 Ci for i ∈ {0, 1}. The variables are:
+
+   • mQ for the 480 spread-3 quads Q meeting all three columns;
+   • tH for the 288 spread-2 triples H meeting exactly two columns;
+   • pH for the 54 spread-1 pairs H meeting exactly one column.
+
+For each small trace H of type t or p, the checker board15/rebuild_15board_certificate_from_
+definition.py enumerates residual witnesses. If |H| = 3, it partitions the 12 remaining vertices into
+three quads; if |H| = 2, it first chooses one unused vertex and partitions the remaining 12 vertices into
+three quads. A residual witness is accepted exactly
+                                                  Pwhen each of the three quads is either fixed present or
+is a spread-3 missing variable. The row is xH ≤     mQ , where the sum is over the variable quads in the
+witness. The same checker also regenerates every closure row xH + mQ ≤ 1 with H ⊂ Q.
+The quotient group is S3 on the D-points, S3 on the three columns, and in each column the two flips
+0 ↔ 1 and 2 ↔ 3. Its order is 2304. This group is used only to quotient the invariant relaxation: the
+fixed present family is preserved, since full columns remain full columns, the seed quads D0 D1 D2 col0
+and D0 D1 D2 col1 in each column are permuted by the low flip, and the high flip does not move a seed
+outside the seed family. The regenerated labelled residual and closure rows form complete orbits, and the
+objective is invariant. Hence averaging any labelled feasible assignment over the group preserves feasibility
+and the objective value, so a certificate on orbit-average variables proves the labelled inequality. The
+quotient map sends a labelled variable to the orbit of that variable under this group; the regenerated
+orbit counts are 13 missing-quad orbits, 9 triple orbits, and 5 pair orbits. A quotient row is accepted
+only if it is the orbit-average image of labelled residual witnesses regenerated from the rule above. The
+file board15/15board_quotient_certificate_summary.txt lists 20 such quotient rows and nonnegative
+integer multipliers. Expanding a quotient row over its orbit gives a labelled valid inequality, so the quotient
+dual lifts back to the labelled board. The checker verifies that the weighted sum coefficient-wise dominates
+300Tσ + 144Pσ − 625Mσ after multiplying each orbit variable by its orbit size. The reported rebuilt counts
+are 264402 labelled residual witnesses, 2016 labelled closure rows, 206 quotient residual rows, and 33
+quotient closure rows.
+
+
+A.4      The 11-board residual-cut certificate
+The labelled 11-board has point set D0 , D1 , D2 , A0 , . . . , A3 , B0 , . . . , B3 . The fixed present quads are the
+two full columns A0 A1 A2 A3 , B0 B1 B2 B3 and the four seed quads D0 D1 D2 Ai , D0 D1 D2 Bi for i ∈ {0, 1}.
+The variables are: 260 spread-2 missing quads, 68 spread-1 present triples, and 3 spread-0 present pairs.
+The certificate file board11/dual_11board_certificate_corrected.txt lists 84 residual rows with non-
+negative integer multipliers. Each row records its left-hand small trace H, the missing quads appearing on
+the right, and a residual pair consisting of two disjoint quads. A listed quad marked Q must be one P           of the
+spread-2 missing variables; a listed quad marked F must be a fixed present trace. The row is xH ≤ mQ
+over the Q-marked residual traces.
+The verifier board11/rebuild_11board_residual_cuts.py checks, for each listed row, that H has the
+advertised spread, that the two residual traces are quads on the 11-board, that the small trace and the
+
+
+                                                           27
+residual traces are pairwise disjoint, and that the right-hand side is exactly the collection of Q-marked
+missing variables. It also checks that every F -marked residual trace belongs to the fixed present family
+displayed above. It then verifies the dual arithmetic: every spread-1 triple receives coefficient 300, every
+spread-0 pair receives coefficient 144, and no spread-2 missing quad receives load greater than 625. This
+proves 300T (11) + 144P (11) ≤ 625M (11) .
+
+
+A.5     Reviewer run matrix
+  Command or file                Mathematical object regenerated or           Typical runtime      Success marker
+                                 checked
+  threshold/verify_r4_           Exact residue-class and symbolic checks      seconds              r4_explicit_threshold_ok=
+  explicit_threshold.py          for Lemma 3.1                                                     True
+  pair_ferrers/verify_pair_      All Ferrers down-sets in [4]2 and            seconds              pair_ferrers_ok=True
+  ferrers.py                     forbidden pair obstruction
+  triple_ferrers/verify_         All Ferrers down-sets in [4]3 and bad        seconds to tens of   Maximum legal size:   32
+  triple_ferrers.py              triple matchings                             seconds
+  topstar/verify_topstar_all_    All 63 top-star Farkas branch certificates   seconds              all_ok=True
+  ranges.sh
+  board15/rebuild_15board_       15-board labelled universe, quotient         seconds to minutes   status:   ok
+  certificate_from_definition.   map, residual rows, and quotient dual
+  py
+  board11/rebuild_11board_       11-board listed residual witnesses and       seconds              status:   ok
+  residual_cuts.py               dual arithmetic
+  no_topstar_exact/verify_no_    Exact upper-cube blocker enumeration         seconds              exact_upper_blocker_branch_
+  topstar_upper_blocker_exact_                                                                     bound_ok=True
+  enum.cpp
+  no_topstar_exact/verify_no_    No-top-star threshold minima, critical       seconds to minutes   exact_no_topstar_threshold_
+  topstar_exact_threshold_       patterns, and rectangle extensions                                certificate_ok=True
+  certificate.py
+  run_all_submission_checks.sh   Manuscript build, threshold checker,         total: minutes       all hashes OK; all checks
+                                 certificate checks, log checksums, and                            passed
+                                 top-level package manifests
+
+
+
+
+                                                              28
+
