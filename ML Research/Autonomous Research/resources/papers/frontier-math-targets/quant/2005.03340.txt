@@ -1,0 +1,1784 @@
+                                                                                    No arbitrage SVI
+                                                                         Claude Martini∗1 and Arianna Mingone†1,2
+                                                          1
+                                                              Zeliade Systems, 56 rue Jean-Jacques Rousseau, Paris, France
+arXiv:2005.03340v2 [q-fin.MF] 25 May 2021
+
+
+
+
+                                                                      2
+                                                                        Università degli Studi di Udine, Udine, Italy
+
+                                                                                          May 26, 2021
+
+
+                                                                                              Abstract
+                                                       We fully characterize the absence of Butterfly arbitrage in the SVI formula for implied total
+                                                   variance proposed by Gatheral in 2004. The main ingredient is an intermediate characterization
+                                                   of the necessary condition for no arbitrage obtained for any model by Fukasawa in 2012 that the
+                                                   inverse functions of the −d1 and −d2 of the Black-Scholes formula, viewed as functions of the
+                                                   log-forward moneyness, should be increasing. A natural rescaling of the SVI parameters and a
+                                                   meticulous analysis of the Durrleman condition allow then to obtain simple range conditions on
+                                                   the parameters. This leads to a straightforward implementation of a least-squares calibration
+                                                   algorithm on the no arbitrage domain, which yields an excellent fit on the market data we used
+                                                   for our tests, with the guarantee to yield smiles with no Butterfly arbitrage.
+
+
+                                            1      Introduction
+                                            Jim Gatheral proposed in 2004 the following Stochastic Volatility Inspired model for the implied
+                                            total variance (meaning: the square of the implied volatility times the time-to-maturity):
+                                                                                                   p
+                                                                      SV I(k) = a + b(ρ(k − m) + (k − m)2 + σ 2 )
+
+                                            where k is the log-forward moneyness, and (a, b, ρ, m, σ) parameters.
+                                                This formula quickly became the benchmark at least on Equity markets, due to its ability
+                                            to produce very good fits. Fabien Le Floch (head of research at Calypso) has a blog article on a
+                                            situation where SVI does not fit, which is a good indicator of how rare such a situation is in practice.
+                                            The practitioner literature on SVI and its variants is plentiful ([3], [14], [18], [1], [15]), and SVI is
+                                            now part of every reference textbook on volatility models ([9], [11]).
+                                                In 2009, the whitepaper on the Quasi-explicit calibration of Gatheral’s SVI ([4], also part of
+                                            Stefano De Marco PHD thesis) proposed a simple trick to disambiguate the calibration of SVI, and
+                                            became itself a reference calibration algorithm.
+                                                SVI has been extended by Gatheral and Jacquier in a seminal paper to surfaces in [10], which
+                                            provides the first explicit family of implied volatility surfaces with explicit and tractable no arbitrage
+                                                ∗ cmartini@zeliade.com
+                                                † arianna.mingone@gmail.com
+
+
+
+
+                                                                                                  1
+conditions, both for the Butterfly and Calendar Spread arbitrages. SSVI has been extended further
+in [12] to other smile shapes, and in [13] to correlation parameters functions of the time-to-maturity.
+A quick and robust calibration algorithm for the latter is provided in [2].
+    SSVI smiles (at a fixed time to maturity) are a subset of SVI smiles with 3 parameters instead
+of 5, and so, for them, an explicit sufficient condition for no (Butterfly) arbitrage is available (cf
+[10]). [16] discusses also partial necessary and sufficient conditions for SSVI smiles.
+    A remarkable fact is that, despite the simplicity of the formula, no Butterfly arbitrage conditions
+for a SVI smile remained up to now too intricate. So for instance in the algorithm [4] there is no
+guarantee that the calibrated parameter will be arbitrage-free. An interesting practical approach is
+provided in [6], where the no arbitrage constraints are expressed as a discretized set of Durrleman
+conditions and encoded as non-linear constraints in the optimizer; stricto sensu there also, there is
+no guarantee though that the calibrated parameter will be arbitrage-free. In this paper, we solve
+this long-standing issue.
+    We start in section 2 with a precise discussion of the meaning of no Butterfly arbitrage, which
+is based on [20] and on [19] for the corresponding statements in terms of volatility.
+    We proceed in section 3 with a slight generalization of the beautiful result by Fukasawa in
+[8], which states that the inverse functions of the −d1 and −d2 coefficients of the Black-Scholes
+formula should be increasing under no Butterfly arbitrage. We need this generalization to handle
+all the configurations of SVI parameters. In this section we also clarify when and how Call and Put
+SVI option prices, given by the Black-Scholes formula with the SVI formula as argument, can be
+represented as expectations, using the results in [20].
+    The main ingredient (section 4) is then to use a natural rescaling of SVI: we work with the
+parameters α, µ where a = σα and m = σµ, and the dummy variable l = k−m       σ   instead of k. It turns
+out that the Fukasawa conditions for SVI in the new parameters do not involve σ. An interesting
+property of those conditions is that they provide the positivity of the 1st term of the Durrleman
+                                                                                         1
+condition; based on the fact that in our case the complementing 2nd term reads 2σ          G2 (l) where
+G2 does not depend on σ, ensuring the Durrleman condition yields a simple condition on σ. In
+section 5 we give the full characterization of the Fukasawa conditions for SVI, and section 6 finishes
+the work with the full characterization of no Butterfly arbitrage.
+    It should be noted that we do not impose the condition a ≥ 0, as is often done without justifica-
+tion; we work out the necessary and sufficient conditions in the full domain of the SVI parameters.
+    At this stage, we have made fully explicit the domain of the SVI parameters for which no
+Butterfly arbitrage holds. It is straightforward to code, resorting to root finding numerical routines
+(like the Brent algorithm) for the evaluation of the thresholds we characterized in our computations.
+There are then 2 byproducts of this parametrization of the domain of high practical interest:
+
+   • a quick check routine that a given SVI parameter lies in the domain or not, which disentangles
+     between 4 possible situations of arbitrage;
+   • a calibration algorithm, using any least-squares type objective function and a minimizer able
+     to handle bounds.
+
+   We provide in the last section (section 7) numerical tests performed on data on index options
+purchased from the CBOE.
+   SVI models a volatility smile, not a volatility surface, so without ambiguity when we use the no
+arbitrage wording for SVI, we mean the absence of Butterfly arbitrage.
+   We thank Antoine Jacquier and Stefano De Marco for useful discussions and comments.
+
+
+                                                   2
+1.1     Domain of SVI parameters
+The SVI model is defined when a, m ∈ R, b ≥ 0,p|ρ| ≤ 1, σ ≥ 0. We recall that SVI is a convex
+function, with a minimum value given by a + bσ 1 − ρ2 (possibly attained at infinity if |ρ| = 1)
+                              k goes to ±∞ (for |ρ| < 1). Since SVI models total variances, it is
+and which goes to infinity as p
+therefore required that a + bσ 1 − ρ2 ≥ 0.
+   If ρ = −1 the SVI smile decreases from ∞ to a, and if ρ = +1 the SVI smile increases from a
+to ∞.
+
+
+2     The Durrleman condition and no arbitrage for SVI
+Let S0 denote the underlying asset value of standard Call options with a fixed maturity t > 0.
+Without loss of generality we assume that there is no interest rates nor dividend rates. In case
+of deterministic interest r and dividend rates δ, all the statements in this section
+                                                                                  R t still hold once
+S0 is replaced by the Forward corresponding to the option maturity Ft = S0 exp 0 (rs − δs )ds and
+working with the numéraire of the option maturity.
+
+2.1     Axiom of no Butterfly arbitrage
+The condition of no Butterfly arbitrage is achieved when the Call price function with respect to the
+strike is (we follow the very careful treatment in [20]):
+    1. convex;
+    2. non-increasing;
+    3. with value in the range [(S0 − K)+ , S0 ].
+    These properties assume only that there is a perfect market for the underlying asset and for the
+Call options, with short-selling allowed, and that there is no static buy-sell strategy involving the
+underlying asset and a finite set of Call options with a Profit and Loss which is strictly positive.
+    We recall in particular that the large moneyness behaviour stating that the Call price function
+should go to zero at ∞ is an additional assumption, and does not strictly follow from the no
+arbitrage axiom.                                                                                p
+    In the case of a Call price function specified through an implied volatility: C(K) = CBS (k, w(k))
+where w is the implied total variance σ 2 t and CBS (k, a) is the Black-Scholes formula expressed as a
+function of the log-forward moneyness k = log SK0 and the implied total volatility, the 3rd property
+is automatically granted since the CBS function is increasing with respect to its 2nd argument and
+since the range bounds correspond to the limit when a goes to 0 and ∞.
+    Observe now that if the 3rd property is satisfied, then the 1st one implies the 2nd one because
+an increasing convex function cannot be bounded.
+
+2.2     Smiles vanishing at some point
+Can a volatility smile reach 0 at some (finite) point? Assume that it is the case, so w(km ) = 0
+at the log-forward moneyness km corresponding to some strike Km . Then it means that the Call
+price with this strike is equal to its intrinsic value (S0 − Km )+ . If Km lies on the right of S0 , the
+price is therefore 0, and by the property 2 above all the Call prices with K > Km will also be 0. If
+Km lies on the left of S0 , the option price is S0 − Km ; as the option price with a strike 0 is equal
+
+
+                                                    3
+to S0 = S0 − 0, the convexity property implies that all the Call prices with K < Km are smaller
+than S0 − K which is the value of the chord between the points 0 and Km . Since this value S0 − K
+is also lower bound for the Call prices, they are eventually equal to this value. So, in the implied
+volatility space, this means that w = 0 for K ≥ Km in the 1st case, and w = 0 for K ≤ Km in the
+second case.
+    This means that no arbitrage implies that smiles reaching 0 above (respectively below) the At-
+The-Money (forward) point will vanish above (respectively below)p this point. In the case of SVI,
+smiles reach zero at most at a single strike, and only if a + bσ 1 − ρ2 = 0 and |ρ| < 1, in which
+case they are strictly positive for other
+                                      p strike values, and there is a Butterfly arbitrage. So we can
+discard this case and assume a + bσ 1 − ρ2 > 0 when |ρ| < 1.
+
+2.3    No Butterfly arbitrage criterion for SVI
+At this stage we know that SVI smiles with no Butterfly arbitrage are positive, and that the 3rd
+property above is automatically satisfied. So there is no Butterfly arbitrage if and only if the 1st
+property holds. Now for positive smiles, as recalled in [10] after Lemma 2.2, with w(k) = SV I(k):
+                                                                p
+                         ∂ 2 CBS                     ∂ 2 CBS (k, w(k))
+                 p(K) :=                           =
+                          ∂K 2                   k
+                                                             ∂K 2
+                                       K=S0 e                                   K=S0 ek
+                                                                             p                                 (1)
+                                                                       d2 (k, w(k))2
+                                                                                    
+                                                         g(k)
+                                                  =      p       exp −
+                                                    S0 ek 2πw(k)              2
+
+where d2 is the standard coefficient of the Black-Scholes formula:
+                                                                   k  σ
+                                             d1,2 (k, σ) = −         ± .
+                                                                   σ  2
+So convexity is equivalent to ask the function g(k) ([10], equation 2.1)
+                                                 2
+                                   kSV I 0 (k)            SV I 0 (k)2                            SV I 00 (k)
+                                                                                       
+                                                                               1     1
+                g(k) :=       1−                      −                            +         +                 (2)
+                                   2SV I(k)                   4             SV I(k) 4               2
+
+to be non-negative, which is usually called the Durrleman condition (cf. Theorem 2.9, condition
+(IV 3) of [19]).
+    Note that the first derivative of the Call function with respect to the strike necessarily goes to
+zero as K goes to ∞, and to a finite limit between −1 and 0 as K goes to 0, which means that the
+total mass of p is less than one, but not necessarily one, meaning that there could be a non-zero
+mass at zero. It will sum to one if and only if the limit is −1; in this case, p can be interpreted as
+a probability measure; the expectation of the underlying asset under this measure will be strictly
+less than the underlying asset value, unless the additional property that the Call price vanishes at
+infinity holds, in which case it will be exactly the underlying asset value (cf. Theorem 2.1.2 of [20]).
+    The above discussion can be translated in properties of the smile: we know from Theorem 2.9
+in [19] that the large moneyness behaviour is one-to-one with the fact that d1 (k) goes to −∞ at
+infinity:                                         p
+                                        lim d1 (k, w(k)) = −∞.
+                                          k→∞
+
+
+
+
+                                                              4
+    The fact that there is no mass at zero, or, equivalently, that the derivative of the Call price with
+respect to the strike goes to −1 when the strike goes to zero, is equivalent to (cf. [7], Proposition
+2.4):                                             p
+                                      lim d2 (k, w(k)) = +∞.
+                                     k→−∞
+
+   In the case of SVI, the 1st condition translates to b(1+ρ) < 2 and the second one to b(1−ρ) < 2.
+In particular the following Lemma holds:
+                                          p
+Lemma 2.1. In SVI, the limit of d1 (k, w(k)) for k going to ∞, is
+    • −∞ if b(1 + ρ) < 2;
+    • 0 if b(1 + ρ) = 2;
+    • ∞ if b(1 + ρ) > 2.
+    The proof is simple and it is omitted. An important consequence to this result is that when
+b(1 + ρ) = 2, the Call prices do not go to zero when the strike goes to infinity and so they are not
+given as the expectation of the payoff; we will come back to this situation in detail in section 3. In
+such a case, this does not necessarily lead to an arbitrage and so the request b(1 + ρ) < 2 is not
+a necessary condition fo the absence of arbitrage. We can summarize the previous discussion as
+follows:
+Proposition 2.2 (No Butterfly arbitrage criterion for SVI). A necessary condition for no Butterfly
+arbitrage to hold in SVI is that SV I(k) > 0 for all k. Under this condition, there is no arbitrage
+in SVI if and only if the function g in eq. (2) is non-negative. In this case, the function p(K) in
+                      k
+eq. (1)
+     R where K = S0 e , and S0 is the underlying asset value, defines a positive density on R+ such
+that p(x)dx ≤ 1.
+    Moreover, the Call prices in SVI go to zero when the strike goes to infinity if and only if
+b(1 + ρ) < 2, and the derivative of the Call price (expressed in numéraireR of the maturity) with
+                 R goes to −1 if and only if b(1 − ρ) < 2. In the first case xp(x)dx = S0 and in
+respect to the strike
+the second case p(x)dx = 1.
+   Note that the two conditions b(1 + ρ) = 2 and b(1 − ρ) = 2 can occur simultaneously if and
+only if b = 2 and ρ = 0. We turn now to the weak no Butterfly condition obtained by Fukasawa.
+Characterizing this intermediary condition will eventually lead us to our full characterization result.
+
+
+3     Fukasawa necessary condition for no Butterfly arbitrage
+We recall the beautiful model-free necessary no Butterfly arbitrage condition obtained by Fukasawa
+in [8]. Following Fukasawa, let us denote the Black-Scholes prices as CBS (k, σ) = S0 Φ(d1 (k, σ)) −
+S0 ek Φ(d2 (k, σ)) for                          k
+                    pCalls and PBS (k, σ) = S0 e Φ(−d2 (k, σ))−S0 Φ(−d1 (k, σ)) for Puts; the implied
+total volatility is w(k) = σ(k); for a given total implied volatility let us set
+                                       f1,2 (k) = −d1,2 (k, σ(k)).
+Fukasawa proved in Theorem 2.8 of [8] that (under the hypothesis that option prices are given by the
+expectation of their payoff) if a total variance smile w, expressed as a function of the log-forward
+moneyness, has no Butterfly arbitrage, then the two functions f1 and f2 are necessarily strictly
+                 0
+increasing with f1,2 > 0.
+
+                                                   5
+3.1     A slight generalization of Fukasawa result
+In the following, we generalize Fukasawa’s result to the case where the only request on the Put prices
+is their convexity and differentiability, without requiring that they are given by the expectation of
+the payoff. Note that the proof is essentially Fukasawa’s one. This will allow us to cover the
+boundary case b(1 + ρ) = 2.
+Lemma 3.1. Let Put prices be defined as the Black-Scholes Put prices with a total volatility σ(k):
+P (K) = PBS (k, σ(k)), where K = S0 ek . If the function P is convex and the total volatility is
+differentiable, then the functions f1,2 are increasing.
+Proof. Because the total volatility is differentiable, then also the Put prices are differentiable. Define
+             1 ∂PBS                                              dP
+DBS (K) := K    ∂k (k, σ) |σ=σ(k) = Φ(f2 (k)) and D(K) := d K (K). Note that here we do not use
+the equality D(K) = E[IK>ST ] whose proof requires that the Put prices are the expectation of their
+payoff. Since the Put prices are given by the Black-Scholes formula, they lie between (K − S0 )+
+and K, and since the function K → P (K) is convex, then its derivative lies necessarily between 0
+and 1: 0 ≤ D(K) ≤ 1. It holds
+
+                          d                                
+               D(K) =       PBS log(K/S0 ), σ(log(K/S0 ))
+                         dK
+                                    1 ∂PBS                              dσ           
+                       = DBS (K) +           log(K/S0 ), σ(log(K/S0 ))      log(K/S0 )                        (3)
+                                   K ∂σ                                  dk
+                                                    dσ            
+                       = DBS (K) + φ f2 log(K/S0 )        log(K/S0 ) .
+                                                      dk
+   We now check that
+                                                        dσ
+                                               f2 (k)      (k) < 1.
+                                                        dk
+                                                     k            k
+                                        D(S0 e )−DBS (S0 e )
+From the previous equations, dσ
+                              dk (k) =         φ(f           and because of the bounds for D(K),
+                      h                          i 2 (k))
+                        1−Φ(−f2 (k)) 1−Φ(f2 (k))
+this quantity lies in − φ(−f2 (k)) , φ(f2 (k)) . So when f2 (k) is non-negative, f2 (k) dσ
+                                                                                         dk (k) ≤
+
+f2 (k) 1−Φ(f   2 (k))                     dσ               1−Φ(−f2 (k))
+         φ(f2 (k)) . Otherwise, f2 (k) dk (k) ≤ −f2 (k) φ(−f2 (k)) . Both quantities are less than 1.
+     At this point, we verify that
+                                                        dσ
+                                                  f1 (k) (k) < 1.                                              (4)
+                                                        dk
+It holds KD(K) ≥ P (K). Indeed, since P is convex, its tangent at K lies below the function P
+itself, so for any x ≥ 0 one has P (K) + (x − K)D(K) ≤ P (x) and evaluating at x = 0 we obtain
+the target inequality since P (0) = 0. From this inequality, using eq. (3) and writing the explicit
+formula of P (K), one gets 0 ≤ S0 Φ(f1 (k)) + S0 ek φ(f2 (k)) dσ                                           dσ
+                                                                      dk (k) = S0 Φ(f1 (k)) + S0 φ(f1 (k)) dk (k).
+                                                        1−Φ(−f1 (k))
+If f1 is non-positive, then f1 (k) dσ  dk (k) ≤ −f1 (k) φ(−f1 (k)) < 1. Otherwise, eq. (4) is automatically
+satisfied when dσ                                                                             dσ          dσ
+                     dk (k) is non-positive, while when it is positive, we notice that f1 (k) dk (k) = f2 dk (k)−
+  dσ                  dσ
+σ dk (k) < 1 − σ dk (k) < 1.
+                                                                                             df1,2        1
+     Finally, we show that f1 and f2 are increasing. Indeed, from their definition, dk             (k) = σ(k)  1−
+dσ         k        σ(k)       1      dσ
+                                                      
+ dk (k) σ(k) ± 2            = σ(k) 1 − dk (k)f2,1 (k) > 0.
+
+   What if we start from convex Call prices defined by the Black-Scholes Call prices instead of
+Put prices? In such case, it would be enough to prove that also the Put prices come from the
+
+                                                          6
+Black-Scholes Put prices and they are convex. Indeed, synthetizing the strategy of selling a Call
+with strike K, buying the underlying and selling a quantity K of cash at time 0 yields a payoff
+(XT − K)+ − XT + K = (K − XT )+ , where XT is the realized value of the underlying at maturity,
+so that the assumption of no arbitrage leads to P (K) = C(K) − S0 + K which is the Put-Call
+parity. Since the equality PBS (k, σ(k)) = CBS (k, σ(k)) − S0 + K also holds from the definition
+of the functions CBS and PBS , it follows firstly that P (K) = PBS (k, σ(k)), so the Calls and Puts
+with the same strike have the same implied volatility. Secondly, looking at the Put-Call parity, one
+notices that the Call prices are convex iff the Put prices are convex. Applying the previous Lemma
+                 0
+one finds again f1,2 (k) > 0.
+
+3.2    Expectation-based representation of the Calls and Put prices in SVI
+The issue of the representation of the Call and Put price functions by an expectation under our
+purely analytical assumptions has been settled by Tehranchi in [20]. Indeed re-starting from the
+assumption that the implied volatility function is such that the Call price function K → C(K) is
+convex, it follows from the above discussion that we are exactly in the situation of Theorem 2.1.2
+in [20]. So there exists a non-negative random variable ST such that E[ST ] ≤ S0 and C(K) = S0 −
+E[K ∧ ST ]. We have then from the above discussion that P (K) = C(K) + K − S0 = K − E[K ∧ ST ].
+It is interesting to note that:
+
+                     C(K) = S0 − E[K ∧ ST ] = E[(ST − K)+ ] + S0 − E[ST ],
+
+whereas the usual expectation for the Put formula still holds:
+
+                            P (K) = K − E[K ∧ ST ] = E[(K − ST )+ ].
+
+    Going back to SVI, when b(1 + ρ) < 2 we are in the situation where C(K) → 0 when K → ∞,
+so that E[ST ] = S0 in the above representation. In the case b(1 + ρ) = 2 one has limk→∞ f1 (k) =
+0, which plugged into the Black-Scholes formula gives limK→∞ C(K) = S20 ; in turns this gives
+E[ST ] = S20 . We can state the following:
+                                           p                               p
+Proposition 3.2. Let C(K) := CBS (k, SV I(k)) and P (K) := PBS (k, SV I(k)) be the Call
+and Put prices in SVI. Then there exists a positive random variable ST such that:
+
+  1. P (K) = K − E[K ∧ ST ] = E[(K − ST )+ ] and C(K) = S0 − E[K ∧ ST ] = E[(ST − K)+ ] +
+     S0 − E[ST ];
+  2. if b(1 + ρ) < 2, C(K) → 0 when K → ∞, E[ST ] = S0 and C(K) = E[(ST − K)+ ];
+  3. if b(1 + ρ) = 2, C(K) → S20 when K → ∞, E[ST ] = S20 and C(K) = E[(ST − K)+ ] + S20 .
+
+    The last ingredient we will require is a natural change of parameters in SVI, that we describe
+in the next section altogether with the main argument of our full characterization.
+
+
+
+
+                                                 7
+4    Normalizing SVI
+We now rescale SVI in the following way, which is natural:
+                                                        r              
+                                               k−m           k − m 2
+                       SV I(k) = ασ + bσ ρ             +              +1
+                                                  σ             σ
+                                               
+                                        k−m
+                                = σN
+                                            σ
+                                        √
+with α := a/σ and N (l) := α + b(ρl + l2 + 1). With this rewriting, the derivatives of the SVI
+model become
+                                                           
+                                                      k−m
+                                   SV I 0 (k) = N 0          ,
+                                                        σ
+                                                              
+                                                1       k−m
+                                  SV I 00 (k) = N 00             .
+                                                σ         σ
+
+    Observe that the second derivative N 00 is positive so N is strictly convex. Its only critical point
+is a minimum that we call l∗ = − √ ρ 2 . We gather the important properties of N in the following:
+                                     1−ρ
+                                                      √
+Lemma 4.1 (Normalized SVI). Let N (l) := α + b(ρl + l2 + 1)  p where a = ασ. Then N is strictly
+convex with a minimum at l∗ = − √ ρ 2 , where N (l∗ ) = α + b 1 − ρ2 . Also:
+                                      1−ρ
+
+                                                                  
+                                           0                  l
+                                      N (l) = b ρ + √                ,
+                                                            l2 + 1
+                                                     b
+                                      N 00 (l) =          3 .
+                                                 (l2 + 1) 2
+
+In particular as l → ±∞:
+
+            N (l) ∼ α + b(ρ ± 1)l,                  N 0 (l) → b(ρ ± 1),        N 00 (l) → 0,
+
+and for every k
+                                                            k − m
+                                       SV I(k) = σN                .
+                                                               σ
+    In the above Lemma, note that the statement N (l) ∼ a0 + b(ρ ± 1)l covers the cases b = 0 and
+b 6= 0.
+    Hereafter we will also put m = µσ, so that k = σ(l + µ) and
+                                                                 
+                                                              k
+                                SV Ia,b,ρ,m,σ (k) = σNα,b,ρ     −µ
+                                                              σ
+
+where the parameters have the following constraints:
+                                                                                p
+         b ≥ 0,          |ρ| ≤ 1,              µ ∈ R,          σ ≥ 0,     α+b       1 − ρ2 ≥ 0.
+
+
+
+                                                        8
+4.1     Expressing g with f1,2 in rescaled parameters, and our main argument
+There is a nice expression of g involving the functions f1,2 ; indeed as shown e.g. in [5] (Eq. 55
+p. 25):
+                  ∂2C                        
+                                                 0      0
+                                                              p         √ 00  1
+                               =  φ(f 2 (k))   f1  (k)f2  (k)  w(k) + (  w) (k)
+                  ∂K 2       k
+                                                                                S0 ek
+                           K=S0 e
+
+where φ is the standard Gaussian density. By identification this yields
+                                             p        √         p
+                         g(k) = f10 (k)f20 (k) w(k) + ( w)00 (k)    w(k).
+
+   With our rescaled parameters, we have
+                                                  2 
+                          kN 0 σk − µ 2 N 0 σk − µ                       N 00 σk − µ
+                                                                                
+                                                           1       1
+               g(k) = 1 −               −                       +     +
+                          2σN σk − µ                   σN σk − µ
+                                     
+                                              4                    4          2σ
+
+and writing G(l) := g(σ(l + µ)) we find
+                                                2
+                                 (l + µ)N 0 (l)      N 0 (l)2                 N 00 (l)
+                                                                        
+                                                                  1     1
+                      G(l) = 1 −                   −                  +     +          .
+                                     2N (l)             4       σN (l) 4       2σ
+
+   We can rewrite G as
+                                                                                    N 0 (l)2
+                                                                                    
+                    0      (l + µ) 1            0     (l + µ) 1         1    00
+    G(l) = 1 − N (l)               +       1 − N (l)          −      +      N (l) −
+                            2N (l)   4                 2N (l)   4      2σ            2N
+                       1
+         = G1 (l) +      G2 (l)
+                      2σ
+where
+                                                                                
+                                        0      (l + µ) 1            0     (l + µ) 1
+                    G1 (l) := 1 − N (l)                +       1 − N (l)          −      ,
+                                                2N (l)   4                 2N (l)   4
+                                         N 0 (l)2
+                    G2 (l) := N 00 (l) −          .
+                                         2N (l)
+                                                                   0                 0
+  Call G1+ the first factor of G1 and G1− the second one. Then f1,2  (σ(l + µ)) = f1,2 (k) =
+                                      
+   1            0  k           k      1      G    (l)
+                                           = √
+                        
+         1−N σ −µ                 ±4         1±
+r
+                                            k
+                                                      and the Fukasawa conditions correspond
+        k                         2σN       σ −µ
+                                                          σN (l)
+  σN    σ −µ
+
+to G1± > 0, which entails that G1 > 0.                                                   √        p
+   Completing the identification yields G1 σk −µ = f10 (k)f20 (k)w(k) and 2σ
+                                                                           1
+                                                                             G2 σk −µ = ( w)00 (k) w(k).
+                                                                                    
+
+   It is now instrumental to observe that:
+                                                                    1
+                                        g(k) = G(l) = G1 (l) +        G2 (l)
+                                                                   2σ
+where
+   • G1 depends only on α, b, ρ, µ,
+   • G2 depends only on α, b, ρ,
+
+
+                                                      9
+so that the dependency of G in σ is particularly simple; this is the main benefit of our rescaling of
+SVI.
+    Our main argument is now as follows: the Fukasawa conditions yield that is it necessary that
+G1 > 0; for a given choice of b, ρ, α, this will give a condition on µ, which therefore characterizes
+the Fukasawa conditions in SVI. Given then a parameter µ satisfying this condition, the positivity
+of g (or G) can be casted as a simple condition on σ:
+                                                           G2 (l)
+                                                σ ≥ sup
+                                                      l    G1 (l)
+which yields the full characterization of no Butterfly arbitrage in SVI.
+    In section 5 we investigate the conditions on G1 related to the Fukasawa conditions, and in
+section 6 this latter condition on σ.
+
+4.2    Classifying the normalized SVI parameters
+We will use the following notations to clarify the assumptions made on the SVI parameters:
+  • (A1) α + b 1 − ρ2 > 0 and |ρ| < 1,
+                p
+
+    • (A2) α ≥ 0 and |ρ| = 1,
+    • (B1) b(1 ± ρ) < 2,
+    • (B2) b(1 + ρ) < 2 and b(1 − ρ) = 2,
+    • (B3) b(1 + ρ) = 2 and b(1 − ρ) < 2,
+    • (B4) b(1 + ρ) = 2 and b(1 − ρ) = 2, which is equivalent to b = 2, ρ = 0.
+   In the sequel, to avoid singularities in our computations, we will assume b positive since the case
+b = 0 is the Black-Scholes case, which is a trivial case of no arbitrage, and exclude the boundary
+cases |ρ| = 1, so work under assumption (A1). We revisit those boundary cases in section 6.4 where
+we will assume (A2).
+
+
+5     Investigating Fukasawa necessary no arbitrage conditions
+5.1    Limits at infinity
+We have the following:
+Lemma 5.1 (Limits of G1 ).
+                                           1       b(ρ ± 1)  1 b(ρ ± 1) 
+                            lim G1 (l) =        −                 +         .
+                            ±∞              2           4       2     4
+    In particular, G1 (∞) ≥ 0 and G1 (−∞) ≥ 0 iff simultaneously b(1 ± ρ) ≤ 2.
+   These conditions are conditions on the asymptotic slopes of the total variance smile, and are
+therefore related to the Roger Lee Moment formula [17]; this is a general fact for the Fukasawa
+conditions: [8] contains several asymptotic statement on f1 and f2 which are directly related to the
+asymptotic behaviour of w(k)k .
+
+
+                                                      10
+5.2     The conditions as an interval for µ
+Let us investigate the corresponding Fukasawa conditions of positivity of G1+ and G1− in terms of
+SVI parameters. We start with the following:
+Lemma 5.2. Let                                                   1      1
+                                   L± (l; α, b, ρ) := 2N (l)           ∓    −l                              (5)
+                                                                N 0 (l) 4
+where L+ is defined on ]l∗ , +∞[ and L− on ] − ∞, l∗ [.Then G1± > 0 if and only if supl<l∗ L− (l) <
+inf l>l∗ L+ (l) and
+                                µ ∈ Iα,b,ρ :=] sup L− (l), inf∗ L+ (l)[.
+                                                    l<l∗          l>l
+
+Proof. Inorder to have G1± > 0, we need supl<l∗ L± (l) < µ < inf l>l∗ L± (l). Indeed G1± (l) =
+                                                            0
+                   
+              (l+µ)
+1 − N 0 (l)            1
+              2N (l) ± 4   so that G1± (l) > 0 iff 1 ∓ N 4(l) > N 0 (l) 2N
+                                                                        (l+µ)
+                                                                           (l) . Since L+ (l) < L− (l) for every
+l, we obtain an interval for µ given by supl<l∗ L− (l) < µ < inf l>l∗ L+ (l).
+Remark 5.3. In order to alleviate the notations, we will often suppress the list of parameters in
+L± , or when we need it just denote the dependency in α, (b, ρ) being fixed.
+
+    What are the basic properties of L− and L+ ?
+    Note that L− (l∗− ) = −∞ and, under b(1 − ρ) < 2, L− (−∞) = −∞. It follows that l− such
+that L− (l− ) = supl<l∗ L− (l) lays in ] − ∞, l∗ [. Similarly, L+ (l∗+ ) = +∞ and L+ (+∞) = +∞ when
+b(1 + ρ) < 2, so l+ such that L+ (l+ ) = inf l>l∗ L+ (l) lays in ]l∗ , +∞[. When b(1 − ρ) = 2 then
+L−(−∞) = −α2 while when b(1 + ρ) = 2 then          L+ (+∞)       α
+                                                              = 2 . Indeed at infinity L− behaves as
+2α       1     1
+      b(ρ−1) + 4   + 2+b(ρ−1)
+                        2     l while L+ as 2α         1     1
+                                                    b(ρ+1) − 4     + 2−b(ρ+1)
+                                                                        2     l. In these cases the supremum
+of L− (or the infimum of L+ ), could be reached at −∞ (or +∞).
+    Experiments show that not every choice of (α, b, ρ) leads to L− (l) < − < 0 for all l < l∗ and
+L+ (l) >  > 0 for all l > l∗ , so the interval for µ could be empty: for example, for α = −0.8, b = 1
+and ρ = 0.5, we have L− (l− ) > L+ (l+ ). This suggests that the situation is intricate; we show below
+that when α ≥ 0, the interval is non-empty.
+
+5.2.1    The case α ≥ 0
+In the case α ≥ 0, we can indeed demonstrate that the interval for µ is non-empty, with the following
+easy argument:
+    L− is negative for l < l∗ iff 2N
+                                   N          0
+                                     0 (4 + N ) − l is negative. In this domain N
+                                                                                    0
+                                                                                      is negative, so the
+previous condition is equivalent to ask N (4+N )−2lN > 0, or equivalently 2(N −lN 0 )+N (2+N 0 ) >
+                                                 0        0
+                                                                 √             2
+0. Let us consider the first term. We have N − lN 0 = α + b l2 + 1 − √lbl2 +1 which is greater than
+                      √                 √
+0 iff, multiplying by l2 + 1, also α l2 + 1 + b > 0 or equivalently α > − √l2b+1 . This holds for
+α ≥ 0 (note that the latter quantity reaches its maximum at −∞ where it equals 0, so this proof
+cannot handle the case α < 0).
+    We can now consider the second term. We want 2 + N 0 > 0. Since N 0 > b(ρ − 1), then
+2 + N 0 > 2 + b(ρ − 1) ≥ 0. So L− is always strictly negative for l < l∗ and α ≥ 0.
+    Similarly, L+ is positive for l > l∗ iff 2(N − lN 0 ) + N (2 − N 0 ) > 0. With the same arguments
+as before we obtain that L+ is strictly positive for l > l∗ and α ≥ 0.
+    Under (B1), we showed L− (−∞) = −∞ and L+ (∞) = ∞, so the interval I is non-empty.
+
+
+                                                       11
+    When b(1 − ρ) = 2 or b(1 + ρ) = 2 this result is still valid. Since in such cases L− (−∞) = − α2
+and L+ (+∞) = α2 respectively, then L− is negative in [−∞, l∗ [ while L+ is positive in ]l∗ , +∞]
+for α > 0. Otherwise if α = 0, supl<l∗ L− (l) = L− (−∞) = 0 and inf l>l∗ L+ (l) = L+ (+∞) = 0
+respectively.
+    We have proven the following:
+
+Lemma 5.4 (SVI parameters fulfilling Fukasawa necessary no arbitrage conditions: case α ≥ 0).
+Assume (A1). For every (α, b, ρ) with α ≥ 0:
+   • under (B1), the interval Iα,b,ρ is non-empty and contains 0;
+   • under (B2),
+
+         – if α > 0, the interval Iα,b,ρ is non-empty and contains 0;
+         – if α = 0, the interval I0,b,ρ is non-empty and has 0 as left boundary;
+   • under (B3),
+         – if α > 0, the interval Iα,b,ρ is non-empty and contains 0;
+         – if α = 0, the interval I0,b,ρ is non-empty and has 0 as right boundary;
+   • under (B4),
+         – if α > 0, the interval Iα,2,0 is non-empty and contains 0;
+         – if α = 0, the interval I0,2,0 is empty.
+
+5.2.2   Computation of the interval for µ under (B1)
+We tackle now the computation of the interval for µ in the general case where α is not necessarily
+positive, which is less straightforward. In this section we will assume (B1); we deal with the other
+cases in the dedicated section 5.2.5.
+                                                                                       0
+                                                                                             N 00
+    We consider the function L− for l < l∗ and L+ for l > l∗ . We have L0± (l) = 1 ∓ N2 − 2N
+                                                                                           N 02 and
+it follows that L0− (l− ) = L0+ (l+ ) = 0.
+    The corresponding equations in l are:
+                                                                √
+                                                    2(α + b(ρl + l2 + 1))
+                                               
+                              b            l
+                          1∓      ρ+ √            − √         √            = 0.
+                              2          l2 + 1    b l2 + 1(ρ l2 + 1 + l)2
+
+Actually, we don’t need to solve these equations. Accordingly, we set:
+                           p          2  p      
+                                                     1 bρ
+                                                           
+                                                                bl
+                                                                        p       
+                              2
+             g±(b,ρ) (l) = ρ l + 1 + l         2
+                                              l +1     ∓      ∓     − ρl + l2 + 1                          (6)
+                                                     2   4      4
+
+where g+(b,ρ) is defined on [l∗ , ∞[ and g−(b,ρ) on ] − ∞, l∗ ]. Then L0± (l) = 0 iff g±(b,ρ) (l) = αb .
+   The following technical result turns to be a key one:
+
+Proposition 5.5. Assume (A1) and (B1), and let g±(b,ρ) defined by eq. (6). Then g±(b,ρ) (l∗ ) =
+ p
+− 1 − ρ2 , g±(b,ρ) (±∞) = ∞, and g±(b,ρ) is either monotonous or with a single minimum. Let
+                                                                         p
+s± = l∗ if g±(b,ρ) is monotonous and s± 6= l∗ such that g±(b,ρ) (s± ) = − 1 − ρ2 otherwise. Then:
+
+
+                                                     12
+Figure 1: Typical plot of the functions g±(b,ρ) with b = 23 and ρ = 21 . The horizontal dotted line
+                           p
+corresponds to the level −b 1 − ρ2 .
+
+
+   • L− (x; bg−(b,ρ) (x)) = supl<l∗ L− (l; bg−(b,ρ) (x)) for any x < s− , L− (x; bg−(b,ρ) (x)) → −∞
+     when x → −∞, and the function L− (x; bg−(b,ρ) (x)) is increasing iff g−(b,ρ) is decreasing;
+   • L+ (x; bg+(b,ρ) (x)) = inf l>l∗ L+ (l; bg+(b,ρ) (x)) for any x > s+ , L+ (x; bg+(b,ρ) (x)) → +∞ when
+     x → +∞, and the function L+ (x; bg+(b,ρ) (x)) is increasing iff g+(b,ρ) is increasing.
+   The proof is provided in Appendix A. We display a typical plot of g−(b,ρ) and g+(b,ρ) in Figure 1.
+   This proposition has in turn two important corollaries:
+Corollary 5.6. Assume (A1) and (B1). There is a unique (l− , l+ ) such that l− < s− , l+ > s+
+and α = bg−(b,ρ) (l− ) = bg+(b,ρ) (l+ ). The interval Iα,b,ρ is non-empty iff L− (l− ; α) < L+ (l+ ; α). In
+this case the distance between L+ (l+ ; α) and L− (l− ; α) increases with α.
+Proof. This follows directly from the previous analysis: increasing α, the functions g±(b,ρ) in-
+crease so the corresponding l− < s− decreases while l+ > s+ increases. In turn, the function
+L+ (l+ ; bg+(b,ρ) (l+ )) increases and the function L− (l− ; bg−(b,ρ) (l− )) decreases. Note that l− < s−
+                                  p
+and l+ > s+ because α > −b 1 − ρ2 from (A1). We can also use the fact that
+       d                                         d               d
+         (L+ (l+ ; α) − L− (l− ; α)) = L0+ (l+ ) l+ − L0− (l− ) l− + ∂α L+ (l+ ; α) − ∂α L− (l− ; α)
+      dα                                        dα              dα
+                                     = ∂α L+ (l+ ; α) − ∂α L− (l− ; α)
+where l+ and l− are functions        of α given by α = bg+(b,ρ) (l+ ) = bg−(b,ρ) (l− ). Now, the RHS is equal
+         1           1       1                 1
+                                                     > 12 and − N 0 (l
+                                                                    1
+                                                                          > 12 , the previous quantity is greater
+                               
+to 2 N 0 (l +)
+               − N 0 (l− ) − 2   and since N 0 (l +)                   −)
+than 1.
+   Let F (b, ρ) denote
+                   p the unique value of α such thatpL+ (l+ ; α) = L− (l− ; α) if there exists such a
+value for α > −b 1 − ρ2 , otherwise let F (b, ρ) = −b 1 − ρ2 . Then L+ (l+ ; α) > L− (l− ; α) if and
+only if α > F (b, ρ). In other words we define F (b, ρ) as:
+                                                                           p
+                        F (b, ρ) := inf{α | L+ (l+ ; α) > L− (l− ; α)} ∨ −b 1 − ρ2
+
+                                                       13
+                                                                                      25
+Figure 2: Plot of L− (l− ) and L+ (l+ (bg−(b,ρ) (l− ))) as functions of l− , with b = 21 and ρ = 52 . The
+                                                  p
+vertical dotted line corresponds to the level −b 1 − ρ2 .
+
+
+under the assumptions (A1) and (B1). We name F the Fukasawa threshold of SVI.
+   Figure 2 shows:
+
+   • in blue the function l− → L− (l− ; bg−(b,ρ) (l− )) with l− < s− where s− is the point at which
+                          p
+     g−(b,ρ) is equal to − 1 − ρ2 ;
+   • in green the corresponding value of l− → L+ (l+ (bg−(b,ρ) (l− )); bg−(b,ρ) (l− )).
+
+   The following corollary gives an easy criterion of existence of a Butterfly arbitrage:
+
+Corollary 5.7. Assume (A1) and (B1). If α ≤ F (b, ρ) then for every choice of µ and σ, the SVI
+model does not satisfy the Fukasawa conditions.
+
+5.2.3   Study of the Fukasawa threshold under (B1)
+In the previous section we showed that the difference L+ (l+ ; bg+(b,ρ) (l+ ))−L− (l− ; bg−(b,ρ) (l− )) goes
+to infinity when increasing α = bg+(b,ρ) (l+ ) = bg−(b,ρ) (l− ) to infinity, so there exists ᾱ such that
+the interval for µ in non-empty; from the previous corollaries for each α > ᾱ the interval for µ is
+also in non-empty. Decreasing α, we could bump into two situations:
+
+    • α reaches the value F (b, ρ) > −b 1 − ρ2 for which L+ (l+ ; F (b, ρ)) = L− (l− ; F (b, ρ));
+                                       p
+
+    • α reaches the value F (b, ρ) = −b 1 − ρ2 . In such case l± = s± .
+                                       p
+
+
+    Our simulations suggest that the first scenario always occurs.
+    Could wep prove this? In this respect
+                                   p        we can observe the following: it is equivalent to prove that
+L+ (s+ ; −b 1 − ρ2 ) < L− (s− ; p
+                                −b 1 − ρ2 ).
+    If s+ = l∗ then L+ (s+ ; −b 1 − ρ2 ) = −l∗ and the function L+ (l+ ; bg+(b,ρ) (l+ )) is increasing.
+It follows that the function L− (l− ; bg−(b,ρ) (l− )) cannot be increasing and s− < l∗ . We should show
+                 p
+that L− (s− ; −b 1 − ρ2 ) > −l∗ .
+
+
+                                                    14
+                                    p
+    When s− = l∗ then L− (s− ; −b 1 − ρ2 ) = −l∗ and the function L− (l− ; bg−(b,ρ) (l− )) is increas-
+ing. Again, the function L+ (l+ ; bg+(b,ρ) (l+ )) cannot be increasing so s+ > l∗ . In this case we should
+                       p
+prove that L+ (s+ ; −b 1 − ρ2 ) < −l∗ .                                                        p
+    In the final case when both g±(b,ρ) have a minimum, it is enough to prove L− (s− ; −b 1 − ρ2 ) >
+                     p
+−l∗ and L+ (s+ ; −b 1 − ρ2 ) < −l∗ .
+    So to sum up, it would remain to prove that when g−(b,ρ) (or g+(b,ρ) ) has a minimum, it holds
+            p                                 p
+L− (s− ; −b 1 − ρ2 ) > −l∗ (or L+ (s+ ; −b 1 − ρ2 ) < −l∗ ) to obtain the result in each case. We
+did not manage to conclude along those lines though.
+                                                         p
+Remark 5.8. We don’t know whether F (b, ρ) > −b 1 − ρ2 but we conjecture it. Indeed we prove
+in Appendix p B that there is a closed formula for F (b, 0) which satisfies F (b, 0) > −b; the statement
+F (b, ρ) > −b 1 − ρ2 can be also assessed numerically.
+
+5.2.4     Symmetries
+We can exploit the symmetry property of N with respect to ρ in order to restrict the required
+computations to the function L− only.
+   Indeed N (l; α, b, ρ) = N (−l; α, b, −ρ), N 0 (l; b, ρ) = −N 0 (−l; b, −ρ) and N 00 (l; b) = N 00 (−l; b).
+This brings to the consideration that
+
+               L− (l; α, b, ρ) = −L+ (−l; α, b, −ρ),        L+ (l; α, b, ρ) = −L− (−l; α, b, −ρ),
+
+so that
+
+                               inf L+ (l; α, b, ρ) = − sup L− (−l; α, b, −ρ)
+                             l>l∗ (ρ)                   l>l∗ (ρ)
+
+                                                  =−         sup    L− (l; α, b, −ρ)
+                                                        l<−l∗ (ρ)
+
+                                                  =−         sup    L− (l; α, b, −ρ)
+                                                        l<l∗ (−ρ)
+
+
+so L+ (l+ (α, b, ρ); α, b, ρ) = −L− (l− (α, b, −ρ); α, b, −ρ).
+   Note that l+ (α, b, ρ) is the unique l > l∗ (ρ) such that L0+ (l; α, b, ρ) = 0 while l− (α, b, −ρ) is
+the unique l < l∗ (−ρ) such that L0− (l; α, b, −ρ) = 0. Since L0+ (l; α, b, ρ) = L0− (−l; α, b, −ρ) and
+−l− (α, b, −ρ) > −l∗ (−ρ) = l∗ (ρ), then l+ (α, b, ρ) = −l− (α, b, −ρ).
+
+Lemma 5.9. Assume (A1) and (B1). Then:
+   • L+ (l+ (α, b, ρ); α, b, ρ) = −L− (l− (α, b, −ρ); α, b, −ρ);
+   • l+ (α, b, ρ) = −l− (α, b, −ρ);
+   • Iα,b,ρ = L− (l− (α, b, ρ); α, b, ρ), −L− (l− (α, b, −ρ); α, b, −ρ) .
+                                                                      
+
+   From the above equations we also have g+(b,ρ) (l) = g−(b,−ρ) (−l) so with easy arguments one
+gets s+ (b, ρ) = −s− (b, −ρ).
+
+
+
+
+                                                       15
+5.2.5    The cases (B2), (B3) and (B4)
+Assume (B2) or (B4). Using the same definitions and following the proof of Proposition 5.5,
+we obtain that g−(b,ρ) (l) is increasing. Now since g−(b,ρ) is increasing on ] − ∞, l∗ ] and since
+                 p
+g−(b,ρ) (l∗ ) = − 1 − ρ2 , it follows that there is no solution to the equation g−(b,ρ) (l− ) = αb . In this
+case so, the supremum of L− is attained at −∞ and it is − α2 . Under (B3) or (B4), for symmetrical
+reasons L+ attains its infimum α2 at ∞.
+    Under (B2), L+ reaches its infimumin ]l∗ , +∞[     while under (B3), L− reaches its supremum in
+] − ∞, l∗ [. Finally under (B4), Iα,2,0 = − α2 , α2 .
+                                                   
+
+    We can extend the definition of the Fukasawa threshold to the cases (B2), (B3) and (B4):
+   • under (B2), F (b, ρ) denotes the unique value of α such that L− (l− (α, b, −ρ); α, b, −ρ) = α2
+                                                p                            p
+     if there exists such a value forpα > −b 1 − ρ2 , otherwise F (b, ρ) = −b 1 − ρ2 : F (b, ρ) :=
+     inf{α | L+ (l+ ; α) > − α2 } ∨ −b 1 − ρ2 ;
+   • under (B3), F (b, ρ) denotes the unique value of α such that L− (l− (α, b, ρ); α, b, ρ) = α2 if there
+                                      p                                 p
+     exists such a value for
+                           p α > −b 1 − ρ2 , otherwise F (b, ρ) = −b 1 − ρ2 : F (b, ρ) := inf{α |
+     α                             2
+     2 > L− (l− ; α)} ∨ −b 1 − ρ ;
+
+   • under (B4), F (2, 0) := 0.
+From Lemma 5.4, under cases (B2) and (B3) it holds F (b, ρ) < 0.
+
+5.3     Conclusion
+We can now state the full characterization of the Fukasawa necessary no arbitrage conditions for
+SVI:
+Theorem 5.10 (SVI parameters (α, b, ρ, µ, σ) fulfilling Fukasawa necessary no arbitrage condi-
+tions). Assume (A1). Then:
+    • under (B1), F (b, ρ) <
+                                                                                    
+                                        0    and     the  interval   I α,b,ρ  =     L− (l− (α, b, ρ); α, b, ρ),
+      −L− (l− (α, b, −ρ); α, b, −ρ) is non-empty iff α > F (b, ρ);
+    • under (B2) (resp.                              the interval Iα,b,ρ = − α2 , −L− (l− (α, b, −ρ); α, b, −ρ)
+                                                                                                                
+                       (B3)), F (b, ρ) < 0 and
+      (resp. Iα,b,ρ = L− (l− (α, b, ρ); α, b, ρ), α2 ) is non-empty iff α > F (b, ρ);
+                                                    
+
+    • under (B4), the interval Iα,2,0 = − α2 , α2 is non-empty iff α > F (2, 0) = 0.
+                                                    
+
+   In every case, the Fukasawa conditions are satisfied iff µ ∈ Iα,b,ρ .
+                                                                                             p
+    Except for F (2, 0), the result F (b, ρ) negative holds even in the case F (b, ρ) > −b 1 − ρ2
+because we have proven that for α ≥ 0 the interval for µ is always non-empty. In terms of the usual
+SVI parameters the conditions translate into σa > F (b, ρ) and m  σ ∈ I σ ,b,ρ .
+                                                                        a
+
+    Is the existence of the Fukasawa
+                                   p threshold surprising? We would say no: indeed the values of
+α too close to the lower bound −b 1 − ρ2 correspond to values of the smile too close to zero, and
+thispwill lead to an arbitrage as discussed in section 2.2, so that one even expects that F (b, ρ) >
+−b 1 − ρ2 .
+    The explanation of the range constraint for µ is less intuitive to us; we would say that it results
+from the geometrical constraint that the Fukasawa conditions impose on the shape of SVI, as follows
+from our computations.
+
+                                                       16
+5.4     Numerics
+F (b, ρ) at a fixed b We plot in Figure 3 the Fukasawa threshold at fixed b = 12 as a function of ρ.
+
+
+
+
+                        Figure 3: Plot of F (b, ρ) as a function of ρ, with b = 12 .
+
+   The graph is symmetric with respect to ρ because F (b, ρ) is the value of α such that the difference
+between L+ (l+ (α, b, ρ); α, b, ρ) and L− (l− (α, b, ρ); α, b, ρ) is null, where bg±(b,ρ) (l± (α, b, ρ)) = α. But
+L+ (l+ (α, b, ρ); α, b, ρ) = −L− (l− (α, b, −ρ); α, b, −ρ) so we look for α such that
+
+                          L− (l− (α, b, −ρ); α, b, −ρ) + L− (l− (α, b, ρ); α, b, ρ) = 0
+
+and this is symmetric with respect topρ.
+  pThe red line is the level α = −b 1 − ρ2 and it again confirms our hypothesis that F (b, ρ) >
+−b 1 − ρ2 .
+   From the previous graph, it seems that F (b, ρ) has monotonicity of the same sign as ρ.
+
+
+
+
+                                                       17
+F (b, ρ) at fixed ρ as a function of b In Figure 4 we plot the Fukasawa threshold at fixed ρ = 51
+as a function of b.
+
+
+
+
+                        Figure 4: Plot of F (b, ρ) as a function of b, with b = 15 .
+
+L− (l− (F (b, ρ), b, ρ); F (b, ρ), b, ρ) and L− (l− (F (b, ρ), b, −ρ); F (b, ρ), b, −ρ) as functions of ρ The
+following Figure 5 shows in blue the function L− (l− (F (b, ρ), b, ρ); F (b, ρ), b, ρ) (denoted for brevity as
+L− (F (b, ρ), ρ))       with         respect     to      ρ        while       in      green    the     function
+L− (l− (F (b, ρ), b, −ρ); F (b, ρ), b, −ρ) (or L− (F (b, ρ), −ρ)) with respect to ρ. The fixed value for
+b is 53 .
+
+
+
+
+       Figure 5: Plot of L− (l− (F (b, ρ), ρ) and L− (F (b, ρ), −ρ) as functions of ρ, with b = 53 .
+
+    This graph also shows in blue the value of the two bounds for µ when they shrink to one point.
+Note that for ρ = 0 this is 0 for every b, while it depends on b for the other values of ρ.
+    The function ρ → L− (l− (F (b, ρ), b, ρ); F (b, ρ), b, ρ) is odd due to the symmetry of ρ → F (b, ρ).
+Furthermore, from the graph it seems that ρ and L− (l− (F (b, ρ), b, ρ); F (b, ρ), b, ρ) have the same
+sign.
+
+L− (l− (F (b, ρ), b, ρ); F (b, ρ), b, ρ) as a function of b Figure 6 shows the function
+L− (l− (F (b, ρ), b, ρ); F (b, ρ), b, ρ) (denoted as L− (F (b, ρ), ρ)) with respect to b. Here we fix ρ = 21 .
+
+                                                      18
+                Figure 6: Plot of L− (l− (F (b, ρ), ρ) as a function of b, with ρ = 12 .
+
+
+5.5     Algorithm
+We can parametrize the normalized SVI parameters satisfying the Fukasawa conditions as follows:
+  1. choose ρ ∈] − 1, 1[ and b positive such that b(1 ± ρ) ≤ 2 by choosing b0 ∈]0, 1] and setting
+     b = b0 1+|ρ|
+              2
+                  ;
+  2. compute numerically F (b, ρ), and parametrize α by setting α = F (b, ρ) + u for positive u;
+  3. compute numerically (L− , L+ ) for this value of u, and parametrize µ by setting µ = (1+q)
+                                                                                            2 L+ +
+     (1−q)
+       2 L− for q ∈] − 1, 1[.
+
+     The values in point 3 can be computed using the same functions employed to find F (b, ρ), indeed
+it is sufficient to evaluate L− (l− (α, b, ρ); α, b, ρ) and −L− (l− (α, b, −ρ); α, b, −ρ).
+     If we are interested only by a test that a given parameter satisfies the Fukasawa conditions, we
+have the corresponding waterfall of failure possibilities that we define as follows:
+  1. b(1 − ρ) > 2 or b(1 + ρ) > 2: failure of type 1 ; otherwise:
+  2. α ≤ F (b, ρ): failure of type 2 ; otherwise:
+  3. µ not in Iα,b,ρ : failure of type 3.
+
+5.5.1   Application to Axel Vogt parameters
+The so-called Axel Vogt example (cf [10]) became the archetypal example of a smile with arbitrage.
+The                            SV I                           parameters                        are
+(a, b, ρ, m, σ) = (−0.041, 0.1331, 0.3060, 0.3586, 0.4153), and they are known to lead to a Butter-
+fly arbitrage. Do they satisfy the Fukasawa conditions?
+    No, since the respective value for µ is 0.86347, while its arbitrage free interval is
+] − 0.72407, 0.82939[.
+    The Fukasawa conditions are not satisfied because of µ. However α = −0.09872 and F (b, ρ) =
+−0.12663, so α > F (b, ρ) and the interval for µ is non-empty. The problem here is due to µ, which
+is too large: we face a failure of type 3.
+
+
+
+                                                  19
+6       No arbitrage domain for SVI
+6.1     Behaviour of the function G2
+Recall that the function G2 is defined as
+
+                                                                N 0 (l)2
+                                        G2 (l) := N 00 (l) −                                            (7)
+                                                                2N (l)
+
+and that it depends only on (α, b, ρ). As discussed in section
+                                                             p 4.1, G2 is positively proportional
+to the second derivative of the volatility smile, meaning of SV I(k). Since the variance smile
+is convex and asymptotically linear on both sides, it is expected that G2 will be asymptotically
+negative, while it is positive around the minimum of the smile. In particular it is expected that it
+will have zeros, on both sides of the minimum of the smile.
+
+6.1.1    The zeros of G2
+In this section we prove the following:
+Lemma 6.1 (Zeros of G2 ). G2 has exactly two zeros l1 , l2 which satisfy l1 < l∗ ∧ 0 and l2 > l∗ ∨ 0
+such that G2 (l) > 0 ⇐⇒ l ∈]l1 , l2 [. Furthermore, G2 (l) → 0− for l → ±∞.
+
+Proof. For l → ±∞ we have that the first addend behaves as bl−3 while the second as − b(ρ±1)   2    l−1 , so
+                  b(ρ±1) −1                                   −                          ∗       00 ∗
+G2 behaves as − 2 l . This means that G2 goes to 0 as l → ±∞. Since G2 (l ) = N (l ) > 0
+and G2 is continuous, then there exists an interval ]l1 , l2 [ containing l∗ such that for every l in this
+interval, G2 is positive. It follows that G2 has at least two zeros. Deriving, we find the following
+interesting relationship between G02 and G2 :
+
+                                                             N 0 (l)
+                                     G02 (l) = N 000 (l) −           G2 (l).
+                                                             N (l)
+
+    We will prove now that this relationship entails that the first zero of G2 is negative. Indeed if
+l1 > 0 is the first zero of G2 , since
+                                                         3bl
+                                       N 000 (l) = −         5                                   (8)
+                                                       2
+                                                     (l + 1) 2
+we have G02 (l1 ) < 0, which is not possible because G2 (l) is negative for every l < l1 . If l1 = 0,
+then G02 (0) = 0 but 0 cannot be a point of local maximum for G2 , otherwise there would be a
+following zero l2 > 0. In such case, G02 (l2 ) < 0 for eq. (8) but having G2 so far negative, it should
+be increasing in l2 . Then 0 could at most be an inflection point. However,
+
+                                            N 0 (l)N 000 (l)     N 0 (l)2   N 00 (l)
+                                                                                    
+                      G002 (l) = N iv (l) −                  + 2          −            G2 (l)
+                                                 N (l)           N (l)2     N (l)
+
+so G002 (0) = N iv (0) = −3b, which is negative since b > 0. Therefore, the first zero l1 of G2 is
+necessarily negative. With similar arguments we obtain that the next zero l2 must be non-negative.
+Suppose l2 = 0. Then, as before, G02 (0) = 0 and G002 (0) = −3b < 0, so it would be a point of local
+maximum, which is not possible. Then l2 must be positive.
+
+
+
+                                                     20
+    Moreover, there cannot be other zeros for G2 . Indeed, suppose l3 was the first zero after l2 .
+Then l3 > 0 and from eq. (8) it should be G02 (l2 ) < 0 but this cannot be true since G2 is negative
+in the left neighborhood of l3 .
+    This leads to the conclusion that G2 has exactly two zeros, one positive and the other one
+                                               bρ2
+                                                    
+negative. As a consequence, G2 (0) = b 1 − 2(α+b)     > 0. This could have been obtained also from
+                   p
+                          2
+the fact that α + b 1 − ρ ≥ 0 due to the positivity of N .
+    Then, we find that G2 > 0 in [l∗ , 0] when ρ ≥ 0 or in [0, l∗ ] when ρ < 0.
+   Substituting the explicit formulas for N, N 0 and N 00 in eq. (7), we obtain
+                                                         √
+                                     b              b2 (ρ l2 + 1 + l)2
+                       G2 (l) =           3 −                      √
+                                 (l2 + 1) 2   2(l2 + 1)(α + b(ρl + l2 + 1))
+                                                                                                    √         2
+                                                                                                        2
+which leads to the remark that G2b(l) = G̃2, αb ,ρ (l) where G̃2,x,ρ (l) :=       1
+                                                                                      3
+                                                                                                  (ρ l +1+l)
+                                                                                          − 2(l2 +1)(x+(ρl+√
+                                                                                                             l2 +1))
+                                                                                                                     ,
+                                                                              (l2 +1) 2
+which reduces in general the study of G2 to the study of a 2-parameters
+                                                                      √      function.
+                                                                                            3
+    In order to find the zeros of G2 we should solve 2 αb + b(2 − l2 ) l2 + 1 − ρ2 (l2 + 1) 2 − 2ρl3 = 0
+                                                   √
+or equivalently 2 αb − 2ρl3 = ((ρ2 + 1)l2 + ρ2 − 2) l2 + 1.
+    Note that when ρ = 0 this equation is explicitly solvable.
+
+6.1.2   Plot of a typical G2 function
+                                                            1
+We plot in Figure 7 the function G2 for the parameters α = 10 , b = 12 , ρ = − 10
+                                                                                3
+                                                                                  .
+
+
+
+
+                                                       1
+                        Figure 7: Plot of G2 with α = 10 , b = 12 and ρ = − 10
+                                                                            3
+                                                                               .
+
+
+6.2     The final condition on σ under (A1)
+We recall that the non-negativity of the Durrleman condition in the case of SVI amounts to the
+non-negativity of the function
+                                                      1
+                                     G(l) = G1 (l) +    G2 (l)                             (9)
+                                                     2σ
+where G1 and G2 do not depend on σ.
+   We have proven that:
+
+                                                     21
+  1. for every (α, b, ρ) with b(1 ± ρ) ≤ 2 and α > F (b, ρ), where F (b, ρ) ≤ 0, there exists an interval
+     for µ such that G1 is positive on R (in fact each factor of G1 is positive on R). Moreover
+     it is necessary that the conditions on (α, b, ρ) hold and that µ lies in this interval under no
+     arbitrage.
+  2. for every (α, b, ρ) with b(1 ± ρ) ≤ 2 there exists an interval ]l1 , l2 [ containing 0 and l∗ such
+     that G2 (l) > 0 iff l ∈]l1 , l2 [.
+
+   We insist here again on the key property brought by the Fukasawa condition that it is necessary
+that G1 is positive. This structures a lot the picture; previous to Fukasawa’s observation, people
+investigating the positivity of G could not assume this. Another consequence is that under the
+Fukasawa conditions of section 3, G is granted to be positive on [l1 , l2 ].
+   The last step is to exploit the fact that thanks to our re-parametrization, the dependency of
+G in σ is very simple. Let stand for a fixed set of parameters (α, b, ρ, µ) fulfilling the Fukasawa
+conditions. Then given the fact that G2 (l) < 0 for some l, it follows that if G is non-negative
+everywhere for ( , σ), then G is also non-negative everywhere for every ( , τ ) with τ > σ. As a
+consequence, there exists a function → σ ∗ ( ) such that G is non-negative everywhere for ( , τ ) iff
+τ ≥ σ ∗ ( ).
+   The value of σ ∗ can be obtained asking the RHS of eq. (9) to be non-negative, which holds for
+             G2 (l)
+σ ≥ supl − 2G  1 (l)
+                     . Then
+                                                                G2 (l)
+                                 σ ∗ (α, b, ρ, µ) := sup −              .
+                                                    l<l1 ∨l>l2 2G 1 (l)
+
+                                                                         G2 (l)
+   Since G2 (l1− ) = G2 (l2+ ) = 0− and G2 (±∞) = 0− , the maximum of − 2G 1 (l)
+                                                                                 for l < l1 ∨ l > l2 is
+reached for a finite real value in ] − ∞, l1 ] ∪ [l2 , +∞[.
+   We have therefore proven the following:
+Theorem 6.2 (Necessary and sufficient no Butterfly arbitrage conditions for SVI under (A1)).
+No Butterfly arbitrage in SVI entails that G1 is positive, which requires b(1 ± ρ) ≤ 2. Under this
+condition:
+
+   • each of the factors of the function G1 is positive on R if and only if α > F (b, ρ) and µ ∈ Iα,b,ρ ;
+   • for such µ’s, calling l1 < 0 < l2 the only zeros of G2 , the function G is positive in ]l1 , l2 [ for
+     every σ ≥ 0 and the function G is non-negative on R if and only if σ ≥ σ ∗ (α, b, ρ, µ).
+
+6.2.1   Practical computation of σ ∗
+Computationally, it would be easier to implement an algorithm with bounded intervals for l. It is
+enough to substitute h = 1l to obtain
+
+                                                                        G2 ( h1 )
+                                 σ ∗ (α, b, ρ, µ) :=     sup       −              .
+                                                        1      1
+                                                       l1 <h< l2
+                                                                       2G1 ( h1 )
+
+    For h which goes to 0± , the function G2 goes to 0− while G1 is always positive under the
+                                                    G (1)
+Fukasawa conditions. So the function f h1 = − 2G2 (h1 ) goes to 0+ . This is a point of minimum for
+                                             
+                                                      1 h
+
+f in the interval l11 , l12 because here the function is always positive.
+                          
+
+
+
+                                                       22
+       Figure 8: Plot of f ( h1 ) as a function of h, with b = 12 , ρ = − 10
+                                                                          3         1
+                                                                             , α = 10          1
+                                                                                      and µ = 10 .
+
+
+    To numerically compute σ ∗ we can use an algorithm which finds the maximum of f in l11 , 0
+                                                                                                   
+         1
+and in 0, l2 and then compares the two maxima.
+                                              4b(ρ−1)
+    It can be shown that f 0 h1 goes to (2−b(ρ−1))(2+b(ρ−1)) < 0 when h goes to 0− while it goes to
+                               
+       4b(ρ+1)                            +                  0 1
+                                                                              0 1
+                                                                                   
+(2−b(ρ+1))(2+b(ρ+1)) > 0 when h goes to 0 . Furthermore, f l1 > 0 and f l2 < 0.
+    We plot in Figure 8 the function f h1 with b = 12 , ρ = − 10
+                                                                3        1
+                                                                  , α = 10           1
+                                                                            and µ = 10 .
+                      1
+    The function
+         1      f     seems
+                     h 1     to have always three extrema:   two   points of  maximum  (one in each
+interval l1 , 0 and 0, l2 ) and one point of minimum at 0. The sign of ρ does not imply in which
+of the two intervals the maximum lies.
+    For ρ = 0 and µ = 0 the maxima have the same height, furthermore the two points of maximum
+are symmetrical with respect to 0, this last one is also the point of minimum. This follows from
+the fact that G2 is symmetric for ρ = 0 and that when µ = 0, also G1 is symmetric.
+    Note that we have not proven that there is a single maximum on each side of 0. So a strict
+implementation should take into account the possibility that there are several ones, and use a global
+optimizer on each side. We strongly conjecture that there is in fact a single maximum on each side.
+
+6.3    Algorithm under (A1)
+We can now complete the algorithms stated for the Fukasawa conditions. For the parametrization
+of the no arbitrage domain, we just need to add the final step which specifies the range of σ:
+  1. choose ρ ∈] − 1, 1[ and b positive such that b(1 ± ρ) ≤ 2 by choosing b0 ∈]0, 1] and setting
+     b = b0 1+|ρ|
+              2
+                  ;
+  2. compute numerically F (b, ρ), and parametrize α by setting α = F (b, ρ) + u for positive u;
+  3. compute numerically (L− , L+ ) for this value of u, and parametrize µ by setting µ = (1+q)
+                                                                                            2 L+ +
+     (1−q)
+       2 L− for q ∈] − 1, 1[;
+  4. compute numerically σ ∗ (α, b, ρ, µ), and parametrize σ by setting σ = σ ∗ + v where v ≥ 0.
+   The main benefit of this parametrization is that it is eventually a simple product of intervals:
+
+                        (ρ, b0 , u, q, v) ∈] − 1, 1[×]0, 1]×]0, ∞[×] − 1, 1[×[0, ∞[
+
+
+                                                    23
+and this is perfectly suitable to feed optimization algorithms working with bounds, like the standard
+ones in the scipy.optimize scientific library.
+   A drawback to keep in mind is that sampling this product sub-space in a uniform way corre-
+sponds to a distorted sampling in the initial space.
+   There again, we can specify an algorithm which decides whether a SVI parameter lies or not in
+the no arbitrage domain:
+
+  1. b(1 − ρ) > 2 or b(1 + ρ) > 2: failure of type 1; otherwise:
+  2. α ≤ F (b, ρ): failure of type 2; otherwise:
+  3. µ not in Iα,bρ : failure of type 3; otherwise:
+  4. σ < σ ∗ : failure of type 4.
+
+6.4     The monotonous case (A2)
+In all the previous discussion, we have assumed |ρ| < 1 to avoid singular cases in our computations.
+What happens when |ρ| = 1? We discuss below the case ρ = −1, the case ρ = 1 follows by
+symmetry.
+    In this case the SVI smile is (convex) decreasing, and reaches its minimum α at infinity, so the
+domain of α is now α ≥ 0. Note that the boundary value 0 is allowed, unlike in the regular case,
+because the implied volatility does not vanish at any finite strike. The negative slope condition
+requires b ≤ 1, and the positive (rightmost) one is automatically fulfilled.
+    Regarding the Fukasawa conditions, the proofs in section 3 still hold with the convention that
+l∗      =      +∞ so that N is decreasing.                       The interval for µ becomes
+Iα,b,−1 =]L− (l− (α, b, −1); α, b, −1), +∞[, so exactly equal to Iα,b,ρ with the convention
+L− (l− (α, b, 1); α, b, 1) = −∞.        For α ≥ 0, we have L− (l) < 0 for every l so
+L− (l− (α, b, −1); α, b, −1) < 0 also, and this interval always contains [0, ∞[. We can then extend
+the definition of the Fukasawa threshold to the case ρ = −1, putting F (b, −1) = 0. This implies
+that the interval for µ is non-degenerate even when α = F (b, −1) = 0.
+    The function G2 has only one negative zero l1 , above which it is always positive with G2 (+∞) =
+                                               G2 (l)
+0+ while G2 (−∞) = 0− . So σ ∗ = supl<l1 − 2G    1 (l)
+                                                       .
+
+Theorem 6.3 (Necessary and sufficient no Butterfly arbitrage conditions for SVI, ρ = −1). No
+Butterfly arbitrage in SVI entails that G1 is positive, which requires b ≤ 1 and α ≥ 0. Under these
+conditions:
+   • each of the factors of the function G1 is positive on R if and only if µ > L− (l− ; α, b, −1);
+
+   • for such µ’s, calling l1 < 0 the only zero of G2 , the function G is positive on ]l1 , ∞[ for
+     every σ ≥ 0 and the function G is non-negative on R if and only if σ ≥ σ ∗ (α, b, −1, µ) where
+                                    G2 (l)
+     σ ∗ (α, b, −1, µ) = supl<l1 − 2G 1 (l)
+                                            .
+
+6.4.1   Application: SVI decreasing to zero
+
+p us consider the case ρ = −1 and a = 0, so SVI is given by the formula SV I(k) = b(−(k − µσ) +
+Let
+   (k − µσ)2 + σ 2 ) with b ≤ 1.
+    Can we compute the lower bound for µ? Consider the equation g−(b,−1) (l) = 0 or equivalently
+                √             √                                                            √
+from eq. (6), (− l2 + 1 + l) l2 + 1 12 − 4b + bl4 + 1 = 0. Simplifying, we obtain 2l(1 − b) l2 + 1 =
+                                                
+
+
+
+                                                 24
+2(1 − b)l2 − (b + 2) and squaring we find the two solutions l = ± √b+2          when b < 1. The positive
+                                                                   2   3(1−b)
+one does not solve the initial equation, so with the notations used in section 3, we finally find
+s− = − √b+2 . If b = 1, then s− = +∞. Note that s− corresponds to l− when α = 0, and we
+         2 3(1−b)
+                                         p
+get that L− (l− (0, b, −1); 0, b, −1) = − 3(1 − b).
+    So for α = 0:
+
+    • the Fukasawa conditions are satisfied if and only if µ > − 3(1 − b);
+                                                                p
+
+    • the unique zero of G2 does not depend on b and is given by l1 = − √13 , and the parameters
+                                                                 p
+      with no arbitrage are eventually given by b ≤ 1, µ > − 3(1 − b), σ ≥ σ ∗ (0, b, −1, µ) =
+                       G2 (l)
+      supl<−1/√3 − 2G    1 (l)
+                               .
+
+
+7     Calibration experiments
+Now that we have parametrized the no arbitrage domain, the design of a calibration algorithm is
+straightforward:
+
+    1. choose an objective function;
+    2. choose a starting point policy;
+    3. for the chosen starting points (possibly several of them), run a minimization algorithm of the
+       objective function over the no arbitrage domain;
+    4. pick up the optimal parameters.
+    As objective function, we choose the classical least squares criterion, which takes as input the
+differences of the data and model total variances on the available set of log-forward moneyness.
+This will give equal weights to far-from the money points, where the precise value of the implied
+volatility, and so the accuracy of the calibration, matters less, and to close-to the money ones, which
+is not a desirable feature: it can be easily patched by adding weights given by the Vegas (computed
+once for all with the data points), so that the errors are more in line with losses, unit-wise. This
+would moreover stabilize the calibration from one day to another one, especially on illiquid markets,
+as discussed in detail in [18].
+    Now the big question for us is rather whether or not the no arbitrage constraint will deteriorate
+the quality of the fit, and we will also work on model generated data or on index options data which
+are liquid ones, whence our choice of a standard non-weighted objective function.
+    Regarding the starting point policy, we are not big fans of smart guess strategies which try
+to compute the best starting point from the data. Such strategies can work brilliantly in many
+favorable situations, yet they might fail heavily on data with low quality (e.g. due to a dubious
+treatment by an internal department), or when faced with new market behavior and configurations.
+There is a clear risk of over-engineering here also. We would be more confident by using a set (with
+small cardinality) of starting points, possibly produced by a machine learning algorithm duly trained
+on the markets in scope. We implement a very basic version of this idea, which picks up uniformly
+generated points within the hyperrectangle of the no arbitrage domain, irrespective of the data.
+    The scipy function here used is the ‘least squares’ which lies in the optimize library. The method
+used is the ‘dogbox’, which handles bounds. The tolerances regarding the change of the cost function
+(‘ftol’), the change of the independent variables (‘xtol’) and the norm of the gradient (‘gtol’) are
+
+
+
+                                                  25
+all set at the Python numpy machine epsilon. The maximum number of function evaluations
+(‘max nfev’) is set at 1000.
+    Even though the arbitrage region does not impose an upper bound for α and σ, we choose
+arbitrary ones. In particular, we ask
+                                                                  
+                                              |k0 | |kN |        ∗
+                                    σ ≤ max        ,      , 1.5σ
+                                               r      r
+
+with r as parameter to be chosen by the user (default value equal to 0.1). This bound is related
+to the fact that when |kσi | is below a threshold r, then the smile is almost flat and this causes
+uncertainty on the parameters to be chosen.
+    The upper bound for α is left to be chosen by the user. For the index option data we set α < 1
+since it is enough to achieve a very good fit, while for the model generated data, in order to have an
+almost perfect calibration, the upper bound actually depends on the α parameter used to generate
+data. We set in every case α < 3, since we know a priori that all the data are generated with α
+lower than 3.
+    We provide below our calibration results on model generated data and then on market data.
+
+7.1    On model data
+To check the robustness of the algorithm we firstly run it on data generated by arbitrary SVI
+parameters with no arbitrage, and on the Axel Vogt parameters. We take a vector of 13 log-forward
+strikes taken from Table 3.2 of [6].
+    The parameters chosen for each of the graphs in Figure 9 are arbitrage-free. The red and the
+blue lines, which represent the total variances generated from the arbitrary parameters and the
+total variances obtained from the calibrated parameters respectively, overlap.
+
+
+
+
+                                                 26
+Figure 9: Model total variances generated by arbitrage-free parameters (in red) and calibrated total
+variances (in blue).
+
+   The fact that the fit is excellent can be seen by the Frobenius relative errors in Table 1.
+
+Table 1: Frobenius relative errors for the total variances with arbitrage-free parameters calibrated
+on model total variances.
+
+
+                         a     b       ρ      m            σ    Relative error (×10−16 )
+                 0    0.10   1.0   -0.306    0.10        0.30                      1.48
+                 1   -0.10   1.1    0.200    0.00        0.60                      1.63
+                 2    0.01   0.1   -0.600   -0.05        0.10                      2.30
+                 3    0.80   0.2    0.800    1.00        0.90                      1.77
+                 4    1.40   1.9    0.000   -0.10        0.50                      2.35
+                 5    0.90   1.2    0.500    0.20        0.85                      2.25
+
+
+
+   Furthermore, also the Frobenius relative error on the parameters is low (Table 2). This means
+that the algorithm is robust and recovers the original data.
+
+
+
+
+                                                    27
+     Table 2: Frobenius relative errors for the parameters calibrated on model total variances.
+
+
+                         a       b        ρ         m            σ    Relative error (×10−14 )
+                 0    0.10   1.0     -0.306        0.10        0.30                      0.10
+                 1   -0.10   1.1      0.200        0.00        0.60                      0.30
+                 2    0.01   0.1     -0.600       -0.05        0.10                      0.06
+                 3    0.80   0.2      0.800        1.00        0.90                     20.00
+                 4    1.40   1.9      0.000       -0.10        0.50                      0.10
+                 5    0.90   1.2      0.500        0.20        0.85                      3.00
+
+
+
+7.1.1   Axel Vogt parameters
+For a matter of completeness we run our algorithm on the notorious Axel Vogt parameters, which
+lead to an arbitrage SVI. The original and the calibrated parameters are reported in Table 3 while
+the graphs of the original and arbitrage-free total variances are shown in Figure 10.
+
+                     Table 3: Axel Vogt parameters vs best fitting no arbitrage.
+
+
+                             a                b                 ρ           m           σ
+              Original       -0.041           0.1331            0.306       0.3586     0.4153
+              Calibrated     -0.0198444       0.102745          0.180754    0.266125   0.310459
+
+
+
+
+Figure 10: Total variances generated by the Axel Vogt parameters (in red) and total variances with
+arbitrage-free parameters (in blue).
+
+   Of course, the calibration is not perfect as in the previous case and the Frobenius error between
+the Axel Vogt total variances and the non arbitrage SVI corresponding total variances is 2.15%.
+
+
+                                                          28
+   We compare the function g defined in eq. (2) with the original Axel Vogt parameters and the
+same function with the new arbitrage-free parameters in Figure 11.
+
+
+
+
+Figure 11: Plot of the functions g with the the Axel Vogt parameters (in red) and with the arbitrage-
+free parameters (in blue).
+
+   From the plot it can be seen that the function g with the new arbitrage-free parameters can be
+very close to zero, but it is always positive.
+   In the following study, we compare the results obtained with the new arbitrage-free parameters
+and the ones with the parameters described in Example 5.1 of [10], which are also arbitrage free.
+Figure 12 shows that the fit of our new parameters is better than the one of Gatheral and Jacquier.
+
+
+
+
+Figure 12: On the left, plot of the total variances generated by the Axel Vogt parameters (in red),
+the total variances with the arbitrage-free parameters (in blue) and the total variances with the
+Gatheral-Jacquier parameters (in green). On the right, plot of the function g with the the Axel Vogt
+parameters (in red), with the arbitrage-free parameters (in blue) and with the Gatheral-Jacquier
+parameters (in green).
+
+   In Table 4 we compare the relative errors on the total variances for the two sets of arbitrage-free
+parameters.
+
+
+                                                 29
+Table 4: Frobenius relative errors for the total variances with arbitrage-free parameters vs Gatheral-
+Jacquier parameters.
+
+
+                        a            b           ρ           m           σ           Relative error
+  Arbitrage-Free        -0.0198444   0.102745    0.180754    0.266125    0.310459    0.022
+  Gatheral-Jacquier     -0.0305199   0.102717    0.100718    0.272344    0.412398    0.133
+
+
+
+7.2    On data from CBOE
+We now turn to market data. We work with market data of good quality bought from the CBOE
+datastore by Zeliade. They cover daily files for the DJX, SPX500 and NDX equity indices, with
+bid and ask prices.
+    To obtain implied total variances from the prices, we operate the classical treatment of inferring
+the discount factor and forward values at each option maturity by performing a linear regression of
+the (mid) Call minus Put prices with respect to the strike. Since the markets under study are very
+liquid, the fit is excellent and the residual error is extremely small.
+    Then, given the discount factor and forward values for each maturity, we are able (after working
+out the exact maturity of each contract from its code, if not provided explicitly) to compute the
+implied volatilities, for the Bid and Ask prices.
+    We feed the objective function with the implied volatility corresponding to the mid price, and
+plot below the implied volatilities for the calibrated model and the bid and ask market data. Results
+are reported in Figures 13 to 15.
+
+
+
+
+                                                 30
+Figure 13: Fitted implied volatilities with arbitrage-free parameters (in red) and bid (in blue) and
+ask (in green) implied volatilities for the DJX index.
+
+
+
+
+                                                31
+                                                  32
+Figure 14: Fitted implied volatilities with arbitrage-free parameters (in red) and bid (in blue) and
+ask (in green) implied volatilities for the SPX500 index.
+Figure 15: Fitted implied volatilities with arbitrage-free parameters (in red) and bid (in blue) and
+ask (in green) implied volatilities for the NDX index.
+
+
+7.3    Discussion
+From our experiments we draw several positive conclusions:
+   • the quality fit is excellent, and there is no big loss resulting from the no arbitrage constraint;
+   • the implementation we have designed seems sufficiently robust in practice; of course such a
+     statement should be re-assessed continuously;
+   • the payload of the root finding algorithms used to compute the Fukasawa threshold and the
+
+
+                                                 33
+     bounds for µ and σ is not an issue, the calibration is still reasonably fast on a basic chip;
+     the average for each maturity for the DJX data is 51.598 seconds, for the SPX data 36.490
+     seconds and for the NDX data 44.900 seconds.
+   Of course, there is room for improvement, at least at the level of the starting point strategy.
+One could also think of pre-computing the numerical functions computed on the fly, or to design
+once for all explicit proxies for them, which would speed massively the execution of the algorithm.
+
+
+8    Conclusion
+Fukasawa’s remark that the inverse of d1 and d2 functions of the Black-Scholes formula have to be
+increasing under no Butterfly arbitrage, paired with the natural rescaling of the SVI parameters
+which consists in scaling a and m by σ, allow us to fully describe the domain of no Butterfly
+arbitrage for SVI.
+    The no Butterfly arbitrage domain can be parametrized as an hyperrectangle, with 2 downstream
+algorithms of practical importance: one for checking that a SVI parameter lies or not in the no
+arbitrage domain, and the other one to effectively perform a calibration. Three functions have to be
+computed numerically by resorting to root-finding type algorithms; due to the fact that our careful
+mathematical analysis provided safe bracketing intervals for those functions, this can be achieved in
+a very quick manner. We provide calibration results on model and market data, the latter showing
+that there is no loss of fit quality due to imposing the no arbitrage constraint.
+    This analysis settles one important issue in the SVI saga. Other ones are still pending, like the
+study of sub-SVI parametrizations with 4 parameters instead of 5, in the spirit of SSVI (which has
+3 parameters slice-wise), which could display more parameter stability than SVI and a better fit
+quality than SSVI; and also the question of the characterization of no Calendar Spread arbitrage
+for two SVI slices corresponding to different maturities.
+
+
+
+
+                                                 34
+A      Proof of Proposition 5.5
+                                            √                                                     √
+Proof. Observe that at the point l∗ ,p
+p                                          ρ l2 + 1 + l = 0 and also after computations, ρl + l2 + 1 =
+  1 − ρ2 , so we have g±(b,ρ) (l∗ ) = − 1 − ρ2 .
+   We have dα  d
+                 L± (l± )= L0± (l± ) dα
+                                       d
+                                        l± + ∂α L± (l± ) = ∂α L± (l± ). Deriving eq. (5) with respect to α,
+                              1       1
+we find ∂α L± (l± ) = 2   N 0 (l± ) ∓ 4    .
+    Since N (l) > 0 iff l > l and 4 ∓ N 0 > 0, then ∂α L− (l− ) < 0 and ∂α L+ (l+ ) > 0. So the function
+             0                 ∗
+
+α → L− (l− , α) is decreasing while α → L+ (l+ , α) is increasing. It means that the bounds for µ
+are an increasing family of sets (possibly empty) parametrized by α. Consider the lower bound, so
+l < l∗ . We can write the expression for g−(b,ρ) in another way. We have
+
+                                          N 0 (l) 2N 00 (l)
+                       L0− (l) = 1 +             − 0 2 (α + lN 0 (l) + N 00 (l)(l2 + 1)).
+                                            2     N (l)
+
+Evaluating this in l− , the LHS becomes 0 and we can isolate α, obtaining
+
+                                1 N 0 (l)2       N 0 (l)
+                                                                                       
+                                                                0         00       2
+                  g−(b,ρ) (l) =              1 +           − lN   (l) − N    (l)(l   + 1)   .            (10)
+                                b 2N 00 (l)        2
+                                                                                           0   2   000
+                                                                     0
+     From this expression, we get the derivative of g−(b,ρ) such as g−(b,ρ) (l) = N 4b
+                                                                                     (l)     N (l)
+                                                                                          3− N           0
+                                                                                               00 (l)2 (N (l)+
+   
+2) , which is positive iff the second factor is positive. Substituting with the explicit expressions, we
+                           √                     √                                                  √
+find that this holds iff 3b l2 + 1 l(2 + bρ) + b l2 + 1 > 0 or equivalently −l(2 + bρ) < b l2 + 1.
+                                                          
+
+     Note that since b(1 − ρ) ≤ 2, then 2 + bρ > 0. If ρ < 0 then the equation is true for l ≥ 0. For
+negative ls we can square, obtaining that it holds iff (b2 (ρ2 − 1) + 4bρ + 4)l2 < b2 . For b(1 − ρ) < 2,
+the coefficient of l2 is positive, so the inequality holds iff l > − √ 2 2 b             := m− . Since ρ is
+                                                                              b (ρ −1)+4bρ+4
+negative, m− < l∗ . So in this case g−(b,ρ) (l) is increasing iff l > m− .
+   If ρ ≥ 0, we proceed in a similar way taking the square and obtaining that, if b(1 − ρ) < 2,
+                                                                    2ρ                 ∗
+the inequality holds iff l > − √ 2 2 b            := m− . If b ≤ 1−ρ   2 , then m− ≥ l   and g− is always
+                                     b (ρ −1)+4bρ+4
+                                2ρ                     ∗
+decreasing. Otherwise if b > 1−ρ   2 , then m− < l       and g−(b,ρ) is increasing iff l > m− . We can write
+α as a function of l− , indeed α = bg−(b,ρ) (l− ). This function has the same monotonicity as g−(b,ρ) .
+   We obtain from the previous analysis that the function x → L− (x; bg−(b,ρ) (x)) is:
+                                            2ρ
+   - increasing iff x < m− when b > 1−ρ        2;
+                                                  2ρ
+   - increasing for every x < l∗ when b ≤ 1−ρ        2.
+                              0          00     2
+   Note that N (l) = α + lN (l) + N (l)(l + 1). Using eq. (5) and substituting α with bg−(b,ρ) (x)
+considered as in eq. (10), we obtain
+
+                                             N 0 (x)2       N 0 (x)
+                                                                                
+                                                                          1      1
+                    L− (x; bg−(b,ρ) (x)) = 00            1+                   +       − x.              (11)
+                                              N (x)           2        N 0 (x) 4
+
+   From here it can be seen that L− (x; bg−(b,ρ) (x)) goes to −l∗ when x goes to l∗− . Similarly, we
+can do all the equivalent computations for L+ . First, the function g+(b,ρ) can be re-written as
+
+                                    1 N 0 (l)2        N 0 (l)
+                                                                                            
+                                                                     0         00       2
+                    g+(b,ρ) (l) =                 1 −           − lN   (l) − N    (l)(l   + 1)
+                                    b 2N 00 (l)         2
+
+
+                                                         35
+while
+                                           N 0 (x)2      N 0 (x)
+                                                                            
+                                                                      1      1
+                     L+ (x; bg+(b,ρ) (x)) = 00        1−                   −     −x
+                                           N (x)           2        N 0 (x) 4
+and even in this case L+ (x; bg+(b,ρ) (x)) goes to −l∗ when x goes to l∗+ . We can study the mono-
+                                                0
+                                                  (l)2      N 000 (l)
+                                 0
+                                        (l) = N 4b                      0
+                                                                                 
+tonicity of g+(b,ρ) , obtaining g+(b,ρ)                −3 + N 00 (l)2 (N (l) − 2) .
+
+    Considering the √ second factor and substituting
+                                             √          with the explicit expressions, the
+                                                                                         √ latter quantity
+is positive iff − 3b l2 + 1 −l(2 − bρ) + b l2 + 1 > 0 or equivalently l(2 − bρ) > b l2 + 1.
+    Here, since b(1 + ρ) ≤ 2, then 2 − bρ > 0. If ρ > 0 then the equation is false for l ≤ 0. For
+positive ls we can square, obtaining that it holds iff (b2 (ρ2 − 1) − 4bρ + 4)l2 > b2 . For b(1 + ρ) < 2,
+the coefficient of l2 is positive, so the inequality holds iff l > √ 2 2 b              := m+ . Since ρ is
+                                                                       b (ρ −1)−4bρ+4
+positive, m+ > l∗ . So in this case g+(b,ρ) (l) is increasing iff l > m+ .
+   If ρ ≤ 0, we proceed in a similar way taking the square and obtaining that, if b(1 + ρ) < 2, the
+                                                                2ρ                  ∗
+inequality holds iff l > √ 2 2 b           := m+ . If b ≤ − 1−ρ     2 , then m+ ≤ l   and g+(b,ρ) is always
+                            b (ρ −1)−4bρ+4
+                                    2ρ                     ∗
+increasing. Otherwise if b > − 1−ρ     2 , then m+ > l       and g+(b,ρ) is increasing iff l > m+ . Remember
+that the function α → L+ (l+ , α) is increasing. To recap, the function x → L+ (x; bg+(b,ρ) (x)) is:
+                                               2ρ
+    - increasing iff x > m+ when b > − 1−ρ        2;
+                                 ∗                   2ρ
+    - increasing for every x > l when b ≤ − 1−ρ         2.
+              2ρ                            2ρ                   2ρ                           2ρ
+    If b ≤ − 1−ρ 2  then ρ < 0 and   b >   1−ρ2  while  if b ≤ 1−ρ  2 then ρ > 0 and b > − 1−ρ2 . This means
+
+that L+ (x; bg+(b,ρ) (x)) and L− (x; bg−(b,ρ) (x)) cannot be both monotonous.
+    The last statement of the proposition is a direct consequence to the fact that
+ d                                                   0
+dx L± (x; bg±(b,ρ) (x)) = ∂α L± (x; bg±(b,ρ) (x))bg±(b,ρ) (x) where ∂α L− (x) < 0 and ∂α L+ (x) > 0.
+
+
+
+B       Computation of F (b, 0)
+In this appendix we compute F (b, 0) and prove that F (b, 0) > −b.
+    With ρ = 0 we have l∗ = 0 and
+                                                    p
+                                       N = α + b l2 + 1,
+                                                 bl
+                                       N0 = √         ,
+                                               l2 + 1
+                                                  b
+                                      N 00 =          3 .
+                                             (l2 + 1) 2
+    Consider the particular case b = 2. Then we have already shown F (2, 0) = 0, which is greater
+than −2.
+                                      2ρ
+    Consider b 6= 2. Since b > 1−ρ       2 = 0, then the function l− → L− (l− ; bg−(b,0) (l− )) is increas-
+                                           b
+ing iff l− < m− where m− = − √4−b             2
+                                                . Furthermore the Fukasawa interval for µ is equal to
+                                                               
+Iα,b,0 = L− (l− (α, b, 0); α, b, 0), −L− (l− (α, b, 0); α, b, 0) so it is symmetrical with respect to 0. The
+Fukasawa threshold F (b, 0) is then the solution to L− (l− (F (b, 0), b, 0); F (b, 0), b, 0) = 0.
+    From equation eq. (11) we obtain
+                                                                         q
+                                                                            2 +1
+                                                                                     !
+                                              2  q
+                                             l−                           l−      1
+                L− (l− ; bg−(b,0) (l− )) = b           2
+                                                  2 l− + 1 + bl−                 +     − l− .
+                                              2                             bl−    4
+
+
+                                                    36
+                                                                        √                              ∗
+For l− < 0, this expression is equal to 0 iff (8 + b2 )l = −6b l2 + 1 and so iff l− equals l−             :=
+       6b
+− √b4 −20b2 +64 . Then
+                                                                            
+                                                                  6b
+                                 F (b, 0) = bg−(b,0) − √
+                                                             b4 − 20b2 + 64
+                      2    √                √
+where g−(b,0) (l) = l4 (2 l2 + 1 + bl) − l2 + 1.
+                                      ∗                             ∗
+   We now need to prove g−(b,0) (l−     ) > −1 or equivalently l−      < s− . From the expression of g−(b,0) ,
+                                                        √
+we immediately find that s− satisfies 2(l − 2) l + 1 = −bl3 − 4, so we look for a negative root
+                                                2         2
+
+                3
+                                                                              h  13 √ i            √
+such that −bl 2
+             l −2
+                  −4
+                     >   0. This happens    iff  l lies outside the  interval   − 4b , − 2 if b ≤ 2, or
+                        h √   13 i               √
+outside the interval − 2, − 4b           if b > 2. Squaring the previous equation and simplifying by
+l3 we find (4 − b2 )l3 − 12l − 8b = 0. Call Pb (l) the LHS.
+                                                                                        2
+    At 0, this polynomial and its derivative are negative. Its local maximum is at − √4−b  2
+                                                                                             and its
+                         16
+value at this point is √4−b2 − 8b which is always positive. So the polynomial has two negative roots
+and a positive one.
+                                  √            13 
+    We can observe that P√2 (− 2) = P√2 − 4b            = 0 with
+          √       √       √
+   • Pb (− 2) = 2 2(b − 2)2 > 0,
+          13                   2
+                                         
+   • Pb − 4b      = − 4b b2 − 3(2b) 3 + 4 < 0.
+                 √
+    Then
+    √     if b < 2 the root of interest s− is the second negative root of the polynomial while if
+b ≥ 2 it is the first negative root.
+                                      ∗
+    The value of the polynomial in l−     is
+                                                      √
+                                   8b((b2 − 16)2 − 36 b4 − 20b2 + 64)
+                                 −
+                                                (b2 − 16)2
+                                  q           √                                                ∗
+which is positive iff b < b̃ where 85 < b̃ < 2. The derivative of the polynomial evaluated in l− is
+     2
+                                     q
+24(5b −8)                               8
+  16−b2 , which is positive iff b >     5.
+    Then:
+   • if b ≤ b̃ the polynomial is positive in l−
+                                              ∗                                ∗
+                                                and s− is its second root, so l− < s− ;
+                  √
+   • if b̃ < b < 2 the polynomial is negative in l− while its derivative is positive and s− is its
+                                                     ∗
+                       ∗
+     second root, so l−  < s− ;
+                    √
+   • finally if b ≥ 2 the polynomial is negative with a positive derivative in l−  ∗
+                                                                                      so even if s− is
+                                  ∗
+     now its first root we have l− < s− .
+
+
+References
+ [1] S. Bossu. Advanced Equity Derivatives: Volatility and Correlation. John Wiley & Sons, 2014.
+ [2] P. Cohort, J. Corbetta, I. Laachir, and C. Martini. Robust calibration and arbitrage-free
+     interpolation of SSVI slices. Decisions in Economics and Finance, 42(2):665–677, 2019.
+
+
+                                                     37
+ [3] B. M. Damghani and A. Kos. De-arbitraging With a Weak Smile: Application to Skew Risk.
+     Wilmott, 2013(64):40–49, 2013.
+ [4] S. De Marco and C. Martini. Quasi-explicit calibration of Gatheral SVI model. Zeliade White
+     Paper, pages 1–15, 2009.
+
+ [5] S. De Marco and C. Martini. Moment generating functions and normalized implied volatilities:
+     unification and extension via Fukasawa pricing formula. Quantitative Finance, 18(4):609–622,
+     2018.
+ [6] T. Ferhati. Robust Calibration For SVI Model Arbitrage Free. 2020.
+ [7] M. Fukasawa. Normalization for Implied Volatility. 2010.
+
+ [8] M. Fukasawa. The normalizing transformation of the implied volatility smile. Mathematical
+     Finance, 22(4):753–762, 2012.
+ [9] J. Gatheral. The volatility surface: a practitioner’s guide. John Wiley & Sons, 357, 2011.
+[10] J. Gatheral and A. Jacquier. Arbitrage-free SVI volatility surfaces. Quantitative Finance,
+     14(1):59–71, 2014.
+[11] A. Gulisashvili. Analytically Tractable Stochastic Stock Price Models. Springer Science &
+     Business Media, 2012.
+[12] G. Guo, A. Jacquier, C. Martini, and L. Neufcourt. Generalized arbitrage-free SVI volatility
+     surfaces. SIAM Journal on Financial Mathematics, 7(1):619–641, 2016.
+[13] S. Hendriks and C. Martini. The Extended SSVI Volatility Surface. Journal of Computational
+     Finance, 22(5), 2019.
+[14] A. Itkin. One more no-arbitrage parametric fit of the volatility smile. North Am. J. Econ.
+     Financ, 2014.
+
+[15] A. Itkin et al. Fitting Local Volatility: Analytic and Numerical Approaches in Black-Scholes
+     and Local Variance Gamma Models. World Scientific Books, 2020.
+[16] T. R. Klassen. Necessary and Sufficient No-Arbitrage Conditions for the SSVI/S3 Volatility
+     Curve. 2016.
+
+[17] R. W. Lee. The Moment Formula for Implied Volatility at Extreme Strikes. Mathematical
+     Finance, 14(3):469–480, 2004.
+[18] L. Nagy and M. Ormos. Volatility Surface Calibration to Illiquid Options. The Journal of
+     Derivatives, 26(3):87–96, 2019.
+
+[19] M. Roper. Arbitrage Free Implied Volatility Surfaces. preprint, 2010.
+[20] M. R. Tehranchi. A Black-Scholes inequality: applications and generalisations. Finance and
+     Stochastics, 24(1):1–38, 2020.
+
+
+
+
+                                                38
+

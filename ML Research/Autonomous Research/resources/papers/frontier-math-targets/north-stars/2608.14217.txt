@@ -1,0 +1,578 @@
+                                                      The Quartic Hessian Conjecture in Dimension Four
+                                                                                         Zixiang Ni
+                                                                                  akie.camellia@gmail.com
+
+                                                                                          August 17, 2026
+
+
+                                                                                             Abstract
+                                                    The Hessian conjecture asks whether a polynomial with nonzero constant Hessian deter-
+                                                minant has a polynomial gradient inverse. It is known in dimensions at most three, false in
+                                                dimensions at least five, and open in dimension four. We prove its four-variable quartic case.
+arXiv:2608.14217v1 [math.AG] 14 Aug 2026
+
+
+
+
+                                                    The top homogeneous part has zero Hessian determinant and, by the four-dimensional
+                                                homogeneous Hesse theorem, is a cone. We divide its cone representative into three exhaustive
+                                                types: a genuinely ternary quartic with nonzero ternary Hessian, a genuinely binary quartic,
+                                                and a fourth power of a linear form. In the first type, the degree-seven determinant equation
+                                                forces the cubic part to be affine-linear in the cone direction. In the binary type, the degree-six
+                                                equation gives a constant null direction in a two-variable Hessian of the cubic part. In the
+                                                unary type, the degree-five equation and a constant-direction lemma give the same conclusion.
+                                                Every type therefore reduces to
+                                                                   f = P (x1 , x2 , x3 ) + x4 Q(x1 , x2 , x3 ) + ax24 ,   deg Q ≤ 2.
+                                                We prove, independently of the degree or top part of P , that every constant-Hessian polynomial
+                                                of this form has a polynomial gradient inverse. The branch a ̸= 0 descends from the known
+                                                three-dimensional Hessian conjecture after a Schur complement. When a = 0, an isotropic-
+                                                cone rank analysis eliminates rank two, solves the rank-one exception by an explicit triangular
+                                                inverse, and reduces rank zero to the two-dimensional Hessian conjecture. The coupled degree-
+                                                six identity is retained throughout; no component with respect to a fixed quadratic form is
+                                                separated.
+
+
+                                           Contents
+                                           1 Introduction                                                                                             2
+
+                                           2 Preliminaries                                                                                            3
+                                             2.1 Coordinate changes and cone tops . . . . . . . . . . . . . . . . . . . . . . . . . . .               3
+                                             2.2 Matrix identities and inverse descent . . . . . . . . . . . . . . . . . . . . . . . . . .            4
+
+                                           3 Classification of quartic cone tops                                                                      5
+
+                                           4 The genuinely ternary top                                                                                5
+                                             4.1 The degree-seven equation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .            5
+                                             4.2 The coupled degree-six equation . . . . . . . . . . . . . . . . . . . . . . . . . . . .              5
+
+                                           5 The degenerate cone tops                                                                                 6
+                                             5.1 The genuinely binary top . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .             6
+                                             5.2 The unary top . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .            7
+
+                                                                                                     1
+6 The uniform inversion proposition                                                               8
+
+7 Proof of the main theorem                                                                       10
+
+8 Discussion                                                                                    11
+  8.1 What remains open . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 11
+  8.2 Relation to the plane Jacobian conjecture . . . . . . . . . . . . . . . . . . . . . . . 11
+
+
+1     Introduction
+For f ∈ C[x1 , . . . , xn ], write
+
+                              Hess(f ) = (∂i ∂j f )i,j ,       ∇f = (∂1 f, . . . , ∂n f ).
+
+Definition 1.1 (Hessian conjecture, HCn ). If det Hess(f ) ∈ C× , then ∇f : Cn → Cn is a
+polynomial automorphism.
+
+    The conjecture is elementary for n = 1, was proved for n = 2 by Dillen [1], and was proved for
+n = 3 by de Bondt [2]. It is false for n ≥ 5 [3], and is open only for n = 4. Moreover, HC4 implies
+the plane Jacobian conjecture by the standard doubling construction [4]. In degree at most two
+the gradient is affine, while a cubic potential has quadratic gradient and is covered by Wang’s
+theorem on quadratic Keller maps [5]. Thus degree four is the first unresolved degree in dimension
+four. A related boundary case was already known: Hubbers proved the Jacobian conjecture for
+cubic-homogeneous Keller maps in dimension four [6]. After normalizing the invertible linear
+part of the gradient, this covers potentials of the form f4 + f2 + f1 + f0 , with fi homogeneous
+of degree i: if A = Hess(f2 ), then constancy of the Hessian determinant gives det A ̸= 0, and
+A−1 (∇f − ∇f (0)) = x + H3 (x) with H3 cubic homogeneous. The result below allows an arbitrary
+cubic part as well, and hence treats every quartic potential.
+
+Theorem 1.2 (Main theorem). Let f ∈ C[x1 , x2 , x3 , x4 ] have degree four. If
+
+                                                det Hess(f ) ∈ C× ,
+
+then ∇f is a polynomial automorphism of C4 .
+
+   The proof has two logically separate parts. First, the top homogeneous form is classified and
+each possible type is shown to produce a constant direction in the cubic part. Second, a uniform
+proposition in that direction proves invertibility without any nondegeneracy assumption on the
+top form.
+
+Remark 1.3 (The corrected degree-six equation). In the genuinely ternary branch, write
+
+                       f4 = φ(x1 , x2 , x3 ),      f3 = g(x1 , x2 , x3 ) + x4 h(x1 , x2 , x3 ),
+
+and A = Hess3 (φ). If the x24 -coefficient of f2 is a, the degree-six determinant equation is
+
+                                       2a det A − (∇h)T adj(A)∇h = 0.
+
+The two terms may cancel: h is a fixed polynomial, not a free parameter. The proof never separates
+them and does not attempt to deduce a = 0.
+
+
+                                                           2
+2     Preliminaries
+2.1   Coordinate changes and cone tops
+All changes of variables below are constant invertible linear maps or source translations. If
+fe = f ◦ T , then
+
+                   ∇fe(x) = T T (∇f )(T x),        Hess(fe)(x) = T T Hess(f )(T x)T.
+
+Thus the Hessian determinant changes only by a nonzero constant factor and gradient invertibility
+is preserved. Source translations have the analogous affine-conjugacy property and do not alter
+the top homogeneous part.
+
+Lemma 2.1 (Top homogeneous Hessian). Let f = dk=0 fk be the decomposition into homoge-
+                                                       P
+neous parts, with d ≥ 3. If det Hess(f ) is constant, then
+
+                                         det Hess(fd ) ≡ 0.
+
+Proof. The entries of Hess(fk ) have degree k − 2. The homogeneous component of maximal
+possible degree n(d − 2) in the determinant is obtained by taking Hess(fd ) in every entry, hence
+equals det Hess(fd ). A constant determinant has no positive-degree component.
+
+Theorem 2.2 (Homogeneous Hesse theorem in low dimension). Let h be homogeneous in 2 ≤
+n ≤ 4 variables over C. If det Hess(h) = 0, then after a constant invertible linear change, h
+depends on at most n − 1 variables.
+
+Proof. This is the low-dimensional case of the classical theorem of Gordan and Noether [7]; see
+de Bondt [8, Theorem 3.1] for a modern statement and proof in dimensions at most four.
+
+Lemma 2.3 (Binary forms with zero Hessian). Let h ∈ C[X, Y ] be homogeneous of degree d ≥ 2.
+Then
+                         hXX hY Y − h2XY ≡ 0 ⇐⇒ h = κLd
+for some κ ∈ C and linear form L, with h = 0 allowed.
+
+Proof. On Y ̸= 0, write h(X, Y ) = Y d p(t), t = X/Y . Direct differentiation gives
+
+                       det Hess2 (h) = (d − 1)Y 2d−4 dpp′′ − (d − 1)(p′ )2 .
+                                                                          
+
+
+Suppose p ̸= 0 and put q = p′ /p ∈ C(t). Dividing the vanishing equation by p2 gives
+
+                                              dq ′ + q 2 = 0.
+
+If q = 0, then p is constant. Otherwise (1/q)′ = 1/d, so q = d/(t − α) for some α ∈ C. Therefore
+                                                        ′
+                                                  p
+                                                              = 0,
+                                              (t − α)d
+
+and the constant field of C(t) is C. Thus p = κ(t − α)d . Homogenization gives the assertion. The
+case p = 0 is immediate, as is the converse.
+
+
+
+
+                                                    3
+2.2    Matrix identities and inverse descent
+Lemma 2.4 (Block determinant). For a square matrix B and a column vector v of the same size,
+                                        
+                                   B v
+                              det T        = −v T adj(B)v.
+                                   v   0
+
+Proof. Expand along the last row and column, or use the polynomial continuation of the Schur-
+complement formula from invertible B.
+
+Lemma 2.5 (Adjugate quadratic form). For a symmetric 3 × 3 matrix M and column vectors
+x, ℓ,
+          (M x + ℓ)T adj(M )(M x + ℓ) = det(M ) xT M x + 2ℓT x + ℓT adj(M )ℓ.
+                                                              
+
+Proof. Expand by bilinearity and use M adj(M ) = adj(M )M = det(M )I, together with symme-
+try.
+
+Lemma 2.6 (Descent of a polynomial inverse). Let R = C[t1 , . . . , tm ], K = Frac(R), and F ∈
+R[x1 , . . . , xn ]n . Assume
+
+                              det Jx F ∈ R× = C× ,        F −1 ∈ K[y1 , . . . , yn ]n .
+
+Then F −1 ∈ R[y1 , . . . , yn ]n .
+
+Proof. Subtract F (0) from the target and let L = Jx F (0). Since det L ∈ C× , an affine target
+change reduces to
+                       Fe(x) = x + H(x),     H ∈ R[x]n ,    ordx H ≥ 2.
+The unique formal inverse has the expansion
+                                                          X
+                                         Fe−1 (y) = y +         Gd (y),
+                                                          d≥2
+
+
+where Gd is homogeneous of y-degree d. Comparing total degree in Fe(Fe−1 (y)) = y recursively
+expresses each Gd over R. The inverse over K is this same formal inverse and is a polynomial, so
+only finitely many Gd are nonzero. Undoing the affine target changes proves the claim.
+
+Lemma 2.7 (Transfer to characteristic-zero fields). If HCn holds over C, then it holds over every
+field of characteristic zero.
+
+Proof. Let K have characteristic zero and let f ∈ K[x1 , . . . , xn ] have nonzero constant Hessian
+determinant. Choose a subfield k ⊂ K, finitely generated over Q, which contains the coefficients
+of f and the inverse of that determinant. Every finitely generated characteristic-zero field embeds
+in C: choose a transcendence basis over Q, send it to algebraically independent complex numbers,
+and extend across the resulting finite algebraic extension. After such an embedding, HCn over C
+supplies a polynomial inverse of ∇f .
+    To descend it, subtract ∇f (0) from the target and normalize the invertible linear part. The
+coefficients of the unique formal inverse are then determined recursively from coefficients in k,
+exactly as in Lemma 2.6; hence they lie in k. The polynomial inverse over C coincides with this
+formal inverse, so only finitely many of these coefficients are nonzero. It therefore belongs to
+k[y]n , and hence gives an inverse over K.
+
+
+                                                     4
+3     Classification of quartic cone tops
+Let f = f4 + f3 + f2 + f1 + f0 have degree four and nonzero constant Hessian determinant. Lemma
+2.1 and Theorem 2.2 allow a linear change after which
+
+                                           f4 = φ(x1 , x2 , x3 ).
+
+There are three exhaustive cases.
+
+ 1. If det Hess3 (φ) ̸≡ 0, the top is genuinely ternary.
+
+ 2. If det Hess3 (φ) ≡ 0, Theorem 2.2 in three variables makes φ binary. If its binary Hessian is
+    nonzero, the top is genuinely binary.
+
+ 3. If the binary Hessian also vanishes, Lemma 2.3 gives φ = cL4 . Since f has degree four, c ̸= 0;
+    after a linear change the top is unary, f4 = cx41 .
+
+    The next two sections show that all three cases lead to the same structural form.
+
+
+4     The genuinely ternary top
+Assume
+                      f4 = φ(x1 , x2 , x3 ),        A = Hess3 (φ),          det A ̸≡ 0.
+Put                                            
+                                           A 0
+                         H4 = Hess(f4 ) =         ,                 Hk = Hess(fk ).
+                                            0 0
+
+4.1     The degree-seven equation
+The degree-seven part of det(H4 + H3 + H2 ) contains three entries of H4 and one of H3 . It is the
+first variation                                      
+                                       tr adj(H4 )H3 .
+The adjugate of H4 has only one possibly nonzero entry, namely (adj H4 )44 = det A. Therefore
+
+                                               0 = det A ∂44 f3 .
+
+The polynomial ring is a domain and det A ̸= 0, so
+
+                                f3 = g(x1 , x2 , x3 ) + x4 h(x1 , x2 , x3 ),
+
+where g is cubic and h is quadratic.
+
+4.2     The coupled degree-six equation
+Write
+                             f2 = q(x1 , x2 , x3 ) + x4 ℓ(x1 , x2 , x3 ) + ax24 ,
+where q is quadratic, ℓ is linear, and a ∈ C. Degree six has exactly two types of contribution:
+
+                                     (2, 2, 2, 0)    and    (2, 2, 1, 1),
+
+                                                       5
+where the numbers denote entry degrees. The first gives 2a det A. In the second, the two H4 -
+entries exhaust the first three coordinates except for one row and column, while the last row and
+column come from Hess(x4 h). The block expansion gives
+                                             −(∇h)T adj(A)∇h.
+Thus
+                                   2a det A − (∇h)T adj(A)∇h = 0.                               (1)
+No separation of its two fixed summands is made.
+   Combining the preceding forms and absorbing f1 , f0 gives the following.
+Proposition 4.1 (Ternary structural reduction). In the genuinely ternary case, after the cone-
+coordinate change,
+                    f = P (x1 , x2 , x3 ) + x4 Q(x1 , x2 , x3 ) + ax24 ,      deg Q ≤ 2.
+
+
+5      The degenerate cone tops
+5.1     The genuinely binary top
+Assume
+                         f4 = φ(x1 , x2 ),       A = Hess2 (φ),            det A ̸≡ 0.
+Put X = (x1 , x2 ) and Z = (x3 , x4 ). Then
+                                                          
+                                                      A 0
+                                              H4 =           .
+                                                       0 0
+Lemma 5.1 (Binary-top degree-six identity).
+                                [det Hess(f )]6 = det A · det HessZ (f3 ).
+Proof. A degree-six determinant term has entry degrees 2 + 2 + 1 + 1 or 2 + 2 + 2 + 0. A nonzero
+permutation term cannot contain three H4 -entries, because H4 is supported on only the two X-
+rows and columns. With two H4 -entries, those entries exhaust both X-rows and columns, leaving
+exactly the Z × Z minor of H3 . Summing the two block minors gives the displayed product with
+positive sign.
+    Since the determinant is constant and the polynomial ring is a domain,
+                                             det HessZ (f3 ) = 0.
+Write                                                             
+                                                               α β
+                                         HessZ (f3 ) =               ,
+                                                               β δ
+where α, β, δ are linear forms and αδ = β 2 . If α ̸= 0, primality of the linear polynomial α gives
+β = µα and δ = µ2 α for some µ ∈ C. If α = 0, then β = 0. Thus, including the zero matrix,
+there are a linear form λ and a constant vector r ∈ C2 such that
+                                             HessZ (f3 ) = λrrT .
+Choose a nonzero constant w ∈ ker(rT ). Then ∂w    2 f = 0. A constant change among x , x makes
+                                                      3                              3 4
+w the fourth coordinate direction. The top remains independent of that coordinate, and f3 is
+affine-linear in it. Since f2 is quadratic, the whole polynomial has the form
+                    f = P (x1 , x2 , x3 ) + x4 Q(x1 , x2 , x3 ) + ax24 ,      deg Q ≤ 2.        (2)
+
+                                                       6
+5.2   The unary top
+Assume now
+                               f4 = cx41 ,      c ̸= 0,      y = (x2 , x3 , x4 ).
+Here H4 = diag(12cx21 , 0, 0, 0). Every nonzero degree-five determinant term contains one entry of
+H4 and three entries of H3 ; terms with two H4 -entries vanish. Hence
+
+                 [det Hess(f )]5 = 12cx21 det Hessy (f3 ) = 0,          det Hessy (f3 ) = 0.
+
+Lemma 5.2 (Constant-direction lemma). Let F (x1 ; y1 , y2 , y3 ) be homogeneous of degree three. If
+
+                                             det Hessy (F ) = 0,
+
+then there is a nonzero constant vector v ∈ C3 such that ∂v2 F = 0.
+
+Proof. Write
+
+         F = g3 (y) + x1 q2 (y) + x21 ℓ1 (y) + γx31 ,       A(y) = Hess(g3 ),       M = Hess(q2 ).
+
+Then Hessy (F ) = A(y) + x1 M . At x1 = 0, det A = 0. Theorem 2.2 makes g3 depend on at most
+two y-variables after a constant change.
+   Suppose first that the essential variable number of g3 is two. Write
+                                                               
+                                      A2 0                  B m
+                             A(y) =            ,   M=               .
+                                       0 0                 mT µ
+
+Lemma 2.3 shows ∆ = det A2 ̸≡ 0; otherwise g3 would be a cube of one linear form. The exact
+expansion                      
+                    A2 0
+             det            + tM = tµ det(A2 + tB) − t2 mT adj(A2 + tB)m
+                    0 0
+has coefficient tµ∆. Hence µ = 0, and v = e3 satisfies v T (A + x1 M )v = 0.
+   If the essential variable number is one, take g3 = κy13 , κ ̸= 0. Let N be the lower-right 2 × 2
+block of M . Then
+
+                       det diag(6κy1 , 0, 0) + tM = 6κy1 t2 det N + t3 det M.
+                                                 
+
+
+Thus det N = 0. Any nonzero v ∈ ker N ⊂ span(e2 , e3 ) satisfies v T Av = v T M v = 0.
+   Finally, if g3 = 0, then t3 det M = 0, so any nonzero v ∈ ker M works.
+
+    Apply the lemma to F = f3 and make a constant change among y so that the fourth coordinate
+is v. Then ∂44 f3 = 0, while f4 is independent of x4 . Expanding the quadratic and lower parts
+again gives (2).
+
+Proposition 5.3 (Degenerate structural reduction). Both the genuinely binary and unary quartic
+cone tops reduce, after a constant linear change, to (2).
+
+
+
+
+                                                        7
+6     The uniform inversion proposition
+Proposition 6.1 (Uniform inversion). Let
+                     f = P (x1 , x2 , x3 ) + uQ(x1 , x2 , x3 ) + au2 ,        deg Q ≤ 2,
+where P is arbitrary. If det Hess(f ) = c ∈ C× , then ∇f is a polynomial automorphism.
+Proof. Write x = (x1 , x2 , x3 )T and set
+       M = Hessx (Q),           ℓ = ∇Q(0),         v = ∇Q = M x + ℓ,             B = Hessx (P ) + uM.
+Then                                                             
+                                                            B v
+                                           Hess(f ) =               .                                   (3)
+                                                            v T 2a
+
+The branch a ̸= 0
+Put
+                    Q(x)                      Q(x)2
+               z =u+      ,    R(x) = P (x) −       ,                   Sz (x) = R(x) + zQ(x).
+                      2a                       4a
+The output coordinates satisfy
+                        Y4 = Q(x) + 2au = 2az,               (Y1 , Y2 , Y3 ) = ∇x Sz (x).
+The derivative in the original gradient is taken at fixed u, whereas ∇x Sz is taken at fixed z;
+the two expressions agree after substitution. Direct differentiation at fixed z, followed by the
+substitution z = u + Q/(2a), gives
+                                                          1 T
+                                          Hessx (Sz ) = B − vv .
+                                                         2a
+The Schur complement of the lower-right entry in (3), followed by the triangular substitution
+between (x, u) and (x, z), yields the polynomial identity
+                                                        c
+                                     det Hessx (Sz ) =     ∈ C× .
+                                                       2a
+    Over K = C(z), the known complex case HC3 , together with Lemma 2.7, gives a polynomial
+inverse of ∇x Sz . Its Jacobian determinant is already a unit over R = C[z], so Lemma 2.6 gives
+                            (∇x Sz )−1 = H(z, Y1 , Y2 , Y3 ) ∈ C[z, Y1 , Y2 , Y3 ]3 .
+Consequently
+                                Y4                                                Q(x)
+                           z=      ,     x = H(z, Y1 , Y2 , Y3 ),       u=z−
+                                2a                                                 2a
+is a polynomial inverse.
+
+The branch a = 0
+Now f = P + uQ, and Lemma 2.4 gives
+                                       c = −v T adj Hessx (P ) + uM v.
+                                                                   
+                                                                                                        (4)
+The coefficient of u2 is
+                                              v T adj(M )v = 0.
+Lemma 2.5 and comparison of the degree-two part in x imply that either M = 0 or det M = 0.
+Thus a nonzero M has rank one or two.
+
+                                                        8
+Rank two
+After congruence, translation in im M , and removal of a constant in Q, we may assume
+                                                1
+                    M = diag(1, 1, 0),       Q = (x21 + x22 ),              v = (x1 , x2 , 0)T .
+                                                2
+Indeed, the constant part of v T adj(M )v = 0 first forces the kernel component of the affine part
+of ∇Q to vanish. Write tij = ∂i ∂j P . Expanding (4) gives
+                    h                                                                               i
+    det Hess(f ) = − x21 (t22 + u)t33 − t223 + 2x1 x2 (t13 t23 − t12 t33 ) + x22 (t11 + u)t33 − t213 .
+                                            
+
+
+The coefficient of u is −(x21 + x22 )t33 , hence t33 = 0. Therefore
+
+                                    P = R(x1 , x2 ) + x3 S(x1 , x2 ).
+
+The constant part becomes
+                                         c = (x1 Sx2 − x2 Sx1 )2 ,
+whose right-hand side vanishes at x1 = x2 = 0, a contradiction.
+
+Rank one
+Put M = diag(1, 0, 0) and rename the variables (x, y, z). A translation in x removes the image
+component of the affine part of ∇Q; a linear change in the (y, z)-plane makes its kernel component
+(α, 0), and a constant in Q only translates the fourth output. We may therefore normalize
+                                    1
+                                 Q = x2 + αy,             v = (x, α, 0)T .
+                                    2
+If α = 0, then
+                                         c = −x2 (t22 t33 − t223 ),
+which cannot be a nonzero constant. Suppose α ̸= 0. The coefficient of u in (4) is −α2 t33 , so
+
+                                         P = R(x, y) + zS(x, y).
+
+The constant part is
+                                           c = (xSy − αSx )2 .                                     (5)
+Choose κ ∈ C× with κ2 = c. Since the polynomial ring is a domain, change the sign of κ if
+necessary so that
+                                   xSy − αSx = κ.
+Define
+                          1                     x
+                      q = x2 + αy,        s=− ,        D = x∂y − α∂x .
+                          2                     α
+Then Dq = 0, Ds = 1, and (q, s) is a polynomial coordinate system:
+
+                                                              q − 12 x2
+                                     x = −αs,            y=             .
+                                                                 α
+Thus D = ∂s and
+                                    S = κs + F (q),           F ∈ C[t].
+
+                                                     9
+    The last two gradient outputs are Y3 = S and Y4 = q. Hence
+
+                                       Y3 − F (Y4 )                                 q − 21 x2
+                   q = Y4 ,      s=                 ,         x = −αs,        y=              .
+                                           κ                                           α
+Put
+                              A1 = Y1 − Rx (x, y),           A2 = Y2 − Ry (x, y).
+Then                                                         
+                   A1   Sx x   z                              Sx x
+                      =           ,                   det             = αSx − xSy = −κ.
+                   A2   Sy α   u                               Sy α
+Thus z, u are recovered polynomially. This solves the rank-one branch rather than excluding it
+by a top-form hypothesis.
+
+Rank zero
+Finally, M = 0 makes Q = ℓT x + q0 affine-linear. If ℓ = 0, the last Hessian row and column
+vanish, so det Hess(f ) = 0, contrary to c ̸= 0. Otherwise take ℓ = (0, 0, λ), λ ̸= 0, by a linear
+change. Equation (4) becomes
+
+                                    c = −λ2 det Hessx1 ,x2 (P ) ∈ C× .
+
+Over K = C(x3 ), the known complex case HC2 , together with Lemma 2.7, gives a polynomial
+inverse for
+                                    F = (Px1 , Px2 ).
+Lemma 2.6, with R = C[x3 ], makes its coefficients polynomial in x3 . The full inverse is then
+
+                  Y4 − q0                                                     Y3 − Px3 (x1 , x2 , x3 )
+           x3 =           ,      (x1 , x2 ) = F −1 (x3 , Y1 , Y2 ),      u=                            .
+                     λ                                                                 λ
+All ranks and both values of a are covered.
+
+
+7     Proof of the main theorem
+Proof of Theorem 1.2. By Lemma 2.1, det Hess(f4 ) = 0. Theorem 2.2 reduces f4 to at most three
+variables. The classification of Section 3 is exhaustive.
+    If the cone top is genuinely ternary, Proposition 4.1 gives the common structural form. If it is
+genuinely binary or unary, Proposition 5.3 gives the same form. Proposition 6.1 then proves that
+∇f is a polynomial automorphism in every case.
+
+Corollary 7.1 (Quartic HC4 ). The Hessian conjecture in dimension four holds for every potential
+of degree at most four.
+
+Proof. Degrees at most two are affine-gradient cases, degree three follows from Wang’s quadratic
+Keller-map theorem, and degree four is Theorem 1.2.
+
+
+
+
+                                                        10
+8     Discussion
+8.1    What remains open
+Theorem 1.2 proves the complete quartic case, not the full four-dimensional Hessian conjecture.
+For degree at least five, the top form is still a cone by Theorem 2.2, but the determinant contains
+more homogeneous layers and the degree-seven/six and degree-six/five arguments above do not
+carry over verbatim.
+    Proposition 6.1, however, has no degree bound on P . Consequently it already proves arbitrary-
+degree cases which admit a coordinate form
+
+                      P (x1 , x2 , x3 ) + x4 Q(x1 , x2 , x3 ) + ax24 ,   deg Q ≤ 2.
+
+8.2    Relation to the plane Jacobian conjecture
+For a Keller map F : Cn → Cn , the potential
+
+                                            Φ(x, y) = y T F (x)
+
+satisfies
+                det Hess(Φ) = (−1)n (det JF )2 ,            ∇Φ(x, y) = JF (x)T y, F (x) .
+                                                                                       
+
+Thus HC2n implies JCn . In particular, the full HC4 would imply the still-open JC2 , but the
+quartic result here addresses only a bounded-degree part of HC4 .
+
+
+Acknowledgments
+Generative-AI systems—GPT-5.6 Sol, GPT-5.6 Luna, Claude Fable 5, and DeepSeek V4 Pro—
+were used during the development of this work for exploring candidate arguments, adversarial
+proof review, algebraic checking, and editorial assistance. The author independently reviewed all
+mathematical arguments and references and assumes full responsibility for the contents of the
+paper. Lean 4 with Mathlib and SymPy were used for auxiliary verification of selected algebraic
+identities; these computational checks are not part of the logical proof.
+
+
+References
+ [1] F. Dillen, Polynomials with constant Hessian determinant, J. Pure Appl. Algebra 71 (1991),
+     no. 1, 13–18.
+
+ [2] M. de Bondt, Polynomials with constant Hessian determinants in dimension three, J. Pure
+     Appl. Algebra 219 (2015), no. 9, 3743–3754.
+
+ [3] G. Meng and L. Yang, A five-variable counterexample to the Hessian conjecture, and the
+     low-dimensional status of the Jacobian and Hessian conjectures, arXiv:2607.22198 (2026).
+
+ [4] G. Meng, Legendre transform, Hessian conjecture and tree formula, Appl. Math. Lett. 19
+     (2006), no. 6, 503–510.
+
+ [5] S. S.-S. Wang, A Jacobian criterion for separability, J. Algebra 65 (1980), no. 2, 453–494.
+
+
+
+                                                      11
+[6] E.-M.G.M. Hubbers, The Jacobian Conjecture: Cubic homogeneous maps in dimension four,
+    Master’s thesis, University of Nijmegen, February 17, 1994.
+
+[7] P. Gordan and M. Nöther, Ueber die algebraischen Formen, deren Hesse’sche Determinante
+    identisch verschwindet, Math. Ann. 10 (1876), no. 4, 547–568.
+
+[8] M. de Bondt, Quasi-translations and singular Hessians, Colloq. Math. 152 (2018), no. 2,
+    175–198.
+
+
+
+
+                                           12
+

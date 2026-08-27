@@ -1,0 +1,1177 @@
+          NON-CONVEXITY OF THE OPTIMAL EXERCISE BOUNDARY
+                  FOR AN AMERICAN PUT OPTION ON
+                      A DIVIDEND-PAYING ASSET
+
+                         XINFU CHEN, HUIBIN CHENG AND JOHN CHADAM
+
+
+        Abstract. We prove that when the dividend rate of the underlying asset following a geo-
+        metric Brownian motion is slightly larger than the risk-free interest rate, the optimal
+        exercise boundary of the American put option is not convex.
+
+
+
+
+                                          1. Introduction
+   Recently we provided a rigorous proof that the early exercise boundary for an American put
+option on an asset whose price followed a geometric Brownian motion was convex when the dividend
+rate was zero [12]; an independent proof was obtained by Ekstrom [13]. To date the convexity of
+the early exercise boundary is an open problem when the dividend rate is non-zero. Numerical ex-
+periments suggest that convexity obtains for dividend rates, D ⩽ r, the risk-free rate, and convexity
+breaks down when D becomes larger than r (D. Chakraborty [9] confirming independent private
+communications from J. Detemple, P. Duck and G. Meyer). In this note we provide a rigorous proof
+that for 0 < D − r ¿ 1 the early exercise boundary loses convexity.
+   The proof is based on careful estimates obtained from a pair of integro-differential equations ((4.6),
+(4.7) in §4) for the optimal exercise boundary. Since these equations involve the derivative of the
+boundary, complete rigor necessitates a proof of its regularity. To this end we provide a short, direct
+proof that the boundary is C ∞ . We note that the regularity of the boundary was recently established
+for more general underliers (Bayraktar and Xing [5] proved C ∞ for jump-diffusion processes and
+Lamberton and Mikou [21] proved continuity of the boundary for general Lévy processes) but these
+proofs are necessarily considerably more technical than the proof presented here.
+   The paper is organized as follows. In the next section we provide a direct and rigorous formulation
+of the American put problem as a variational inequality. We then provide mathematically precise
+statements of the main results. In §3 we prove the regularity of the early exercise boundary. An
+outline of the derivation of the integro-differential equations central to our proof of the non-convexity
+is provided in §4. The details of the proof of the non-convexity of the optimal exercise boundary
+when 0 < D − r ¿ 1 are provided in §5. Finally, in §6 we provide a rigorous proof of the (time-
+to-expiry)1/2 near expiry asymptotic behavior of the early exercise boundary formally derived in
+[27]. Combining these results confirms the generally accepted belief that for 0 < D − r ¿ 1 the
+boundary begins convex at expiry and loses convexity as the time-to-expiry increases. Analytic
+and numerical estimates for the location of the non-convex region are provided in §2 and §5. We
+also provide numerical evidence that convexity returns when D becomes sufficiently large (e.g.,
+D > e0.4 r ∼
+           = 1.5r, when r = 0.05 and the volatility, σ = 0.25).
+
+
+                         2. Background, Notation, and Main Results
+   We consider a financial market consisting of a bond and a stock, whose time t prices, Bt and St ,
+are stochastic processes defined by the stochastic differential equations
+(2.1)                     dSt = µt St dt + σ St dWt ,      dBt = rBt dt
+
+  Xinfu Chen acknowledges support from NSF grant DMS-0504691.
+  Huibin Cheng and John Chadam acknowledge support from NSF grant DMS-0707953.
+  Department of Mathematics,University of Pittsburgh, PA, 15260, USA.
+                                                    1
+2                            XINFU CHEN, HUIBIN CHENG AND JOHN CHADAM
+
+
+where σ and r are positive constants and {Wt } is the standard Brownian motion (Wiener process).
+In the time interval [t, t + dt), the stock pays DSt dt dividend at time t + dt. An American put option
+with strike price E and expiry T is a guaranteed right to sell a stock at price E at any time on or
+before expiry. One wants to know the value of the option and the optimal time to exercise the right
+of the option.
+   The Black–Scholes model is widely used to value options. An important advantage of the model is
+that European options (no early exercise) can be valued analytically by the Black–Scholes formula
+[17, 24]. The situation is quite different, however, for American put options with early exercise.
+While considerable progress has been made, no completely satisfactory analytic solution has been
+found. As a result, people resort routinely either to numerical methods or to analytic approximations.
+There is a considerable literature in these fields; see, for example, [1–13, 17, 19–23, 25–27] and the
+references therein.
+2.1. The Black–Scholes Theory. We denote the Black–Scholes operator by
+                                    ∂P   σ2 2 ∂ 2 P            ∂P
+                           L∗ P =      +   S      2
+                                                    + (r − D)S    − rP.
+                                    ∂t   2    ∂S               ∂S
+
+
+Proposition 1 (Black-Scholes Theory). Consider the American put option with strike price E and
+expiry T , on a stock that pays dividends at a constant rate, D ⩾ 0, in a system where the bond and
+stock prices obey (2.1), with positive constants σ and r. Let (B, P ) be the classical solution of
+                        ∗           +
+               max{L P, (E − S) − P } = 0
+                                                           in (0, ∞) × (−∞, T ),
+                                     +
+(2.2)            P (S, T ) = (E − S) := max{E − S, 0}       on (0, ∞) × {T },
+              
+                                                      +
+                 B(t) := inf{S > 0 | P (S, t) > (E − S) } on (−∞, T ].
+Then the no-arbitrage price of the option at time t is P (St , t); more precisely, the following holds:
+   (1) For any t0 < T , there exists a self-financing portfolio starting at time t0 with a value Πt0 =
+       P (St0 , t0 ) such that at any time t ∈ (t0 , T ] its value, Πt , is at least as large as P (St , t).
+          Consequently, if the option is sold at t0 at a price, p̄, higher than P (St0 , t0 ), then the
+       seller can make a profit, p̄ − P (St0 , t0 ), at time t0 and use P (St0 , t0 ) to form the above self-
+       financing portfolio, cashing it to pay the option obligation whenever the option is exercised,
+       making an additional profit Πτ − (E − Sτ )+ at the exercise time, τ .
+   (2) Define the optimal exercise time, τ ∗ , by
+                             τ ∗ := sup{t ⩽ T | Ss > B(s) ∀ s ∈ [t0 , t)}.
+        Then τ ∗ ⩽ T and Πτ ∗ = (E − Sτ ∗ )+ .
+           Consequently, if at time t0 the option can be bought at a price, p, lower than P (St0 , t0 ),
+        then the buyer can make the profit, P (St0 , t0 ) − p, at time t0 by short selling the above
+        portfolio at time t0 and clearing it at the optimal exercise time at which the payment,
+        (E − Sτ ∗ )+ = Πτ ∗ , from the option is just enough to clear the short position.
+
+  Proof. The self-financing portfolio is maintained in each time interval (t, t + dt] with
+     ∂P (S, t) ¯¯                                                        P (St , t)
+                ¯      shares of stock, and the remainder, Πt − St                  , in the bond.
+        ∂S        S=St                                                      ∂S
+The stochastic change, dΠt , of the value of the portfolio from t to t + dt can be calculated by
+                             ∂P (St , t) n            o n            ∂P (St , t) o
+                    dΠt =                 dSt + DSt dt + Πt − St                  rdt.
+                                ∂S                                      ∂S
+Note that, by Itô’s Lemma,
+                                 ∂P (St , t)       n ∂P (S , t) σ 2 S2 ∂P (S , t) o
+                                                          t          t        t
+                   dP (St , t) =             dSt +             +                     dt.
+                                      ∂S                ∂t         2      ∂S 2
+Taking the difference of dΠt and dP (St , t) we find that
+            d[Πt − P (St , t)] = r[Πt − P (St , t)]dt − L∗ P (St , t)dt ⩾ r[Πt − P (St , t)]dt
+                                          AMERICAN PUT OPTION                                       3
+
+
+by the variational inequality. Thus,
+                    Πt − P (St , t) ⩾ [Πt0 − P (St0 , t0 )]er[t−t0 ] = 0        ∀ t ∈ [t0 , T ].
+This completes the proof.                                                                          ¤
+
+2.2. The Change of Variables. It is mathematically convenient to use the dimensionless quanti-
+ties:
+                         S         σ2               2r        2D
+                x := ln , s :=         (T − t), k := 2 , ` := 2 , α := k − ` − 1,
+                         E          2               σ         σ
+                                              ³ S σ2        ´
+                   P (S, t) = E p(x, s) = E p ln , (T − t) ,      B(t) = Eeb(s) .
+                                                 E 2
+In a typical financial situation we might have σ = 20% (year−1/2 ), T − t = 0.5 (year), with St
+fluctuating in (40%E, 250%E). The resulting range of interest for the dimensionless variable (x, s)
+would be x ∈ (−1, 1), s ∈ [0, 0.01].
+   With
+                     p0 (x) := max{1 − ex , 0},            Lp := pxx + α px − kp,
+the variational problem for (B, P ) is transformed to
+                  max{Lp − ps , p0 − p} = 0 in R × (0, ∞),                  p(·, 0) = p0 ;
+(2.3)
+                            b(s) := inf{x | p(x, s) > p0 (x)}           ∀ s > 0.
+We shall call x = b(s) the free boundary and use the default extension b(0) := lims&0 b(s).
+
+2.3. The Main Results. The well-posedness, i.e., the existence of a unique solution (P, B) of (2.2)
+follows from the standard theory of variational inequalities; see for example, [10, 14]. Here we are
+concerned with the behavior of the free boundary (the optimal exercise boundary). We will give a
+self-contained proof, of the C ∞ regularity of the boundary, that focuses the presentation on the key
+ingredients in the case of the classical American put option.
+
+Theorem 1. There exists a unique solution of (2.3). In addition, b ∈ C ∞ ((0, ∞)) ∩ C([0, ∞)).
+
+   As mentioned earlier, numerical experiments suggest that there is a breakdown of the convexity
+of the early exercise boundary as the dividend rate, D, increases past the risk-free interest rate,
+r. Figure 1 shows the loss of convexity as ε := ln(D/r) = ln(`/k) crosses zero. These numerics
+were carried out using an integro-differential equation derived in §4. It is clear that at its onset
+when 0 < D − r ¿ 1, the non-convex region occurs close to expiry. On the other hand, the formal
+expansion of Wilmott et. al. [27, p121], for s & 0,
+                                       r               √
+                          b(s) = ln − [A + o(1)] s, A = 0.9034...,
+                                      D
+does not capture this behavior. More specifically,
+                                           Eeb(s) σ 4 h                  i
+                                B 00 (t) =              b̈(s) + (ḃ(s))2
+                                              4
+is positive for the above near-expiry asymptotics agreeing with the numerics in Figure 1 that the
+boundary begins convex. To observe the loss of the convexity, more precise estimates are required.
+In particular, we will prove
+Theorem 2. When 0 < D − r ¿ 1, the optimal exercise boundary is not convex. More precisely,
+when ε := ln(D/r) = ln(`/k) is positive and sufficiently small, neither S = B(t) nor x = b(s) is
+convex. In particular, there exist a t̂ for which B 00 (t̂) < 0 and hence b̈(ŝ) < 0, where
+                                             ε2                         2ŝ
+                               0 < ŝ ⩽              and     t̂ = T −       .
+                                          6| ln ε|                      σ2
+              4                                            XINFU CHEN, HUIBIN CHENG AND JOHN CHADAM
+
+
+
+
+                                            r=.05, d=0.055, E=1, T=1,σ=0.25                                                −3
+                                                                                                                    x 10
+                         0.91                                                                                   6
+
+
+
+
+                                                                                                  s=(T−t)σ /2
+                                                                                                                4
+
+
+
+
+                                                                                                  2
+                  B(t)
+
+
+
+
+                         0.89
+                                                                                                                2
+
+                                                                            400 mesh pts.
+                                                                                                                0
+                                                                            800 mesh pts.
+                         0.87                                                                                       0.2                                                           0.4
+                                                                            1600 mesh pts.                                      0                                       0.3
+                                                                                                                                                              0.2
+                                                                                                                                                       0.1          z
+                           0.97                  0.98                0.99                    1                             ε=log(D/r) −0.2   0
+                                                             t
+
+
+                                                    Figure 1. Loss of Convexity as ε = ln(D/r) crosses zero
+                         The figure on the left, in the original S, t variables, shows that the optimal free boundary is not
+                         convex. Numerical accuracy is demonstrated by the overlap of the curves produced from 400,800,
+                         and 1600 mesh points. The figure on the right shows the variation of the free boundary as ε
+                         increases. Here z = b(0) − b(t); for ε < 0, all free boundaries are convex. For ε positive and small,
+                         the free boundary loses its convexity near s = 0, i.e., near expiry.
+
+
+                 The proof of Theorem 2 is given in §5. The intuition for the upper bound on ŝ, the location of
+              the non-convexity, comes from a formal argument giving
+                                                                                      ŝ| ln ε|  1
+                                                                                lim             = .
+                                                                                ε→0       ε2     8
+              See Figure 2.
+
+                           −8
+                      x 10                                                                                      0.015
+              2.5
+                                  2
+                                ε /8|lnε|                k=1.6
+
+                  2             start time
+                                end time
+                                                                                                                    0.01
+                                                                                                      s=(T−t)σ2/2
+s=(T−t)σ2/2
+
+
+
+
+              1.5
+
+
+                  1
+                                                                                                                0.005
+                                                                                                                                                                          start time
+              0.5
+                                                                                                                                                                          end time
+                                                                                                                                                                              2
+                                                                                                                                                                          ε /8ln|ε|
+                  0                                                                                                   0
+                   0                  0.2         0.4         0.6             0.8            1                         0             0.1         0.2         0.3          0.4           0.5
+                                                     ε=log(D/r)                          −3
+                                                                                      x 10                                                          ε=log(D/r)
+
+                                             Figure 2. Time interval for which the free boundary is non-convex
+                         The solid curves in the left figure are inflection points of the free boundary curves. The dashed
+                         curve is the analytic estimate for the location of the non-convexity. The figure on the right shows
+                         that when ε is large enough (> 0.4), the free boundary regains convexity, the teardrop region in
+                         the ε − s domain indicating where the free boundary is concave.
+
+                 In the course of this analysis, some of the estimates can be used to provide a rigorous proof of
+              the previously mentioned near-expiry expansion [27].
+                                            AMERICAN PUT OPTION                                             5
+
+
+Theorem 3. Assume that D > r. Let A = 0.903446597884.... Then
+               r            √             A + o(1)           A + o(1)
+      b(s) = ln − [A + o(1)] s, ḃ(s) = −    √     , b̈(s) =                                       ∀s > 0
+               D                            2 s               4s3/2
+where lims&0 o(1) = 0. Consequently, the inverse, s = s(z), of z = ln(D/r) − b(s) satisfies
+                       z2                          2z                                2
+           s(z) =             ,     s0 (z) =              ,          s00 (z) =               ∀ z ⩾ 0.
+                    A2 + o(1)                   A2 + o(1)                        A2 + o(1)
+
+
+  Note that the above asymptotic behavior implies that very near expiry, the optimal exercise
+boundary begins convex. The location of the non-convex region occurs a little farther from expiry
+near t̂ given in Theorem 2.
+
+
+                                3. Regularity of The Free Boundary
+3.1. Basic Properties of the Solution. Note that
+                                   Lp0 (x) = δ(x) + (`ex − k)H(−x)
+where H is the Heaviside function, H(z) = 1 for z > 0 and H(z) = 0 for z < 0, and δ(x) = H 0 (x) is
+the Delta function. It is critical here that Lp0 changes sign only once:
+           Lp0 ⩾ 0 in [b0 , ∞),        Lp0 < 0 in (−∞, b0 );                b0 := min{0, ln(k/`)}.
+This property implies that the free boundary in (2.3b) is well-defined. Indeed, for each s > 0,
+                  p(x, s) > p0 (x) ∀ x > b(s),             p(x, s) = p0 (x) ∀ x ⩽ b(s).
+Later we shall show that b ∈ C ∞ ((0, ∞)), from which we can derive the following: for each s > 0,
+                                  p(b(s), s)     =   1 − eb(s) ,
+                                 px (b(s), s)    = −eb(s) ,
+                                 ps (b(s), s)    = 0,
+                              pxx (b(s)±, s)     = −eb(s) + ( 12 ± 21 )(k − `eb(s) ),
+                              psx (b(s)±, s)     =   ( 12 ± 12 )ḃ(s)(`eb(s) − k).
+The first and second equations are a direct consequence of p(x, s) = p0 (x) = 1 − ex for x ⩽
+b(s). The equation ps (b(s), s) = 0 is derived by differentiating p(b(s), s) = p0 (b(s)) and using
+px (b(s), s) = p0x (b(s)). The value pxx (b(s)+, s) is obtained from the differential equation ps = Lp
+and ps (b(s)±, s) = 0. Similarly, differentiating px (b(s)±, s) = p0x (b(s)) we obtain the expression for
+psx (b(s)±, s).
+   To see the monotonicity of the free boundary b, it is useful to notice that q := ps satisfies the free
+boundary problem
+                          
+                          
+                           qs (x, s) = Lq(x, s)          ∀ x > b(s), s > 0,
+                          
+                          
+                           q(x, s) = 0                   ∀ x ⩽ b(s), s > 0,
+(3.1)
+                          
+                           q(x, 0) = max{Lp0 (x), 0} ∀ x ∈ R, s = 0,
+                          
+                                       Rs
+                          
+                            Π(b(s)) = 0 qx (b(t), t)dt ∀ s ⩾ 0
+where
+                        Z z                            (
+                                                           0                         if z ⩾ b0 ,
+               Π(z) =          min{Lp0 (x), 0}dx =         Rz        x
+                         ∞                                    b0
+                                                                   (`e − k)dx        if z < b0 .
+Here the last equation in (3.1) is a weak formulation of the free boundary condition
+(3.2)            b(0) = b0 ,     ḃ(s)[`eb(s) − k] = qx (b(s), s),       b(s) ⩽ b0     ∀ s > 0.
+6                            XINFU CHEN, HUIBIN CHENG AND JOHN CHADAM
+
+
+   Formally, p ⩾ p0 implies q(·, 0) = ps (·, 0) ⩾ 0. Since Lp0 (x) < 0 when x < b0 , one readily sees
+that b(0) ⩾ b0 . In the case b0 = 0, we have q(·, 0) = δ(x) so clearly b(0) ⩽ b0 . In the case b0 < 0, we
+have q(·, 0) > 0 in (b0 , 0] so we also have b(0) ⩽ b0 . Thus, we should have b(0) = b0 . We denote
+                                   Qb = {(x, s) | s > 0, x > b(s)}.
+Note that q ⩾ 0 on the parabolic boundary of Qb , so by the maximum principle and Hopf’s Lemma,
+q > 0 in Qb and qx (b(s), s) > 0 for each s > 0. Thus,
+                   ḃ(s)[`eb(s) − k] > 0,     ḃ(s) < 0,   `eb(s) − k < 0        ∀ s > 0.
+
+
+
+   We now turn to the proof of Theorem 1. Existence and uniqueness of weak solutions of (2.3)
+follows from the standard theory of variational inequalities (see [14] and [10] for more details). The
+key consideration here is the regularity. As remarked in [12], for the American put option, it is
+convenient to carry out the analysis in terms of the function q := ps ; i.e., using the free boundary
+problem (3.1), for (q, b). This is a Stefan type free boundary problem which has been well-studied
+(see, for example, [16, 18]). The existence of a smooth classical solution would be standard if the
+free boundary condition is not degenerate; i.e., the coefficient of ḃ at s = 0 in (3.2) is not zero. We
+shall treat the degeneracy that arises here in (3.2) by using the initial value b(0) = b0 − ² for positive
+² and then sending ² & 0. (Note that this ² is unrelated to ε := ln(`/k)).
+
+
+3.2. The Bootstrap Argument. We begin with the bootstrap argument which shows that b ∈
+C ∞ ((0, ∞)) if b ∈ C γ ((0, ∞)) for some γ > 1/2.
+   For this, we denote D = {(x, t) | x ⩾ b(s), s > 0}. Suppose that b ∈ C β/2 ((0, ∞)) for some β > 1
+that is not an integer. Then by standard local regularity theory, e.g. the potential theory in [15],
+the solution of qs = Lq in Qb with zero boundary value on x = b(s) has the regularity q ∈ C β,β/2 (D)
+and qx ∈ C β−1,(β−1)/2 (D). Consequently, qx (b(·), ·) ∈ C (β−1)/2 ((0, ∞)). Since `eb(s) − k < 0 for all
+s > 0, the last equation in (3.1) can be differentiated to give ḃ[`eb − k] = qx (b, s), from which we
+conclude that b ∈ C (β+1)/2 ((0, ∞)). Thus, by induction, b ∈ C ∞ ((0, ∞)).
+
+
+3.3. An Upper Bound for q. Let q0 be the solution of
+                        q0s = Lq0 on R × (0, ∞),           q0 (·, 0) = max{Lp0 , 0}.
+Then q0 > 0 on R × (0, ∞) so by comparison, q ⩽ q0 on R × [0, ∞).
+                                                                                    2
+    For the subsequent analysis, we consider the function q̃0 := q0 (x, t)eαx/2+(k+α /4)t which satisfies
+q̃0s = q̃0xx on R × (0, ∞) with initial data δ(x) + eαx/2 (`ex − k)H(−x)H(x − b0 ). Hence,
+                                    2        Z 0 −(x−y)2 /(4s)
+                                 e−x /(4s)       e
+                     q̃0 (x, s) = √        +       √           eαy/2 (`ey − k)dy.
+                                    4πs       b0     4πs
+Note that kq̃(x, ·)kL∞ ([0,∞)) is finite for every x 6= 0.
+
+
+3.4. Long Time Behavior. Let (p∗ (·), b∗ ) ∈ C 1 (R) × R be the solution of
+(3.3)    p∗ = p0 on (−∞, b∗ ],          p∗00 + αp∗0 − kp∗ = 0 in (b∗ , ∞),             p∗ (∞) = 0.
+The solution is given by
+                        n                                                             √
+                                 e−λ(x−b ) o
+                                        ∗
+                                                                  λ              α+       α2 + 4k
+          p∗ (x) := max 1 − ex ,            ,         b∗ := ln       ,    λ :=                    .
+                                   1+λ                           1+λ                      2
+One can use a comparison argument to show that p ⩽ p∗ , b∗ ⩽ b.                       Since ps ⩾ 0 > ḃ, the
+limt→∞ (p(·, t), b(s)) exists and must be the solution of (3.3). Hence,
+    p(x, s) ⩽ p∗ (x),    b(0) > b(s) > b∗ ,     lim (p(x, t), b(t)) = (p∗ (x), b∗ )       ∀ x ∈ R, s > 0.
+                                               t→∞
+                                         AMERICAN PUT OPTION                                           7
+
+
+3.5. An Upper Bound for |ḃ|. Let η be any positive constant such that η ⩾ −b0 . We define
+                                              ¯ d[eαx/2 (`ex − k)] ¯
+                                              ¯                    ¯
+                        M0 := max ¯                                ¯,
+                                    x∈[b0 ,0]           dx
+                                          n             q̃0 (−η/2, t) o
+(3.4)                M (η) := max M0 , sup                             ,
+                                                    t>0      η/2
+                      bη (s) := min{−η, b(s)},
+                                                                           2
+                          q1 (x, s) :=    M (η) (x − bη (s))e−αx/2−(k+α /4)s .
+Note that bη is a continuous decreasing function. The following is the key to our analysis:
+                                                           2
+        q1s − Lq1 = −M (η)[x − bη (s)]ḃη (s)e−αx/2−(k+α /4)s ⩾ 0         ∀ x ⩾ bη (s), s ⩾ 0.
+Now we compare q1 with q on Q where Q = {(x, t) | b(s) < x < −η/2, s > 0}. Since q ⩽ q0 on
+R × (0, ∞) and q = 0 when x ⩽ b(s), our choice of M (η) implies that q1 ⩾ q on the parabolic
+boundary of Q so q < q1 in Q.
+  Suppose b(s) ⩽ −η. Then q(b(s), s) = q1 (b(s), s) = 0 and q(x, s) < q1 (x, s) for x ∈ (b(s), −η/2].
+Hence,
+                                                                    2
+            0 ⩽ qx (b(s), s) ⩽ q1x (b(s), s) = M (η)e−αb(s)/2−(k+α /4)s    if b(s) ⩽ −η.
+It then follows from the last equation in (3.1) or from (3.2) that
+                                                               2
+(3.5)           0 ⩽ eαb(s)/2 [`eb(s) − k]ḃ(s) ⩽ M (η)e−[k+α /4]s       if b(s) ⩽ −η.
+    ∗
+As b < b(s) < b0 for all s > 0, for any δ > 0, by taking η = −b(δ), we see that b is Lipschitz
+continuous on [δ, ∞). Hence, b is locally Lipschitz on (0, ∞), so by the bootstrap argument, we have
+b ∈ C ∞ ((0, ∞)).
+
+Remark 3.1. When ` > k, we have −b0 = ε := ln(`/k) > 0. Hence, we can set η = −b0 = ε in the
+above analysis and use b∗ < b ⩽ b0 to derive that there exists a constant C > 0 such that
+             (                                 2
+                0 < [b(s) − b0 ]ḃ(s) ⩽ Ce−(k+α /4)s     ∀ s > 0,
+(3.6)                                            2
+                0 ⩽ q(x, s) ⩽ C[x − b(s)]e−(k+α /4)s     ∀ s > 0, x ∈ [b(s), −ε/2].
+
+
+3.6. An Approximation. Once we have the a priori estimate, the existence will be standard.
+There are many ways to do it. We find the following interesting. Let ² > 0 be a fixed small number.
+We remove the degeneracy of the free boundary condition by requiring b(0) = b0 − ². Hence, we
+consider the following problem, for (q ² , b² ):
+                  ²
+                   qs (x, s) = Lq ² (x, s)                 ∀ x > b² (s), s > 0,
+                 
+                 
+                 
+                  q ² (x, s) = 0                           ∀ x ⩽ b² (s), s > 0,
+(3.7)
+                 
+                   q ² (x, 0) = max{Lp0 (x), 0}            ∀ x ∈ R, s = 0,
+                 
+                  Π(b² (s)) = Π(b − ²) + R s q (b(t), t)dt ∀ s ⩾ 0.
+                 
+                                      0          0 x
+
+   This is a standard Stefan problem, for which the existence of a classical solution can be proven
+as follows. We establish the existence of a solution in a time interval [0, h] for an arbitrary large h.
+We define a function space
+              n               ¯                                                             o
+                              ¯
+         B = b ∈ C 1 ([0, h]) ¯ b(0) = b0 − ²; 0 ⩽ eαb/2 [`eb − k]ḃ ⩽ M (² − b0 ) in [0, h]
+
+where M (·) is defined in (3.4). Clearly, B is a closed subset of C 1 ([0, h]).
+  For each b ∈ B, we let q be the solution of the following initial–boundary value problem
+                     
+                      qs (x, s) = Lq(x, s)
+                                                      ∀ x > b(s), s ∈ (0, h],
+                        q(b(s), s) = 0                 ∀ s > 0,
+                     
+                     
+                        q(x, 0) = max{Lp0 (x), 0}      ∀ x ⩾ b0 − ².
+8                                XINFU CHEN, HUIBIN CHENG AND JOHN CHADAM
+
+
+This problem admits a unique classical solution q. As the boundary is C 1 , we see that q ∈
+∩0<β<1 C 2β,β (Qb \ ([b0 , 0] × {0})). This implies qx (b(·), ·) ∈ ∩0<β<1/2 C β ([0, h]).
+  From the solution, we define b̃ = T[b] by solving the ode
+                                      db̃(s)
+            eαb̃(s)/2 [`eb̃(s) − k]          = qx (b(s), s)eαb(s)/2   ∀ s ∈ (0, h],   b̃(0) = b0 − ².
+                                       ds
+Since q > 0 in Qb , we have qx (b(s), s) ⩾ 0. Hence, b̃ is well-defined and b̃(s) ⩽ b0 − ² for all s ∈ [0, h].
+We want to show that T has a fixed point in B. This fixed point is a solution of (3.7).
+   First of all, since ḃ ⩽ 0, following the same line of proof as in the previous subsection, we find
+                                                                    2
+that 0 ⩽ q ⩽ q0 and 0 ⩽ qx (b(s), s) ⩽ M (² − b0 )e−αb(s)/2−(k+α /4)s . Hence,
+                                                      ˙                     2
+                                 0 ⩽ eαb̃/2 [`eb̃ − k]b̃ ⩽ M (² − b0 )e−(k+α /4)s .
+Thus, T maps B to itself. In addition {T[b] | b ∈ B} is a bounded set in C 1+1/4 ([0, h]) which is a
+compact subset of C 1 ([0, h]). Hence, by the Schauder’s fixed point theorem, T admits a fixed point,
+b² , in B. Extend the corresponding q by zero for x < b² and denoting it by q ² , we see that (q ² , b² ) is
+a classical solution of (3.7) in R × [0, h]. Since M (² − b0 ) does not depend on h, we can let h → ∞
+to obtain a solution of (3.7) on R × (0, ∞).
+
+Remark 3.2. When α > 0, we may need extra care to prevent b² from being unbounded from below.
+Since we know the limit b := lim²&0 b² is bounded from below by b∗ , this technicality can be treated
+                                     ∗
+by replacing eαb/2 by max{eαb/2 , eαb /2 }. We omit the details.
+
+
+3.7. Monotonicity of the Approximation Sequence. Let 0 < ²1 < ²2 . Then b²2 (0) < b²1 (0).
+We claim that b²2 < b²1 on [0, ∞). Suppose this is not true. Then t∗ := sup{t > 0 | b²2 <
+b²1 in [0, t]} is finite and we have b²2 < b²1 in [0, t∗ ) and b²2 (t∗ ) = b²1 (t∗ ).
+    Now by comparison on D = {(x, t) | x ⩾ b²1 (s), s ∈ [0, t∗ ]} we see that q ²2 ⩾ q ²1 on D. Since
+b is C 1 , we obtain from Hopf’s lemma that qx²2 (b²1 (t∗ ), t∗ ) > qx²1 (b²1 (t∗ ), t∗ ). Consequently, since
+ ²1
+
+b²1 (t∗ ) = b²2 (t∗ ), we find from the boundary condition that
+                                   qx²2 (b²1 (t∗ ), t∗ )   qx²1 (b²1 (t∗ ), t∗ )
+                          −ḃ²2 (t∗ ) =       ²          >            ²          = −ḃ²1 (t∗ ).
+                                      k − eb 1 (t∗ )          k − eb 1 (t∗ )
+That is (b²2 − b²1 )0 |s=t∗ < 0. But this implies b²2 (s) − b²1 (s) > 0 when 0 < t∗ − s ¿ 1, contradicting
+the definition of t∗ . Hence, we must have b²2 < b²1 on [0, ∞). Consequently, by comparison, we have
+q ²1 < q ²2 in Qbε1 .
+
+
+3.8. The Limit of the Approximation Sequence. Now we define (q, b) = lim²&0 (q ² , b² ). We
+shall show that (q, b) solves (3.1) and b ∈ C ∞ ((0, ∞)) ∩ C([0, ∞)).
+   First of all, q ∈ C ∞ (Qb ) and qs = Lq in Qb := {(x, t) | s > 0, x > b(s)} = ∩²>0 Qb² .
+   Next we establish the regularity of b. As the limit of a sequence of decreasing functions, b is also
+decreasing. Next we claim that b(s) < b0 for every s > 0. Indeed, if this is not true, then we have
+b(s) = b0 for all s ∈ [0, δ] for some δ > 0. Note that for the ² problem, integrating qsε = Lq ² over
+Qb² we have the following identity, for t2 > t1 ⩾ 0,
+Z                  Z                 Z t2 Z                   Z t2
+    ²                 ²                      ²
+   q (x, t2 )dx − q (x, t1 )dx + k          q (x, t)dxdt = −       qx² (b² (t), t)dt = Π(b² (t1 )) − Π(b² (t2 ).
+    R                 R                       t1    R                     t1
+
+Sending ² & 0 and using Lebesgue’s dominated theorem we obtain
+     Z            Z                Z t2 Z
+       q(x, t2 ) − q(x, t1 )dx + k        q(x, t)dxdt = Π(b(t1 ) − Π(b(t2 )) ∀ t2 > t1 ⩾ 0.
+        R                 R                    t1   R
+
+Now if b ≡ b0 on [0, δ], we can integrate qs = Lq over (0, ∞) × (δ/2, δ) to derive
+                            Z δ
+                                 qx (b0 , t)dt = Π(b(δ) − Π(b(δ/2)) = 0,
+                                      δ/2
+                                                AMERICAN PUT OPTION                                          9
+
+
+which is impossible since Hopf’s maximum principle implies that qx (b0 , s) > 0 for each s ∈ (0, δ). In
+conclusion, b(s) < b0 for every s > 0.
+   Now let η ⩾ −b0 be any small positive constant. Passing the estimate of ḃ² to the limit we find that
+(3.5) holds. This implies that b is Lipschitz continuous on [δ, ∞) where δ := inf{s > 0 | b(s) < −η}.
+A bootstrap argument shows that b ∈ C ∞ ((δ, ∞)). Now we can use (q ε , b² ) → (q, b) in the needed
+norm to conclude that q(b(s), s) = 0 and qx (b(s), s) = ḃ[`eb(s) − k] for all s ∈ (δ, ∞). Sending
+η & −b0 , we must have δ → 0 since b(s) < b0 for each s > 0. Thus, b ∈ C ∞ ((0, ∞)) and (q, s) is a
+solution of (3.1).
+   Finally, let δ ² := inf{s > 0 | b² (s) > b0 − 2²}. Then δ ² ∈ (0, ∞] and b(s) ⩾ b² > b0 − 2² for all
+s ∈ (0, δ ² ). Hence, lims&0 b(s) ⩾ b0 − 2². Sending ² & 0 we find lims&0 b(s) ⩾ b0 . As b(s) < b0 for
+s > 0, we conclude that lims→0 b(s) = b0 , so b ∈ C([0, ∞)).
+
+
+3.9. Recovering p from q. Once we have a classical solution of (q, b) of (3.1), we can define
+                                         Z s
+                     p(x, s) := p0 (x) +     q(x, t)dt ∀ x ∈ R, t ⩾ 0.
+                                                      0
+
+   Since q(x, t) = 0 for x ⩽ b(t) and since ḃ < 0, we see that q = 0 on (−∞, b(s)] × [0, s] for each
+s > 0. Hence, p(x, s) ≡ p0 (x) when x ⩽ b(s) and px (b(s), s) = p0x (b(s)) for each s > 0. Also, ps = q
+on R × (0, ∞). In addition, when x ⩾ b0 ,
+                                     Z s                    Z s
+                Lp(x, s) = Lp0 (x) +     Lq(x, t)dt = Lp0 +     qt (s, t)dt = q(x, s),
+                                            0                            0
+
+since q(·, 0) = max{Lp0 , 0} = Lp0 when x ⩾ b0 .
+   When x ∈ (b(s), b0 ), write s = ŝ(x) the inverse of x = b(s). Then
+                                                    Z s
+                                 p(x, t) = p0 (x) +      q(x, t)dt.
+                                                               ŝ(x)
+
+Consequently,
+                                                                        Z s
+                                                  0
+                 Lp(x, s)       = Lp0 (x) − ŝ (x)qx (x, ŝ(x)) +                  Lq(x, t)dt
+                                                                           ŝ(x)
+                                                       1
+                                = Lp0 (x) −                 qx (x, ŝ(x)) + q(x, s) = q(x, s) = ps .
+                                                  ḃ(ŝ(x))
+Thus, (p, s) is a solution of the variational inequality (2.3).
+   Since the solution of variational inequality (2.3) is unique [10, 14], the assertion of Theorem 1
+thus follows.
+
+                                Rt
+Remark 3.3. Let p² := p0 + 0 q ² (x, t)dt. Then (p² , b² ) does not solve the original problem; one
+finds that p²s − Lp² = −Lp0 (x) in (b0 − ², b0 ) × (0, ∞). Indeed, as ² & 0, p² & p and b² % b.
+
+
+
+                                           4. Integral Formulation
+  Introduce φ(x, s) = p(x, s) − p0 (x). Then
+      φs − Lφ(x, s) = H(x − b(s)) Lp0 (x)                 on R × (0, ∞),           φ(·, 0) = 0 on R × {0}.
+Hence, we can use Green’s formula to write
+                        Z sZ ∞
+              φ(x, s) =          Γ(x − y, t)Lp0 (y)dydt                 ∀ (x, s) ∈ R × [0, ∞),
+                            0     b(s−t)
+
+where Γ is the fundamental solution given by
+                                                                                                2
+                 Γ(x, s) := K(x + αs, s)e−ks ,                 K(z, t) := (4πt)−1/2 e−z /4t .
+10                                   XINFU CHEN, HUIBIN CHENG AND JOHN CHADAM
+
+
+We therefore obtain the following, for every (x, s) ∈ R × (0, ∞),
+               Z s             Z sZ 0
+  φ(x, s) =        Γ(x, t)dt +            [`ey − k]Γ(x − y, t)dydt,
+                        0                         0       b(s−t)
+                       Z s                        Z sZ 0
+     φx (x, s)    =          Γx (x, t)dt +                              [`ey − k]Γx (x − y, t)dydt,
+                        0                             0    b(s−t)
+                                     Z 0                                                  Z s
+                                                   y
+     φs (x, s)    =    Γ(x, s) +             [`e − k]Γ(x − y, s)dy −                            ḃ(s − t)[`eb(s−t) − k]Γ(x − b(s − t), t) dt
+                                      b(0)                                                 0
+                                     Z 0                                                 Z s
+                  = Γ(x, s) +              [`ey − k]Γ(x − y, s)dy −                            ḃ(t)[`eb(t) − k]Γ(x − b(t), s − t) dt.
+                                      b0                                                  0
+
+Also, for every s > 0 and x 6= b(s),
+                              Z 0                            Z s
+   φsx (x, s) = Γx (x, s) +       [`ey − k]Γx (x − y, s)dy −     ḃ(t)[`eb(t) − k]Γx (x − b(t), s − t) dt.
+                                             b0                                                  0
+
+     Evaluating these expressions at x = b(s) we then obtain the following.
+
+
+Theorem 4. Let (b, p) be the solution of the variational inequality (2.3). Then b satisfies the
+following integral identities:
+                               Z s                 Z sZ 0
+(4.1)                     0 =      Γ(b(s), t) dt +        [`ey − k]Γ(b(s) − y, t)dydt,
+                                                   0                                 0    b(s−t)
+                                                  Z s                            Z sZ 0
+(4.2)                            0     =                  Γx (b(s), t)dt +                           [`ey − k]Γx (b(s) − y, t)dydt,
+                                                   0                                 0    b(s−t)
+                                                                         Z 0
+(4.3)                            0     =          Γ(b(s), s) +      [`ey − k]Γ(b(s) − y, s)dy
+                                                                 b0
+                                                         Z s
+                                                      −      ḃ(t)[`eb(t) − k]Γ(b(s) − b(t), s − t) dt,
+                                                                0
+                                                                               Z 0
+(4.4)            ḃ(s)[`eb(s) − k]     =          2Γx (b(s), s) + 2                  [`ey − k]Γx (b(s) − y, s)dy
+                                                                                b0
+                                                                Z t
+                                                           −2           ḃ(t)[`eb(t) − k]Γx (b(s) − b(t), s − t) dt.
+                                                                    0
+
+Also, for any θ ∈ R,
+                                       ³                         Z 0
+                                             b(s) ´                           ³     b(s) − y ´
+(4.5) ḃ(s)[`eb(s) − k]         =       θ−          Γ(b(s), s) +     [`ey − k] θ −             Γ(b(s) − y, s)dy
+                                               s                  b0                    s
+                                         Z s                  ³    b(s) − b(t) ´
+                                       −     ḃ(t)[`eb(t) − k] θ −               Γ(b(s) − b(t), s − t) dt .
+                                          0                            s−t
+With the particular choice of θ = 0 and θ = [b(s) − b0 ]/s we have
+                                                 Z
+              b(s)        −b(s)Γ(b(s), s) 1 0 y
+(4.6) ḃ(s)[`e     − k] =                  +         [`e − k][y − b(s)]Γ(b(s) − y, s)dy
+                                 s             s b0
+                               Z s
+                                                        b(s) − b(t)
+                             +     ḃ(t)[eb(t)−b0 − 1]              Γ(b(s) − b(t), s − t) dt,
+                                 0                         s−t
+                                               Z
+                          −b0 Γ(b(s), s) 1 0 y
+(4.7) ḃ(s)[`eb(s) − k] =                +         [`e − k][y − b0 ]Γ(b(s) − y, s)dy
+                                s            s b0
+                               Z s                   ³ b(s) − b
+                                                                0   b(s) − b(t) ´
+                             −     ḃ(t)[`eb(t) − k]              −               Γ(b(s) − b(t), s − t) dt.
+                                 0                         s           s−t
+                                          AMERICAN PUT OPTION                                         11
+
+
+  Here (4.5) is obtained by adding a θ + α multiple of (4.3) to (4.4) and using
+                                                   −x − αs
+                                   Γx (x, s) =             Γ(x, s).
+                                                     2s
+   We shall use (4.6) and (4.7) for our analysis. For numerical simulation we use (4.5) with θ =
+(b(s) − b0 )/(2s), since a formal asymptotic expansion suggests that for ` > k
+                                     √                   b(s) − b0
+                       b(s) − b0 ∝       s,    ḃ(s) ∼               when 0 < s ¿ 1.
+                                                            2s
+Hence, taking θ = (b(s) − b0 )/(2s) in (4.5) removes the singularity of the last integral in (4.5) in a
+natural way.
+
+
+
+                                              5. Non-Convexity
+  From now on we assume that ` > k. We shall prove Theorem 2.
+
+5.1. The Idea. It is convenient to visualize graphs in the first quadrant. Hence, we introduce
+
+                            z(s) = b0 − b(s) = −ε − b(s)              ∀ s ⩾ 0.
+
+Since z 0 (s) > 0 for all s > 0, z = z(s) admits an inverse, which we denote by s = s(z).
+
+   We can rewrite (4.6) and (4.7) as follows. Note that `ey − k = k[ey−b0 − 1]. Hence we can use
+the change of variable ỹ = y − b0 in the first integral and the change of variable y = b0 − b(t) in the
+second integral in (4.6) and (4.7) to obtain
+                                        dz
+(5.1)                      [1 − e−z ]          = I1 + I2 − I3 = J1 + J2 + J3
+                                        ds
+where
+                           (ε + z)Γ(−ε − z, s)
+                 I1   :=                        ,
+                             Z ε ks
+                           1
+                 I2   :=         [ey − 1][z + y]Γ(−y − z, s)dy,
+                           s 0
+                           Z z           ³ z−y ´
+                 I3   :=       [1 − e−y ]              Γ(y − z, s(z) − s(y)) dy,
+                            0             s(z) − s(y)
+                           ε Γ(−ε − z, s)
+                 J1   :=                   ,
+                             Z εks
+                           1
+                 J2   :=          y[ey − 1]Γ(−z − y, s)dy,
+                           s 0
+                           Z z           ³ z        z−y ´
+                 J3   :=       [1 − e−y ]      −              Γ(y − z, s(z) − s(y)) dy.
+                            0             s(z) s(z) − s(y)
+  Since the coefficient of dz/ds at s = 0 is zero, it may be better to consider the inverse function,
+which is smooth on [0, ∞). Hence we write (5.1) as
+                               ds     1 − e−z         1 − e−z
+(5.2)                             =              =              .
+                               dz   I1 + I2 − I3   J1 + J2 + J3
+
+  Recall that
+                                                        ¯
+                                                        ¯
+                              B(t) = Eeb(s) = Ee−ε−z(s) ¯            2
+                                                                                .
+                                                                 s= σ2 (T −t)
+12                          XINFU CHEN, HUIBIN CHENG AND JOHN CHADAM
+
+
+It follows that
+                                4eε d2 B(t)   d2 e−z(s)       dz d ³ 1 ´
+                                                 =      =  −                ds
+                                σ 4 E d2 t       ds2          ds dz ez dz
+                                                   ³ dz ´3 d ³ ds ´
+                                         = e−2z                  ez
+                                                     ds dz          dz
+                                                  ³ dz ´3 ³ d2 s     ds ´
+                                         = e−z                    +       .
+                                                    ds      dz 2     dz
+  Thus, to show that B is not convex (B 00 (t) ⩾ 0 not true), we need only show that ez ds/dz is not
+an increasing function. For this, we compare the values of ez ds/dz at two points:
+                                          ε2                                          ε2
+(5.3)          z1 := z(s1 ), s1 :=                   ,     z2 := z(s2 ), s2 :=
+                                     [8 + ν] | ln ε|                             [8 − ν] | ln ε|
+where ν can be any constant in (0, 8). For definiteness, we fix ν = 2.
+    For convenience, we introduce
+                              n      ¯ d2 s   ds              o
+                                     ¯
+(5.4)               z ∗ := sup z > 0 ¯ 2 +       ⩾ 0 in (0, z] , s∗ := s(z ∗ ).
+                                       dz     dz
+Note that the optimal exercise boundary is convex if and only if s∗ = ∞. In the sequel, we shall
+show that when ε is small, s∗ < s2 ; that is, the convexity changes at time before s2 .
+    We remark that the convexity of s(·) implies the convexity of B(·) since B 00 is proportional to
+s + s0 with s0 > 0. Hence, if B(·) is not convex, then neither is s(·).
+ 00
+
+    In the sequel, ε = ln(D/r) = ln(`/k) is a small positive constant. We use the standard notation
+o(1) to denote a generic small quantity that approaches zero as ε & 0.
+
+5.2. The General Lower Bound of ds/dz. We shall utilize the first equation in (5.2) to estimate
+the positive lower bound of ds/dz. The key here is that all terms I1 , I2 and I3 are positive, so we
+have the basic estimate
+                                     dz              ds     1 − e−z
+                          (1 − e−z )    ⩽ I1 + I2 ,      ⩾          .
+                                     ds              dz     I1 + I2
+   We can estimate I2 as follows. Notice that α = k − ` − 1 < −1. Hence, when 0 ⩽ y ⩽ z,
+                                          2                     2                    2             2
+                                 e−(y+z) /(4s)+[y+z]α/2−(k+α /4)s   e−(y+z) /(4s)−y−(k+α /4)s
+           Γ(−y − z, s) =                     √                   ⩽           √               .
+                                                 4πs                            4πs
+It then follows, using 0 ⩽ ey − 1 ⩽ yey ⩽ 12 (y + z)ey , that
+                    Z
+                  1 ε y
+        I2 :=          [e − 1][z + y]Γ(−y − z, s)dy
+                  s 0
+                         2    Z                                     2     Z      √
+                  e−(k+α /4)s ε         2 −(y+z)2 /(4s)       e−(k+α /4)s (z+ε)/ s 2 −η2 /4
+             ⩽        √          (y + z) e              dy =      √          √
+                                                                                   η e      dη
+                    4 πs3      0                                 4 π       z/ s
+                         2    Z                           2
+                  e−(k+α /4)s ∞ 2 −η2 /4         e−(k+α /4)s      1
+             ⩽         √          η e      dη =                ⩽        ∀ s > 0.
+                      4 π      0                        2         2
+     Next, we consider
+                                                                                 2
+                                  (ε + z)Γ(−ε − z, s)   (ε + z)e−(ε+z−αs) /(4s)−ks
+                      I1   :=                         =         √                  .
+                                          ks                      4πk 2 s3
+Since α < 0, we see that
+                   ∂ I1    I1 n      (ε + z)(ε + z − αs) o             ε2
+                        =       1−                         < 0 when s < .
+                   ∂z     ε+z                 2s                       2
+                                   2
+It then follows that when s ∈ (0, ε /2],
+                                                                 2
+                                              ε Γ(−ε, s)   ε e−ε /(4s)
+                                     I1 ⩽                ⩽ √           .
+                                                 ks           4πk 2 s3
+                                             AMERICAN PUT OPTION                                          13
+
+
+Combing these estimates, we then obtain
+                  ds     1 − e−z      1 − e−z       z e−z                             h ε2 i
+(5.5)                =              ⩾         ⩾                                  ∀ s ∈ 0,    .
+                  dz   I1 + I2 − I3   I1 + I2    e−ε2 /(4s)
+                                                ε√                                        2
+                                                            +14πk2 s3    2
+
+5.3. The Lower Bound of ds/dz on [0, s∗2 ] where s∗2 = min{s2 , s∗ }.
+   (1) First we consider s ∈ [0, s1 ] where s1 := ε2 /(10| ln ε|), 0 < ε ¿ 1. It is easy to verify that
+I1 = o(1) when s ∈ (0, s1 ], so that
+                         ds     ze−z                       z 2 e−z
+(5.6)                       ⩾           ,         s⩾                    ∀ z ∈ [0, z1 ].
+                         dz   o(1) + 12                   1 + o(1)
+This also implies that when s ∈ [0, s1 ], z(s) = o(ε). In particular, z1 := z(s1 ) = o(ε).
+
+   To extend the estimate beyond s1 , we notice that s00 +s0 ⩾ 0 implies that (ez s0 )0 ⩾ 0 so integrating
+it over [x, x + h] ⊂ (0, z ∗ ] we obtain
+(5.7)                      s0 (x + h) ⩾ e−h s0 (x) ∀ 0 < x < x + h ⩽ z ∗ .
+    (2) With z1 := z(s1 ), s∗ := s(z ∗ ), s∗2 := min{s2 , s∗ }, and z2∗ := z(s∗2 ), we claim that z2∗ < 2z1 .
+Suppose not. Then we take h = z1 and integrate (5.7) over [0, z1 ] to obtain s(2z1 ) − s(z1 ) ⩾
+e−z1 s(z1 ), so s(2z1 ) ⩾ [1 + e−z1 ]s(z1 ) = [2 − o(ε)]s(z1 ). However, since s2 = 35 s1 , we obtain
+s(2z1 ) ⩾ [2 − o(ε)]s1 > s2 ⩾ s(z2∗ ), contradicting the assumption z2∗ ⩾ 2z1 . Hence, we must have
+z2∗ < 2z1 .
+
+   (3) We now consider the lower bound of ds/dz in [s1 , s∗2 ]. From (5.7) and (5.6) we derive, for any
+z ∈ [z1 , z2∗ ] ⊂ [z1 , 2z1 ],
+                                                      ∗                      ∗
+                     ds(z)      ∗ ds(z1 )   e−z2 z1 e−z1    e−z1 −z2 z1   z
+                           ⩾ e−z2         ⩾           1  =          1   z⩾ .
+                      dz            dz       o(1) + 2      [o(1) + 2 ]z   2
+   In conclusion, when ε is positive and sufficiently small,
+              ds(z)  z                z2                         z2 − y2
+(5.8)               ⩾ ,      s(z) ⩾      ,     s(z) − s(y) ⩾                 ∀ 0 ⩽ y ⩽ z ⩽ z2∗ .
+               dz    2                4                             4
+5.4. Upper Bounds of ds/dz. The optimal exercising boundary is convex if and only if s∗ = ∞.
+In what follows, we shall show that when ε is small positive, s∗ < s2 . To do this, we show that the
+value ez ds/dz at z2 is much smaller than at z1 , so it cannot be an increasing function and therefore
+the free boundary cannot be convex. In (5.8), we already have a lower bound of ez dz/ds at z1 if
+s∗ ⩾ s1 (if s∗ < s1 , the non-convexity is established). Here what we need is an upper bound at
+z = z2 . The basic idea is to use the second equation in (5.2).
+
+5.4.1. Estimate of J3 . In the case s00 ⩾ 0, it is easy to show that J3 is positive. Under the weaker
+condition s00 + s0 ⩾ 0 in (0, s∗ ], we shall show that J3 is almost positive. For this purpose, we write
+                               Z z
+                         J3 =       [1 − e−y ]R(z, y)Γ(y − z, s(z) − s(y)) dy
+                                 0
+where
+                                              z         z−y           ys(z) − zs(y)
+                         R(z, y)     :=           −              =
+                                             s(z) s(z) − s(y)       s(z)[s(z) − s(y)]
+                                                    zy        ³ s(z) s(y) ´
+                                     =                                −
+                                             s(z)[s(z) − s(y)] z           y
+                                                              Z z 0
+                                                    zy             s (x)x − s(x)
+                                     =                                              dx
+                                             s(z)[s(z) − s(y)] y          x2
+                                                              Z z R x 00
+                                                    zy              0
+                                                                       x̂s (x̂)dx̂
+                                     =                                             dx.
+                                             s(z)[s(z) − s(y)] y          x2
+14                              XINFU CHEN, HUIBIN CHENG AND JOHN CHADAM
+
+
+Since s00 + s0 ⩾ 0 in (0, z ∗ ], when x̂ ∈ (0, z ∗ ], we have s00 (x̂) ⩾ −s0 (x̂). Also s0 (x̂) ⩽ ex−x̂ s0 (x) ⩽
+ez s0 (x) when 0 < x̂ ⩽ x ⩽ z ⩽ z ∗ . Hence s00 (x̂) ⩾ −s0 (x̂) ⩾ −ez s0 (x). Thus, when 0 < y < z < z2∗ ,
+                                                    Z z Rx z 0
+                                        zy               0
+                                                           x̂e s (x)dx̂           zyez
+                  R(z, y) ⩾ −                                   2
+                                                                        dx = −          .
+                                 s(z)[s(z) − s(y)] y          x                  2 s(z)
+     Next using (5.8) we derive that
+                                                   1               1
+                     Γ(y − z, s(z) − s(y)) < p                ⩽p            .
+                                              4π[s(z) − s(y)]   π[z − y 2 ]
+                                                                   2
+
+Hence,
+                         Z z
+               J3   =    [1 − e−y ]R(z, y)Γ(y − z, s(z) − s(y)) dy
+                           0
+                        Z z                                √ 3 z
+                               zyez        1                 πz e
+                    ⩾ −     y        p             dy = −          ⩾ −z            ∀ z ∈ (0, z2∗ ].
+                         0    2 s(z)       2    2
+                                        π(z − y )           8 s(z)
+
+5.4.2. Estimate of J2 . One can estimate the lower bound of J2 as follows:
+                   Z                                         2    Z
+                 1 ε y                              eαz−(k+α /4)s ε 2 −(z+y)2 /(4s)
+            J2 =        y[e − 1]Γ(−z − y, s)dy ⩾       √               y e          dy
+                 s 0                                     4πs3       0
+                                                             2    Z        √
+                                                    eαz−(k+α /4)s (z+ε)/ s −η2 /4
+                                                =       √             √
+                                                                             e    dη.
+                                                          4π        z/ s
+
+In view of (5.8), we see that when s ∈ (0, s∗2 ], we have
+                                Z √                    Z
+                           eo(ε) ε/ s −η2 /4          1 3 −η2 /4
+                     J2 ⩾ √           e         dη ⩾      e      dη := c > 0.
+                             4π 2                     4 2
+It then follows that
+                        J2 + J3 ⩾ c − z > 0 ∀ s ∈ (0, s∗2 ] ( ⇔ ∀ z ∈ (0, z2∗ ]).
+
+5.5. Completion of the Proof of Theorem 2. Now suppose z ∗ > z2 . Then z2∗ = z2 and s∗2 = s2 .
+Hence we can use the second equation in (5.2) to conclude that
+                 1 ds(z) ¯¯        1 − e−z        1           1
+                          ¯    =                          ⩽
+                 z dz z=z2             z    J1 + J2 + J3     J1
+                                   k√                             ¯
+                                                        2         ¯
+                               =       4πs3 e(ε+z(s)−αs) /(4s)+ks ¯            ⩽ ε1/4 .
+                                   ε                                      2
+                                                                    s= −6εln ε
+
+In comparing with (5.8), we see that
+                 ds(z2 )       ds(z1 )                1                         ez1 z1
+              ez2        − ez1         ⩽ z2 ez2 ε1/4 − ez1 z1 ⩽ 2z1 e2z1 ε1/4 −        < 0.
+                   dz            dz                   2                           2
+This implies that ez ds(z)/dz is not an increasing function on [z1 , z2 ]. Consequently, we must have
+z ∗ < z2 . This completes the proof of Theorem 2.
+
+
+                                            6. Expansion Near Expiry
+6.1. A Formal Expansion. In [27], the ideas were presented for obtaining a formal expansion for
+the leading order behavior, as s & 0. Here we extend these ideas to a full expansion. Recall that
+φ := p − p0 satisfies φs − Lφ = δ(x) + k[ex−b0 − 1]H(x − b(t))H(−x), with zero initial value. When
+ε = −b0 = ln(`/k) > 0, the Delta function will not interfere much with the solution near (b0 , 0).
+Hence, we expect the following expansion
+                         ¯                      ∞
+                                                X                           ∞
+                                                                            X
+                         ¯
+        φ(x, s) = Φ(ξ, s)¯ x−b(0) , Φ(ξ, s) ∼ s    φn (ξ)sn/2 , b(s) ∼ b0 +   An sn/2 .
+                               ξ=   √
+                                        s            n=1                             n=1
+                                                    AMERICAN PUT OPTION                                                  15
+
+
+Note that Φ satisfies
+               ξ      1      α             X∞
+                                               ξ n sn/2                              ³ b(s) + ε ε ´
+        Φs −      Φξ − Φξξ = √ Φξ − kΦ + k                                   ∀ξ ∈        √     , √ , s > 0.
+               2s     s       s            n=1
+                                                  n!                                        s     s
+This leads to the following
+                                        k ξn
+                             Ln φn =         + αφn−1 − kφn−2                 ∀ ξ ∈ (A1 , ∞)
+                                         n!
+where
+                                               ³   n ξ d    d2 ´
+                                        Ln ψ := 1 + −      − 2 ψ.
+                                                   2  2 dξ  dξ
+Here we have used the extension φ0 = φ−1 ≡ 0.
+  The boundary conditions for φn and the unknown An will be derived from
+                    0 = φ(b(s), s) = Φ(ξ(s), s),        0 = φx (b(s), s) = s−1/2 Φξ (ξ(s), s),
+                                                                       X∞
+                                    ξ(s) = [b(s) − b0 ]s−1/2 ∼ A1 +        An sn−1/2 .
+                                                                             n=2
+
+Using the asymptotic expansion, we have
+               X∞         ³      ∞
+                                 X              ´
+        0 ∼        sn/2 φn A1 +     Am s(m−1)/2
+                     n=1                      m=2
+
+                                    φn (A1 ) ³ X                        ´i
+                     X∞           ∞
+                                  X  (i)       ∞
+               ∼           sn/2                           Am s(m−1)/2
+                     n=1          i=0
+                                         i!         m=2
+                                                                      ∞
+                                                                      X
+               ∼ φ1 (A1 )s1/2 + [φ2 (A1 ) + φ01 (A1 )A2 ]s +                 [φn (A1 ) + φ01 (A1 )An + · · · ]sn/2
+                                                                      n=3
+                     ∞
+                     X              ³         ∞
+                                              X                   ´
+         0 ∼               sn/2 φ0n A1 +            Am s(m−1)/2
+                     n=1                      m=2
+                                                                      ∞
+                                                                      X
+               ∼ φ01 (A1 )s1/2 + [φ02 (A1 ) + φ001 (A1 )A2 ]s +              [φ0n (A1 ) + φ001 (A1 )An + · · · ]sn/2 .
+                                                                      n=3
+
+Hence, we obtain the boundary conditions and the free boundary conditions
+        φ1 (A1 ) = 0,             φ01 (A1 ) = 0,                                  φ1 (ξ) = O(ξ) as ξ → ∞,
+        φ2 (A1 ) = 0,             φ02 (A1 ) + φ001 (A1 )A2 = 0,                   φ2 (ξ) = O(ξ 2 ) as ξ → ∞,
+        φn (A1 ) = an−1 ,         φ0n (A1 ) + φ001 (A1 )An = bn−1 ,               φn (ξ) = O(ξ n ) as ξ → ∞
+where am , bm are constants depending only expansions of order up to m.
+  For the homogeneous equation Ln ψ = 0, one can verify that the following are two linear inde-
+pendent solutions:
+                       Z ∞                                 Z
+                                  n+2 −η 2 /4                             2
+              ψn (ξ) =     (η − ξ)   e        dη, ψ̃n (ξ) = (η − ξ)n+2 e−η /4 dη.
+                              ξ                                               R
+
+Here ψ̃n is a polynomial of degree n + 2. It is easy to verify that
+                                             n     A1 ψ1 (ξ) o
+                                   φ1 (ξ) = k ξ −
+                                                    ψ1 (A1 )
+where A1 is the solution of the transcendental equation
+           Z ∞
+                                        2
+(6.1)           (η − A1 )2 (η + 2A1 )e−η /4 dη = 0 ⇒ A1 = −0.9034465978843...
+               A1
+16                              XINFU CHEN, HUIBIN CHENG AND JOHN CHADAM
+
+
+6.2. An Alternative Formal Derivation. We can also use the first or second equation in√ (5.2)√to
+derive the asymptotic behavior. Assume that 0 < s < ε3 . Also assume that z(s) = [A + O( s)] s.
+                           2
+Then one finds J1 = O(e−ε /(4s) ) can be neglected in the expansion for small s. Also,
+                                       Z ∞
+                                   1                    2
+                            J2 = √          (A − η)2 e−η /4 dη + O(z).
+                                    4π A
+For J3 , one uses the change of variable
+                                                        r
+                                         (z − y)            z−y
+                                 η=p                ≈A           .
+                                        s(z) − s(y)         z+y
+Then one derives that
+                                     Z A³ 2
+                                A2         A − η 2 ´2 −η2 /4
+                          J3 = √                      e      dη + O(z).
+                                  4π 0     A2 + η 2
+Thus the differential equation (5.2) gives the following equation for A:
+                             Z ∞                           Z
+                           1                   2        A2 A ³ A2 − η 2 ´2 −η2 /4
+                   A2 = √         (A − η)2 e−η /4 dη + √                  e       dη
+                            π A                          π 0     A2 + ζ 2
+                                 =⇒        A = 0.9034465978843....
+Numerically it is evident that A = −A1 and is precisely the value obtained in [27].
+
+6.3. Proof of Theorem 3. The leading order expansion can be made rigorous. Instead of consid-
+ering the premium φ = p − p0 , we consider the rate, q = ps = φs , of the premium change. We study
+the blow-up family {q L , bL }L>0 defined by
+                 q L (x, s) := L q(b0 + L−1 x, L−2 s),   bL (s) = L [b(L−2 s) − b0 ].
+Information obtained from bL will be cycled back to b through the identity
+                                       √    ¯              h1 i
+                                            ¯
+(6.2)                b(sθ) = b0 + s bL (θ)¯       √   ∀ θ ∈ , 2 , s > 0.
+                                              L=1/ s         2
+                                 L
+                                          √       2
+We shall show that limL→∞ b (θ) = A1 θ in C ([δ, h]) for any h > δ > 0.
+   For each L > 0, (q L , bL ) satisfies
+              L         L
+               qs = qxx    + αL−1 qxL − kL−2 q L           ∀ x > bL (s), s > 0,
+             
+             
+             
+              q L (x, s) = 0                               ∀ x ⩽ bL (s), s > 0,
+                         −1 L
+               
+                kL[eL b (s) − 1]ḃL (s) = qxL (bL (s), s)       ∀ s > 0,
+               
+               
+                L                                  x/L
+                 q (x, 0) = δ(x − εL) + k max{ e L −1 , 0}       ∀ x ∈ R.
+     From (3.6) we derive that
+                                                              √
+                      0 < bL (s) ḃL (s) ⩽ C,   0 > bL (s) ⩾ − 2Cs      ∀ s > 0,
+
+              0 ⩽ q L (x, s)    = L q(b0 + xL−1 , sL−2 ) ⩽ LC{b0 + xL−1 − b(L−2 s)}
+                                                         √
+                                = C[x − bL (s)] ⩽ C[x + 2Cs] ∀ s > 0, x ∈ [bL (s), εL/2].
+   Since the bounds of the above estimates for q L and bL are independent of L, one can show that
+{(q L , bL )}L>1 is locally compact and we can select a subsequence along which (q L , bL ) approaches
+a limit, (Ψ, ζ). The limit satisfies
+                          
+                          
+                             Ψs = Ψxx                  ∀ x > ζ(s), s > 0,
+                          
+                          
+                          
+                             Ψ(x, s) = 0,              ∀ x ⩽ ζ(s), s > 0,
+                          
+                          
+                              kζ(s)ζ̇(s) = Ψx (ζ(s), s) ∀ s > 0,
+                          
+                          
+                          
+                             Ψ(x, 0) = k max{0, x}     ∀ x ∈ R,
+                          
+                          
+                          
+                          
+                              0 ⩽ Ψ(x, s) ⩽ C[x − ζ(s)] ∀ x ⩾ ζ(s), s ⩾ 0.
+Since the solution is unbounded, the last condition imposes a constraint on the growth of the solution.
+                                       AMERICAN PUT OPTION                                           17
+
+
+  This problem admits a unique solution and the solution is self-similar, given by
+                            √
+               ζ(s) = A1 s         ∀ s > 0,
+                                   √ R∞                    2
+                          ³     A1 s x/√s (η − √xs )e−η /4 dη ´
+             Ψ(x, s) = k x −          R∞                           ∀ x ⩾ ζ(s), s > 0,
+                                       A1
+                                          (η − A1 )e−η2 /4
+where A1 is the solution of the equation
+                                         R∞     2
+                                       A1 A1 e−η /4 dη                A21
+                                1+ R∞              −η 2 /4
+                                                                  =       .
+                                     A1
+                                          (η − A1 )e         dη       2
+
+It is easy to verify that this equation is equivalent to (6.1).
+   Once we know the uniqueness of the limit, we then know that the whole sequence (q L , bL ) con-
+verges. In addition, by compactness, limL→∞ bL = ζ in C 2 ([1/2, 2]). Using (6.2) and its differentia-
+tion with respective θ, we obtain the assertion of Theorem 3. This completes the proof.             ¤
+
+
+
+                                              References
+ [1] F. AitSahlia & T. Lai, Exercise boundaries and efficient approximations to American option
+     prices and hedge parameters, J. Computational Finance, 4 (2001), 85–103.
+ [2] G. Barone-Adesi & R. E. Whaley, Efficient analytic approximation of American option values,
+     Journal of Finance, 42 (1987), 301–320.
+ [3] G. Barone-Adesi, & R. Elliott, Approximations for the values of American options, Stochastic
+     Analysis and Applications, 9 (1991), 115–131.
+ [4] G. Barles, J. Burdeau, & M. Romano, & N. Samsoen, Critical stock price near expiration,
+     Mathematical Finance, 5 (1995), 77-95.
+ [5] E. Bayraktar & Hao Xing, Analysis of the optimal exercise boundary of American option for
+     jump diffusions, preprint.
+ [6] M. Broadie & J. Detemple, American option valuation: New bounds, approximations and com-
+     parison of existing methods, Review of Financial Studies, 9 (1996), 1121–1250.
+ [7] D.S. Bunch & H. Johnson, The American put option and its critical stock price, J. Finance,
+     55 (2000), 2333–2356.
+ [8] P. Carr, R. Jarrow, & R. Myneni, Alternative characterization of American put option, Math-
+     ematical Finance, 2 (1992), 87–105.
+ [9] D. Chakraborty, Numerical study of the convexity of the exercise boundary of the American
+     put option on a devidend-paying asset, MS. Thesis, Department of Mathematics, University of
+     Pittsburgh, December (2008).
+[10] Xinfu Chen & J. Chadam, A mathematical analysis of the optmal boundary for American put
+     options, SIAM J. Math. Anal., 38 (2006), 1613–1641.
+[11] Xinfu Chen & J. Chadam Analytic and numerical approximations for the early exercise boundary
+     for American put options, Dyn. Cont. Disc. and Impulsive Sys., 10 (2003), 649–657.
+[12] Xinfu Chen, J. Chadam, L. Jiang, & W. Zheng, Convexity of the exercise boundary of the
+     American put option on a zero dividend asset. Math. Finance 18 (2008), 185–197.
+[13] E. Ekstrom, Convexity of the optimal stopping boundary for the American put option, J. Math.
+     Anal. Appl. 299 (2004), 147–156.
+[14] A. Friedman, Variational Principles and Free Boundary Problems, John Wiley &
+     Sons, New York, 1982.
+[15] A. Friedman, Partial Diffferential Equations of Parabolic Type, Prentice-Hall, 1964.
+[16] A. Friedman, Analyticity of the free boundary for the Stefan problem, Arch. Rational Mech.
+     Anal. 61 (1976), 97–125.
+[17] J. Hull, Options, Futures and Other Derivative Securities, , 3rd Ed., Prentice-Hall,
+     New York, 1997.
+[18] L. Jiang, Existence and differentiability of the solution of a two phase Stefan problem for quasi-
+     linear parabolic equations, Chinese Math. Acta 7 (1965), 481–496.
+18                        XINFU CHEN, HUIBIN CHENG AND JOHN CHADAM
+
+
+[19] I. J. Kim, The analytic evaluation of American Options, Review of Financial Studies, 3 (1990),
+     547–572.
+[20] R. A. Kuske & J. B. Keller, Optimal exercise boundary for an American put option, Applied
+     Mathematical Finance 5 (1998), 107–116.
+[21] D. Lamberton & M. Mikou, The critical price for the American put in an exponential Lévy
+     model, Finance Stoch. 12 (2008), 561–581.
+[22] L. W. MacMillan, Analytic approximation for the American put option, Advances in Future
+     and Option Research, 1 A (1986), 119–139.
+[23] H. P. Jr. McKean, Appendix: a free boundary problem for the heat equation arising from a
+     problem in mathematical economics, Industrial Management Review, 6 ( 1965), 32–39.
+[24] R. Merton, Continuous-time Finance, Blackwell, 1992.
+[25] P. Van Moerbeke, On optimal stopping and free boundary problems, Arch. Rational Mech.
+     Anal. 60 (1976), 101–148.
+[26] R. Stamicar, D. Ševčovič, & J. Chadam, The early exercise boundary for the American put near
+     expiry: numerical approximation, Canad. Appl. Math. Quart., 7 (1999), 427–444.
+[27] P. Wilmott, J. Dewynne, & S. Howison, The Mathematics of Financial Derivatives,
+     Cambridge,University Press, New York, 1995.
+

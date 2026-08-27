@@ -1,0 +1,2337 @@
+                                                           Explicit no arbitrage domain for sub-SVIs via
+                                                                         reparametrization
+                                                                        Claude Martini∗1 and Arianna Mingone†1, 2
+arXiv:2106.02418v1 [q-fin.MF] 4 Jun 2021
+
+
+
+
+                                                          1
+                                                          Zeliade Systems, 56 rue Jean-Jacques Rousseau, Paris, France
+                                               2
+                                                   Centre de Mathématiques Appliquées (CMAP), CNRS, Ecole Polytechnique,
+                                                                        Institut Polytechnique de Paris
+
+                                                                                           June 7, 2021
+
+
+                                                                                              Abstract
+                                                       The no Butterfly arbitrage domain of Gatheral SVI 5-parameters formula for the volatility
+                                                   smile has been recently described. It requires in general a numerical minimization of 2 functions
+                                                   altogether with a few root finding procedures. We study here the case of some sub-SVIs (all
+                                                   with 3 parameters): the Symmetric SVI, the Vanishing Upward/Downward SVI, and SSVI, for
+                                                   which we provide an explicit domain, with no numerical procedure required.
+
+
+                                           1       Introduction
+                                           Gatheral SVI parametrization of a volatility smile reads:
+                                                                                                p           
+                                                                     w(k) = a + b ρ(k − m) + (k − m)2 + σ 2
+
+                                           where w(k) is the so-called total variance: the squared implied volatility times the remaining time
+                                           to maturity at the log-forward moneyness k.
+                                               SVI is known to fit very well a large set of market data, and recently the challenging question of
+                                           characterizing no Butterfly arbitrage in SVI has been solved with a handy parametrization of the
+                                           no arbitrage domain, leading to an efficient implementation of a calibration algorithm ensuring no
+                                           Butterfly arbitrage ([6]). So why would one care about sub-SVIs, meaning SVI with some parameters
+                                           frozen, or re-parametrizations of SVI with less than 5 parameters, like the volatility slices of SSVI
+                                           surfaces of Gatheral and Jacquier ([3])?
+                                               In fact, for several reasons. The 1st one is that SVI might be too rich in the sense that
+                                           an excellent fit could also be achieved in most cases by sub-SVIs, with the additional benefit to
+                                           stabilize the variation of the calibrated optimal parameter from one day to another, or between
+                                           different maturity slices. A good theoretical reason to suspect this follows from considering SVI
+                                               ∗ cmartini@zeliade.com
+                                               † arianna.mingone@polytechnique.edu
+
+
+
+
+                                                                                                  1
+smiles with ρ = 0 and m 6= 0: indeed the correspondence with stochastic volatility models dictates
+that models with a zero correlation should yield symmetric smiles, which implies m = 0; in this
+sense SVI smiles with ρ = 0 and m 6= 0 should correspond to smiles which are not associated to
+stochastic volatility models, and also probably not very likely to be met in real-life market data.
+In this direction, one could also note that the result by Gatheral and Jacquier ([2]) that the Long
+Term Heston smile goes to SVI shows in fact that it goes to a sub-SVI; indeed the SVI parameters
+are given by
+                                                                                  p
+              θ       2              θϕ                           ρ                 1 − ρ2
+         a = (1 − ρ ),           b=     ,        ρ,        m=− ,            σ=             ,
+              2                       2                           ϕ                   ϕ
+so that the long-term smile depends eventually only on the 3 parameters (θ, ϕ, ρ), with the constraint
+ρ = 0 =⇒ m = 0 enforced.
+    The 2nd reason is that it is difficult to obtain no Calendar Spread arbitrage conditions on two
+SVI smiles attached to two different maturities, as discussed in [3]. This has been achieved for
+smiles corresponding to SSVI parameters, which are sub-SVI ones with 3 parameters instead of 5,
+as shown in [5]. So in order to obtain tractable no arbitrage SVI surfaces, it may be required in
+practice to restrict the set of SVI parameters. Note that, in relation to the 1st point above, given
+the poor ability of SSVI to fit especially on the short term, the right balance between fitting ability
+and tractability might lie in-between SVI and SSVI, in some sub-SVI with 4 parameters.
+    Another hope is that there might be simplifications, due to the special structure of the different
+sub-SVIs under study, both in the Fukasawa domain which characterizes a weak no Butterfly
+arbitrage property and constitutes a key step in the full characterization of no Butterfly arbitrage,
+and in the last stage of the algorithm in [6], which requires 2 minimizations to get the lower
+bound of the no arbitrage domain for the SVI parameter σ. We recall that the computation of
+the boundary of the Fukasawa domain, which corresponds to the weak necessary condition of no
+arbitrage obtained by. . . Fukasawa ([1]), requires also some root-finding algorithm in general, much
+quicker than the last stage minimization algorithms for σ though.
+    In this work we study in detail the following sub-SVIs:
+
+  1. The Vanishing SVI where a = 0 and ρ = ±1, with its 2 flavors Vanishing upward (ρ = 1),
+     and Vanishing downward (ρ = −1); the second family may correspond to real-life smiles and
+     is given by                                  p               
+                            w(k) = b −(k − m) + (k − m)2 + σ 2
+
+  2. The Symmetric SVI where ρ = m = 0, so that:
+                                                      p
+                                          w(k) = a + b k 2 + σ 2
+
+  3. SSVI (slices) given by:
+                                        θ          p                   
+                               w(k) =     1 + ρϕk + (ϕk + ρ)2 + 1 − ρ2
+                                        2
+
+    For all those sub-SVIs, our program is clear: trying to find out an explicit parametrization
+for the Fukasawa domain and, when possible, of the full no arbitrage domain. Besides brute-force
+calculus (that we do use in many circumstances), we heavily use a re-parametrization paradigm,
+that we illustrate below in the context of the bound on σ discussed above.
+
+                                                  2
+    This stage requires indeed to compute the minimum of a function f˜(l; γ, b, ρ, µ), on an interval
+which depends on the parameters (γ, ρ); we know that f˜ goes to infinity at the bounds of this
+interval. Our strategy is then to study the critical points of f˜. It turns out that in full generality,
+the equation characterizing those critical points ¯l reads:
+                                       p(¯l; γ, ρ, µ) = b2 q(¯l; γ, ρ, µ).
+
+In some circumstances, we can then use ¯l as a parameter, and obtain b2 as p(           l̄;γ,ρ,µ)
+                                                                                      q(l̄;γ,ρ,µ)
+                                                                                                  . In other
+                                                           2
+circumstances, we use the fact that the equation p − b q = 0 is, in full generality, quadratic in µ,
+and we use the same trick to back up µ once ¯l is promoted to the status of a parameter.
+    Now this is only the easy part of the story, since the critical points of f˜ may correspond to other
+local minima than the absolute one, or, even worse, to local maxima. The hard part is to show
+that the chosen critical point ¯l, in a given domain, corresponds indeed to the global minimum of
+f˜; one way to prove this is that there is a unique solution to the critical points equation above.
+We manage to prove this unicity for the Symmetric and Vanishing case, and resort to a numerical
+proof for SSVI.
+    This leads us to the following results:
+   • in section 3, we obtain a fully explicit parametrization of the no arbitrage domain for the
+     Vanishing Upward and the Vanishing Downward SVI (Propositions 3.2 and 3.4);
+   • in section 4, we find a parametrization of the no arbitrage domain for the Extremal Decorre-
+     lated SVI (Proposition 4.2);
+   • in section 5, we get the no arbitrage domain for the Symmetric SVI (Proposition 5.2);
+   • in section 6, we derive a quasi-explicit parametrization (modulo a zero of a one-dimensional
+     function to be computed numerically) of the no arbitrage domain for SSVI (Proposition 6.3).
+     We also re-visit the Long Term Heston SVI appoximation and show it is in fact of SSVI type;
+     we prove in Proposition 6.8 that it is indeed free of Butterfly arbitrage as soon as T is larger
+     than some fully explicit threshold, which completes Gatheral and Jacquier result.
+    Up to now and to the best of our knowledge, the only known volatility model (meaning: a
+formula for the implied volatility) with an explicit no arbitrage domain was the SSVI slice, with the
+(restrictive) conditions obtained by Gatheral and Jacquier ([3]), and extended to the characterization
+of the full no arbitrage domain in the decorrelated case in [4]. To this extent, the present work
+is a big leap forward, since we obtain 3 new families: the Vanishing Downward/Upward one, the
+Symmetric one, and the correlated SSVI, with explicit no arbitrage domains (a single-variable
+boundary function has to be computed numerically for SSVI).
+    All our sub-SVIs are 3 parameters SVI; as discussed above, 3 parameters may be too little to
+produce a good fit on market data, so we would say that the interest here is essentially of academic
+nature: we hope that those families can help in the investigation of the theoretical properties of
+volatility smiles, or come as handy illustrations of those properties. Note though that the Vanishing
+Downward SVI could have a practical application to the case of decreasing market smiles which are
+often encountered for not-too-short maturities. SSVI is used in practice; our investigation yields
+a parametrization of the SSVI slices satisfying the no Butterfly arbitrage property which is much
+more effective than the generic one presented in [6].
+    We warmly thank Stefano De Marco and Antoine Jacquier for their remarks and comments on
+a preliminary version of this work.
+
+
+                                                       3
+2     Notations and preliminaries
+2.1    Necessary and sufficient no Butterfly arbitrage conditions for SVI
+In the whole article, we will refer to the results in [6], that we quickly summarize here, with some
+changes in notations.
+    The general form for SVI is
+                                                           p               
+                          SV I(k) = a + b ρ(k − m) + (k − m)2 + σ 2
+where a, m ∈ R, b ≥ 0, ρ ∈ [−1, 1], σ ≥ 0. If b = 0 and a > 0, SVI reduces to the Black-Scholes
+case, which is free of arbitrage, while if a = b = 0, we recover the trivial case. In the following we
+will consider b > 0.
+                 a
+    We set γ = bσ   and µ = m σ . Let us redefine the quantity
+                                                             p
+                                      N (l; γ, ρ) := γ + ρl + l2 + 1
+such that SV I(k) = bσN k−m
+                                  
+                              σ     . The derivatives of N are
+                                           l                                         1
+                    N 0 (l; ρ) = ρ + √          ,                   N 00 (l) =            3
+                                         l2 + 1                                  (l2 + 1) 2
+so that N has a unique critical point which is a point of minimum equal to l∗ = − √ ρ                . Since
+                                                                                              1−ρ2
+N is aprescaled total variance, it must be positive, so the constraint on the new variables are
+γ ≥ − 1 − ρ2 , b ≥ 0, ρ ∈ [−1, 1], µ ∈ R, σ ≥ 0. When b = 0, we recover the Black-Scholes case,
+which is free of Butterfly arbitrage under σ > 0. Then, when formulating theorems of non-arbitrage,
+we consider only the more difficult cases b > 0.
+   We define
+                                                                      l+µ
+                                 h(l; γ, ρ, µ) := 1 − N 0 (l; ρ)              ,
+                                                                 2N (l; γ, ρ)
+                                                  N 0 (l; ρ)
+                                       g(l; ρ) :=            ,                                  (1)
+                                                       4
+                                                                N 0 (l; ρ)2
+                                  g2 (l; γ, ρ) := N 00 (l) −                ,
+                                                               2N (l; γ, ρ)
+and G1 (l) := G1+ (l)G1− (l) := (h(l) − bg(l))(h(l) + bg(l)).
+    In section 4.1 of [6], it is shown that the requirement that an SVI is (Butterfly) arbitrage-free
+is equivalent to the requirement that the function
+                                                            1
+                                                    G1 +      bg2
+                                                           2σ
+is non-negative. Fukasawa proved in [1] that the condition G1+ > 0 and G1− > 0 are also necessary.
+Theorem 5.10 of [6], that we rewrite here, characterizes these conditions in the case of SVI. The
+statement requires the definition of the functions:
+                                                   b
+                                                    1
+            L− (l; γ, b, ρ) := 2N (l; γ, ρ)           − l, +
+                                              N 0 (l; ρ)
+                                                   4
+                              p           2 p        1 bρ  bl        p      
+                  g−(b,ρ) := ρ l2 + 1 + l      l2 + 1 +      +    − ρl + l2 + 1 .
+                                                      2    4   4
+
+
+                                                           4
+           p
+When γ + 1 − ρ2 > 0 and |ρ| < 1, preliminary propositions show that under the case b(1 ± ρ) < 2,
+there exist a unique l− (γ, b, ρ) < l∗ and a unique l− (γ, b, −ρ) < l∗ such that g−(b,ρ) (l− (γ, b, ρ)) = γ
+and g−(b,−ρ) (l− (γ, b, −ρ)) = γ. In such way, the quantity
+                                                                                          p
+        F̃ (b, ρ) := inf γ| − L− (l− (γ, b, −ρ); γ, b, −ρ) > L− (l− (γ, b, ρ); γ, b, ρ) ∧ − 1 − ρ2
+
+is well-defined and it is called the Fukasawa threshold. If instead b(1 − ρ) = 2 (or b(1 + ρ) =
+2), there exists a unique l− (γ, b, −ρ) < l∗ (resp. l− (γ, b, ρ)) such that g−(b,−ρ) (l− ) = γ (resp.
+g−(b,ρ) (l− ) = γ). When the former case arises while the latter does not, the Fukasawa threshold is
+defined as F̃ (b, ρ) := inf γ| − L− (l− (γ, b, −ρ); γ, b, −ρ) > − bγ
+                                                                       p
+                                                                   2 ∧ − 1 − ρ2 . Vice versa, when it is
+the second case to be active while the first is not, the quantity is defined as F̃ (b, ρ) := inf γ| bγ
+                                                                                                
+                              p                                                                      2 >
+L− (l− (γ, b, ρ); γ, b, ρ) ∧ − 1 − ρ2 . Finally, when both cases are valid, so b = 2 and ρ = 0, the
+threshold is F̃ (2, 0) := 0. The aforementioned theorem is:
+Theorem 2.1  p (SVI parameters (γ, b, ρ, µ, σ) fulfilling Fukasawa necessary no arbitrage conditions).
+Assume γ + 1 − ρ2 > 0 and |ρ| < 1. Then:
+
+   • if b(1 ± ρ) < 2, it holds that F̃ (b, ρ) < 0 and the interval Iγ,b,ρ = L− (l− (γ, b, ρ); γ, b, ρ),
+                                                                           
+                                   
+     − L− (l− (γ, b, −ρ); γ, b, −ρ) is non-empty iff γ > F̃ (b, ρ);
+
+   • if b(1 − ρ) = 2 (or b(1 + ρ) = 2) and ρ 6= 0, it holds that F̃ (b, ρ) < 0 and the           interval
+     Iγ,b,ρ = − bγ                                                                              bγ
+                  2 , −L− (l− (γ, b, −ρ); γ, b, −ρ) (resp. Iγ,b,ρ = L− (l− (γ, b, ρ); γ, b, ρ), 2 ) is non-
+     empty iff γ > F̃ (b, ρ);
+   • if b = 2 and ρ = 0, the interval Iγ,2,0 = −γ, γ is non-empty iff γ > F̃ (2, 0) = 0.
+                                                       
+
+In every case, the Fukasawa conditions are satisfied iff µ ∈ Iγ,b,ρ .
+                                                                                                p
+   The final necessary and sufficient conditions for no Butterfly arbitrage in the case γ +         1 − ρ2 >
+0 and |ρ| < 1 are summed up in Theorem 6.2 of [6], in which σ ∗ is defined as
+
+                                                                          bg2 (l)
+                                   σ ∗ (γ, b, ρ, µ) :=       sup      −           .
+                                                         l<l1 ∨l>l2       2G1 (l)
+                                                                                        p
+Theorem 2.2 (Necessary and sufficient no Butterfly arbitrage conditions for SVI, γ + 1 − ρ2 > 0
+and |ρ| < 1). No Butterfly arbitrage in SVI entails that G1 is positive, which requires b(1 ± ρ) ≤ 2.
+Under this condition:
+   • each of the factors of the function G1 is positive on R if and only if γ > F̃ (b, ρ) and µ ∈ Iγ,b,ρ ;
+   • for such µ’s, calling l1 < 0 < l2 the only zeros of g2 , the function G1 + 2σ 1
+                                                                                      bg2 is positive in
+                                                                                ∗
+     ]l1 , l2 [ for every σ ≥ 0 and it is non-negative on R if and only if σ ≥ σ (γ, b, ρ, µ).
+   In the case of |ρ| = 1 and γ ≥ 0, Theorem 6.3 of [6] holds:
+Theorem 2.3 (Necessary and sufficient no Butterfly arbitrage conditions for SVI, ρ = −1). No
+Butterfly arbitrage in SVI entails that G1 is positive, which requires b ≤ 1 and γ ≥ 0. Under these
+conditions:
+   • each of the factors of the function G1 is positive on R if and only if µ > L− (l− ; γ, b, −1);
+
+
+                                                         5
+   • for such µ’s, calling l1 < 0 the only zero of g2 , the function G1 + 2σ 1
+                                                                                bg2 is positive on
+     ]l1 , ∞[ for every σ ≥ 0 and it is non-negative on R if and only if σ ≥ σ ∗ (γ, b, −1, µ) where
+                                    bg2 (l)
+     σ ∗ (γ, b, −1, µ) := supl<l1 − 2G1 (l)
+                                            .
+
+     From now on, we denote f := − 2G    bg2
+                                           1
+                                             and f˜ := − gG  1
+                                                          2 (l)
+                                                                . In this way, the value of the supremum of
+f is equal to b times half the reciprocal of the infimum of f˜, and the point at which the supremum
+of f is reached is exactly the point at which the infimum of f˜ is reached.
+     We present here some general observations that will be used in the next sections.
+     In order to calculate σ ∗ , one should find the supremum of the function f over a domain consti-
+tuted of two open intervals: on the left of l1 , the first zero of g2 , and on the right of l2 , the second
+zero of g2 . From a computational point of view, one needs to perform two maximum searches and to
+compare the two found values to choose the highest. Sometimes this double search is not necessary,
+indeed for the sub-SVIs studied in this article, the signs of ρ and µ determine the interval where
+the global supremum of f lies. Since l1 < 0 < l2 , the trick will be to compare the two quantities
+f (l) and f (−l), but first of all, it is necessary to study the two intervals of interest. In particular,
+the following Lemma holds:
+
+Lemma 2.4. If ρ ≥ 0 and l > 0, then g2 (l) ≤ g2 (−l) and l2 (γ, ρ) ≤ −l1 (γ, ρ).
+  If ρ < 0 and l > 0, then g2 (l) > g2 (−l) and l1 (γ, ρ) > −l2 (γ, ρ).
+Proof. Fix l > 0, then for ρ ≥ 0, it holds
+                                                                    √          
+                                            lρ (l2 + 1)(1 − ρ2 ) + 2γ l2 + 1 + 1
+                       g2 (−l) − g2 (l) =
+                                                    (l2 + 1)N (l)N (−l)
+                                              p                     2
+                                            lρ  (l2 + 1)(1 − ρ2 ) − 1
+                                       ≥                                  ≥0
+                                                (l2 + 1)N (l)N (−l)
+              p
+since γ ≥ − 1 − ρ2 . So g2 (l) ≤ g2 (−l) and in particular g2 (−l1 ) ≤ g2 (l1 ) = 0 so l2 (γ, ρ) ≤
+−l1 (γ, ρ). These inequalities are strict for ρ strictly positive. Similarly for ρ < 0, we find g2 (l) >
+g2 (−l) and l1 (γ, ρ) > −l2 (γ, ρ).
+
+    This Lemma has a direct consequence, which is that for ρ ≥ 0, the supremum of f on the left of
+l2 is higher than its supremum on the left of −l1 , since in the first case, f could attain it between
+l2 and −l1 : supl>l2 f (l) ≥ supl>−l1 f (l). If we can show that for positive ls, f (l) ≥ f (−l), then
+the last term is greater than supl>−l1 f (−l). Making a change of variable, this quantity is equal to
+supl<l1 f (l) so this means that σ ∗ can be found as the supremum of f on the right of l2 .
+    The request f (l) ≥ f (−l) is satisfied if, for example, G1 (l) ≤ G1 (−l) because in the above
+Lemma we showed g2 (l) ≤ g2 (−l). The difference between G1 (l) and G1 (−l) can be written as
+(h(l) − h(−l))(h(l) + h(−l)) − b2 (g(l) − g(−l))(g(l) + g(−l)). The quantity g(l) − g(−l) is equal to
+  √l
+2 l2 +1
+        , which is positive, while g(l) + g(−l) is ρ2 , which again is non-negative for ρ ≥ 0. Showing
+that the product with the h functions is non-positive would then be enough to reach the desired
+inequality.
+Lemma 2.5. Let ρ = 0. If µ ≥ 0, then σ ∗ (γ, b, 0, µ) = supl>l2 f (l) while if µ < 0, then
+σ ∗ (γ, b, 0, µ) = supl<l1 f (l).
+
+
+
+                                                     6
+Proof. In the case ρ = 0, it holds l2 = −l1 since g2 is symmetric. It can be shown that in general
+                                        √                            √       
+                                l    ρ γ l2 + 1 + 1 + µ γ + (1 − ρ2 ) l2 + 1
+         h(l) − h(−l) = −   √                                                   ,
+                              l2 + 1                 N (l)N (−l)
+                             √                  √                               √    
+                           γ l2 + 1 + 1 2γ + 2 l2 + 1 − ρµ + l2 γ + (1 − ρ2 ) l2 + 1
+         h(l) + h(−l) =                          √                                       .
+                                                   l2 + 1N (l)N (−l)
+     In particular for ρ = 0 and positive l, √           √ former quantity is the sign of −µ while the
+                                             the sign of the
+numerator of the latter quantity is (γ + l2 + 1)(2γ l2 + 1 + l2 + 2), which is always positive for
+γ > −1. Then G1 (l) − G1 (−l) = (h(l) − h(−l))(h(l) + h(−l)) follows the sign of −µ and so does
+f (−l) − f (l). If µ is non-negative, f (l) ≥ f (−l) so its supremum must be searched on the right of
+l2 . If µ is negative, the opposite inequality holds for f and its supremum lies on the left of l1 .
+
+
+   These Lemmas will be useful for the sub-SVIs studied in this article, however it must be noticed
+that the inequality f (l) ≥ f (−l) does not hold in general.
+
+2.2    Smile inversion
+Tehranchi proved in [7] that a curve of Call prices (with unit underlyer) parametrized by the strike
+κ is free of Butterfly arbitrage if and only if it is convex and satisfies 1 ≥ C(κ) ≥ (1 − κ)+ for every
+κ ≥ 0. Moreover, C has these properties if and only if C ∗ (κ) := 1 − κ + κC κ1 has them.
+    Note that if at some point κ it holds C(κ) = 1, then since C should be convex and decreasing,
+then C is the constant function 1. Because this case is uninteresting, we can assume      pthat 1 > C(κ)
+for every κ. Then there is a unique total variance function w(k) such that CBS (κ, w(k)) = C(κ)
+                                                                                           ∗
+where Cp  BS is the (normalized) Black-Scholes Call price function, and a unique w (k) such that
+             ∗          ∗
+CBS (κ, w (k)) = C (κ). By the Put-Call parity for the Black-Scholes model it holds that
+                                p                     p                        1
+                       PBS (κ, w∗ (k)) = CBS (κ, w∗ (k)) + κ − 1 = κC              .
+                                                                                κ
+                                              √ ∗                        √ ∗ 
+                                                  w (k)                      w (k)
+    Now the LHS is equal to κN √ k∗ +              2      − N    √  k
+                                                                          −   2      and the RHS is equal
+                                       w (k)                       w∗ (k)
+                    √                             √       
+                         w(−k)                          w(−k)
+to κ N √ k         +      2      − κ1 N √ k       −      2       . By the monotonicity of the function
+            w(−k)                         w(−k)
+u → CBS (κ, u) it follows then that w∗ (k) = w(−k). Eventually, we can reword the symmetry of
+Tehranchi involution C → C ∗ at the implied volatility level: a smile w is free of Butterfly arbitrage
+if and only if the inverse smile k → w(−k) is.
+    Let us now relate the implied volatility of C with that of C ∗ .
+    In the case of SVI, this reduces to have
+                          p                                         p                      
+        a + b ρ(k − m) + (k − m)2 + σ 2 = a∗ + b∗ ρ∗ (−k − m∗ ) + (−k − m∗ )2 + σ ∗2               (2)
+
+for all k. We prove that this happens iff a∗ = a, b∗ = b, ρ∗ = −ρ, m∗ = −m and σ ∗ = σ. Of course,
+a∗ , b∗ , ρ∗ , m∗ and σ ∗ do not depend on k ∗ so neither on k. Making the derivative with respect to
+k at the latter equality gives
+                                                                   k + m∗
+                                                                               
+                                   k−m
+                      b ρ+ p                     = b∗ −ρ∗ + p                       .             (3)
+                                (k − m)2 + σ 2                  (k + m∗ )2 + σ ∗2
+
+                                                   7
+Evaluating this for k going to ±∞, it must hold b(ρ ± 1) = b∗ (−ρ∗ ± 1) or equivalently b∗ = b and
+ρ∗ = −ρ. In the same equation, consider k = m, then it must hold
+
+                                                  m + m∗
+                                                               
+                                bρ = b ρ + p
+                                              (m + m∗ )2 + σ ∗2
+                                                                                           k+m∗
+which reduces to m∗ = −m. At this point, (3) becomes √                 k−m
+                                                                                   = √                    so σ ∗ = σ.
+                                                                     (k−m)2 +σ 2         (k+m∗ )2 +σ ∗2
+Finally, from (2), it follows a∗ = a.
+Proposition 2.6 (Absence of Butterfly arbitrage for the inverse SVI). The SV I(a, b, ρ, m, σ) is
+Butterfly arbitrage-free iff the SV I(a, b, −ρ, −m, σ) is Butterfly arbitrage-free.
+
+2.3    The b∗ approach: reparametrizing from the critical point equation
+We now explain how to properly perform the trick described in the Introduction 1 which allows to
+switch the roles of the parameter b and of the critical point ¯l depending on b of f˜. The key passage
+will be the exploitation of the characteristic equation of these critical points: h(¯l)p(¯l)−b2 g(¯l)q(¯l) = 0.
+Three hypothesis must be verified:
+
+   1. the Fukasawa bound for γ must be a monotone function in b;
+   2. there is uniqueness for the critical points of f˜;
+
+   3. the functions p and q do not vanish at the same point.
+
+    In [6], the Fukasawa conditions read γ > F̃ (b, ρ). Firstly, suppose that for fixed ρ, the function
+b → F̃ (b, ρ) is monotone and surjective from 0, 1+|ρ|       2
+                                                                    to [−1, 0]. Then, its inverse F̃ −1 (·, ρ)
+is well defined on [−1, 0] and we shall extend it to
+                                           (
+                                            F̃ −1 (γ, ρ) if γ ∈] − 1, 0],
+                               G̃(γ, ρ) :=     2
+                                             1+|ρ|         if γ > 0.
+
+   Secondly, suppose we have proven that for l > l2 , the function f˜ has exactly one critical
+point ¯l(γ, b, ρ, µ) for ρ ∈ [−1, 1], γ > −1, b ∈ [0, G̃(γ, ρ)], µ ∈]L− , L+ [. This critical point must
+then be a local and global point of minimum. Note that we require the uniqueness also for b = 0
+and b = G̃(γ, ρ). This point satisfies f˜0 (¯l) = 0 or equivalently
+
+                                          h(¯l)p(¯l) − b2 g(¯l)q(¯l) = 0
+
+with h(¯l) = G1+ (l) + G1− (l) > 0, g(l) > 0 and p(l) := h(l)g20 (l) − 2h0 (l)g2 (l) and q(l) := g(l)g20 (l) −
+2g 0 (l)g2 (l).
+      In particular, either q(¯l) = p(¯l) = 0 or
+
+                                             h(¯l) h(¯l)g20 (¯l) − 2h0 (¯l)g2 (¯l)
+                                                                                   
+                                        2
+                                       b = ¯
+                                             g(l) g(¯l)g20 (¯l) − 2g 0 (¯l)g2 (¯l)
+                                                                                  
+
+
+when q(¯l) 6= 0.
+
+
+                                                        8
+    It is natural to define on the set B(γ, ρ, µ) = {l ∈]l2 (γ, ρ), ∞[: p(l)q(l) > 0} a positive function
+b∗ by the formula
+                                                     h(l)p(l)
+                                          b∗2 (l) :=          .                                       (4)
+                                                     g(l)q(l)
+    Note that the function b∗ might go on B(γ, ρ, µ) to levels not allowed for b; yet this function
+is continuous on its domain of definition and when q(¯l) 6= 0 it holds that b2 = b∗2 (¯l). As an
+immediate consequence, note that if b1 6= b2 are such that ¯l(γ, b1 , ρ, µ), ¯l(γ, b2 , ρ, µ) ∈ B(γ, ρ, µ),
+then ¯l(γ, b1 , ρ, µ) 6= ¯l(γ, b2 , ρ, µ). Note also that we don’t know if B is one-piece, i.e. connected.
+    The question of interest is now the location of the set Z(γ, ρ, µ) := {¯l(γ, b, ρ, µ), b ∈]0, G̃(γ, ρ)[}
+(note that we exclude 0, this will turn to be more convenient below) with respect to the sets
+B(γ, ρ, µ) and {p = q = 0}. The third and last hypothesis is that, for the fixed parameters
+(γ, ρ, µ), the set {p = q = 0} is empty. Then Z(γ, ρ, µ) is contained in B(γ, ρ, µ). From the
+above remark, the function ¯l(γ, ·, ρ, µ) is injective; however at this stage we don’t know whether it
+is continuous (which would imply it is either continuous increasing or continuous decreasing).
+    Remember that the proof of the uniqueness of the critical point of f˜ still holds for b = G̃(γ, ρ).
+Then for (l, b) ∈]l2 , ∞] × [0, G̃(γ, ρ)], the equation
+
+                                             h(l)p(l) − b2 g(l)q(l) = 0
+
+ characterizes the points ¯l(γ, b, ρ, µ), since f˜ has a single local and global minimum. As discussed
+ above, in the open set B(γ, ρ, µ), this equation defines a continuous function b∗ ; from the charac-
+ terizing property we get that Z(γ, ρ, µ) eventually coincides with b∗−1 (]0, G̃(γ, ρ)[) ⊆ B(γ, ρ, µ), so
+ that in particular Z(γ, ρ, µ) is an open set. Furthermore, the function b → ¯l(γ, b, ρ, µ) is the inverse
+ of b∗ : Z(γ, ρ, µ) →]0, G̃(γ, ρ)[.
+     It remains to prove that Z(γ, ρ, µ) is one-piece. Indeed, take a sequence (bn )n such that
+¯ln = ¯l(γ, bn , ρ, µ) goes to ¯l ∈ Z̄(γ, ρ, µ). Since (bn )n is a bounded sequence, it has a subsequence
+ converging to a certain b ∈ [0, G̃(γ, ρ)]; call such subsequence as the original one, then the correlated
+ subsequence of ¯ln still converges to ¯l. Since for every n we have h(¯ln )p(¯ln ) − b2n g(¯ln )q(¯ln ) = 0 where
+ all the functions are continuous, then taking the limit, it holds h(¯l)p(¯l) − b2 g(¯l)q(¯l) = 0. From the
+ characteristic equation above, this yields in turn that ¯l = ¯l(γ, b, ρ, µ). Also, b is unique because
+ either b = b∗ (¯l) or p(¯l) = q(¯l) = 0, but the set {p = q = 0} is empty. Then it must hold either that
+¯l ∈ Z(γ, ρ, µ) or that ¯l is the unique critical point ¯l(γ, b, ρ, µ) of f˜ when b = 0 or b = G̃(γ, ρ). The
+ boundary of Z(γ, ρ, µ) is the set {¯l(γ, 0, ρ, µ), ¯l(γ, G̃(γ, ρ), ρ, µ)} and because Z(γ, ρ, µ) is an open set,
+ we get that Z(γ, ρ, µ) =]¯l(γ, 0, ρ, µ), ¯l(γ, G̃(γ, ρ), ρ, µ)[ or Z(γ, ρ, µ) =]¯l(γ, G̃(γ, ρ), ρ, µ), ¯l(γ, 0, ρ, µ)[.
+     As a consequence we also get that ¯l(γ, ·, ρ, µ) is either strictly increasing or strictly decreasing,
+ and that Z(γ, ρ, µ) is a single connected component of B(γ, ρ, µ), with a boundary point ¯l(γ, 0, ρ, µ)
+ which is the single zero of p, and the other boundary point lying within B(γ, ρ, µ).
+
+
+3     Vanishing SVI
+3.1     Vanishing (Upward) SVI
+In this section, we work with the Vanishing Upward SVI and immediately recover the final results
+on the Vanishing Downward SVI in Section 3.4.
+
+
+
+
+                                                           9
+                 Figure 1: Vanishing Upward SVI with b = 21 , m = −1 and σ = 1.
+
+
+     The Vanishing Upward SVI is the sub-SVI obtained by setting ρ = 1 and a = 0. The corre-
+sponding SVI formula becomes
+                                                           p
+                         SV I(k; 0, b, 1, m, σ) = b(k − m + (k − m)2 + σ 2 ).
+                                 √
+With our notations, N (l) = l + l2 + 1. Note that the Roger Lee conditions require 0 < b ≤ 1.
+     We plot in Figure 1 a Vanishing Upward SVI with b = 21 , m = −1 and σ = 1.
+     The wording Vanishing refers to the fact that the smile goes to 0 on the left, upward meaning
+it is increasing. The symmetric smile with ρ = −1 will be a Vanishing Downward one.
+
+3.2    The Fukasawa conditions
+Since γ = 0, the Fukasawa condition on γ is automatically satisfied. We cite here a result obtained
+in paragraph 5.3.1 of [6].
+Lemma 3.1 (Fukasawa conditions for the Vanishing   pUpward SVI). A Vanishing Upward SVI with
+0 < b ≤ 1 satisfies the Fukasawa conditions iff µ < 3(1 − b).
+
+3.3    The condition on σ
+Let us define the two following auxiliary functions:
+          h
+µ∗ (x) := 2(1 − x)(2x2 − 8x − 1)+
+             p                                                                                         i
+           + 4b2 x6 + 8b2 x5 + 8x4 (8 − b2 ) − 4x3 (5b2 + 32) + x2 (96 − b2 ) + 2x(5b2 − 16) + 4 + 3b2
+            h p                     i
+          / 2 1 − x2 (2x2 − 2x − 1) ,                                                               (5)
+                       √
+                     4b 1 − x2 (1 − x − 2x2 )
+σ ∗ (x) := −                  √      2                                                             (6)
+              4 2 − x − µ∗ (x) 1 − x2 − b2 (1 + x)2
+
+   We show then the following:
+
+
+
+                                                  10
+Proposition 3.2 (Fully explicit no arbitrage domain for the Vanishing Upward SVI). A Vanishing
+Upward SVI with b = 1 is arbitrage-free iff µ < 0 and σ ≥ − µ2 .
+  A Vanishing Upward SVI with 0 < b < 1 is arbitrage-free iff it can be parametrized as
+                                                    s            2   !
+                                      k      ∗          k
+                      SV I(k) = bσ       − µ (x) +        − µ∗ (x) + 1                     (7)
+                                      σ                 σ
+      2+b
+where 4−b < x < 1 and σ ≥ σ ∗ (x).
+
+3.3.1   Proof of Proposition 3.2
+Note that
+                                                     2                      2
+                                                           b2
+                                                             
+                                           (l + µ)                      l
+                           G1 (l) = 1 − √               −        1+ √           ,
+                                          2 l2 + 1         16         l2 + 1
+                                                 √
+                                        1           l2 + 1 + l
+                           g2 (l) =         3 −                .
+                                      2
+                                    (l + 1) 2      2(l2 + 1)
+                                                                                   √
+The g2 function
+          √     has only one positive zero. Indeed, its zeros solve 2 = l2 + 1 + l l2 + 1, or yet
+1 − l2 = l l2 + 1. The only possible solution satisfies l2 ≤ 1, so l2 = √13 . In order to have no
+                                                   bg2 (l)
+arbitrage, we then need σ ≥ σ ∗ = supl∈]l2 ,+∞[ − 2G 1 (l)
+                                                           .
+   From now on, we operate a change of variable setting x = √l2l+1 so that the points l = l2 and
+                                                                      √
+l = ∞ correspond to x = 12 and x = 1 respectively. Also, √l21+1 = 1 − x2 .
+   We call J1 and j2 the functions G1 and g2 evaluated at x, so
+                                                              2 2
+                                         x µp                     b
+                          J1 (x) = 1 − −            1−x      2   − (1 + x)2 ,
+                                         2      2                 16
+                                   √
+                                     1−x    2
+                          j2 (x) =            (1 − x − 2x2 ).
+                                      2
+                                                                                                     √
+   The first derivative of j2 is j20 (x) = 2√1−x1
+                                                   2
+                                                     (6x3 + 2x2 − 5x − 1) which is positive iff x > 2+6 10 :=
+                           4    3       2
+xm2 . Also, j200 (x) = −12x −2x +18x      +3x−5
+                                                 and the only inflection point of j2 in 12 , 1 is 12 . Then,
+                                                                                               
+                                       3
+                                    2
+                             2(1−x ) 2                                  √    √
+                           1                                              2−5 5
+the function j2 is null at 2 , decreases to its minimum j2 (xm2 ) = − 34 108    and then increases to
+0 for x = 1, furthermore it is always convex.
+                                                            2
+    Let us turn to the study of J1 . We have J1 (1) = 1−b     and we know that for the Fukasawa
+                                                          4                       √
+conditions, both J1+ and J1− are positive, where J1 = J1+ J1− and J1± = 1− x2 − µ2 1 − x2 ∓ 4b (1+x).
+Considering the first derivatives, we know J10 = J1+
+                                                  0             0
+                                                     J1− + J1+ J1− where
+
+                                     0         1 µ   x     b
+                                    J1± (x) = − + √       ∓ .                                            (8)
+                                               2 2 1 − x2  4
+   If µ ≤ 0, then J1± are decreasing and so is J1 . In particular, it attains its minimum at x = 1
+                          1
+and we get that J = J1 + 2σ bj2 is always positive for
+                                                        √      √
+                                      bj2 (xm2 )   (34 2 − 5 5)b
+                                σ≥−              =
+                                       2J1 (1)         54(1 − b2 )
+
+                                                     11
+when b < 1. We have therefore the explicit no arbitrage sub-domain:
+Lemma 3.3 (No arbitrage sub-domain√    √
+                                         for the Vanishing Upward SVI). A Vanishing Upward SVI
+                                    2−5 5)b
+with 0 < b < 1, µ ≤ 0 and σ ≥ (3454(1−b 2)   is arbitrage-free.
+
+    This explicit sub-domain was obtained with not too much effort. Let us turn now to the more
+difficult task to obtain an explicit parametrization for the whole domain.
+
+Uniqueness of the critical point of f˜ for the Vanishing SVI Let us study φ̃(x; b, µ) =
+− Jj12(x;b,µ)
+                                                                       p
+       (x;b) . We want to prove that for each b ∈ [0, 1] and µ ∈] − ∞,  3(1 − b)[, there exists a unique
+          ∗     ∗                                                ∗
+                         1 
+value x := x (b, µ) ∈ 2 , 1 such that inf x∈] 12 ,1[ φ̃(x) = φ̃(x ).
+   The existence is obvious. The derivative of φ̃ is
+                        h                                       p
+         φ̃0 (x; b, µ) = 4µ2 (1 − x2 )(2x2 − 2x − 1) − 8µ(1 − x) 1 − x2 (2x2 − 8x − 1)+
+                                                                                                     i
+                         + 2x4 (4 − b2 ) − 6x3 (b2 + 12) + 3x2 (52 − b2 ) + 4x(b2 − 22) + 3b2
+                          h           3
+                                                        i
+                         / 8(1 − x2 ) 2 (1 + x)(2x − 1)2 .                                                       (9)
+
+The denominator of the above formula is always      positive. Looking at the numerator, for b = 1
+every coefficient of µ is negative when x ∈ 21 , 1 and µ < 0, required from the Fukasawa condition.
+Then φ̃0 (x; 1, µ) is always negative and the inferior point of φ̃ is reached at 1 for every µ < 0, so that
+x∗ (1, µ) = 1. From now on we consider b < 1. Since for finite values of µ, φ̃( 21 ; b, µ) = φ̃(1; b, µ) = ∞,
+the points which attain the infimum of φ̃ are points of minimum belonging to 12 , 1 and such that
+                                                                                            
+
+φ̃0 (x∗ ; b, µ) = 0.
+                                                                        0 ∗
+      What happens when µ = −∞? Dividing by µ2 we still have φ̃ (xµ2;b,µ) = 0, so making µ going to
+−∞ and relying on the linearity    of the limits, we obtain the equation 4(1 − x∗2 )(2x∗2 − 2x∗ − 1) = 0,
+whose only solution in 2 , 1 is 1, so x∗ (b, −∞) = 1.
+                             1
+                               
+
+      Take now µ ≤ 0 and |ν| < −µ (note in particular that µ < ν) and consider the quantity
+φ̃(x; b, µ) − φ̃(x; b, ν). Unless a factor b−1 (1 + x)−1 (2x − 1)−1 , it is equal to (ν − µ) 2 − x −
+(µ+ν) √
+           1 − x2 and, as a consequence, the quantity φ̃0 (x; b, µ) − φ̃0 (x; b, ν) times (1 + x)(2x − 1)
+                  
+    2
+equals                                             
+                                  (µ + ν)      x                                           
+                     (ν − µ) −1 +          √          + (4x + 1) φ̃(x; b, ν) − φ̃(x; b, µ) .
+                                      2      1 − x2
+                                                                 √
+                                                                    1−x2
+                                                                                          √
+The function φ̃ is decreasing in µ, indeed ∂µ φ̃(x) = − 2−x−µ                                     2
+                                                           b(1+x)(2x−1) and 2 − x − µ 1 − x > 2 − x −
+√ √
+   3 1 − x2 ≥ 0. So given the fact that φ̃ is decreasing in µ, we get in turn φ̃0 (x; b, µ)− φ̃0 (x; b, ν) < 0.
+This entails that if there is uniqueness, x∗ (b, ν) < x∗ (b, µ) under those conditions.
+      We prove that indeed the uniqueness holds. We prove that if φ̃0 ≥ 0, then φ̃00 > 0, which
+means that once φ̃0 becomes zero, then it will necessarily increase and it can never become 0 again
+                                                                                               J j 0 −J 0 j
+(note that this property is slightly weaker than the convexity of φ̃). We have φ̃0 = 1 2j 2 1 2 ≥ 0
+                                                                                                         2
+                                                                                   J1 j200 −J100 j2        j0
+but the term −J10 j2 is negative, so j20 must be positive. It holds φ̃00 =                j22
+                                                                                                    − 2φ̃0 j22 , where
+                         j0
+we have proven −2φ̃0 j22 ≥ 0. We now look at the quantity n =                 J1 j200 − J100 j2 and show that
+                                                                                    √
+it is strictly positive to obtain the conclusion. Indeed, the denominator of n is 32 1 − x2 (1 −
+
+                                                      12
+x) which is positive while its numerator is a quadratic  √ function of µ with quadratic coefficient
+−4(1 − x2 )(2x − 1)(4x2 − 2x − 3), linear coefficient 16 1 − x2 (1 − x)(2x − 1)(2x2 − 5x − 4) and
+free term depending on b. The quadratic coefficient is positive, so n is a convex parabola as a
+function of µ. Furthermore, the linear coefficient, corresponding to ∂µ n(x; µ)|µ=0 unless a positive
+factor, is negative, so n(x; 0) < n(x; µ) for every µ < 0. Then for negative µ’s it is enough to
+prove that n(x; 0) is positive for every x. We already know that j200 is positive. In addition,
+                                                                     µ
+J100 = J1+
+        00         0
+           J1− + 2J1+  0
+                      J1−        00
+                          + J1+ J1−        00
+                                    where J1± (x; 0) =                   3
+                                                                                           0
+                                                                                  = 0 and J1± (x; 0) < 0. Then
+                                                                 2(1−x2 ) 2 µ=0
+J100 (x; 0) > 0 and n(x; 0) = J1 (x; 0)j200 (x; 0) − J100 (x; 0)j2 (x; 0) > 0.
+      For the final case µ > 0, we need to introduce the µ∗ -function.
+
+    The µ∗ approach for the Vanishing SVI Assume b < 1 so that J1 (1) > 0 and let us
+make µ vary towards its upper bound defined by the Fukasawa condition. Then the function J1
+will eventually reach the x-axis level at a point x∗+ (b). This point is necessarily a critical point of
+J1 with µ set at the value of the upper bound. So J1 (x∗+ (b)) = J10 (x∗+ (b)) = 0. Now observe that
+      J j 0 −J 0 j                       p
+φ̃0 = 1 2j 2 1 2 so that φ̃0 (x∗+ (b); b, 3(1 − b)) = 0 also. In particular, if we know that φ̃ (for this
+            2
+critical value of µ) has a single critical point, this must be x∗+ (b).
+                                                            p
+    We look for the solutions to J1 (x) = 0 when µ = 3(1 − b). J1− is always positive on 12 , 1
+                                                                                                       
+                              √                                                 2
+while J1+ (x) = 1 − x2 − µ2 1 − x2 − 4b (1 + x) satisfies 1 − 4b x − 12 + 4b
+                                                                   
+                                                                                    = 0. This yields
+                                                      1
+                                                        +b   2+b
+                                            x∗+ (b) = 2 b4 =
+                                                      1− 4   4−b
+
+which is clearly larger than 21 for positive b and smaller than 1 when b < 1.
+     As a sanity check we should verify that also J10 (x) = 0 at this point. Indeed, J10 (x∗+ (b)) =
+J1+ (x∗+ (b))J1− (x∗+ (b)) + J1+ (x∗+ (b))J1−
+  0                                         0
+                                               (x∗+ (b)) = J1+
+                                                            0
+                                                                (x∗+ (b))J1− (x∗+ (b)). From eq. (8) we have
+          0
+                            p                        ∗
+that J1+ is null for µ = 3(1 − b) and x = x+ (b).
+     In the limiting case b = 1 and µ = 0, we have already seen that J1 is decreasing and attains its
+minimum at 1. Furthermore, φ̃(1; 1, 0) = 0, so also φ̃ reaches its minimum at 1. We can            then
+                                                                                                       set
+x∗ (1) = 1. The uniqueness of x∗ follows from the fact that J1 and so φ̃ are positive in 21 , 1 .
+     Take x ∈]x∗+ (b), 1[. From eq. (9) we can see that φ̃0 is a concave parabola as a function of
+µ. So p     in order to have a unique µ = µ∗ (x)-solution to φ̃0 (x; b, µ) = 0, it is enough      p to prove
+φ̃ (x; b, 3(1 − b)) > 0. Note that x∗+ (b) is a zero and a point of minimum for φ̃(·; b, 3(1 − b)),
+  0
+                                                             p
+so in a right neighborhood of x∗+ (b) we have φ̃0 (x; b, 3(1 − b)) > 0. If for a certain x we rather
+                   p
+have φ̃0 (x; b, 3(1 − b)) < 0, then there exists a x∗− (b) > x∗+ (b) point of maximum such that
+                 p                                  p
+φ̃0 (x∗− (b); b, 3(1 − b)) = 0 and φ̃00 (x∗− (b); b, 3(1 − b)) < 0. We show that this is not possible.
+     Let us look at J10 . From eq. (8), we see that J1+       0
+                                                                 (x) is positive iff √1−x x
+                                                                                            2
+                                                                                              > b+2
+                                                                                                  2µ or x >
+                            p
+√ 2    2+b
+                2
+                  . For µ = 3(1 − b) we obtain exactly that x has to be greater than x∗+ (b). On
+  4µ +(2+b)
+                     0
+the other side, J1−    (x) is positive iff x > √ 22−b 2 which corresponds to x > √b2 −16b+16
+                                                                                           2−b
+                                                                                                    for
+                                                4µ +(2−b)
+     p
+µ = 3(1 − b). This quantity is inferior to x∗+ (b) so also J1−
+                                                            0
+                                                               (x) is positive. Then J10 (x∗− (b)) > 0.
+Suppose x− (b) ≥ xm2 , then j2 (x− (b)) ≥ 0 and consequently φ̃0 (x∗− (b)) > 0, which is not possible.
+            ∗                    0   ∗
+
+So if it exists, x∗− (b) must be smaller than xm2 .
+
+
+
+                                                        13
+                        J j 00 −J 00 j      j0
+      We have φ̃00 = 1 2 j 2 1 2 −2φ̃0 j22 so when evaluating in x∗− (b), the second term is null. The quan-
+                             2
+tities J1 (x∗− (b)), −j2 (x∗− (b)) and j200 (x∗− (b)) are strictly positive. Also, J100 = J1+  00         0
+                                                                                                  J1− + 2J1+   0
+                                                                                                              J1− +
+         00        00               µ                                                    0                     ∗
+J1+ J1− and J1± (x) =                   3 which are positive. Since also J1± and J1± are positive in x− (b),
+                              2(1−x2 ) 2
+                                                p
+then J100 (x∗− (b)) > 0. So φ̃00 (x∗− (b); b, 3(1 − b)) cannot be negative and this leads to a contradiction.
+      Consequently, for fixed b ∈]0, 1[, there is a unique functionpx → µ∗ (x) such that φ̃0 (x; b, µ∗ (x)) =
+0 is well defined for x ∈]x∗+ (b), 1[ and takes values in ] − ∞, 3(1 − b)[. It is also continuous since
+it is defined as the first root of a second degree polynomial with continuously changing parameters.
+In particular, µ∗ is defined as in eq. (5).
+      Note that the function µ∗ cannot be extended to b = 1 since the inferior point of φ̃ is reached at
+1 for every µ < 0. On the other hand, it can be extended to b = 0 since all the previous statements
+still hold.
+                                                                                                   ∗
+      We have already seen that for x in the preimage          p of ] − ∞, 0], the function µ (x) is injective.
+We show that this still holds in the preimage of ]0, 3(1 − b)[. If this is not the case, there exists
+a critical point x̂ such that µ∗ 0 (x̂) = 0. Taking the derivative with respect to x at the members of
+φ̃0 (x; µ∗ (x)) = 0, we obtain φ̃00 (x; µ∗ (x)) + ∂µ φ̃0 (x; µ∗ (x))µ∗ 0 (x) = 0, so at x̂ it holds simultaneously
+φ̃0 (x̂; µ∗ (x̂)) = 0 and φ̃00 (x̂; µ∗ (x̂)) = 0. We want to prove that this is not possible.
+                                           J j 00 −J 00 j
+      At x̂, we have φ̃00 |µ=µ∗ (x̂) = 1 2 j 2 1 2 |µ=µ∗ (x̂) . Since we have already proven that j200 > 0 on
+                                                   2
+                                                  00                                                        00
+1 
+  2 , 1 , it is enough to prove that J1 > 0. We consider µ ≥ 0. It can be shown that J1 (x) =
+                        √
+(4−b2 −4µ2 )(1−x2 )2 +4µ 1−x2 (2x3 −3x+2)
+                8(1−x2 )2                         and J1000 (x) = 3µ(2x−1)
+                                                                       2
+                                                                                                       1       00
+                                                                         5 , which is positive iff x > 2 . So J1 is
+                                                                    2(1−x ) 2
+                                 2     2
+increasing. We have J100 21 = − b8 − µ2 + √µ3 + 21 which is positive iff −4µ2 + √83 µ + 4 − b2 > 0;
+                           
+                                                                                 √
+                                                                                       2
+this concave parabola is positive at zero and its positive root is 2+ 216−3b √
+                                                                               3
+                                                                                  . This quantity is greater
+           p             00
+                                                             p
+than 3(1 − b) so J1 is always positive for µ ∈ [0, 3(1 − b)[.
+       The proof that the function µ∗ (x) is injective corresponds to the proof of the        uniqueness of
+x (b, µ) in the set ]x∗+ (b), 1[. In order to obtain the uniqueness in the whole 12 , 1 , we prove now
+  ∗
+
+that φ̃ is strictly decreasing in 12 , x∗+ (b) , so that any critical point x∗ cannot live in this set. For
+                                              
+
+the continuity of µ∗ and since µ∗ (1) = −∞, for every µ ≤ 0 there exists x > x∗+ (b) such that
+µ∗ (x) = µ. Furthermore, for any fixed x, we have proven that there is at most one possible µ ≤ 0
+such that φ̃0 (x; b, µ) = 0. So if x < x∗+ (b), there is no µ ≤ 0 satisfying the latter equation.
+       Consider now µ > 0. Firstly, we prove that φ̃0 is increasing with respect to µ. From eq. (9)
+                                                            2
+                                                              −8x−1)
+it is evident that it holds true iff µ < √(1−x)(2x 1−x 2 (2x2 −2x−1)
+                                                                     . The right hand side is a decreasing
+function for x ∈ 2 , 1 so it is enough to check the inequality in x∗+ (b). Here the condition becomes
+                     1 
+             2
+               −8
+                  p                                    p
+µ < b2b+4b−8       3(1 − b) and this is greater than 3(1 − b), so the inequality holds true.
+                                                                                                    p
+       So in order to prove that φ̃0 (x; b, µ) is negative, it is enough to prove that
+                                                                                     p    φ̃0 (x; b, 3(1 − b))
+is non-positive. Suppose now that there exists x < x∗+ (b) such that φ̃0 (x; b, 3(1 − b)) > 0. Since
+             p
+φ̃0 ( 21 ; b, 3(1 − b)) is negative, there is an intermediate point at which φ̃0 is null and then be-
+                                                  p
+comes positive up to x. Also φ̃0 (x∗+ (b); b, 3(1 − b)) is null so there is x∗− < x∗+ (b) such that
+                p                             p                                                   p
+φ̃0 (x∗− ; b, 3(1 − b)) > 0 and φ̃00 (x∗− ; b, 3(1 − b)) = 0. However it holds that φ̃00 (x∗− ; b, 3(1 − b)) =
+J1 (x∗   00  ∗      00 ∗      ∗
+     − )j2 (x− )−J1 (x− )j2 (x− )               j 0 (x∗ )
+             j2 (x∗ )2            − 2φ̃0 (x∗− ) j22 (x−
+                                                      ∗ ).   We have already proven that J100 is positive for all
+                  −                                   −
+                                                                                                    j 0 (x∗ )
+            so the first term is positive in x∗− < x∗+ (b). Then, it must be φ̃0 (x∗− ) j22 (x−
+      1       
+x ∈     2, 1                                                                                  ∗ > 0 or
+              0   ∗                      0  ∗                        00
+                                                                                         1 −)
+equivalently j2 (x− ) < 0. Note that J1 (x− ) is negative because J1 is positive in 2 , 1 and for
+
+
+                                                               14
+Figure 2: Comparison between the Vanishing Upward SVI arbitrage-free sub-domain and domain
+as functions of b.
+
+      p                                                                  J (x∗ )j 0 (x∗ )−J 0 (x∗ )j (x∗ )
+µ = 3(1 − b) the function J1 is null at x∗+ (b). Then φ̃0 (x∗− ) = 1 − 2 j−2 (x∗ )12 − 2 − is nega-
+                                                                                          −
+tive, which is a contradiction.                                        p
+    To sum up, we have shown that for fixed b ∈ [0, 1[ and µ < 3(1 − b), there is only one x such
+that φ̃0 (x; b, µ) = 0 and this x lives in ]x∗+ (b), 1[. Furthermore, for fixed b ∈ [0, 1[ and x ∈]x∗+ (b), 1[,
+                                 p
+there is only one µ in ] − ∞, 3(1 − b)[ such that φ̃0 (x; b, µ) = 0. If b = 1 and µ < 0, the function
+φ̃(x; 1, µ) is decreasing and reaches its infimum − µ2 at x = 1.
+
+3.3.2    Numerical illustration of Proposition 3.2
+Figure 2 compares the no arbitrage sub-domain for σ reported in Lemma 3.3 with the full no
+arbitrage domain found in Proposition 3.2, as functions of b. The red line represents the sub-
+domain. The blue line corresponds to the full domain for x∗ equal to the zero of the µ∗ -function.
+The reason why we take this point, which depends on b, is that the sub-domain is defined for
+µ ≤ 0, so x∗ must be greater than the zero of µ∗ (·). Then, the green line shows the full domain
+for x∗ = 0.99 (for the chosen values of b, 0.99 is always greater than the zero of µ∗ (·)) and the
+light blue line is the full domain for an intermediate point between the blue and the green ones. As
+expected, the red line is above all the other lines.
+
+3.4     Vanishing (Downward) SVI
+The Vanishing Downward SVI is the sub-SVI obtained by setting ρ = −1 and a = 0. The corre-
+sponding SVI formula becomes
+                                                        p
+                    SV I(k; 0, b, −1, m, σ) = b(−k + m + (k − m)2 + σ 2 ).
+
+   We plot in Figure 3 a Vanishing Downward SVI with b = 21 , m = 1 and σ = 1.
+
+
+                                                      15
+                Figure 3: Vanishing Downward SVI with b = 21 , m = 1 and σ = 1.
+
+
+    From Proposition 2.6, we know that the Vanishing Downward SVI is arbitrage-free iff SV I(k; 0, b, 1, −m, σ)
+is arbitrage-free, and this corresponds to a Vanishing Upward SVI. This means that the previous
+results still hold for the Vanishing Downward SVI setting m(ρ = −1) = −m(ρ = 1). In particular,
+we redefine the quantity σ ∗ as
+                                               √
+                            ∗                4b 1 − x2 (1 − x − 2x2 )
+                           σ (x) := −                 √      2
+                                      4 2 − x + µ∗ (x) 1 − x2 − b2 (1 + x)2
+
+and Proposition 3.2 becomes:
+
+Proposition 3.4 (Fully explicit no arbitrage domain for the Vanishing Downward SVI). A Van-
+ishing Downward SVI with b = 1 is arbitrage-free iff µ > 0 and σ ≥ µ2 .
+    A Vanishing Downward SVI with 0 < b < 1 is arbitrage-free iff it can be parametrized as
+                                                     s            2    !
+                                      k                  k
+                    SV I(k) = bσ − − µ∗ (x) +              + µ∗ (x) + 1                     (10)
+                                      σ                 σ
+
+      2+b
+where 4−b < x < 1 and σ ≥ σ ∗ (x).
+
+
+4     Extremal Decorrelated SVI
+The coefficient ρ in SVI should correspond to the leverage factor in stochastic volatility models,
+i.e. the stock/vol returns correlation. In particular, when it is zero, the volatility is independent
+from the stock which leads to symmetric smiles. In terms of SVI parameters this means that m
+should also be zero.
+     This is not automatically enforced in SVI, where ρ and m are distinct parameters. Therefore
+we call:
+
+    • Decorrelated SVI sets of SVI parameters where ρ = 0;
+    • Extremal Decorrelated SVI a Decorrelated SVI with b = 2;
+
+
+                                                 16
+                Figure 4: Extremal Decorrelated SVI with a = 8, m = 2 and σ = 2.
+
+
+   • Symmetric SVI a Decorrelated SVI with m = 0.
+   The two latter families intersect into an SVI with b = 2 and ρ = m = 0.
+   The Extremal Decorrelated SVI is the sub-SVI obtained by setting b = 2 and ρ = 0. The
+corresponding SVI formula becomes
+                                                         p
+                           SV I(k; a, 2, 0, m, σ) = a + 2 (k − m)2 + σ 2 .
+                                    √
+   With our notations, N (l) = γ + l2 + 1.
+   We plot in Figure 4 an Extremal Decorrelated SVI with a = 8, m = 2 and σ = 2.
+
+4.1    The Fukasawa conditions
+The Roger Lee conditions on b and ρ are satisfied. In subsection 5.2.5 of [6] we prove that the
+Fukasawa conditions are satisfied iff γ > F̃ (2, 0) = 0 and µ ∈ Iγ,2,0 =] − γ, γ[. Setting µ = qγ we
+obtain the following.
+Lemma 4.1 (Fukasawa conditions for the Extremal Decorrelated SVI). An Extremal Decorrelated
+SVI satisfies the Fukasawa conditions iff it can be parametrized by
+                                            r         2    
+                                                 k
+                                   2σ γ +          − qγ + 1                            (11)
+                                                 σ
+with γ > 0, q ∈] − 1, 1[ and σ > 0.
+
+4.2    The condition on σ
+We will prove the following characterization of the no Butterfly arbitrage domain for the Extremal
+Decorrelated SVI:
+Proposition 4.2 (Fully explicit no arbitrage domain for the Extremal Decorrelated SVI). An
+Extremal Decorrelated SVI is arbitrage-free iff it can be parametrized as
+                                                  r         2    
+                                                       k
+                             SV I(k) = 2σ γ +            − qγ + 1                      (12)
+                                                       σ
+                                    1
+with γ > 0, q ∈] − 1, 1[ and σ ≥ γ(1−|q|) .
+
+
+                                                17
+4.2.1    Proof of Proposition 4.2
+Setting µ = qγ with q ∈] − 1, 1[, the function G1 is
+                                                                           √
+                  −2qγl3 + l2 ((3 + q 2 )γ 2 + 3) − 4qγl + 4(1 + γ 2 ) + 2γ l2 + 1(l2 − 2qγl + 4)
+         G1 (l) =                                            √
+                                               4(l2 + 1)(γ + l2 + 1)2
+                                       √
+                                (l2 −2) l2 +1−2γ
+and since ρ = 0, g2 (l) = −            3    √       is symmetric, so l1 = −l2 . In particular, working with
+                              2(l2 +1) 2 (γ+ l2 +1)
+                                                                                 √
+l ≥ 0, to find its roots it is sufficient to solve a third degree equation in l2 + 1.
+                                        √
+    We operate the substitution y =         l2 + 1 so that
+                    2γy 3 + ((3 + q 2 )γ 2 + 3)y 2 + 6γy + 1 + (1 − q 2 )γ 2 − 2qγl(y)(y 2 + 2γy + 1)
+        G1 (l(y)) =                                                                                   ,
+                                                       4y 2 (y + γ)2
+                      y 3 − 3y − 2γ
+        g2 (l(y)) = −               .
+                       2y 3 (y + γ)
+                                                               bg2
+     From Lemma 2.5, it follows that the function f = − 2G       1
+                                                                    is such that for l > l2 and q negative,
+f (l) < f (−l) while for q positive, f (l) > f (−l) and for q = 0 it is symmetric. So if we want to find
+the supremum of f in ] − ∞, l1 [∪]l2 , ∞[, it is enough to look at ] − ∞, l1 [ for q < 0 and ]l2 , ∞[ for
+q ≥ 0. Note also that f (l; γ, q) = f (−l; γ, −q).
+                                                                                     1
+     Suppose q ≥ 0 and l > l2 . The function f has its limit at ∞ equal to γ(1−q)       . We want to prove
+                                                                             1
+that this is also the supremum of f . This would be true iff f (l) < γ(1−q) for every l or equivalently
+iff −g2 (l)γ(1 − q) < G1 (l). Using the change of variable, this reads also
+                                                                                        p
+y 3 − 3y − 2γ             2γy 3 + ((3 + q 2 )γ 2 + 3)y 2 + 6γy + 1 + (1 − q 2 )γ 2 − 2qγ y 2 − 1(y 2 + 2γy + 1)
+               γ(1−q) <                                                                                         .
+   y 3 (y + γ)                                                 2y 2 (y + γ)2
+Multiplying by 2y 3 (y + γ)2 and simplifying, one gets
+
+  2γqy 4 + (γ 2 (1 + q)2 + 3)y 3 + 6γ(2 − q)y 2 + (γ 2 (1 − q)(q + 11) + 1)y+
+                                                                           p
+                                                        4γ 3 (1 − q) − 2γqy y 2 − 1(y 2 + 2γy + 1) > 0.
+     p
+Since y 2 − 1 < y, the LHS is greater than
+              (γ 2 (1 − q)2 + 3)y 3 + 4γ(3 − 2q)y 2 + (γ 2 (1 − q)(q + 11) + 1)y + 4γ 3 (1 − q).
+Each of the coefficients of this polynomial is positive and y > 0 so the whole polynomial is positive
+and f reaches its supremum at ∞.
+   In the case q < 0, the conclusion follows immediately from P roposition 2.6.
+
+
+5       Symmetric SVI
+The Symmetric SVI is the sub-SVI obtained by setting ρ = 0 and m = 0. The corresponding SVI
+formula becomes                                             p
+                              SV I(k; a, b, 0, 0, σ) = a + b k 2 + σ 2 .
+                               √
+With our notations, N (l) = γ + l2 + 1.
+   We plot in Figure 5 a Symmetric SVI with a = 0.64, b = 1.6 and σ = 0.4.
+
+                                                      18
+                   Figure 5: Symmetric SVI with a = 0.64, b = 1.6 and σ = 0.4.
+
+
+5.1    The Fukasawa conditions
+The Roger Lee conditions imply 0 < b ≤ 2.          In Appendix Bof [6] we prove√
+                                                                                     that the Fukasawa
+                                                            6b           (b2 +32) 4−b2
+conditions are satisfied iff γ > F̃ (b, 0) = g−(b,0) − √b4 −20b2 +64
+                                                                     = −         2
+                                                                                   3   . Since ρ = 0, the
+                                                                           (16−b ) 2
+interval for µ is symmetric and being µ = 0, the Fukasawa condition on µ is automatically satisfied.
+Lemma 5.1 (Fukasawa conditions for the Symmetric SVI).      √
+                                                                     A Symmetric SVI with 0 < b ≤ 2
+                                                       2           2
+satisfies the Fukasawa conditions iff γ > F̃ (b) = − (b +32) 2 4−b
+                                                                3    .
+                                                        (16−b ) 2
+
+    For every value of b, we have F̃ (b) ∈] − 1, 0] and in particular F̃ (2) = 0. We can extend the
+                                                                                   108b3
+definition of F̃ to the point b = 0, setting F̃ (0) = −1. Furthermore, ddbF̃ (b) = 2
+                                                                                     5√
+                                                                                           2
+                                                                                             > 0 for
+                                                                                   (16−b ) 2   4−b
+positive b. So the inverse function F̃ −1 : [−1, 0] → [0, 2] is well defined. As in section 2.3, we define
+                                            (
+                                              F̃ −1 (γ) if γ ∈] − 1, 0],
+                                  G̃(γ) =                                                             (13)
+                                              2         if γ > 0.
+
+It can be shown, working out the calculation of the roots of a 3rd degree polynomial, that the
+explicit formula of G̃ in the case γ ≤ 0 is
+                            v                                         
+                            u p
+                                                            4      2 −1
+                            u 6 8γ 2 + 1 cos 13 arccos − 8γ +20γ           − 4γ 2 − 5
+                            u
+                                                                     3
+                            t                              (8γ 2 +1) 2
+                 G̃(γ) = 2                                                            .   (14)
+                                                     1 − γ2
+
+5.2    The condition on σ
+Before enunciating the main Proposition of this chapter, we need to introduce some notation. In
+this section, for positive ls we will operate a change of variable setting z = √l21+1 , whose domain
+is ]0, 1]. Then we define the functions J1 (z) := G1 (l(z)), j2 (z) := g2 (l(z)), η(z) := h(l(z)) and
+
+
+
+
+                                                   19
+j(z) := g(l(z)). In particular,
+                                                    2γz 3 + 3z 2 − 1
+                                             j2 (z; γ) = z            ,
+                                                         2(γz + 1)
+                                                           1 − z2
+                                      η(z; γ) = 1 −                 ,                                (15)
+                                                         2(1 + γz)
+                                                   1 − z2
+                                         j(z) =             .
+                                                       4
+   In the following, the symbol 0 indicates the derivative with respect to z if not differently specified.
+   We also define the functions
+                              q                                       p
+                  γ ∗ (u) := u 6u3 + 15u2 + 14u + 6 + (1 + u)2 3(12u2 + 12u + 11),                   (16)
+                             s
+                               η(z)(η(z)j20 (z) − 2η 0 (z)j2 (z))
+                b∗ (z, γ) :=                                      ,                                  (17)
+                               j(z)(j(z)j20 (z) − 2j 0 (z)j2 (z))
+                                           b∗ (z ∗ , γ)j2 (z ∗ )
+                 σ ∗ (z, γ) := −                                        .                            (18)
+                                    2(η(z )2 − b∗ (z ∗ , γ)2 j(z ∗ )2 )
+                                         ∗
+
+
+   The final result of this subsection will be:
+
+Proposition 5.2 (Fully explicit no arbitrage domain for the Symmetric SVI). An arbitrage-free
+Symmetric SVI must have γ > −1.
+   A Symmetric SVI with b = 2 is arbitrage-free iff γ > 0 and σ ≥ γ1 .
+                                                        √
+                                                          (4−G̃(γ)2 )(16−G̃(γ)2 )
+   Call z ∗ (γ ∗ (u), 0) = γ ∗u(u) and z ∗ (γ, G̃(γ)) =        G̃(γ)2 +8
+                                                                                  .
+                 q        √                                                       p √
+   • If γ = −      9+5 3
+                        18     ,  the  Symmetric  SVI is arbitrage-free iff b < 2  3 3 − 5 and
+                                                 q √
+      σ ≥ − 2(η(ẑ)bj2 −b
+                       2 (ẑ)
+                           2 j(ẑ)2 ) where ẑ =
+                                                   3− 3
+                                                     2 .
+                 q       √
+   • If γ 6= −        9+5 3
+                        18  and b < 2, a Symmetric SVI is arbitrage-free iff it can be parametrized as
+                                                                             r          
+                                                     ∗       ∗            ∗     k 2
+                                    SV I(k) = σb (z, γ (u)) γ (u) +                   +1             (19)
+                                                                                σ
+
+      where
+           u > −1,
+                                                                          q    √
+                  ∗     ∗           ∗   ∗           ∗                 ∗     9+5 3
+         z ∈]z (γ (u), 0), z (γ (u), G̃(γ (u)))[ if γ (u) < −                     or
+                                                                              18
+                                                                          q    √
+          z ∈]z ∗ (γ ∗ (u), G̃(γ ∗ (u))), z ∗ (γ ∗ (u), 0)[ if γ ∗ (u) > −  9+5  3
+                                                                              18 ,
+
+           σ ≥ σ ∗ (z, γ ∗ (u)).
+
+
+
+
+                                                                 20
+5.2.1   Proof of Proposition 5.2
+When b = 2, we are in the case of the Extremal Decorrelated SVI with q = 0, so the arbitrage
+conditions are satisfied iff γ > 0 and σ ≥ γ1 .
+    From now on we consider b < 2. Since ρ = 0, the g2 function is symmetric with respect to l and
+since µ = 0, the G1 function is symmetric too. Then f˜ = − G   g2 is symmetric as a function of l and
+                                                                1
+
+
+we consider l ≥ 0. Recall that we are interested in the value of σ ∗ = supl>l2 2f˜b(l) .
+    The function φ̃(z) := f˜(l(z)) goes to ∞ at 0 and at the non trivial zero of j2 , which we call
+z2 (γ). Then φ̃ has at least one point of minimum in ]0, z2 [.
+
+Study of j2 To find z2 , we should solve p1 (z) := 2γz 3 + 3z 2 − 1 = 0. It can be shown that for
+γ negative, the polynomial has three roots but only the second one lies in the interval ]0, 1[. If γ
+is null, then z2 (0) = √13 . If γ is positive but not greater than 1, the polynomial has three roots
+and only the third lies in the interval ]0, 1[. Finally, if γ > 1, there is only one root. Using the
+trigonometric notation, z2 (γ) is
+                                                             
+                                 1      1              2    2π     1
+                            
+                            
+                             − γ cos 3 arccos(1 − 2γ ) − 3 − 2γ       if γ < 0,
+                            
+                            
+                             √13
+                            
+                                                                       if γ = 0,
+                            
+                            
+                   z2 (γ) = 1
+                                                      
+                                      1          2          1
+                               γ cos 3 arccos(2γ − 1) − 2γ             if 0 < γ ≤ 1,
+                            
+                            
+                            
+                            
+                            
+                                                        
+                             γ1 cosh 13 arccosh(2γ 2 − 1) − 2γ1
+                            
+                                                                      if γ > 1.
+
+   Let us show that j2 has a single critical point zm2 where it achieves its minimum. It holds
+
+                                         6γ 2 z 4 + 14γz 3 + 9z 2 − 1
+                              j20 (z) =                                ,
+                                                  2(γz + 1)2
+                                         6γ 3 z 4 + 19γ 2 z 3 + 21γz 2 + 9z + γ
+                              j200 (z) =                                        .
+                                                       (γz + 1)3
+
+Since j20 (0) = − 12 and j20 (1) = 3γ+4
+                                    γ+1 , which is positive having γ > −1, then j2 has at least one
+critical point in ]0, 1[.
+
+   • The function j200 is positive if γ ≥ 0 so j2 has exactly one critical point in this case, which is
+     a point of minimum.
+   • Consider the case γ < 0. The polynomial p2 (z) := 6γ 2 z 4 + 14γz 3 + 9z 2 − 1 has derivative
+     p02 (z) = 2z(12γ 2 z 2 + 21γz + 9), so its three critical points are 0, − 4γ
+                                                                                3
+                                                                                  and − γ1 . Since γ > −1,
+     the third critical point, which is a point of minimum, is greater than 1 and, since 0 is the first
+     critical point and since −1 = p2 (0) < 0 < p2 (1) = 6γ 2 + 14γ + 8 = 2(γ + 1)(γ + 4), p2 has
+     exactly one zero in ]0, 1[. So again j2 has only one critical point in this interval.
+
+    Because j2 is negative before z2 then j20 (z2 ) > 0, furthermore j20 (0) < 0 so the critical point zm2
+of j2 (a point of minimum) lies in ]0, z2 [.
+    We have already seen that if γ ≥ 0, then j2 is strictly convex in ]0, 1[.
+
+
+                                                      21
+      We can moreover show that j2 has a single inflection point if γ is negative. In such case, call
+the numerator of j200 as p3 (z) := 6γ 3 z 4 + 19γ 2 z 3 + 21γz 2 + 9z + γ. It holds p3 (0) = γ < 0 and
+p3 (1) = 6γ 3 + 19γ 2 + 22γ + 9, which is a third degree polynomial in γ with only root equal to −1
+and a positive leading order term, so it is positive for γ > −1. Then p3 has at least one zero in
+]0, 1[. Moreover, p03 (z) = 3(γz + 1)2 (8γz + 3), whose zeros are − 8γ   3
+                                                                           and − γ1 > 1. The former is
+a point of maximum for p3 while the latter is an inflection point. Gathering all the informations,
+it follows that p3 has exactly one zero in ]0, 1[. Since j200 > 0 at the point of minimum of j2 and
+j200 (0) < 0, the only inflection point zi2 (γ) of j2 lies in ]0, zm2 [.
+                                                             2
+                                                        1−z 2             2
+Study of J1 It holds J1 (z) = η(z)2 − b2 j(z)2 = 1 − 2(1+γz)     − b2 1−z
+                                                                       16 .
+   We write here a general result which holds for every SV I.
+Lemma 5.3. Under the Fukasawa conditions, G1 is strictly decreasing at the second zero of g2 .
+Proof. Since G01 = G01+ G1− + G1+ G01− and G01+ < G01− for l > l∗ , then it is enough to prove
+G01− (l2 ) < 0. Remember that G1− (l2 ) = 1 − N 0 (l2 ) l22N
+                                                           +µ
+                                                              − 4b . From the formula of g2 , we have
+                                                                  
+                      0   2
+that N 00 (l2 ) = N (l2 )
+                  2N (l2 ) . Then
+
+                                    N 00 (l2 )(l2 + µ) + N 0 (l2 ) N 0 (l2 )2 (l2 + µ) bN 00 (l2 )
+                      G01− (l2 ) = −                               +                       +
+                                                2N (l2 )                   2N (l2 )2           4
+                                    0      2                0     2        0
+                                 N (l2 ) (l2 + µ) bN (l2 )             N (l2 )
+                            =                          +            −           .
+                                      4N (l2 )2           8N (l2 )    2N (l2 )
+                                                                                         
+For the absence of arbitrage, µ < inf l>l∗ L+ (l) = inf l>l∗ 2N           (l)   bN (l)
+                                                                      N 0 (l) − 2 −l so this holds in particular
+in l2 > l∗ . Substituting with the formula of L+ we obtain
+                           N 0 (l2 )2                                          bN 0 (l2 )2   N 0 (l2 )
+                                                                        
+                                                2N (l2 ) bN (l2 )
+              G01− (l2 ) <          2
+                                         l2  +    0
+                                                         −          − l 2 +                −           = 0.
+                           4N (l2 )             N (l2 )       2                 8N (l2 )     2N (l2 )
+
+
+      Observe that
+                     γz 4 (b2 γ 2 + 4) + z 3 (3b2 γ 2 + 8γ 2 + 8) + 3γz 2 (b2 + 8) + z(b2 + 8γ 2 + 8) + 4γ
+          J10 (z) =                                                                                        ,
+                                                             8(γz + 1)3
+                     b2     γ 2 z 4 + 4γz 3 + 6z 2 + (4γz + 1)(2 − γ 2 )
+         J100 (z) =     +                                                 ,
+                     8                        2(γz + 1)4
+                     6z(γ 2 − 1)2
+         J1000 (z) =                 .
+                      (γz + 1)5
+So:
+      • For γ ≥ 0, J10 is always greater than 0 so J1 is increasing and has its minimum in 0.
+      • If γ < 0, J10 is negative for z = 0 and we know that G01 (l2 ) < 0 so J10 (z2 ) > 0. Then J1 has
+        at least a point of minimum in ]0, z2 [. Also, the minimum of J100 is reached at 0 and it is
+        b2 −4γ 2 +8                                        2
+
+             8      . This quantity is positive iff γ 2 < b 4+8 , so for example for every γ < 0 because γ is
+        greater than −1. In such case J1 is always convex and it has exactly one critical point zm1 ,
+        which is a point of minimum, in ]0, z2 [.
+
+
+                                                         22
+                                                                                                               2
+                                                                                                                        √
+                                                                                                                             2
+    Note also that when γ goes to its Fukasawa limit, J1+ (z) = 1 − 2(γz+1) 1−z
+                                                                                   − b 1−z
+                                                                                        4    goes to 0
+             √     2 )(16−b2 )
+    ∗          (4−b
+in z+ (b) :=      b2 +8        , which is also a point of minimum for J1 . It is easy to shown that if
+           4        2           2
+γ > − (b −38b
+           2
+              3
+               +64)(b +8)
+                     2
+                       3
+                                              ∗
+                          := M (b), then j2 (z+                ∗
+                                                (b))) > 0, so z+                          ∗
+                                                                 (b) > z2 (γ), otherwise z+ (b) ≤ z2 (γ).
+           (4−b    ) 2 (16−b    )2
+Note that M (b) ≥ F̃ (b) (the equality holding iff b = 0), so when γ goes to F̃ (b), J1 reaches its
+minimum before z2 (γ) (or at z2 (γ) if b = 0).
+    Then J1 has in any case one point of minimum: in the case γ ≥ 0, this is 0, while when γ < 0,
+                                               2
+it is zm1 (γ, b). Also, J1 is convex if γ 2 ≤ b 4+8 (in particular γ < 0 given that γ should be larger
+                                                                     2
+than −1) while it has a unique inflection point zi1 (γ, b) if γ 2 > b 4+8 .
+
+Uniqueness of the critical point of φ̃ for the Symmetric SVI From the formula for φ̃0 =
+J1 j20 −J10 j2
+      j2
+               , given that J1 > 0 and j2 < 0 we have that:
+     2
+
+
+
+   • for γ < 0: all the critical points of φ̃ must lie in [zm1 , zm2 ] ∪ [zm2 , z2 ∧ zm1 );
+   • for γ ≥ 0: all the critical points of φ̃ must lie in ]0, zm2 [ since J10 j2 is negative.
+                                                                                 J1 j200 −J100 j2        j0
+   Considering now the second derivative of φ̃, so φ̃00 =                               j22
+                                                                                                  − 2φ̃0 j22       and evaluating it at a
+                                                                                                       00
+point of maximum of φ̃, the second term becomes null and necessarily φ̃ ≤ 0. Then it must hold
+j200 J100 ≤ 0 (the equality holding when both factors are 0). In particular:
+
+   1. for γ < 0: if φ̃ has a point of maximum, it lies in [zm1 , zi2 (γ)[ because in such case J100 > 0,
+      j200 < 0 in [0, zi2 (γ)[;
+                    q
+                         2
+   2. for 0 ≤ γ ≤ b 4+8 : φ̃ cannot have a point of maximum, because J1 and j2 are strictly convex,
+      so it has one point of minimum which lies in ]0, zm2 [;
+                q
+                    2
+   3. for γ > b 4+8 : J1 has one inflection point zi1 and if φ̃ has a point of maximum, it lies in
+      ]0, zm2 ∧ zi1 [.
+
+    We consider the first case and show that zm1 > zi2 (γ) or equivalently that J10 (zi2 ) < 0, so
+that there is no point of maximum. The quantity zi2 (γ) does not depend on b so ∂b2 (J10 (zi2 )) =
+                 z
+∂b2 J10 (zi2 ) = 8i2 > 0. We can then check that for every −1 < γ < 0 we have indeed J10 (zi2 ; b = 2) < 0
+in Figure 6.                                           q
+                                                                            b2 +8                     2
+   Let us now consider the last case. Since γ >                               4 , then in particular γ > 2.                  Suppose we
+                                                                J10
+are at a critical point of φ̃, then J1 =                        j20 j2 and its second derivative evaluated at this point is
+         J1 j200 −J100 j2       J10 j200 −J100 j20
+φ̃00 =          j22
+                            =         j2 j20       .   In the set ]0, zm2 ∧ zi1 [, the denominator is always positive. The
+                                               6
+numerator times 16(γz + 1) is equal to
+
+b2 6γ 6 z 8 + 36γ 5 z 7 + 91γ 4 z 6 + 126γ 3 z 5 + 3γ 2 (γ 2 + 34)z 4 + 2γ(5γ 2 + 23)z 3 + 3(4γ 2 + 3)z 2 + 6γz + 1 +
+                                                                                                                   
+
++ 24γ 4 z 8 + 96γ 3 (γ 2 + 1)z 7 + 4γ 2 z 6 (148γ 2 + 17) + 24γz 5 (8γ 4 + 48γ 2 − 3) + 12z 4 (50γ 4 + 81γ 2 − 6)+
++ 16γz 3 (44γ 2 + 25) + 12z 2 (33γ 2 + 8) + 120γz + 4γ 2 + 8.
+
+
+
+                                                                       23
+                                   Figure 6: J10 (zi2 ; b = 2) as a function of γ.
+
+
+All coefficients of z are positive quantities, indeed the only minus involved are in the expressions
+8γ 4 + 48γ 2 − 3 > 8 × 4 + 48 × 2 − 3 > 0 and 50γ 4 + 81γ 2 − 6 > 50 × 4 + 81 × 2 − 6 > 0. Then φ̃00 is
+positive and φ̃ cannot have a point of maximum even in this case.
+    We denote from now on the well-defined single point of minimum of φ̃ with z ∗ (γ, b).
+
+Limits of z ∗ with respect to γ When γ goes to ∞, the ratio between the numerator of φ̃0 and
+γ 4 goes to 2z 6 (48 + b2 (z 2 − 3)), which is null for z = 0, so z ∗ (∞, b) = 0.
+    On the other√ side, let γ go to F̃ (b). Then, from the above study of J1 , the minimum point of
+        ∗        (4−b2 )(16−b2 )
+J1 is z+  (b) =        b2 +8      < z2 (F̃ (b)) and it coincides with the minimum point z ∗ (F̃ (b), b) of φ̃,
+at which φ̃ is null.
+    If b = 0, it still holds z ∗ (∞, 0) = 0 and it is easy to show that at the point z ∗ (0) = z2 (F̃ (0)) = 1
+the function φ̃ with γ = F̃ (b) vanishes.
+
+The b∗ approach for the Symmetric SVI Let γ ∈] − 1, ∞[ be fixed. With reference to the
+definition of G̃(γ) in eq. (13), we want to prove that for every b ∈]0, G̃(γ)[ the corresponding z ∗ (γ, b)
+lies in ]z ∗ (γ, 0), z ∗ (γ, G̃(γ))[ (or in ]z ∗ (γ, G̃(γ)), z ∗ (γ, 0)[).
+Remark 5.4. Note that if γ > 0, b could actually attain the value G̃(γ) = 2 but we have already
+seen in the Extremal Decorrelated scenario that in such case the function f˜ is increasing and has
+its minimum (which is not necessarily a critical point) in z = 0. So in the following we will always
+consider b < G̃(γ).
+    Remember the definition of η and j in eq. (15) and the fact that we use 0 to indicate the derivative
+with respect to z.
+    The proof of the uniqueness of the critical point of φ̃ still holds for b = 0 and b = G̃(γ), and we
+proved z ∗ (γ, G̃(γ)) = z+
+                         ∗
+                           (G(γ)). In particular, the single point of minimum z ∗ (γ, b) defined above
+of φ̃ lies in ]0, z2 [.
+
+
+
+                                                         24
+                                                                                                            q    √
+    In a following paragraph we show that the only solution to p(z) = q(z) = 0 is for γ̂ = − 9+5
+                                                                                               18
+                                                                                                  3
+        q √
+at ẑ = 3−2 3 . Take γ 6= γ̂. With reference to the observations in section 2.3, we can conclude
+that the set Z(γ) of the critical points of φ̃ is equal to the interval with extrema the only zero of
+p = ηj20 − 2η 0 j2 , denoted z ∗ (γ, 0), and the point z ∗ (γ, G̃(γ)).
+          = γ̂, the minimum point of φ̃ does not depend on b and it is z ∗ (γ̂, b) = ẑ. In such case,
+    For γ p
+              √
+G̃(γ̂) = 2 3 3 − 5. In the following we see what happens for the other values of γ.
+                           4 2    2       3
+                                            γ(z 2 −3)+3z 4 −8z 2 +1
+    It holds q(z) = − 2z γ (z −3)+4z  √
+                                     8 1−z 2 (γz+1)2
+                                                                    . Suppose zq (γ) is a zero of q, then solving
+                                                                                                    1−z 2
+the equation q(zq ) = 0 in γ, the only solution greater than −1 is γ = γq (zq ) := 2 √ q 2 − z1q .
+                                                                                      zq 2(3−zq )
+                                                     
+                        0       1       z 4 −3z 2 +6
+It can be shown that γq (z) = z2 1 − √            2
+                                                    3   < 0 for every z ∈]0, 1[. This means that γq is
+                                             z 2(3−z ) 2
+invertible from ]0, 1[ to ] − 1, ∞[ and that for fixed γ, q has a unique zero. Observe that γq (ẑ) = γ̂.
+Since q(0) < 0, on the left of its zero zq (γ), q is negative while on the right it is positive. Also, if
+                                                        2 6   3 5    4
+                                                                       (10γ 2 −1)+28γz 3 +12z 2 −1
+γ < γ̂, then zq (γ) > ẑ. We now look at p(z) = 2γ z +12γ z +3z4(γz+1)         3                    . Substituting
+                                                                                           √           3
+                                                                                                         
+                                                                       z 2z −3z −3+z 2(3−z 2 ) 2
+                                                                         2     4   2
+γ with γq (z) in the last expression, we find p z; γ = γq (z) = −                    1−z 2                 . We call
+                              √         2 23
+r(z) := 2z 4 − 3z 2 −p 3  + z   2(3 − z  )   , then r(ẑ) = r(1)  = 0   and   r(0) =   −3   <    0.   Furthermore
+r0 (z) =√−(4z 2 − 3)( 2(3 − z 2 ) − 2z), where the second factor is positive for z < 1, so r is increasing
+        3
+                                     √3 
+in 0, 2 3 ẑ and decreasing in 2 , 1 , with unique zeros at ẑ and 1. This means that for the
+previous choice of γ < γ̂, p(zq (γ)) < 0, so z ∗ (γ, 0) > zq (γ) because z ∗ (γ, 0) is the unique zero of
+p. Remember that q is positive in ]zq (γ), z ∗ (γ, 0)[. Since b∗ defined in eq. (4) lives where p and q
+have the same sign and since the set Z(γ) is an interval, the latter will lie on the right of z ∗ (γ, 0),
+indeed on the immediate left we have seen that p is negative while q is positive. The reasoning is
+similar for γ > γ̂, with the conclusion that the previous set is on the left of z ∗ (γ, 0).
+
+Limits of z ∗ with respect to b When b goes to 0 and γ is not γ̂, the value of z ∗ (γ, b) is the
+only solution smaller than z2 (γ) to p(z) = 0, or
+
+                        2γ 2 z 6 + 12γ 3 z 5 + 3z 4 (10γ 2 − 1) + 28γz 3 + 12z 2 − 1 = 0.                       (20)
+
+Since the equation is of sixth degree, the solution cannot be written explicitly, but it can be found
+by a numeric routine in the interval ]0, z2 (γ)[.
+   Another cunning way to find z ∗ (γ, 0) is to use again the trick of changing the role between
+parameters and variables. Firstly, note that if γ = 0, the only solution to eq. (20) is z = √ 1√ .
+                                                                                                            6+ 33
+If γ 6= 0, substitute z = uγ in the above equation, then we look for u solving
+
+                          γ 4 − 2u2 (6u3 + 15u2 + 14u + 6)γ 2 + u4 (3 − 2u2 ) = 0.                              (21)
+
+The interval where u lives is such that 0 < uγ < z2 (γ), or equivalently γz2u(γ) > 1. If u is negative,
+it must hold 0 > u > γz2 (γ) > γ > −1, so for sure u > −1. Imagine        p to fix u, then equation
+eq. (21) is quadratic in γ 2 and has four (eventually complex) solutions ± Γ± , with Γ± = u2 6u3 +
+                              p                    
+15u2 + 14u + 6 ± (1 + u)2 3(12u2 + 12u + 11) . The solution γ must have the same sign of u,
+                                             p                               p       p
+since z > 0. If u is positive, the solution Γ− is smaller than u, so also Γ− z2 ( Γ− ) is smaller
+                                                       p
+than u. Then, the only possible solution could be Γ+ . We plot in Figure 7 (left) the graph of
+
+                                                        25
+                                                     √              √
+                                                    ±    Γ± z2 (±       Γ± )
+                               Figure 7: Study of            u                 as functions of u.
+
+
+
+
+                  Figure 8: z ∗ (γ, 0) and z ∗ (γ, G̃(γ)) as functions of γ ranging from −1 to −0.98.
+
+√             √
+    Γ+ z2 (       Γ+ )
+             to check whether it is greater than 1. If u is negative, we plot in Figure 7 (right) the
+        u   √         √
+                   −
+              Γ± z2 (− Γ± )
+graphs of         u         and check again whether these quantities are greater than 1.
+                                                  p
+    We can see that for every u > 0, the solution Γ+ is admissible and that for −1 < u < 0, the
+                              p
+only admissible solution is − Γ+ . To sum up, for u > −1, the solution to eq. (21) in terms of γ is
+eq. (16) and it ranges from −1 to ∞. Observe that if u = 0, the value of γ ∗u(u) is exactly √ 1√ ,
+                                                                                                        6+ 33
+so the definition is well posed even in this case.
+
+5.2.2         Numerical illustration of the interval for z ∗
+We report in Figures 8 and 9 the graphs of z ∗ (γ, 0), which is the only zero of p(z, γ) in 0, z2 (γ) ,
+                                                                                                    
+
+and of z ∗ (γ, G̃(γ)).
+
+
+
+                                                            26
+                Figure 9: z ∗ (γ, 0) and z ∗ (γ, G̃(γ)) as functions of γ ranging from −1 to 0.4.
+
+
+6      SSVI
+The SSVI is a sub-SVI classically parametrized as
+                                                                      
+                                       θ            p
+                                                             2       2
+                   SSV I(k; θ, ϕ, ρ) =     1 + ρϕk + (ϕk + ρ) + 1 − ρ .                                                     (22)
+                                       2
+It can be easily checked that the corresponding
+                                          √ 2     SVI parameters are
+                  
+                    θ(1−ρ2 ) θϕ     ρ      1−ρ              p
+(a, b, m, ρ, σ) =      2    , 2 , − ϕ , ρ, ϕ   , so that γ = 1 − ρ2 and the special property µ =
+− √ ρ 2 = l∗ hold, where l∗ is the unique critical point of the smile, which is a point of minimum,
+      1−ρ
+of N . The corresponding SVI formula becomes
+                                                                p                                s                             
+                p                        ρσ                                        k       ρ          k         ρ       2
+SV I k; bσ          1 − ρ2 , b, ρ, − p            ,σ       = bσ        1 − ρ2 +ρ        +p       +           +p                 +1 .
+                                         1 − ρ2                                     σ     1 − ρ2         σ        1 − ρ2
+                           p             √
+With our notations, N (l) = 1 − ρ2 + ρl + l2 + 1.
+  We plot in Figure 10 an SSVI with b = 1, ρ = 21 and σ = 12 .
+
+6.1       The Fukasawa conditions
+Since γ > 0, we always have γ > F̃ (b, ρ). We show that also the condition on µ is verified for γ > 0.
+Lemma 6.1. Assume γ > 0. Then for every SVI, l∗ ∈ Iγ,b,ρ .
+Proof. Consider the case ρ ≥ 0, so that l∗ ≤ 0. Note that N (l) − γ = lN 0 (l) + N 00 (l)(l2 + 1). Then
+                                                 0        00
+                                                             (l)(l2 +1)
+the condition L− (l) < l∗ for l < l∗ becomes γ+lN (l)+N
+                                                    2N 0 (l)            (4 + bN 0 (l)) < l + l∗ or equivalently
+            0
+     N (l)        ∗          0         00    2
+γ > 4+bN 0 (l) (2l − l(2 + bN (l))) − N (l)(l + 1).
+
+
+
+
+                                                                   27
+                             Figure 10: SSVI with b = 1, ρ = 21 and σ = 12 .
+
+
+    The term −N 00 (l)(l2 + 1) is strictly negative and if 2l∗ − l(2 + bN 0 (l)) ≥ 0, also the first term is
+negative, so that if γ ≥ 0 we automatically have L− (l) < l∗ for every l < l∗ . When ρ > 0 (or ρ = 0
+and b < 2), since b(1 + ρ) ≤ 2, it holds b(1 − ρ) 6= 2. Because L− (−∞) = L− (l∗− ) = −∞ and L− is
+continuous, it holds supl<l∗ L− (l) = L− (l− ) where l− ∈] − ∞, l∗ [. Then if we show L− (l) < l∗ for
+every l < l∗ , it follows l∗ > supl<l∗ L− (l). If ρ = 0 and b = 2, it holds b(1 − ρ) = 2, so l− = −∞
+and L− (l− ) = −γ. In such case, the only annoying situation arises for γ = 0, because it holds
+l∗ = 0 = supl<l∗ L− (l). Taking γ > 0 this case does not arise.                                     
+    Consider the quantity 2l∗ − l(2 + bN 0 (l)). Since b(1 + ρ) ≤ 2, it is greater than −2 −l∗ +
+         0
+              
+l 1 + N1+ρ (l)
+                 , which is positive iff, substituting and dividing by −2, the quantity c(l) := √ ρ 2 +
+                                                                                                     1−ρ
+                         
+  l               √ l
+1+ρ   1 +   2ρ  +   l2 +1
+                            is negative. Observe  that for l going to −∞, c goes to −∞   when     ρ > 0 and
+                                                                                               2
+                                                                                                      
+to 0− when ρ = 0. Furthermore c(l∗ ) = 0. The derivative of c is c0 (l) = 1+ρ  1
+                                                                                   1 + 2ρ + l(l2 +2)3 . We
+                                                                                                 (l +1) 2
+would like c0 to be positive, so that c would be increasing and, from the previous analysis, negative
+for l < l∗ . However, this does not always happen. Indeed, the minimum point of c0 is reached
+       √               1
+                                      q                                             32
+at − 2 and it is 1+ρ       1 + 2ρ − 34 23 , which is non-negative iff ρ ≥ 23               − 12 = ρ̄. Therefore,
+we are annoyed by the cases where ρ < ρ̄. Under                                        ¯                      0
+                                                        √ this hypothesis, call l(ρ) the first zero of c ,
+                                   0
+that is also the only zero of c smaller than − 2. We need to prove that d(ρ) := c(l(ρ); ρ) <          ¯
+0. Observe that dρ    d
+                        d(ρ) = ∂ρ c(¯l(ρ); ρ) + c0 (¯l(ρ); ρ) dρ
+                                                              d ¯
+                                                                 l(ρ) = ∂ρ c(¯l(ρ); ρ). The latter quantity is
+    1          l
+                                                                                                          √
+      2
+        3 + (1+ρ)2   1 − √l2l+1 , which is increasing in l and so it is smaller than its value at l = − 2.
+(1−ρ )  2
+                                     √         q 
+Then ∂ρ c(¯l(ρ); ρ) ≤      1
+                             2
+                                      2
+                               3 − (1+ρ)2   1 −    2
+                                                   3    and it is negative for ρ < ρ̄. Then, it is enough to
+                       (1−ρ ) 2
+show d(0) < 0. For ρ = 0, we have ¯l(0) = −∞ and it is easy to see that d(0) = 0− as desired.
+    Remember that if l∗ > 0 (i.e. ρ < 0), then l∗ > L− (l− ) because L− (l− ) ≤ 0 for Lemma 4.4 in
+[6]. Then we have proven that supl<l∗ L− (l) < l∗ for every γ > 0 and ρ.
+    Using the symmetries, we have that for every ρ
+
+                     l∗ (ρ) > L− (l− (ρ); ρ) = −L+ (−l− (ρ); −ρ) = −L+ (l+ (−ρ); −ρ)
+
+or equivalently l∗ (−ρ) < L+ (l+ (−ρ); −ρ).
+
+
+                                                      28
+   In particular this lemma holds for SSVI and has as immediate consequence the following:
+                                                                 2
+Lemma 6.2 (Fukasawa conditions for SSVI). An SSVI with 0 < b ≤ 1+|ρ| always satisfies the
+Fukasawa conditions.
+
+6.2    The condition on σ
+As in the previous chapters, we start this section by defining some (already used) useful functions:
+                                   s
+                                     h(l, ρ) h(l, ρ)g20 (l, ρ) − 2h0 (l, ρ)g2 (l, ρ)
+                                                                                      
+                        ∗
+                       b (l, ρ) :=                                                      ,       (23)
+                                     g(l, ρ) g(l, ρ)g20 (l, ρ) − 2g 0 (l, ρ)g2 (l, ρ)
+                                                                                     
+
+                                                   b∗ (l, ρ)g2 (l, ρ)
+                         σ ∗ (l, ρ) := −                                      .                 (24)
+                                           2(h(l, ρ)2 − b∗ (l, ρ)2 g(l, ρ)2 )
+
+   We will show that the only positive zero of g2 is
+                                                                1
+                                             l2 (ρ) =         arccos(−ρ) 
+                                                                             .                  (25)
+                                                        tan        3
+
+   The objective of this subsection is to prove the following:
+Proposition 6.3 (Fully explicit no arbitrage domain for SSVI). If an SSVI is arbitrage-free then
+          2
+0 < b ≤ 1+|ρ| .
+
+   • If b = 1+|ρ|
+                2
+                                                     p
+                  , an SSVI is arbitrage-free iff σ ≥ 1 − ρ2 .
+
+   • If b < 1+|ρ|
+              2
+                  , for ρ ≥ 0, define ¯l(0, ρ) the only root in ]l2 (ρ), ∞[ of b∗ (l, ρ) = 0.
+      Then, under the assumption that f˜ has a unique critical point (that we sustain numerically
+      in Appendix A):
+           an SSVI with ρ ≥ 0 is arbitrage-free iff it can be parametrized as
+                                   p                                s                      
+                                                k          ρ         k       ρ     2
+                           ∗              2
+               SV I(k) = σb (l, ρ)    1−ρ +ρ         +p            +       +p            +1     (26)
+                                                  σ       1 − ρ2        σ      1 − ρ2
+
+            where l ∈ [¯l(0, ρ), ∞[ and σ ≥ σ ∗ (l, ρ);
+           an SSVI with ρ < 0 is arbitrage-free iff it can be parametrized as
+                                  p                                  s                     
+                                                 k          ρ         k      ρ     2
+                          ∗
+              SV I(k) = σb (l, −ρ)    1 − ρ2 + ρ      +p            +       +p           +1   (27)
+                                                   σ       1 − ρ2        σ     1 − ρ2
+
+            where l ∈ [¯l(0, −ρ), ∞[ and σ ≥ σ ∗ (l, −ρ).
+
+
+
+
+                                                          29
+6.2.1    Proof of Proposition 6.3
+We give the proof in the case ρ ≥ 0. Using Lemmas 2.4 and 2.5 we get the following remark:
+Remark 6.4. Suppose ρ ≥ 0, then l2 ≤ −l1 . Fix l > l2 > 0. For the particular case of SSVI,
+h(−l) − h(l) = 0 so the difference between G1 (l) and G1 (−l) is given by −b2 4√ρl              l2 +1
+                                                                                                      , which is
+                                        ˜       ˜                  ˜                ˜
+negative. Since g2 (l) ≤ g2 (−l), then f (l) ≤ f (−l), so inf l>l2 f (l) ≤ inf l<l1 f (l). It follows then that
+σ ∗ = 2 inf b f˜(l) .
+           l>l2
+
+    Similarly for ρ < 0 and l < l1 , it holds f˜(l) < f˜(−l) and σ ∗ =          b
+                                                                                        .
+                                                                           2 inf l<l1 f˜(l)
+
+
+Study of j2     In this section, we work with x = √l2l+1 , whence
+                             p                          p      p
+                              1 − x2 N (l(x)) = 1 + ρx + 1 − ρ2 1 − x2 ,
+                                      N 0 (l(x)) = x + ρ,
+                                                              3
+                                      N 00 (l(x)) = (1 − x2 ) 2 .
+
+Remark 6.5. We redefine the useful functions when using the x variable and set:
+
+      Π(x) := N (l(x)), j2 (x) := g2 (l(x)), j(x) := g(l(x)), J1 (x) := G1 (l(x)), φ̃(x) := f˜(l(x)).
+
+The derivative with respect to l is indicated with 0 , so for example the function j20 (x) corresponds to
+g20 (l(x)) rather than dj
+                       dx (x).
+                         2
+
+
+
+    In the study of the function g2 in [6], we recall that the function has one positive zero l2 > l∗
+and it has at least one point of minimum (that here we prove to be unique and call m2 ) at the right
+of l2 .
+
+   Computation√
+                  of l2 Let us study the location of the unique positive zero of j2 (x) = (1 −
+   3    (x+ρ)2 1−x2
+                                   p
+ 2
+x ) − 2(1+ρx+ρ̄ 1−x2 ) , where ρ̄ = 1 − ρ2 . Note that j2 (1) = 0; so for x < 1, j2 (x) = 0 iff
+   2           √
+
+                                                      p
+                                2(1 − x2 )(1 + ρx + ρ̄ 1 − x2 ) = (x + ρ)2 .                                (28)
+
+Isolating the radical and squaring yields that the zeros of j2 solve the polynomial root equation
+                                                                         2
+                          4ρ̄2 (1 − x2 )3 = (x + ρ)2 − 2(1 + ρx)(1 − x2 ) .                     (29)
+
+The key observation is that −ρ is a root of eq. (29) and not of eq. (28). This leads to the following
+factorization of the polynomial (x + ρ)(4x5 + 8ρx4 + (4ρ2 − 3)x3 − 5ρx2 − ρ2 x + ρ3 ). Now −ρ is
+again a root of the rightmost factor which factors in turn in (x + ρ)(4x4 + 4ρx3 − 3x2 − 2ρx + ρ2 ). . .
+and the miracle continues! Indeed, −ρ is again a root of this later factor, leading to the fact that
+the zeros of j2 solve ρ = x(3 − 4x2 ).
+    In particular:
+                                                                  √
+     • ρ = 0, assuming we can exclude x = 0, gives x =             3
+                                                                  2 <1
+                                                                                                       2
+     • ρ = 1 gives the polynomial equation 4x3 − 3x + 1 = 0 which reads 4(x + 1) x − 12                     = 0,
+       whence x = 12 .
+
+                                                       30
+    Taking the derivative with respect to ρ gives 1 = 3x0 (ρ)(1 − 4x(ρ)2 ) which gives in turn that
+ρ → x(ρ) is decreasing when x > 21 . We can now either solve the 3rd degree polynomial root
+                                                              √ 
+problem, or take x as a parameter varying in the range 12 , 23 , and backup ρ by the formula
+ρ(x) = 3x − 4x3 .
+    Going the other route, we note that the polynomial Qρ (x) := 4x3 − 3x + ρ satisfies Qρ 21 =
+                                                                                                    
+                  √                                                                           √ 
+−1 + ρ < 0, Qρ 23 = ρ ≥ 0 and also Q0ρ (x) = 3(4x2 − 1) which is positive in the range 12 , 23 ,
+                                                                                              1
+so it has
+       1
+          a unique real root in this range. Its unique local maximum is located at x = − 2 1 where
+Qρ − 2 = 1 + ρ > 0, with, together with the observation                   = ρ − 1 < 0 and Qρ ( 2 ) < 0,
+                                                           that Q1ρ (−1)
+                                                        1              1
+                                                 
+gives that Qρ has 2 other real roots located in −1, − 2 and − 2 , 2 , so that x(ρ) is the largest of
+the roots of Qρ . The three solutions have explicit formula
+                                                      
+                                      arccos(−ρ) − 2πk
+                                cos                       , k = 0, 1, 2
+                                              3
+
+and the greatest is x(ρ) = cos arccos(−ρ)
+                                          
+                                    3       . It follows that l2 (ρ) is given by eq. (25).
+
+   Uniqueness of m2        Using the parametrization in x, we get that the zeros of j20 solve:
+                                         p                    p                       
+            (x + ρ)3 = 2(1 − x2 ) ρx + ρ̄ 1 − x2 + 1 3x ρx + ρ̄ 1 − x2 + 1 + x + ρ .
+                                                                             
+                                                                                                           (30)
+                                                           √               √          
+In particular for ρ = 0 this reads x2 = 2(1 − x2 ) 1 +        1 − x2 4 + 3 1 − x2 . Isolating the radical
+                                                                                  2
+and squaring yields the polynomial equation x2 + 2(1 − x2 )(3x2 − 7) = 4 × 49(1 − x2 )3 ; 0 is a
+root, whereas it is not a solution of eq. (30). Letting X =√1 − x2 , the        √
+                                                                                    polynomial factorizes into
+        2      2                                                 4+ 7       4− 7
+(1 − X) (36X − 16X + 1), yielding two roots in ]0, 1[, 18 and 18 , with only the latter one
+                                                  q√
+                                                        7    7
+solving eq. (30), giving in turn xm2 (ρ = 0) =       18 + 9 .
+    Let us turn now to ρ = 1. In this case      √
+                                                  eq. (30) simplifies to 1 = 2(1 − x)(3x + 1), or yet
+6x2 − 4x − 1 = 0, yielding xm2 (ρ = 1) = 2+6 10 .
+    Before investigating the general case, we can observe that if we set x = ρ in eq. (30) we get an
+equation in ρ which is 8ρ3 = 4(1 − ρ2 ) × 8ρ, or yet ρ2 = 4(1 − ρ2 ) which gives xm2 ρ = √25 = √25 .
+    Let us prove now that in the general case g2 has a unique critical        point.
+                                                    N 0 (l)2      N 0 (l)   N 0 (l)               0
+                                                                                         
+    Note that ∂ρ N (l) = l + l , so ∂ρ g2 (l) = −∂ρ 2N (l) = − N (l) 1 − 2N (l) (l + l∗ ) = − NN (l)
+                              ∗                                                                     (l)
+                                                                                                        h(l) < 0
+                                                                                             0
+because h(l) = (G1+ (l) + G1− (l))/2 > 0. From the formula g20 (l) = N 000 (l) − NN (l)
+                                                                                    (l)
+                                                                                         g2 (l), we find
+                 N 0 (l)    N 0 (l)
+                        
+    0                                            000
+∂ρ g2 (l) = − ∂ρ N (l) g2 − N (l) ∂ρ g2 since N does not depend on ρ. The second term is positive
+                                      0                   0
+                                                                        
+while the first has the factor ∂ρ NN (l)(l)
+                                            = N1(l) 1 − NN (l)
+                                                            (l)
+                                                                (l + l∗ ) = √
+                                                                              2
+                                                                                1 √
+                                                                                        2
+                                                                                           > 0. Then
+                                                                               N (l) l +1   1−ρ
+∂ρ g20 (l) > 0.
+     We have seen that for ρ = 0 and ρ = 1, the function g2 has a unique critical point m2 √       . Since
+                                                                                                        √
+∂ρ g20 (l) > 0, then for every ρ < 1, the critical points of g2 must be greater than m2 (ρ = 1) = 2 2+3
+                                                                                                          5
+                                                                                                            .
+A critical point in the l-variable is still a critical point in the x-variable and viceversa, because
+df           0      dl        f 0 (l(x))                      0   d
+dx (x) = f (l(x)) dx (x) =  (1−x ) 2 2
+                                       3 with the convention    = dl . Then, showing the convexity of g2 in
+the x-variable for x > xm2 (ρ = 1) automatically proves the uniqueness of its critical point in any
+variable (even if g2 is not convex in the l-variable).
+
+
+                                                      31
+                2                     2 00            d2 l
+                                                                               √
+    We have ddxj22 (x) =       dl               0                 00
+                                                                                   1 − x2 j20 (x))(1 − x2 )−3 and
+                                     
+                               dx (x) j2 (x) + j2 (x) dx2 (x) = (j2 (x) + 3x
+
+                                                   Π00 (x)2   Π0 (x)Π000 (x) 5Π0 (x)2 Π00 (x) Π0 (x)4
+                    p                                                                                
+    j200 (x) + 3x       1 − x2 j20 (x) = Πiv (x) −          −                +                −        +
+                                                    Π(x)          Π(x)            2Π(x)2        Π(x)3
+                                                                  Π0 (x)Π00 (x)   Π0 (x)3
+                                             p                                           
+                                        + 3x 1 − x2 Π000 (x) −                  +           .
+                                                                      Π(x)        2Π(x)2
+             √              000                      0    000                √       0      00
+Since 3x 1 − x2 = − ΠΠ00 (x)    (x)
+                                    , the terms − Π (x)Π
+                                                       Π(x)
+                                                              (x)
+                                                                   and −3x 1 − x2 Π (x)Π
+                                                                                       Π(x)
+                                                                                               (x)
+                                                                                                    simplify. Also,
+               √        000                  5                                          2+
+                                                                                            √
+                                                                                               10
+Π (x)+3x 1 − x2 Π (x) = 3(1−x ) 2 (2x −1), which is positive since x > 6 > √12 . The term
+  iv                                       2    2
+     00                                           0    2 00
+                                                                                      Π00 (x)              Π0 (x)2
+                                                                                                                  
+        (x)2
+− ΠΠ(x)      becomes positive with the sum of Π (x)     Π (x)
+                                                    2Π(x) 2     , indeed it becomes −  Π(x)      Π 00
+                                                                                                      (x)− 2Π(x)     =
+    00                                                  0    2   00                              0   4
+− ΠΠ(x)
+     (x)
+         j2 (x) > 0. Note that the remaining 4 Π (x) Π (x)
+                                                 2Π(x)2    is positive. Finally, − ΠΠ(x)
+                                                                                     (x)
+                                                                                        3 compensates
+         √         Π0
+                      (x)3
+with 3x 1 − x2 2Π(x)2 summing to
+
+           Π0 (x)3              Π0 (x)     Π0 (x)3
+                                      
+                3 p                                                    p        p
+                                                    x + 3ρx2 − 2ρ + 3x 1 − ρ2 1 − x2 .
+                                                                                        
+                  x 1 − x2 −             =
+           Π(x)22               Π(x)       2Π(x) 3
+
+                                   q
+                                      2
+Now 3ρx2 − 2ρ is positive iff x >     3 and this is true, so also the previous quantity is positive.
+                                          2
+Then, since the negative terms of ddxj22 are smaller in magnitude than its positive terms, j2 is convex
+in the x-variable.
+    As a consequence, j2 has a unique critical point for x > x2 and it lies between xm2 (ρ = 1) and
+xm2 (ρ = 0).
+    In order to study xm2 in the general case, let us isolate the radical of eq. (30) and square. We
+get the daunting polynomial root equation
+                                                                         2                               2
+ (ρ+x)3 −2(1−x2 ) 3ρ̄2 x(1−x2 )+(ρx+1)(3x(ρx+1)+(ρ+x))                         = 4ρ̄2 (1−x2 )3 6x(ρx+1)+ρ+x
+
+There again, we observe that −ρ is a root, whereas it does not solve the initial equation. This leads
+to an iterative factorization where eventually −ρ is a root of order 4. The remaining factor is
+
+                               ρ2 + 2ρ(12x5 − 16x3 + 5x) + (36x6 − 56x4 + 21x2 ).
+
+For x ∈ [xm2 (ρ = 1), xm2 (ρ = 0)], the only positive ρ solution is
+                                                              p
+                    ρ(x) = x(−12x4 + 16x2 − 5 + 2(1 − x2 ) 36x4 − 24x2 + 1).
+
+Since ∂ρ j20 < 0, also ∂ρ dj
+                          dx < 0 and the function ρ(x) is invertible in [xm2 (ρ = 1), xm2 (ρ = 0)] =
+                            2
+
+h √ q√             i
+ 2+ 10
+    6  , 187 + 79 and its inverse gives the value of xm2 for fixed ρ.
+
+
+
+
+                                                            32
+                                                                                                       q
+                                                                                                           1−x2
+                 From the above remark, J1 (x) = η 2 (x) − b2 j 2 (x) where η(x) = 21 1 +
+                                                                                                                  
+Study of J1                                                                                                1−ρ2       and
+j(x) = x+ρ
+        4 . The simplified formula for η can be recovered from:
+
+                               Π0 (x)      x              ρ    
+                   η(x) = 1 −           √         −p
+                               2Π(x)      1 − x2         1 − ρ2
+                                              p              √      
+                                   (x + ρ) x 1 − ρ2 − ρ 1 − x2
+                       =1− p                          p          √      
+                               2 1 − ρ2 1 + ρx + 1 − ρ2 1 − x2
+                          √                                    p
+                             1 − x2 ((1 − ρ2 ) + ρx + 1) + 1 − ρ2 ((1 − x2 ) + ρx + 1)
+                       =               p                      p       √      
+                                      2 1 − ρ2 1 + ρx + 1 − ρ2 1 − x2
+                                                    p          √
+and collecting at the numerator the quantities          1 − ρ2 1 − x2 and ρx + 1, one recovers the prod-
+     p           √                     p         √          
+uct     1 − ρ2 + 1 − x2 1 + ρx + 1 − ρ2 1 − x2 where the second factor simplifies with the
+denominator.
+    The function j is of course positive and increasing in x, while η is positive decreasing in x, since
+dη
+dx (x) = − √ x2 √ 2 < 0. Then J1 is a decreasing function and it attains its minimum at 1,
+            2 1−ρ 1−x
+          1
+                                         
+equal to 16  2 − b(1 + ρ) 2 + b(1 + ρ) .
+                                                  bj2 (x)
+    Looking at the condition σ ≥ supx>x2 − 2J       1 (x)
+                                                          , we then have that for every x > x2 , it holds
+  bj2 (x)
+− 2J 1 (x)
+           < − bj2J2 (m  2)
+                     1 (1)
+                                  8bj2 (m2 )
+                            = − (4−b2 (1+ρ)2 ) , from which one immediately finds a no arbitrage sub-domain
+
+for SSVI:
+Lemma 6.6 (No arbitrage sub-domain for SSVI). Let j2 be given as in Remark 6.5. An SSVI with
+0 < b(1 + |ρ|) < 2 and σ ≥ − 8bj 2 (m2 (|ρ|),|ρ|)
+                              (4−b2 (1+|ρ|)2 ) is arbitrage-free.
+
+
+Uniqueness of the critical point of f˜ for SSVI Remember that we consider the case ρ ≥ 0.
+Then, we look at the infimum of f˜(l) for l > l2 , letting b be eventually 0. For b < 1+ρ   2
+                                                                                                , it holds
+ ˜  +          ˜           ˜         ˜
+f (l2 ) = ∞ = f (∞) and f > 0, so f must have a critical point which is a point of minimum. We
+want to prove that in such case f˜ has a unique critical point in ]l2 , ∞[. When b = 1+ρ  2
+                                                                                              , it can be
+shown that the derivative of f˜ vanishes at ∞. We prove that even in this case this is the unique
+point of minimum of f˜.
+     To show that f˜ has a unique critical point, we can prove that ddxφ̃ has a unique zero.
+   We have seen that J1 is decreasing as a function of x. A critical point must satisfied ddxφ̃ = 0
+or J1 dj   dJ1                                                                    dj2
+      dx − dx j2 = 0. Looking at the sign of the previous functions, it must hold dx > 0 so the
+        2
+
+                                                                                 2         2       2
+critical point is on the right of xm2 . At the critical point, it holds j22 ddxφ̃2 = J1 ddxj22 − ddxJ21 j2 := n, so
+we should show that n is positive for every x > xm2 .
+                            2
+                                     dj 2     d2 j             2
+                                                          Π02 d j2
+    We have ∂b2 n = −j 2 ddxj22 + 2( dx   + j dx                     j2
+                                                 2 )j2 = − 16 dx2 + 8 < 0, so it is enough to show the
+                                                                                               √
+positivity of n|b= 2 for x > xm2 or, more generally, for x > xm2 (ρ = 1) = 2+6 10 . We show it
+                    1+ρ
+numerically in Appendix A. We plot in Figure 11 the function n|b= 2                    for x > xm2 (ρ = 1) for
+                                                                                 1+ρ
+different values of ρ.
+
+The b∗ approach for SSVI We have numerically shown that f˜ has at most one critical point
+in ]l2 , ∞] and this is a point of minimum.
+
+                                                        33
+                                  Figure 11: n0 |b= 1+ρ
+                                                     2  for different ρs.
+
+                                                                               
+   • The limit of f˜ at ∞ is finite iff b = 1+ρ
+                                             2
+                                                and it equals 12           γ
+                                                                          1+ρ − µ   = √1        for SSVI. So if
+                                                                                     2   1−ρ2
+           2
+      b = 1+ρ , the point of minimum of f˜ is ∞ because there its first derivative is null, so that due
+                                                                                    p
+      to uniqueness, the function is strictly decreasing, and in such a case, σ ∗ = 1 − ρ2 .
+
+   • Consider now b < 1+ρ  2
+                             , f˜ has a critical point ¯l ∈]l2 , ∞[ and it satisfies b2 = b∗ (¯l)2 or p(¯l) =
+                                                         0         0
+     q(¯l) = 0. In the latter case, we should have 2h (l̄) = 2g (l̄) but the right hand side is always
+                                                         h(l̄)    g(l̄)
+      positive while we have shown that the left hand side is negative. Then we can apply the
+      observation in section 2.3 and obtain that the set of the critical points of f˜ for ρ fixed is equal
+      to the interval starting from the maximum between all the zeros of p, coinciding with ¯l(0, ρ),
+                                                                                                    ∗
+      and ending at ¯l 1+ρ
+                         2                            2
+                                                         , choose l ∈ [¯l(0, ρ), ∞[. Then σ ∗ = 2bf˜(l;ρ)
+                                                                                                      (l)
+                               
+                            , ρ = ∞. Fix ρ ≥ 0, b < 1+ρ                                                   .
+
+
+Limits of ¯l Because of the uniqueness of the critical points of φ̃, when b goes to 0, the critical
+point satisfies ηj20 − 2η 0 j2 = 0. The numerator of ηj20 − 2η 0 j2 is
+ p
+   1 − ρ2 −4ρx6 + 2(6ρ2 − 5)x5 + 24ρx4 + (31 − 14ρ2 )x3 − 13ρx2 + 5(ρ2 − 4)x + ρ(ρ2 − 4) +
+                                                                                        
+ p
++ 1 − x2 2(2ρ2 −1)x5 +4ρ(4−3ρ2 )x4 +(21−22ρ2 )x3 +ρ(8ρ2 −15)x2 +5(3ρ2 −4)x+ρ(3ρ2 −4) .
+                                                                                          
+
+                                                                                          (31)
+                                                  q√
+If ρ = 0, possible solutions are x = 0 and x =        6 − 32 but since x must be greater than x2 , the
+latter is the searched p
+                       solution. If ρ = 1, the only possible solution is x = 1. In terms of l, these two
+                              √
+points correspond to 9 + 4 6 and ∞.
+    The above expression can also be written as
+                p                                    p
+             2u 1 − x2 2x(1 − x2 )u − x(x + ρ)2 − 1 − x2 (x + ρ + 3xu)v + (x + ρ)3 v
+                                                                             
+
+
+
+                                                    34
+or                   p         p         p         p
+         ϕ(x) := −2u2 1 − x2 x 1 − x2 3 1 − ρ2 + 1 − x2 + x + ρ + (x + ρ)3 v
+                                                                 
+                  √        p               √         p
+where up= 1 + ρx + 1 − x2 1 − ρ2 andp  v = 1 − x2 + 1 − ρ2 . Observe that (u, v)(x = 1) =
+                                             
+ 1 + ρ, 1 − ρ2 and (u, v)(x = ρ) = 2, 2 1 − ρ2 so that
+
+     • ϕ(1) = (1 + ρ)3
+                         p
+                             1 − ρ2 > 0;
+                                3
+     • ϕ(ρ) = −48ρ(1 − ρ2 ) 2 ≤ 0;
+
+     and ϕ has a zero in the range ]x2 (ρ) ∨ ρ, 1[.
+                                                                        p      √
+Lemma 6.7 (Computation of ¯l(0, ρ)). The only root of b∗ (l) = 0 is 9 + 4 6 if ρ = 0, ∞ if ρ = 1
+and, in the general case, it lies in ]l2 (ρ) ∨ −l∗ (ρ), ∞[. It can be computed as ¯l(0, ρ) = √ x̄(0,ρ) 2 ,
+                                                                                                1−x̄(0,ρ)
+where x̄(0, ρ) is the only zero of eq. (31), which lies in ]x2 (ρ) ∨ ρ, 1[.
+   Remember from Proposition 2.6 that the smile SV I(a, b, −ρ, −m, σ) is arbitrage-free iff the
+smile SV I(a, b, ρ, m, σ) is arbitrage-free. Furthermore, in thepcase of SSVI, we have the relation
+SV I(k; a, b, −ρ, −m, σ) = SV I(−k; a, b, ρ, m, σ) where a = bσ 1 − ρ2 and m = −σ √ ρ 2 . So an
+                                                                                             1−ρ
+SSVI with ρ < 0 is arbitrage-free iff the SSVI with parameter −ρ > 0 is arbitrage-free.
+
+6.2.2    The Gatheral-Jacquier sufficient conditions
+How does the boundary in Lemma 6.6 compare with the sufficient conditions found by Gatheral
+and Jacquier in Theorem 4.2 of [3]? The theorem asserts that an SSVI is free of Butterfly arbitrage
+                         2
+     √ + |ρ|) < 4 and θϕ (1 + |ρ|) ≤ 4. In terms of the SVI parameters, we have θϕ = 2b and
+if θϕ(1
+        1−ρ2
+ϕ=       σ     so that the two conditions become
+
+                                           b(1 + |ρ|) < 2,
+                                                b          p
+                                           σ ≥ (1 + |ρ|) 1 − |ρ|2 ,
+                                                2
+                                                                              q
+where the first is the strict Roger-Lee condition. Note that when σ ≥ 2b 1−|ρ|   1+|ρ| and the Roger-Lee
+condition is satisfied, then the second condition is automatically verified and the SSVI is free of
+arbitrage. Then, we can simply look at the second condition, keeping in mind that the Roger-Lee
+condition b(1 + |ρ|) ≤ 2 must hold, being a necessary condition.
+    We can compare with some plots the Gatheral-Jacquier second sufficient condition with the
+sufficient condition of Lemma 6.6 and the necessary and     sufficient   condition σ ≥ σ ∗ . In the first
+                                                                 2
+                                                                    
+couple of graphs in Figure 12, ρ is fixed while b ranges in 0, 1+|ρ| ; in the second couple in Figure 13,
+b is fixed and ρ ranges in 0, 1 ∧ 2b − 1 .
+                                         
+
+    We can see that the sufficient condition of Lemma 6.6 is weaker than the Gatheral-Jacquier’s
+one as soon as b(1 + |ρ|) remains low, but when this quantity goes to 2, the former goes to ∞ since
+J1 (1) goes to 0.
+
+
+
+
+                                                      35
+Figure 12: Comparison of Gatheral-Jacquier and Lemma 6.6 sufficient conditions as functions of
+b.
+
+
+
+
+Figure 13: Comparison of Gatheral-Jacquier and Lemma 6.6 sufficient conditions as functions of
+ρ.
+
+
+
+
+                                             36
+6.3      No arbitrage in the Long Term Heston SVI approximation
+In this section, we look at the Long Term Heston SVI introduced by Gatheral and Jacquier in [2].
+The authors prove that, under an appropriate hypothesis on the Heston parameters, the Heston
+implied volatility converges to an SVI implied volatility when the time-to-maturity goes to infinity.
+    In the Heston model, the underlying process St follows the stochastic differential equation of
+the form
+                                     √
+                             dSt =       vt St dWt ,                                 S0 > 0
+                                                       √
+                             dvt = κ̃(θ̃ − vt )dt + σ̃ vt dZt ,                      v0 > 0
+                    < W, Z >t = ρ̃dt.
+
+We use the ∼ hat to distinguish Heston parameters from SVI and SSVI parameters.
+  Recall the canonical SSVI equation eq. (22). The authors show that setting
+
+                                4κ̃θ̃T p                                                
+                                                       2 + σ̃ 2 (1 − ρ̃2 ) − (2κ̃ − ρ̃σ̃) ,
+                      θ :=                 (2κ̃ − ρ̃σ̃)
+                           σ̃ 2 (1 − ρ̃2 )
+                              σ̃
+                      ϕ :=        ,
+                           κ̃θ̃T
+the Heston model converges to an SVI with parameters
+                                                                                          p
+            θ                 θϕ                                     ρ                        1 − ρ2
+         a = (1 − ρ2 ),   b=     ,      ρ = ρ̃,                   m=− ,              σ=              .   (32)
+            2                  2                                     ϕ                         ϕ
+
+Observe that it holds γ = 1 − ρ2 and µ = − √ ρ
+                         p
+                                                                = l∗ . In this way it is evident that the Long
+                                                         1−ρ2
+Term Heston corresponds to a sub-SVI with three parameters and, in particular, it corresponds to
+an SSVI!
+   We already know from Lemma 6.2 that an SSVI always satisfies the Fukasawa conditions. The
+only requirement needed for a no arbitrage parametrization is σ > σ ∗ (b, ρ). Then, a Long Term
+Heston √is free of arbitrage iff it satisfies proposition 6.3. Since σ depends linearly to T , indeed
+      k̃θ̃   1−ρ2
+σ =        σ̃    T , it increases with T . On the other hand, b and ρ are constant with respect to T
+so σ ∗ (b, ρ) is also constant and σ will eventually become greater than the arbitrage bound for T
+going to ∞. Then, choosing T large enough will grant no arbitrage in the SSVI Long Term Heston
+parametrization.
+    This was intuitively true, since the SSVI Long Term Heston approximates the Heston smile,
+which is itself arbitrage-free; now the convergence in the proof of Gatheral and Jacquier is pointwise,
+so the no arbitrage property at a fixed T was still to be proven.
+    Let us try now to compute a lower bound for T which grants no arbitrage.
+    Suppose ρ ≥ 0, then from Remark 6.4, f reaches its supremum on the right of l2 , the second
+                                            bg2 (l)
+zero of g2 . The requirement σ ≥ − 2(h2 (l)−b    2 g 2 (l)) for every l > l2 can be rewritten substituting σ
+
+with its expressions in terms of the Heston parameters, as
+
+                                                             g2 (l)
+                                           T ≥ A sup − 2                                                 (33)
+                                                 l>l2 h  (l) − b2 g 2 (l)
+
+
+
+                                                        37
+with
+                         bσ̃         p                                                             3
+                                       (2κ̃ − ρσ̃)2 + σ̃ 2 (1 − ρ2 ) − (2κ̃ − ρσ̃) / κ̃θ̃(1 − ρ2 ) 2 ,
+                                                                                  
+              A :=     p        =
+                  2κ̃θ̃ 1 − ρ 2
+
+                       2     p                                            
+                                           2 + σ̃ 2 (1 − ρ2 ) − (2κ̃ − ρσ̃) .
+              b=                (2κ̃ − ρσ̃)
+                 σ̃(1 − ρ2 )
+
+Note than the function of which we look for the supremum does only depend on ρ and on b.
+    The numerator attains its minimum at the locus of the unique minimum of g2 on the right
+of l2 , that we denoted m2 (ρ). We have proven that for SSVI, h is a decreasing function so it is
+always greater than h(∞) = 21 , while g is increasing with limit g(∞) = (1+ρ)
+                                                                           4 . In this way, for
+             8bσ̃g2 (m2 (ρ))
+T ≥− √ 2                2    2
+                               , the inequality eq. (33) is satisfied.
+       κ̃θ̃   1−ρ (4−b (1+ρ) )
+    In the case ρ < 0, from Proposition 2.6 it follows that the previous discussion still holds substi-
+tuting ρ with −ρ.
+    We summarize our findings in the following:
+Proposition 6.8 (No arbitrage sub-domain for the Long Term Heston SVI). The Long Term
+Heston SVI approximation defined by eq. (32) is an SSVI. There is no Butterfly arbitrage in the
+Long Term Heston SVI approximation as soon as
+
+                                                        8bσ̃g2 (m2 (|ρ|), |ρ|)
+                                     T ≥−           p
+                                             κ̃θ̃       1 − ρ2 (4 − b2 (1 + |ρ|)2 )
+
+where m2 (ρ) is the only positive point of minimum of g2 (·, ρ) and
+                                   2      p                                            
+                                                        2 + σ̃ 2 (1 − ρ2 ) − (2κ̃ − ρσ̃) .
+                         b=                 (2κ̃ − ρσ̃)
+                              σ̃(1 − ρ2 )
+
+   Observe that this Proposition corresponds to Lemma 6.6 using the Long Term Heston notations.
+
+
+
+
+                                                             38
+A        Numerical proof of the uniqueness of the critical point of
+         f˜ in SSVI
+As discussed in section 6.2.1, to prove the uniqueness of the critical point of f˜ for SSVI, it√ is enough
+                                    2       2
+to show that the function n = J1 ddxj22 − ddxJ21 j2 is positive for every x > xm2 (ρ = 1) = 2+6 10 setting
+      2
+b = 1+ρ .
+    The check consists
+                  √
+                        into evaluating the target function at ρ spanning from 0 to 0.999 and x
+                2+ 10
+spanning from     6    to 0.999, choosing for each variable 1000 points between the extrema. The
+algorithm is the following:
+def N fun ( x , rho ) : return (1.+ rho ∗x ) / np . s q r t (1. − x∗∗2)+np . s q r t (1. − rho ∗ ∗ 2 )
+
+def N1 fun ( x , rho ) : return x+rho
+
+def N2 fun ( x ) : return (1. − x ∗ ∗ 2 ) ∗ ∗ ( 3 . / 2 . )
+
+def N3 fun ( x ) : return −3.∗x∗(1−x ∗ ∗ 2 ) ∗ ∗ 2
+
+def N4 fun ( x ) : return 3 . ∗ ( 5 . ∗ x ∗∗2 −1.)∗(1. − x ∗ ∗ 2 ) ∗ ∗ ( 5 . / 2 . )
+
+
+def h f u n ( x , rho ) : return ( 1 . + np . s q r t ( ( 1 . − x ∗ ∗ 2 ) / ( 1 . − rho ∗ ∗ 2 ) ) ) / 2 .
+
+def h d e r f u n ( x , rho ) : return −x / ( 2 . ∗ np . s q r t (1. − rho ∗ ∗ 2 ) ∗ np . s q r t (1. − x ∗ ∗ 2 ) )
+
+def g f u n ( x , rho ) : return N1 fun ( x , rho ) / 4 .
+
+def g d e r f u n ( ) : return 1 . / 4 .
+
+def h d e r d e r f u n ( x , rho ) : return − 1 . / ( 2 . ∗ np . s q r t (1. − rho ∗ ∗ 2 ) ∗ ( 1 . − x ∗ ∗ 2 ) ∗ ∗ ( 3 . / 2 . ) )
+
+def g 2 f u n ( x , rho ) : return N2 fun ( x)−N1 fun ( x , rho ) ∗ ∗ 2 / ( 2 . ∗ N fun ( x , rho ) )
+
+def g 2 d e r d e r f u n ( x , rho ) :
+
+      return ( x ∗ ( ( rho + x ) ∗ ∗ 3 + 2 ∗ ( x ∗∗2 − 1 ) ∗ ( rho + 3∗ x ∗ ( rho ∗x + np . s q r t ( 1 − rho ∗ ∗ 2 ) ∗ \ \
+      np . s q r t ( 1 − x ∗ ∗ 2 ) + 1 ) + x ) ∗ ( rho ∗x + np . s q r t ( 1 − rho ∗ ∗ 2 ) ∗ np . s q r t ( 1 − x ∗ ∗ 2 ) + 1 ) ) ∗ \ \
+      ( rho ∗x + np . s q r t ( 1 − rho ∗ ∗ 2 ) ∗ np . s q r t ( 1 − x ∗ ∗ 2 ) + 1 ) − 2∗ np . s q r t ( 1 − x ∗ ∗ 2 ) ∗ \ \
+      ( rho ∗np . s q r t ( 1 − x ∗ ∗ 2 ) − x∗np . s q r t ( 1 − rho ∗ ∗ 2 ) ) ∗ ( ( rho + x ) ∗ ∗ 3 + 2 ∗ ( x ∗∗2 − 1 ) ∗ \ \
+      ( rho + 3∗ x ∗ ( rho ∗x + np . s q r t ( 1 − rho ∗ ∗ 2 ) ∗ np . s q r t ( 1 − x ∗ ∗ 2 ) + 1 ) + x ) ∗ \ \
+      ( rho ∗x + np . s q r t ( 1 − rho ∗ ∗ 2 ) ∗ np . s q r t ( 1 − x ∗ ∗ 2 ) + 1 ) ) + np . s q r t ( 1 − x ∗ ∗ 2 ) ∗ \ \
+      ( rho ∗x + np . s q r t ( 1 − rho ∗ ∗ 2 ) ∗ np . s q r t ( 1 − x ∗ ∗ 2 ) + 1 ) ∗ ( np . s q r t ( 1 − x ∗ ∗ 2 ) ∗ ( 4 ∗ x ∗\\
+      ( rho + 3∗ x ∗ ( rho ∗x + np . s q r t ( 1 − rho ∗ ∗ 2 ) ∗ np . s q r t ( 1 − x ∗ ∗ 2 ) + 1 ) + x ) ∗ \ \
+      ( rho ∗x + np . s q r t ( 1 − rho ∗ ∗ 2 ) ∗ np . s q r t ( 1 − x ∗ ∗ 2 ) + 1 ) + 3 ∗ ( rho + x ) ∗ ∗ 2 ) + 2 ∗ ( x ∗∗2 − 1 ) ∗ \ \
+      ( rho ∗np . s q r t ( 1 − x ∗ ∗ 2 ) − x∗np . s q r t ( 1 − rho ∗ ∗ 2 ) ) ∗ ( rho + 3∗ x ∗ ( rho ∗x + np . s q r t ( 1 − rho ∗ ∗ 2 ) ∗ \ \
+      np . s q r t ( 1 − x ∗ ∗ 2 ) + 1 ) + x ) + 2 ∗ ( x ∗∗2 − 1 ) ∗ ( 3 ∗ x ∗ ( rho ∗np . s q r t ( 1 − x ∗ ∗ 2 ) −\\
+      x∗np . s q r t ( 1 − rho ∗ ∗ 2 ) ) + np . s q r t ( 1 − x ∗ ∗ 2 ) ∗ ( 3 ∗ rho ∗x + 3∗ np . s q r t ( 1 − rho ∗ ∗ 2 ) ∗ \ \
+      np . s q r t ( 1 − x ∗ ∗ 2 ) + 4 ) ) ∗ ( rho ∗x + np . s q r t ( 1 − rho ∗ ∗ 2 ) ∗ np . s q r t ( 1 − x ∗ ∗ 2 ) + 1 ) ) ) / \ \
+      ( 2 ∗ np . s q r t ( 1 − x ∗ ∗ 2 ) ∗ ∗ 3 ∗ ( rho ∗x + np . s q r t ( 1 − rho ∗ ∗ 2 ) ∗ np . s q r t ( 1 − x ∗ ∗ 2 ) + 1 ) ∗ ∗ 3 )
+
+
+def n f u n ( x , b , rho ) :
+
+      h = h f u n ( x , rho )
+      g = g f u n ( x , rho )
+
+
+
+                                                                     39
+      return −2∗( h d e r f u n ( x , rho )∗∗2+h∗ h d e r d e r f u n ( x , rho )−b ∗∗2∗ g d e r f u n ( ) ∗ ∗ 2 ) ∗ g 2 f u n ( x , rho ) +\\
+      ( h∗∗2−b ∗∗2∗ g ∗ ∗ 2 ) ∗ g 2 d e r d e r f u n ( x , rho )
+
+def n f u n 2 ( x , rho ) :
+
+      return n f u n ( x , 2 . / ( 1 . + rho ) , rho )
+
+
+def c h e c k u n i c i t y ( ) :
+
+      r h o c h e c k = np . l i n s p a c e ( 0 . , 0 . 9 9 9 , 1 0 0 0 )
+      x c h e c k = np . l i n s p a c e ( ( 2 . + np . s q r t ( 1 0 . ) ) / 6 . , 0 . 9 9 9 , 1 0 0 0 )
+
+      r h o v , x v = np . m e s h g r i d ( r h o c h e c k , x c h e c k )
+
+      x =      np . sum ( [ n f u n 2 ( x v , r h o v ) < 0 . ] )
+
+      i f x == 0 . : return ’ There i s u n i c i t y ’
+      e l s e : return ’No u n i c i t y ’
+
+    The result is that at the chosen points, the function is positive, indeed the command
+check unicity ()
+
+    returns:
+
+ ’There is unicity’
+
+
+
+
+                                                                          40
+References
+[1] M. Fukasawa. The normalizing transformation of the implied volatility smile. Mathematical
+    Finance, 22(4):753–762, 2012.
+[2] J. Gatheral and A. Jacquier. Convergence of Heston to SVI. Quantitative Finance, 11(8):1129–
+    1132, 2011.
+[3] J. Gatheral and A. Jacquier. Arbitrage-free SVI volatility surfaces. Quantitative Finance,
+    14(1):59–71, 2014.
+[4] G. Guo, A. Jacquier, C. Martini, and L. Neufcourt. Generalized arbitrage-free SVI volatility
+    surfaces. SIAM Journal on Financial Mathematics, 7(1):619–641, 2016.
+[5] S. Hendriks and C. Martini. The Extended SSVI Volatility Surface. Journal of Computational
+    Finance, 22(5), 2019.
+[6] Claude Martini and Arianna Mingone. No arbitrage svi. arXiv preprint arXiv:2005.03340, 2020.
+[7] M. R. Tehranchi. A Black-Scholes inequality: applications and generalisations. Finance and
+    Stochastics, 24(1):1–38, 2020.
+
+
+
+
+                                              41
+

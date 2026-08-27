@@ -1,0 +1,531 @@
+                                                    A five-variable counterexample to the Hessian
+                                                   conjecture, and the low-dimensional status of the
+                                                           Jacobian and Hessian conjectures∗
+                                                                                               Guowu Meng
+                                                            Department of Mathematics, Hong Kong University of Science and Technology
+                                                                                        mameng@ust.hk
+                                                                                                   Liang Yang
+                                                             Department of Mathematics, Sichuan University, Chengdu 610064, PR China
+                                                                                      malyang@scu.edu.cn
+arXiv:2607.22198v2 [math.AC] 27 Jul 2026
+
+
+
+
+                                                                               Version 4 (arXiv v2) — July 26, 2026
+
+
+
+                                                                                                    Abstract
+                                                         We exhibit an explicit integer polynomial in five variables, of total degree 14 and with
+                                                     constant Hessian determinant 128, whose gradient is not injective. Consequently its formal
+                                                     Legendre transform is not a polynomial, and the Hessian conjecture HC5 is false. The coun-
+                                                     terexample is obtained from the six-variable doubling of Alpöge’s 2026 Jacobian counterex-
+                                                     ample by a one-variable Schur descent—a partial Legendre transform in a single variable.
+                                                     Combined with de Bondt’s theorem that HCn holds for n ≤ 3, with the elementary doubling
+                                                     and stabilization bridges relating the Jacobian conjectures JCn to the Hessian conjectures
+                                                     HCn , and with Alpöge’s refutation of JC3 , this decides the Hessian conjecture in every di-
+                                                     mension except n = 4: HCn is true for n ≤ 3, false for n ≥ 5, and open only at n = 4. Exactly
+                                                     two statements of the two families remain unsettled, JC2 and HC4 , linked by HC4 ⇒ JC2 .
+                                                     Along the way we record, as a warm-up, an explicit six-variable counterexample to HC6 with
+                                                     constant Hessian determinant −4 and non-injective gradient. This note adds the five-variable
+                                                     counterexample to, and updates the status recorded in, the first author’s earlier educational
+                                                     preprint [7].
+
+                                           2020 Mathematics Subject Classification. 14R15 (primary); 13N15, 26B10 (secondary).
+                                           Keywords. Jacobian conjecture, Hessian conjecture, Keller map, formal Legendre transform,
+                                           Schur complement.
+
+
+                                           1        Introduction
+                                           Throughout, k is a field of characteristic zero (for instance Q, R, or C). For a polynomial map
+                                           F = (F1 , . . . , Fn ) : kn → kn we write Jac F = det ∂Fi /∂xj .
+                                           Conjecture 1.1 (JCn , Keller [5]). If F : kn → kn is a polynomial map with Jac F ∈ k× , then
+                                           F is invertible, with polynomial inverse.
+                                               ∗
+                                                   The authors are listed in alphabetical order.
+
+
+                                                                                                       1
+A polynomial map F with Jac F ∈ k× (that is, with Jac F a nonzero constant) is called a Keller
+map; thus the conjecture asserts that every Keller map has a polynomial inverse.
+   The conjecture, open since 1939 in every dimension n ≥ 2 (see [2] for background and
+reductions and [8] for a survey), was refuted in July 2026: Alpöge publicly announced [1] an
+explicit polynomial map F : C3 → C3 with Jac F = −2 possessing a fiber of three points (the
+announcement credits the AI system Fable with the construction). With u = 1 + x1 x2 , the map
+is                                                                             
+                                               u3 x3 + x22 u (4 + 3x1 x2 )
+                     F (x1 , x2 , x3 ) = x2 + 3x1 u2 x3 + 3x1 x22 (4 + 3x1 x2 ) ,        (1)
+                                                                               
+                                                           2        3
+                                                 2x1 − 3x1 x2 − x1 x3
+of component degrees 7, 6, 4. One checks that Jac F ≡ −2 (a single 3 × 3 determinant; verified
+independently in exact arithmetic in Appendix B), while
+                                                                        
+                  F 0, 0, − 41 = F 1, − 32 , 13
+                                             2    = F   −1, 3 13
+                                                             ,
+                                                            2 2   =  − 1
+                                                                       4 , 0, 0  .         (2)
+
+Since three distinct rational points share the same image, JC3 fails over every field of charac-
+teristic zero. We rely on the announcement [1] only for the map F and its origin; the identities
+(1)–(2), and every consequence drawn from them below, are explicit. Although Alpöge’s map
+was found by AI and the Schur descent below with AI assistance, the resulting refutations of
+JC3 and HC5 can be checked entirely by hand—and, independently, in exact rational arithmetic
+(Appendix B)—so the mathematical content of this paper is independent of [1].
+    This paper has two purposes. First and foremost, we construct an explicit counterexample
+to the Hessian conjecture HC5 (Section 6): a five-variable integer polynomial of total degree 14
+with constant nonzero Hessian determinant and non-injective gradient, obtained from Alpöge’s
+map (1) by doubling followed by a one-variable Schur descent. Second, we record the resulting
+status of the two families JCn and the closely related Hessian conjectures HCn introduced in [6].
+Together with de Bondt’s theorem that HCn holds for n ≤ 3 [3] and two standard bridges, the
+new counterexample decides HCn in every dimension but n = 4, collapsing the two dimension-
+indexed families of open problems to exactly two low-dimensional statements, JC2 and HC4
+(Theorem 4.1). An earlier, single-author version recording only the status portion, intended for
+educational purposes, is available as [7]; the present paper adds the HC5 counterexample and
+updates the status to include the truth of HC2 and HC3 , established by de Bondt [3] and not
+recorded there.
+
+
+2    The Hessian conjecture and the two bridges
+Let φ ∈ k[x1 , . . . , xn ] satisfy det Hess φ ∈ k× , where Hess φ = ∂ 2 φ/∂xi ∂xj . Then Hess φ(0)
+                                                                                  
+
+is invertible, so the gradient map ∇φ admits a formal inverse at ∇φ(0) (after harmless affine
+normalization), and one defines the formal Legendre transform φL of φ by the classical formula
+φL (p) = ⟨p, x(p)⟩ − φ(x(p)), where x(p) is the formal inverse of p = ∇φ(x); equivalently,
+∇φL = (∇φ)−1 as formal maps. This is the classical change of variables x ↔ p = ∇φ(x)
+familiar from convex analysis and mechanics, carried out formally near the base point. In
+general φL is a formal power series; see [6], where a tree formula for its coefficients is given.
+
+Conjecture 2.1 (HCn , [6]). If φ ∈ k[x1 , . . . , xn ] has det Hess φ ∈ k× , then φL is a polynomial.
+
+
+
+                                                 2
+   The two conjectures are linked by two bridges. The first is immediate; the second is the
+doubling construction of [6] (see also the symmetric reduction of de Bondt–van den Essen [4],
+and [9] for related formulations).
+
+Proposition 2.2. JCn =⇒ HCn .
+
+Proof (following [6]). If det Hess φ ∈ k× then ∇φ is a polynomial map with constant nonzero
+Jacobian determinant, so by JCn it has a polynomial inverse G. By uniqueness of the formal
+inverse at the base point, G coincides with the formal inverse x(p) of p = ∇φ(x) appearing in
+the definition of φL . Substituting into the defining formula φL (p) = ⟨p, x(p)⟩ − φ(x(p)) gives
+
+                                  φL (p) = ⟨p, G(p)⟩ − φ(G(p)),
+
+a polynomial in p. Hence φL is a polynomial.
+
+Proposition 2.3. HC2n =⇒ JCn .
+
+Proof (following [6]). Given F : kn → kn with Jac F ∈ k× , set φ(x, y) = ⟨y, F (x)⟩, a polynomial
+in k[x1 , . . . , xn , y1 , . . . , yn ]. Since φ is linear in y, the Hessian has the block form
+                                                                                   !
+                                                                         (DF (x))T
+                                                    P
+                                                       k yk Hess Fk (x)
+                                        Hess φ =                                     ,           (3)
+                                                          DF (x)             0
+                                                                     2
+and swapping the two blocks of n rows (a permutation of sign (−1)n = (−1)n ) gives det Hess φ =
+(−1)n (Jac F )2 ∈ k× . If HC2n holds, φL is a polynomial, so ∇φ has a polynomial inverse. But
+∇φ is triangular in (x, y),
+                                ∇φ(x, y) = (DF (x))T y, F (x) :
+                                                              
+
+the q-block F (x) depends on x alone, while for each fixed x the p-block y 7→ (DF (x))T y is an
+invertible linear map, since Jac F ∈ k× . Its inverse is therefore triangular too, and recovers x
+from q = F (x) by a polynomial map—a polynomial inverse of F . Hence JCn holds.
+
+   The counterexamples below all refute HCn the same way, through the following elementary
+observation.
+
+Lemma 2.4. Let φ satisfy det Hess φ ∈ k× . If the gradient map ∇φ is not injective, then φL
+is not a polynomial.
+
+Proof. Were φL a polynomial, ∇φL would be a polynomial map, and the formal identity ∇φL ◦
+∇φ = id, valid near the base point, would be an identity of polynomials, hence hold on all of
+kn ; thus ∇φL would be a global inverse of ∇φ, impossible for a non-injective map.
+
+
+3    Two stabilization lemmas
+Falsehood propagates upward in dimension, on both sides.
+
+Lemma 3.1. If JCn is false, then JCn+1 is false.
+
+Proof. If F : kn → kn is a Keller map, so is Fe(x, t) = (F (x), t) in dimension n + 1, with
+Jac Fe = Jac F ∈ k× . As Fe acts on x and t separately, it is invertible as a polynomial map if
+and only if F is. Hence a counterexample to JCn lifts to one for JCn+1 .
+
+                                                 3
+Lemma 3.2. If HCn is false, then HCn+1 is false.
+
+Proof. If φ ∈ k[x1 , . . . , xn ] has det Hess φ ∈ k× , so does φ(x,e t) = φ(x) + 21 t2 in dimension n + 1,
+           e = Hess φ ⊕ (1). As φ
+since Hess φ                               e is a sum in the separate variables x and t, its Legendre
+transform separates likewise, φ     e L (p, s) = φL (p) + 12 s2 , so φ
+                                                                     e L is a polynomial if and only if φL is.
+Hence a counterexample to HCn lifts to one for HCn+1 .
+
+
+4     The status theorem
+Theorem 4.1. Over any field of characteristic zero:
+
+    (i) JC1 and HC1 are true; moreover HC2 and HC3 are true.
+
+ (ii) JCn is false for every n ≥ 3.
+
+ (iii) HCn is false for every n ≥ 5.
+
+ (iv) Within the two indexed families JCn and HCn , n ≥ 1, over fields of characteristic zero,
+      these results leave exactly two statements undecided, JC2 and HC4 , linked by
+
+                                                 HC4 =⇒ JC2 .
+
+Proof. (i) The one-variable cases are classical: F ′ ∈ k× forces F linear, and φ′′ ∈ k× forces φ
+quadratic, hence φL quadratic. For HC2 and HC3 , de Bondt [3] proved that a polynomial in
+at most three variables with constant nonzero Hessian determinant has a polynomial gradient
+inverse; the argument in the proof of Proposition 2.2 then makes φL a polynomial.
+    (ii) JC3 is false by (1)–(2); Lemma 3.1 propagates falsehood to all n ≥ 3.
+    (iii) HC5 is false by the explicit five-variable counterexample of Section 6 (Theorem 6.1);
+Lemma 3.2 propagates falsehood to all n ≥ 5. Independently, the falsity of JC3 gives the falsity
+of HC6 through Proposition 2.3 (contrapositive), recovering the range n ≥ 6.
+    (iv) Parts (i)–(iii) decide JCn for every n ̸= 2 and HCn for every n ̸= 4, leaving exactly JC2
+and HC4 undecided; these are linked by HC4 ⇒ JC2 (Proposition 2.3 with n = 2).
+
+The resulting landscape:
+
+                                 n       1       2         3       4      ≥5
+                               JCn     true    open       false   false   false
+                               HCn     true    true       true    open    false
+               The only bridge between the two surviving open statements is HC4 ⇒ JC2 .
+
+Both survivors are open: JC2 is the classical two-dimensional Jacobian conjecture, unproven
+since 1939 (see [8]), and no result known to us settles HC4 . They are linked only by HC4 ⇒
+JC2 (Proposition 2.3 with n = 2), so HC4 is the stronger: proving it settles JC2 , while a
+counterexample to JC2 falsifies it. That both sit in the lowest dimensions may point to a
+genuinely low-dimensional phenomenon.
+
+
+
+
+                                                      4
+Remark 4.2 (Why the descent stops at five variables). The Schur descent that produces HC5
+from HC6 (Section 6) cannot be iterated to reach HC4 : the mechanism self-terminates. Each
+descent needs a pivot variable in which the potential is affine-linear with a degenerate reduced
+Hessian, a degeneracy the doubled potential owes to its linearity in the dual variables. A single
+descent already spends that linearity—the descended potential is quadratic in those variables—
+so no further pivot of the required type remains. Reaching HC4 therefore appears to require
+genuinely new ideas.
+
+
+5    An explicit counterexample to HC6
+Applying the doubling of Proposition 2.3 to the map (1) yields a completely explicit counterex-
+ample to HC6 —the case n = 6 of Theorem 4.1(iii), and hence every n ≥ 6 by Lemma 3.2. Write
+u = 1 + x1 x2 and set
+               φ(x1 , x2 , x3 , y1 , y2 , y3 ) = y1 u3 x3 + x22 u(4 + 3x1 x2 )
+                                                                              
+
+                                                 + y2 x2 + 3x1 u2 x3 + 3x1 x22 (4 + 3x1 x2 )
+                                                                                             
+                                                                                               (4)
+                                                 + y3 2x1 − 3x21 x2 − x31 x3 ,
+                                                                              
+
+a polynomial of degree 8.
+Proposition 5.1. The polynomial (4) satisfies det Hess φ ≡ −4, while ∇φ is not injective;
+consequently φL is not a polynomial and HC6 is false.
+Proof. Here φ = ⟨y, F (x)⟩ is the doubling of Proposition 2.3 applied to F , and that proof
+                                                                                  3        2          2
+supplies both claims. First, by the block
+                                T
+                                              form (3), det Hess φ = (−1) (Jac F ) = −(−2) = −4.
+Second, ∇φ(x, y) = (DF (x)) y, F (x) , so a collision of F lifts at once to one of ∇φ: for the
+three colliding points P = (0, 0, − 14 ), (1, − 32 , 13        3 13
+                                                     2 ), (−1, 2 , 2 ) of (2), the distinct points (P, 0) ∈ k
+                                                                                                             6
+
+share the gradient
+                                                                              
+                           ∇φ(P, 0) = 0, F (P ) = 0, 0, 0, − 14 , 0, 0 .
+
+Hence ∇φ is not injective, and φL is not a polynomial by Lemma 2.4. (Only non-injectivity of
+∇φ is used; we make no claim about its generic fiber cardinality.)
+
+
+6    An explicit counterexample to HC5
+The six-variable counterexample φ of (4) has one variable more than we would like. Every
+component of the map (1) is affine-linear in x3 , so we may eliminate x3 and obtain a genuine five-
+variable counterexample. The elimination—a one-variable Schur descent, found by the second
+author—is carried out, and shown to work in general, in Appendix A. Here we simply write down
+the resulting polynomial and check by hand the two properties that make it a counterexample.
+    Collecting φ = x3 A + B according to its dependence on x3 , and writing u = 1 + x1 x2 as
+before, gives the two polynomials
+
+              A = y1 u3 + 3x1 y2 u2 − x31 y3 ,
+              B = y1 x22 u(4 + 3x1 x2 ) + y2 x2 + 3x1 x22 (4 + 3x1 x2 ) + y3 2x1 − 3x21 x2
+                                                                                          
+
+in the five variables x1 , x2 , y1 , y2 , y3 . The polynomial of the next theorem is built from A and B
+alone; Appendix A explains how it arises and why this combination transports the collision.
+
+                                                      5
+Theorem 6.1. The five-variable polynomial
+
+                            Ψ = A2 + 13A + 2B ∈ Z[x1 , x2 , y1 , y2 , y3 ]
+
+has total degree 14 and satisfies
+                                          det Hess Ψ ≡ 128.
+Moreover the two distinct rational points
+
+                                       P± = ±1, ∓ 23 , 0, 0, 0
+                                                                 
+
+satisfy
+                                                          0, 0, − 12 , 0, 0 .
+                                                                           
+                             ∇Ψ(P+ ) = ∇Ψ(P− ) =
+Consequently ΨL is not a polynomial, and HC5 is false.
+Proof. Constant Hessian determinant. The doubled potential φ = x3 A + B of (4) is affine-
+linear
+ T in x3 , so its Hessian in (x3 , w), with w = (x1 , x2 , y1 , y2 , y3 ), is the bordered matrix
+  0g
+  g M
+       , where g = ∇w A and M = M (s, w) with M (s, w) := Hessw (B + sA), at s = x3 . Since
+B + sA is linear in (y1 , y2 , y3 ), the three y-rows of M are supported in the two x-columns,
+so det M (s, w) ≡ 0; and expanding the border gives −g T adj(M (s, w)) g = det Hess φ = −4,
+independently of s (Proposition 5.1); here adj denotes the adjugate (classical adjoint) matrix,
+characterized by adj(M ) M = (det M ) I. By the rank-one determinant identity det(M +λgg T ) =
+det M +λ g T adj(M )g (immediate      on expanding  in the columns, since gg T has rank one), applied
+               1 2   13              13
+to Hessw B + 2 A + 2 A = M 2 + A, w + gg T ,
+                                             
+
+                                                    
+                      det Hessw B + 12 A2 + 13   2 A   = 0 + g T adj(M )g = 4.
+
+As Ψ = 2 B + 21 A2 + 13
+                                
+                            2 A   and scaling a potential in five variables by 2 multiplies its Hessian
+determinant by 25 , we get det Hess Ψ = 25 · 4 = 128. The total degree is 14, and expanding A2 +
+13A + 2B yields 42 monomials (counted after expansion; the count is confirmed in Appendix B).
+    Gradient collision. Write F = F0 + x3 F1 , so A = ⟨y, F1 ⟩ and B = ⟨y, F0 ⟩. Differentiating
+gives, everywhere, ∇Ψ = (2A + 13)∇A + 2∇B. Since A and B are homogeneous of degree
+one in (y1 , y2 , y3 ), so are their x-derivatives; hence A, B, and their x-derivatives all vanish on
+{y = 0}. The x-block of ∇Ψ therefore vanishes on {y = 0}, while—using A = 0 and ∇y A = F1 ,
+∇y B = F0 —its y-block is 13F1 + 2F0 = 2 F0 + 13                       13
+                                                       2 F1 = 2F ( · , 2 ). Thus
+
+                           ∇Ψ(P± ) = 0, 0, 2F (±1, ∓ 23 , 13              1
+                                                              
+                                                           2 ) = (0, 0, − 2 , 0, 0),
+
+the two values agreeing because F (1, − 32 , 13           3 13         1
+                                             2 ) = F (−1, 2 , 2 ) = (− 4 , 0, 0) by (2), while P+ ̸= P− .
+    Conclusion. The distinct points P+ ̸= P− have equal gradient, so ∇Ψ is not injective;
+since det Hess Ψ ∈ k× , Lemma 2.4 shows ΨL is not a polynomial and HC5 is false. (As in
+Proposition 5.1, only non-injectivity of ∇Ψ is used; we make no claim about the generic fiber
+cardinality.)
+
+    Because the theorem refers to Ψ alone, the refutation of HC5 is self-contained and elementary
+to verify by hand: the proof reduces both properties of Ψ to two facts about Alpöge’s map F —
+that Jac F is a nonzero constant, and that F maps (±1, ∓ 32 , 13
+                                                              2 ) to a common image. The first is
+a single 3 × 3 determinant (a conceptual explanation of which now also appears in the discussion
+documented in [1]), the second an immediate substitution; no computer algebra is needed.
+
+                                                   6
+    Alpöge’s map has a three-point fiber (2), yet Ψ exhibits only a two-point gradient collision.
+This is not an oversight: the descent transfers exactly those collisions whose source points
+share the pivot coordinate x3 (Lemma A.2). Only the pair (±1, ∓ 32 , 13   2 ) lies over a common
+x3 = t0 = 13   2 and  so is carried down   to P ± ; the third preimage  (0, 0, − 41 ) sits alone over
+x3 = − 14 , with no partner to collide with after the pivot is eliminated, and is simply not seen
+by the five-variable potential. Two colliding points already refute HC5 . The descent is treated
+in general in Appendix A, where it turns any collision of a Keller map over a common last
+coordinate into a constant-Hessian counterexample, and where the coefficients 13 and 2 are seen
+to be one choice among a two-parameter family.
+
+
+Acknowledgments
+The first author thanks Jianshu Li, Qiang Du, and Yu Zhao for informing him of Alpöge’s
+counterexample and for helpful discussions. The Schur descent of Section 6 was found by the
+second author; large language model (LLM) assistants (OpenAI’s ChatGPT Pro and Anthropic’s
+Claude) served as auxiliary tools—ChatGPT Pro in the search for the descent, both in scripting
+the exact-arithmetic verifications. All statements, computations, and proofs are the sole respon-
+sibility of the authors, who have verified them by hand. The five-variable counterexample is, to
+our knowledge, new.
+
+
+A      The Schur-descent bridge in general odd dimensions
+The five-variable counterexample of Section 6 was produced from the six-variable doubling by a
+mechanism that is not special to the displayed coefficients. We record here the two elementary
+lemmas underlying the construction and the general statement they yield.
+   Throughout, k is a field of characteristic zero. Suppose a potential in the scalar variable t
+and the block w = (w1 , . . . , wm ) is affine-linear in t,
+                                     Φ(t, w) = t A(w) + B(w).                                    (5)
+Write g = ∇w A and, for an auxiliary indeterminate s,
+                                M (s, w) := Hessw B + s Hessw A,
+a matrix affine-linear in s whose entries are polynomials in s and w; we may therefore substitute
+for s any polynomial expression—below the variable t, and later a function of w. With s = t
+the lower-right block is Hessw Φ = Hessw (B + tA) = M (t, w), so the full Hessian is the bordered
+matrix
+                                                       gT
+                                                            
+                                                  0
+                                   Hesst,w Φ =                 .                              (6)
+                                                  g M (t, w)
+Lemma A.1 (Schur descent). Assume that in the situation (5)–(6),
+                          det Hesst,w Φ = c ∈ k× ,      det M (s, w) ≡ 0,
+the latter identically in s and w. For any λ ∈ k× and µ ∈ k define the m-variable polynomial
+                               ψλ,µ (w) = B(w) + λ2 A(w)2 + µA(w).                               (7)
+Then
+                                       det Hess ψλ,µ = −λc.                                      (8)
+
+                                                 7
+Proof. The polynomial ψλ,µ is a one-variable partial Legendre transform of Φ in t. Repair Φ by
+a quadratic,
+                                b w) = Φ(t, w) − 1 (t − µ)2 ,
+                               Φ(t,                 2λ
+           b = A(w) − 1 (t − µ) vanishes exactly at t∗ = µ + λA(w), where Φ
+so that ∂t Φ                                                               b attains the critical
+                      λ
+value ψλ,µ (w). The pivot ∂t2 Φ
+                              b = −1/λ is invertible, so eliminating t leaves on the remaining
+variables the Schur complement of that pivot in Hesst,w Φ—namely
+                                                         b         the Hessian M (µ + λA, w) +
+    T
+λgg of the critical value ψλ,µ —and the block-determinant identity reads
+                                            b = − 1 det Hess ψλ,µ .
+                                det Hesst,w Φ     λ
+
+It remains to compute the left-hand side. Because Φ is affine in t, the repair alters only the
+corner of the bordered Hessian (6), replacing 0 by −1/λ. By the Cauchy bordered-determinant
+expansion
+                                  a gT
+                                       
+                            det           = a det M − g T adj(M ) g                        (9)
+                                  g M
+(valid for any scalar a; expand the border by multilinearity along its first row and column),
+a bordered determinant with det M ≡ 0 equals −g T adj(M ) g, independently of the corner a.
+Hence the repair leaves the determinant unchanged, det Hesst,w Φ
+                                                               b = det Hesst,w Φ = c, and the
+displayed Schur identity gives det Hess ψλ,µ = −λc.
+
+Lemma A.2 (Transfer of a collision). Suppose two distinct points (t0 , w+ ) ̸= (t0 , w− ) sharing
+the same t-coordinate satisfy
+                     ∇Φ(t0 , w+ ) = ∇Φ(t0 , w− ),       A(w+ ) = A(w− ) = A0 .
+(The second condition is automatic: ∂t Φ = A(w) is a component of ∇Φ, so equal full gradients
+at (t0 , w± ) already force A(w+ ) = A(w− ); we record it separately only to name the common
+value A0 .) Choosing µ = t0 − λA0 , one has
+                                    ∇ψλ,µ (w+ ) = ∇ψλ,µ (w− ).
+Proof. At either point, using µ + λA = µ + λA0 = t0 ,
+               ∇w ψλ,µ = ∇w B + (µ + λA) ∇w A = ∇w B + t0 ∇w A = ∇w Φ(t0 , w),
+and the right-hand sides agree at w+ and w− by hypothesis.
+
+   Together the two lemmas turn any suitable doubled Keller map into a constant-Hessian
+polynomial in one fewer variable with a surviving gradient collision.
+Proposition A.3 (Odd-dimensional Schur-descent bridge). Let F : kn → kn be a Keller map,
+affine-linear in the source coordinate t = xn —that is, each component Fi has total degree at most
+1 in xn (no coordinate change is applied)—and let Φ(x, y) = ⟨y, F (x)⟩ be its doubled potential.
+Suppose F has a collision over a common last coordinate:
+                              x′+ ̸= x′− ,   F (x′+ , t0 ) = F (x′− , t0 ),
+where x′ = (x1 , . . . , xn−1 ) and t0 ∈ k. Then for every λ ∈ k× the (2n − 1)-variable polynomial
+                               ψλ (w) = B(w) + λ2 A(w)2 + t0 A(w)
+satisfies det Hess ψλ = (−1)n+1 λ(Jac F )2 ∈ k× and has a gradient collision at the two distinct
+points (x′± , 0). In particular ∇ψλ is non-injective and ψλL is not a polynomial.
+
+                                                    8
+Proof. Write Φ = tA + B as in (5) with w = (x1 , . . . , xn−1 , y1 , . . . , yn ); if F = F0 + tF1 then
+A = ⟨y, F1 ⟩ and B = ⟨y, F0 ⟩. Since F is a Keller map, the doubling has det Hesst,w Φ =
+(−1)n (Jac F )2 =: c ∈ k× by the block form (3) (Proposition 2.3). For every s the polynomial
+B + sA is linear in the n dual variables y1 , . . . , yn , so in M (s, w) = Hessw (B + sA) the n
+rows indexed by y are supported entirely in the n − 1 columns indexed by x′ , hence linearly
+dependent, so det M (s, w) ≡ 0. Both hypotheses of Lemma A.1 thus hold, and with µ = t0 it
+gives det Hess ψλ = −λc = (−1)n+1 λ(Jac F )2 , a nonzero constant.
+    For the collision, take the                     ′                                 A = ⟨0, F1 ⟩ = 0 and
+                                  two points (x± , 0). At y′ = 0 one has
+∇Φ(t0 , (x , 0)) = 0, F (x , t0 ) , so the equal-t collision F (x+ , t0 ) = F (x′− , t0 ) gives ∇Φ(t0 , (x′+ , 0)) =
+           ′               ′
+
+∇Φ(t0 , (x′− , 0)) with common value A0 = 0. Lemma A.2, with µ = t0 , transfers this to
+∇ψλ (x′+ , 0) = ∇ψλ (x′− , 0); as (x′+ , 0) ̸= (x′− , 0), ∇ψλ is not injective, and ψλL is not a poly-
+nomial by Lemma 2.4.
+
+Remark A.4. Only a collision of F over a common last coordinate is needed—not a collision
+of the doubled gradient ∇Φ, which is produced automatically at y = 0. The construction
+is a genuine two-parameter family: λ ∈ k× scales the determinant, while Lemma A.2 allows
+any collision lying over a value A = A0 to be transported by taking µ = t0 − λA0 in ψλ,µ =
+B + λ2 A2 + µA; the choice A0 = 0 above is the simplest. When F , the points x′± , and t0 , λ are
+defined over Q, a scalar multiple of ψλ has integral coefficients. Over a general field no such
+integrality holds, and none is claimed.
+
+     For n = 3, Proposition A.3 recovers the counterexample of Theorem 6.1: the map F of (1)
+is affine-linear in t = x3 and, by (2), its points (1, − 32 ) and (−1, 32 ) collide over t0 = 13
+                                                                                               2 , so with
+                       13                        1 2   13                                   2
+λ = 1 and µ = t0 = 2 it produces ψ = B + 2 A + 2 A, whose double Ψ = 2ψ = A + 13A + 2B
+is the polynomial of that theorem. So Ψ is neither unique nor canonical: the second parameter
+λ of the family above only rescales the determinant, so fixing det Hess = 128 (that is, λ = 1)
+still leaves µ free—every A2 + 2µA + 2B is a counterexample—and µ = 13              2 is singled out only
+as the value placing the collision at the trivial y = 0 points P± . It is the quadratic dependence
+on the dual variables y1 , y2 , y3 , through the term A2 , that supplies the nondegeneracy a merely
+linear doubling such as (4) cannot.
+
+
+B     Verification and ancillary files
+The proof of Theorem 6.1 is complete and hand-checkable; all its identities have also been
+verified independently in exact rational arithmetic. A fully expanded, line-by-line transcript—
+including the 3×3 reduction of Jac F , the block Hessian, and the six-variable algebraic Legendre
+transform of φ showing that φL is not a polynomial—is provided as the ancillary document
+derivation full details.pdf. The identity det Hess Ψ = 128 is proved symbolically, for the
+whole family A2 + 2µA + 2B, in hc5 schur descent.py and independent check.py, and for
+the representative Ψ = A2 + 13A + 2B (its y = 0 collision, degree 14, and 42 monomials)
+in coefficient analysis.py and, using no external CAS, in independent nosympy.py. All
+scripts are fail-closed (Python 3.8, SymPy 1.12; see verification/README.md) and, with the
+ancillary document, are available for independent re-running in the public GitHub repository
+https://github.com/malyang/hc5-counterexample.1
+   1
+     The repository URL will be finalized at acceptance and, if a citable snapshot is desired, an archival release
+can additionally be minted a DOI.
+
+
+
+                                                        9
+References
+[1] L. Alpöge, An explicit counterexample to the Jacobian conjecture, announce-
+    ment, July 19, 2026. Discussed at https://sbseminar.wordpress.com/2026/
+    07/20/the-new-counterexample-to-the-jacobian-conjecture/            and https:
+    //jacobianfun.org/jacobian-explained (both accessed July 24, 2026). To be up-
+    dated to the author’s preprint or published account when available.
+
+[2] H. Bass, E. H. Connell, D. Wright, The Jacobian conjecture: reduction of degree and formal
+    expansion of the inverse, Bull. Amer. Math. Soc. 7 (1982), 287–330.
+
+[3] M. de Bondt, Polynomials with constant Hessian determinants in dimension three, J. Pure
+    Appl. Algebra 219 (2015), 3743–3754; arXiv:1203.6605.
+
+[4] M. de Bondt, A. van den Essen, A reduction of the Jacobian conjecture to the symmetric
+    case, Proc. Amer. Math. Soc. 133 (2005), 2201–2205.
+
+[5] O.-H. Keller, Ganze Cremona-Transformationen, Monatsh. Math. Phys. 47 (1939), 299–306.
+
+[6] G. Meng, Legendre transform, Hessian conjecture and tree formula, Appl. Math. Lett. 19
+    (2006), 503–510; arXiv:math-ph/0308035.
+
+[7] G. Meng, The Jacobian and Hessian conjectures after the 2026 counterexample: what re-
+    mains, educational preprint, July 2026; https://doi.org/10.13140/RG.2.2.33409.83042.
+
+[8] A. van den Essen, Polynomial Automorphisms and the Jacobian Conjecture, Progress in
+    Mathematics 190, Birkhäuser, 2000.
+
+[9] W. Zhao, Hessian nilpotent polynomials and the Jacobian conjecture, Trans. Amer. Math.
+    Soc. 359 (2007), 249–274.
+
+
+
+
+                                             10
+

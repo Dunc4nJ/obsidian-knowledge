@@ -1,0 +1,852 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+<head>
+	<title>Oswin Aichholzer's homepage</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<link rel="stylesheet" type="text/css" href="/staff/aichholzer/_css/main.css.php" media="screen" />
+	<meta name="description" content="The Homepage of Oswin Aichholzer, an associate professor at the Institute of Algorithms and Theory at Graz University of Technology." />
+	<meta name="keywords" content="Oswin, Aichholzer, professor, Institute for Algorithms and Theor<, Graz University of Technology, ATCS, TUG" /> 
+	<script type="text/javascript" src="/staff/aichholzer/_java/prototype/prototype.js"></script>
+	<script type="text/javascript" src="/staff/aichholzer/_java/scriptaculous/scriptaculous.js"></script>
+</head>
+<body>
+<p class="hide"><a name="top"></a></p>
+<p class="hide">Skip to: <a href="#content">Content</a> | <a href="#navigation">Navigation</a> | <a href="#footer">Footer</a></p>
+<div id="mainFrame">
+	<div id="main">
+		<div id="header">
+			<div id="title">
+				<h1>Oswin Aichholzer</h1>
+			</div>
+		</div>
+		<p class="hide"><a name="content"></a></p>
+		<div id="content">
+
+<div class="item">
+	<h1>On the Rectilinear Crossing Number</h1>
+
+
+	<p>
+		The following table contains lower bounds and best known minimizing examples
+                (upper bounds) for the rectilinear crossing number of the complete 
+		graph of a set of n points in the plane (in general position;  n up to 100).
+                The examples for n=34,38,42,48,51 are by Henning F. Jensen [personal
+                communication 2005-2009]). The set for n=40 is based on the realization of an abstract
+                order type by Manfred Scheucher. Some of the examples for n=3k are also based on
+                [3-symmetric and 3-decomposable drawings of K_n by B. M. Ábrego, M. Cetina,
+                S. Fernández-Merchant, J. Leaños, and G. Salazar in Discrete Applied Mathematics
+                158 (2010), no. 12, 1240-1258]. Many of the larger examples (in the range 46-99) are from (or based
+                on examples from) [Computational search of small point sets with small rectilinear crossing number.
+                by Ruy Fabila-Monroy and Jorge Lopez, Journal of Graph Algorithms and Applications 2014].
+                Especially the set with n=75 points is from there, which provides the currently
+                best upper bound of 0.380473 for the rectilinear crossing constant.                 
+	</p>
+	<p>
+		For the computation of the lower bounds we used a Mathematica-notebook,
+                which you can download 
+		<a class="popup" href="crossing.nb">here</a> to make your own experiments.
+	<p>
+                Several of the lower bounds are summarized from recent papers. Tight values for up to n=27 are from [The maximum number
+                of halving lines and the rectilinear crossing number of K_n for n<=27, Bernardo M. Abrego, Silvia Fernandez-Merchant,
+                Jesus Leanos and Gelasio Salazar, Electronic Notes in Discrete Mathematics, 30:261--266, 2008].    
+                Recently improved lower bounds for larger values of n are taken from [On <=k-edges, crossings, and
+                halving lines of geometric drawings of K_n. by Bernardo M. Abrego, Mario Cetin,
+                Silvia Fernandez-Merchant, Jesus Leanos and Gelasio Salazar] and for n=30 from
+                [Point sets that minimize $(\le k)$-edges, $3$-decomposable drawings, and the
+                rectilinear crossing number of $K_{30}$, Mario Cetina, César I. Hernández,
+                Jesus Macias Leanos, Cristobal Villalobos, Discrete Mathematics, 311 (2011) 1646--1657].
+	</p>
+<!-- 	<p>
+		One implication of the investigation of small sets is an improved constant for the
+                asymptotic upper bound for the rectilinear crossing number. Using Theorem 2 of
+                [B.Abrego, S.Fernandez-Merchant: Geometric drawings of K_n with few crossings] and
+                plugging in the values for n=90 below, one gets an upper bound of 0.38054415*(n choose 4) + O(n^3).
+                Using similar techniques the currently best bounds for this constant have been slightly
+                improved [see above cited papers] to the range 0,379972 ... 0,380488.
+	</p>   -->
+	<p>
+		The last column contains the number of all existing combinatorial non-isomorphic minimal
+                drawings and a binary file of them (for n up to 16) and all sets
+		we found so far for n = 17 to 20. The xy-coordinates are stored as 16-bit unsigned integer, see our 
+		<a href="../ordertypes/">order type page</a> for more details on the file format.
+		See also <a href="/staff/aichholzer/research/publications/">publications</a>.
+	</p>
+
+
+	<table class="crossingsTable">
+		<thead>
+			<tr>
+				<td>Number n of<br />Vertices</td>
+				<td>lower<br />bound</td>
+				<td>min. crossings<br />(so far)</td>
+				<td>minimizing<br />example</td>
+				<td>non-isomorphic drawings<br />(number and 16bit-file)</td>
+			</tr>
+		</thead>
+<tfoot>
+    <tr>
+        <td colspan="5">Magic number [sum of crossings]: 29418771</td>
+    </tr>
+</tfoot>
+
+<tbody>
+    <tr>
+        <td>3</td>
+        <td>0</td>
+        <td>0</td>
+        <td><a class="popup" href="data/best003.asc"> best003.asc</a></td>
+        <td class="right">1 <a class="popup" href="data/minimize3.b16">file</a></td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>0</td>
+        <td>0</td>
+        <td><a class="popup" href="data/best004.asc"> best004.asc</a></td>
+        <td class="right">1 <a class="popup" href="data/minimize4.b16">file</a></td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>1</td>
+        <td>1</td>
+        <td><a class="popup" href="data/best005.asc"> best005.asc</a></td>
+        <td class="right">1 <a class="popup" href="data/minimize5.b16">file</a></td>
+    </tr>
+    <tr>
+        <td>6</td>
+        <td>3</td>
+        <td>3</td>
+        <td><a class="popup" href="data/best006.asc"> best006.asc</a></td>
+        <td class="right">1 <a class="popup" href="data/minimize6.b16">file</a></td>
+    </tr>
+    <tr>
+        <td>7</td>
+        <td>9</td>
+        <td>9</td>
+        <td><a class="popup" href="data/best007.asc"> best007.asc</a></td>
+        <td class="right">3 <a class="popup" href="data/minimize7.b16">file</a></td>
+    </tr>
+    <tr>
+        <td>8</td>
+        <td>19</td>
+        <td>19</td>
+        <td><a class="popup" href="data/best008.asc"> best008.asc</a></td>
+        <td class="right">2 <a class="popup" href="data/minimize8.b16">file</a></td>
+    </tr>
+    <tr>
+        <td>9</td>
+        <td>36</td>
+        <td>36</td>
+        <td><a class="popup" href="data/best009.asc"> best009.asc</a></td>
+        <td class="right">10 <a class="popup" href="data/minimize9.b16">file</a></td>
+    </tr>
+    <tr>
+        <td>10</td>
+        <td>62</td>
+        <td>62</td>
+        <td><a class="popup" href="data/best010.asc"> best010.asc</a></td>
+        <td class="right">2 <a class="popup" href="data/minimize10.b16">file</a></td>
+    </tr>
+    <tr>
+        <td>11</td>
+        <td>102</td>
+        <td>102</td>
+        <td><a class="popup" href="data/best011.asc"> best011.asc</a></td>
+        <td class="right">374 <a class="popup" href="data/minimize11.b16">file</a></td>
+    </tr>
+    <tr>
+        <td>12</td>
+        <td>153</td>
+        <td>153</td>
+        <td><a class="popup" href="data/best012.asc"> best012.asc</a></td>
+        <td class="right">1 <a class="popup" href="data/minimize12.b16">file</a></td>
+    </tr>
+    <tr>
+        <td>13</td>
+        <td>229</td>
+        <td>229</td>
+        <td><a class="popup" href="data/best013.asc"> best013.asc</a></td>
+        <td class="right">4534 <a class="popup" href="data/minimize13.b16">file</a></td>
+    </tr>
+    <tr>
+        <td>14</td>
+        <td>324</td>
+        <td>324</td>
+        <td><a class="popup" href="data/best014.asc"> best014.asc</a></td>
+        <td class="right">20 <a class="popup" href="data/minimize14.b16">file</a></td>
+    </tr>
+    <tr>
+        <td>15</td>
+        <td>447</td>
+        <td>447</td>
+        <td><a class="popup" href="data/best015.asc"> best015.asc</a></td>
+        <td class="right">16001 <a class="popup" href="data/minimize15.b16">file</a></td>
+    </tr>
+    <tr>
+        <td>16</td>
+        <td>603</td>
+        <td>603</td>
+        <td><a class="popup" href="data/best016.asc"> best016.asc</a></td>
+        <td class="right">36 <a class="popup" href="data/minimize16.b16">file</a></td>
+    </tr>
+    <tr>
+        <td>17</td>
+        <td>798</td>
+        <td>798</td>
+        <td><a class="popup" href="data/best017.asc"> best017.asc</a></td>
+        <td class="right">at least 37269 <a class="popup" href="data/minimize17.b16">file</a></td>
+    </tr>
+    <tr>
+        <td>18</td>
+        <td>1029</td>
+        <td>1029</td>
+        <td><a class="popup" href="data/best018.asc"> best018.asc</a></td>
+        <td class="right">1 <a class="popup" href="data/minimize18.b16">file</a></td>
+    </tr>
+    <tr>
+        <td>19</td>
+        <td>1318</td>
+        <td>1318</td>
+        <td><a class="popup" href="data/best019.asc"> best019.asc</a></td>
+        <td class="right">at least 13243 <a class="popup" href="data/minimize19.b16">file</a></td>
+    </tr>
+    <tr>
+        <td>20</td>
+        <td>1657</td>
+        <td>1657</td>
+        <td><a class="popup" href="data/best020.asc"> best020.asc</a></td>
+        <td class="right">at least 6 <a class="popup" href="data/minimize20.b16">file</a></td>
+    </tr>
+    <tr>
+        <td>21</td>
+        <td>2055</td>
+        <td>2055</td>
+        <td><a class="popup" href="data/best021.asc"> best021.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>22</td>
+        <td>2528</td>
+        <td>2528</td>
+        <td><a class="popup" href="data/best022.asc"> best022.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>23</td>
+        <td>3077</td>
+        <td>3077</td>
+        <td><a class="popup" href="data/best023.asc"> best023.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>24</td>
+        <td>3699</td>
+        <td>3699</td>
+        <td><a class="popup" href="data/best024.asc"> best024.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>25</td>
+        <td>4430</td>
+        <td>4430</td>
+        <td><a class="popup" href="data/best025.asc"> best025.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>26</td>
+        <td>5250</td>
+        <td>5250</td>
+        <td><a class="popup" href="data/best026.asc"> best026.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>27</td>
+        <td>6180</td>
+        <td>6180</td>
+        <td><a class="popup" href="data/best027.asc"> best027.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>28</td>
+        <td>7233</td>
+        <td>7234</td>
+        <td><a class="popup" href="data/best028.asc"> best028.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>29</td>
+        <td>8421</td>
+        <td>8423</td>
+        <td><a class="popup" href="data/best029.asc"> best029.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>30</td>
+        <td>9726</td>
+        <td>9726</td>
+        <td><a class="popup" href="data/best030.asc"> best030.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>31</td>
+        <td>11207</td>
+        <td>11213</td>
+        <td><a class="popup" href="data/best031.asc"> best031.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>32</td>
+        <td>12830</td>
+        <td>12836</td>
+        <td><a class="popup" href="data/best032.asc"> best032.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>33</td>
+        <td>14626</td>
+        <td>14634</td>
+        <td><a class="popup" href="data/best033.asc"> best033.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>34</td>
+        <td>16613</td>
+        <td>16620</td>
+        <td><a class="popup" href="data/best034.asc"> best034.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>35</td>
+        <td>18796</td>
+        <td>18808</td>
+        <td><a class="popup" href="data/best035.asc"> best035.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>36</td>
+        <td>21164</td>
+        <td>21174</td>
+        <td><a class="popup" href="data/best036.asc"> best036.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>37</td>
+        <td>23785</td>
+        <td>23801</td>
+        <td><a class="popup" href="data/best037.asc"> best037.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>38</td>
+        <td>26621</td>
+        <td>26635</td>
+        <td><a class="popup" href="data/best038.asc"> best038.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>39</td>
+        <td>29691</td>
+        <td>29715</td>
+        <td><a class="popup" href="data/best039.asc"> best039.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>40</td>
+        <td>33048</td>
+        <td>33070</td>
+        <td><a class="popup" href="data/best040.asc"> best040.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>41</td>
+        <td>36674</td>
+        <td>36700</td>
+        <td><a class="popup" href="data/best041.asc"> best041.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>42</td>
+        <td>40561</td>
+        <td>40590</td>
+        <td><a class="popup" href="data/best042.asc"> best042.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>43</td>
+        <td>44796</td>
+        <td>44826</td>
+        <td><a class="popup" href="data/best043.asc"> best043.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>44</td>
+        <td>49324</td>
+        <td>49370</td>
+        <td><a class="popup" href="data/best044.asc"> best044.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>45</td>
+        <td>54181</td>
+        <td>54213</td>
+        <td><a class="popup" href="data/best045.asc"> best045.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>46</td>
+        <td>59410</td>
+        <td>59463</td>
+        <td><a class="popup" href="data/best046.asc"> best046.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>47</td>
+        <td>65015</td>
+        <td>65059</td>
+        <td><a class="popup" href="data/best047.asc"> best047.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>48</td>
+        <td>70948</td>
+        <td>71010</td>
+        <td><a class="popup" href="data/best048.asc"> best048.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>49</td>
+        <td>77362</td>
+        <td>77420</td>
+        <td><a class="popup" href="data/best049.asc"> best049.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>50</td>
+        <td>84146</td>
+        <td>84223</td>
+        <td><a class="popup" href="data/best050.asc"> best050.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>51</td>
+        <td>91374</td>
+        <td>91446</td>
+        <td><a class="popup" href="data/best051.asc"> best051.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>52</td>
+        <td>99073</td>
+        <td>99161</td>
+        <td><a class="popup" href="data/best052.asc"> best052.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>53</td>
+        <td>107251</td>
+        <td>107347</td>
+        <td><a class="popup" href="data/best053.asc"> best053.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>54</td>
+        <td>115878</td>
+        <td>115975</td>
+        <td><a class="popup" href="data/best054.asc"> best054.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>55</td>
+        <td>125087</td>
+        <td>125207</td>
+        <td><a class="popup" href="data/best055.asc"> best055.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>56</td>
+        <td>134798</td>
+        <td>134917</td>
+        <td><a class="popup" href="data/best056.asc"> best056.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>57</td>
+        <td>145030</td>
+        <td>145164</td>
+        <td><a class="popup" href="data/best057.asc"> best057.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>58</td>
+        <td>155900</td>
+        <td>156042</td>
+        <td><a class="popup" href="data/best058.asc"> best058.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>59</td>
+        <td>167344</td>
+        <td>167506</td>
+        <td><a class="popup" href="data/best059.asc"> best059.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>60</td>
+        <td>179354</td>
+        <td>179523</td>
+        <td><a class="popup" href="data/best060.asc"> best060.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>61</td>
+        <td>192095</td>
+        <td>192265</td>
+        <td><a class="popup" href="data/best061.asc"> best061.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>62</td>
+        <td>205437</td>
+        <td>205634</td>
+        <td><a class="popup" href="data/best062.asc"> best062.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>63</td>
+        <td>219457</td>
+        <td>219659</td>
+        <td><a class="popup" href="data/best063.asc"> best063.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>64</td>
+        <td>234223</td>
+        <td>234447</td>
+        <td><a class="popup" href="data/best064.asc"> best064.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>65</td>
+        <td>249732</td>
+        <td>249962</td>
+        <td><a class="popup" href="data/best065.asc"> best065.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>66</td>
+        <td>265888</td>
+        <td>266151</td>
+        <td><a class="popup" href="data/best066.asc"> best066.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>67</td>
+        <td>282974</td>
+        <td>283238</td>
+        <td><a class="popup" href="data/best067.asc"> best067.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>68</td>
+        <td>300767</td>
+        <td>301057</td>
+        <td><a class="popup" href="data/best068.asc"> best068.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>69</td>
+        <td>319389</td>
+        <td>319691</td>
+        <td><a class="popup" href="data/best069.asc"> best069.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>70</td>
+        <td>338913</td>
+        <td>339252</td>
+        <td><a class="popup" href="data/best070.asc"> best070.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>71</td>
+        <td>359311</td>
+        <td>359645</td>
+        <td><a class="popup" href="data/best071.asc"> best071.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>72</td>
+        <td>380531</td>
+        <td>380925</td>
+        <td><a class="popup" href="data/best072.asc"> best072.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>73</td>
+        <td>402798</td>
+        <td>403180</td>
+        <td><a class="popup" href="data/best073.asc"> best073.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>74</td>
+        <td>425980</td>
+        <td>426398</td>
+        <td><a class="popup" href="data/best074.asc"> best074.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>75</td>
+        <td>450078</td>
+        <td>450492</td>
+        <td><a class="popup" href="data/best075.asc"> best075.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>76</td>
+        <td>475305</td>
+        <td>475773</td>
+        <td><a class="popup" href="data/best076.asc"> best076.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>77</td>
+        <td>501531</td>
+        <td>502011</td>
+        <td><a class="popup" href="data/best077.asc"> best077.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>78</td>
+        <td>528738</td>
+        <td>529278</td>
+        <td><a class="popup" href="data/best078.asc"> best078.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>79</td>
+        <td>557191</td>
+        <td>557741</td>
+        <td><a class="popup" href="data/best079.asc"> best079.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>80</td>
+        <td>586684</td>
+        <td>587280</td>
+        <td><a class="popup" href="data/best080.asc"> best080.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>81</td>
+        <td>617310</td>
+        <td>617930</td>
+        <td><a class="popup" href="data/best081.asc"> best081.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>82</td>
+        <td>649190</td>
+        <td>649859</td>
+        <td><a class="popup" href="data/best082.asc"> best082.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>83</td>
+        <td>682308</td>
+        <td>682976</td>
+        <td><a class="popup" href="data/best083.asc"> best083.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>84</td>
+        <td>716507</td>
+        <td>717276</td>
+        <td><a class="popup" href="data/best084.asc"> best084.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>85</td>
+        <td>752217</td>
+        <td>752971</td>
+        <td><a class="popup" href="data/best085.asc"> best085.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>86</td>
+        <td>789077</td>
+        <td>789911</td>
+        <td><a class="popup" href="data/best086.asc"> best086.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>87</td>
+        <td>827289</td>
+        <td>828125</td>
+        <td><a class="popup" href="data/best087.asc"> best087.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>88</td>
+        <td>866947</td>
+        <td>867887</td>
+        <td><a class="popup" href="data/best088.asc"> best088.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>89</td>
+        <td>907990</td>
+        <td>908940</td>
+        <td><a class="popup" href="data/best089.asc"> best089.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>90</td>
+        <td>950372</td>
+        <td>951379</td>
+        <td><a class="popup" href="data/best090.asc"> best090.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>91</td>
+        <td>994394</td>
+        <td>995478</td>
+        <td><a class="popup" href="data/best091.asc"> best091.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>92</td>
+        <td>1039840</td>
+        <td>1040946</td>
+        <td><a class="popup" href="data/best092.asc"> best092.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>93</td>
+        <td>1086725</td>
+        <td>1087899</td>
+        <td><a class="popup" href="data/best093.asc"> best093.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>94</td>
+        <td>1135377</td>
+        <td>1136586</td>
+        <td><a class="popup" href="data/best094.asc"> best094.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>95</td>
+        <td>1185551</td>
+        <td>1186887</td>
+        <td><a class="popup" href="data/best095.asc"> best095.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>96</td>
+        <td>1237263</td>
+        <td>1238662</td>
+        <td><a class="popup" href="data/best096.asc"> best096.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>97</td>
+        <td>1290844</td>
+        <td>1292312</td>
+        <td><a class="popup" href="data/best097.asc"> best097.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>98</td>
+        <td>1346029</td>
+        <td>1347559</td>
+        <td><a class="popup" href="data/best098.asc"> best098.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>99</td>
+        <td>1402932</td>
+        <td>1404592</td>
+        <td><a class="popup" href="data/best099.asc"> best099.asc</a></td>
+	<td>--</td>
+    </tr>
+    <tr>
+        <td>100</td>
+        <td>1459912</td>
+        <td>1463457</td>
+        <td><a class="popup" href="data/best100.asc"> best100.asc</a></td>
+	<td>--</td>
+    </tr>
+
+</tbody>
+	</table>
+	<p>
+		Table last modified on Tue, 26 May 2015 12:24:33 +0200.
+	</p>
+</div>
+
+		</div>
+		<div id="sidebar">
+			<div id="navigationDiv">
+				<p class="hide"><a name="navigation"></a></p>
+				<h1>Navigation</h1>
+<ul>
+	<li><a href="/staff/aichholzer/">Home</a></li>
+	<li><a href="/staff/aichholzer/research/">Research</a>
+		<ul>
+			<li><a href="/staff/aichholzer/research/publications/">Publications</a></li>
+			<li><a href="/staff/aichholzer/research/pac/">Projects and collaborations</a></li>
+			<li><a href="/staff/aichholzer/research/rp/">Research projects</a></li>
+		</ul>
+	</li>
+	<li><a href="/staff/aichholzer/teaching/">Teaching (german)</a>
+		<ul>
+			<li><a class="popup" href="https://tc.tugraz.at/main/course/view.php?id=3116">Entwurf und Analyse von Algorithmen</a></li>
+			<li><a class="popup" href="https://tc.tugraz.at/main/course/view.php?id=3115">Datenstrukturen und Algorithmen 2</a></li>
+                        <li><a class="popup" href="https://tc.tugraz.at/main/course/view.php?id=3117">Algorithmen und Spiele</a></li>
+                        <li><a class="popup" href="https://tc.tugraz.at/main/course/view.php?id=2610">Enumerative Combinatoric Algorithms</a></li>
+                        <li><a class="popup" href="https://tc.tugraz.at/main/course/view.php?id=3566">Discrete and Computational Geometry</a></li>
+			<li><a href="/staff/aichholzer/teaching/projecttopics/">Projektthemen, Diplomarbeiten</a></li>
+		</ul>
+	</li>
+	<li><a href="/staff/aichholzer/visitors/">Information for visitors</a></li>
+	<li><a href="/staff/aichholzer/contact/">Contact</a></li>
+	<li class="hide"><a href="#top">Back to top</a></li>
+</ul>
+
+<h1>Quick links</h1>
+<ul class="quickLinks">
+	<li><a class="popup" href="http://www.ist.tugraz.at/mittagsseminar.html">Mittagsseminar</a></li>
+<li><a class="popup" href="https://www.tugraz.at/institute/ist/home/">Institute for Software Technology</a></li>
+<li><a class="popup" href="http://www.tugraz.at/">Graz University of Technology</a></li>
+<li><a href="/staff/aichholzer/?id=18">EUROCORES-Project ComPoSe</a></li>
+<li><a href="/staff/aichholzer/?id=22">Doctoral Program &quot;Discrete Mathematics&quot;</a></li>
+<li><a href="/staff/aichholzer/?id=24">Lehrbuch angewandte Geometrie</a></li>
+<li><a class="popup" href="http://connect4.ist.tugraz.at:8080">Perfect Connect 4</a></li>
+<li><a href="/staff/aichholzer/?id=1">Rectilinear Crossing Number Project (RCN)</a></li>
+<li><a href="/staff/aichholzer/research/rp/triangulations/crossing/">Rectilinear Crossing Number Records</a></li>
+<li><a class="popup" href="http://www.faz.net/s/Rub163D8A6908014952B0FB3DB178F372D4/Doc~E2A455516D54E464698BCA5FB8AA892B8~ATpl~Ecommon~Scontent.html">A story about RCN in the FAZ</a></li>
+<li><a class="popup" href="http://www.futura-sciences.com/news-boinc-theorie-graphes-nouvelle-performance_10368.php">A story about RCN, french version</a></li>
+<li><a href="/staff/aichholzer/teaching/projecttopics/list/">New topics for projects and thesis</a></li>
+<li><a href="/staff/aichholzer/research/rp/abalone/">Abalone World Champion</a></li>
+<li><a href="/staff/aichholzer/?id=14">FWF Joint Research Program Industrial Geometry</a></li>
+<li><a href="/staff/aichholzer/?id=17">TU-Forschungsschwerpunkt &quot;Algorithmen und mathematische Modellierung&quot;</a></li>
+<li><a class="popup" href="http://theory.lcs.mit.edu/~edemaine/events/">Erik Demaine&#039;s List of Events</a></li>
+<li><a class="popup" href="http://www.computational-geometry.org/">Computational Geometry Pages</a></li>
+</ul>
+			</div>
+		</div>
+		<div style="clear: both;"></div>
+	</div>
+	<p class="hide"><a name="footer"></a></p>
+	<div id="footer">
+		&copy; 2006 Oswin Aichholzer. Valid <a class="popup" href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> &amp; <a class="popup" href="http://validator.w3.org/check?uri=referer">XHTML</a>.
+	</div>
+
+</div>
+<p class="hide">Back to: <a href="#top">Top</a> | <a href="#content">Content</a> | <a href="#navigation">Navigation</a></p>
+<script type="text/javascript" src="/staff/aichholzer/_java/mfsct.js"></script>
+<script type="text/javascript" src="/staff/aichholzer/_java/popup.js"></script>
+<script type="text/javascript" src="/staff/aichholzer/_java/floatNavigation.js"></script>
+</body>
+</html>

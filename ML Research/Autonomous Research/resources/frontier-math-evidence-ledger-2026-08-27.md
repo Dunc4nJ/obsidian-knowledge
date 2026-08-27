@@ -2,7 +2,7 @@
 
 Date: 2026-08-27  
 Campaign mode: W4 priority and novelty selection, mathematics primary, ML/quant relevance scored separately  
-Status: Round 2 material increment; target selection only; no mathematical result is claimed
+Status: Round 3 material increment; target selection and verifier auditing only; no new mathematical result is claimed
 
 ## Decision boundary
 
@@ -25,12 +25,82 @@ Two leaderboards are necessary. “Headline ceiling” and “expected campaign 
 ## Epistemic disclosure
 
 - The source census used primary papers, official proceedings, maintained expert surveys, and current curated tables through 2026-08-27.
-- Three adversarial/scouting reviews were run. All were same-family OpenAI/GPT-5 reviews and therefore count only as T1 critique, not independent T2 corroboration.
+- Six adversarial/scouting passes were run: three initial reviews and three fresh-context follow-up audits. All were same-family OpenAI/GPT-5 reviews and therefore count only as T1 critique, not independent T2 corroboration.
 - “No later solution found” means NO_PRIOR_FOUND under the logged searches. It never means proof that no paper, preprint, private manuscript, or newly posted result exists.
 - Positive construction certificates and negative/nonexistence certificates are treated separately. A tiny witness does not imply that exhaustive nonexistence is easy.
 - ML or quant “relevance” is not operational benefit. Several targets illuminate representation, algorithms, or verification without implying faster training, better forecasts, or deployable alpha.
 
-## Round 2 ranking: expected campaign value
+## Round 3 superseding decision: rank by objective, not by certificate size
+
+The Round 2 table below is retained as an auditable snapshot, but a single leaderboard was the wrong decision object. A hostile second pass found that it systematically rewarded tiny positive witnesses and underweighted theorem ladders, negative-route difficulty, crowding, and the attention actually demonstrated by the two north stars.
+
+The current forced rankings are therefore separated by campaign objective. Adjacent ranks are not strongly identified; these are ordinal allocation judgments, not calibrated success probabilities.
+
+### Attention-first expected campaign value
+
+1. **Terminal shallow-ReLU depth for maxima/CPWL**, with `max_11` only as a first machinery rung.
+2. **Field-pinned 3×3 matrix-multiplication rank**, because it combines a much higher ceiling than Costas with multiple honest construction and lower-bound rungs.
+3. **Rectilinear crossing number of K28**, the best quiet exact one-bit campaign, but not demonstrably high-probability after eighteen years of stasis.
+4. **Costas array of order 32**, an exceptional positive certificate but an all-or-nothing existence lottery with no useful near-witness theorem yet specified.
+5. **Distribution-independent SQ learning versus dimension complexity**, a broad direct-ML theorem with a hard analytic interface.
+6. **The full weighted-regression data-selection curve for `d<n<2d`**, the best theorem-shaped pilot but with a lower attention ceiling.
+
+The substantive change is not whether rank 1 and rank 2 should be swapped. It is that field-pinned matrix rank displaces Costas from the overall top three, and K28 is described as a pilot rather than “highest expected value” without qualification.
+
+### Best verifier-first pilot for testing the research skill
+
+1. **K28**: decide 7,233 versus 7,234 with an exact geometric construction or a complete lower certificate.
+2. **Weighted regression `R(3,4)`**: the first intermediate cell not covered by the published theorems or the authors' signaled `n=2d-1` argument.
+3. **Costas-32**: produce a 32-entry permutation and check 496 exact displacement constraints; treat every search null as bounded.
+4. **ReLU `max_11`**: useful only if the terminal depth program remains the stated objective and failure of the current ansatz is never generalized.
+
+### Highest headline ceiling, ignoring success probability
+
+1. **The four-variable Hessian conjecture `HC4`**, newly isolated as the only unresolved Hessian dimension; a proof implies the plane Jacobian conjecture, while a counterexample would complete the Hessian dimension classification.
+2. **Exact `R(5,5)`**.
+3. **An 8-bit APN permutation**.
+4. **Field-pinned exact 3×3 tensor rank or a rank-22 upper-bound record**.
+5. **The terminal shallow-ReLU depth theorem**.
+6. **The five-dimensional kissing number**.
+7. **Hadwiger–Nelson: raise the lower bound to six or construct a five-coloring**.
+8. **Distribution-independent SQ versus dimension complexity**.
+
+`HC4` is a moonshot, not a top expected-value target: the quartic case was solved on 2026-08-14, bounded-degree rungs remain, and the post-Jacobian lane is maximally crowded.
+
+### Direct ML-theory shortlist
+
+1. Terminal ReLU depth.
+2. Distribution-independent SQ versus dimension complexity.
+3. ALS tensor-decomposition overparameterization.
+4. The full weighted-regression selection curve, starting with `R(3,4)` rather than the author-signaled endpoint.
+5. The fixed-dimensional softmax-attention exponent.
+6. The exact uniform-in-sequence-length transformer rank-depth conjecture.
+
+### Quant-mathematics reconnaissance lane
+
+These are **leads**, not yet launch-ready priority claims. Their current status rests on primary sources plus bounded searches and needs a dedicated domain-expert audit.
+
+1. **An explicit semialgebraic no-butterfly domain for full five-parameter SVI** requiring no runtime root finding or global minimization. The known complete characterization still invokes those numerical steps; explicit domains are available for sub-SVIs.
+2. **Convexity of the finite-maturity American-put exercise boundary for `0<q<r`** in the constant-parameter Black–Scholes model. Convexity is proved at zero dividend, while nonconvexity is proved when the dividend rate is slightly above the interest rate.
+3. **A sharp no-price-manipulation criterion for a pinned singular nonlinear cross-impact kernel**, after removing cases covered by the 2026 concave-cross-impact theory.
+4. **Reusable adaptive-backtest inference under one frozen dependence, tail, query, and coverage contract**.
+5. **A theorem-level microfoundation or impossibility boundary for square-root impact in a pinned order-flow model**.
+
+The quant lane is the best place to search for practical mathematical value, but none of these currently has the public-attention ceiling of `HC4`, `R(5,5)`, matrix rank, or terminal ReLU depth.
+
+## What the two north stars select for
+
+The common pattern is not “pick the most famous conjecture” and not “prefer the smallest certificate.” It is:
+
+1. use a famous conjecture as a recognizable hub;
+2. attack either a meaningful quantitative theorem ladder (the zeta campaign) or a decisive exact witness (the Jacobian counterexample);
+3. search a very large idea funnel, while logging cousin results and failed routes;
+4. make verification commensurate with the extraordinariness of the claim—formal transport, independent implementation, and expert review;
+5. insist that every qualifier survives into the headline.
+
+The post-Anthropic zeta ecosystem adds a sixth lesson: **frontier velocity is itself a target-selection variable**. Within days, several public AI-generated repositories claimed further record constants. A pinned replay in this campaign reproduced one draft's finite three- and seven-point interval certificates, but not its global analytic theorem. The lane is therefore a valuable audit benchmark and a poor clean launch target until the follow-ups receive expert review and end-to-end proof transport.
+
+## Round 2 ranking: expected campaign value (superseded snapshot)
 
 | Rank | Exact target | Attention class if solved | Best honest first rung | Certificate class | Direct ML/quant/crypto link | Principal failure mode | Conviction |
 |---:|---|---|---|---|---|---|---|
@@ -162,20 +232,23 @@ Running all targets as one undifferentiated search would destroy falsifiability.
 ### E-007 — rectilinear K28
 
 - Claim: exact values are known through n=27; the maintained current interval for K28 is 7,233 through 7,234.
-- Primary/current sources: Ábrego et al., [DOI 10.1016/j.endm.2008.01.045](https://doi.org/10.1016/j.endm.2008.01.045); Schaefer’s 2026 [Crossing Numbers survey](https://www.combinatorics.org/ojs/index.php/eljc/article/download/DS21/pdf); maintained [OEIS A014540](https://oeis.org/A014540).
+- Primary/current sources: Ábrego et al., [DOI 10.1016/j.endm.2008.01.045](https://doi.org/10.1016/j.endm.2008.01.045); Ábrego and Fernández-Merchant's June 2026 [current-status paper](https://doi.org/10.57717/cgt.v5i2.75); Schaefer’s 2026 [Crossing Numbers survey](https://www.combinatorics.org/ojs/index.php/eljc/article/download/DS21/pdf); maintained [OEIS A014540](https://oeis.org/A014540).
 - Local locators: expanded/rectilinear-k27-2008.txt:10032–10075; expanded/crossing-number-survey-2026.txt:4232–4240.
-- Evidence direction: supports exact known range through 27; current one-bit K28 interval is supported by maintained expert/curated sources.
-- Qualification: the current interval was not independently recomputed. A nonrealizable oriented matroid does not supply a planar point construction.
-- Confidence: 0.93 on status, with the stated source-quality caveat.
+- Evidence direction: the 2008 paper's Table 3 gives pseudolinear lower bound 7,233 and rectilinear upper bound 7,234; because pseudolinear is at most rectilinear, integrality leaves exactly those two values. The June 2026 paper says exact rectilinear values are still known only through 27 and at 30.
+- Exact replay: Aichholzer's archived `best028.asc` integer-coordinate witness was recovered, SHA-256 `666d74d36b125e18e439167918bc150f1e82bbb3db5c99ab568021b7c9bfa6fa`. A new integer-arithmetic verifier checked all 3,276 triples for general position and all 20,475 four-point subsets, returning exactly 7,234 crossings.
+- Local audit: expanded/k28-baseline-audit-2026-08-27.md; verifier: expanded/verify_k28_best028.py.
+- Qualification: this independently replays the known 7,234 **upper** witness; it does not decide whether a 7,233 construction exists or prove the universal 7,234 lower bound. A nonrealizable oriented matroid does not supply a planar point construction.
+- Confidence: 0.99 on the interval and 0.96 on unresolved status through the audit date, pending a second implementation/reviewer for the local replay.
 
 ### E-008 — Costas-32
 
 - Claim: all Costas arrays are enumerated through order 29; 32 and 33 are the smallest orders with no known array.
 - Primary sources: Drakakis, [arXiv:1102.5727](https://arxiv.org/abs/1102.5727); Gulec and Abolghasemi, [arXiv:2602.03407](https://arxiv.org/abs/2602.03407).
 - Local locators: expanded/1102.5727.txt:317–321, 429–434; expanded/2602.03407.txt:48–60, 239–266.
-- Evidence direction: supports a live tiny-witness construction campaign and an explicit 2026 AI-search interface.
-- Qualification: absence from databases means “not known,” not “does not exist.” The 2026 UCM framework does not itself produce order 32.
-- Confidence: 0.90.
+- Evidence direction: supports a live tiny-witness construction campaign and an explicit 2026 AI-search interface. A direct audit of the Beard/IEEE DataPort information workbook found zeros in its order-32 row, while the source explicitly remains incomplete above the enumerated range through 29.
+- Qualification: the defensible statement is “no published or catalogued witness found through 2026-08-27,” never “no witness exists.” The 2026 UCM framework does not itself produce order 32, and active CP/SAT projects make the lane moderately crowded.
+- Audited artifact hashes: ZIP `96cf4d162b120b6f04e7e40b0a4e368bcc6dcd81a9444e2578d783c00fe3dea0`; extracted workbook `ddcc90922d5b253a5c8cf2d1c6de0e85b1920de412766098115ffa7da2f5892e`.
+- Confidence: 0.94 on the bounded no-known-witness statement and open status.
 
 ### E-009 — 8-bit APN permutation
 
@@ -191,9 +264,9 @@ Running all targets as one undifferentiated search would destroy falsifiability.
 - Claim: for min-norm linear regression, the exact worst-case ratio is infinite below d selected points, d+1 at d, and one from 2d onward; d<n<2d is open, with 1+1/d suggested at n=2d−1.
 - Primary source: Hanneke et al., [PMLR 291](https://proceedings.mlr.press/v291/hanneke25e.html).
 - Local locator: expanded/hanneke25e.txt:135–170.
-- Evidence direction: supports an unusually crisp, theorem-sized ML target.
-- Qualification: weighted and unweighted selection differ; empirical full-dataset loss is not generalization; no direct claim about LLM data pruning.
-- Confidence: medium-high after bounded no-resolution searches.
+- Evidence direction: supports an unusually crisp, theorem-sized ML target. A second citation audit found no published/indexed resolution through 2026-08-27.
+- Qualification: the authors explicitly say they believe they already have an argument for `R(d,2d−1)=1+1/d`; that endpoint is a replication gate, not clean priority territory. The first defensible original cell is `R(3,4)`, followed by `R(d,2d−2)`. Weighted and unweighted selection differ; empirical full-dataset loss is not generalization; no direct claim about LLM data pruning.
+- Confidence: high on the exact published frontier; `NO_PRIOR_FOUND` for later resolution remains a bounded search.
 
 ### E-011 — distribution-independent deep versus linear
 
@@ -301,6 +374,43 @@ Running all targets as one undifferentiated search would destroy falsifiability.
 - Required pinning for AdamW: architecture/loss, batch sampling, beta parameters, bias correction, epsilon, weight decay, and schedule.
 - Confidence: high that the broad formulations are under-specified.
 
+### E-023 — the four-variable Hessian conjecture
+
+- Claim: `HC_n` is true for `n≤3`, false for `n≥5`, and open only for `n=4`; moreover `HC4 => JC2`.
+- Primary sources: Meng and Yang, [arXiv:2607.22198](https://arxiv.org/abs/2607.22198); Ni, [arXiv:2608.14217](https://arxiv.org/abs/2608.14217).
+- Local locators: north-stars/2607.22198.txt:16–31, 43–87; north-stars/2608.14217.txt:12–24, 62–91, 504–535.
+- Evidence direction: identifies an unusually legible post-Jacobian moonshot and supplies a degree-bounded ladder.
+- Qualification: the four-variable quartic case was proved on 2026-08-14. The next degree-bounded rung begins at degree five, but a bounded-degree theorem is not the full `HC4`. The lane is extraordinarily fresh and crowded.
+- Confidence: high on the cited status at publication; later-status conclusion is bounded through 2026-08-27.
+
+### E-024 — zeta north star and fast-following record claims
+
+- Established baseline: Anthropic's paper proves `0.672500703679...` for simple zeros on the critical line and supplies a Lean artifact for its stated headline theorems.
+- Primary/first-party source: [Anthropic's research report](https://www.anthropic.com/research/riemann-zeta) and the downloaded paper under `north-stars/anthropic-zeta-2026.pdf`.
+- Fast-follow evidence: public repositories now advertise `0.673008527927...`, `0.673192911473...`, and a `0.673312742272...` record candidate, all downstream of the same analytic framework and all explicitly pending expert review or end-to-end formalization.
+- Reproduction: at pinned commit `040c5e899e658aed7b56a2a87f501798fe10761d`, 7/7 tests passed; the three-point verifier passed at 128-bit precision; the seven-point verifier passed after 707,901 nodes and reproduced `0.6730085279277798`.
+- Local audit: `north-stars/zeta-followup-audit-2026-08-27.md`; stronger-candidate snapshot pinned at commit `1610b97b7895ff34982260f8dcaf04a0f7b82cf7` under `north-stars/zeta-simple-zeros-673137-claim/`.
+- Qualification: the replay checks the supplied finite inequalities, not every analytic implication in the draft. None of the fast-follow constants is treated here as an established theorem or accepted priority record.
+- Confidence: high on the local verifier output; low on the unaudited global theorem claims.
+
+### E-025 — exact first cell for weighted regression
+
+- Claim: the companion theorem gives `R(d,n)=infinity` for `n<d`, `R(d,d)=d+1`, and `R(d,n)=1` for `n≥2d`; the regime `d<n<2d` remains open in the published record located.
+- Primary sources: Hanneke et al., [Data Selection for ERMs](https://proceedings.mlr.press/v291/hanneke25a.html) and [Open Problem: Data Selection for Regression Tasks](https://proceedings.mlr.press/v291/hanneke25e.html).
+- Evidence direction: replacing the author-signaled endpoint with `R(3,4)` removes a priority trap. It is the smallest weighted scalar-regression cell neither covered by the theorem nor equal to `2d−1`.
+- Qualification: a complete result needs both a universal upper bound over all finite datasets and an explicit extremal dataset, including rank-deficient selected designs, support sizes below four, arbitrary convex weights, minimum-norm tie-breaking, and the zero-optimum convention.
+- Cousin trap: the August 2026 preprint “Sharp Pair Selection for Mean Regression” concerns unweighted mean estimation, not weighted linear regression.
+- Confidence: high on the statement match; `NO_PRIOR_FOUND` for a later solution is bounded by the logged searches.
+
+### E-026 — quant-mathematics leads
+
+- Full SVI: Martini and Mingone [fully characterize](https://arxiv.org/abs/2005.03340) the no-butterfly domain, but their implementation still uses root finding and numerical minimization; their [sub-SVI paper](https://arxiv.org/abs/2106.02418) provides explicit domains only for lower-parameter families.
+- American put: the zero-dividend boundary is proved convex; Chen, Cheng, and Chadam's [nonconvexity paper](https://sites.pitt.edu/~chadam/papers/LargeDNonConvex.pdf) proves nonconvexity when the dividend rate is slightly above the interest rate and describes the positive-dividend convexity region as open in its source context.
+- Cross impact: current concave-cross-impact work derives consistency conditions ruling out manipulation, so a launch target must isolate an uncovered singular kernel or a necessity-versus-sufficiency gap rather than repeat the broad question.
+- Evidence direction: supports a separate quant reconnaissance lane with real model relevance and exact theorem interfaces.
+- Qualification: these sources do not establish that every proposed formulation remains open in August 2026. Each needs a fresh domain-expert and current-literature audit before promotion.
+- Confidence: high on the paper statements; medium-low on current target availability.
+
 ## Adversarial review ledger
 
 | Review | Tier | What it tried to break | Material outcome |
@@ -308,6 +418,9 @@ Running all targets as one undifferentiated search would destroy falsifiability.
 | V-T1-01 hostile audit | T1, same model family | Initial 13-candidate ranking, exact statements, application claims, certificate claims | Promoted R(5,5); required field-pinning for tensor rank; corrected transformer quantifiers; demoted broad AdamW/backtesting; killed four under-specified applied programs |
 | V-T1-02 pure-math scout | T1, same model family | Searched for quieter exact problems with compact witnesses and checked stale/cousin traps | Added rectilinear K28, Costas-32, APN-8, S(13), N(18); rejected projective-plane order 12 and Moore degree 57 as all-or-nothing without a useful rung |
 | V-T1-03 ML/quant scout | T1, same model family | Searched current COLT/arXiv targets, attempted cousin/refutation checks, and challenged direct-use claims | Added SQ-dimension, ALS, weighted data selection, private PAC, one-bit mean, randomized memory-query; identified five 2026 moved problems |
+| V-T1-04 exact-pilot source audit | T1, same model family | Reconstructed K28's one-bit interval and audited Costas databases, current papers, repositories, and certificate requirements | Raised K28 source confidence; bounded the Costas statement to “no published/catalogued witness found”; refused universal absence; identified Costas as more attention-legible but more lottery-like |
+| V-T1-05 weighted-regression audit | T1, same model family | Searched the exact theorem, companion paper, endpoint formula, and adjacent 2026 work | Confirmed the published intermediate regime remains unresolved in bounded searches; demoted the author-signaled `n=2d−1` endpoint; selected `R(3,4)` as the clean first original cell |
+| V-T1-06 hostile allocation review | T1, same model family | Attacked the revised ranking for certificate-size bias, attention inflation, missing negative routes, crowding, and north-star mismatch | Split the leaderboard by objective; promoted field-pinned tensor rank over Costas overall; retained K28 as a quiet pilot; added `HC4` only to the moonshot lane; required stronger wording around ReLU `max_11` |
 
 No review above is independent-family corroboration. Before any public claim, the selected target should receive at least one domain-expert or genuinely cross-family T2 review, followed by an independent verification implementation.
 
@@ -321,6 +434,9 @@ No review above is independent-family corroboration. Before any public claim, th
 | Exact-value derivative-free convex-optimization gap | Moved up to polylogarithms | [arXiv:2607.13335](https://arxiv.org/abs/2607.13335) |
 | COLT 2026 piecewise-Lipschitz/root anti-concentration questions | Materially moved | [arXiv:2608.01670](https://arxiv.org/abs/2608.01670); remaining statement needs a fresh audit |
 | Shannon capacity lower bound for C7 | Benchmark, not flagship | July 2026 record [arXiv:2607.21517](https://arxiv.org/abs/2607.21517) is already LLM-assisted and the lane is crowded |
+| Post-Anthropic simple-zeta-zero constant within the same stability/window framework | Hyper-crowded audit benchmark | Several public AI-generated repositories advertised successively stronger constants within days; one finite verifier was replayed here, but the global theorem remains unverified and the current claimed record is moving faster than expert review |
+| Quartic four-variable Hessian conjecture | Moved; full `HC4` remains | Ni proved degree at most four in [arXiv:2608.14217](https://arxiv.org/abs/2608.14217); do not pitch the quartic case or confuse a future degree-five rung with full `HC4` |
+| Weighted regression `R(d,2d−1)=1+1/d` | Priority collision / replication gate | The open-problem authors say they believe they already possess an argument; target `R(3,4)` or the full intermediate curve instead |
 | Robust factor covariance as originally pitched | Remove/rebuild | [arXiv:2410.01826](https://arxiv.org/abs/2410.01826) already combines much of the proposed robust factor/portfolio story |
 | Generic multidimensional martingale OT stability/rates | Reject generic positive version | [arXiv:2101.06964](https://arxiv.org/abs/2101.06964) gives qualitative instability in dimension at least two; positive results require structure |
 | Full training-DAG memory/recompute/communication theorem | Systems program, not one theorem | Machine model and fidelity dominate; MODeL and selective recomputation already occupy major pieces |
@@ -365,26 +481,36 @@ Expanded sources include:
 - Hadwiger–Nelson and current cousins.
 - Backtesting/Adam evidence and moved-frontier papers.
 
-PDFs and pdftotext extractions are stored side by side. A hash manifest should be regenerated whenever the corpus changes.
+North-star sources now include the Anthropic zeta paper/note, OpenAI's ten-advances and reasoning-walkthrough documents, the Jacobian consequences paper, the `HC5`/low-dimensional status paper, and the quartic `HC4` paper. Two post-Anthropic zeta repositories are pinned locally as **unreviewed research artifacts**, not accepted papers.
+
+The quant folder now includes both full-SVI and sub-SVI papers, the American-put boundary nonconvexity paper, a current quant-finance benchmark paper, and the curated formal-mathfin open-problem list used only for scouting.
+
+PDFs and pdftotext extractions are stored side by side. `MANIFEST.sha256` was regenerated after Round 3 and binds 183 files while deliberately pruning nested `.git`, virtual-environment, and bytecode-cache metadata.
 
 ## Remaining gaps before launch
 
-1. T2 gap: no independent-family or domain-expert review yet.
-2. Rectilinear K28: independently reproduce the 7,233–7,234 interval from source constructions/inequalities, not just maintained tables.
-3. Costas-32: audit the current database and all post-February-2026 search claims; verify no unpublished repository witness appeared.
-4. Weighted regression: perform an exact citation search around the authors’ claimed n=2d−1 argument and Hanneke et al. 2025 companion paper.
-5. APN-8: validate the June 2026 preprint’s code/data and independently implement the DDT/CCZ checks.
-6. Sorting S(13): settle the provenance of the 44 lower bound before advertising a one-bit interval.
-7. Kochen–Specker: distinguish the machine-checked geometric half from the still-uncomposed end-to-end lower-bound certificate.
-8. For every ML target: freeze every quantifier, model, norm, error metric, precision assumption, and source version in the problem specification.
+1. **T2 remains open:** no independent-family or domain-expert review yet.
+2. **K28 baseline reconstructed:** the primary inequality chain and archived 7,234 integer-coordinate construction have now been replayed exactly; a second implementation/reviewer remains desirable before launch.
+3. **Costas bounded audit completed:** no published/catalogued witness was found, but launch still needs recovery benchmarks on known order-29 arrays and a final repository sweep; universal absence remains unclaimable.
+4. **Weighted-regression citation audit completed:** before publication, contact or otherwise check the authors' private `n=2d−1` argument; use `R(3,4)` as the proposed original target and rerun novelty.
+5. **ReLU:** estimate `max_11` system/certificate size and predeclare that failure of any chosen ansatz is only a bounded null.
+6. **Matrix rank:** freeze the field and keep rank, border rank, ring validity, and addition count as distinct claims.
+7. **HC4:** sweep degree-five and structural subclasses posted after 2026-08-14 before allocating compute.
+8. **Zeta follow-ups:** independently audit the analytic reduction and transport the strongest stable candidate into a proof assistant or a clean-room checker before treating any claimed constant as established.
+9. **APN-8:** validate the June 2026 preprint’s code/data and independently implement the DDT/CCZ checks.
+10. **Sorting S(13):** settle the provenance of the 44 lower bound before advertising a one-bit interval.
+11. **Kochen–Specker:** distinguish the machine-checked geometric half from the still-uncomposed end-to-end lower-bound certificate.
+12. **Every ML/quant target:** freeze every quantifier, model, norm, error metric, precision or market assumption, and source version in the problem specification.
 
-## Round 2 decision
+## Round 3 decision
 
-The most defensible first discussion is not “which famous conjecture shall we solve?” It is:
+The most defensible next discussion is not “which single famous conjecture shall we solve?” It is which test we want the skill to pass:
 
-- Do we want the best quiet exact pilot: rectilinear K28?
-- The cleanest applied construction: Costas-32?
-- The best theorem-shaped ML pilot: weighted regression data selection?
-- Or the highest-ceiling moonshot: R(5,5), APN-8, field-pinned 3x3 tensor rank, or terminal ReLU depth?
+- **Verifier-first exact pilot:** rectilinear K28.
+- **Theorem-first ML pilot:** compute `R(3,4)` in weighted regression.
+- **ML attention flagship:** terminal shallow-ReLU depth, with `max_11` as a rung.
+- **Algebraic attention flagship:** field-pinned 3×3 tensor rank.
+- **North-star moonshot:** full `HC4`, with degree-five work explicitly labeled as a bounded rung.
+- **Quant reconnaissance:** full-SVI explicitness or the `0<q<r` American-put boundary, only after a dedicated current-status audit.
 
-That choice changes the search architecture, verifier, compute budget, and honest definition of progress.
+My highest conviction for testing the *skill itself* is K28 first: its one-bit statement, exact positive certificate, and residual source-reconstruction task exercise the ledger and verifier disciplines without pretending it is the highest-ceiling theorem. If the objective is attention rather than skill validation, terminal ReLU and field-pinned matrix rank are stronger allocations. `HC4` should be held as a deliberately low-probability moonshot, not allowed to consume the whole portfolio.

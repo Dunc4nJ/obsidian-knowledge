@@ -1,0 +1,1783 @@
+                                                               Counterexamples to the Jacobian conjecture
+                                                                     in dimensions greater than two
+                                                                                           Shuhong Gao∗
+                                                                        School of Mathematical and Statistical Sciences
+                                                                        Clemson University, Clemson, SC 29634-0975
+                                                                                Email: sgao@clemson.edu
+
+                                                                                           July 31, 2026
+arXiv:2608.00222v1 [math.AG] 31 Jul 2026
+
+
+
+
+                                                                                              Abstract
+                                                      The Jacobian conjecture, open since 1939, asks whether every polynomial map of Cn whose
+                                                   Jacobian determinant is a nonzero constant must have a polynomial inverse. It was refuted in
+                                                   dimension three by Alpöge on July 19, 2026, with an inﬁnite family by Gallagher (July 20) and
+                                                   a geometric explanation by Speyer (July 23): the counterexample sweeps the tangent lines of
+                                                   a plane curve — a map that classical duality forces to hit most points several times. We give
+                                                   a self-contained account of this tangent-sweep mechanism and generalize it from plane curves
+                                                   to direction ﬁelds on hypersurfaces. The resulting construction produces counterexamples in
+                                                   every dimension greater than two and, in each dimension, of arbitrarily large geometric degree
+                                                   (the number of preimages of a typical point). We work it out in ﬁve new explicit maps: one
+                                                   three-dimensional of degree four, two four-dimensional of degrees ﬁve and ten, and two ﬁve-
+                                                   dimensional of degrees six and twelve. The counterexamples provide explicit examples of étale
+                                                   coverings Cn → Cn that are not proper: they are everywhere unramiﬁed, and fail to be injective
+                                                   only through points escaping to inﬁnity. All identities were veriﬁed in exact rational arithmetic;
+                                                   an appendix determines exact ﬁber structures through Gröbner bases.
+
+
+                                           1       Introduction
+                                           Let F : Cn → Cn be a polynomial map. Throughout this paper we use the following conventions.
+                                           The value F (x) is written as a column vector of the n components of F ; consequently each partial
+                                           derivative ∂i F := ∂F/∂xi is again a column vector, and the Jacobian matrix of F is
+                                                                                                             
+                                                                             J(F ) = ∂1 F, ∂2 F, . . . , ∂n F ,
+
+                                           the square matrix whose columns are the partial derivatives, with the variables taken in the order in
+                                           which they are displayed. More generally, for column vectors V1 , . . . , Vk of equal length, (V1 , . . . , Vk )
+                                           denotes the matrix with these columns; adjoining a column ∆ to a matrix J is written (∆, J). If
+                                           F has a polynomial inverse, the chain rule forces det J(F ) to be a nonzero constant. The Jacobian
+                                           conjecture, raised by Keller [7], asserts the converse: a polynomial map with det J(F ) ∈ C× (a Keller
+                                               ∗
+                                               AI disclosure: The main idea and framework are due to the author, and Claude Fable 5 assisted in the proofs
+                                           and in the writing up of the paper.
+
+
+                                                                                                   1
+map) is a polynomial automorphism. The problem became widely known through the survey of
+Bass, Connell and Wright [1] and the book of van den Essen [5].
+    On July 19, 2026, the conjecture was refuted in dimension three by an explicit counterexample
+announced by L. Alpöge [11]. The next day, Gallagher [12] gave a uniform one-variable construction
+producing, for every integer d ≥ 3, an explicit counterexample of geometric degree d; expositions
+by Tao (July 21) [15] and Speyer (July 23) [14] followed. The ﬁrst counterexample is a polynomial
+map F : C3 → C3 with det J(F ) ≡ −2 that identiﬁes three distinct points. Its mechanism, isolated
+and named the tangent sweep by Speyer [14], is strikingly classical: one sweeps the tangent lines
+of a plane curve — a map that is unavoidably many-to-one, by projective duality — and then
+conjugates by monomial maps so that the Jacobian factor picked up by the sweep is cancelled
+exactly. The price of the cancellation is that the ramiﬁcation of the sweep is pushed to inﬁnity: the
+resulting Keller map is everywhere unramiﬁed but not proper, and injectivity fails through escape
+to inﬁnity, a loophole the Jacobian hypothesis never excluded.
+    This paper has several goals. First (§3), we give a self-contained account of the tangent-sweep
+mechanism in the plane and of the ﬁrst counterexample (§3.4), including a complete description of
+its ﬁbers: the generic ﬁber has 3 points, the ﬁber degenerates to 1 point over an irreducible surface
+Σ in the target and to the empty set over a rational curve C ⊂ Σ, and no ﬁber has exactly 2 points.
+The entire stratiﬁcation is the projective duality of a cuspidal cubic read through a monomial twist.
+Second (§3.5), we construct along the same lines a new three-dimensional Keller map of geometric
+degree four, based on a rational quartic curve with two cusps and a node; throughout the paper, the
+geometric degree of a generically ﬁnite polynomial map is the number of points in its generic ﬁber,
+so “geometric degree d” and “generic ﬁber of exactly d points” are synonymous. Third (§4), we give
+a general construction, valid in every dimension n > 2, based on sweeping tangent direction ﬁelds
+on parametrized hypersurfaces. The methods are developed in §4.1–§4.3: prescribed direction ﬁelds
+and their tangency criterion, formulated as exterior-product identities for any direction ﬁeld with
+unimodular component row, which split the construction into escape branches (§4.2); and the side
+conditions of the monomial twist, organized into the discrete data and the stage equations (§4.3).
+Concrete examples follow in dimension four (§4.4): sweeping a tangent direction ﬁeld on a suitable
+non-cylindrical ruled surface in C3 produces a Keller map F4 : C4 → C4 with det J(F4 ) ≡ − 44      9 and
+geometric degree ﬁve — since geometric degree is invariant under composition with polynomial
+automorphisms, F4 is not equivalent to any product Φ × id of a three-dimensional Keller map Φ
+of geometric degree 6= 5 with the identity, in particular not to the trivial extension of Alpöge’s
+example — while specializing the second (M -)branch to the direction ﬁeld (1, w1 , w2 )T yields a
+further four-dimensional counterexample F5 of geometric degree ten (§4.4.2). The framework is
+then carried into dimension ﬁve (§4.5), where a new phenomenon appears: the direction ﬁeld
+decides not only which escape branch is available but whether a branch is rigid. For the mixed ﬁeld
+∆ = (1, w1 , w12 , w2 )T — the ﬁrst direction ﬁeld that is neither curve-like nor tautological — the
+top branch vanishes identically, and we prove that on the middle branch the governing equation
+degenerates, on a natural characteristic-invariance locus, to a linear transport equation all of whose
+solutions are suspensions of four-dimensional sweeps — whether the entire middle branch is rigid
+is left as an open problem (Problem 4.8); the bottom branch, by contrast, is ﬂexible, and we
+construct from it an explicit ﬁve-dimensional Keller map F6 with det J(F6 ) ≡ −290, of geometric
+degree six, whose ﬁber over a punctured coordinate axis has exactly four points. Finally (§4.6),
+the curve-type direction ﬁeld (1, w1 , . . . , w1n−2 )T admits a reductive construction, uniform in every
+dimension: its normalization is equivalent to prescribing a w1 -family of constant-Jacobian maps of
+
+
+                                                   2
+Cn−3 plus one free potential, its ﬁbers are governed by a single univariate polynomial generalizing
+the tangency polynomial of the plane theory, and it yields a second ﬁve-dimensional counterexample
+F7 , of geometric degree twelve; since the transverse data need only have constant Jacobian, Keller
+counterexamples in n − 3 variables can themselves serve as data, so the construction propagates
+its own counterexamples along n 7→ n + 3. In particular, the construction introduced here is not
+limited to the ﬁve explicit maps of this paper: it produces counterexamples in every dimension
+n > 2 and, within each ﬁxed dimension, of arbitrarily large geometric degree — for n = 3 through
+Gallagher’s family, and for every n ≥ 4 through the curve-type ﬁeld, whose free data may be chosen
+of arbitrarily high degree, the geometric degree being the degree of the univariate ﬁber polynomial
+of Proposition 4.11.
+     All polynomial identities asserted below (Jacobian determinants, divisibilities, ﬁber counts at
+rational points) were veriﬁed by exact rational arithmetic; the veriﬁcation scripts are available from
+the author. Appendix A deﬁnes graph ideals and analyzes exact ﬁber sizes: for F we give the full
+(six-element) reduced lexicographic Gröbner basis certifying the stratiﬁcation of §3.4; for G we prove
+a complete ﬁber-size theorem (Theorem A.1) showing that G attains every ﬁber size in {4, 3, 2, 1, 0};
+for F4 –F7 , whose Gröbner bases are out of reach, we summarize the univariate elimination data
+behind the generic counts, the complete stratiﬁcations being deferred to a subsequent version.
+
+
+2    Background and previous work
+We recall what was known before 2026; see [5] for a comprehensive treatment. Wang [16] proved the
+conjecture for maps of degree at most 2 in any dimension. Bass–Connell–Wright [1] and Yagzhev
+[17] showed that it suﬃces to prove the conjecture for maps of the form x + H(x) with H cubic
+homogeneous (in all dimensions simultaneously), and Drużkowski [4] reduced further to the case
+where each component of H is the cube of a linear form. In dimension two, Moh [8] veriﬁed the
+conjecture for maps of degree at most 100; the two-dimensional case remains open and is untouched
+by the counterexamples discussed here, which exist only in dimension ≥ 3 (by Wang’s theorem,
+degree 2 examples are impossible, and the known constructions produce degree ≥ 3).
+    Two structural facts frame the counterexample. A theorem of Bialynicki-Birula and Rosenlicht
+[2] states that an injective polynomial map Cn → Cn is bijective with polynomial inverse; hence
+a Keller counterexample must fail injectivity. Since a Keller map is étale (unramiﬁed), it is a
+local biholomorphism everywhere, so non-injectivity can only occur through failure of properness:
+distinct preimages cannot collide over any target point, they can only escape to inﬁnity. The locus
+of points over which a polynomial map is not proper was studied by Jelonek [6], who showed it is
+either empty or a hypersurface. In the real category, Pinchuk [9] had already constructed a non-
+injective polynomial map of R2 with everywhere nonvanishing (nonconstant) Jacobian, an early
+warning that unramiﬁedness does not force injectivity. The counterexamples below realize this
+scenario over C with constant Jacobian: they are étale of geometric degree d > 1 onto their (open,
+dense) image, with the ﬁber count dropping only across the Jelonek hypersurface.
+
+
+3    The tangent sweep of a plane curve
+In this section we describe the main idea behind Alpöge’s counterexample and Gallagher’s family
+[12], following the tangent sweep picture due to Speyer [14].
+
+
+
+                                                  3
+3.1   The sweep and its Jacobian
+Let p, q ∈ C[w] with p nonconstant, and let K : w 7→ (p(w), q(w))T be a parametrized plane curve.
+Throughout this section we assume
+                                          deg q ≤ deg p + 1,
+so that the tangent slope q ′ /p′ stays bounded as w → ∞: the tangent direction of K does not
+degenerate to the vertical at its place at inﬁnity. The assumption is exactly the compatibility
+condition for the normal form below: comparing degrees in the normalization q ′ = w2 p′ shows that
+any pair satisfying it has deg q = deg p + 1 exactly, while a pair with deg q > deg p + 1 cannot
+be brought to that form; and it is what makes the degree and leading-coeﬃcient statements of
+Lemma 3.1 — hence the ﬁber counts — uniform over all targets.
+    The tangent sweep of K is the map sending (point of K, position along its tangent line) to the
+plane:
+                                                      T
+           T0 (γ, w) = p(w) + γp′ (w), q(w) + γq ′ (w) ,    det J(T0 ) = γ (p′ q ′′ − p′′ q ′ ),
+the variables being ordered (γ, w). The factor p′ q ′′ − p′′ q ′ vanishes at inﬂection points. Normalizing
+the direction ﬁeld to δ = (2, w)T , which is tangent exactly when q ′ = w2 p′ , i.e.
+                                                Z w
+                                                       s ′
+                                        q(w) =         2 p (s) ds,                                     (1)
+                                                   0
+gives the inﬂection-free normal form
+                                                           T
+                      S(γ, w) = p(w) + 2γ, q(w) + γw            ,   det J(S) = 2γ.
+Thus the sweep is unramiﬁed except over γ = 0, which maps onto the curve itself, and its Jacobian
+is a coordinate.
+
+3.2   Fibers and duality
+Fix a target point (X, Y ) ∈ C2 and solve S(γ, w) = (X, Y ). The ﬁrst coordinate determines the
+position along the tangent line, γ = 12 (X − p(w)); substituting into the second coordinate leaves a
+single equation in w, the tangency polynomial
+                                                                
+                              WX,Y (w) = q(w) + w2 X − p(w) − Y.                                 (2)
+Its meaning is geometric: the tangent line of K at the parameter value w is the line {K(w) +
+γ (2, w)T : γ ∈ C}, and WX,Y (w) = 0 says exactly that this line passes through (X, Y ). A root w0
+of WX,Y is thus a parameter of tangency: it names the point K(w0 ) of the curve at which some
+tangent line through (X, Y ) touches K. (Picture a point outside a parabola: two tangent lines pass
+through it, touching the parabola at two points; the two parameter values naming those points of
+contact are the two roots of WX,Y .)
+                                                                                   
+Lemma 3.1. For every (X, Y ) ∈ C2 the assignment w0 7→ 21 (X − p(w0 )), w0 is a bijection from
+the set of distinct roots of WX,Y onto the ﬁber S −1 (X, Y ). If deg p = d then degw WX,Y = d+1 with
+leading coeﬃcient −lc(p)/(2(d + 1)), independent of (X, Y ): every ﬁber of S is ﬁnite of cardinality
+at most d + 1, and S is generically (d + 1)-to-one. Moreover the normalization (1) gives the exact
+derivative identity
+                                              
+                        ′
+                     WX,Y  (w) = 12 X − p(w) = γ,               ′′
+                                                             WX,Y  (w) = − 21 p′ (w).            (3)
+
+                                                       4
+    The identity (3) — the derivative of the tangency polynomial is the sweep multiplier — organizes
+all ﬁber degenerations, and is used repeatedly later:
+
+   • Multiple roots lie on the curve. w0 is a multiple root iﬀ W = W ′ = 0 there, i.e. iﬀ γ = 0 and
+     (X, Y ) = K(w0 ): the discriminant locus of WX,Y in the (X, Y )-plane is the swept curve itself
+     (the envelope of its tangent lines). Concretely, for the cuspidal cubic of §3.4, where WX,Y is
+     proportional
+                  to w3 − 2w2 + Xw − 2Y , one has the exact identity discw w3 − 2w2 + Xw −
+     2Y = −4 E(X, Y ) with E the implicit equation of the cubic — the sweep-level source of the
+     discriminant factorizations in Theorem 3.4 and Appendix A.
+
+   • Contact bookkeeping. A point of K sees its own tangent doubly: at a smooth point K(w0 ) the
+     root w0 of WK(w0 ) has multiplicity exactly 2 (by (3), W ′′ (w0 ) = − 21 p′ (w0 ) 6= 0). At a cusp
+     (p′ (w0 ) = 0, hence also q ′ (w0 ) = 0) the multiplicity is ≥ 3: the cusp sees its cuspidal tangent
+     triply. At a node, two parameters w1 6= w2 are each double roots.
+
+   • The multiplier detects the point of contact. A root has γ = 0 iﬀ the target (X, Y ) is the point
+     of tangency itself; these are exactly the solutions lying on the ramiﬁcation locus of S.
+
+    Counting distinct roots gives the ﬁber sizes of the sweep, and — after the twist of §3.3, which
+deletes precisely the solutions with γ = 0 — of the Keller maps built from it:
+
+Proposition 3.2 (ﬁber sizes). Let deg p = d. The ﬁber of the sweep S over (X, Y ) has cardinality
+
+        d + 1 if (X, Y ) ∈
+                         / K,     d at a smooth point of K,         d − 1 at a cusp or a node,
+
+each contact of order k collapsing k simple roots into one multiple root. The solutions with γ = 0
+are exactly the multiple roots, so for the twisted map the corresponding sheets escape to inﬁnity and
+the ﬁber sizes become
+
+      d + 1 (generic),    d − 1 (smooth curve points),         d − 2 (cusps),       d − 3 (nodes),
+
+away from the degeneration loci of the monomial conjugation itself, which can contribute further
+strata. Both reﬁnements are visible in the examples: for d = 2 (Theorem 3.4) the sizes are 3, 1, 0
+— no nodes, and no extra strata; for d = 3 (Theorem A.1) they are 4, 2, 1, 0, plus a twist stratum
+of size 3 over a hyperplane invisible at sweep level.
+
+    Behind the generic count stands classical duality: d + 1 is the class of K, the degree of the dual
+curve K∨ , computable from the Plücker formula m = deg(deg −1) − 2δ − 3κ for a curve with δ
+nodes and κ cusps; the constancy of the leading coeﬃcient of WX,Y says that no tangency parameter
+escapes to w = ∞ as the target moves, so the count d + 1 holds over every target, with multiplicity.
+
+3.3     The monomial twist
+The sweep is not a Keller map (det J(S) = 2γ), but the factor γ can be cancelled by conjugation
+with monomial maps. Pad the sweep to three variables and compose:
+                                   
+   x               x           x          x
+        monomial         aﬃne      w=γu
+  y  −−−−−−−→   xy          
+                        −−−−→ γ −−−−−→   γ
+   z                2
+                  x z          u         w
+
+                                                   5
+                                                                          
+                                                                                        
+                                                                       γx            C
+                                                          padded sweep      twist
+                                                         −−−−−−−−−→  P  −−−−→  P/C  ,
+                                                                       Q            Q/C 2
+
+where γ = γ0 + a xy + b x2 z, u = 1 + xy, P = p(w) + 2γ, Q = q(w) + γw and C = γx. The Jacobians
+multiply to
+                                   C −3 · 2γ 2 · γ · x3 · (−b) = −2b,
+a nonzero constant. (Permuting the components of the ﬁnal map changes the sign of the determinant
+by the sign of the permutation; this accounts for det J(F ) = −2 below, where the traditional
+component order reverses the one displayed here.) The twist requires C | P and C 2 | Q; these
+divisibilities amount to ﬁnitely many linear conditions on the coeﬃcients of p (and on γ0 , a),
+the “side conditions” of [14]; §4.3 systematizes these conditions in every dimension. Because the
+ramiﬁcation locus γ = 0 of the sweep is exactly where the twisted coordinate C = γx degenerates,
+the composite is everywhere unramiﬁed; the d + 1 sheets of the sweep survive, but sheets that
+would have merged over the curve now escape to inﬁnity. The construction converts ramiﬁcation
+into non-properness. Varying d = deg p produces Keller counterexamples of geometric degree d + 1
+for every d ≥ 2 — this is Gallagher’s family [12] — which defeats all approaches to the conjecture
+through degree bounds.
+
+3.4     The ﬁrst counterexample and its ﬁber structure
+We ﬁrst run the scheme of §3.3 with deg p = 2, which recovers the counterexample of Alpöge [11].
+The solution of the side conditions in closed form is
+
+      p(w) = −3w2 + 4w,      q(w) = −w3 + w2 ,        γ = 2 − 3xy − x2 z,     u = 1 + xy,   w = γu
+
+(q is (1) for this p), and the map, in Alpöge’s original component order,
+                                 q(w) + γw p(w) + 2γ          T
+                          F =               ,             , γx    : C3 −→ C3
+                                    (γx)2          γx
+(the sweep order of §3.3 lists the components in reverse; the reversal is a transposition of the outer
+components and multiplies the Jacobian determinant by −1).
+Theorem 3.3. F is a polynomial map with components of degrees 7, 6, 4; its Jacobian determinant
+is identically −2; and its generic ﬁber consists of exactly 3 points.
+    A few comments on the ingredients. In the sweep order the determinant is −2b = 2 with b = −1,
+and the component reversal contributes the sign −1. The divisibilities required
+                                                                                 by the twist are
+explicit: p(w) + 2γ = γ −3γu2 + 4u + 2 and q(w) + γw = γ 2 −γu3 + u2 + u , and both bracketed
+factors vanish at x = 0. The tangency polynomial (2) is, up to a constant factor, the cubic
+
+                                       w3 − 2w2 + Xw − 2Y,
+
+whose leading coeﬃcient is constant, so every target point admits three tangency parameters
+counted with multiplicity.
+    Written out in full — matching the form in [14, 15] — the map is F = (f1 , f2 , f3 )T with f3 = γx,
+f2 f3 = p(w) + 2γ, f1 f32 = q(w) + γw:
+
+                              f1 = (1 + xy)3 z + y 2 (1 + xy)(4 + 3xy),
+
+                                                  6
+                                f2 = y + 3x(1 + xy)2 z + 3xy 2 (4 + 3xy),
+                                f3 = 2x − 3x2 y − x3 z,
+
+and F (0, 0, − 14 ) = F (1, − 23 , 13            3 13         1
+                                    2 ) = F (−1, 2 , 2 ) = (− 4 , 0, 0): three distinct points with a common
+image. The underlying curve K = (p, q) is a rational cuspidal cubic with one cusp, at (p, q)( 23 ) =
+                                               T
+        4
+( 34 , 27 ), and no node; the Plücker formula gives class m = 3 · 2 − 3 · 1 = 3, matching the ﬁber count.
+       The ﬁbers of F are completely described by the following stratiﬁcation, which we established
+by exact computation (a lexicographic Gröbner basis of the graph ideal, together with symbolic
+lifting certiﬁcates over the function ﬁelds of the strata).
+
+Theorem 3.4. Let c3 (v) = 27v12 v32 −18v1 v2 v3 +16v1 +v23 v3 −v22 and a2 (v) = 54v1 v32 −18v2 v3 +16 =
+∂c3 /∂v1 , and let σ(v) = (v2 v3 , v1 v32 )T . Then:
+
+  1. discx of the elimination cubic of the graph ideal equals −c3 a22 , and a22 −4(4−3v2 v3 )3 = 108v32 c3 ;
+
+  2. v32 c3 = E ◦ σ where E(X, Y ) = X 3 − X 2 − 18XY + 16Y + 27Y 2 is the implicit equation of K,
+     and a2 is (a constant multiple of ) the equation of the cuspidal tangent line pulled back by σ;
+
+  3. the ﬁber of F over v has exactly 3 points if c3 (v) 6= 0 (with two of them sharing their x-
+     coordinate precisely when a2 (v) = 0), exactly 1 point if c3 (v) = 0 and v ∈/ C, and is empty
+                    4 −2 4 −1
+     if v ∈ C = {( 27 t , 3 t , t) : t 6= 0}, the σ-preimage of the cusp. In particular no ﬁber has
+     exactly 2 points, the image of F is C3 \C, and the Jelonek non-properness set is the irreducible
+     surface {c3 = 0} = σ −1 (K).
+
+   The mechanism is the contact geometry of Proposition 3.2 (here d = 2: sizes 3, 1, 0): crossing
+σ −1 (K), a double contact makes two sheets escape together (whence the exact square a22 in the
+discriminant, and the impossibility of ﬁber size 2); over the cusp the contact is triple and all three
+sheets escape.
+
+3.5    A three-dimensional example of geometric degree four
+We now run the scheme of §3.3 with deg p = 3. Gallagher’s family [12] contains examples of
+every geometric degree n ≥ 3, including a degree-four instance; the example below was obtained
+independently by solving the side conditions directly, and is recorded here with its veriﬁcation data.
+The solution in closed form is:
+
+p(w) = w3 −6w2 +6w,          q(w) = 83 w4 −2w3 + 23 w2 ,      γ = 2−4xy −x2 z,      u = 1+xy,      w = γu,
+
+(q is (1) for this p), and the map
+                                         p(w) + 2γ q(w) + γw T
+                         G =        γx,            ,             : C3 −→ C3 .
+                                             γx       (γx)2
+
+Theorem 3.5. G is a polynomial map with components of degrees 4, 11, 12; its Jacobian determi-
+nant is identically 2; and its generic ﬁber consists of exactly 4 points.
+
+    Here b = −1 and the components are in the displayed order, so det J(G) = −2b = 2. The
+divisibilities are again explicit: p(w) + 2γ = γ 6u − 6γu2 + γ 2 u3 + 2 and q(w) + γw = γ 2 38 γ 2 u4 −
+
+
+                                                     7
+                
+2γu3 + 32 u2 + u , and both bracketed factors vanish at x = 0. The tangency polynomial (2) is the
+quartic
+                                  1 4       3      2
+                                  4 w − 2w + 3w − Xw + 2Y,
+whose leading coeﬃcient is constant, so every target point admits four tangency parameters counted
+with multiplicity.
+   Written out in full, G = (g1 , g2 , g3 )T with
+        g1 = − x3 z − 4x2 y + 2x
+        g2 = x6 y 3 z 2 + 8x5 y 4 z + 3x5 y 2 z 2 + 16x4 y 5 + 20x4 y 3 z + 3x4 yz 2 + 32x3 y 4 + 18x3 y 2 z + x3 z 2
+               + 28x2 y 3 + 8x2 yz + 16xy 2 + 2xz + 2y
+        g3 = 38 x6 y 4 z 2 + 3x5 y 5 z + 23 x5 y 3 z 2 + 6x4 y 6 + 21 4 4
+                                                                   2 x y z
+               + 94 x4 y 2 z 2 + 18x3 y 5 + 14x3 y 3 z + 23 x3 yz 2 + 43 2 4
+                                                                      2 x y
+               + 9x2 y 2 z + 38 x2 z 2 + 14xy 3 + 3xyz + 92 y 2 + 12 z
+
+ All statements were veriﬁed exactly; the ﬁber count 4 was conﬁrmed at random√rational targets.
+The underlying curve (p, q)T is a rational quartic with two cusps, at w = 2 ± 2 (the common
+roots of p′ and q ′ ), and, by the genus count δ + κ = 3 for a rational quartic, one node; the Plücker
+formula gives class m = 4 · 3 − 2 · 1 − 3 · 2 = 4, matching the ﬁber count. The richer singularity
+structure of the curve produces a richer stratiﬁcation than in Theorem 3.4, which is worked out
+completely in Appendix A.2 (Theorem A.1), and follows the pattern of Proposition 3.2 with d = 3:
+double contact over smooth curve points gives ﬁbers of size 2, the two cusps give size 1, the node —
+where two branches each impose a double contact — gives empty ﬁbers, and over the hyperplane
+v1 = 0, where the elimination quartic degenerates, the ﬁber has 3 points (or 1 on a distinguished
+conic) — the twist stratum invisible at sweep level. Thus G attains every ﬁber size in {4, 3, 2, 1, 0}.
+
+
+4     A general construction from parametrized hypersurfaces
+In this section we propose a general framework, valid in any dimension n > 2: one sweeps a tangent
+direction ﬁeld on a parametrized hypersurface of dimension n − 2 in Cn−1 , pads by one multiplier
+variable, and twists by monomial maps. The framework is set up in §4.1 (where the branch
+coeﬃcients Lk are listed explicitly for n = 4 and n = 5) and §4.2 (which treats general n only).
+We then specialize: §4.4 is devoted to dimension four, with two counterexamples F4 and F5 , and
+§4.5 to dimension ﬁve, where the direction ﬁeld ∆ = (1, w1 , w12 , w2 )T leads to a rigidity theorem
+for the middle escape branch and, on the bottom branch, to a ﬁve-dimensional counterexample
+F6 . Finally, §4.6 solves the curve-type direction ﬁeld ∆ = (1, w1 , . . . , w1n−2 )T uniformly in every
+dimension — the normalization reduces to a w1 -family of constant-Jacobian maps of Cn−3 together
+with a free potential — and produces a second ﬁve-dimensional counterexample F7 , of geometric
+degree twelve.
+
+4.1   Sweeping a direction ﬁeld on a hypersurface
+The architecture sweeps a single tangent direction ﬁeld on a parametrized hypersurface, and we
+set it up at once for arbitrary dimension n ≥ 3. Let w = (w1 , . . . , wn−2 ), let X ∈ C[w] n−1 be a
+column vector of n − 1 polynomials, viewed as a parametrized hypersurface X : Cn−2 → Cn−1 , and
+write ∂i = ∂/∂wi , so that J(X) = (∂1 X, . . . , ∂n−2 X) is an (n − 1) × (n − 2) matrix whose column
+
+                                                               8
+span is the tangent space of X at w. A polynomial tangent ﬁeld is a column vector ∆ ∈ C[w] n−1
+with ∆(w) in the column span of J(X)(w) for all w, equivalently the tangency criterion
+                                                  
+                                      det ∆, J(X) ≡ 0,                                      (4)
+
+where (∆, J(X)) is the square matrix obtained by adjoining the column ∆. Under the standard
+identiﬁcation Λn−1 C n−1 ∼
+                         = C, the left-hand side is the exterior product ∆ ∧ ∂1 X ∧ · · · ∧ ∂n−2 X —
+the exterior-product form of the criterion referred to in the introduction. The padded sweep is
+                                                           
+                                                  γx
+                          F0 (x, γ, w) =                      : Cn → Cn .
+                                            X(w) + γ∆(w)
+                                                                    
+Lemma 4.1. Let ∆ be a polynomial tangent ﬁeld of X, i.e. det ∆, J(X) ≡ 0. Then, with the
+variables ordered (x, γ, w1 , . . . , wn−2 ),
+                                                           n−2
+                                                           X
+                                                        
+                      det J(F0 ) = γ det ∆, J(X) + γJ(∆) =     Lk γ k+1 ,
+                                                                     k=1
+
+where Lk is the sum of the determinants det(∆, C1 , . . . , Cn−2 ) in which exactly k of the columns Ci
+are taken from J(∆) and the rest from J(X).
+
+   We record the coeﬃcients explicitly in the two dimensions used below. For n = 4 (parameters
+w = (w1 , w2 ), columns in C[w]3 ) we write L := L1 and M := L2 :
+
+det J(F0 ) = γ 2 L+γ 3 M,     L = det(∆, ∂1 X, ∂2 ∆)+det(∆, ∂1 ∆, ∂2 X),        M = det(∆, ∂1 ∆, ∂2 ∆).
+
+For n = 5 (parameters w = (w1 , w2 , w3 ), columns in C[w]4 ), det J(F0 ) = γ 2 L1 + γ 3 L2 + γ 4 L3 with
+
+          L1 = det(∆, ∂1 ∆, ∂2 X, ∂3 X) + det(∆, ∂1 X, ∂2 ∆, ∂3 X) + det(∆, ∂1 X, ∂2 X, ∂3 ∆),
+          L2 = det(∆, ∂1 ∆, ∂2 ∆, ∂3 X) + det(∆, ∂1 ∆, ∂2 X, ∂3 ∆) + det(∆, ∂1 X, ∂2 ∆, ∂3 ∆),
+          L3 = det(∆, ∂1 ∆, ∂2 ∆, ∂3 ∆).
+
+Note that Ln−2 involves ∆ alone, and more generally the higher coeﬃcients are dominated by
+derivatives of ∆: which of them can be made a nonzero constant is decided by the direction ﬁeld
+before the hypersurface is chosen. All of these identities were veriﬁed by exact expansion.
+
+4.2   Prescribed direction ﬁelds and their tangency criterion
+In Lemma 4.1 the pair (X, ∆) is given together, with ∆ tangent to X. In the constructions
+that follow we reverse the roles: we prescribe the direction ﬁeld — an explicit polynomial map
+∆ : Cn−2 → Cn−1 , assigning to each parameter value w the direction that will be swept at the
+(yet unknown) point X(w) — and regard the hypersurface X as the unknown. For a ﬁxed ∆, the
+tangency criterion (4) then becomes a ﬁrst-order partial diﬀerential equation on the components of
+X, quasi-linear and multilinear in its ﬁrst derivatives; the normalization adds the conditions on the
+coeﬃcients Lk , in which X appears with progressively smaller weight as k grows: Lk is of degree
+n − 2 − k in the derivatives of X, and in particular the top coeﬃcient Ln−2 involves ∆ alone. Which
+normalization branch is available is therefore decided by the choice of ∆ before any equation on X
+
+
+                                                   9
+is solved. This section works with a general n > 2 throughout; everything speciﬁc to n = 4 and
+n = 5 is deferred to §4.4 and §4.5.
+    Both the tangency criterion and Lemma 4.1 reduce to plain matrix algebra, which we use to
+organize this analysis. Assume the column ∆ ∈ C[w] n−1 is unimodular, i.e. its entries generate the
+unit ideal of C[w]. Complete ∆ to a matrix U ∈ SLn−1 (C[w]) with ﬁrst column ∆, and let
+
+                                           N ∈ C[w] (n−2)×(n−1)
+
+be the matrix formed by the last n − 2 rows of U −1 . Then N ∆ = 0 (the rows of N are a free basis
+of the syzygies of ∆), and for arbitrary columns V1 , . . . , Vn−2 ,
+                                                                              
+                          det ∆, V1 , . . . , Vn−2 = det N (V1 , . . . , Vn−2 ) ,              (5)
+
+since U −1 (∆, V1 , . . . , Vn−2 ) has ﬁrst column e1 and det U −1 = 1. Applying (5) to the columns of
+J(X) + γJ(∆) and setting
+                                                                                       
+                P := N J(X),              Pe := N J(∆)       (n − 2) × (n − 2) matrices ,
+
+Lemma 4.1 becomes
+                                            
+                 det J(F0 ) = γ det P + γ Pe ,               with     det P = 0 (tangency),                     (6)
+
+and the branch coeﬃcients Lk of Lemma 4.1 are the coeﬃcients of det(P + γ Pe ) as a polynomial
+in γ: the tangency L0 = det P ≡ 0, and, for 1 ≤ k ≤ n − 2, Lk is the sum of the determinants
+obtained from P by replacing exactly k of its columns by the corresponding columns of Pe.
+    The normalization conditions now split into n − 2 branches, one for each index 1 ≤ k ≤ n − 2:
+
+   the Lk -branch:     Lj ≡ 0 (j 6= k),            Lk ≡ const 6= 0,        giving     det J(F0 ) = Lk γ k+1 .
+
+(For n = 4, where L = L1 and M = L2 as in §4.1, the two branches are called the L-branch and
+the M -branch.) Which branches can be realized is constrained by Pe = N J(∆), which depends on
+∆ alone: since every term of Lk contains k columns of Pe, one has Lj ≡ 0 automatically for all
+j > rank Pe , so the rank of Pe bounds the highest available branch. At the two extremes, a direction
+ﬁeld depending on a single parameter forces rank Pe ≤ 1 (only the bottom branch survives), while
+the tautological ﬁeld with Pe the identity opens the top branch k = n − 2. Mixed direction ﬁelds,
+whose Pe has intermediate rank, ﬁrst occur for n = 5 and are the subject of §4.5.
+    Two structural remarks apply for every n. First, on the locus where the ﬁrst row of P is nonzero,
+tangency (det P ≡ 0, i.e. P singular) expresses the remaining rows through rational multipliers, and
+the equality of mixed partial derivatives of the entries of X converts the row relations deﬁning P
+into scalar potentials; the branch equations then become a system of ﬁrst-order partial diﬀerential
+equations on the potentials. Second, when ∆ has a constant entry, the potentials can be chosen
+globally. Write ∆ = (δ1 , . . . , δn−1 )T with δ1 = 1, take the syzygy matrix N with rows − δi+1 eT   T
+                                                                                                  1 +ei+1
+(1 ≤ i ≤ n − 2), and deﬁne the potentials
+
+ Gi := Xi − δi X1        (i = 2, . . . , n − 1),       Γ := (G2 , . . . , Gn−1 )T ,   b := (δ2 , . . . , δn−1 )T .
+                                                                                      ∆
+
+Diﬀerentiating by the product rule, ∂j Gi = ∂j Xi − δi ∂j X1 − X1 ∂j δi , which in matrix form is
+
+                                         b
+                P = N J(X) = J(Γ) + X1 J(∆),                          Pe = N J(∆) = J(∆)
+                                                                                      b
+
+                                                        10
+(for the second identity, the row −δi+1 eT    T
+                                         1 + ei+1 applied to ∂j ∆ gives ∂j δi+1 − δi+1 ∂j δ1 = ∂j δi+1 ,
+since δ1 = 1 is constant). The whole branch analysis therefore takes place in the (n − 2) × (n − 2)
+pencil
+                           P + γ Pe = J(Γ) + µ J(∆),
+                                                   b       µ = X1 + γ,
+in which the hypersurface enters only through the potentials Γ and the scalar X1 ; this device is
+used systematically in §4.5 and §4.6.
+
+4.3    The twist in dimension n: the stage equations
+All the higher-dimensional maps below are produced by one and the same procedure, which converts
+a normalized sweep into a Keller map. Since we use it repeatedly, we record it once, together with
+the equations that have to be solved. The input is a padded sweep F0 = (γx, S)T , S = X + γ∆,
+on a branch of §4.2: det J(F0 ) = c γ k+1 . The output has the shape
+                                        S1         Sn−1 T
+                            F = C, e1 , . . . , en−1 ,            C = γx,
+                                        C          C
+after γ and w are expressed through the source variables by a monomial map and a stage. Three
+layers of choices are involved.
+    (i) Discrete data. Positive integers: weights dj for the parameters (wt wj = dj ), twist exponents
+ei for the target components, and x-degrees mj for the source monomials. They must satisfy
+                                                            X       X           X                 X
+wt(Xi ) ≥ ei (every monomial),        1+wt(∆i ) ≥ ei ,         mj =      ei ,       dj +(k+1) =      ei .
+                                                                j            i           j                   i
+
+                                                                                                             (7)
+The ﬁrst two conditions make Ei := Si γ,        γ d1 u1 , . . . , γ dn−2 un−2 /γ ei a polynomial   in (γ, u); the
+last two make the x- and γ-powers cancel in the determinant chain below.
+    (ii) The stage. On the source Cn ∋ (x, y1 , . . . , yn−1 ) put vj = xmj yj and let the stage be
+                                                                  P
+                           (γ, u1 , . . . , un−2 )T = θ 0 + L v + µ qµ µ(v) :
+
+a base point θ 0 , an invertible linear part L with columns col1 , . . . , coln−1 , and ﬁnitely many correc-
+tion vectors qµ ∈ Cn−1 attached to monomials µ(v) of degree ≥ 2. Let J ⊆ {1, . . . , n − 1} be the
+set of indices of the variables vj occurring in some correction monomial.
+Lemma 4.2. If every correction vector lies in V := span{colj : j ∈      / J}, then the stage is a
+polynomial automorphism of Cn−1 with constant Jacobian determinant det L.
+                            P
+Proof. The Jacobian is L + µ qµ ∇µ(v); in the multilinear expansion of its determinant, any term
+replaces a nonempty set of columns colj with j ∈ J (since ∂j µ 6= 0 forces j ∈ J) by vectors in V ;
+together with the untouched columns {colj : j ∈  / J} this places more than dim V columns inside
+V , so every such term vanishes. For the inverse: L−1 qµ ∈ span{ej : j ∈/ J}, so the J-coordinates
+of v are aﬃne in the stage values; substituting them into the corrections (which involve only those
+coordinates) recovers the remaining coordinates polynomially.
+
+   (iii) The side conditions. F is a polynomial map iﬀ x ei | Ei ◦ stage for every i; since vj has
+x-degree mj , this is the ﬁnite system
+                     
+         µ Ei ◦ stage = 0         for every monomial µ(v) of x-degree < ei , i = 1, . . . , n − 1. (8)
+Ordered by the x-degree r of µ, the system is triangular :
+
+                                                    11
+                                                                                                             d
+   • r = 0: Ei (θ 0 ) = 0 for all i — equivalently S(γ0 , w0 ) = 0 at the base parameters wj0 = γ0 j u0j :
+     the swept hypersurface passes through the origin. These n − 1 equations are absorbed into
+     the free data of X.
+
+   • r = 1: ∇Ei (θ 0 ) · colj = 0 for each vj of x-degree 1 and each i with ei ≥ 2: the low columns
+     lie in common kernels of gradients.
+
+   • r ≥ 2: for each column of x-degree r, kernel conditions ∇Ei · colj = 0 (ei > r); and for each
+     correction monomial µ of x-degree r, the inhomogeneous linear equation
+                                                                  
+                     ∇Ei · qµ = − µ Ei ◦ (aﬃne part of the stage)         (ei > r),
+
+        whose right-hand side is a Taylor coeﬃcient of Ei along the columns already chosen.
+Every unknown — the base point, a column, a correction vector — enters (8) for the ﬁrst time
+linearly, so the hierarchy is solved by ﬁnite-dimensional linear algebra, order by order; the only
+nondegeneracy required is the linear independence of the gradients involved at each step, together
+with the invertibility of the assembled L and the span condition of Lemma 4.2. The Jacobian
+determinants then multiply to
+                                      P                    P                          P
+                                      mj                  dj        k+1       −           ei
+                   det J(F ) =              | {zL} · |γ {z } · c| γ{z } · (γx)
+                                  |x {z } · det                                                = c det L,        (9)
+                                                                          | {z            }
+                                 monomials      stage    scalings det J(F0 )      twist
+
+a nonzero constant. The discrete data of the six maps of this paper are:
+             map     n   det J(F0 )         (dj )           (ei )         (mj )       det J(F ) = ±c det L
+             F       3      2γ 2             (1)          (1, 2)         (1, 2)                −2
+             G       3      2γ 2             (1)          (1, 2)         (1, 2)                 2
+             F4      4      2γ 2           (1, 1)        (1, 2, 1)      (1, 1, 2)             − 44
+                                                                                                 9
+                                                                                                  160
+             F5      4       γ3            (1, 2)        (1, 2, 3)      (1, 2, 3)                  29
+             F6      5       γ2           (1, 3, 4)     (1, 2, 3, 4)   (1, 2, 3, 4)              −290
+             F7      5       γ2           (1, 3, 4)     (1, 2, 3, 4)   (1, 2, 3, 4)             119377
+(the sign for F comes from the traditional component reversal). All the stage displays in the
+following subsections are solutions of (8) found exactly this way.
+
+4.4     The case n = 4
+4.4.1     Specialization I: ∆ = (1, w1 , w12 )T and the map F4
+The column ∆ = (1, w1 , w12 )T is unimodular, with the natural syzygy matrix of §4.2 (rows −δi+1 eT
+                                                                                                  1+
+ T
+ei+1 ):
+                            
+               −w1 1 0                                                           
+         N=        2            ,     N ∆ = 0,     det(∆, V, W ) = det N (V, W ) ∀V, W.
+               −w1 0 1
+Since ∆ depends only on w1 , its independent partial derivatives are ∆′ = ∂1 ∆ = (0, 1, 2w1 )T and
+∆′′ = ∂12 ∆ = (0, 0, 2)T (all higher ones vanish), and (∆, ∆′ , ∆′′ ) is a frame of constant volume
+det(∆, ∆′ , ∆′′ ) = 2; against the syzygy matrix,
+                                                                      
+                                             ′      1            ′′     0
+                            N ∆ = 0,     N∆ =            , N∆ =             .
+                                                   2w1                  2
+
+                                                             12
+For a ruled surface X = A(w1 ) + w2 B(w1 ) — so that ∂1 X = A′ (w1 ) + w2 B ′ (w1 ) and ∂2 X = B(w1 )
+— expand the data in the frame,
+
+                B = b1 ∆ + b2 ∆′ + b3 ∆′′ ,           A′ = a1 ∆ + a2 ∆′ + a3 ∆′′            (ai , bi ∈ C[w1 ]),
+
+so that, using ∆′′′ = 0, B ′ = b′1 ∆ + (b1 + b′2 )∆′ + (b2 + b′3 )∆′′ . The product P = N J(X) =
+(N ∂1 X, N ∂2 X) is now explicit: abbreviating c2 = a2 + w2 (b1 + b′2 ) and c3 = a3 + w2 (b2 + b′3 ),
+                                                                                
+                            c2            b2              e                   1 0
+               P =                                   ,    P = N J(∆) =               ,
+                      2(w1 c2 + c3 ) 2(w1 b2 + b3 )                          2w1 0
+
+and therefore                                        
+                                      det P + γ Pe       = 2 (c2 b3 − c3 b2 ) + 2 γ b3 .
+The coeﬃcient M of γ 2 vanishes automatically — this ∆ lives on the L-branch — the normalization
+L ≡ 2 forces b3 ≡ 1, and the tangency, i.e. the identical vanishing in w2 of the γ-free term, reduces
+to
+                              b3 = 1,     b1 = b22 − b′2 ,   a2 = a3 b2 .
+Thus, on the ruled ansatz, the branch data are three free polynomials b2 , a3 , a1 ∈ C[w1 ] (together
+with the constant of integration of A): the relations displayed determine b3 , b1 , a2 , the curve A
+is recovered from A′ by integration — which stays polynomial — and every such choice satisﬁes
+det J(F0 ) = 2γ 2 (veriﬁed by exact expansion on randomized data). The ﬁnitely many side condi-
+tions of the twist then select special members of this family. (In the language of §4.6, this is the
+case n = 4 of the curve-type family with G2 linear in w2 : the three free univariate polynomials
+correspond to the coeﬃcients of G2 = α(w1 )w2 + β(w1 ) and to ϕ(w1 ) in H3 = cw2 + ϕ.) Crucially
+there are solutions with b2 6≡ 0: the surface is then ruled but not a cylinder, and the second pa-
+rameter w2 enters every swept coordinate. (Cylindrical solutions b1 = b2 = 0 produce only shears
+of three-dimensional examples.)
+    Take b2 = w1 , a3 = 1 (so a2 = w1 , b1 = w12 − 1) and a1 = 13 − 38 w1 . Integrating, the curve and
+ruling are
+                                                                       T                                            T
+                      4 2       2 2    8 3
+A(w1 ) =       1
+               3 w1 − 3 w1 ,    3 w1 − 9 w1 ,   2w1 + 97 w13 − 23 w14        ,   B(w1 ) = w12 − 1, w13 , w14 + w12 + 2 ,
+
+so the surface X = A + w2 B = (p, q, r)T and the tangent ﬁeld ∆ are, explicitly,
+
+                                 p(w1 , w2 ) = 13 w1 − 34 w12 + w2 (w12 − 1),
+                                 q(w1 , w2 ) = 23 w12 − 98 w13 + w2 w13 ,
+                                 r(w1 , w2 ) = 2w1 + 79 w13 − 23 w14 + w2 (w14 + w12 + 2),
+                                ∆(w1 , w2 ) = (1, w1 , w12 )T           (independent of w2 ).
+
+The tangency identity det(∆, J(X)) ≡ 0 and the normalization L ≡ 2, M ≡ 0 hold for this pair by
+construction (and were veriﬁed by expansion). Deﬁne on C4 ∋ (x, y, z, t):
+
+ γ = 1 + xy + x2 t,            u1 = 1 + xz,     u2 = − 79 + 22     8
+                                                            9 xy + 3 xz,          w1 = γu1 ,       w2 = γu2 ,     C = γx,
+
+                                 Si = Ai (w1 ) + w2 Bi (w1 ) + γ ∆i (w1 )         (i = 1, 2, 3),
+
+
+                                                               13
+                                                 S1 S2 S3 T
+                                      F4 =     C,   ,  ,      .
+                                                  C C2 C
+In the format of the composition diagram of §3.3, F4 is the composite
+                                                                           
+   x                 x             x                x                  γx       C
+                                        w1 =γu1
+ y  monomial  xy  aﬃne  γ  w2 =γu2  γ  padded sweep  S1  twist  S1 /C 
+   −−−−−−−→   −−−−→   −−−−−−→   −−−−−−−−−→   −−−−→                         
+ z               xz         u1              w1                 S2  S2 /C 2  ,
+   t                x2 t          u2               w2                   S3     S3 /C
+
+whose Jacobian determinants multiply to the constant computed after Theorem 4.3 below.
+Theorem 4.3. F4 is a polynomial map C4 → C4 with components of degrees 4, 11, 12, 21; its
+Jacobian determinant is identically − 44
+                                       9 ; and its generic ﬁber consists of exactly 5 points.
+
+    Consequently F4 is a non-injective Keller map in dimension four which is not equivalent, under
+composition with polynomial automorphisms on either side, to Φ × id for any three-dimensional
+Keller map Φ of geometric degree 6= 5: geometric degree is invariant under such compositions, and
+deg(Φ × id) = deg Φ. In particular F4 is not a trivial extension of Alpöge’s example or of the map
+G. Whether F4 is equivalent to Φ × id for a degree-ﬁve member Φ of Gallagher’s family [12] is
+left open; the ﬁber stratiﬁcation of a product has product form, so the stratiﬁcation deferred to
+Appendix A.3 is expected to decide this.
+
+Proof sketch. The degrees and divisibilities are read oﬀ the construction, and det J(F4 ) ≡ − 44        9
+is the chain factorization through the stage (Lemma 4.2); the constancy was also conﬁrmed at
+random rational points. For the ﬁbers we use the elimination scheme that recurs for F5 , F6 and F7 :
+eliminate γ through the ﬁrst sweep equation, then eliminate the remaining transverse parameter
+by a resultant, leaving a univariate polynomial in w1 certiﬁed by exact gcd computations. Here,
+let v1 6= 0, set (Y1 , Y2 , Y3 ) = (v1 v2 , v12 v3 , v1 v4 ), and substitute γ = Y1 − A1 − w2 B1 (the ﬁrst
+sweep equation; ∆1 = 1) into the other two. The resulting equations are linear in w2 , with leading
+coeﬃcients w1 and 2w12 + 2 having no common zero, and their resultant with respect to w2 is, up
+to sign, the compatibility determinant
+                                                                                      
+R(w1 ; Y ) = det A(w1 )−Y, B(w1 ), ∆(w1 ) = 29 w15 + 92 w14 + 89 +Y1 w13 − 34 +2Y2 w12 +(2Y1 +Y3 ) w1 −2Y2 ,
+
+a quintic with constant leading coeﬃcient 92 — the tangency quintic of the swept surface, playing the
+role of the tangency polynomial (2). Each root carries a unique (w2 , γ) (the two leading coeﬃcients
+are coprime), and each root with γ 6= 0 lifts to exactly one ﬁber point via x = v1 /γ and the
+triangular stage, which recovers (y, z, t) rationally. At the witness target v = ( 23 , − 15 , 21 , 3), exact
+univariate gcd certiﬁcates show that R is squarefree and coprime to the w2 -resultant of the second
+sweep equation with γ = 0, so that ﬁber has exactly 5 points, and by openness of these conditions
+the generic count is 5.
+   Written out in full, F4 = (F4,1 , F4,2 , F4,3 , F4,4 )T with
+    F4,1 = x3 t + x2 y + x
+               6  2 2  8 6 3 2   44 5 2 2    16 5  3    44 5   2  41 5 2 2  22 4 3 2
+    F4,2 = 22
+            9 x yz t + 3 x z t + 9 x y z t + 3 x yz t + 9 x yzt + 9 x z t + 9 x y z
+            + 83 x4 y 2 z 3 + 88  4 2        4  2    16 4 3    22 4 2   10 4 2   44 3 3    85 3 2 2
+                               9 x y zt + 14x yz t + 3 x z t + 9 x yt + 9 x zt + 9 x y z + 9 x y z
+                 3  3  44 3 2       3      70 3 2    7 3 2   22 2 3  98 2 2    92 2  2  8 2 3
+            + 16
+              3 x yz + 9 x y t + 12x yzt + 9 x z t − 9 x t + 9 x y + 9 x y z + 9 x yz + 3 x z
+
+
+                                                      14
+                 2     4 2          2              2
+            + 10                37     40      29     26     26    35
+              3 x yt − 9 x zt + 9 xy + 9 xyz + 9 xz − 9 xt − 9 y − 9 z
+               6  3 2  8 6 4 2   44 5 2 3    16 5  4    22 5  2 2  65 5 3 2  22 4 3 3
+    F4,3 = 22
+            9 x yz t + 3 x z t + 9 x y z t + 3 x yz t + 3 x yz t + 9 x z t + 9 x y z
+            + 38 x4 y 2 z 4 + 44  4 2 2    58 4  3    16 4 4    22 4   2  17 4 2 2  22 3 3 2
+                               3 x y z t + 3 x yz t + 3 x z t + 3 x yzt + 3 x z t + 3 x y z
+                  3 2 3  16 3  4  44 3 2        3  2   122 3 3    22 3 2   1 3 2    22 2 3
+            + 109
+               9 x y z + 3 x yz + 3 x y zt + 26x yz t + 9 x z t + 9 x yt + 3 x zt + 3 x y z
+                 2 2 2     2  3  8 2 4   44 2 2    46 2      26 2 2    7 2 2       3      2
+            + 61                                                               22
+              3 x y z + 16x yz + 3 x z + 9 x y t + 3 x yzt + 3 x z t − 9 x t + 9 xy + 15xy z
+            + 16xyz 2 + 19  3  10             37 2  16     11 2  22
+                        3 xz + 3 xyt − 2xzt + 9 y + 3 yz + 3 z − 9 t
+               12 4 4  8 12 5 4  88 11 2 4 3 32 11 5 3  88 11 3 4  89 11 4 4
+    F4,4 = 22
+            9 x yz t + 3 x z t + 9 x y z t + 3 x yz t + 9 x yz t + 9 x z t
+                 10 3 4 2    10 2 5 2 352 10 2 3 3 148 10 4 3 32 10 5 3 88 9 4 4
+            + 44
+              3 x y z t + 16x y z t + 9 x y z t + 3 x yz t + 3 x z t + 9 x y z t
+                 9 3 5    44 10 2 4 116 10 3 4 176 9 3 3 2 266 9 2 4 2    9  5 2
+            + 32
+              3 x y z t + 3 x yz t + 9 x z t + 3 x y z t + 3 x y z t + 32x yz t
+                 8 5 4  8 8 4 5  176 9 2 2 3 272 9  3 3 350 9 4 3 352 8 4 3   620 8 3 4
+            + 22
+              9 x y z + 3 x y z + 3 x y z t + 3 x yz t + 9 x z t + 9 x y z t + 9 x y z t
+            + 32x8 y 2 z 5 t + 88  9   4    9 2 4     8 3 2 2 584 8 2 3 2 394 8  4 2     8 5 2
+                                9 x yzt + 6x z t + 88x y z t + 3 x y z t + 3 x yz t + 16x z t
+                 7 5 3  59 7 4 4  32 7 3 5 352 8 2 3  248 8  2 3 440 8 3 3 176 7 4 2
+            + 88
+              9 x y z + 3 x y z + 3 x y z + 9 x y zt + 3 x yz t + 9 x z t + 3 x y z t
+                   7 3 3       7 2 4       7  5    22 8 4   4 8 4   176 7 3 2       7 2 2 2
+            + 1520
+               9 x y z t + 146x y z t + 32x yz t + 9 x yt − 9 x zt + 3 x y zt + 212x y z t
+                  7  3 2 172 7 4 2  44 6 5 2     6 4 3 482 6 3 4     6 2 5  88 7 2 3
+            + 616
+               3 x yz t + 3 x z t + 3 x y z + 52x y z + 9 x y z + 16x y z + 9 x y t
+                  7   3     7 2 3 352 6 4         6 3 2        6 2 3   1120 6 4    32 6 5
+            + 112
+               3 x yzt + 20x z t + 9 x y zt + 200x y z t + 264x y z t + 9 x yz t + 3 x z t
+            − 97 x7 t4 + 44  6 3 2 344 6 2 2  1354 6 2 2 655 6 3 2  88 5 5   194 5 4 2
+                          3 x y t + 3 x y zt + 9 x yz t + 9 x z t + 9 x y z + 3 x y z
+                  5 3 3 604 5 2 4  32 5  5  20 6 3   40 6 3   88 5 4   1040 5 3
+            + 968
+               9 x y z + 9 x y z + 3 x yz + 3 x yt − 9 x zt + 9 x y t + 9 x y zt
+                   5 2 2  554 5  3   338 5 4    74 5 2 2 452 5   2 287 5 2 2  22 4 5
+            + 2168
+               9 x y z t + 3 x yz t + 9 x z t + 3 x y t + 9 x yzt + 9 x z t + 9 x y
+                  4 4   994 4 3 2 1007 4 2 3    4  4  8 4 5   34 5 3 236 4 3   1024 4 2
+            + 116
+               3 x y z + 9 x y z + 9 x y z + 40x yz + 3 x z − 9 x t + 9 x y t + 9 x y zt
+                  4  2   454 4 3    52 4 2   47 4 2     3 4 532 3 3   859 3 2 2 542 3   3
+            + 382
+               3 x yz t + 9 x z t + 9 x yt − 9 x zt + 9x y + 9 x y z + 9 x y z + 9 x yz
+                 3 4 206 3 2   346 3     250 3 2    17 3 2  40 2 3 131 2 2   404 2   2
+            + 83
+              9 x z + 9 x y t + 9 x yzt + 9 x z t − 3 x t + 3 x y + 3 x y z + 9 x yz
+                 2 3  10 2     10 2        2              2
+            + 41                             142      89     28     20    29
+              3 x z + 3 x yt + 9 x zt + 9xy + 9 xyz + 9 xz − 9 xt + 3 y + 3 z
+
+     The proof of the Jacobian statement is the veriﬁed chain factorization x4 ·(− 22                  2   2
+                                                                                                  9 )·γ ·2γ ·(γx)
+                                                                                                                 −4 =
+  44                                    2
+− 9 , in which the factor 2γ is Lemma 4.1 for the surface above (L = 2, M = 0; a polynomial
+identity), the factor γ 2 comes from the scaling (w1 , w2 ) = (γu1 , γu2 ), x4 from the monomial substi-
+tution (v1 , v2 , v3 ) = (xy, xz, x2 t) with x-degrees (1, 1, 2), and − 22          9 is the determinant of the aﬃne
+stage. The ﬁve side conditions (divisibility of S1 , S3 by C and of S2 by C 2 ) determine the constants
+(γ0 , u01 , u02 , α0 , α1 ) = (1, 1, − 97 , 13 , − 83 ); the grading (1, 1, 2) leaves the aﬃne stage invertible. The
+ﬁber count was established by exact elimination: the tangency equation of the swept ruled family
+has degree 7, always divisible by the spurious factor w12 −1, leaving a squarefree quintic; all ﬁve roots
+lift, as conﬁrmed by explicit ﬁbers with residuals below 10−9 , e.g. the target of (0.7, −0.4, 0.3, 0.5)
+has ﬁve preimages, three real and one conjugate pair.
+
+4.4.2    Specialization II: ∆ = (1, w1 , w2 )T and a map of geometric degree ten
+The column ∆ = (1, w1 , w2 )T is unimodular with the natural syzygy matrix
+                                                
+                                       −w1 1 0
+                                 N=                ,    N ∆ = 0,
+                                       −w2 0 1
+and now the partial derivatives of ∆ are the constant columns ∂1 ∆ = e2 and ∂2 ∆ = e3 : the triple
+(∆, ∂1 ∆, ∂2 ∆) is a frame of constant volume det(∆, e2 , e3 ) = 1, with N ∆ = 0, N e2 = (1, 0)T ,
+
+                                                         15
+N e3 = (0, 1)T , so that Pe = N J(∆) = I2 , the identity matrix. Exactly as in §4.4.1, expand the
+columns of J(X) in the frame,
+
+         ∂1 X = a1 ∆ + a2 e2 + a3 e3 ,     ∂2 X = b1 ∆ + b2 e2 + b3 e3        (ai , bi ∈ C[w1 , w2 ]);
+
+comparing ﬁrst entries forces a1 = ∂1 X1 and b1 = ∂2 X1 , so the ﬁrst coeﬃcients are automatically
+integrable, with X1 itself as their potential. The products with N are again explicit:
+                                
+                          a 2 b2                    
+        P = N J(X) =               ,    det P + γ Pe = (a2 b3 − a3 b2 ) + γ (a2 + b3 ) + γ 2 .
+                          a 3 b3
+
+Thus M ≡ 1 identically and L = a2 + b3 , the trace of P : this ∆ lives on the M -branch, with
+normalization L ≡ 0 and det J(F0 ) = γ 3 .
+    The branch is solved completely by combining the two algebraic conditions with the integrability
+of the expansion. The tangency and the normalization L ≡ 0 give two equations,
+
+                             a2 b3 − a3 b2 = 0        and       a2 + b3 = 0,
+
+which say that P is trace-free of rank ≤ 1; this is parametrized by two scalars ρ, λ:
+
+                              (a2 , b2 , a3 , b3 ) = (−ρλ, λ, −ρ2 λ, ρλ).
+
+The equality of mixed partials ∂2 (∂1 X) = ∂1 (∂2 X), expanded in the frame (using ∂2 ∆ = e3 and
+∂1 ∆ = e2 , the ei being constant), gives three scalar equations:
+
+              ∂2 a1 = ∂1 b1 (automatic),         ∂2 a2 = b1 + ∂1 b2 ,     a1 + ∂2 a3 = ∂1 b3 .
+
+The last two express the gradient of X1 through (ρ, λ):
+
+       ∂2 X1 = ∂2 a2 − ∂1 b2 = − ∂2 (ρλ) − ∂1 λ,         ∂1 X1 = ∂1 b3 − ∂2 a3 = ∂1 (ρλ) + ∂2 (ρ2 λ),
+
+and the compatibility ∂1 ∂2 X1 = ∂2 ∂1 X1 of this gradient is the single linear wave-type equation
+
+                                    λ11 + 2(ρλ)12 + (ρ2 λ)22 = 0,                                        (10)
+
+after which X1 is recovered by integration, and then the potentials G2 = X2 − w1 X1 and G3 =
+X3 − w2 X1 — whose gradients are, by §4.2, the rows of P − X1 Pe — by two further integrations.
+    Solutions of (10) are produced in two steps. First ﬁx the multiplier ρ ∈ C[w1 , w2 ]; since
+the rank-one parametrization above is linear in λ for ﬁxed ρ, equation (10) is then linear in λ,
+with polynomial coeﬃcients (a degenerate second-order equation in the plane, cf. [3]), and its
+polynomial solutions of any bounded degree are found by comparing coeﬃcients: they form the
+kernel of an explicit linear map between ﬁnite-dimensional spaces of polynomials. Each solution
+(ρ, λ) then determines a surface: X1 is recovered from the displayed gradient — whose compatibility
+is exactly (10), which is why the equation governs the branch — and X2 , X3 follow by the further
+integrations. For the choice ρ = w1 used below no ad hoc computation is needed: (10) reads
+λ11 + 2w1 λ12 + w12 λ22 + 2λ2 = 0, and the substitution η = w2 − 21 w12 transforms it into the heat
+equation,                                               
+                        λ(w1 , w2 ) = µ w1 , w2 − 21 w12 ,    2
+                                                             ∂w 1
+                                                                  µ + ∂η µ = 0
+
+
+                                                    16
+(veriﬁed by exact expansion). Its polynomial solutions are completely described in the literature:
+by Rosenbloom and Widder [10], they are spanned by the heat polynomials
+                                                     X            k!
+                                    vk (x, t) =                           x k−2j t j ,
+                                                             j! (k − 2j)!
+                                                     j≤k/2
+
+one in each degree k. Hence (10) with ρ = w1 has exactly one new polynomial solution in each
+                       1 2
+degree, namely vk w1 , 2 w1 − w2 ; normalized to be monic in w1 , the ﬁrst six are
+
+       1,     w1 ,   w12 − w2 ,   w13 − 23 w1 w2 ,     w14 − 12 2      6 2
+                                                             5 w1 w2 + 5 w2 ,        w15 − 40  3      30     2
+                                                                                           13 w1 w2 + 13 w1 w2 .
+
+The aﬃne λ chosen below is a combination of the ﬁrst three; every further heat polynomial is a
+candidate surface for the construction, whose ﬁber geometry is unexplored.
+    (Under the normalization X1 = w1 the branch is rigid — only a two-parameter family sur-
+vives, and its twist is obstructed; the freedom of a general X1 is essential.) Taking ρ = w1 and
+λ = ν1 + ν2 w1 + ν3 (w2 − w12 ), which solves (10), and integrating, one obtains a three-parameter
+family of quintic surfaces, linear in (ν1 , ν2 , ν3 ). The ﬁve divisibility constants of the twist (with
+scalings (w1 , w2 ) = (γu1 , γ 2 u2 ), monomials (v1 , v2 , v3 ) = (xy, x2 z, x3 t) of x-degrees (1, 2, 3), and
+twist exponents (1, 2, 3), so that det = C −6 · γ 3 · γ 3 · x6 · det(stage)) now form a solvable linear
+system: at the base point (γ0 , u01 , u02 ) = (1, 1, 1) one ﬁnds (ν1 , ν2 , ν3 ) = 51     60    240
+                                                                                   29 , − 29 , − 29 , with surface
+
+                      3   60 2
+            X1 = 160              240        51      60
+                  29 w1 − 29 w1 − 29 w1 w2 + 29 w1 + 29 w2 ,
+                 60 4        3   120 2
+            X2 = 29 w1 − 20              51
+                         29 w1 − 29 w2 + 29 w2 ,
+                   48 5        4   240 3      17 3    60 2              2              30 2
+            X3 = − 29 w1 + 15                                    240        51
+                           29 w1 + 29 w1 w2 − 29 w1 − 29 w1 w2 − 29 w1 w2 + 29 w1 w2 + 29 w2 .
+
+The residual quadratic side condition is absorbed by a unipotent nonlinear stage: with v =
+(v1 , v2 , v3 ) = (xy, x2 z, x3 t), set
+                                                                                                4197 2
+            γ = 1 + 20
+                    29 v1 ,       u1 = 1 − 49
+                                           29 v1 + 8v2 ,            u2 = 1 − 69
+                                                                             29 v1 + 9v2 + v3 + 1682 v1 ,
+
+where the v1 -column lies in ker(∇E2 ) ∩ ker(∇E3 ), the v2 -column in ker(∇E3 ), and the coeﬃcient
+     4197
+τ = 1682    kills the v12 -obstruction while leaving the stage Jacobian constant (= 160
+                                                                                     29 ), because the
+                                                                             2
+corresponding cofactor vanishes by design. With w1 = γu1 , w2 = γ u2 , C = γx and Si =
+Xi (w1 , w2 ) + γ∆i (w1 , w2 ), deﬁne
+                                                     S1 S2 S3 T
+                                         F5 =      C,   ,  ,      .
+                                                      C C2 C3
+
+As a composition diagram,
+                                                                           
+ x                 x           x      w1 =γu1  x                γx              C
+y  monomial  xy  stage  γ  w2 =γ 2 u2  γ  padded sweep  S1  twist  S1 /C 
+  −−−−−−−→                                                                 
+z             x2 z  −−−−→ u1  −−−−−−−→ w1  −−−−−−−−−→  S2  −−−−→ S2 /C 2  ,
+  t               x3 t         u2              w2                S3           S3 /C 3
+
+in which the second arrow is now the unipotent nonlinear stage displayed above (a polynomial
+automorphism of the coordinates (γ, u1 , u2 ) over x) rather than a plain aﬃne map.
+
+
+                                                             17
+Theorem 4.4. F5 is a polynomial map C4 → C4 with components of degrees 3, 12, 14, 16; its
+Jacobian determinant is identically 160
+                                     29 ; and its generic ﬁber consists of exactly 10 points.
+
+   Consequently F5 is a four-dimensional non-injective Keller map arising from the M -branch, of
+geometric degree ten, not equivalent to Φ × id for any three-dimensional Keller map Φ of geometric
+degree 6= 10.
+
+Proof sketch. The divisibilities and the constancy of the determinant are the chain factorization
+above, conﬁrmed by exact evaluation at random rational points. For the ﬁbers we run the same
+elimination scheme as for F4 : let v1 6= 0 and set (Y1 , Y2 , Y3 ) = (v1 v2 , v12 v3 , v13 v4 ). Eliminating
+γ = Y1 − X1 (w1 , w2 ) leaves the two equations
+
+                       X2 + (Y1 − X1 ) w1 = Y2 ,           X3 + (Y1 − X1 ) w2 = Y3
+
+in (w1 , w2 ), whose resultant with respect to w2 is, after the harmless rescaling by −294 /30, the
+degree-ten polynomial
+                                                                 
+ R(w1 ; Y ) = 20480w110 − 51200w19 + 57600w18 + 222720Y1 − 126720 w17
+                                                                                           
+              + −204160Y1 − 742400Y2 + 234480 w16 + −119712Y1 + 890880Y2 + 890880Y3 − 155448 w15
+                                                                     
+              + 201840Y12 + 59160Y1 − 417600Y2 − 1113600Y3 + 65025 w14
+                                                                              
+              + −67280Y12 − 538240Y1Y2 + 41412Y1 + 306240Y2 + 556800Y3 − 44217 w13
+                                                                                   
+              + −146334Y12 + 201840Y1Y2 + 807360Y1Y3 + 75429Y1 − 88740Y2 − 459360Y3 w12
+                                                             
+              + 97556Y13 − 42891Y12 − 403680Y1Y3 + 177480Y3 w1
+              − 97556Y12 Y2 + 42891Y1Y2 + 171564Y1Y3 − 25230Y22 + 201840Y2Y3 − 403680Y32 − 75429Y3,
+
+ again with constant leading coeﬃcient, so the number of roots never drops and, as for F4 , all ﬁber
+degenerations pass through γ = 0. At the witness target v = ( 12 , 32 , − 13 , 1), exact univariate gcd
+certiﬁcates show that R is squarefree; that R is coprime to the w2 -resultant of the ﬁrst equation
+with γ = 0, so every root has γ 6= 0; and that R is coprime to the ﬁrst subresultant of the pair,
+so each root w1 carries a unique w2 . Since x = v1 /γ and the triangular stage recovers (y, z, t)
+rationally wherever γ 6= 0, that ﬁber has exactly 10 points, and by openness of these conditions the
+generic count is 10. (The counts were also conﬁrmed by Newton iteration at multiple targets.)
+
+   Written out in full, F5 = (F5,1 , F5,2 , F5,3 , F5,4 )T with
+             2
+  F5,1 = 20
+         29 x y + x
+                  7 2 3 602112000 6 3 2 768000 6 2     3276800 6 3 2076288000 5 4
+  F5,2 = 32768000
+           24389 x y z − 707281 x y z − 24389 x y zt +   841 x yz + 20511149 x y z
+                    5 3   54835200 5 2 2 80752000 4 5  76800 5     81920 5 3 152428800 4 3
+          + 4704000
+            707281 x y t − 24389 x y z + 20511149 x y − 841 x yzt + 29 x z + 707281 x y z
+                   4 2    1044480 4 2  169140800 3 4 1920 4     515520 3 2    3360 3    9600 3 2
+          + 374400
+            24389 x y t −   841 x yz + 20511149 x y − 29 x zt + 24389 x y z + 841 x yt + 29 x z
+            907520 2 3          2    180 2            2
+          + 707281 x y − 108960               14050      252
+                          841 x yz − 29 x t + 24389 xy − 29 xz + y
+                  8 2 4  2408448000 7 3 3 9830400 7 4 22127616000 6 4 2 191692800 6 2 3
+  F5,3 = 98304000
+           24389 x y z −   707281 x y z +   841 x yz + 20511149 x y z −   24389 x y z
+                        5 5    48000 6 2 2   245760 6 4 201456000 5 4   45158400 5 3 2
+          − 90354432000
+             594823321 x y z − 24389 x y t +   29 x z − 20511149 x y t + 24389 x y z
+            73022484000 4 6           5 2     1310720 5 3 5316643200 4 4    4800 5 2  13521600 4 3
+          − 17249876309 x y − 864000
+                               24389 x y zt −   841 x yz − 20511149 x y z − 841 x yt − 707281 x y t
+                     4 2 2  4696088400 3 5 86400 4      112640 4 3 69664320 3 3   120 4 2
+          − 25906560
+              24389 x y z − 594823321 x y − 841 x yzt +   29 x z + 707281 x y z − 29 x t
+                   3 2    1613760 3 2  40879390 2 4  2160 3    3661320 2 2    240 2    9480 2 2
+          + 62760
+            24389 x y t −   841 x yz + 20511149 x y − 29 x zt + 24389 x y z + 29 x yt + 29 x z
+
+
+
+                                                      18
+           516820
+         − 707281 xy 3 − 105360      189     1437 2
+                           841 xyz − 29 xt − 1682 y − z
+                     9 2 5 19267584000 8 3 4           8 2 3   62914560 8
+  F5,4 = − 629145600
+             24389 x y z +    707281  x y z + 49152000
+                                               24389 x y z t −    841  x yz 5 − 132882432000 7 4 3
+                                                                                  20511149 x y z
+                     7 3 2    1975910400 7 2 4              6 5 2 768000 7 2 2   4915200 7 3
+         − 903168000
+             707281 x y z t +    24389  x y z − 15504384000
+                                                 20511149 x y z − 24389 x y zt +   841 x yz t
+         − 1572864
+              29   x7 z 5 + 2308608000 6 4
+                             20511149 x y zt −
+                                               15174451200 6 3 3
+                                                  707281  x y z + 3799290048000 5 6    4704000 6 3 2
+                                                                   17249876309 x y z + 707281 x y t
+                    6 2 2    54312960 6
+         − 85708800
+             24389 x y z t +    841  x yz 4 + 8448384000  5 5   11697561600 5 4 2 2437443220800 4 7
+                                               594823321 x y t − 20511149 x y z + 500246412961 x y
+                 6   2  122880 6 3  195724800 5 3    496404480 5 2 3 184263724800 4 5
+         − 76800
+            841 x yzt +   29 x z t + 707281 x y zt −   24389 x y z + 594823321 x y z
+                  5 2 2  1873920 5 2    184320 5 4 484262400 4 4    1251989760 4 3 2
+         + 374400
+           24389 x y t −   841 x yz t +   29 x z + 20511149 x y t +   707281 x y z
+                        3 6 1920 5 2  2238720 4 2    844800 4 3 4465704480 3 4    2760 4 2
+         + 135717082080
+           17249876309 x y − 29 x zt + 24389 x y zt − 841 x yz − 20511149 x y z + 841 x yt
+                4 2    6755640 3 3   9897600 3 2 2  2476692498 2 5 145200 3     123776 3 3
+         + 7680
+            29 x z t − 707281 x y t − 24389 x y z − 594823321 x y − 841 x yzt +   29 x z
+                    2 3    210 3 2  126390 2 2    1938744 2 2             4 2412 2
+         − 61829880
+            707281 x y z − 29 x t − 24389 x y t −
+                                                               128225745
+                                                    841 x yz + 41022298 xy − 29 x zt
+                    2                   2  1629343 3
+         + 5740350      11001     9318                99879     160
+            24389 xy z + 841 xyt + 29 xz + 1414562 y − 841 yz − 29 t
+
+
+4.5   The case n = 5: mixed direction ﬁelds
+In dimension ﬁve the parameters are w = (w1 , w2 , w3 ), the hypersurface X ∈ C[w]4 is a parametrized
+threefold in C4 , the matrices P, Pe are 3×3, and there are three potential branches L1 , L2 , L3 . Three
+natural unimodular direction ﬁelds with ﬁrst entry 1 present themselves, and the general principle
+of §4.2 — the rank of Pe bounds the highest branch — sorts them immediately. Throughout we use
+the syzygy matrix N with rows −δi+1 eT         T
+                                          1 + ei+1 and the potentials Γ = (G2 , G3 , G4 ) of §4.2, so that
+Pe = J(∆)
+        b and the branch analysis lives in the pencil J(Γ) + µPe, µ = X1 + γ.
+
+   • ∆ = (1, w1 , w12 , w13 )T : the ﬁeld depends on w1 alone, so J(∆)b has only its ﬁrst column
+                          e
+     nonzero and rank P = 1: L2 ≡ L3 ≡ 0 automatically, only the bottom branch is available,
+     and the analysis is parallel to Specialization I — one sweeps a one-parameter direction ﬁeld
+     along a threefold, using the constant-volume frame (∆, ∆′ , ∆′′ , ∆′′′ ) of its partial derivatives
+     (det = 12). In §4.6 we solve this case completely, in every dimension at once, and extract a
+     second ﬁve-dimensional counterexample from it.
+
+   • ∆ = (1, w1 , w2 , w3 )T : the tautological ﬁeld, with Pe = J(w1 , w2 , w3 )T = I3 , so L3 ≡ 1: the
+     top branch is open, det J(F0 ) = γ 4 , and the normalization L1 ≡ L2 ≡ 0 generalizes the linear
+     wave-type equation (10) of Specialization II; the reduction through ρ-multipliers goes through
+     verbatim, one dimension up.
+
+   • ∆ = (1, w1 , w12 , w2 )T : the ﬁrst genuinely mixed ﬁeld — neither curve-like nor tautological.
+     (Any ﬁeld (1, w1 , w12 , ℓ(w2 , w3 ))T with ℓ a nonconstant linear form, e.g. w2 + w3 , reduces to
+     this one by an aﬃne change of the parameters (w2 , w3 ), which only rescales det J(F0 ).) This
+     is the case we now work out; it looks very diﬀerent, and indeed behaves diﬀerently: its middle
+     branch turns out to be rigid on a natural locus.
+
+The pencil for ∆ = (1, w1 , w12 , w2 )T . Here
+                                                                             
+                                                                        1 0 0
+                 ∂3 ∆ = 0,      b = (w1 , w12 , w2 )T ,
+                                ∆                          Pe = J(∆)
+                                                                  b = 2w1 0 0 ,
+                                                                        0 1 0
+
+
+                                                      19
+of rank 2: the top branch dies, L3 ≡ 0, and both the bottom and the middle branch are a priori
+available.
+    The frame viewpoint of §4.4 applies here as well, provided one takes all independent partial
+derivatives of ∆, including the second-order one: (∆, ∂1 ∆, ∂12 ∆, ∂2 ∆) is a frame of constant volume
+2, with
+
+       N ∆ = 0,       N ∂1 ∆ = (1, 2w1 , 0)T ,        N ∂12 ∆ = (0, 2, 0)T ,   N ∂2 ∆ = (0, 0, 1)T ,
+
+and expanding ∂j X = c0j ∆ + c1j ∂1 ∆ + c2j ∂12 ∆ + c3j ∂2 ∆ forces c0j = ∂j X1 , as always, and gives
+the columns of P = N J(X) as (c1j , 2w1 c1j + 2c2j , c3j )T (all veriﬁed by expansion). The diﬀerence
+with §4.4 lies in what must be done with these ﬁrst-order data: the branch equations below have
+to be integrated — twice on the middle branch — so it is more eﬃcient to work from the start
+with the integrated objects, the potentials of §4.2, of whose derivatives the frame coeﬃcients are
+triangular combinations: P = J(Γ) + X1 Pe. With the potentials
+
+                  G2 = X2 − w1 X1 ,        G3 = X3 − w12 X1 ,          G4 = X4 − w2 X1 ,
+
+the pencil determinant is quadratic in µ,
+                                                  
+                                 det J(Γ) + µPe       = D0 + µD1 + µ2 D2 ,
+
+with coeﬃcients (writing H := G3 − 2w1 G2 )
+
+                   D2 = − ∂3 H,
+                                                                               
+                   D1 = (∂2 H) ∂3 G4 − (∂3 H) ∂2 G4 − ∂1 G2 ∂3 G3 − ∂1 G3 ∂3 G2 ,
+                   D0 = det J(G2 , G3 , G4 ),
+
+and the padded sweep of Lemma 4.1 satisﬁes the exact identity
+                                    h                              i
+                      det J(F0 ) = γ D0 + (X1 + γ)D1 + (X1 + γ)2 D2 ,                                  (11)
+
+veriﬁed by expansion for generic data. Comparing coeﬃcients of γ, the two branches become:
+
+   • bottom (L1 -)branch: D2 ≡ 0, D1 ≡ c 6= 0, and X1 = −D0 /c; then det J(F0 ) = c γ 2 ;
+
+   • middle (L2 -)branch: D2 ≡ c 6= 0, X1 = −D1 /(2c), and the master equation
+
+                                                  4c D0 = D12 ;                                        (12)
+
+     then det J(F0 ) = c γ 3 .
+
+The two branches behave very diﬀerently — the bottom one is solved in closed form and yields
+our counterexample, while the middle one turns out to be rigid on a natural locus — and we treat
+them in turn.
+
+
+
+
+                                                       20
+4.5.1   The bottom branch: closed-form solution and the map F6
+Here D2 = −∂3 H ≡ 0 says that H = G3 − 2w1 G2 does not involve w3 :
+
+                    G3 = 2w1 G2 + ϕ(w1 , w2 ),          ϕ a free bivariate polynomial.
+
+The remaining condition D1 ≡ c is then solved in closed form. Substituting this expression for
+G3 into the displayed formula for D1 — so that ∂3 H = 0, ∂2 H = ∂2 ϕ, ∂3 G3 = 2w1 ∂3 G2 and
+∂1 G3 = 2G2 + 2w1 ∂1 G2 + ∂1 ϕ — two of the four terms cancel and D1 collapses to
+                                                             
+                            D1 = (∂2 ϕ) ∂3 G4 + 2G2 + ∂1 ϕ ∂3 G2 :
+
+a single ﬁrst-order equation for G4 , with G2 and ϕ free. Taking ϕ = τ w2 (τ 6= 0 constant — the
+choice that makes the left-hand side a total ∂3 -derivative, and the one compatible with the weights
+of the twist below), the condition D1 ≡ c reads ∂3 τ G4 + G22 − c w3 = 0 and integrates at once.
+The complete solution of the branch is therefore
+                                                                                               c w3 − G22
+G2 ∈ C[w1 , w2 , w3 ] and ψ ∈ C[w1 , w2 ] arbitrary,         G3 = 2w1 G2 + τ w2 ,       G4 =              + ψ,
+                                                                                                    τ
+followed by X1 = −D0 /c and Xi+1 = Gi+1 + δi+1 X1 , which give det J(F0 ) = cγ 2 for every such
+choice: the branch is ﬂexible — an arbitrary trivariate G2 generates a solution.
+    We now choose data with genuine, nonlinear dependence on all three parameters:
+
+           τ = c = 1,       G2 = w2 + w1 w3 + w12 − w13 ,           ϕ = w2 ,       ψ = 2w14 − 2w15 ,
+
+so that G3 = 2w1 G2 + w2 , G4 = w3 − G22 + 2w14 − 2w15 , and X1 = −D0 . Explicitly,
+
+X1 = −w3 + 2w2 − 2w1 + 2w1 w3 + 5w12 − 2w13 + 8w14 − 10w15 ,
+X2 = w2 + 2w1 w2 − w12 + 2w12 w3 + 4w13 − 2w14 + 8w15 − 10w16 ,
+X3 = w2 + 2w1 w2 + w12 w3 + 2w12 w2 + 2w13 w3 + 3w14 − 2w15 + 8w16 − 10w17 ,
+X4 = w3 − w2 w3 + w22 − 2w1 w2 + 3w12 w2 − w12 w32 − 2w13 w3 + w14 + 2w14 w3 + 8w14 w2 − 10w15 w2 − w16 ,
+
+of degrees 5, 6, 7, 6. The sweep S = X +γ∆ satisﬁes the polynomial identity det J(S) = γ (variables
+ordered (γ, w1 , w2 , w3 )), the threefold X has rank J(X) = 3 generically, and w3 enters X quadrat-
+ically: in particular X does not factor through two parameters, which rules out the suspensions
+that dominate the middle branch (Theorem 4.6 below). The pure-w1 tails t2 = w12 − w13 ⊂ G2 and
+t4 = ψ = 2w14 −2w15 serve a second purpose: they arrange the base point that the twist below needs.
+Indeed, since S1 = X1 + γ and Si+1 = Gi+1 + δi+1 (X1 + γ), the base condition S(1, 1, 0, 0) = 0 is
+equivalent to the four scalar conditions
+
+     G2 (1, 0, 0) = G3 (1, 0, 0) = G4 (1, 0, 0) = 0,        X1 (1, 0, 0) = −1 (i.e. D0 (1, 0, 0) = c = 1).
+
+Because G3 (1, 0, 0) = 2 G2 (1, 0, 0) and G4 (1, 0, 0) = −G2 (1, 0, 0)2 + ψ(1, 0), the ﬁrst three reduce
+to t2 (1) = 0 and t4 (1) = 0, which the displayed tails satisfy; the last, D0 (1, 0, 0) = 1, is a linear
+condition on the leading tail coeﬃcients and holds by direct evaluation (all veriﬁed exactly).
+    For the twist, assign the weights (1, 3, 4) to (w1 , w2 , w3 ). Every monomial of Xi has weight ≥ i
+against the twist exponents (1, 2, 3, 4), so the scalings
+
+                               w1 = γu1 ,       w2 = γ 3 u2 ,        w3 = γ 4 u3
+
+                                                       21
+make Ei := Si /γ i a polynomial in (γ, u1 , u2 , u3 ) for i = 1, 2, 3, 4, with Ei (1, 1, 0, 0) = 0 at the base
+point. The gradients there are
+
+           ∇E2 = (−16, −17, 3, 2),         ∇E3 = (−17, −18, 5, 3),            ∇E4 = (−2, −2, 0, 1).
+
+On C5 ∋ (x, y, z1 , z2 , z3 ) — we name the last three source coordinates z1 , z2 , z3 to keep them clear
+of the sweep parameters — put v = (v1 , v2 , v3 , v4 ) = (xy, x2 z1 , x3 z2 , x4 z3 ) (of x-degrees 1, 2, 3, 4)
+and deﬁne the stage, solving the hierarchy (8),
+
+                             γ = 1 − 29v1 + 999v12 + 355v1 v2 − 41553v13 + v4 ,
+                           u1 = 1 + 27v1 − 5v2 ,
+                                                 2
+                           u2 = v1 − 12v2 + 2128
+                                              5 v1 + v3 ,
+                           u3 = −4v1 − 10v2 .
+
+Here the v1 -column (−29, 27, 1, −4) spans the common kernel ker ∇E2 ∩ ker ∇E3 ∩ ker ∇E4 , the
+v2 -column (0, −5, −12, −10) lies in ker ∇E3 ∩ ker ∇E4 , the v3 - and v4 -columns are eu2 and eγ with
+∇E4 · eu2 = 0, and the three correction vectors (the coeﬃcients of v12 , v1 v2 , v13 ) are chosen inside
+span(eu2 , eγ ) — the span of the last two columns — to kill the obstructing Taylor coeﬃcients of
+E3 and E4 along the v1 -direction. Two consequences: ﬁrst, Ei composed with the stage is divisible
+by x i ; second, because the corrections lie in the span of two columns of the linear part, the stage
+is an elementary polynomial automorphism of C4 with constant Jacobian determinant −290 (each
+correction’s contribution to the Jacobian is a determinant with a repeated column). With w1 = γu1 ,
+w2 = γ 3 u2 , w3 = γ 4 u3 substituted throughout, the sweep components are
+                                                                         S1 = X1 + γ,        S2 = X2 + γ w1 ,
+  Si = Xi (w1 , w2 , w3 ) + γ ∆i (w1 , w2 ) (i = 1, 2, 3, 4),     i.e.
+                                                                         S3 = X3 + γ w12 ,   S4 = X4 + γ w2 ,
+with X1 , . . . , X4 the polynomials displayed above. With C = γx, deﬁne
+                                       S1 S2 S3 S4 T
+                            F6 =     C,   ,  ,  ,      : C5 → C5 .
+                                        C C2 C3 C4
+As a composition diagram, in the format of §3.3,
+                                           
+   x                x            x     w1 =γu1    x
+  y             xy          γ  w2 =γ 3 u2  γ 
+    monomial  2  stage   w3 =γ 4 u3  
+  z1  −−−−−−−→ x z1  −−−−→ u1  −−−−−−−→ w1 
+                                           
+  z2           x3 z2       u2             w2 
+   z3               4
+                   x z3         u3               w3
+                                                                                              
+                                                                               γx          C
+                                                                               S1             
+                                                                 padded sweep   twist  S1 /C2 
+                                                                                      
+                                                                −−−−−−−−−→  S2  −−−−→ S2 /C  ,
+                                                                               S3     S3 /C 3 
+                                                                                S4       S4 /C 4
+
+where the stage is the elementary polynomial automorphism displayed above (over x), of constant
+Jacobian determinant −290; the Jacobian determinants of the ﬁve arrows multiply to the constant
+in the chain factorization of the proof of Theorem 4.5.
+
+                                                      22
+Theorem 4.5. F6 is a polynomial map C5 → C5 with components of degrees 7, 38, 40, 42, 44; its
+Jacobian determinant is identically −290; and its generic ﬁber consists of exactly 6 points.
+
+    The proof below establishes two further properties: F6 ﬁxes the axis {y = z1 = z2 = z3 = 0}
+pointwise, and for every C0 6= 0 the ﬁber over (C0 , 0, 0, 0, 0) consists of exactly 4 points — the visible
+one and three escape companions. Consequently F6 is a non-injective Keller map in dimension ﬁve,
+of geometric degree six, not equivalent to Φ × id for any four-dimensional Keller map Φ of geometric
+degree 6= 6, since geometric degree is invariant under composition with polynomial automorphisms
+and multiplicative on products.
+
+Proof sketch. The Jacobian statement is the chain factorization
+
+    det J(F6 ) =     x10
+                     |{z}      · (−290) ·         γ8        ·      γ2       ·         (γx)−10              = −290,
+                                 | {z }          |{z}             |{z}                | {z }
+                   monomials     stage      scalings γ·γ 3 ·γ 4 det J(F0 )=1·γ 2 twist exponents 1+2+3+4
+
+together with the divisibility statements above, all veriﬁed exactly (and the constancy conﬁrmed at
+17 random rational points). For the ﬁbers, let Y ∈ C4 be a sweep target. The system S(γ, w) = Y
+triangularizes: S1 = Y1 gives γ = Y1 − X1 ; substituting into Si+1 = Gi+1 + δi+1 (X1 + γ) turns the
+remaining three equations into the potential equations
+
+               G2 (w) = Y2 − w1 Y1 ,           G3 (w) = Y3 − w12 Y1 ,           G4 (w) = Y4 − w2 Y1 ,
+
+By our choice of the data, G3 = 2w1 G2 + w2 and G4 = w3 − G22 + ψ(w1 ) with ψ = 2w14 − 2w15 ;
+hence                                                    
+         w2 = G3 − 2w1 G2 = Y3 − w12 Y1 − 2w1 Y2 − w1 Y1 = Y3 − 2w1 Y2 + w12 Y1
+and, inserting G2 = Y2 − w1 Y1 and this value of w2 (the mixed terms cancel identically),
+
+                 w3 = Y4 − w2 Y1 + G22 − ψ(w1 ) = Y4 + Y22 − Y1 Y3 + 2w15 − 2w14 .
+                                                                                            
+Substituting both expressions into the one equation not yet used, G2 w1 , w2 (w1 ), w3 (w1 ) = Y2 −
+w1 Y1 , leaves the univariate ﬁber polynomial
+                                                                                           
+ RY (w1 ) = 2w16 − 2w15 − w13 + (Y1 + 1) w12 + Y4 + Y22 − Y1 Y3 − 2Y2 + Y1 w1 + Y3 − Y2 = 0,
+
+of degree exactly 6 with constant leading coeﬃcient 2. Since the stage is a polynomial automorphism
+and the monomial conjugation is bijective wherever x 6= 0, the ﬁber of F6 over a target with ﬁrst
+coordinate C0 6= 0 is in bijection with the roots of RY having γ = Y1 − X1 6= 0, via x = C0 /γ. For
+random rational targets RY is squarefree with all six roots satisfying γ 6= 0 (veriﬁed exactly for
+the squarefreeness and numerically for the roots), giving generic ﬁber size 6. Over Y = 0 the ﬁber
+polynomial factors,
+                                  R0 (w1 ) = w12 (w1 − 1) (2w13 − 1),
+and γ = −X1 vanishes at the double root w1 = 0 (which is therefore deleted by the twist) while
+γ = 1 at w1 = 1 and γ = 3w12 − 3w1 = 3w1 (w1 − 1) at the three roots of 2w13 = 1; since
+3w1 (w1 − 1) vanishes only at w1 ∈ {0, 1}, which are not roots of 2w13 − 1, all four remaining points
+survive, and the ﬁber over (C0 , 0, 0, 0, 0) has exactly 4 points — the visible one (C0 , 0, 0, 0, 0) (note
+S(1, 1, 0, 0) = 0 makes F6 ﬁx the axis) and three escape companions.
+
+
+                                                          23
+   The ﬁrst component of F6 is
+
+                   F6,1 = x − 29x2 y + 999x3 y 2 − 41553x4 y 3 + 355x4 yz1 + x5 z3 ,
+
+and the remaining components have 342, 421, 507 and 904 terms respectively; they are reproduced,
+together with all veriﬁcation scripts, in the ancillary ﬁles. Unlike F4 and F5 , whose geometric
+degrees (5 and 10) were established by elimination of comparable diﬃculty, here the triangular
+collapse of the ﬁber system to the sextic RY makes the ﬁve-dimensional example the easiest of the
+three to analyze — a direct payoﬀ of the potentials (G2 , G3 , G4 ) adapted to the mixed direction
+ﬁeld.
+
+4.5.2   The middle branch: rigidity
+Here D2 ≡ c integrates to
+
+               G3 = 2w1 G2 − c w3 + ϕ(w1 , w2 ),        ϕ a free bivariate polynomial,
+
+X1 = −D1 /(2c) is determined, and the data (G2 , G4 , ϕ) remain constrained by the nonlinear master
+equation (12): unlike its neighbour, this branch does not integrate in closed form. Introduce the
+characteristic ﬁeld and its invariant coordinate
+
+           W = c ∂2 + (∂2 ϕ) ∂3 ,       θ = w3 − ϕ(w1 , w2 )/c      (Wθ = 0, Ww1 = 0).
+
+The quadratic part of (12) in the derivatives of G4 is the rank-one form (WG4 )2 , so (12) is a
+Hamilton–Jacobi-type equation degenerate along W.
+
+Theorem 4.6 (collapse on the characteristic-invariance locus). Let c 6= 0, let ϕ(w1 , w2 ) be arbitrary,
+and suppose the datum G2 is constant along the characteristic ﬁeld, WG2 = 0, i.e. G2 = G2 (w1 , θ).
+Set
+                                               ∂G2        ∂ (G22 )
+                               K(w1 , θ) = c          +            .
+                                               ∂w1 θ        ∂θ
+Then the master equation (12) factors as a perfect square,
+                                                           2
+                                    4c D0 − D12 = − WG4 − K ,
+
+so it linearizes to the transport equation WG4 = K, whose general polynomial solution is G4 =
+(w2 /c) K(w1 , θ) + h(w1 , θ) with h arbitrary. For every such solution the components X1 , X2 , X3 of
+the swept threefold depend on (w1 , θ) alone, X4 = h(w1 , θ), and in the parameters (γ, w1 , θ, w2 ) the
+sweep is the triangular suspension
+                                       
+   S = T (γ, w1 , θ), γw2 + h(w1 , θ) ,              b 1 , θ) + γ (1, w1 , w2 )T ,
+                                               T = X(w                             det J(T ) = c γ :
+                                                                            1
+
+a four-dimensional bottom-branch sweep with direction ﬁeld (1, w1 , w12 )T , extended by one shear-type
+coordinate. In particular no datum with WG2 = 0 produces a genuinely ﬁve-dimensional example.
+
+Proof. All statements are direct computations from the displayed formulas for D0 , D1 , D2 . With
+H = −cw3 + ϕ one ﬁnds ∂2 H = ∂2 ϕ, ∂3 H = −c, and, using ∂2 G2 = −((∂2 ϕ)/c)∂θ G2 , ∂3 G2 =
+∂θ G2 : the coeﬃcient of ∂1 G4 in D0 is −(c ∂2 G2 + (∂2 ϕ)∂3 G2 ) = −WG2 = 0; the remaining two
+coeﬃcients of D0 collapse to (K/c) W, giving D0 = (K/c) WG4 ; and D1 = WG4 + K. Hence
+
+                                                  24
+4cD0 − D12 = 4KWG4 − (WG4 + K)2 = −(WG4 − K)2 . Since W annihilates functions of (w1 , θ)
+and W (w2 /c)K = K, the transport equation has the stated general solution. Finally X1 =
+−D1 /(2c) = −K/c depends on (w1 , θ) only, hence so do X2 = G2 + w1 X1 and X3 = G3 + w12 X1 =
+2w1 G2 + ϕ − cw3 + w12 X1 = 2w1 G2 − cθ + w12 X1 , while X4 = G4 + w2 X1 = h; and ∂S4 /∂w2 = γ
+with S1 , S2 , S3 independent of w2 gives det J(S) = γ det J(T ), so det J(T ) = cγ. All identities were
+also veriﬁed by exact expansion on randomized data.
+
+Remark 4.7. The collapse is not conﬁned to the locus WG2 = 0. The complementary explicit
+families we have solved — e.g. ϕ = 0, G2 independent of w3 and G4 linear in w3 with constant
+coeﬃcient — also collapse, in a diﬀerent mode (w3 enters all components linearly through constant
+coeﬃcients, and a linear change of target coordinates splits oﬀ a graph coordinate).
+Open Problem 4.8 (rigidity of the middle branch). Does the master equation (12) admit a polyno-
+mial solution that is not equivalent to a suspension of a four-dimensional sweep? We conjecture that
+it does not. If so, this is a genuine rigidity phenomenon: for the mixed ﬁeld ∆ = (1, w1 , w12 , w2 )T
+the middle escape det J(F0 ) = cγ 3 is unrealizable by irreducibly ﬁve-dimensional data, even though
+it is unobstructed at the level of branch counting.
+
+4.6    The curve-type family: a uniform solution in every dimension
+We now return to the ﬁrst direction ﬁeld of the classiﬁcation above and treat it uniformly for all
+n ≥ 3:                                                         T
+                                ∆ = 1, w1 , w12 , . . . , w1n−2 ,
+the rational normal curve, depending on the single parameter w1 . Here the normalization system
+admits a complete solution, and the solutions for n = 3, 4, 5 fall into a single pattern.
+Theorem 4.9 (reduction for the curve-type ﬁeld). Let n ≥ 3 and ∆ = (1, w1 , . . . , w1n−2 )T . With
+the potentials Γ = (G2 , . . . , Gn−1 ) of §4.2, set
+
+                             Hi+1 := Gi+1 − i w1i−1 G2          (2 ≤ i ≤ n − 2).
+
+Then Pe = ∆
+          b ′ eT is of rank one, with ∆
+               1
+                                      b ′ = (1, 2w1 , . . . , (n − 2)w n−3 )T , the pencil is linear in µ,
+                                                                      1
+                                                                                                           
+ det J(Γ) + µPe = D0 + µD1 ,          D0 = det J(Γ),             D1 = det J(w2 ,...,wn−2 ) H3 , . . . , Hn−1 ,
+
+and the (unique) branch normalization D1 ≡ c 6= 0 says precisely:
+  (i) the family H(w1 ; · ) = (H3 , . . . , Hn−1 )T : Cn−3 → Cn−3 has constant Jacobian determinant c
+      in the transverse parameters (w2 , . . . , wn−2 ), for every value of the spectator parameter w1 ;
+
+ (ii) G2 ∈ C[w] is completely free.
+Given such data, X1 = −D0 /c and Xi+1 = Gi+1 + w1i X1 yield det J(F0 ) = c γ 2 .
+
+Proof. Since ∆ depends on w1 alone, J(∆) has only its ﬁrst column nonzero and Pe = N J(∆) =
+b ′ eT ; a rank-one summand makes the pencil determinant linear in µ, with µ-coeﬃcient D1 =
+∆    1
+det(∆ b ′ , ∂2 Γ, . . . , ∂n−2 Γ). Subtracting i w i−1 times the ﬁrst row from the i-th row (2 ≤ i ≤ n − 2)
+                                                     1
+reduces the column ∆         b ′ to e1 ; these row operations commute with ∂j for j ≥ 2 because the multipliers
+depend on w1 alone, and they replace ∂j Gi+1 by ∂j Hi+1 . Expanding along the ﬁrst column leaves
+
+                                                      25
+the stated (n − 3) × (n − 3) Jacobian. Finally X1 = −D0 /c gives det J(S) = D0 + (X1 + γ)c = cγ,
+and padding contributes the extra γ. All identities were veriﬁed by exact expansion on randomized
+data.
+
+Remark 4.10. The frame viewpoint of §4.4 is available here too: the collection (∆, ∆′ , . . . , ∆(n−2)
+                                                                                                 Qn−2) of
+all independent partial derivatives of the rational normal ﬁeld is a frame of constant volume k=0      k!
+(= 2 for n = 4 and 12 for n = 5, the values already met), and expanding the columns of J(X) in
+it — the coeﬃcient of ∆ being ∂j X1 , as always — reproduces the pencil above; the row reduction
+in the proof is precisely the triangular change between the frame coeﬃcients and the derivatives of
+the potentials. We phrase the theorem through the potentials because the construction ultimately
+integrates the data: G2 enters the solution undiﬀerentiated, and the ﬁber theory of Proposition 4.11
+below is written directly in terms of Γ.
+     The pattern for small n is now transparent. For n = 3 there are no transverse parameters: the
+condition (i) is empty (D1 = 1, c = 1), G2 (w1 ) is the only datum, and X = (−G′2 , G2 − w1 G′2 )T
+sweeps the envelope of the line family {Y2 = w1 Y1 + G2 (w1 )} — the classical Clairaut picture, with
+G2 the support function; the whole of §3 is the case n = 3. For n = 4 the condition reads ∂2 H3 = c,
+i.e. H3 = cw2 + ϕ(w1 ); taking G2 linear in w2 recovers exactly the ruled surfaces of Specialization I,
+while a nonlinear G2 gives non-ruled solutions that the ruled ansatz of §4.4.1 does not see. For
+n = 5 the condition asks for a w1 -family of unit-Jacobian pairs (H3 , H4 ) in (w2 , w3 ) — the ﬁrst
+case where (i) is a genuine Keller-type condition on the data.
+
+Proposition 4.11 (univariate ﬁber theory). Assume in addition that each H(w1 ; · ) is a polynomial
+automorphism of Cn−3 whose inverse depends polynomially on w1 (e.g. any triangular family).
+Then for every target Y ∈ Cn−1 the ﬁber system S(γ, w) = Y triangularizes: γ = Y1 − X1 , the
+potential equations become Gi+1 (w) = Yi+1 − w1i Y1 , hence
+                                    
+            H w1 ; w2 , . . . , wn−2 = h(w1 ), hi+1 = Yi+1 − i w1i−1 Y2 + (i − 1) w1i Y1 ,
+
+so (w2 , . . . , wn−2 ) = H −1 (w1 ; h(w1 )) are polynomial functions of w1 , and the last remaining equa-
+tion is the univariate ﬁber polynomial
+                                                                              
+                         RY (w1 ) := G2 w1 , H −1 (w1 ; h(w1 )) − Y2 − w1 Y1 = 0.
+
+The ﬁbers of the twisted map over targets with nonzero ﬁrst coordinate are in bijection with the
+roots of RY at which γ 6= 0. For n = 3, RY is the tangency polynomial of §3.
+
+Remark 4.12 (counterexamples propagate along n 7→ n + 3). Condition (i) of Theorem 4.9 asks for
+a w1 -family of constant-Jacobian — Keller-type — maps of Cn−3 . Any family of (tame) polynomial
+automorphisms qualiﬁes, and then Proposition 4.11 applies. But for n ≥ 6 one may instead take
+H to be a constant family equal to a Keller counterexample in n − 3 variables: Alpöge’s F for
+n = 6, the maps F4 or F5 for n = 7, F6 or F7 for n = 8, and so on — the construction feeds on its
+own output, three dimensions at a time. (The sweep-level statement is unconditional; carrying out
+the monomial twist requires the same ﬁnitely many side conditions as in the examples above.) For
+such non-invertible H the ﬁber system is no longer triangular, and its geometry is unexplored.
+
+An explicit ﬁve-dimensional example. Take n = 5, c = 1, and the data
+
+            H3 = w2 + w13 + w12 w3 ,      H4 = w3 + w14 ,      G2 = w22 + w2 + w1 w3 + w13 ,
+
+                                                   26
+so that det J(w2 ,w3 ) (H3 , H4 ) ≡ 1, the pair H(w1 ; · ) is a triangular automorphism for every w1 , and
+G2 is genuinely nonlinear in the transverse parameters. Then G3 = 2w1 G2 + H3 , G4 = 3w12 G2 + H4 ,
+X1 = − det J(G2 , G3 , G4 ), and the components X1 , . . . , X4 (degrees 7, 8, 9, 10) are reconstructed as
+in Theorem 4.9; the sweep S = X + γ∆ satisﬁes det J(S) = γ and passes through the origin at the
+base point, S(1, 1, 0, −1) = 0, with transversality constant D0 (1, 0, −1) = 1 (the pure-w1 terms of
+H3 , H4 , G2 are tuned for exactly this). Assign the weights (1, 3, 4) to (w1 , w2 , w3 ); every monomial
+of Xi has weight ≥ i, so the scalings w1 = γu1 , w2 = γ 3 u2 , w3 = γ 4 u3 make Ei = Si /γ i polynomial,
+with base point (γ, u1 , u2 , u3 ) = (1, 1, 0, −1) and gradients
+
+            ∇E2 = (−15, 0, −3, 4),          ∇E3 = (−20, 3, −1, 6),           ∇E4 = (−19, 8, −1, 7).
+
+On C5 ∋ (x, y, z1 , z2 , z3 ) with v = (xy, x2 z1 , x3 z2 , x4 z3 ) the stage is
+
+                         γ = 1 − 61v1 + 9012v12 + 238
+                                                  19 v1 v2 −
+                                                             35823670 3
+                                                                19   v1 + 8v3 + v4 ,
+                       u1 = 1 + 59v1 + v2 − 5178v12 + 19v3 ,
+                       u2 = −7v1 − 27v2 ,
+                       u3 = −1 − 234v1 − 5v2 ,
+
+built by the same rules as for F6 : the v1 -column (−61, 59, −7, −234) spans the common kernel of
+the three gradients, the v2 -column (0, 1, −27, −5) lies in ker ∇E3 ∩ ker ∇E4 , the v3 - and v4 -columns
+(8, 19, 0, 0) and eγ satisfy ∇E4 · (8, 19, 0, 0) = 0, and all correction vectors lie in the span of the
+last two columns, so the stage is an elementary polynomial automorphism of constant Jacobian
+determinant 119377. With C = γx and Si = Xi (w1 , w2 , w3 ) + γ w1i−1 substituted throughout,
+deﬁne
+                                        S1 S2 S3 S4 T
+                            F7 = C,         ,     ,     ,        : C5 → C5 .
+                                         C C2 C3 C4
+
+Theorem 4.13. F7 is a polynomial map C5 → C5 with components of degrees 7, 86, 89, 92, 95; its
+Jacobian determinant is identically 119377; and its generic ﬁber consists of exactly 12 points.
+
+    The determinant is the chain factorization x10 · 119377 · γ 8 · γ 2 · (γx)−10 , exactly as for F6 . As
+before, the proof yields more: F7 ﬁxes the axis {y = z1 = z2 = z3 = 0} pointwise, and for C0 6= 0
+the ﬁber over (C0 , 0, 0, 0, 0) consists of exactly 7 points. In particular F7 is a ﬁve-dimensional non-
+injective Keller map of geometric degree twelve, not equivalent to Φ × id for any four-dimensional
+Keller map Φ of geometric degree 6= 12.
+
+Proof sketch. The Jacobian and divisibility statements are veriﬁed exactly as for F6 (the constancy
+was also conﬁrmed at 8 random rational points). For the ﬁbers, Proposition 4.11 gives the values
+of w2 and w3 along the ﬁber in closed form: writing them as p1 (w1 ) and p2 (w1 ),
+
+     p2 (w1 ) = Y4 − 3Y2 w12 + 2Y1 w13 − w14 ,        p1 (w1 ) = Y3 − 2Y2 w1 + Y1 w12 − w13 − w12 p2 (w1 ),
+
+                      RY (w1 ) = p1 (w1 )2 + p1 (w1 ) + w1 p2 (w1 ) + w13 + Y1 w1 − Y2 ,
+of degree exactly 12 with constant leading coeﬃcient 1 (the identity RY = residual of the second
+sweep equation was checked at 150 random (Y, w1 )). At the rational witness target Y = (1, 2, −1, 3)
+the polynomial RY is squarefree and coprime to γ(w1 ) = Y1 − X1 (w1 , p1 (w1 ), p2 (w1 )) — both
+
+
+                                                        27
+certiﬁed by exact univariate gcd computations — so that ﬁber has exactly 12 points, and by
+openness of both conditions the generic count is 12. Over Y = 0,
+                                                                              
+                  R0 (w1 ) = w15 (w1 − 1) w16 + w15 + w14 − w13 − w12 − w1 + 1 ,
+the quintuple root w1 = 0 has γ = 0 and is deleted by the twist, while γ(1) = 1 and gcd(γ, R0 /w15 ) =
+1 exactly, so all seven remaining roots survive: the ﬁber over (C0 , 0, 0, 0, 0) has exactly 7 points,
+including the visible ﬁxed point (C0 , 0, 0, 0, 0).
+
+    The ﬁrst component is
+             F7,1 = x − 61x2 y + 9012x3 y 2 − 35823670
+                                                 19    x4 y 3 + 238  4        4      5
+                                                                 19 x yz1 + 8x z2 + x z3 ,
+
+and the remaining components have between 14,000 and 26,000 terms; they are reproduced, with
+all veriﬁcation scripts, in the ancillary ﬁles. Together, F6 and F7 illustrate the two mechanisms
+available in dimension ﬁve: a mixed direction ﬁeld on its ﬂexible bottom branch, and the curve-type
+ﬁeld with transverse Keller-type data.
+
+
+5    Concluding remarks
+The six maps F , G, F4 , F5 , F6 , F7 studied here are instances of one principle: a classical en-
+veloping construction (tangent lines of a curve, a tangent direction ﬁeld on a surface) supplies an
+unramiﬁed-oﬀ-a-divisor, many-to-one polynomial map whose Jacobian is essentially a coordinate;
+a monomial twist then launders that coordinate into the constant Jacobian, at the cost of deleting
+the ramiﬁcation divisor — so the colliding sheets escape to inﬁnity rather than merging. The ﬁber
+stratiﬁcations are correspondingly classical: contact orders of tangent objects through the target
+point. For F this gives ﬁber sizes {3, 1, 0} (Theorem 3.4); for G, Theorem A.1 proves the sizes are
+exactly {4, 3, 2, 1, 0} — the value 2 from double contact at smooth curve points, 1 at the cusps,
+0 at the node, and, unexpectedly, 3 over the hyperplane where the shadow map degenerates; for
+F4 and F5 the discriminantal geometry of the swept families is two-dimensional and the complete
+stratiﬁcations are open, while for F6 and F7 the univariate ﬁber polynomials RY from the proofs
+of Theorems 4.5 and 4.13 reduce the stratiﬁcations to discriminants of a sextic and a degree-twelve
+polynomial in the target coordinates, which we have not yet unwound. We will return to the strat-
+iﬁcations of F4 , F5 , F6 and F7 , and to certiﬁed Gröbner bases for their graph ideals in favourable
+orders, in a subsequent version of this paper. The M -branch of §4.4.2 is largely unexplored: every
+polynomial solution (ρ, λ) of the linear equation (10) is a candidate surface, and the ﬁber geometry
+of the resulting degree-ten (and higher) maps remains to be understood.
+    Several questions suggest themselves. Which ﬁber-size sets are realizable by Keller maps in
+dimension n? (For F no ﬁber has size one less than the generic size, yet G does attain size
+4 − 1 = 3 — over the degenerate hyperplane rather than over a contact stratum — so the gap
+phenomenon is not universal and seems to be contact-geometric in nature.) Do non-graph surfaces
+in C4 admit hyperbolic sweep normalizations, which would give four-dimensional examples with
+two independent escape divisors? Is the middle branch of the mixed direction ﬁeld (1, w1 , w12 , w2 )T
+genuinely rigid — that is, does the master equation (12) admit any polynomial solution that is
+not a suspension of a four-dimensional sweep (Theorem 4.6 and Problem 4.8)? More generally, for
+which pairs (direction ﬁeld, branch index) in dimension n is the branch realizable by irreducibly
+n-dimensional data? And what is the minimal geometric degree of a Keller counterexample in
+dimension n ≥ 4?
+
+                                                  28
+Acknowledgements
+The computations reported here were carried out in exact rational arithmetic; scripts are available
+from the author.
+
+
+A     Graph ideals, Gröbner bases, and exact ﬁber sizes
+For a polynomial map Φ = (ϕ1 , . . . , ϕn )T : Cn → Cn , the graph ideal is
+                                                   
+                  JΦ = ϕ1 − v1 , . . . , ϕn − vn ⊆ Q[x1 , . . . , xn , v1 , . . . , vn ],
+the kernel of the substitution homomorphism ﬁxing the xi and sending vi 7→ ϕi . Specializing v
+at a point v 0 maps JΦ into the ﬁber ideal (ϕ1 − v10 , . . . , ϕn − vn0 ), so any element of JΦ yields
+constraints valid on every ﬁber; and since our maps are étale, all ﬁbers are reduced, so “ﬁber size”
+is unambiguous. All computations below are in exact rational arithmetic and were certiﬁed as
+indicated.
+
+A.1     The map F
+For Alpöge’s map F of §3.4 the reduced lexicographic Gröbner basis of JF with z > y > x > v1 >
+v2 > v3 is remarkably small: it consists of six polynomials h1 , . . . , h6 (integer-scaled below; divide
+by the leading coeﬃcients 27, 54, 6, 24, 4, 8 for the monic reduced basis). Terms are grouped by the
+monomials in (z, y, x), in decreasing lexicographic order, so that each coeﬃcient is a polynomial in
+v = (v1 , v2 , v3 ):
+                                                                       
+      h1 = 27v12 v32 − 18v1 v2 v3 + 16v1 + v23 v3 − v22 x3 + −3v2 v3 + 4 x − 2v3
+                                    
+      h2 = 54v1 v32 − 18v2 v3 + 16 y
+                                                                                                            
+            + 729v13 v33 − 567v12 v2 v32 + 432v12 v3 + 27v1 v23 v32 + 27v1 v22 v3 − 48v1 v2 − 3v24 v3 + 3v23 x2
+                                                                    
+            + −162v12 v32 + 108v1 v2 v3 − 96v1 − 6v23 v3 + 6v22 x
+           − 81v1 v2 v32 + 72v1 v3 + 15v22 v3 − 16v2
+                                                                                
+      h3 = 6v2 v3 − 8 yx + 6v3 y + 81v12 v32 − 54v1 v2 v3 + 48v1 + 3v23 v3 − 3v22 x2
+                               
+           + −18v1 v3 + 2v2 x − 3v2 v3
+                                               
+      h4 = 24v1 − 2v22 yx + −18v1 v3 + 4v2 y
+                                                                       
+           + −243v13 v32 + 162v12 v2 v3 − 144v12 − 9v1 v23 v3 + 9v1 v22 x2
+                                       
+           + 54v12 v3 − 30v1 v2 + 2v23 x + 27v1 v2 v3 − 4v22
+                                   
+      h5 = 4y 2 + −18v1 v3 − 2v2 y
+                                                                       
+           + −243v13 v32 + 162v12 v2 v3 − 144v12 − 9v1 v23 v3 + 9v1 v22 x2
+            + 27v1 v2 v3 − 2v22
+                               
+      h6 = 8z + −108v1v3 + 12v2 y
+                                                                                                              
+            + −1458v13v32 + 243v12 v22 v32 + 972v12 v2 v3 − 864v12 − 216v1 v23 v3 + 198v1 v22 + 9v25 v3 − 9v24 x2
+                                                                      
+            + −162v12 v2 v32 + 108v1 v22 v3 − 96v1 v2 − 6v24 v3 + 6v23 x
+            + 108v12 v32 + 90v1 v2 v3 − 8v1 − 23v23 v3 + 20v22
+
+ The basis was certiﬁed independently of the algorithm that produced it: all ﬁfteen S-polynomials
+reduce to zero modulo the set; each hi vanishes identically under vj 7→ fj ; each fi − vi reduces
+
+                                                           29
+to zero modulo the set; and an independent computation over Fp , p = 2147483629, reproduces
+the basis modulo p. The element h1 generates the elimination ideal JF ∩ Q[x, v]: written by
+its (z, y, x)-grouping, h1 = c3 x3 + (4 − 3v2 v3 )x − 2v3 , and this is the elimination cubic referred
+to in Theorem 3.4(1); the identities discx (h1 ) = −c3 a22 and a22 − 4(4 − 3v2 v3 )3 = 108v32 c3 then
+drive the whole stratiﬁcation, whose proof is completed by three lifting certiﬁcates: exact identi-
+ties F (candidate point) = v veriﬁed in Q(v)[x]/(h1 ), over the function ﬁeld of {a2 = 0}, and in
+Q(v2 , v3 )[v1 ]/(c3 ) respectively. This yields Theorem 3.4: ﬁber sizes 3, 1, 0 across the strata, and
+never 2.
+
+A.2     The map G
+For the degree-four map G of §3.5 the behaviour of the lexicographic basis changes dramatically.
+The computation, ﬁrst abandoned after modular experiments showed staircase elements of v1 -degree
+exceeding 20, has since been completed (Singular via Sage): the reduced lexicographic basis of JG ,
+in the order x > y > z > v1 > v2 > v3 , has 174 elements — against six for F — an interesting
+contrast, and a warning that the tangent-sweep counterexamples need not have small Gröbner
+bases. Its proﬁle: all elements are monic; 20 leading terms are x-headed of x-degree ≤ 2 (among
+them the reconstruction relations with leading terms xy 2 and xz), 153 are y-headed of y-degree
+≤ 3, and exactly one element is free of both x and y — the elimination quartic ZG below. Total
+degrees range from 12 to 93, with exactly one element in each degree from 61 to 93: a staircase
+ladder of 33 elements of up to 2,787 terms (the basis occupies 139 MB in plain text), which is where
+the computation spends its eﬀort. The ﬁber analysis, however, does not require the full basis.
+Write σ(v) = (X, Y )T := (v1 v2 , v12 v3 )T for the shadow map (X, Y are the values of p(w) + 2γ and
+q(w) + γw). The elimination ideal JG ∩ Q[x, v] is principal, generated by the quartic (computed as
+a resultant, and monic in w after the substitution x = 2v1 /(X − p(w))):
+                                                                
+      RG (x; v) = E(X, Y ) x4 − 24v12 3X 2 + 8X + 16Y − 24 x2 − 64v13 (X + 4) x − 16v14 ,
+
+where
+
+E(X, Y ) = 27X 4 + 80X 3 − 672X 2 Y + 1536XY 2 − 512Y 3 − 144X 2 − 2304XY + 4608Y 2 + 3456Y
+
+is the implicit equation of the swept quartic
+                                              curve KG = (p, q). As for F , the leading coeﬃcient is
+                                                1                          1
+the curve equation: Resw W, X − p(w) = − 64        E and discw (W ) = − 64   E for the tangency quartic
+W = 4 w − 2w + 3w − Xw + 2Y . The curve KG has its node at (X, Y ) = (−4, 12 ) — where the
+      1 4        3     2
+
+tangency quartic becomes the perfect square W = 41 (w2 − 4w − 2)2 — and its two cusps at the
+                      √                             √            √
+parameters w = 2 ± 2, i.e. at (X, Y ) = (−4 ∓ 4 2, − 11    2 ∓ 4 2).
+    The full basis completes this picture from the target side. Its unique element free of x and y
+generates the elimination ideal JG ∩ Q[z, v]: a quartic in z (114 terms, coeﬃcients of degree up to
+21 in v),
+                   ZG (z; v) = v12 z 4 + c3 (v) z 3 + c2 (v) z 2 + c1 (v) z + c0 (v),
+              c3 (v) = −10v13 v23 + 288v13 v2 v3 − 450v12 v22 + 1504v12 v3 − 3648v1 v2 − 8208.
+Three exact certiﬁcates tie ZG to the ﬁber theory below. First, substituting
+                                                                            the reconstruction
+formula z = γ(6γ − 4w − γ 2 )/v12 of Theorem A.1 gives ZG z(w); v ≡ 0 (mod W ) identically
+(veriﬁed in exact arithmetic at random rational targets), so the four roots of ZG are precisely
+the values of z on the four sheets — the z-coordinate analogue of RG , of degree equal to the
+
+                                                    30
+geometric degree. Second, the leading coeﬃcient is exactly v12 , while c3 (0, v2 , v3 ) = −8208 6= 0:
+over the hyperplane v1 = 0 the quartic drops to degree exactly 3, matching the three-point ﬁbers
+of Theorem A.1 — where RG sees the non-properness locus through its leading coeﬃcient E(σ(v))
+(the curve side), ZG sees it through v12 (the hyperplane side). Third, the discriminant of ZG with
+respect to z vanishes at targets with σ(v) ∈ KG and not at generic targets (veriﬁed exactly at
+sample points of each stratum): the contact strata of the dual curve are read oﬀ the collisions of
+the z-roots.
+Theorem A.1 (Fiber sizes of G). Every ﬁber of G is reduced, and its cardinality is determined as
+follows. For v1 6= 0, ﬁber points correspond bijectively to roots w of W with γ := 12 (X − p(w)) 6= 0,
+via
+                              v1            w−γ             γ (6γ − 4w − γ 2 )
+                         x= ,          y=          ,    z=                     ,
+                              γ              v1                    v12
+and these formulas satisfy G(x, y, z) = v identically modulo W . Hence for v1 6= 0 the ﬁber has
+                       
+                       
+                        4 points if σ(v) ∈ / KG ,
+                       
+                       
+                       2 points if σ(v) ∈ K is a smooth, non-node point,
+                                                 G
+                       
+                        1 point    if σ(v) is a  cusp,
+                       
+                       
+                       0 points if σ(v) is the node.
+
+For v1 = 0 the quartic RG degenerates    identically and the ﬁber splits into the branch x = 0, which
+                                   v2 ∗          ∗
+contributes the single point 0, 2 , z with z determined linearly, and the branch γ = 0, which
+contributes the two points with x2 = 4/(v22 − 24v3 ); hence the ﬁber has 3 points if v22 6= 24v3 and 1
+point if v22 = 24v3 . In particular G attains every ﬁber size in {4, 3, 2, 1, 0}.
+    All counts were veriﬁed exactly at rational (or explicitly algebraic) sample points of each stra-
+tum, including the exact ﬁber point (0, 12 , − 41 ) over v = (0, 1, 1) and the identity W = 14 (w2 −4w−2)2
+at the node. The completed Gröbner basis provides an independent certiﬁcation: all 174 elements
+vanish on the graph of G (checked in modular arithmetic at random rational points of the graph),
+the leading terms are pairwise non-divisible, and the quartic ZG re-derives the counts over both
+strata of the target. Note the mechanism of the empty ﬁber: at the node both branches of the curve
+impose a double contact, so all four sheets escape simultaneously — the analogue for G of the cusp
+mechanism in F . The value 3, impossible for F , appears over the hyperplane v1 = 0, where the
+shadow map degenerates.
+
+A.3    The maps F4 –F7
+For the higher-dimensional maps the graph ideals live in 8 or 10 variables, with generators of degree
+up to 21, 16, 44 and 95 respectively, and their Gröbner bases are out of reach of our implementation
+— the growth from six elements for F to 174 for G suggests they may be out of reach altogether.
+The ﬁber theory, however, does not need them: for F4 the ﬁbers are governed by the tangency
+quintic displayed in the proof of Theorem 4.3, whose leading coeﬃcient is the constant 92 (so the
+number of tangency parameters never drops and all degenerations pass through γ = 0); for F5 by a
+resultant of degree 10 (proof of Theorem 4.4); and for F6 and F7 by the univariate ﬁber polynomials
+RY , of degrees 6 and 12 with constant leading coeﬃcients, derived in closed form in the proofs of
+Theorems 4.5 and 4.13. All four generic counts are established there by exact elimination and gcd
+certiﬁcates at rational targets. The complete stratiﬁcations — for F4 a two-dimensional family of
+plane curves, for F6 and F7 the discriminants of RY — are left to a subsequent version.
+
+                                                   31
+References
+ [1] H. Bass, E. H. Connell and D. Wright, The Jacobian conjecture: reduction of degree and formal
+     expansion of the inverse, Bull. Amer. Math. Soc. (N.S.) 7 (1982), 287–330.
+
+ [2] A. Bialynicki-Birula and M. Rosenlicht, Injective morphisms of real algebraic varieties, Proc.
+     Amer. Math. Soc. 13 (1962), 200–203.
+
+ [3] R. Courant and D. Hilbert, Methods of Mathematical Physics. Vol. II: Partial Diﬀerential
+     Equations, Interscience, New York, 1962.
+
+ [4] L. M. Drużkowski, An eﬀective approach to Keller’s Jacobian conjecture, Math. Ann. 264
+     (1983), 303–313.
+
+ [5] A. van den Essen, Polynomial Automorphisms and the Jacobian Conjecture, Progress in Math-
+     ematics 190, Birkhäuser, Basel, 2000.
+
+ [6] Z. Jelonek, The set of points at which a polynomial map is not proper, Ann. Polon. Math. 58
+     (1993), 259–266.
+
+ [7] O.-H. Keller, Ganze Cremona-Transformationen, Monatsh. Math. Phys. 47 (1939), 299–306.
+
+ [8] T.-T. Moh, On the Jacobian conjecture and the conﬁgurations of roots, J. Reine Angew. Math.
+     340 (1983), 140–212.
+
+ [9] S. Pinchuk, A counterexample to the strong real Jacobian conjecture, Math. Z. 217 (1994),
+     1–4.
+
+[10] P. C. Rosenbloom and D. V. Widder, Expansions in terms of heat polynomials and associated
+     functions, Trans. Amer. Math. Soc. 92 (1959), 220–243.
+
+[11] L. Alpöge, A counterexample to the Jacobian conjecture in dimension three, announcement,
+     July 19, 2026, https://x.com/__alpoge__/status/2079028340955197566; see also [13, 15].
+
+[12] A. Gallagher, An inﬁnite family of counterexamples to the Jacobian Conjecture in dimen-
+     sion three: every generic ﬁber degree n ≥ 3 occurs, preprint, July 20, 2026, Zenodo,
+     doi:10.5281/zenodo.21479195.
+
+[13] Secret Blogging Seminar, The new counterexample to the Jacobian conjecture, blog post, July
+     20, 2026, https://sbseminar.wordpress.com/2026/07/20/the-new-counterexample-to-the-jacobian-c
+
+[14] D.    E.    Speyer,    The    geometry    and      structure   of   Gallagher’s coun-
+     terexamples   to    the    Jacobian    conjecture,       note,    July    23,   2026,
+     https://sbseminar.wordpress.com/wp-content/uploads/2026/07/jacobiantangentsweep.pdf.
+
+[15] T. Tao, A digestion of the Jacobian conjecture counterexample, blog post, July 21, 2026,
+     https://terrytao.wordpress.com/2026/07/21/a-digestion-of-the-jacobian-conjecture-counterex
+
+[16] S. S.-S. Wang, A Jacobian criterion for separability, J. Algebra 65 (1980), 453–494.
+
+[17] A. V. Yagzhev, On Keller’s problem, Sibirsk. Mat. Zh. 21 (1980), 141–150.
+
+
+                                                32
+
