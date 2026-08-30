@@ -40,6 +40,7 @@ Financial and investment-focused multi-agent systems.
 
 Vault philosophy and agent integration patterns.
 
+- [[memory is a compiler not a database - Ashwin Gopinath argues admission and action utility functions are the moat, and silence is the evidence they work]] — memory as a *compiler* not a database: admission utility (what earns storage) + action utility/interruption gate (risk, irreversibility, authority → act/ask/silence) over a four-tier state model with provenance that makes forgetting real; proactivity from state differentials, and silence as the evidence the utility function works
 - [[Obsidian as Agentic Memory]] — architectural pillars for building agent knowledge systems (synthesizes vibe note-taking patterns and tools-for-thought lineage)
 - [[deerflow stores memory as local JSON with async middleware and confidence-scored prompts]] — DeerFlow’s JSON-based, confidence-gated, token-budgeted memory middleware pattern for practical agent memory
 - [[four memory layers serve different knowledge types]] — CASS, CM, ms, and the vault as a unified memory system

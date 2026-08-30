@@ -2,3 +2,6 @@
 .obsidian/
 .ntm/
 .paper_research_cache/
+
+# Nested working repo (own git history) — not part of the vault
+ML Research/Autonomous Research/resources/papers/frontier-math-targets/relu-max-certificates/
