@@ -1,0 +1,343 @@
+---
+created: 2026-09-02
+description: Mercor + SkyRL's step-by-step guide to RL post-training for knowledge-work agents — Qwen3.6-35B-A3B trained past Opus 4.5 on APEX-Agents, then the recipe extended to Qwen3.5-397B-A17B for a 70% relative Pass@1 gain (16.11% → 27.29%) on 1,928 expert-created tasks, with full training script, weights, and eval traces released. The structure is the lesson: Steps 1-3 (environment robustness, harness fixes, TITO token accounting, systems tuning, an overfitting run) are pure de-risking with no real compute spent until Step 4. Harness fixes alone bought +5.95 points with zero training — about what one epoch would have bought on the unfixed harness — and the closing verdict is that algorithm choices mattered far less than data.
+source: https://www.mercor.com/blog/training-frontier-knowledge-work-agents-a-397b-rl-training-guide-with-skyrl/
+author: Mercor and SkyRL
+type: article
+published: 2026-09-01
+tags: [rl, post-training, agentic-rl, skyrl, harness, apex-agents, open-weights, moe, token-accounting, mercor]
+---
+
+## Key Takeaways
+
+- **The headline, and the structural lesson underneath it.** Post-training with RL (no SFT warmup — "RL is the hardest part of post-training to get right") on **1,928 expert-created APEX-Agents tasks** takes Qwen3.6-35B-A3B past Opus 4.5, then extends to **Qwen3.5-397B-A17B for +70% relative Pass@1, 16.11% → 27.29%**. Full training script, model weights, and eval traces are released. But the guide's real contribution is its shape: **Steps 1-3 are de-risking, and "we do not spend real compute until Step 4."** Environment robustness, harness correctness, token accounting, systems tuning, and a deliberate overfitting run all come *before* the science. That ordering is the same fix-the-environment-before-the-model doctrine as [[Prime Intellect's fine-tune-last doctrine - 5x task timeouts lifted Terminal-Bench 14.7 points with no model change|Prime Intellect's fine-tune-last ladder]], here executed as a full engineering program.
+
+*Pass@1 before and after post-training, and gains by domain — 35B gains most in corporate law, 397B in management consulting:*
+![[mercor-skyrl-001.png]]
+![[mercor-skyrl-002.png]]
+
+- **Step 1's punchline is the number to remember: harness fixes bought +5.95 points with zero training.** Reading traces surfaced that Python packages were missing from the sandbox (agents burned turns discovering what was installed), the PowerPoint MCP tool **returned `None` on every call even when it succeeded**, and the PDF reader flattened 2-D layout into 1-D text, garbling multi-column tables (fix: nudge toward `pdfplumber`). Adding affordances — wrap-up nudge near the context limit, retry on tool-call parse failure, truncate tool results — took base Qwen3.6-35B-A3B from **22.74% → 28.69% mean reward**, "roughly what one epoch of training would have bought on the unfixed harness." Infrastructure discipline alongside it: **put a timeout on everything**, round-robin judge API keys (800+ concurrent rollouts destroy rate limits), **isolate MCP clients per process** (one shared Python process caused constant disconnects), and classify every error as fail-the-trial vs retry. The explicit warning: run an eval pass at your expected RL concurrency and drive non-model error rate to ~zero first — "do not rely on masking errors during RL too much." This is [[the harness is everything and agent performance comes from environment design not model capability]] measured in points, and the same effect [[data-eng-bench shows a data-native harness beats generic coding agents on dbt tasks at up to 3.9x lower cost with equal or better quality|data-eng-bench isolates]] from the eval side.
+
+- **TITO (token-in-token-out) is the subtle correctness trap: never re-tokenize the engine's text output.** Converting inference output back through a tokenizer creates two misalignments — between what the model generated and what the trainer thinks it generated, and (in multi-turn) between turn N's output IDs and later turns' input IDs. Their toy example: if the model emits `0, 1, 3` (`<`, `search`, `>`) and you hand the trainer the string `<search>`, it may re-tokenize to `2, 3` — "a silent misalignment that makes training off-policy." Three remedies (rewrite the harness onto `/completions`; ask for token IDs back but accept trajectory splintering; have the framework proxy `/chat/completions`), and they chose the first. Paired with the Step-2 mismatch check — comparing trainer vs engine logprobs, where **below 0.03 is healthy** — which is how they caught a real correctness bug in the combination of vLLM CPU offloading, GDN models, and in-flight weight updates.
+
+*What runs where for one RL trial, and the train-inference logprob diff that catches silent correctness bugs:*
+![[mercor-skyrl-003.png]]
+![[mercor-skyrl-004.png]]
+
+- **Step 2's transferable systems rules, and Step 3's cheapest possible sanity check.** Give rollout as few GPUs as possible without making the trainer wait (`wait_for_generation_buffer` = 0; ratios were 4:2 for 35B, 12:8 for 397B). **Rollout concurrency is the min of two ceilings**: the *systems* ceiling (total KV-cache tokens ÷ average trajectory length — "usually the binding one for long-horizon tasks") and the *algorithmic* ceiling from staleness tolerance, `(max_staleness + 1) × mini_batch × n_samples` = `(3+1)×16×16 = 1024`; both runs were systems-bound at 550 and 300. Then **the overfitting run**: 32 tasks with non-zero reward variance, batch 32, 8 samples, synchronous — "if you cannot overfit a handful of tasks, an end-to-end run has no chance." It paid off diagnostically: tasks graded by *diffing files* were much harder to overfit than tasks graded on final response, which pointed at the grading logic — a third-party file-diffing tool made extraction higher-fidelity and the tasks learnable. A broken verifier is indistinguishable from a hard task without this check, which is the [[Phoebe Yao argues verifier engineering is the moat in RL post-training because verifiability bounds learnability|verifiability-bounds-learnability]] point in practice.
+
+*The overfitting run — learning signal within a few steps confirms the tasks are learnable:*
+![[mercor-skyrl-005.png]]
+
+- **Step 4's ablations: the two knobs that mattered, the one that didn't, and admirable honesty about reading the table.** **Token aggregation (+3.9 pts)** — with trajectories spanning 2k-128k tokens, `token_mean` (the default in most open frameworks) lets the longest rollouts dominate the gradient; `prompt_mean` (DAPO's objective, highlighted by ScaleRL) removes that bias. **Context nudge (+3.0 pts)** — injecting a wrap-up notice at 20% remaining context means fewer rollouts get zeroed for blowing context, so more usable signal per batch; because it fires at a *percentage*, it also absorbs train-eval context mismatch, and since evals run *without* it, the gain is a pure training-time effect. **DPPO vs GLM-5 loss** scored within noise, but DPPO changed *behavior*: 21 → 32 turns and 834 → 588 assistant tokens per turn. **Overlong filtering cost 1.5 points** (consistent with Composer 2) and adaptive length penalty was neutral-to-negative. Two habits worth stealing: single-pass evals over 480 tasks are ±1-3 points noisy so everything is a 3-pass mean with sub-point gaps treated as ties (cf. [[Terminal-Bench leaderboard requires five full runs with raw logs to enforce reproducibility over cherry-picked results|five-run reproducibility]]), and **read behavior not just reward** — many turns, few tokens per turn, high tool-call success signals deliberate work — with the disarming admission "we have no rigorous justification for reading the table this way."
+
+*Algorithm ablations at epoch-1 checkpoints, 3 passes over the held-out 480 tasks:*
+![[mercor-skyrl-006.png]]
+
+- **Step 6 is the most consequential result: the gains transfer across harnesses, so a post-trained open model is a reusable asset.** They swapped the MCP-based Archipelago harness they trained on for code-based **OpenCode** (no MCP servers at all — just bash/glob/read/grep/write/edit) and most of the improvement survived; it also generalized to **Terminal-Bench 2.1 under Terminus**, with HLE and GPQA showing no regression. **The 35B transfers noticeably better than the 397B**, and the explanation is visible in the traces: over training, Qwen3.6-35B-A3B *learns to prefer code execution over MCP calls* while the 397B keeps its MCP preference — a partial counter to [[Model-Harness-Fit means tool surfaces and citation tags are post-trained into the model, not interchangeable|Model-Harness-Fit]] and to the claim that "RL gains are bound to the harness they were trained in." The closing verdict is the one to carry: **"Algorithm choices mattered less than the data: the best of five knobs gave +3.9 points, while post-training as a whole moved both models 10 to 12 points… We expect the next stretch of the gap to frontier to close from the data side."** That is Mercor — a data supplier — arguing for data over algorithms, so read it with the incentive in view (cf. [[data is a great place to start an AI company and a dangerous place to stop - Etna Labs maps the training-signal supplier market|the supplier-market analysis]]), but it converges with [[Harvey's Tenet post-trains Kimi K3 with GSPO in rubric-graded legal environments, doubling LAB hold-out completions while co-optimizing cost via reward shaping|Harvey's Tenet]] reaching the same conclusion in law from the buyer's side.
+
+*Harness transfer (Archipelago → OpenCode), the code-execution preference shift that explains it, and no-regression checks:*
+![[mercor-skyrl-010.png]]
+![[mercor-skyrl-011.png]]
+![[mercor-skyrl-012.png]]
+![[mercor-skyrl-013.png]]
+
+*The 397B hero run — Pass@1, Pass@16, and policy entropy (the initial dip is async-RL dynamics, easier tasks finishing first):*
+![[mercor-skyrl-007.png]]
+![[mercor-skyrl-008.png]]
+![[mercor-skyrl-009.png]]
+
+## External Resources
+
+- Original post: [Training frontier knowledge work agents: A 397B RL training guide with SkyRL — Mercor and SkyRL, 2026-09-01](https://www.mercor.com/blog/training-frontier-knowledge-work-agents-a-397b-rl-training-guide-with-skyrl/) (third in a series; Jan: <1,000 tasks nearly doubled an open model on APEX-Agents; Feb: ~2,000 cases produced Applied Compute: Small from GLM-4.7 355B, first in corporate law)
+- **Released:** [ApexAgents-SkyRL-Recipe (GitHub)](https://github.com/Mercor-Intelligence/ApexAgents-SkyRL-Recipe) · [model weights + eval traces (HuggingFace)](https://huggingface.co/collections/mercor/apexagents-skyrl-recipe)
+- Stack: [SkyRL](https://github.com/NovaSky-AI/SkyRL) (Berkeley Sky Computing Lab + Anyscale; fully-async, Tinker-compatible) · Harbor (from the Terminal-Bench team; rollout lifecycle across Modal/Daytona) · vLLM + Megatron + Ray · APEX-Agents (480 public tasks with worlds on HuggingFace)
+
+## Original Content
+
+> [!quote]- Full article — "Training frontier knowledge work agents: A 397B RL training guide with SkyRL" (Mercor and SkyRL, 2026-09-01)
+> A step-by-step account of how we post-trained Qwen3.5-397B-A17B: we focus on the often overlooked infrastructure and derisking work preceding the hero run, show even stronger improvements on a larger model, and release the full training script.
+>
+> This is the third post in our series on post-training open models with Mercor’s expert data. In January, we showed that fewer than 1,000 expert-labeled tasks could nearly double an open-weight model’s score on APEX-Agents. In February, we scaled the dataset to roughly 2,000 cases. The resulting model, Applied Compute: Small, post-trained from GLM-4.7 355B, took the top spot in corporate law and fourth place overall. Both runs used a proprietary RL stack. This post opens the recipe: we reproduce those gains on public SkyRL, extend them to 397B parameters, and release the full training script, the model weights, and the eval traces.
+>
+> The open-source community has made real progress on how to train competitive coding agents [1,2] at 27B to 32B parameters. Much less research is shared publicly about knowledge work agents, because realistic environments are costly to build and long-horizon rollouts are costly to train on.
+>
+> We address this gap by post-training Qwen3.6-35B-A3B with reinforcement learning (RL) to surpass Opus 4.5 on APEX-Agents [3], a benchmark of 480 realistic knowledge-work tasks. We then extended the best recipe to Qwen3.5-397B-A17B, which improved Pass@1 by 70% relative, from 16.11% to 27.29%. The script is designed to run on proprietary data, but we document the full task format so you can point it at your own.
+>
+> Figure 1: Pass@1 on the held-out APEX-Agents benchmark, before and after post-training on 1,928 expert-created APEX-Agents off-the-shelf tasks.
+>
+> Figure 2: Gains by domain. Darker bars are the post-trained -Mercor models. The 35B gains most in corporate law; the 397B gains most in management consulting.
+>
+> We take the final checkpoint of each run and refer to them as Qwen3.5-397B-A17B-Mercor and Qwen3.6-35B-A3B-Mercor.
+>
+> In this blogpost, we give a step-by-step guide to frontier RL training for complex knowledge work, with the best practices we found and the lessons we learned.
+>
+> Full training source code, model weights, and eval traces can be found at:
+>
+> github.com/Mercor-Intelligence/ApexAgents-SkyRL-Recipe
+> huggingface.co/collections/mercor/apexagents-skyrl-recipe
+>
+> This blogpost is organized as the following:
+>
+> Background: APEX-Agents and our training setup
+> Step 1: Environment, harness, and token accounting
+> Step 2: RL systems tuning
+> Step 3: The overfitting run
+> Step 4: Algorithm ablations on the 35B
+> Step 5: The 397B hero run
+> Step 6: Evaluation and generalization
+> Lessons and forward-looking
+>
+> Steps 1 to 3 are de-risking. We do not spend real compute until Step 4.
+>
+> Background: APEX-Agents and our training setup
+>
+> APEX-Agents is Mercor’s frontier benchmark for long-horizon cross-application tasks in professional services. Unlike prompt-only tasks, each task lives in a world: a simulated company holding dozens of PDFs, spreadsheets, and slideshows, plus chat and email servers. Many tasks share one world. The agent works through MCP tools or code execution. The 480 benchmark tasks and all their files are public on Hugging Face, and you can read a sample investment banking task on the leaderboard.
+>
+> We focus on RL without SFT warmup because RL is the hardest part of post-training to get right. We use SkyRL, built at Berkeley Sky Computing Lab in collaboration with Anyscale, for three reasons: it integrates arbitrary agent harnesses easily, it supports fully-async training, and its Tinker-compatible training loop lets us swap compute backends.
+>
+> We anchor our study using APEX-Agents off-the-shelf (OTS) datasets: 1,928 expert-created tasks in management consulting, investment banking, and corporate law. They have the same shape as the public benchmark, but none of their worlds or prompts appear in it, so there is no contamination.
+>
+> Step 1: Environment, harness, and token accounting
+>
+> Get the environment and harness right before any RL. That means three things: robust environment infrastructure (failed trajectories waste GPU hours and bias the reward), a correct harness (quirks teach the model to route around your harness, burning exploration budget that should go to the task), and exact token accounting.
+>
+> 1.0 What runs where (both compute and code)
+>
+> We use Harbor for both the data format and rollout lifecycle management. Harbor comes from the team behind Terminal-Bench: it evaluates and optimizes agents in container environments, runs trials in parallel across sandbox providers like Modal and Daytona, and generates rollouts for RL. On top of it we implement our own BaseAgent (code here), equivalent to Mercor’s archipelago loop agent.
+>
+> A Mercor OTS data delivery ships each world as an image.tar, which we push to ECR; at trial time Modal pulls that image to boot the sandbox. The image holds the world’s filesystem and runs the MCP servers that operate on it (Docs, PDF, Email, Chat). The agent loop connects to the sandbox’s MCP servers and exposes their tools to the LLM. In our setup the agent loop runs on the GPU nodes; it could equally run inside the environment sandbox, in a separate container, or on other CPU nodes in the Ray cluster.
+>
+> Figure 3: What runs where for one RL trial. Left: training data is a HuggingFace dataset of prebuilt Harbor task directories (prompt, config, verifier), and each trial consumes one task directory. Middle: on the Ray GPU cluster, SkyRL provides the fully-async training loop, the vLLM engines, and in-flight NCCL weight sync; each trial runs as its own Ray task, where Harbor’s Trial drives the rollout lifecycle (env start → agent.run() → verify → teardown) around our ArchipelagoAgent, which exchanges raw token IDs with the engines. Right: every trial gets a Modal sandbox booted from its world’s ECR image, exposing MCP servers over the world’s filesystem; after the agent finishes, Harbor runs the verifier in-sandbox, and the reward joins the trajectory flowing back to the trainer.
+>
+> The recipe repo is deliberately small: SkyRL and Harbor are pip-installed dependencies, no forks, and the code you write is a handful of files.
+>
+> ApexAgents-SkyRL-Recipe/
+> ├── apex_agents_skyrl_recipe/
+> │   ├── entrypoints/
+> │   │   └── main_tito_harbor_fully_async.py  # entrypoint: wires our config into
+> │   │                                        #   SkyRL's fully-async trainer
+> │   ├── tito_harbor_generator.py   # the one piece of SkyRL code you write:
+> │   │                              #   implements GeneratorInterface, runs each
+> │   │                              #   trial as a Ray task via harbor's Trial
+> │   ├── agents/
+> │   │   └── archipelago.py         # the MCP tool-calling agent, a harbor
+> │   │                              #   BaseAgent subclass; the rest of agents/
+> │   │                              #   are its helpers (e.g. TITO bookkeeping)
+> │   └── harbor_trial_config/
+> │       └── archipelago_tito.yaml  # agent + trial config: timeouts, retries,
+> │                                  #   sandbox settings
+> │
+> └── scripts/                       # launch scripts holding every SkyRL training
+>                                    #   knob we tuned in Steps 2 and 4
+>
+> 1.1 Environment infrastructure robustness
+>
+> Once you know what runs where, the job is to drive environment failures down and keep the GPUs busy. This is largely a whack-a-mole process, but to give you a flavor:
+>
+> Put a timeout on everything. File downloads, MCP interactions, container teardown. Anything without a timeout will eventually hang a rollout for its entire end-to-end budget.
+> Bypass LLM-judge rate limits. An eval pass generates modest judge traffic, but RL at 800+ concurrent rollouts hits rate limits hard. Round-robin across judge API keys if needed and retry with backoff, as in agents/llm.py.
+> Isolate MCP clients per process. Sharing one Python process across hundreds of agent loops caused constant MCP disconnects, making the environment an unnecessary bottleneck. We run each agent loop as its own Ray task.
+> Classify every remaining error as fail-the-trial vs. retry. One benefit of building on Harbor is that much of this fault tolerance already exists (search @retry in harbor-framework/harbor); the patches we added on top are in agents/archipelago.py, and the failure signatures we match on are in metrics_helper.py.
+>
+> Suggestion. Run an evaluation pass over your full training set at the concurrency you expect during RL, 300–600 rollouts for us, and drive the non-model error rate as close to zero as possible before training. Step 2 covers how we picked that ceiling. Do not rely on “masking errors during RL” too much.
+>
+> 1.2 Optimize the harness
+>
+> With the infrastructure stable, look at the harness itself. Run an evaluation pass with the untrained model, then read the traces: how many failures reflect genuine model limitations, and how many come from harness quirks or outright bugs? Minimize the latter before RL, so training teaches real capability instead of workarounds.
+>
+> These issues only surface by reading traces. That is slow manual work, but coding agents automate it well: ask them to systematically analyze traces and use metrics like per-tool failure rates to find patterns. Issues we found this way include:
+>
+> Some Python packages were initially missing from the sandbox, so agents burned many turns discovering what was actually installed, or fell back to sometimes-less-ergonomic MCP servers.
+> The PowerPoint MCP tool returned None for every call even when it succeeded. We patched the MCP tool implementation in slides_output_validation_fix.py.
+> The PDF-reader MCP tool flattens 2-D layout into 1-D text, garbling multi-column tables. We nudged the model to use the Python package pdfplumber instead.
+>
+> A few affordances in the harness also help:
+>
+> Nudge the model to wrap up when it is close to exhausting its context budget.
+> When tool-call parsing fails, prompt the model to retry instead of failing the trajectory outright.
+> Truncate tool results to a fixed token/char budget so a single call cannot blow the context.
+>
+> Together these fixes raised the base Qwen3.6-35B-A3B from 22.74% to 28.69% mean reward, with zero training. Those fixes bought roughly what one epoch of training would have bought on the unfixed harness.
+>
+> All harness tweaks are in the released codebase.
+>
+> 1.3 Token-in-token-out (TITO)
+>
+> Finally, make the harness RL-friendly by ensuring TITO, the exact token accounting named above.
+>
+> What is TITO? Several posts have covered why this matters for RL [4, 5]. In short: when converting the inference engine’s output into the trainer’s input, we must not re-tokenize the engine’s text output, which causes two kinds of misalignment: (1) between what the LLM actually generated and what the trainer thinks it generated; (2) in multi-turn settings, between the output token IDs of turn N and the input token IDs of later turns. Say the vocabulary has four tokens: 0: <, 1: search, 2: <search, 3: >.
+>
+> If the LLM generates 0, 1, 3 and we hand the trainer the string <search> without bookkeeping the tokens, it may re-tokenize to 2, 3, a silent misalignment that makes training off-policy.
+>
+> How to achieve TITO. There are roughly three options:
+>
+> Rewrite the harness to use /completions instead of the string-in-string-out /chat/completions. Most control, most engineering effort.
+> Ask /chat/completions to return input and output token IDs (e.g. vLLM's return_token_ids). Low effort, but it does not address misalignment (2), so each trajectory splinters into multiple training sequences, hurting systems performance.
+> Have the RL framework provide a proxy that translates /chat/completions into /completions and tracks tokens internally. Most convenient, at the cost of some implicitness (e.g. around harness-side retries). This is coming soon to SkyRL (issue).
+>
+> We adopt the first approach; implementation details in agents/tito.py.
+>
+> Step 2: RL systems tuning
+>
+> With the environment and harness settled, we turn to the RL stack itself. For long-horizon agentic RL the default is fully-async training with in-flight weight updates, to minimize the effect of stragglers [6, 7]. We use vLLM as the inference engine and Megatron as the training backend, and we tune in this order.
+>
+> 1. Optimize Megatron knobs. Spend one overnight Claude Code session optimizing Megatron for speed, using a dummy script to sweep:
+>
+> Parallelism (TP/EP/PP/CP)
+> CPU-offloading granularity
+> Micro-batch size (max_tokens_per_microbatch). We use dynamic micro-batching, which is crucial for trainer throughput.
+>
+> 2. Split the cluster between rollout and training. The rule of thumb: give rollout as few GPUs as you can without making the trainer wait. In SkyRL this shows up in the timing/wait_for_generation_buffer panel, where 0 means the trainer never waits on generation. Our inference-to-train node ratios were 4:2 for the 35B runs and 12:8 for the 397B run.
+>
+> 3. Set rollout concurrency. Rollout concurrency (generator.rate_limit.max_concurrency in the recipe repo) has two ceilings; set it to the lower of the two.
+>
+> The systems ceiling, usually the binding one for long-horizon tasks, is KV cache: total KV-cache capacity in tokens divided by the average trajectory length. Raise it with CPU KV-cache offloading or higher parallelism degrees (TP / PP / EP).
+> The algorithmic ceiling is your staleness tolerance in fully-async training, (max_staleness_steps + 1) × mini_batch_size × n_samples_per_prompt trajectories, for us (3 + 1) × 16 × 16 = 1024. Past that, extra trajectories are too stale for the trainer to accept.
+>
+> The systems ceiling bound in both of our runs: we set concurrency to 550 for the 35B and 300 for the 397B, well under 1024.
+>
+> 4. Check train-inference mismatch. With the configuration set, run a few training steps and compare logprobs between trainer and inference engine. This check is how we caught a correctness issue in the combination of vLLM CPU offloading, GDN models, and in-flight weight updates. Our diff stayed small without rollout router replay.
+>
+> Figure 4: Mean logprob difference between trainer and inference engine. Below 0.03 is usually a healthy sign.
+>
+> All relevant knobs are in the training scripts in the recipe repo.
+>
+> Step 3: The overfitting run
+>
+> With the environment and RL systems ready, we can finally launch runs, but not the hero run yet. First, de-risk with an overfitting run to confirm the tasks are learnable: if you cannot overfit a handful of tasks, an end-to-end run has no chance. We use a 32-task subset (each with non-zero reward variance during offline eval) with batch size 32 and 8 samples per prompt, trained synchronously, so every step is one epoch.
+>
+> If overfitting fails, walk back through the earlier steps to find what went wrong (usually Step 1). For example, we found that tasks graded by diffing files before and after the rollout were much harder to overfit than tasks graded on the final response alone. That pointed us at the grading logic: switching to a third-party file-diffing tool made file extraction much higher fidelity, and the tasks became learnable.
+>
+> Figure 5: Overfitting run on 32 tasks. You should see learning signal within a small number of steps.
+>
+> Step 4: Algorithm ablations on the 35B
+>
+> With the de-risking done, we can finally spend compute on science. In RL, reward shape, exploration, and systems throughput all move at once, so scaling studies are less clean than in SFT. We therefore ablated a few knobs we had concrete hypotheses about, on Qwen3.6-35B-A3B, evaluating every arm’s epoch-1 checkpoint with 3 passes over the held-out 480 tasks. We believe these knobs translate across model sizes.
+>
+> Table 1: Algorithm ablations on Qwen3.6-35B-A3B. Every run is evaluated at its epoch-1 checkpoint, 3 passes over the held-out 480 tasks (mean ± std). “/” means the same as baseline (token_mean, GLM-5 loss, no nudge). We performed additional experiments on adaptive length penalty, overlong filtering, and resetting KV-cache, but they did not significantly help. See the full experiment table here.
+>
+> Absolute scores in this section are lower than our headline results, because we landed further Step-1 harness optimizations after the ablations. All runs within the ablation share the same harness, so comparisons here are apples-to-apples.
+>
+> The knobs, and what we found:
+>
+> Token aggregation (+3.9 pts). There are three natural ways to aggregate the policy loss over a batch:
+> Equally over every token (token_mean, one global token pool, which is how token-level loss is implemented in most open frameworks)
+> Equally over every sequence (sequence_mean, as in original GRPO [15]; Dr. GRPO [14] is a variant that normalizes by a constant)
+> Equally over every rollout group, and equally among tokens within a group (prompt_mean, what DAPO's objective [12] specifies, as ScaleRL [13] later highlighted)
+> Our trajectories range from 2k to 128k tokens, so token_mean lets whichever prompts rolled out longest dominate the gradient. prompt_mean removes that bias, and beats the token_mean baseline by 3.9 points (run 4 vs. 1).
+> Policy loss, DPPO vs. GLM-5 loss. Both correct for train-inference mismatch and fully-async policy staleness by using the rollout logprobs directly in the loss, so neither needs the separate forward pass that traditional TIS [11] takes to obtain the trainer’s logprobs, a real saving at 100k-token trajectories. DPPO [8] masks tokens where training and inference logprobs diverge, via a binary approximation of total-variation divergence (we tried it after the positive report in the Tmax paper [1]); the GLM-5 loss (Section 3.3 of [10]) instead truncates the importance ratio. At epoch 1, the two score within noise of each other (run 3 vs. 1). DPPO’s clearest effect is on behavior rather than score: it consistently pushes the model toward more, shorter turns (21 → 32 turns; 834 → 588 assistant tokens per turn).
+> Context nudge — a harness change that improves training. When 20% of the context budget remains, we inject a notice asking the model to wrap up. Fewer rollouts blow the context, so fewer get zeroed across the board, hence more usable signal per batch. And because it fires at a percentage rather than an absolute token count, it also absorbs the train-eval context-length mismatch slightly. All evaluations in this table run without the nudge, so its +3.0 points (run 4 vs. 1) is a pure training-time effect.
+> What didn’t help (see the full table here): overlong filtering (OLF) and adaptive length penalty (ALP). OLF masks over-length rollouts out of the loss instead of penalizing them. Since we train at 160k and evaluate at 256k, not dramatically different, and both without compaction, we expected little benefit, and the ablation agrees: adding OLF cost 1.5 points, consistent with Composer 2’s finding [17]. ALP [16], with separate penalty coefficients for agent-generated vs. environment tokens, was neutral-to-negative at every setting we tried. Possibly our training horizon is too short for length pressure to pay off, or the coefficients need further tuning.
+>
+> Two habits kept us honest when reading this table. First, single-pass evals over 480 tasks are noisy (±1–3 points run-to-run), so every number above is a 3-pass mean; treat differences within ~1 point as ties. Second, look at behavior, not just reward: many turns, few assistant tokens per turn, and high tool-call success suggest deliberate multi-step work rather than rambling. We have no rigorous justification for reading the table this way, but the runs that looked deliberate by these metrics were also the ones that scored best. We took run 5 (DPPO + prompt_mean + nudge) as the configuration for the hero run.
+>
+> Step 5: The 397B hero run
+>
+> After Step 4, we pick the knobs we are most confident in (DPPO + prompt_mean + the harness nudge, without length penalty or curriculum learning) and launch the 397B run.
+>
+> In our experience, the only real difference between a 35B run and a 397B run is the RL systems work, which Step 2 already de-risked. Below are the final Pass@1, Pass@16, and entropy curves for both runs. The initial drop in Pass@1 and Pass@16 are due to async RL dynamics, where easier tasks finish faster initially.
+>
+> Step 6: Evaluation and generalization
+>
+> Recent experience from the field suggests RL gains are bound to the harness they were trained in [9]. To test this, we swapped the MCP-based harness we trained on, Archipelago, for the popular code-based OpenCode, and evaluated on the same 480 APEX-Agents tasks. Under OpenCode we expose no MCP servers at all: we preinstall the Python packages the agent might need, and it works purely through code and file tools (bash, glob, read, grep, write, edit, todowrite).
+>
+> Table 2: APEX-Agents results under the harness we trained on (Archipelago) and a held-out harness (OpenCode).
+>
+> The improvement largely transfers despite the harnesses being very different, and the 35B transfers noticeably better than the 397B. This is partly expected: over the course of training, Qwen3.6-35B-A3B learns to rely on code execution far more than on the MCP servers, while Qwen3.5-397B-A17B stays with MCP, possibly because Qwen3.6 received much heavier agentic post-training.
+>
+> Figure 6: Fraction of tool calls that are code execution (vs. MCP tool calls). Qwen3.6-35B-A3B increasingly relies on code execution; Qwen3.5-397B-A17B keeps the same preference throughout.
+>
+> To take a step further, we change both the harness and datasets, evaluating Terminal-Bench 2.1 with Terminus to understand whether our post-trained model generalizes to other agentic tasks. To our pleasant surprise, it does. The small model again exhibits more transfer, which can likely be explained by its preference for coding as well.
+>
+> Table 3: Terminal-Bench 2.1 scores before and after post-training. These scores were computed over 3 passes using the terminus-2 harness. Every task had a maximum of 1000 steps, and 3 hour sandbox timeout. The baseline scores recreate the artificial-analysis reported scores as Qwen3.6-35B-A3B at 44.6% and Qwen3.5-397B-A17B at 50.6%, well within the error-bounds.
+>
+> In addition to APEX-Agents and Terminal-Bench 2.1, we evaluate on HLE and GPQA to ensure the model did not lose non-agentic reasoning capabilities. Numbers below are reported over 3 passes.
+>
+> Table 4: HLE and GPQA, before and after post-training. All differences fall inside the error bars, so we read this as no regression rather than an improvement.
+>
+> Lessons and forward-looking
+>
+> Two things stood out. Algorithm choices mattered less than the data: the best of five knobs gave +3.9 points, while post-training as a whole moved both models 10 to 12 points. And the gains transfer across harnesses, suggesting a post-trained open model is a reusable asset rather than something welded to one scaffold. We expect the next stretch of the gap to frontier to close from the data side.
+>
+> Step 1’s de-risking surfaced a number of improvements to the APEX-Agents dataset itself, which we will share in APEX-Agents v1.1. We will also apply this playbook to more off-the-shelf datasets and share our learnings. On the data side, Mercor is investing further in trace analysis, since understanding where models improve and where they fail informs which new data yields the most return.
+>
+> On the framework side, SkyRL is landing several improvements so that users can do as little of Steps 1–2 as possible. A TITO proxy is coming soon (issue), and thanks to SkyRL’s Tinker-first design, we aim to make the same training loop and agent integration run on any Tinker-compatible compute backend, including managed services (issue).
+>
+> The training script is at github.com/Mercor-Intelligence/ApexAgents-SkyRL-Recipe, and the model weights and eval traces are in the ApexAgents-SkyRL-Recipe Hugging Face collection. The 480 APEX-Agents tasks are on Hugging Face if you want to run the benchmark yourself.
+>
+> As we move forward, we plan to extend our open training runs to more frontier datasets and more capable models. Our modeling research team tackles problems like better learning algorithms for knowledge work, model customizability, as well as the automation of domain-specific post-training. We envision a future where we enable every enterprise to easily customize open models on proprietary data to then unlock more economic value.
+>
+> We are expanding the Mercor Research team, join us.
+>
+> Acknowledgements
+>
+> This work was done by Charlie Ruan*, Sumanth Hegde, Eric Tang, Tyler Griggs, Jungyeon Park, Maanas Baraya, Philipp Moritz, Michael Haines, Edward J. Hu, and others on the Mercor Research and SkyRL teams. We thank Anyscale for helping set up the training cluster. We thank Nathan Lambert, Lifan Yuan, Kourosh Hakhamaneshi, and Hamish Ivison for helpful feedback on the blogpost.
+>
+> * Work done at Mercor Research.
+>
+> Citations
+>
+> [1] https://arxiv.org/abs/2606.23321
+>
+> [2] https://www.together.ai/blog/deepswe
+>
+> [3] https://arxiv.org/abs/2601.14242
+>
+> [4] https://vllm.ai/blog/2025-10-22-agent-lightning
+>
+> [5] https://huggingface.co/blog/huggingface/tito
+>
+> [6] https://arxiv.org/abs/2505.24298
+>
+> [7] https://arxiv.org/abs/2509.19128
+>
+> [8] https://arxiv.org/abs/2602.04879
+>
+> [9] https://arxiv.org/abs/2606.23321
+>
+> [10] https://arxiv.org/abs/2602.15763
+>
+> [11] https://fengyao.notion.site/off-policy-rl
+>
+> [12] https://arxiv.org/abs/2503.14476
+>
+> [13] https://arxiv.org/abs/2510.13786
+>
+> [14] https://arxiv.org/abs/2503.20783
+>
+> [15] https://arxiv.org/abs/2402.03300
+>
+> [16] https://arxiv.org/abs/2506.05256
+>
+> [17] https://arxiv.org/abs/2603.24477
+>
+> All Blog Posts
+> Share
+> Experts
+> Find work
+> Explore listings
+> Help center
+> Resources
+> Stories
+> Research
+> APEX Benchmarks
+> APEX-Agents
+> APEX-Accounting
+> APEX-SWE
+> Off-the-shelf data
+> Enterprise
+> Enterprise AI
+> Human data
+> Data monetization
+> Robotics
+> Contact sales
+> Company
+> Mission
+> Careers
+> Security
+> Newsroom
+> Blog
+> © 2026 Mercor
+> San Francisco, CA
+> Your Privacy Choices
