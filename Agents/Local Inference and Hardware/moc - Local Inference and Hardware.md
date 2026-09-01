@@ -29,7 +29,7 @@ Running frontier-class models on hardware you own or control: DGX Sparks and Sta
 
 ## Compression & Fitting Models
 
-- [[EXL3 3-bit plus an 18.5 percent expert prune runs DeepSeek-V4-Flash 284B at 47 tok-s on 4.7K of hardware]] — @0xSero: stacking EXL3 3-bit quantization with an ~18.5% MoE expert prune fits a 284B model into 128GB VRAM (context + activations included) at 47 tok/s and 400K context. The transferable point is that the two levers are orthogonal — bits-per-weight and expert-count — so composing them lowers the hardware floor faster than pushing either alone
+- [[EXL3 3-bit plus an 18.5 percent expert prune runs DeepSeek-V4-Flash 284B at 47 tok-s on 4.7K of hardware]] — @0xSero: stacking EXL3 3-bit quantization with an ~18.5% MoE expert prune fits a 284B model into 128GB VRAM (context + activations included) at 47 tok/s and 400K context. The transferable point is that the two levers are orthogonal — bits-per-weight and expert-count — so composing them lowers the hardware floor faster than pushing either alone (**fact-check 2026-09-01:** the "$4.7K of hardware" is a single DGX Spark — 128 GB unified memory at 273 GB/s — not a GPU build)
 
 ## Caching & Serving
 
