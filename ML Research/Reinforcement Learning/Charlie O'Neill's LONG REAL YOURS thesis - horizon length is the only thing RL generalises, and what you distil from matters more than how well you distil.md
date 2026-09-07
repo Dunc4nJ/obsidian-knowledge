@@ -25,6 +25,7 @@ The essay cites no links, papers or repositories. It references Anthropic (Sonne
 
 ## Original Content
 
+> [!quote]- Full X Article (Charlie O'Neill, "Let's bet on this shit (how to act rationally if you believe in RL scaling and envs)", 7 Sep 2026)
 > @oneill_c (Charlie O'Neill) — 2026-09-07
 >
 > Article: Let's bet on this shit (how to act rationally if you believe in RL scaling and envs)
