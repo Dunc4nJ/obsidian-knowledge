@@ -34,6 +34,7 @@ How agents store, retrieve, and evolve knowledge across sessions. Memory archite
 - [[Hermes, Codex, and Claude Code converge on markdown plus filesystem tools because memory is a judgment problem not a data structure problem]]
 - [[Auto-Dreamer learns offline region rewriting to shrink language-agent memory 12x while improving task success]]
 - [[Mem0 surveys nine agent harness memory systems and finds five recurring gaps - bounded storage, keyword retrieval, harness scoping, weak staleness, and isolation]]
+- [[GPT-6 Astra swaps Codex compaction for notes across context windows plus searchable earlier windows including tool outputs]]
 
 ## Series
 
