@@ -55,3 +55,5 @@ Measuring agent quality, observability, regression testing, production monitorin
 - [[Langfuse]]
 - [[OpenLLMetry]]
 - [[resources/Laminar|Laminar]]
+- [[Archil's Hunter Leath argues line-by-line PR review never caught bugs anyway so replace it with automated per-PR evidence artifacts and safer deployments]] — Hunter Leath (Archil) argues that human line-by-line PR review was always a weak bug filter -- at Amazon, PRs with hundreds of comments shipped bugs at the same rate as unreviewed ones -- and that the only way to survive agent-accelerated code volume is to replace reading diffs with…
+
