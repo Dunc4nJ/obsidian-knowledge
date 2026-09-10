@@ -11,6 +11,11 @@ The unit of progress in post-training is increasingly **the dataset, not the che
 
 The boundary this folder deliberately does *not* draw is between "corpus" and "environment": [[Daniel Ching's On Data I argues the post-training datapoint has become an executable environment not a corpus row]] argues they are the same thing at different maturities, so both sit here under one roof.
 
+## Cross-Cutting
+
+Notes that span both corpus synthesis and environment construction — frontier-lab data pipelines where the two are one system, and cross-lab comparisons of how the artifact gets made.
+- [[Viv reads four data-generation trends out of DeepSeek V4.1 and Kimi K3 - solve-inspect-repair and per-domain pipelines are in DeepSeek's report, the knowledge graph is Kimi's alone]] — Viv distils four data-generation and RL-environment trends from the DeepSeek-V4.1-Flash and Kimi K3 reports; checked against the DeepSeek report verbatim in this vault, the multi-agent solve-inspect-repair loop and the per-domain pipeline split are documented almost literally, while the progressive-difficulty ladder and the knowledge graph belong to Kimi or to nobody.
+
 ## Corpus Synthesis
 
 How training corpora get made: synthetic generation, rephrasing, curation, dedup, and the generator/student scaling questions underneath them.
