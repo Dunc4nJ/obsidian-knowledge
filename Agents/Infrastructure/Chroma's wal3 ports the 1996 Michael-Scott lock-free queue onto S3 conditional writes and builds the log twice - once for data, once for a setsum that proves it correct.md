@@ -124,11 +124,17 @@ Source: [wal3: A Write-Ahead Log for Chroma, Built on Object Storage](https://ww
 >
 > In our object storage-backed world, we only have files. So we will use a file for the linked list node and we will use a file for the header. For clarity, we call the former `fragments` and the latter the `manifest`. Where we would allocate a linked list node in memory, we put a file if and only if it doesn't exist. We use if-match on the entire content of the manifest to add the atomically update it to reference the new node. It's the same algorithm in a new context.
 >
-> Graphically, the isomorphism between the algorithms is readily apparent. In the first step, there are two stationary lists; the memory-bound, pointer-rich list is on the left and our manifestation of it is on the right.
+> Graphically, the isomorphism between the algorithms is readily apparent.
+>
+> *Recovered from the page's p5.js canvas (one frame): the isomorphism. Left, the memory-bound pointer-rich list — HEAD to Node 8 to Node 7 to Node 6. Right, wal3's equivalent — a MANIFEST holding the ordered slot list `8, 7, 6` while the fragments sit as independent object keys with no pointers between them.*
+> ![[chroma-wal3-002.png]] In the first step, there are two stationary lists; the memory-bound, pointer-rich list is on the left and our manifestation of it is on the right.
 >
 > The first step to pushing onto the log is to allocate a new node. In the classic world, this is a memory allocation. On top of S3 this is an "If-none-match" that will make sure Node 3 is created by the log. Note that at this point, neither the head nor manifest know anything about the new node.
 >
 > In the final step, a conditional operation on the head updates the head to refer to the new node.
+>
+> *Recovered from the page's second p5.js canvas (one frame): setsum over the log. Fragments `/logs/0` through `/logs/9` each carry a checksum; red is the garbage-collected prefix, green the live suffix. The invariant is that the red digest plus the green digest must equal the digest of the whole log.*
+> ![[chroma-wal3-003.png]]
 >
 > ## A Safe Path to Implementation
 >
