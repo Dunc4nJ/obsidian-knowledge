@@ -31,6 +31,7 @@ tags: [local-inference, hardware, deepseek, v4.1-flash, rtx-pro-6000, sglang, sm
 
 ## Original Content
 
+> [!quote]- Full thread (@net_termina / Killy, 11 Sep 2026)
 > @net_termina (Killy) - 2026-09-11
 >
 > Deepseek V4.1 Flash Max Optimized
@@ -52,7 +53,7 @@ tags: [local-inference, hardware, deepseek, v4.1-flash, rtx-pro-6000, sglang, sm
 >
 > Engagement: 12 likes | 0 retweets | 2 replies
 > [Original post](https://x.com/net_termina/status/2098437949331230748)
-
+>
 > @net_termina (Killy) - 2026-09-11 (second post in the thread)
 >
 > https://t.co/hZRVddFw2u

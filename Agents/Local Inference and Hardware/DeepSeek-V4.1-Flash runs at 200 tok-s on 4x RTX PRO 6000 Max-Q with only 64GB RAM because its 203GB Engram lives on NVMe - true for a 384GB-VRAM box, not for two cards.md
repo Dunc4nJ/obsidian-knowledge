@@ -31,6 +31,7 @@ tags: [local-inference, hardware, deepseek, v4.1-flash, engram, nvme, offloading
 
 ## Original Content
 
+> [!quote]- Full thread (@0x0SojalSec, 10 Sep 2026) + quoted source posts
 > @0x0SojalSec (Md Ismail Šojal 🕷️) - 2026-09-10
 >
 > You don’t need 256GB+ RAM to run a DeepSeek-V4.1-Flash 763B model locally,
@@ -47,7 +48,7 @@ tags: [local-inference, hardware, deepseek, v4.1-flash, engram, nvme, offloading
 >
 > Engagement: 570 likes | 26 retweets | 28 replies
 > [Original post](https://x.com/0x0SojalSec/status/2098193131762242018)
-
+>
 > @0x0SojalSec (Md Ismail Šojal 🕷️) - 2026-09-10 (second post in the thread)
 >
 > Official weights: - https://t.co/WGFFHhQcZA
