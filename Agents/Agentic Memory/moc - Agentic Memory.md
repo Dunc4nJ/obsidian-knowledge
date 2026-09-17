@@ -36,6 +36,7 @@ How agents store, retrieve, and evolve knowledge across sessions. Memory archite
 - [[Mem0 surveys nine agent harness memory systems and finds five recurring gaps - bounded storage, keyword retrieval, harness scoping, weak staleness, and isolation]]
 - [[GPT-6 Astra swaps Codex compaction for notes across context windows plus searchable earlier windows including tool outputs]]
 - [[LangChain Deep Agents specifies long-term memory as files routed to a store namespace, making user, agent, and org scope a lambda over runtime identity]]
+- [[Josh Rosen argues context infrastructure should decide later - CortexDB and Statewave preserve raw history because the write path cannot know what will matter]] — the lakehouse read on agent memory: most systems decide on the *write path* and "once the underlying information is gone, better retrieval cannot recover it," so preserve the raw event history and make memories, graphs and embeddings rebuildable views over it. Proposes a **medallion architecture for context** (high-fidelity record / continuously rebuilt interpretations / per-consumer views), argues storage is cheap while **interpretation is the expensive operation** so frequently-useful views should be materialized, and states CrewAI's selective-extraction counter-position fairly. Leaves fact currency and inferred-vs-stated provenance unsolved. CortexDB, Statewave, Supermemory, Zep; no benchmarks and no implementation of his own
 
 ## Series
 
