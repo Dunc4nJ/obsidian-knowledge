@@ -11,6 +11,10 @@ Study guides, courses, and certification materials.
 
 - [[Claude Certified Architect exam covers five domains from agentic loops to context management]] — comprehensive self-study breakdown of all five exam domains with tutor prompts and build exercises
 
+## Hands-On Guides
+
+- [[Rahul's 14-step QLoRA guide trains Qwen2.5-1.5B on 200-500 examples - its best moves are gating on a prompt-only baseline and splitting by company not page]] — end-to-end small-LLM fine-tuning walkthrough with runnable code at every step (data rights, OCR cascade, JSONL dataset build, company-level splits, QLoRA on Colab T4, prompt-only baseline eval, vLLM adapter serving); the 1.5B-beats-frontier headline is asserted, not measured
+
 ## Inference & serving → moved to ML Research/Inference/
 
 These vLLM/inference explainers were re-homed to the inference folder — see [[moc - Inference]] (kept discoverable here):
