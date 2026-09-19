@@ -142,6 +142,7 @@ Both nuances undercut the chart in opposite directions. "The numbers for LLMs ar
 
 - [[pg-jev]]
 - [[jevlike]]
+- [[jev-align]] — Sutro's GEPA CLI that tunes a Jev task's criteria text to your labels; see [[Sutro's jev-align uses GEPA to rewrite Jev's decision criteria from five labeled examples - the demo moves labeled-set ambiguity 49.6 points but full-pool certainty only 0.5]] for the launch demo and its numbers
 
 ## Original Content
 
