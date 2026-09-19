@@ -120,7 +120,7 @@ Designing the scaffolding around agents — system prompts, AGENTS.md patterns, 
 - [[repository-level context files reduce coding agent task success and increase inference costs by over 20 percent]]
 - [[memory-first agents should dispatch stateless subagents for focused task execution]]
 - [[the harness is everything and agent performance comes from environment design not model capability]]
-- [[hashline edit format improves LLM coding accuracy more than model upgrades at zero training cost]]
+- [[hashline tags lines with content hashes to give LLMs stable edit anchors without reproducing old code]]
 - [[training compaction into the model through RL produces better summaries than prompted compaction at one-fifth the tokens]]
 - [[LangChain Deep Agents Deploy offers open harness to avoid Claude Managed Agents memory lock-in]] — the product launch, paired with Chase's thesis below
 - [[Memory ownership follows harness ownership - Harrison Chase argues picking a closed harness is picking a permanent owner for your agent's data flywheel]] — Chase's strategic manifesto formalizing the three-tier memory lock-in taxonomy (stateful API → closed harness → closed harness with server-side long-term memory), the thesis that underwrites the Deep Agents Deploy launch
@@ -211,7 +211,7 @@ Agent skill design, authoring, testing, and lifecycle management. SKILL.md patte
 ### Tooling
 Agent tool design, context engineering, prompt caching, skill architectures, search strategies, progressive disclosure, and general patterns for how agents interact with tools and manage context. The broadest subfolder — if a note is about *how agents use tools or manage their context window*, it goes here.
 
-- [[Everything is Context: Agentic File System Abstraction for Context Engineering]]
+- [[Everything is Context - Agentic File System Abstraction for Context Engineering]]
 - [[Slate's terminal UX solves multi-agent observability by separating orchestration search and execution into visible parallel threads]]
 - [[Agno Context Providers collapse the multi-source tool surface to 2N tools by hiding each source behind a query and update sub-agent]] — Ashpreet Bedi: each source (Slack, Drive, GitHub) gets wrapped in a sub-agent exposing only `query_<source>` and `update_<source>`; main agent's tool surface stays linear at 2N regardless of how many tools each source has, source-specific quirks live in the sub-agent
 - [[Quarq Labs frames GEPA and RLM as complementary context layers - GEPA optimizes static prompts before inference while RLM decomposes context at runtime]] — synthesis from Quarq Labs (personal-agent harness builder): GEPA optimizes the static prompt ahead of inference, RLM decomposes context dynamically at runtime, together replacing the "longer windows" paradigm with active curation; shared diagnosis is that LLMs are passive consumers of context
