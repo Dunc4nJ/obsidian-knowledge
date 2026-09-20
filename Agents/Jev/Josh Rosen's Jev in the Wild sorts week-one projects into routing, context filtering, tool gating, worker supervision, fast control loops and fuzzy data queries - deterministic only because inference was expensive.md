@@ -9,7 +9,7 @@ type: knowledge
 tags: [jev, system-one-models, architecture-patterns, routing, tool-gating, worker-supervision, control-loops, fuzzy-queries, typesafe]
 ---
 
-# Josh Rosen's Jev in the Wild sorts week-one projects into routing, context filtering, tool gating, worker supervision, fast control loops and fuzzy data queries - deterministic code is only deterministic because inference was too expensive
+# Josh Rosen's Jev in the Wild sorts week-one projects into routing, context filtering, tool gating, worker supervision, fast control loops and fuzzy data queries - deterministic only because inference was expensive
 
 ## Key Takeaways
 
@@ -85,47 +85,52 @@ The miscellany section is where Rosen is most candid that this is a field survey
 
 ## Not Yet Captured
 
-Of the 25 projects and people named in the article, the vault has a first-hand note on exactly one - pg-jev. Everything below is named by Rosen and absent from the vault, listed for dispatch. The routers, the gates and Foreman are the highest-value gaps, because they are the three patterns where the vault's existing notes raise objections that only the projects themselves can answer.
+The article links 23 GitHub repositories plus one hosted project page. The vault has a first-hand note on exactly one of them, pg-jev, so the other 23 items below are the dispatch queue. Each entry gives the name as Rosen writes it, the pattern he files it under, his own one-line description quoted verbatim from the article, and the URL. The routers, the gates and Foreman are the highest-value gaps, because those are the three patterns where the vault's existing notes raise objections only the projects themselves can answer.
 
 **Routing**
-- JevRouter (Vincent Koc) - models, subagents, skills, MCP tools and CLIs in one candidate set: https://github.com/vincentkoc/jev-router
-- agent-router (partme-ai) - chooses coding agent, model and effort level: https://github.com/partme-ai/agent-router
-- jev-codex-router (tom-doerr) - per-Codex-turn routing: https://github.com/tom-doerr/jev-codex-router
-- hono-jev-router (Marc Bouchenoire) - semantic HTTP routing in Hono: https://github.com/marcbouchenoire/hono-jev-router
+- **JevRouter** (Vincent Koc). Routing. "puts models, subagents, skills, MCP tools, and CLIs into the same candidate set" - https://github.com/vincentkoc/jev-router
+- **agent-router** (partme-ai). Routing. "chooses between coding agents as well as the model and effort level" - https://github.com/partme-ai/agent-router
+- **jev-codex-router** (tom-doerr). Routing. "makes that decision for individual Codex turns" - https://github.com/tom-doerr/jev-codex-router
+- **hono-jev-router** (Marc Bouchenoire). Routing, outside AI infrastructure. "routes HTTP requests by meaning instead of just URL patterns" - https://github.com/marcbouchenoire/hono-jev-router
 
 **Context filtering**
-- Winnow (nicobailon) - judges tool results before they enter a coding agent's context: https://github.com/nicobailon/winnow
-- jev-sift (jkudish) - scores files, URLs and snippets before an agent opens them: https://github.com/jkudish/jev-sift
-- fast-jev-compaction (tamaratran) - decides what survives Claude Code compaction, verbatim: https://github.com/tamaratran/fast-jev-compaction
-- jev-reranker (Joel Hooks) - relevance probability per candidate document: https://github.com/joelhooks/jev-reranker
-- blink (Marcel Corso) - the reranker idea applied to code search: https://github.com/marcelcorso/blink
+- **Winnow** (nicobailon). Context filtering. "judges tool results before they enter a coding agent's context" - https://github.com/nicobailon/winnow
+- **jev-sift** (jkudish). Context filtering. "scores files, URLs, and snippets so an agent only opens the ones that matter" - https://github.com/jkudish/jev-sift
+- **fast-jev-compaction** (tamaratran). Context filtering. "uses Jev to decide what survives Claude Code context compaction while keeping the selected content verbatim" - https://github.com/tamaratran/fast-jev-compaction
+- **reranker** (Joel Hooks). Context filtering, search and RAG. "gives each candidate document a relevance probability" - https://github.com/joelhooks/jev-reranker
+- **blink** (Marcel Corso). Context filtering, search and RAG. "applies the same idea to code search" - https://github.com/marcelcorso/blink
 
 **Tool gating**
-- jev-guard (andrewgcodes) - allow/ask/deny on tool calls plus prompt-injection inspection of results: https://github.com/andrewgcodes/jev-guard
-- pi-warden (badlogic / Mario Zechner) - decision layer inside the Pi coding agent: https://github.com/badlogic/pi-warden
-- Jev Shield (Aviv Sinai) - semantic checks on MCP calls, results and descriptions: https://github.com/avivsinai/jev-shield
+- **jev-guard** (andrewgcodes). Tool gating. "evaluates tool calls from coding agents and turns the result into allow, ask, or deny decisions. It can also inspect tool results for prompt injection before they return to the agent." - https://github.com/andrewgcodes/jev-guard
+- **pi-warden** (badlogic, Mario Zechner). Tool gating. "puts a similar decision layer directly into the Pi coding agent, checking actions against project rules and feeding the resulting guidance back into the worker" - https://github.com/badlogic/pi-warden
+- **Jev Shield** (Aviv Sinai). Tool gating, at the MCP layer. "pushes the pattern down to MCP. Tool calls, results, and descriptions can all pass through semantic checks before the system acts on them." - https://github.com/avivsinai/jev-shield
 
 **Worker supervision**
-- Foreman (ThruWire, Rosen's own) - Jev supervising a Codex worker on the factory floor: https://github.com/thruwire/foreman
-- The Foreman AGENTS.md drift post (19 September, 218 likes): https://x.com/JoshARosen/status/2101346654406217965
+- **Foreman** (ThruWire, Rosen's own project). Worker supervision. "A Codex worker does the software engineering while Foreman independently watches the work. Jev continuously assesses the evidence coming off the factory floor, including worker output, Git changes, tests, previous assessments, and the original job." - https://github.com/thruwire/foreman
 
 **Fast control loops**
-- Jev Ultrafast (Browser Use) - browser operations and DOM targets as a candidate set: https://github.com/browser-use/jev-ultrafast
-- jev-browser (jkudish) - per-step action choice: https://github.com/jkudish/jev-browser
-- typesafe-computer-use (TypeSafe AI) - screen to candidate actions to a Jev pick: https://github.com/TypeSafeAI/typesafe-computer-use
-- jev-plays-pokemon-red - the clearest illustration of bounded repeated choice: https://github.com/pokemonredexperiments/jev-plays-pokemon-red
+- **Browser Use's Jev Ultrafast**. Fast control loops. "constructs a set of possible browser operations and DOM targets, then has Jev pick one. A small language model is only needed when the browser actually has to generate text." - https://github.com/browser-use/jev-ultrafast
+- **jev-browser** (jkudish). Fast control loops. "uses a similar architecture and uses Jev to choose an action on each step" - https://github.com/jkudish/jev-browser
+- **typesafe-computer-use** (TypeSafe AI). Fast control loops, computer use. "reads the screen, constructs possible actions, and uses Jev to decide what to do, such as where to move the mouse or what to click on" - https://github.com/TypeSafeAI/typesafe-computer-use
+- **Pokémon** (jev-plays-pokemon-red). Fast control loops, games. "Projects have Jev playing Pokémon, driving cars, and controlling other simulations." - https://github.com/pokemonredexperiments/jev-plays-pokemon-red
 
 **Fuzzy data queries**
-- duckdb-jev (colliber): https://github.com/colliber/duckdb-jev
-- neo4jev (tom-doerr) - Jev picks which graph relationship to traverse: https://github.com/tom-doerr/neo4jev
+- **DuckDB** (duckdb-jev, colliber). Fuzzy data queries. "There are already Jev extensions for DuckDB" - https://github.com/colliber/duckdb-jev
+- **neo4jev** (tom-doerr). Fuzzy data queries, graphs. "brings the same idea to graphs by using Jev to decide which relationship to follow through Neo4j" - https://github.com/tom-doerr/neo4jev
+- *Already in the vault:* **pg-jev** (realZachi). "puts Jev directly inside Postgres. A SQL query can filter rows based on whether a customer sounds angry, rank products by how luxurious they seem, or classify a ticket by which team should handle it." - https://github.com/realZachi/pg-jev. See [[pg-jev]].
 
-**Everything else**
-- Magic Jev Ball - decides whether to approve a GitHub PR: https://jevable.com/project/2101129105676861621
-- typesafe-adblock (realZachi) - asks Jev whether something looks like an ad: https://github.com/realZachi/typesafe-adblock
-- Unclutter (Kitze) - decides which parts of a webpage are unnecessary: https://github.com/kitze/unclutter
-- awesome-jev (AnotiaWang) - semantic question against every function in a codebase: https://github.com/AnotiaWang/awesome-jev
-- Stefan's designer demo (6,204 likes, the article's most-engaged embed): https://x.com/heystefan_/status/2101369117496521042
-- Rosen's own context-management prediction post (18 September, 520 likes), the seed of the context-filtering pattern: https://x.com/JoshARosen/status/2100896143764836460
+**And then there's everything else**
+- **Magic Jev Ball**. Everything else. "looks at a GitHub PR and decides whether you should approve it" - https://jevable.com/project/2101129105676861621
+- **ad blocker** (typesafe-adblock, realZachi). Everything else. "asks Jev whether something actually looks like an ad" - https://github.com/realZachi/typesafe-adblock
+- **Unclutter** (Kitze). Everything else. "deciding what parts of a webpage are unnecessary" - https://github.com/kitze/unclutter
+- **Every** (awesome-jev, AnotiaWang). Everything else. "asking a semantic question against every function in a codebase" - https://github.com/AnotiaWang/awesome-jev. Note for whoever picks this up: the anchor text and the target disagree. Rosen links the word "Every" to AnotiaWang's `awesome-jev`, which is an ecosystem list rather than a codebase-querying tool, so either the link is misdirected or the intended project belongs to Every. Resolve which before writing a note.
+
+**Named but unlinked, so there is no URL to dispatch.** Rosen also lists, without links, "autonomous cars, mobile phone control, semantic code search, sponsor detection in YouTube videos, and even scoring every sentence in a video to flag when someone dodges a question," plus TypeSafe's own Jev playgrounds including the "Jedi sandwich" example. These would have to be found before they could be captured.
+
+**Source posts, not projects**
+- Rosen's context-management prediction, 18 September, 520 likes, the seed of the context-filtering pattern: https://x.com/JoshARosen/status/2100896143764836460
+- Rosen's Foreman AGENTS.md drift post, 19 September, 218 likes: https://x.com/JoshARosen/status/2101346654406217965
+- Stefan's designer demo, 19 September, 6,204 likes at capture, the article's most-engaged embed by two orders of magnitude: https://x.com/heystefan_/status/2101369117496521042
 
 ## Replies
 
@@ -196,7 +201,7 @@ The host tweet had zero replies at capture. The quote-tweet showed one reply in 
 > There are similar experiments around search and RAG. [reranker](https://github.com/joelhooks/jev-reranker) gives each candidate document a relevance probability, while [blink](https://github.com/marcelcorso/blink) applies the same idea to code search.
 >
 >
-> > **Embedded tweet** - Josh Rosen (@JoshARosen), Fri Sep 18 10:34:08 +0000 2026 - 520 likes / 37 reposts / 49 replies - https://x.com/JoshARosen/status/2100896143764836460
+> > **Embedded tweet - Rosen citing his own prior post as evidence** - Josh Rosen (@JoshARosen), Fri Sep 18 10:34:08 +0000 2026 - 520 likes / 37 reposts / 49 replies - https://x.com/JoshARosen/status/2100896143764836460
 > >
 > > I predict Jev revolutionizes context management.
 > >
@@ -236,7 +241,7 @@ The host tweet had zero replies at capture. The quote-tweet showed one reply in 
 > It looks at questions such as whether the worker is stuck or drifting from its instructions.
 >
 >
-> > **Embedded tweet** - Josh Rosen (@JoshARosen), Sat Sep 19 16:24:18 +0000 2026 - 218 likes / 11 reposts / 20 replies - https://x.com/JoshARosen/status/2101346654406217965
+> > **Embedded tweet - Rosen citing his own prior post as evidence** - Josh Rosen (@JoshARosen), Sat Sep 19 16:24:18 +0000 2026 - 218 likes / 11 reposts / 20 replies - https://x.com/JoshARosen/status/2101346654406217965
 > >
 > > Using Jev to catch Codex workers ignoring AGENTS.md.
 > >
@@ -294,7 +299,15 @@ The host tweet had zero replies at capture. The quote-tweet showed one reply in 
 > >
 > > when a designer gets access to Jev
 > >
-> > *(video attached: https://video.twimg.com/amplify_video/2101367981486051328/vid/avc1/3620x2160/s2ygWn-SPWBDHupm.mp4?tag=29)*
+> > *(video attached, 32.7s, 3620x2160, h264, no audio track: https://video.twimg.com/amplify_video/2101367981486051328/vid/avc1/3620x2160/s2ygWn-SPWBDHupm.mp4?tag=29)*
+> >
+> > **What the demo actually shows.** A browser at `127.0.0.1:5174` holds a physics sandbox with roughly a hundred emoji objects piled at the bottom of the page and one text box at the top. You type an arbitrary natural-language predicate and the matching objects levitate out of the pile and line up under the box. Over the clip he runs five: "things you can wear", "things you can wear in winter", "i need to lose weight", "starting a band", and "things a magnet could attract". There is no speech and no narration, so the frames below are the whole content.
+> >
+> > *Typing "things you can wear" lifts eight objects out of the pile - ring, headphones, scarf, glove, boot, sunglasses, top hat and crown.*
+> > ![[josharosen-857272-001.png]]
+> >
+> > *Adding two words narrows the same set to four. This is the article's read-time-semantics claim as a visual: the pile never changed, the predicate did, and nothing was indexed in advance.*
+> > ![[josharosen-857272-002.png]]
 >
 >
 > Even the TypeSafe's own Jev playgrounds lean into this. One example asks whether putting Luke Skywalker between two pieces of toast makes a “Jedi sandwich” a sandwich.
