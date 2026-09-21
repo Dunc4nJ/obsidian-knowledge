@@ -10,11 +10,13 @@ description: The first research entry in this folder that builds an ontology age
 
 ## Key Takeaways
 
-- **The contribution is a delivery mechanism, not an ontology format, and the paper's own strongest evidence is the comparison that isolates it.** `Baseline + SL` takes the builder agent's ontology and prepends it to the prompt as a static fragment; `EvoOntology` serves the identical content through two MCP tools the agent queries per turn. Same content, different delivery. The static version is *worse than no ontology at all* on four of six backbones on DDR-Bench, including −15.0 Trajectory-Wise on Claude-Sonnet-5, and drops Execution Accuracy on BIRD for every strong backbone (−5.6 on GPT-5.5) while raising Valid Efficiency Score across the board. The authors read that as a static fragment competing with the agent's other instructions and being unprunable per turn. It is the cleanest answer yet to a question the vault's semantic-layer notes keep deferring: injecting a good semantic layer into context can actively hurt, and the fix is to make it queryable. That reframes [[data agents are useless without a context layer that captures business definitions and tribal knowledge|a16z's living context layer]] and [[LangChain's agent-first data stack scales self-service analytics 40x by making context explicit across dbt models, a semantic layer, workspace guides, and endorsements|LangChain's five explicit context surfaces]] as claims about *content* that say nothing about interface, and it puts [[Palantir Ontology gives enterprise agents a decision-centric substrate by surfacing data logic and action as tools governed by one security model|Palantir's ontology-as-tools framing]] on measured ground for the first time in this folder.
+- **The contribution is a delivery mechanism, not an ontology format, and the paper's own strongest evidence is the comparison that isolates it.** `Baseline + SL` takes the builder agent's ontology and prepends it to the prompt as a static fragment; `EvoOntology` serves the identical content through two MCP tools the agent queries per turn. Same content, different delivery. The static version is *worse than no ontology at all* on four of six backbones on DDR-Bench, including −15.0 Trajectory-Wise on Claude-Sonnet-5, and drops Execution Accuracy on BIRD for every strong backbone (−5.6 on GPT-5.5) while raising Valid Efficiency Score across the board. The authors' own explanation is the sentence to keep: "a static prompt fragment competes with the agent's other instructions and cannot be pruned per turn, whereas EvoOntology exposes the same content through MCP tools that the agent actively queries, retrieving only the terms and mappings relevant to the current step." It is the cleanest answer yet to a question the vault's semantic-layer notes keep deferring: injecting a good semantic layer into context can actively hurt, and the fix is to make it queryable. That reframes [[data agents are useless without a context layer that captures business definitions and tribal knowledge|a16z's living context layer]] and [[LangChain's agent-first data stack scales self-service analytics 40x by making context explicit across dbt models, a semantic layer, workspace guides, and endorsements|LangChain's five explicit context surfaces]] as claims about *content* that say nothing about interface, and it puts [[Palantir Ontology gives enterprise agents a decision-centric substrate by surfacing data logic and action as tools governed by one security model|Palantir's ontology-as-tools framing]] on measured ground for the first time in this folder.
 
-- **The ablation quietly vindicates [[MotherDuck's Simon Spati splits semantic layer from context layer by what compiles to SQL, and argues sophistication is a cost not a default|Späti's "sophistication is a cost, not a default"]] even as the paper's title argues the opposite.** Masking each object family from the evolved ontology puts **Mappings at −13.4** and **Evidence at −8.7**, while **Relations — the graph edges, the thing that makes this an ontology rather than a glossary — cost only −2.1**, and Constraints only −3.5. Mappings ground a Term to concrete columns and join paths; Evidence is the probe query that lets the agent check a candidate SQL fragment against the real value distribution. So what carries the result is flat grounding plus executable receipts, which is very close to the flat curated topic tree MotherDuck's own evals found beat a graph. Späti's decision rule was whether the bottleneck is *relating entities* or *picking the right document*; EvoOntology's numbers say that on these three benchmarks it is neither, it is *knowing which column means what and having seen its values*. The graph structure is nearly free to keep and nearly worthless to have.
+- **The ablation quietly vindicates [[MotherDuck's Simon Spati splits semantic layer from context layer by what compiles to SQL, and argues sophistication is a cost not a default|Späti's "sophistication is a cost, not a default"]] even as the paper's title argues the opposite.** Masking each object family from the evolved ontology puts **Mappings at −13.4** and **Evidence at −8.7**, while **Relations — the graph edges, the thing that makes this an ontology rather than a glossary — cost only −2.1**, and Constraints only −3.5. Mappings ground a Term to concrete columns and join paths; Evidence is the probe query that lets the agent check a candidate SQL fragment against the real value distribution. So what carries the result is flat grounding plus executable receipts, which is very close to the flat curated topic tree MotherDuck's own evals found beat a graph. Späti's decision rule was whether the bottleneck is *relating entities* or *picking the right document*; EvoOntology's numbers say that on these three benchmarks it is neither, it is *knowing which column means what and having seen its values*. The graph structure is nearly free to keep and nearly worthless to have. The repo's own example store corroborates it from the other direction: 13 Semantic Relations against 102 Structural References, so the artifact is a grounded glossary with a thin relational skin rather than a graph.
 
-- **The gate is the mechanism, and its threshold is never disclosed.** An edit is accepted only when the candidate ontology beats its parent by margin `tau` on the same held-out validation set, same backbone, same decoding, same interaction budget, with the candidate differing from the parent at exactly one level. Remove that gate and accept every patch, and DDR-Bench falls **−11.2** points, the largest drop in any ablation, because unfiltered candidates admit regressions the next round cannot undo. Remove the attribution tag and it falls −6.3; remove trace clustering, −4.8; replace the typed patch with a free-form rewrite, only −1.7. The authors' own summary is that the loop is "more selective than iterative," which is the same conclusion [[Self-Harness lets a fixed LLM rewrite its own agent harness from clustered failure traces, lifting Terminal-Bench held-out pass rates up to 21 points|Self-Harness reached for harness edits]] and the same admission-function argument as [[memory is a compiler not a database - Ashwin Gopinath argues admission and action utility functions are the moat, and silence is the evidence they work|memory as a compiler, where the moat is what earns a write]]. Yet the paper never states the value of `tau`, the size of the validation split, or how many candidates were proposed per accepted round. The single load-bearing component is reported only by its absence.
+- **The gate is the mechanism, and the released code shows its margin is zero.** An edit is accepted only when the candidate ontology beats its parent on the same held-out validation set, same backbone, same decoding, same interaction budget, with the candidate differing from the parent at exactly one level. Remove that gate and accept every patch, and DDR-Bench falls **−11.2** points, the largest drop in any ablation, because unfiltered candidates admit regressions the next round cannot undo. Remove the attribution tag and it falls −6.3; remove trace clustering, −4.8; replace the typed patch with a free-form rewrite, only −1.7. The authors' own summary is that the loop is "more selective than iterative," which is the same conclusion [[Self-Harness lets a fixed LLM rewrite its own agent harness from clustered failure traces, lifting Terminal-Bench held-out pass rates up to 21 points|Self-Harness reached for harness edits]] and the same admission-function argument as [[memory is a compiler not a database - Ashwin Gopinath argues admission and action utility functions are the moat, and silence is the evidence they work|memory as a compiler, where the moat is what earns a write]]. The paper writes the acceptance rule as a margin `tau` and never gives it a value, but `evoontology/evaluation/evaluation.py` resolves it: on the ground-truth path the test is `candidate_avg > parent_avg`, a strict inequality with **no margin at all**. So the gate's real work is rejecting outright regressions, not demanding a meaningful improvement, and nothing in it protects against accepting a noise-level win. That it still dominates the ablation says how much damage unfiltered patches do, not how selective the threshold is.
+
+- **On the benchmark carrying the headline gain, the gate is an LLM judge, not a scorer.** The same module implements two protocols chosen by whether ground truth exists. BIRD has it, so Execution Accuracy is scored directly. DDR-Bench and InsightBench do not, so the candidate and parent are run per validation task, **anonymized A/B**, and an LLM judge picks a winner; the candidate is accepted only when it "wins strictly more non-tie tasks than the Parent *and* records zero critical errors," where a critical error is a wrong conclusion, a contradiction, an unanswered question, or an execution failure. The zero-critical-error condition is a genuinely strong hard gate and the anonymization is the right precaution. But it means the +17.8 on DDR-Bench was produced by a loop whose every accept decision was itself a model judgment, which is a different epistemic status from BIRD's +7.4 and deserves to be read that way.
 
 - **The evolved ontology is a per-model artifact, which breaks the shared-infrastructure story this folder has been building.** Every backbone evolves independently from the same initial state, and they diverge: pairwise Jaccard overlap of accepted Term identifiers never exceeds 0.62, and the two Claude models share *less* with each other (0.55) than the two GPT models do (0.61). Serve one backbone's evolved store to another and performance drops by at least 6.6 points versus its own store, with the diagonal winning every column. The paper treats this as evidence that backbone-specific evolution is beneficial; read the other way, it means the artifact is not portable, which is exactly what a semantic layer in [[Snowflake, Databricks and ClickHouse preview AI architecture by turning inference into a database operator, the semantic layer into agent infrastructure, and agents into a new database workload|Josh Rosen's "semantic layer as agent infrastructure"]] has to be, and what Palantir's one-ontology-one-security-model story depends on. The precise split matters: the builder's shared initial ontology delivers **+12.3** of the +20.0 on DDR-Bench and is model-agnostic; the **+7.7** from evolution is the part that does not travel. And the non-portable part is the larger share of the value per edit, because **Tool-level edits account for 57 percent of the accepted gain** while Content contributes 34 percent and Schema 9 percent — and tool descriptions and manifest wording are the most model-specific thing in the system.
 
@@ -52,6 +54,30 @@ This is the same schema-over-instances division as [[Everything Is Connected - k
 
 **Schema Layer `Gamma_t`** — defines the fields of the four node families, the admissible Semantic Relation types, and the permitted reference patterns. Because it sets the representational boundary rather than the content, "schema updates can therefore extend the ontology's representational capacity without changing its instantiated content."
 
+The paper leaves the schema abstract; the repo's Schema Layer explorer shows what it actually holds. Five object types with their own field counts and one-line definitions:
+
+| Object type | Fields | Definition |
+| --- | --- | --- |
+| Term | 8 | "Reusable analytical concept: business concept, metric, entity, dimension, or category" |
+| Mapping | 12 | "Grounds a Term to physical structures in the underlying data environment" |
+| Constraint | 10 | "Conditions required for correct interpretation and usage of semantic objects" |
+| Evidence | 6 | "Reproducible observations from the data environment that support semantic claims" |
+| Relation | 8 | "Serialized form of a Semantic Relation edge between Terms" |
+
+A Term's eight fields are `id`, `name`, `type`, `definition`, `scope`, `aliases`, `evidence_refs`, and `lifecycle_state`. Two of those are load-bearing and never mentioned in the paper. `aliases` is how business vocabulary reaches the agent, which is the entity-mapping problem Anthropic identified. `lifecycle_state` implies the store can mark a Term stale or retired rather than only adding and deleting, which is the temporal hygiene [[Everything Is Connected - knowledge graphs encode entities as directed-labeled triples that support multi-hop traversal and ontology-driven inference|knowledge graphs need to mark facts stale instead of asserting them]].
+
+The five controlled values of a Relation's `relation_type` come with declared directionality, which is the part that makes this a real schema rather than a tag vocabulary:
+
+| `relation_type` | Direction | Meaning |
+| --- | --- | --- |
+| `association` | Undirected, symmetric | "Concept-level relatedness that does not fit a stronger relation type" |
+| `hierarchy` | Directed | source (parent / broader) to target (child / narrower) |
+| `composition` | Directed | source (whole / parent) to target (part / child) |
+| `equivalence` | Undirected, symmetric | Same-meaning relationship between Terms |
+| `derivation` | Directed | source (input / base concept) to target (derived result) |
+
+One number from the explorer's live example, a Formula 1 database, sharpens the Relations ablation considerably. That `ontology_v1` holds 19 Terms, 16 Mappings, 7 Constraints, 13 Evidence records, **13 Semantic Relations, and 102 Structural References**. The edges that make it an ontology are outnumbered roughly eight to one by the edges that merely attach a Term to its grounding. The store is overwhelmingly a grounded glossary with a thin relational skin, which is exactly what the −2.1 Relations ablation would predict.
+
 **Tool Layer `R_t`** — two MCP tools plus a session manifest.
 
 | Interface | Signature | Behavior |
@@ -60,7 +86,42 @@ This is the same schema-over-instances division as [[Everything Is Connected - k
 | resolve | `f_resolve(I, c)` | Returns the requested records and their linked objects |
 | manifest | — | Compact source and usage information at session initialization |
 
-The released code names these `browse_semantics` and `resolve_semantics`. The critical sentence is about the manifest: "It is the only ontology content placed in the prompt, while detailed records are retrieved on demand." Two tools sits well inside the range [[MCP Best Practices|MCP best practices]] recommends, and the manifest-then-fetch pattern is the same progressive disclosure as [[code execution with MCP cuts tool token overhead 98 percent by presenting servers as filesystem APIs instead of upfront definitions|presenting MCP servers as filesystem APIs instead of upfront definitions]] and the same collapse to a small query surface as [[Agno Context Providers collapse the multi-source tool surface to 2N tools by hiding each source behind a query and update sub-agent|Agno's two-tools-per-source Context Providers]].
+The released code gives the real names and parameters, served by the module `tool_server.semantic_mcp`:
+
+| Paper | Implementation | Parameters | Bound |
+| --- | --- | --- | --- |
+| `f_browse(q, k, n)` | `browse_semantics` | `query` (required), `kind`, `limit` | Up to 6 catalog items |
+| `f_resolve(I, c)` | `resolve_semantics` | `mentions` (required), `context` | Up to 5 concepts |
+
+So the paper's opaque `I` is a list of concept mentions and `c` is a context string. The critical sentence is about the manifest: "It is the only ontology content placed in the prompt, while detailed records are retrieved on demand." The repo's Tool Layer explorer shows one verbatim, worth reading closely because it is the entire prompt cost of the ontology:
+
+```
+Ontology layer version: ontology_v1
+Objects: 19 terms, 16 mappings, 13 relations, 7 constraints, 13 evidence records.
+Active constraints: 7 (block=7)
+
+## Semantic MCP Tools
+Semantic Tools (2 available)
+
+These tools are bounded navigation aids. Use them to ground analytical concepts
+before querying the underlying data.
+
+- **browse_semantics**(query, kind, limit) - find up to 6 catalog items relevant
+  to a specific analytical need.
+- **resolve_semantics**(mentions, context) - resolve up to 5 concepts to grounded
+  mappings, relations, constraints, and evidence.
+
+### When to use semantic tools
+- Call resolve_semantics with the concepts you plan to use; it returns the
+  corresponding tables, columns, constraints, and supporting evidence.
+- Use browse_semantics only when you need to discover what concepts are available.
+- Resolved mappings are guidance, not final answers - always validate against the
+  actual data with your native query tools.
+```
+
+Three things stand out. The manifest is a routing policy, not a data dump: it tells the agent to prefer `resolve_semantics` and to reach for `browse_semantics` only when it does not know what exists, which is why Tool-level edits that reword this are worth 57 percent of the gain. The object counts are in the manifest, so the agent knows the ontology's size before spending a call. And the last line concedes the ontology may be wrong: "Resolved mappings are guidance, not final answers." That hedge is the closest thing here to an answer to Späti's complaint that there is no data-quality metric for context, and it is not a metric, just an instruction to distrust.
+
+Two tools sits well inside the range [[MCP Best Practices|MCP best practices]] recommends, and the manifest-then-fetch pattern is the same progressive disclosure as [[code execution with MCP cuts tool token overhead 98 percent by presenting servers as filesystem APIs instead of upfront definitions|presenting MCP servers as filesystem APIs instead of upfront definitions]] and the same collapse to a small query surface as [[Agno Context Providers collapse the multi-source tool surface to 2N tools by hiding each source behind a query and update sub-agent|Agno's two-tools-per-source Context Providers]].
 
 ## Builder Agent
 
@@ -106,7 +167,20 @@ Unpacking each word of the name:
 
 - **Paired** — the same validation set, decoding configuration, and interaction budget are used for both arms. The pair is *parent ontology versus candidate ontology*, differing at exactly one level, not tasks-with-versus-without. The single-level difference is what makes the comparison attributable: it "isolates the attributed hypothesis while limiting regressions on the validation set."
 - **Conditional on the backbone** — `phi` is indexed by `m`. "All backbones evolve independently from the same initial state `L_0`, allowing accepted updates to reflect backbone-specific interaction patterns." This is the design choice that makes the evolved ontology a per-model artifact.
-- **The acceptance statistic** — a raw score difference on `V`, thresholded at `tau`. There is no significance test, no repeated-run variance estimate, and no stated value for `tau`. The margin is the entire acceptance policy and the paper leaves it as a symbol.
+- **The acceptance statistic** — a raw score difference on `V`, thresholded at `tau`. There is no significance test and no repeated-run variance estimate, and the paper never gives `tau` a value.
+
+The released code closes that gap. `evoontology/evaluation/evaluation.py` implements the gate as an `EvaluationGate` class with two protocols "chosen by whether ground truth exists":
+
+| Protocol | Used for | Acceptance rule |
+| --- | --- | --- |
+| Ground truth | BIRD (Execution Accuracy) | `candidate_avg > parent_avg` — strict inequality, so `tau = 0` |
+| LLM judge | DDR-Bench, InsightBench | Per-task anonymized A/B comparison; accept only if candidate wins strictly more non-tie tasks *and* logs zero critical errors |
+
+The module's own docstring defines a critical error as a "wrong conclusion / contradiction / unanswered / execution failure," each a hard reject regardless of win count. The module owns the aggregation gate and the A/B anonymization helpers but neither the scoring function nor the judge call, which live in the benchmark adapter and the evolver.
+
+Two consequences. First, `tau` is zero in practice, so the gate rejects regressions but admits arbitrarily small improvements, including ones inside the noise. Second, the benchmarks with the largest reported gains are the ones gated by a model rather than a scorer.
+
+The benchmark configs pin down the rest of "identical decoding and interaction budgets." In `benchmarks/bird/configs/`, `baseline.yaml` and `ontology.yaml` are byte-for-byte identical except for `condition`, the `semantic.enabled` flag, and the extra `semantic` MCP server entry. Both set `temperature: 0.0` and `max_turns: 30`. So decoding is greedy and each arm of the pair is a single deterministic pass, which removes sampling noise from the comparison but also means the gate never sees a variance estimate. The 30-turn cap is the interaction budget, and Table 8's 14.6-to-8.4 turn range sits well inside it.
 
 Rejected candidates are not deployed, and "their signatures, interventions, and evaluation outcomes are logged to avoid repeated ineffective updates," so the loop has memory of its own failures.
 
