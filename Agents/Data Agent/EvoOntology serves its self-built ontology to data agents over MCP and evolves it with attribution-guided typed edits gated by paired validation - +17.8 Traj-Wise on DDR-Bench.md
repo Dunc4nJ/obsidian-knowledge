@@ -434,7 +434,7 @@ This folder's central argument has been about *what goes in* the intermediate la
 
 ## Original Content
 
-> [!quote]- Full paper, verbatim (Chong, Zhang, Fan, Du, "EvoOntology: A Self-Evolving Ontology Layer for Data Agents", arXiv 2609.15779, 14 Sep 2026; docling extraction, figures and tables at their original positions)
+> [!quote]- Full paper, verbatim (Chong, Zhang, Fan, Du, "EvoOntology: A Self-Evolving Ontology Layer for Data Agents", arXiv 2609.15779, 14 Sep 2026; docling extraction, figures and tables at their original positions. Figures 1 and 2 are served from the authors' own repo assets at full resolution, because the PDF-extracted crops were 476x212 and 1006x453 and illegible; all other figures are the docling extraction.)
 > ## EvoOntology: A Self-Evolving Ontology Layer for Data Agents
 >
 > Meiduo Chong 1 , Shaolei Zhang 1 ∗ , Ju Fan 1 , Xiaoyong Du 1
@@ -457,7 +457,7 @@ This folder's central argument has been about *what goes in* the intermediate la
 >
 > *Figure 1: left, a data agent without an ontology layer does blind exploration over tables, CSVs, docs, databases, charts and logs with high semantic uncertainty. Right, the same agent with a self-evolving ontology layer gets grounded data understanding, with the Diagnose - Attribute - Patch - Evaluate - Update loop wrapped around the layer's node types (Terms, Mappings, Evidence, Constraints) and edge types (Semantic Relation, Structural References).*
 >
-> ![[evoontology-15779-001.png]]
+> ![[evoontology-repo-001.png]]
 >
 > - (a)  Data Agent w/o Ontology Layer
 >
@@ -497,7 +497,7 @@ This folder's central argument has been about *what goes in* the intermediate la
 >
 > *Figure 2: the full architecture. Left, the data agent's two tool families - Execute SQL and Execute Python for data interaction, browse and resolve for ontology interaction. Middle, the builder agent extracting candidate concepts from workload queries (Cost, Revenue, Profit, Time), grounding them in heterogeneous data, and constructing the Schema, Content and Tool layers around a financial-analysis example. Right, the evolution agent diagnosing a history trajectory, attributing a missing Channel term to Content Level and an FX Convert tool to Tools Level, patching the parent ontology into a candidate, and the accept-or-roll-back gate.*
 >
-> ![[evoontology-15779-002.png]]
+> ![[evoontology-repo-002.png]]
 >
 > Content Layer. The Content Layer S t is a typed semantic graph with four node families and two edge families. The node families comprise Terms , Mappings , Constraints , and Evidence . Terms represent domain concepts, Mappings ground them to fields and linking paths, Constraints govern their valid use, and Evidence supports their semantic claims. The edge families comprise Semantic Relations and Structural References . Semantic Relations connect Terms through association , hierarchy , composition , equivalence , or derivation . Structural References link Terms to Mappings and attach Constraints and Evidence to the objects they govern or support. Figure 2 illustrates these components through a financial-analysis example.
 >
