@@ -18,9 +18,9 @@ Frank Dellaert is a Georgia Tech robotics and computer vision professor, the cre
 
 - **A Jev probability is not a calibrated CPT entry, and nobody has measured whether it is.** This is the sharpest objection to the piece, and Dellaert half-raises it by listing "probability calibration (which Jev explicitly was trained for)" as future work. The vault's standing finding is that the calibration claim remains unmeasured: [[LangChain's Jev-as-a-Judge bench puts Jev's quality-score variance 92 to 913x below three LLM judges at $0.34 against Claude's $28.17 - five weather traces, one human oracle, provider-default sampling|LangChain's judge bench]] measured variance, not calibration; [[Sutro's jev-align uses GEPA to rewrite Jev's decision criteria from five labeled examples - the demo moves labeled-set ambiguity 49.6 points but full-pool certainty only 0.5|Sutro's jev-align]] tunes prompt text with no calibration metric in the loop; and [[Featherless's Simple Jev reproduces Jev's API on stock open models by remapping every answer to a single-token letter and softmaxing only those logits - no classifier head, and the code stamps every answer calibrated False|Featherless's reimplementation]] stamps every answer `calibrated: False`. A Bayes net *multiplies* CPTs, so a per-row miscalibration compounds through the joint over all 256 assignments. Reading the article against this is the whole game, and Dellaert names the gap without closing it.
 
-- **One CPT row is verifiably wrong in a way calibration cannot excuse, and it is a logical error rather than a numerical one.** The variable E is *defined* as "the patient has tuberculosis or lung cancer" - a deterministic OR. Three of its four rows came back exactly 1.0, correctly. The fourth, P(E=true | T=0, L=0), came back **1%** when the definition forces it to 0. That 1% creates a path where "either disease" is true with neither disease present, and it flows into every downstream posterior through X and D. The point generalizes: zero-shot factors need a hard-constraint check before they enter the graph, because a language model has no mechanism that enforces a definitional identity. This is checkable for free and has nothing to do with calibration.
+- **One CPT row is verifiably wrong in a way calibration cannot excuse, and it is a logical error rather than a numerical one.** The variable E is *defined* as "the patient has tuberculosis or lung cancer" - a deterministic OR, which GTSAM's canonical example writes as the literal gate `"F T T T"`. Three of its four rows came back exactly 1.00, correctly, and returning exact unity is itself proof that Jev reproduced the logical form rather than estimating. The fourth, P(E=true | T=0, L=0), came back **1%** where the gate forces 0. That 1% creates a path where "either disease" is true with neither disease present, and it flows into every downstream posterior through X and D. The point generalizes: zero-shot factors need a hard-constraint check before they enter the graph, because a language model has no mechanism that enforces a definitional identity. This is checkable for free and has nothing to do with calibration.
 
-- **The contamination caveat is weaker for the numbers than for the structure, which the article does not point out.** Dellaert flags that the Asia network is in every textbook and in GTSAM's own docs, so it is presumably in Jev's training data. But his notebook's prompt explicitly instructs Jev to "use ordinary real-world medical knowledge, not the memorized textbook Asia-network numbers," and the returned values diverge substantially from the canonical published CPTs (smoking prevalence 20% against the textbook's 50%, P(tuberculosis | Asia visit) 32% against the textbook's 5%). So the numbers look less like regurgitation than the caveat implies. The *structure* experiment is where contamination bites hardest, and that is the one he has no defense for. As @Imfulao put it in the replies, "the real test will be unfamiliar networks where memorization can't help" - and Dellaert does not run one.
+- **The notebook is considerably more careful about contamination than the article prose, and neither measure actually settles the question.** Dellaert flags in the article that the Asia network is in every textbook and in GTSAM's own docs, so it is presumably in Jev's training data. The notebook then takes two deliberate countermeasures the prose never mentions. For Experiment 1, `CPT_STATE['population']` literally instructs Jev to "use ordinary real-world medical knowledge, **not the memorized textbook Asia-network numbers**"; the article says only that "shared instructions specify the population and say to treat unspecified facts as unknown." For Experiment 2, the variables are anonymized to shuffled identifiers `V1` through `V8` and the state adds that "these questions ask about model structure, not whether a variable is true for a particular patient"; the article says only that he "supplied only the variable meanings." The divergence from the canonical table is therefore **by instruction**, which demonstrates that Jev follows an instruction to avoid the textbook numbers - not that it lacks them. Read honestly, neither countermeasure is evidence against contamination, and the real test remains a network the model has never seen. As @Imfulao put it in the replies, "the real test will be unfamiliar networks where memorization can't help." Dellaert does not run one.
 
 - **Zero-shot CPTs are the first of his own three classical methods automated, not a fourth source of information.** He opens by teaching that CPTs come from our own judgment, expert interviews, or estimation from data. Jev supplies judgment distilled from text at scale - it adds no observation of the world. So the honest framing is a *much faster prior*, not a new epistemic channel, and the value is that priors become cheap enough to regenerate per context rather than elicited once and frozen. The cost supports that reading: 46 typed questions across both experiments for $0.0003, around 0.00065 cents each, which is consistent with the [[TypeSafe's Jev trades string generation for parallel-sampled typed decisions with calibrated probabilities at $0.042 per MTok - the 193x and 444x claims come from four self-built workflow evals|$0.042 per MTok]] launch pricing. The whole 18-row CPT set costs roughly a hundredth of a cent.
 
@@ -79,32 +79,40 @@ return np.array([[response["answers"][qid]["probabilities"][label]
                   for label in labels] for qid in questions], dtype=float)
 ```
 
-### The 18 CPT rows
+### The 18 CPT rows, against the canonical table
 
-Transcribed from Figure 2 (teal = P(true)) and cross-checked against the notebook's `recorded_cpts` array, which agrees exactly. P(false) is the complement.
+Jev's values are transcribed from Figure 2 (teal = P(true)) and cross-checked against the notebook's `recorded_cpts` array, which agrees exactly. Note that the recorded array stores two decimal places, so it carries no more precision than the figure's whole percentages.
 
-| Variable | Parent condition | P(true) |
-| --- | --- | --- |
-| A - Asia visit | root, no parents | 4% |
-| S - Smoking | root, no parents | 20% |
-| T - Tuberculosis | A=0 | 3% |
-| T - Tuberculosis | A=1 | 32% |
-| L - Lung cancer | S=0 | 1% |
-| L - Lung cancer | S=1 | 8% |
-| B - Bronchitis | S=0 | 5% |
-| B - Bronchitis | S=1 | 69% |
-| E - Either disease | T=0, L=0 | 1% |
-| E - Either disease | T=0, L=1 | 100% |
-| E - Either disease | T=1, L=0 | 100% |
-| E - Either disease | T=1, L=1 | 100% |
-| X - Abnormal X-ray | E=0 | 11% |
-| X - Abnormal X-ray | E=1 | 99% |
-| D - Shortness of breath | E=0, B=0 | 7% |
-| D - Shortness of breath | E=0, B=1 | 85% |
-| D - Shortness of breath | E=1, B=0 | 95% |
-| D - Shortness of breath | E=1, B=1 | 97% |
+The canonical column is the Lauritzen & Spiegelhalter parameterization as it appears in [GTSAM's own Asia example](https://borglab.github.io/gtsam/discretebayesnetexample) - the page Dellaert names as the likely contamination source, and which he co-authored. P(false) is the complement throughout.
 
-The row `E | T=0, L=0 = 1%` is the logical error discussed in the takeaways: E is defined as the OR of T and L, so that entry is forced to 0.
+| Variable | Parent condition | Jev P(true) | Canonical P(true) | Delta |
+| --- | --- | --- | --- | --- |
+| A - Asia visit | root, no parents | 4% | 1% | +3 |
+| S - Smoking | root, no parents | 20% | 50% | -30 |
+| T - Tuberculosis | A=0 | 3% | 1% | +2 |
+| T - Tuberculosis | A=1 | 32% | 5% | +27 |
+| L - Lung cancer | S=0 | 1% | 1% | 0 |
+| L - Lung cancer | S=1 | 8% | 10% | -2 |
+| B - Bronchitis | S=0 | 5% | 30% | -25 |
+| B - Bronchitis | S=1 | 69% | 60% | +9 |
+| E - Either disease | T=0, L=0 | 1% | 0% | +1 |
+| E - Either disease | T=0, L=1 | 100% | 100% | 0 |
+| E - Either disease | T=1, L=0 | 100% | 100% | 0 |
+| E - Either disease | T=1, L=1 | 100% | 100% | 0 |
+| X - Abnormal X-ray | E=0 | 11% | 5% | +6 |
+| X - Abnormal X-ray | E=1 | 99% | 98% | +1 |
+| D - Shortness of breath | E=0, B=0 | 7% | 10% | -3 |
+| D - Shortness of breath | E=0, B=1 | 85% | 80% | +5 |
+| D - Shortness of breath | E=1, B=0 | 95% | 70% | +25 |
+| D - Shortness of breath | E=1, B=1 | 97% | 90% | +7 |
+
+Mean absolute deviation across the 18 rows is **8.1 percentage points**, with four divergences of 20 points or more: smoking prevalence (20% against 50%), tuberculosis given an Asia visit (32% against 5%), bronchitis in a non-smoker (5% against 30%), and shortness of breath given disease without bronchitis (95% against 70%). Four rows match exactly, three of which are the deterministic `E` rows.
+
+**These are not the textbook numbers. But that is because the prompt told Jev not to use them**, and the divergence has to be read in that light - see the takeaway on contamination below.
+
+**The numerical agreement is weak while the structural agreement is exact.** The canonical `E` row is a hard OR gate, written in GTSAM as `"F T T T"` - a literal false followed by three trues. Jev returned exactly 1.00 on all three true rows, which no genuinely uncertain estimator would do, so it clearly reproduced the logical form of the gate. It then leaked **1%** onto the one row the gate forces to zero. Three rows right by construction, one row wrong by construction.
+
+**Direction of error is mixed, so "Jev's priors are more modern" is only half true.** Smoking at 20% against the 1988 table's 50%, and non-smoker bronchitis at 5% against 30%, are both far closer to present-day epidemiology than the benchmark. But tuberculosis at 32% following an Asia visit is clinically absurd and much worse than the canonical 5%. Jev is not uniformly recalibrating toward reality; it is producing plausible-sounding numbers that happen to be better on two rows and considerably worse on another.
 
 ### What GTSAM does with them
 
@@ -120,7 +128,9 @@ Dellaert is explicit that this part is not new: "inference in Bayes nets is very
 
 ## Experiment 2 - The Structure Itself
 
-Second request, same pattern, different question. He supplied **only the variable meanings** under shuffled identifiers `V1`-`V8`, sent **no reference edges and no CPTs**, and asked about all **28 unordered pairs** in one API request. Each question was a three-option Choice: `no_edge`, `u_to_v`, or `v_to_u`. The instructions ask the model to account for mediation through the other listed variables, so that association through a shared cause does not earn a direct edge.
+Second request, same pattern, different question. He supplied **only the variable meanings**, sent **no reference edges and no CPTs**, and asked about all **28 unordered pairs** in one API request. Each question was a three-option Choice: an edge from the first variable to the second, an edge in the reverse direction, or no direct edge (`no_edge`, `u_to_v`, `v_to_u`). The instructions ask the model to account for mediation through the other listed variables, so that association through a shared cause does not earn a direct edge.
+
+The variables are **anonymized**, which is the second contamination countermeasure the article prose does not mention. The notebook maps shuffled identifiers `V1` through `V8` onto the letters `LSABETDX`, so `V1` is lung cancer and `V3` is the Asia visit, and every question is phrased in terms of the opaque identifier plus a meaning string. The state adds that "these questions ask about model structure, not whether a variable is true for a particular patient." The three extra edges were therefore proposed against anonymized identifiers, not against the familiar `A`, `T`, `E` labels.
 
 He then combined the 28 answers into an acyclic graph by maximizing `sum(log P(pair choice)) - number of edges` with an edge penalty of 1.0, checking all **8! = 40,320** variable orderings to enforce acyclicity. That took **38 ms on a MacBook Air**.
 
@@ -134,7 +144,13 @@ These are arguably defensible clinically rather than simply wrong, which makes t
 
 ## The Notebook
 
-The gist `dellaert/ed9c8ed6bbfa22a4f027474b9c3e32b5` contains one file, `jev_minimal_repro.ipynb` - 14 cells (6 code, 8 markdown), no stored outputs. It runs without a Jev API key: `LIVE = False` replays the original `jev-1.13.0` probabilities embedded in the notebook, and flipping it to `True` re-issues the two requests. Full code is in the Original Content callout below under its own sub-heading; the two most reusable pieces are quoted in the Experiment 1 section above.
+The gist `dellaert/ed9c8ed6bbfa22a4f027474b9c3e32b5` contains one file, `jev_minimal_repro.ipynb` - 242 lines, 14 cells (6 code, 8 markdown), no stored outputs. Its own title cell says it reproduces "the article's CPTs, three evidence updates, and structure recovery," so it covers all three stages including the posterior inference the article body only alludes to. Full code is in the Original Content callout below under its own sub-heading; the two most reusable pieces are quoted in the Experiment 1 section above.
+
+**Everything is pinned, including the model.** The setup cell fixes `typesafe-sdk==0.7.0` and `numpy==1.26.4`, and installs a pre-release `gtsam>4.3a0` only when neither `gtsam` nor `gtsam-develop` is already newer than `4.3a0`. The model string is the exact version **`jev-1.13.0`**, not a floating `jev-latest` alias - which matters, because a CPT set is only reproducible against a pinned model. @Madeactual's reply independently recommends the same practice.
+
+**The default path makes no API calls at all.** `LIVE = False` replays the `recorded_cpts` and `recorded_pairs` arrays embedded in the notebook, and only `LIVE = True` issues the two requests, prompting for `TYPESAFE_API_KEY` if it is unset. That is a good reproducibility design: anyone can rerun the full pipeline and get the article's exact figures without a key or a cent of spend. The one caveat is that the recorded arrays are stored at two decimal places, so the replay carries the same precision as the published figures and no more.
+
+The three evidence queries the notebook runs, all after Jev is out of the loop, are cumulative observations on a `DiscreteFactorGraph`: `{A: 0}`, then `{A: 0, X: 1}`, then `{A: 0, X: 1, D: 1}`. Each is added as a unary factor and marginalized with `DiscreteMarginals`, reading back the posterior for tuberculosis, lung cancer and bronchitis. The results are the table in the Experiment 1 section.
 
 The variable definitions and dependency structure that feed the question generator:
 
@@ -214,7 +230,7 @@ Outside the folder, the same LLM-proposes / probabilistic-engine-infers split ap
 - [GTSAM](https://gtsam.org/) - the factor-graph library
 - [GTSAM discrete inference](https://borglab.github.io/gtsam/discrete/)
 - [GTSAM discrete Bayes nets](https://borglab.github.io/gtsam/discretebayesnet/)
-- [GTSAM's own Asia network example](https://borglab.github.io/gtsam/discretebayesnetexample) - the contamination source he names
+- [GTSAM's own Asia network example](https://borglab.github.io/gtsam/discretebayesnetexample) - the contamination source he names, and the source of the canonical CPT column above: priors `99/1` and `50/50`, `P(T|A)` as `99/1 95/5`, `P(L|S)` as `99/1 90/10`, `P(B|S)` as `70/30 40/60`, `P(E|T,L)` as the gate `F T T T`, `P(X|E)` as `95/5 2/98`, and `P(D|E,B)` as `9/1 2/8 3/7 1/9`
 - [GTSAM hybrid inference](https://borglab.github.io/gtsam/hybrid/)
 - [testSudoku.cpp](https://github.com/borglab/gtsam/blob/develop/gtsam_unstable/discrete/tests/testSudoku.cpp) - GTSAM solving Sudoku with discrete factors
 - [Lauritzen & Spiegelhalter, 1988](https://doi.org/10.1111/j.2517-6161.1988.tb01721.x) - the original Asia / Chest Clinic paper
