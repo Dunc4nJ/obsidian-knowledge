@@ -11,14 +11,14 @@ description: MotherDuck ships prompt_jev(), a first-party SQL function that rout
 
 # MotherDuck's prompt_jev labels 100k AG News rows in 40 seconds for 50 cents at 89 percent - a benchmark fine-tuned encoders beat by 5 points, metered at a 25 percent markup over TypeSafe list
 
-*The launch card, also the blog's og:image. Note the "classify a million rows" claim, which appears nowhere in the tweet text or the benchmark table.*
+*The tweet's attached photo and the blog's og:image are one and the same asset, 1600x893. It is a promotional card, not a chart: the MotherDuck duck stamping coloured labels into one column of a table of grey placeholder rows, under "INTRODUCING PROMPT_JEV()" and "CLASSIFY A MILLION ROWS IN SQL. 50X FASTER AT 1% THE COST." It carries no data. Kept as this note's single cover image, and worth one observation - the "a million rows" framing appears neither in the tweet text nor anywhere in the benchmark, which tops out at 100,000 rows.*
 ![[motherduck-896307-001.jpg]]
 
 ## Key Takeaways
 
 - **The headline numbers hold, and the benchmark they rest on is the easiest one in text classification.** 100,000 rows in 40 seconds for $0.50 at 89 percent, against gpt-5.6-terra at 31m59s, $37.58 and 88 percent, works out to 48x faster and 75x cheaper - close enough to the "~50x faster at ~1% of the cost" framing. The dataset is where it gets thin. AG News is the 2015 four-class news-topic set from Zhang, Zhao and LeCun, and a fine-tuned DistilBERT or RoBERTa sits around 94-95 percent on it at near-zero marginal inference cost. Both Jev (89) and the frontier LLM (88) land five to six points *below* that bar. So "matched frontier LLM accuracy" is true and unimpressive, and the post's own "LLM-style ergonomics with encoder-style efficiency" line invites exactly the encoder comparison the table omits. The defensible claim is about the cost of getting there - no labeled set, no fine-tuning loop, no model to maintain - not about the accuracy reached.
 - **"It exceed existing models by >25x across cost, accuracy, and speed dimensions" does not survive the table it sits under.** Cost clears it at 75x over gpt-5.6-terra. Speed clears it at 48x. Accuracy moved one point, 88 to 89, against the strongest baseline and nine points against the weakest. The sentence bundles a one-point delta into a multiplier earned entirely by two other columns.
-- **MotherDuck's retail carries a roughly 25 percent markup over TypeSafe list, and the blog never mentions it.** The pricing page meters Jev at 1 AI Unit, which is $1.00, per 19,000,000 input tokens with output free - $0.0526 per MTok against the $0.042 per MTok list price recorded in [[TypeSafe's Jev trades string generation for parallel-sampled typed decisions with calibrated probabilities at $0.042 per MTok - the 193x and 444x claims come from four self-built workflow evals]]. Working the "Retail cost/100k" column backwards: $0.50 is half an AI Unit, so 9.5M input tokens across 100,000 rows, about 95 input tokens per row, and $5 per million rows. That is MotherDuck's own retail, not TypeSafe's and not the LLM vendors' - and whether MotherDuck compute time is billed on top of it is not stated in the post or on the function page.
+- **MotherDuck's retail carries a roughly 25 percent markup over TypeSafe list, and the blog never mentions it.** The pricing page meters Jev at 1 AI Unit, which is $1.00, per 19,000,000 input tokens with output free - $0.0526 per MTok against the $0.042 per MTok list price recorded in [[TypeSafe's Jev trades string generation for parallel-sampled typed decisions with calibrated probabilities at $0.042 per MTok - the 193x and 444x claims come from four self-built workflow evals]]. Working the "Retail cost/100k" column backwards: $0.50 is half an AI Unit, so 9.5M input tokens across 100,000 rows, about 95 input tokens per row, and $5 per million rows. That is MotherDuck's own retail, not TypeSafe's and not the LLM vendors'. And it is not the whole bill: MotherDuck meters compute separately, per second in Compute Units against a Duckling, so a `prompt_jev` pass is charged twice over - AI Units for the tokens plus the Duckling time the query holds while waiting on the API. Converting the docs' own rows-per-AI-Unit table into dollars gives $2.90 per million `noul` rows and $3.85 per million short `choice` rows, rising to $16.67 at 1,000-character inputs or with batching turned off.
 - **The docs contradict the blog on availability, and the post's own scale claim breaks the default spend cap.** The blog closes with "available on all paid MotherDuck plans." The function page says preview, restricted to organizations in `us-east-1` and `us-west-2`, with the name, parameters and return types subject to change. The pricing page adds a default soft limit of 10 AI Units per day on both Lite and Business. At $5 per million rows the 10M-row test the post mentions in passing costs about 50 AI Units, five times the default daily ceiling, so it cannot run without a support request. The "tests at 1m and 10m rows yielded similar performance (and in some cases even faster)" line also ships without a single number attached.
 - **The function is far more typed than the blog's one example shows, and it confirms a quirk the vault had already flagged.** This is not a single-string classifier. `noul` returns a bare calibrated `DOUBLE` probability, `choice` returns `STRUCT(choice, probabilities[], confidence)`, and `score` returns a weighted position on an ordered rubric between 0 and `length-1` alongside its own distribution and confidence. That is TypeSafe's Noul/Choice/Score trio mapped onto SQL return types, plus a `questions` mode that asks many of them against one input in a single request. It also corroborates [[Annabell frames TypeSafe's Jev as a savant for eval verdicts and routing - three question types, 255 choices, 10 score levels, and a Noul with no confidence field]] from a second, independent source: the `noul` path really does return only the probability, with no confidence field beside it, while `choice` and `score` both get one.
 - **2,484 rows/s is a batching number, and the docs make batching an accuracy knob rather than a free lunch.** Default `batch_size` is 32 input rows per request, tunable 1 to 64, and MotherDuck warns that "batching can introduce extra variance from sharing a context window across multiple rows," recommending `batch_size := 1` for strict per-row isolation - which its own AI Unit table prices at roughly 4.3x the cost per row. The community Postgres extension in [[pg-jev]] measured this same tradeoff independently and settled on 20, having found batches of 40 falling to 92-98 percent correct and batches of 80 to 77-94. MotherDuck ships a default 60 percent larger than the number pg-jev's author measured his way to, and publishes no accuracy-versus-batch-size curve of its own.
@@ -73,6 +73,15 @@ FROM customer_conversations;
 
 **Multi-question mode.** `questions` asks several things about one input in a single request and returns a named `STRUCT` with one field per question, each in its own type's normal return shape. The tradeoff is explicit in the docs: the request carries `input` once for the whole set, "so asking twenty things at once costs far fewer input tokens than twenty single-question queries over the same table, at the price of losing row batching." A JSON escape hatch passes arbitrary nested criteria straight through to TypeSafe, at the cost of `score` probabilities coming back as `JSON` rather than the native struct.
 
+**How to write criteria.** The key-tasks guide is the only place MotherDuck explains this, and it is the most transferable part of the documentation:
+
+- **Write instructions as a question about one row, not a task description for the model.** "Which kind of data role does this job posting describe?" rather than "classify the role."
+- **Keep criteria short, mutually exclusive, and phrased in the same register.** Overlapping labels are the main failure mode.
+- **Use confidence as the diagnostic.** "A run where most rows come back below roughly 0.6 usually means the criteria overlap or a needed option is missing - add an `other` or `unclear` option and run again." The worked example is analytics engineering roles splitting probability between `analytics` and `data_engineering` until one label carries a description that claims them.
+- **Say what a question excludes whenever two answers read alike.** Their examples: `C` matches C++, C# and "C-level" until the question rules them out; `Go` matches the verb; `R` needs "the language" appended.
+- **Leave out columns the question does not depend on.** "They add tokens and dilute the signal. A question about the work rarely needs the posting date, and a date in the input invites the model to reason about it."
+- **Test on twenty rows before a full pass**, and **materialize results into a table keyed on the row id** rather than adding a column to the source, so a new question or threshold produces a new table instead of a rebuild.
+
 **Error behavior.** Argument problems fail the query at bind time, before any row is processed - including the plan gate, `AI functions are not available for your organization.`, which fires on the Free plan or with AI functions disabled. Per-row failures return `NULL` rather than failing the query: a `NULL` input sends no request, and a request that still fails after retries or hits the AI function timeout yields `NULL`. The exception is a `questions` call that fails TypeSafe validation, including an HTTP 422, which errors the whole query.
 
 ## The Benchmark
@@ -89,7 +98,16 @@ MotherDuck benchmarked 100,000 articles sampled from the training split of [AG N
 
 Verbatim on the scaling claim: "What really excited us was that it exceed existing models by >25x across cost, accuracy, and speed dimensions. Furthermore, tests at 1m and 10m rows yielded similar performance (and in some cases even faster than our baseline presented above)." No numbers accompany the 1m and 10m runs.
 
-Derived from the table: 48.0x wall-clock speedup and 75.2x cost reduction against gpt-5.6-terra; 29.6x speedup and 3.9x cost reduction against gpt-4o-mini, the cheapest baseline. The accuracy spread across all five models is nine points, and across Jev and the two strongest baselines it is five.
+**Doing the arithmetic the post does not.** Against gpt-5.6-terra, the model the headline is built on, Jev is **75.2x cheaper** ($37.58 / $0.50) and **48.0x faster** (1,919s / 40s). Against gpt-4o-mini, the cheapest baseline, it is **3.9x cheaper** ($1.93 / $0.50) and **29.6x faster** (1,185s / 40s). So ">25x across cost, accuracy, and speed dimensions" is true for cost against terra only, true for speed against all four baselines, and false for cost against every cheap baseline - gpt-5-nano at $1.58 is a 3.2x gap, not a 25x one. On accuracy it is not a multiplier at all: +1 point over terra, +5 over luna, +6 over nano, +9 over gpt-4o-mini. One sentence, three dimensions, and the claim only lands cleanly on one of them.
+
+| Baseline | Cost ratio | Speed ratio | Accuracy delta |
+|---|---:|---:|---:|
+| gpt-5.6-terra | 75.2x | 48.0x | +1 pt |
+| gpt-5.6-luna | 7.1x | 41.1x | +5 pt |
+| gpt-5-nano | 3.2x | 26.7x | +6 pt |
+| gpt-4o-mini | 3.9x | 29.6x | +9 pt |
+
+**MotherDuck's own docs measure a very different throughput.** The key-tasks guide runs the same function over 200 job postings and reports "That run took about three seconds over 200 postings." The sentence is attached to a `GROUP BY` over already-materialized results, so it may be timing the aggregation rather than the classification pass, and the page does not disambiguate. If it is the classification pass, it is about 67 rows/s - roughly 37x below the benchmark's 2,484. Either reading is informative: job descriptions are far longer than AG News items, and the docs state plainly that a `questions` call "sends one request per row instead of packing 32 rows into one," so the headline rate is a best case for short inputs under a single batched question, not a throughput figure to plan against.
 
 **Reproduction SQL**, verbatim from the post's collapsed appendix. It loads AG News straight from Hugging Face over `hf://`, samples 100k with a seeded reservoir, classifies, then scores accuracy, per-class precision/recall/F1 and a confusion matrix. Note `result.choice` and `result.confidence` - the `choice` struct fields - and that NULLs are "reported separately, never scored as wrong":
 
@@ -133,17 +151,25 @@ The appendix continues with per-class precision/recall/F1 and a `PIVOT` confusio
 
 **The meter.** Consumption is measured in AI Units, and 1 AI Unit = $1.00. Jev appears on the pricing page under Classification Models at 1 AI Unit per 19,000,000 input tokens, output free, with the note "Only input tokens are metered." That works out to $0.0526 per MTok against TypeSafe's own $0.042 per MTok list price - about a 25 percent markup. Lite and Business plans carry a default soft limit of 10 AI Units per day on Advanced AI Functions, which support can raise or remove.
 
-The function docs express the same meter as rows per AI Unit, assuming 40-character instructions and four 10-character labels:
+The function docs express the same meter as rows per AI Unit, assuming 40-character instructions and four 10-character labels. Because an AI Unit is exactly $1.00, that table converts directly into dollars per million rows - the units the blog's "Retail cost/100k" column is quoted in, and the comparison MotherDuck does not publish:
 
-| Question | Input length | Rows per AI Unit |
-|---|---|---|
-| `noul` | 50 characters | ~345,000 |
-| `choice` | 50 characters | ~260,000 |
-| `choice`, `batch_size := 1` | 50 characters | ~60,000 |
-| `choice` | 1,000 characters | ~60,000 |
-| `score` | 1,000 characters | ~60,000 |
+| Question | Input length | Rows per AI Unit | Dollars per million rows |
+|---|---|---:|---:|
+| `noul` | 50 characters | ~345,000 | $2.90 |
+| `choice` | 50 characters | ~260,000 | $3.85 |
+| `choice`, `batch_size := 1` | 50 characters | ~60,000 | $16.67 |
+| `choice` | 1,000 characters | ~60,000 | $16.67 |
+| `score` | 1,000 characters | ~60,000 | $16.67 |
 
-Two things fall out of that table. Dropping to `batch_size := 1` costs roughly 4.3x more per row than the default 32, which puts a price on the "strict per-row isolation" recommendation. And the benchmark's implied ~200,000 rows per AI Unit sits between the 50-character and 1,000-character `choice` rows, which is consistent with AG News article lengths. That is the one internal cross-check available on the cost claim, and it passes.
+**Reconciling this with the blog.** The benchmark's $0.50 per 100,000 rows is $5.00 per million, which implies ~200,000 rows per AI Unit. That sits between the 50-character `choice` row (260,000) and the 1,000-character `choice` row (60,000), which is exactly where AG News headlines-plus-lead should land. The blog's cost claim survives its own documentation, which is the single most useful cross-check available here.
+
+Two further readings. Dropping to `batch_size := 1` costs roughly 4.3x more per row than the default 32, putting a hard price on the docs' own "strict per-row isolation" recommendation. And a `noul` question is the cheapest thing on the menu at $2.90 per million, which makes threshold filtering rather than labeling the economically obvious use.
+
+**AI Units are on top of compute, not instead of it.** This resolves an ambiguity the blog leaves open. MotherDuck meters compute separately, per second, in Compute Units against a Duckling instance, with Lite including 10 CU-hours a month and Business charging a $250/month platform fee before usage. A `prompt_jev` pass therefore bills twice: AI Units for the tokens, plus the Duckling time the query occupies while waiting on the TypeSafe API. Since the benchmark's own framing is that the query spends 40 seconds wall-clock rather than 32 minutes, the compute component is small here - but it is not zero, and it is not in the $0.50.
+
+**"All paid plans" is doing some work.** Lite carries a $0/month platform fee and needs no credit card after the 7-day trial, so the distinction the blog draws is really against the post-trial Free state, which the error table names directly: `AI functions are not available for your organization.` fires when "the organization is on the Free plan or has AI functions disabled."
+
+**The calibration claim is the vendor's own.** The docs lead with "Every answer carries calibrated probabilities, so you can act on the decision and on how certain the model is about it," and the key-tasks guide builds a whole workflow on reading `confidence` and a related page on triaging by it. No calibration evidence is offered on either page - no reliability diagram, no expected calibration error, no held-out check. That matters because the vault has a standing gap here: [[Featherless's Simple Jev reproduces Jev's API on stock open models by remapping every answer to a single-token letter and softmaxing only those logits - no classifier head, and the code stamps every answer calibrated False]] found the open reimplementation stamping `calibrated: False` on every answer with no temperature scaling, Platt or isotonic fit anywhere, and [[Annabell frames TypeSafe's Jev as a savant for eval verdicts and routing - three question types, 255 choices, 10 score levels, and a Noul with no confidence field]] recorded the same asymmetry in the API surface. MotherDuck is reselling the calibration claim without testing it - and its own benchmark SQL computes `mean_confidence` while never comparing it to observed accuracy, which is the one line of SQL that would have checked it.
 
 ## Replies
 
@@ -171,7 +197,9 @@ Seven replies, matching the seven the post reports. A cursor for an eighth page 
 - [Introducing prompt_jev(): bringing Jev to Motherduck SQL](https://motherduck.com/blog/motherduck-supports-jev/) - the launch post
 - [@motherduck announcement tweet](https://x.com/motherduck/status/2102077291081896307) - 2026-09-21
 - [MotherDuck docs on prompt_jev](http://motherduck.com/docs/sql-reference/motherduck-sql-reference/ai-functions/prompt-jev/) - the full function reference
-- [Example text classification how-to](https://motherduck.com/docs/key-tasks/ai-and-motherduck/classify-text-with-prompt-jev/) - linked from the post's Further Reading
+- [Classify text with prompt_jev](https://motherduck.com/docs/key-tasks/ai-and-motherduck/classify-text-with-prompt-jev/) - the seven-step worked guide over 200 job postings, linked from the post's Further Reading, and the only place MotherDuck explains how to write criteria
+- [Triage classifications by confidence](https://motherduck.com/docs/key-tasks/ai-and-motherduck/triage-classifications-by-confidence/) - the companion page on deciding which rows to trust and which to escalate, not linked from the blog
+- [Job postings dataset](https://motherduck.com/docs/getting-started/sample-data-queries/job-postings/) - 200,000 data-role postings, the data the key-tasks examples run against
 - [MotherDuck AI Functions index](https://motherduck.com/docs/sql-reference/motherduck-sql-reference/ai-functions/) - siblings are SQL Assistant, EMBEDDING and PROMPT
 - [MotherDuck pricing, AI function section](https://motherduck.com/docs/about-motherduck/billing/pricing) - the AI Unit meter and the 10-unit daily soft limit
 - [TypeSafe: Introducing system one models and Jev](https://typesafe.ai/blog/introducing-system-one-models-and-jev) - the model launch this post integrates
@@ -200,8 +228,7 @@ Seven replies, matching the seven the post reports. A cursor for an eighth page 
 >
 > The two `t.co` links resolve to https://motherduck.com/blog/motherduck-supports-jev/ and to the attached photo.
 >
-> *The attached photo, 1600x893. It is the same asset as the blog's og:image (`prompt_jev_1600x893_10f1baca62.jpg`, identical dimensions), so one file is stored for both sources rather than two. It reads: "INTRODUCING PROMPT_JEV()" over "CLASSIFY A MILLION ROWS IN SQL. 50X FASTER AT 1% THE COST.", on a teal ground, with the MotherDuck duck stamping coloured labels into one column of a six-column table of grey placeholder rows, a yellow lightning bolt beside it, and a yellow footer band repeating "AI ENGINEERING". Every number on the card is the tweet's; the "a million rows" framing is not, and appears in neither the tweet text nor the benchmark table, which tops out at 100,000 rows.*
-> ![[motherduck-896307-001.jpg]]
+> The attached photo is a promotional card carrying no data or chart (`prompt_jev_1600x893_10f1baca62.jpg`, 1600x893, the same asset as the blog's og:image). It is embedded once as this note's cover image above rather than repeated here. Full description: "INTRODUCING PROMPT_JEV()" over "CLASSIFY A MILLION ROWS IN SQL. 50X FASTER AT 1% THE COST." on a teal ground, with the MotherDuck duck stamping coloured labels into one column of a six-column table of grey placeholder rows, a yellow lightning bolt beside it, and a yellow footer band repeating "AI ENGINEERING".
 >
 > ---
 >
@@ -770,6 +797,402 @@ Seven replies, matching the seven the post reports. A cursor for an eighth page 
 > Optionally append `&source=<url-encoded interface identifier>` such as `claude.ai` or `chatgpt`.
 >
 > `page_path` and `text` are required; `page_title` and `source` are optional. Responses: `200 {"feedback_id": "<uuid>"}`, `400` for malformed query parameters, and `429` when rate-limited.
+>
+> ---
+>
+> #### Docs: classify text with prompt_jev
+>
+> Title: Classify text with prompt_jev
+>
+> URL Source: https://motherduck.com/docs/key-tasks/ai-and-motherduck/classify-text-with-prompt-jev/
+>
+> Markdown Content:
+> # Classify text with prompt_jev
+>
+>
+> > Turn a free-text column into a typed, groupable column using the prompt_jev function.
+>
+> Use this guide to turn a column of free text — job descriptions, support messages, closure notes, reviews, transcripts — into a column you can group, filter, and sort on. You're done when the text column has a typed companion column stored in a table.
+>
+> :::info[Preview]
+> `prompt_jev` is in [preview](/about-motherduck/feature-stages/). It is available only to organizations in the `us-east-1` and `us-west-2` [regions](/about-motherduck/cloud-regions/). The function name, parameters, and return types may change.
+> :::
+>
+> ## Before you start
+>
+> - A MotherDuck organization on the Lite or Business plan, in the `us-east-1` or `us-west-2` [region](/about-motherduck/cloud-regions/).
+> - A table with a `VARCHAR` column holding the text.
+> - Write access to a database where you can store the results.
+>
+> The examples run against the [job postings dataset](/getting-started/sample-data-queries/job-postings/): 200,000 postings for data roles, each with the full description text. Load a slice of it into your own database to follow along:
+>
+> #### Load 200 job postings
+>
+> Database: `my_db`
+>
+> ```sql
+> CREATE OR REPLACE TABLE my_db.job_postings AS
+> SELECT *
+> FROM 'https://us.data.motherduck.com/job_postings/parquet/year=2026/month=03/jobs.parquet'
+> ORDER BY listed_date DESC, job_id
+> LIMIT 200;
+> ```
+>
+> Two hundred rows is enough to work with and small enough that a full pass costs little. Every measured number on this page comes from that slice.
+>
+> ## Step 1: Pick the question type
+>
+> `prompt_jev` answers one of three question shapes. Pick the one that matches the decision you need.
+>
+> | **You need** | **Type** | **Returns** |
+> |---|---|---|
+> | One label out of a fixed list | `choice` | The winning label, per-label probabilities, and a confidence |
+> | A rating on an ordered scale | `score` | A weighted position on the scale, per-level probabilities, and a confidence |
+> | Whether a statement is true | `noul` | A probability between 0 and 1 |
+>
+> "Which role family is this?" is a `choice`. "How senior is this role?" is a `score`, because the levels have an order. "Does this posting state a salary range?" is a `noul`.
+>
+> If you can't enumerate the possible answers, this isn't the right function. Use [`prompt`](/sql-reference/motherduck-sql-reference/ai-functions/prompt/) with a `struct` schema instead.
+>
+> To put several of these questions to the same row in one call, see [Ask many questions in one pass](#ask-many-questions-in-one-pass).
+>
+> ## Step 2: Write the instructions and criteria
+>
+> Write the instructions as a question about one row, not as a task description for the model. Keep criteria short, mutually exclusive, and phrased in the same register.
+>
+> #### One question, disjoint options
+>
+> Database: `my_db`
+>
+> ```sql
+> -- Good: one question, disjoint options
+> SELECT prompt_jev(
+>     description,
+>     'Which kind of data role does this job posting describe?',
+>     choice := ['analytics', 'data_engineering', 'data_science', 'machine_learning', 'other']
+> )
+> FROM my_db.job_postings
+> LIMIT 20;
+> ```
+>
+> Rules the binder enforces, so you'll see these as errors before any row runs:
+>
+> - `choice` and `score` need at least two labels, and they must be unique.
+> - `choice`, `score`, and `noul` are mutually exclusive. Pick one.
+> - `instructions`, `choice`, `score`, and `noul` must be constants. They can't reference a column.
+>
+> For `score`, order the levels from lowest to highest. The order defines the scale, and the returned `score` is a weighted position on it.
+>
+> #### Score a scale
+>
+> Database: `my_db`
+>
+> ```sql
+> SELECT prompt_jev(
+>     description,
+>     'How senior is the role this posting describes?',
+>     score := ['intern', 'junior', 'mid', 'senior', 'staff or above']
+> )
+> FROM my_db.job_postings
+> LIMIT 20;
+> ```
+>
+> ## Step 3: Test on a sample
+>
+> Run against a small slice first and read the answers before spending a full pass over the table. Twenty rows is enough to catch instructions that are ambiguous or criteria that overlap.
+>
+> #### Sample and read the answers
+>
+> Database: `my_db`
+>
+> ```sql
+> SELECT
+>     title,
+>     prompt_jev(
+>         description,
+>         'Which kind of data role does this job posting describe?',
+>         choice := ['analytics', 'data_engineering', 'data_science', 'machine_learning', 'other']
+>     ) AS role_family
+> FROM my_db.job_postings
+> USING SAMPLE 20 ROWS;
+> ```
+>
+> Look at `role_family.confidence` across the sample. A run where most rows come back below roughly 0.6 usually means the criteria overlap or a needed option is missing — add an `other` or `unclear` option and run again. Job postings are a good illustration: analytics engineering roles split their probability between `analytics` and `data_engineering` until one of the two labels carries a description that claims them.
+>
+> ## Step 4: Combine several fields into the input
+>
+> `prompt_jev` takes one text value per row. When the decision depends on more than one column, concatenate them with labels so the model can tell the parts apart.
+>
+> #### Combine several fields into the input
+>
+> Database: `my_db`
+>
+> ```sql
+> SELECT prompt_jev(
+>     'Title: ' || title || E'
+> ' ||
+>     'Location: ' || location || E'
+> ' ||
+>     'Description: ' || description,
+>     'Does this role require working from an office at least part of the week?'
+> ) AS onsite_required
+> FROM my_db.job_postings
+> LIMIT 20;
+> ```
+>
+> Leave out columns the question doesn't depend on. They add tokens and dilute the signal. A question about the work rarely needs the posting date, and a date in the input invites the model to reason about it.
+>
+> ## Step 5: Materialize the results
+>
+> The function runs once per row per query, so store the answers rather than recomputing them.
+>
+> #### Materialize the results
+>
+> Database: `my_db`
+>
+> ```sql
+> CREATE TABLE my_db.posting_role_family AS
+> SELECT
+>     job_id,
+>     title,
+>     prompt_jev(
+>         description,
+>         'Which kind of data role does this job posting describe?',
+>         choice := ['analytics', 'data_engineering', 'data_science', 'machine_learning', 'other']
+>     ) AS role_family
+> FROM my_db.job_postings;
+> ```
+>
+> Keying the results table on `job_id` rather than adding a column to the source means a new question, threshold, or model produces a new table without rebuilding the postings.
+>
+> To add the column to an existing table instead, declare the exact return type:
+>
+> #### Add the column to an existing table
+>
+> Database: `my_db`
+>
+> ```sql
+> ALTER TABLE my_db.job_postings ADD COLUMN role_family STRUCT(
+>     choice VARCHAR,
+>     probabilities STRUCT(value VARCHAR, probability DOUBLE)[],
+>     confidence DOUBLE
+> );
+>
+> UPDATE my_db.job_postings
+> SET role_family = prompt_jev(
+>     description,
+>     'Which kind of data role does this job posting describe?',
+>     choice := ['analytics', 'data_engineering', 'data_science', 'machine_learning', 'other']
+> )
+> WHERE role_family IS NULL AND description IS NOT NULL;
+> ```
+>
+> ## Step 6: Verify and backfill
+>
+> A row returns `NULL` when its input was `NULL` or when the request failed after retries. The query itself doesn't fail, so check for gaps:
+>
+> #### Check for gaps
+>
+> Database: `my_db`
+>
+> ```sql
+> SELECT count(*) AS missing
+> FROM my_db.job_postings
+> WHERE role_family IS NULL AND description IS NOT NULL;
+> ```
+>
+> Rerun the `UPDATE` from step 5 to fill them in. The `WHERE role_family IS NULL` clause means only the missing rows are sent.
+>
+> ## Step 7: Query the results
+>
+> The classification is a plain column now.
+>
+> #### Query the results
+>
+> Database: `my_db`
+>
+> ```sql
+> SELECT
+>     role_family.choice AS role_family,
+>     count(*) AS postings,
+>     round(avg(role_family.confidence), 2) AS mean_confidence
+> FROM my_db.job_postings
+> GROUP BY role_family
+> ORDER BY postings DESC;
+> ```
+>
+> That run took about three seconds over 200 postings. `analytics` taking half the corpus is the title filter showing through, not a claim about the job market.
+>
+> For a `score` question, sort or bucket on the numeric value:
+>
+> #### Sort or bucket on a score
+>
+> Database: `my_db`
+>
+> ```sql
+> SELECT
+>     date_trunc('month', listed_date) AS month,
+>     round(avg(seniority.score), 2) AS mean_seniority
+> FROM my_db.job_postings
+> GROUP BY month
+> ORDER BY month;
+> ```
+>
+> ## Ask many questions in one pass
+>
+> One call can answer a whole list of questions about the same row. Pass `questions` instead of `instructions`, with one named entry per question. Each entry carries its own `type` and `instructions`.
+>
+> Twenty `noul` questions, one per language, turn a description into twenty probabilities:
+>
+> #### Ask twenty questions in one call
+>
+> Database: `my_db`
+>
+> ```sql
+> CREATE OR REPLACE TABLE my_db.posting_languages AS
+> SELECT job_id, prompt_jev(description, questions := {
+>     sql: {type: 'noul', instructions: 'Does this posting ask for SQL?'},
+>     python: {type: 'noul', instructions: 'Does this posting ask for Python?'},
+>     r: {type: 'noul', instructions: 'Does this posting ask for R, the language?'},
+>     scala: {type: 'noul', instructions: 'Does this posting ask for Scala?'},
+>     java: {type: 'noul', instructions: 'Does this posting ask for Java, not JavaScript?'},
+>     go: {type: 'noul', instructions: 'Does this posting ask for Go, not the verb?'},
+>     rust: {type: 'noul', instructions: 'Does this posting ask for Rust?'},
+>     c: {type: 'noul', instructions: 'Does this posting ask for C, not C++ or C#?'},
+>     cpp: {type: 'noul', instructions: 'Does this posting ask for C++?'},
+>     csharp: {type: 'noul', instructions: 'Does this posting ask for C#?'},
+>     javascript: {type: 'noul', instructions: 'Does this posting ask for JavaScript?'},
+>     typescript: {type: 'noul', instructions: 'Does this posting ask for TypeScript?'},
+>     julia: {type: 'noul', instructions: 'Does this posting ask for Julia, the language?'},
+>     kotlin: {type: 'noul', instructions: 'Does this posting ask for Kotlin?'},
+>     ruby: {type: 'noul', instructions: 'Does this posting ask for Ruby?'},
+>     php: {type: 'noul', instructions: 'Does this posting ask for PHP?'},
+>     swift: {type: 'noul', instructions: 'Does this posting ask for Swift?'},
+>     matlab: {type: 'noul', instructions: 'Does this posting ask for MATLAB?'},
+>     bash: {type: 'noul', instructions: 'Does this posting ask for Bash scripting?'},
+>     perl: {type: 'noul', instructions: 'Does this posting ask for Perl?'}
+> }) AS languages
+> FROM my_db.job_postings;
+> ```
+>
+> The answer is a `STRUCT` with one `DOUBLE` field per question, named after the key you gave it, so `languages.rust` is the probability that the posting asks for Rust.
+>
+> Say what a question excludes whenever two answers read alike. `C` matches C++, C#, and "C-level" until the question rules them out, and `Go` matches the verb.
+>
+> Twenty questions in one call send the description once. Twenty separate `noul` queries send it twenty times, and usage is metered on input tokens.
+>
+> What you give up is throughput. `batch_size` only applies to single-question calls, so a `questions` call sends one request per row instead of packing 32 rows into one. Over a large table a wide question set runs slower than a single question does.
+>
+> Cast the struct to a `MAP` to read the answers as rows instead of twenty columns, so adding a language later doesn't change the shape of every query downstream:
+>
+> #### Rank the languages
+>
+> Database: `my_db`
+>
+> ```sql
+> SELECT
+>     e.key AS language,
+>     count(*) FILTER (e.value >= 0.5) AS postings,
+>     round(avg(e.value), 2) AS mean_probability
+> FROM my_db.posting_languages,
+>     unnest(map_entries(languages::MAP(VARCHAR, DOUBLE))) AS t(e)
+> GROUP BY language
+> ORDER BY postings DESC;
+> ```
+>
+> ## Troubleshooting
+>
+> **`prompt_jev requires at least two criteria for type "choice"`** — add a second option, or switch to `noul` if the question is a yes/no.
+>
+> **`prompt_jev "choice" parameter must be a constant value`** — the label list references a column. Move the values into the query text, or run one query per label set.
+>
+> **`prompt_jev "choice", "score", and "noul" cannot be combined`** — drop the extra argument. Pick one question type per call, or [ask many questions in one pass](#ask-many-questions-in-one-pass).
+>
+> **`AI functions are not available for your organization.`** — the organization is on the Free plan, or an admin has AI functions disabled. See the [TypeSafe integration page](/integrations/data-science-ai/typesafe/).
+>
+> **Many rows come back `NULL`** — the query hit the AI function timeout. Split the table into batches with `LIMIT` and `OFFSET`, or filter down to the rows that still need an answer and rerun.
+>
+> ## Related tasks
+>
+> - [Triage classifications by confidence](/key-tasks/ai-and-motherduck/triage-classifications-by-confidence/) — decide which rows to trust and which to escalate
+> - [Job postings dataset](/getting-started/sample-data-queries/job-postings/) — the data these examples run against
+> - [`prompt_jev` SQL reference](/sql-reference/motherduck-sql-reference/ai-functions/prompt-jev/)
+> - [`prompt` SQL reference](/sql-reference/motherduck-sql-reference/ai-functions/prompt/) — for generated text and open-ended extraction
+>
+>
+> ---
+>
+> ## Docs feedback
+>
+> MotherDuck accepts optional user-submitted feedback about this page at `GET https://motherduck.com/docs/api/feedback/agent`.
+> For agents and automated tools, feedback submission should be user-confirmed before sending.
+>
+> URL-encode query parameter values and send a GET request:
+>
+> ```text
+> GET https://motherduck.com/docs/api/feedback/agent?page_path=%2Fkey-tasks%2Fai-and-motherduck%2Fclassify-text-with-prompt-jev%2F&page_title=Classify%20text%20with%20prompt_jev&text=<url-encoded user feedback, max 2000 characters>
+> ```
+>
+> Optionally append `&source=<url-encoded interface identifier>` such as `claude.ai` or `chatgpt`.
+>
+> `page_path` and `text` are required; `page_title` and `source` are optional. Responses: `200 {"feedback_id": "<uuid>"}`, `400` for malformed query parameters, and `429` when rate-limited.
+>
+> ---
+>
+> #### Docs: AI function pricing section
+>
+> ### AI function pricing
+>
+> MotherDuck enhances your analytical capabilities with integrated AI functions. These functions leverage powerful large language models (LLMs), fine-tuned to assist with SQL tasks and unlock new OLAP use cases.
+>
+> AI functions are categorized and priced as follows:
+> -   **SQL Assistant Functions**: metered per call, with some free features.
+> -   **Advanced AI Functions**: metered per token consumed for both input and output, priced in AI Units (1 AI Unit = $1.00).
+>
+> ### SQL assistant functions
+> These features, including [FixIt](/docs/getting-started/interfaces/motherduck-quick-tour/#help-me-fix-this-broken-query--fixit) and [Text-to-SQL](/docs/sql-reference/motherduck-sql-reference/ai-functions/sql-assistant/prompt-sql/), help you write, understand, and correct SQL queries.
+>
+> SQL Assistant features are included with both Lite and Business plans.
+>
+> | SQL Assistant Functions                        | Price     | Unit          |
+> | :--------------------------------------------- | :-------- | :------------ |
+> | FixIt                                          | FREE      | per call      |
+> | SQL Assistant (Text-to-SQL, Explain SQL, etc.) | 1 AI Unit | for 60 calls  |
+>
+> ### Advanced AI functions
+> These functions provide access to powerful generative AI models for tasks like embedding generation and complex prompting. They are metered based on token usage, with costs calculated in AI Units (1 AI Unit = $1.00).
+>
+> :::note
+> For Lite and Business plans, there is a default soft limit on Advanced AI Function consumption of 10 AI Units per day to help control costs. This limit can be increased or removed by contacting support@motherduck.com.
+> :::
+>
+> **Embedding Models**
+>
+> | Embedding Model Name                  | Price     | Tokens per AI Unit  |
+> | :------------------------------------ | :-------- | :------------------ |
+> | OpenAI text-embedding-3-small         | 1 AI Unit | 15,000,000 tokens   |
+> | OpenAI text-embedding-3-large         | 1 AI Unit | 3,000,000 tokens    |
+>
+> **Generative Prompt Models**
+>
+> | Provider | Model Name       | Price     | Input Tokens (per AI Unit) | Output Tokens (per AI Unit) | Blended Tokens (per AI Unit) |
+> | :------- | :--------------- | :-------- | :------------------------- | :-------------------------- | :--------------------------- |
+> | OpenAI   | GPT-5            | 1 AI Unit | 240,000                    | 30,000                      | 100,000                      |
+> | OpenAI   | GPT-5-mini       | 1 AI Unit | 1,200,000                  | 150,000                     | 500,000                      |
+> | OpenAI   | GPT-5-nano       | 1 AI Unit | 6,000,000                  | 750,000                     | 2,500,000                    |
+> | OpenAI   | GPT-4.1          | 1 AI Unit | 150,000                    | 37,500                      | 93,750                       |
+> | OpenAI   | GPT-4.1-mini     | 1 AI Unit | 750,000                    | 187,500                     | 468,750                      |
+> | OpenAI   | GPT-4.1-nano     | 1 AI Unit | 3,000,000                  | 750,000                     | 1,875,000                    |
+> | OpenAI   | GPT-4o           | 1 AI Unit | 120,000                    | 30,000                      | 75,000                       |
+> | OpenAI   | GPT-4o-mini      | 1 AI Unit | 2,000,000                  | 500,000                     | 1,250,000                    |
+>
+> **Classification Models**
+>
+> | Provider | Model Name | Price     | Input Tokens (per AI Unit) | Output Tokens (per AI Unit) |
+> | :------- | :--------- | :-------- | :------------------------- | :-------------------------- |
+> | TypeSafe | Jev        | 1 AI Unit | 19,000,000                 | Free                        |
+>
+> Jev powers [`prompt_jev`](/docs/sql-reference/motherduck-sql-reference/ai-functions/prompt-jev/). Only input tokens are metered.
 >
 > ---
 >
