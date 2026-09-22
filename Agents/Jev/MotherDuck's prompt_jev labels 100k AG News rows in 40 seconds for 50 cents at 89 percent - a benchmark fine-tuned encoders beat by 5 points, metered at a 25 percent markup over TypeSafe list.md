@@ -149,7 +149,15 @@ The appendix continues with per-class precision/recall/F1 and a `PIVOT` confusio
 
 **The function docs, verbatim:** "`prompt_jev` is in preview. It is available only to organizations in the `us-east-1` and `us-west-2` regions. The function name, parameters, and return types may change."
 
-**The meter.** Consumption is measured in AI Units, and 1 AI Unit = $1.00. Jev appears on the pricing page under Classification Models at 1 AI Unit per 19,000,000 input tokens, output free, with the note "Only input tokens are metered." That works out to $0.0526 per MTok against TypeSafe's own $0.042 per MTok list price - about a 25 percent markup. Lite and Business plans carry a default soft limit of 10 AI Units per day on Advanced AI Functions, which support can raise or remove.
+**The meter, and the markup calculation in full.** The pricing page states "Advanced AI Functions: metered per token consumed for both input and output, priced in AI Units (**1 AI Unit = $1.00**)." Jev appears there under Classification Models at **1 AI Unit per 19,000,000 input tokens, output free**, with the note "Only input tokens are metered." The arithmetic:
+
+```text
+MotherDuck retail : $1.00 / 19,000,000 tokens  = $0.052632 per MTok
+TypeSafe list     :                              $0.042000 per MTok
+markup            : 0.052632 / 0.042000         = 1.2531  ->  +25.3%
+```
+
+So MotherDuck resells Jev at a **25 percent markup** over TypeSafe's own published list price of $0.042 per MTok. Lite and Business plans carry a default soft limit of 10 AI Units per day on Advanced AI Functions, which support can raise or remove.
 
 The function docs express the same meter as rows per AI Unit, assuming 40-character instructions and four 10-character labels. Because an AI Unit is exactly $1.00, that table converts directly into dollars per million rows - the units the blog's "Retail cost/100k" column is quoted in, and the comparison MotherDuck does not publish:
 
@@ -195,7 +203,7 @@ Seven replies, matching the seven the post reports. A cursor for an eighth page 
 ## Links
 
 - [Introducing prompt_jev(): bringing Jev to Motherduck SQL](https://motherduck.com/blog/motherduck-supports-jev/) - the launch post
-- [@motherduck announcement tweet](https://x.com/motherduck/status/2102077291081896307) - 2026-09-21
+- [@motherduck announcement tweet](https://x.com/motherduck/status/2102077291081896307) - 2026-09-21. Its one attached photo is a promotional card, not a chart: it carries no data, and is the same 1600x893 asset as the blog's og:image. Stored once as this note's cover image.
 - [MotherDuck docs on prompt_jev](http://motherduck.com/docs/sql-reference/motherduck-sql-reference/ai-functions/prompt-jev/) - the full function reference
 - [Classify text with prompt_jev](https://motherduck.com/docs/key-tasks/ai-and-motherduck/classify-text-with-prompt-jev/) - the seven-step worked guide over 200 job postings, linked from the post's Further Reading, and the only place MotherDuck explains how to write criteria
 - [Triage classifications by confidence](https://motherduck.com/docs/key-tasks/ai-and-motherduck/triage-classifications-by-confidence/) - the companion page on deciding which rows to trust and which to escalate, not linked from the blog
