@@ -10,8 +10,8 @@ description: TypeSafe's Advanced structure docs page opens instructions, Choice 
 
 ## Key Takeaways
 
-- **There is no schema. `EntryType` is an open key map, so every field name on the page is a convention the model reads as English, not an interface it validates against.** The page links each of the four structurable fields to [`EntryType`](https://docs.typesafe.ai/sdk/javascript/api/type-aliases/EntryType), whose whole definition is `string | { [key: string]: JsonValue } | JsonValue[] | null`. That single line is the most load-bearing fact here and the page never says it out loud. It means `field`, `extracted_value`, `question`, `focus`, `note`, `inspect`, `compare`, `what`, `not_for`, `examples`, `summary` and `signals` are just keys the authors happened to pick, and the page itself is inconsistent across its own five examples. It also explains why [[Annabell frames TypeSafe's Jev as a savant for eval verdicts and routing - three question types, 255 choices, 10 score levels, and a Noul with no confidence field]] can use `scope`, `definition` and `includes` where the docs use `focus`, `what` and `examples` and still be correct. Nothing was violated because nothing was specified.
-- **An employee shouting "USE THE STRUCTURED CRITERIA" points at a page with zero numbers in it.** Nathan LeClaire works at TypeSafe. The page he links contains no accuracy delta, no confidence delta, no consistency measurement, no ablation, and no token counts. Its two stated reasons for structuring are "when it helps with clarity" and "when question needs supporting data", both asserted. Structure here is a documented best practice, not a measured one. The measured case for explicit written criteria lives outside TypeSafe's docs, in [[LLM Data Company experiments show explicit rubric criteria let gpt-oss-120b match Opus 4.7 at 100x lower cost and full-rubric grading beats per-criterion across every model]], which is the evidence this page is missing.
+- **There is no schema. `EntryType` is an open key map, so every field name on the page is a convention the model reads as English, not an interface it validates against.** The page links each of the four structurable fields to [`EntryType`](https://docs.typesafe.ai/sdk/javascript/api/type-aliases/EntryType), whose whole definition is `string | { [key: string]: JsonValue } | JsonValue[] | null`. That single line is the most load-bearing fact here and the page never says it out loud. It means `field`, `extracted_value`, `question`, `focus`, `note`, `inspect`, `compare`, `what`, `not_for`, `examples`, `summary` and `signals` are just keys the authors happened to pick, and the page itself is inconsistent across its own five examples. It also explains why [[Annabell frames TypeSafe's Jev as a savant for eval verdicts and routing - three question types, 255 choices, 10 score levels, and a Noul with no confidence field]] can use `scope`, `definition` and `includes` where the docs use `focus`, `what` and `examples` and still be correct. Nothing was violated because nothing was specified. The absence of reserved names is not an oversight, it is the feature: it is precisely what lets a schema, a taxonomy or a database row go in "entirely or as relevant subfields instead of serializing them into a string template", since an imposed vocabulary would force exactly the flattening the page is telling you to avoid.
+- **An employee shouting "USE THE STRUCTURED CRITERIA" points at a page whose entire justification is one sentence, and which contains zero numbers.** The whole mechanistic thesis is "System One models are trained to understand structure." That is it: no accuracy delta, no confidence delta, no consistency measurement, no ablation, no token counts, and no explanation of what the training did. Nathan LeClaire works at TypeSafe, so this is a vendor telling users to adopt a practice the vendor has not published evidence for. Its two stated reasons for structuring are "when it helps with clarity" and "when question needs supporting data", both asserted. Structure here is a documented best practice, not a measured one. The measured case for explicit written criteria lives outside TypeSafe's docs, in [[LLM Data Company experiments show explicit rubric criteria let gpt-oss-120b match Opus 4.7 at 100x lower cost and full-rubric grading beats per-criterion across every model]], which is the evidence this page is missing.
 - **The sibling pages contradict the post's urgency, and they are the more careful advice.** Choice, Score and Noul each say some version of "Start with strings" and escalate to objects only on a specific observed failure: when the model keeps confusing two neighbouring options, or keeps scoring between two levels on inputs you think are clear. That is a debugging escalation triggered by evidence, not a default. Prose is still the default because structure costs tokens on every call while buying nothing on questions the model already gets right.
 - **Structured criteria roughly triple the per-question token bill, and Jev charges input only.** Rewriting the Noul page's string criteria into the advanced page's object form takes the question from about 59 to about 180 tokens by my estimate at 3.6 characters per token; the three-option Choice goes from about 48 to about 142. At the $0.042 per MTok in [[TypeSafe's Jev trades string generation for parallel-sampled typed decisions with calibrated probabilities at $0.042 per MTok - the 193x and 444x claims come from four self-built workflow evals]] that is roughly four to five dollars more per million questions. Negligible against an LLM, real against Jev's own economics, and worth caching per [[jevcache]] because the criteria block is the static half of every request.
 - **Taken with jev-align, this page is the schema for the only tunable surface a Jev question has.** [[Sutro's jev-align uses GEPA to rewrite Jev's decision criteria from five labeled examples - the demo moves labeled-set ambiguity 49.6 points but full-pool certainty only 0.5]] mutates exactly `instructions`, `true_criteria` and `false_criteria`, because that is all there is to mutate. A Jev question has no temperature, no few-shot slots, no system prompt and no reasoning budget. The criteria text is the entire optimization target, and this page describes its shape.
@@ -392,9 +392,15 @@ The approving panel shows two code cards:
 }
 ```
 
-A mock newspaper in the corner, "THE JEV TIMES", Monday, September 21, 2026, runs the headline "JEV SOLVES NAVIER-STOKES" with subheads "Fluid Dynamics Community In Shambles", "Astra Consulted Once; Jev Handles The Rest", and "Lean Confirms: Proof Holds Water". The footer reads "this meme brought to you by structure gang".
+A mock newspaper in the corner, "THE JEV TIMES", Monday, September 21, 2026, runs the headline "JEV SOLVES NAVIER-STOKES" with subheads "Fluid Dynamics Community In Shambles", "Astra Consulted Once; Jev Handles The Rest", and "Lean Confirms: Proof Holds Water". The footer reads "this meme brought to you by structure gang 🧱📐🤝".
 
-The joke is a division-of-labour claim, that a cheap System One model picks nearly every proof step and the expensive model gets consulted once. But the criteria card is worth reading straight, because it is a better illustration than anything on the docs page: the options are Lean tactics, each option's value is the concrete invocation (`{"tactic": "rw", "using": "ih"}`), and one option is an escape hatch gated on a condition (`ask_astra` when "Useful moves exhausted"). That is a Choice whose option values are executable arguments rather than descriptions, which the docs never demonstrate and which `EntryType` plainly permits.
+Three things in it are worth more than the joke.
+
+**`ask_astra` is an escalation to System Two encoded as one option inside a Choice.** Every other option is a Lean tactic the caller can execute directly; this one is gated on a condition, `{"when": "Useful moves exhausted"}`, and its effect is to call a frontier model instead. That is Jev deciding when Jev is not enough, which is the checkpoint logic of [[Josh Rosen's ThruWire puts Jev at the checkpoint - prove X things happened however you like, and Jev scores the fuzzy half of that contract against the artifact not the trace]] collapsed into a single structured criterion. The docs page never demonstrates it, though `EntryType` plainly permits it, and it is the most useful idea in the whole thread: the option set does not have to be homogeneous, and one member of it can be "hand this to something smarter". Note also that option values here are executable arguments (`{"tactic": "rw", "using": "ih"}`) rather than descriptions, so the Choice doubles as a dispatch table.
+
+**The Navier-Stokes gag is pointed, and "Astra" is the tell.** It parodies OpenAI's September 2026 announcement that a Millennium Prize problem had been solved by a group of agents running "an OpenAI next-generation model significantly more capable than GPT-6 Astra", recorded verbatim in [[Joel Niklaus says FinePhrase's 1B generator ceiling is an artifact of the 1.7B ablation student - scale the student to 6.2B and 12B generators pull ahead]] along with the training-data carve-out that followed, and examined from the sovereignty side in [[Alex Ellis concedes cost per token is never the reason and buys 4x DGX Sparks anyway - the second pair holds GLM 5.2's 753B for in-house red-teaming]]. So `ask_astra` is not a generic placeholder; it names the frontier model from that announcement. The inversion is the argument: where OpenAI's story was 10,000 agents on an unreleased frontier model, the meme's version is a cheap classifier doing the walking and Astra "consulted once".
+
+**`llm_notes` is the System Two to System One channel made concrete.** The key nests an upstream model's hints, `{"try": "Induction", "watch": "Weak induction hypothesis"}`, inside the `instructions` of a Jev question. A slow reasoning model writes advice; a fast typed classifier consumes it as labelled JSON and returns a decision. That is the connective tissue between the two systems, and it only exists because `instructions` accepts an arbitrary object. It also sharpens Dev Agrawal's reply below: if criteria and instructions can carry examples and hints, they are an in-context-learning channel, not merely a specification.
 
 All six replies were retrieved. None is from TypeSafe. Nathan LeClaire did not reply to any of them, no @typesafeai account posted, and @CompleteSkeptic (Diogo Almeida) is not in the thread. The two obvious questions an employee's "use structured criteria" invites, why it is not the default and what it buys measured, were both effectively asked and neither got an answer.
 
@@ -812,6 +818,239 @@ Also relevant: [[LangChain's Jev-as-a-Judge bench puts Jev's quality-score varia
 > ```
 >
 > Text, a JSON object or array, or `null` for state, instructions, and criteria.
+>
+> ---
+>
+> #### Appendix: the same five examples in authoring form, from the markdown twin
+>
+> Source: https://docs.typesafe.ai/primitives/advanced.md. Each example is a `<TypesafeExample display="request" example={{ ... }} />` component invocation whose props are JavaScript object literals, not JSON: unquoted keys and single-quoted strings. Reproduced verbatim and unconverted, in page order, one per section. Note `selectedModels: ['jev-latest']`, present in all five here and stripped from every rendered request above, so it is playground metadata rather than part of the API call. The rendered view shows a request only; no example on this page displays a response.
+>
+> **Structured instructions** (twin lines 260-339)
+>
+> ```jsx
+> <TypesafeExample
+>   display="request"
+>   example={{
+> state: {
+>   source_text:
+>     'Invoice #4471 issued March 3, 2026 to Beaver Dam Logistics for $12,840.00, net 30.',
+> },
+> selectedModels: ['jev-latest'],
+> questions: {
+>   invoice_number_is_correct: {
+>     type: 'noul',
+>     instructions: {
+>       field: {
+>         name: 'invoice_number',
+>         type: 'string',
+>         description: 'The identifier printed on the invoice.',
+>       },
+>       extracted_value: '4471',
+>       question: 'Does `extracted_value` match the `field` as it appears in `source_text`?',
+>     },
+>   },
+>   customer_name: {
+>     type: 'choice',
+>     instructions: {
+>       field: {
+>         name: 'customer_name',
+>         type: 'string',
+>         description: 'The organization the invoice was issued to.',
+>       },
+>       question: 'Which option is the value of `field` in `source_text`?',
+>     },
+>     criteria: {
+>       'Beaver Logistics': null,
+>       'Dam Logistics': null,
+>       'Beaver Dam Logistics': null,
+>       'Beaver': null,
+>       'Dam': null,
+>     },
+>   },
+>   amount_due: {
+>     type: 'score',
+>     instructions: {
+>       field: {
+>         name: 'amount_due',
+>         type: 'number',
+>         unit: 'USD',
+>         description: 'The total the invoice asks to be paid.',
+>       },
+>       question: 'How large is the `field` value in `source_text`?',
+>     },
+>     criteria: [
+>       'Under $1,000',
+>       '$1,000 to $10,000',
+>       '$10,000 to $100,000',
+>       '$100,000 to $1,000,000',
+>       'Over $1,000,000',
+>     ],
+>   },
+>   payment_terms: {
+>     type: 'score',
+>     instructions: {
+>       field: {
+>         name: 'payment_terms',
+>         type: 'integer',
+>         unit: 'days',
+>         description: 'Days allowed for payment, from terms such as "net 30".',
+>       },
+>       question: 'How many days does the `field` in `source_text` allow for payment?',
+>     },
+>     criteria: [
+>       'Due on receipt',
+>       'Net 10',
+>       'Net 30',
+>       'Net 60',
+>       'Net 90',
+>     ],
+>   },
+> },
+> }}
+> />
+> ```
+>
+> **Structured Choice options - JSON rubric for boundary clarification** (twin lines 359-392)
+>
+> ```jsx
+> <TypesafeExample
+>   display="request"
+>   example={{
+> state:
+>   'I ordered the standing desk two weeks ago and tracking still says label created. Was I even charged?',
+> selectedModels: ['jev-latest'],
+> questions: {
+>   department: {
+>     type: 'choice',
+>     instructions: {
+>       question: 'Which team should handle this message?',
+>       focus: "Classify the customer's primary request, not every topic mentioned.",
+>     },
+>     criteria: {
+>       billing: {
+>         what: 'Charges, invoices, refunds, or subscriptions',
+>         not_for: 'Order tracking or account access',
+>         examples: ['I was charged twice', 'Where is my refund?'],
+>       },
+>       orders: {
+>         what: 'Order status, delivery, cancellation, or returns',
+>         not_for: 'Charges or account access',
+>         examples: ['Where is my package?', 'Cancel my order'],
+>       },
+>       account: {
+>         what: 'Login, password, profile, or security',
+>         not_for: 'Charges or delivery',
+>         examples: ["I can't log in", 'Change my email'],
+>       },
+>     },
+>   },
+> },
+> }}
+> />
+> ```
+>
+> **Structured Choice options - Walking a taxonomy** (twin lines 402-427)
+>
+> ```jsx
+> <TypesafeExample
+>   display="request"
+>   example={{
+> state:
+>   "32oz plastic bottle with a flip straw lid. Fits most bike cages.",
+> selectedModels: ['jev-latest'],
+> questions: {
+>   department: {
+>     type: 'choice',
+>     instructions: 'Which top-level department does this product belong to?',
+>     criteria: {
+>       'Sporting Goods': {
+>         Cycling: ['Bike Bottles & Cages', 'Bike Lights', 'Helmets'],
+>         Fitness: ['Yoga Mats', 'Resistance Bands'],
+>         Outdoor: ['Tents', 'Sleeping Bags', 'Hydration Packs'],
+>       },
+>       'Home & Kitchen': {
+>         Drinkware: ['Water Bottles', 'Travel Mugs', 'Tumblers'],
+>         Cookware: ['Pots & Pans', 'Bakeware'],
+>       },
+>       'Baby & Toddler': ['Sippy Cups', 'Bottle Warmers', 'Bibs'],
+>     },
+>   },
+> },
+> }}
+> />
+> ```
+>
+> **Structured Score levels** (twin lines 441-471)
+>
+> ```jsx
+> <TypesafeExample
+>   display="request"
+>   example={{
+> state:
+>   'Fixed the null check in the payment handler. Also refactored the retry loop while I was in there, and bumped the SDK version since the old one had that timeout bug.',
+> selectedModels: ['jev-latest'],
+> questions: {
+>   pr_scope: {
+>     type: 'score',
+>     instructions: {
+>       question: 'How focused is this pull request description on a single change?',
+>       note: 'Judge the number of independent changes, not the size of any one change.',
+>     },
+>     criteria: [
+>       {
+>         summary: 'One change, clearly stated',
+>         signals: ['A single fix or feature', 'Nothing described as "also" or "while I was in there"'],
+>       },
+>       {
+>         summary: 'One main change plus a small related tweak',
+>         signals: ['A primary change and one minor adjacent edit', 'The tweak supports the main change'],
+>       },
+>       {
+>         summary: 'Several independent changes bundled together',
+>         signals: ['Two or more unrelated fixes or features', 'Changes that could each be their own PR'],
+>       },
+>     ],
+>   },
+> },
+> }}
+> />
+> ```
+>
+> **Structured Noul criteria** (twin lines 477-507)
+>
+> ```jsx
+> <TypesafeExample
+>   display="request"
+>   example={{
+> state: {
+>   sender: { display_name: 'Beaver Dam Builders Ltd.', email: 'donotreply@payroll.example' },
+>   message:
+>     'Your Q3 bonus is ready. Reply with your login password so we can verify your identity and release the funds.',
+> },
+> selectedModels: ['jev-latest'],
+> questions: {
+>   requests_credentials: {
+>     type: 'noul',
+>     instructions: {
+>       question: 'Does the `message` ask the recipient to disclose a sensitive credential?',
+>       inspect: 'message',
+>       focus: 'Look for a request to send the credential itself, not a request to change or reset it.',
+>     },
+>     criteria: {
+>       true: {
+>         what: 'Asks the recipient to reply with, type, or send a password, PIN, one-time code, or other security sensitive answer',
+>         examples: ['Reply with your password', 'Send us the 6-digit code you just received'],
+>       },
+>       false: {
+>         what: 'No sensitive credential is requested',
+>         examples: ['Reset your password from the settings page', 'Your statement is ready'],
+>       },
+>     },
+>   },
+> },
+> }}
+> />
+> ```
 >
 > ---
 >
