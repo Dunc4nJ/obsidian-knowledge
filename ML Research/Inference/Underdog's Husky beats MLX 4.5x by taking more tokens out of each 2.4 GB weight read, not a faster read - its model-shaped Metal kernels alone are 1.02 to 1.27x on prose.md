@@ -1,8 +1,10 @@
 ---
 created: 2026-09-23
-source: https://x.com/0xsigil/status/2102165862065328538
+source: https://husky.underdog.ai
+via: https://x.com/0xsigil/status/2102165862065328538
 author: Sigil Wen (Underdog)
-published: 2026-09-21
+published: 2026-09-20
+cite: Wen, Sigil. "Husky - a model-specific inference engine up to 4.5x faster than Apple's MLX." Underdog, 20 September 2026. https://husky.underdog.ai
 type: knowledge
 tags: [inference, metal, mlx, megakernel, kernel-fusion, apple-silicon, local-inference, quantization, speculative-decoding, underdog, husky, woof]
 description: Underdog's Husky engine claims up to 4.5x over Apple's MLX and 730 tok/s for a 4-bit 4B Woof on an M5 Max, but its own write-up concedes the 2.4 GB per-token weight read and the ~6 ms step are unchanged - the speedup is tokens kept per read (prompt lookup plus a trained draft), and model-shaped Metal kernels on their own are worth 1.02 to 1.27x on prose.
@@ -84,6 +86,41 @@ Husky's own decomposition, in its own words:
 The routing between 2 and 3 is adaptive: "If the last few tokens appear earlier in the prompt, lookup proposes, since it is better at copying. Otherwise the draft runs while its guesses land at least half a token a step, and rests on the one-row path when they stop." The acceptance-length lever is exactly the one formalised in [[Step 04 - Draft models and the acceptance-rate lever (α = distributional overlap)]], and 7 tokens is an aggressive draft length that only pays because the block verify costs 1.5x one row rather than 8x.
 
 One genuine kernel result *does* feed the speculation, and it is the most transferable thing in the write-up: the eight-row verify step originally cost 2.3x a one-row step "because the kernels walked a 12,800-wide input as one serial chain of matrix ops per simdgroup; splitting that input across the eight simdgroups brought the step to 1.5x". That single change moved two benchmark rows from 403 to 487 and from 483 to 611 tok/s. Kernel work here is not what beats MLX — it is what makes speculation cheap enough to be worth doing. That is a better story than the one the tweet told.
+
+### Table 1, all sixteen prompts
+
+The page's own results table, reproduced in full. Medians of three runs per engine, greedy, each in its own quiet window with a canary check first and repeats agreeing within 12 percent. The "Faster" columns are against MLX. First-token times are for a conversation re-sent with one more message, both engines continuing from their caches.
+
+| Prompt | MLX tok/s | Husky tok/s | Faster | Flash on | Faster | MLX first | Husky first | Sooner |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Function edit, 368 tokens in | 163 | 614 | 3.77x | 730 | 4.48x | 177 ms | 32 ms | 5.5x |
+| Add a field to a JSON file, 477 tokens in | 157 | 611 | 3.89x | 672 | 4.28x | 145 ms | 30 ms | 4.8x |
+| Rename a SQL column, 240 tokens in | 158 | 487 | 3.08x | 547 | 3.46x | 143 ms | 33 ms | 4.3x |
+| Write a function, 40 tokens in | 155 | 170 | 1.10x | 545 | 3.52x | 145 ms | 29 ms | 5.0x |
+| Fix typos in a paragraph, 301 tokens in | 159 | 463 | 2.91x | 535 | 3.36x | 141 ms | 31 ms | 4.5x |
+| Invoice to JSON, 321 tokens in | 164 | 208 | 1.27x | 496 | 3.02x | 144 ms | 30 ms | 4.8x |
+| CSV to a table, 303 tokens in | 158 | 287 | 1.82x | 462 | 2.92x | 141 ms | 34 ms | 4.1x |
+| Data to a table, 247 tokens in | 163 | 188 | 1.15x | 282 | 1.73x | 150 ms | 31 ms | 4.8x |
+| Repeated transcript, 857 tokens in | 153 | 164 | 1.07x | 273 | 1.78x | 140 ms | 39 ms | 3.6x |
+| Tone rewrite, 195 tokens in | 162 | 168 | 1.04x | 269 | 1.66x | 138 ms | 34 ms | 4.1x |
+| Short email, 38 tokens in | 151 | 164 | 1.09x | 260 | 1.72x | 148 ms | 38 ms | 3.9x |
+| Project plan, 51 tokens in | 158 | 171 | 1.08x | 246 | 1.56x | 139 ms | 37 ms | 3.8x |
+| Meeting notes to to-dos, 249 tokens in | 163 | 175 | 1.07x | 234 | 1.44x | 148 ms | 36 ms | 4.1x |
+| Reply to an email thread, 280 tokens in | 163 | 170 | 1.04x | 217 | 1.33x | 139 ms | 36 ms | 3.9x |
+| Call summary, 657 tokens in | 162 | 166 | 1.02x | 211 | 1.30x | 151 ms | 34 ms | 4.4x |
+| Question over a document, 297 tokens in | 159 | 193 | 1.21x | 210 | 1.32x | 137 ms | 34 ms | 4.0x |
+
+Read the MLX column downward: 151 to 164 across every task, a 9 percent spread on inputs ranging from 38 to 857 tokens. That flatness is the signature of one-token-per-read decode pinned to the bus. Then read the Husky column: 164 to 614, a 3.7x spread on the same weights and the same machine. Nothing about kernel fusion can vary by prompt. The spread is the guesser.
+
+### Is the comparison fair
+
+Mostly yes, with one asymmetry that matters for the headline.
+
+The baseline is named and current. The Method section gives **mlx-lm 0.31.3 on MLX 0.32.2**, and both are the latest releases on PyPI as of this capture, mlx-lm 0.31.3 dating to 2026-04-22. This is not a stale build chosen to flatter, which is a real point in the page's favour and worth saying plainly.
+
+The **Husky column is a fair engine-versus-engine comparison**: same file, same greedy output, verified token by token, both engines continuing from their own caches. The 1.02x to 3.9x there is credible.
+
+The **Flash-on column is not like-for-like**. `mlx-lm` ships its own speculative decoding through `--draft-model` and `--num-draft-tokens`, and the Method section never says whether the MLX column was run with a draft. On the evidence, it was not. So the 1.3x to 4.5x compares a drafted engine against an undrafted one, which is a comparison of configurations rather than of engines. The fair version of that test is Husky with Flash against `mlx-lm` with a draft model, and it has not been published. This does not make the 730 tok/s wrong, and a user of the Underdog app genuinely gets it. It does mean the headline multiple is not a measure of how much better Husky's Metal work is than Apple's.
 
 ### Bandwidth check against the vault's own numbers
 
@@ -194,19 +231,22 @@ The distribution is the story: **roughly 120 of the 179 third-party replies are 
 > 19.3 s, 1920x1080, no speech (silent demo over music - faster-whisper with VAD kept 0 segments).
 > mp4: `https://video.twimg.com/amplify_video/2102165493725683712/vid/avc1/1920x1080/IbHbNKFjcsVl8BWk.mp4?tag=29`
 >
-> *Frame 1 (~1.9 s). Slide headed "Husky by Underdog", right rule "MSI · model-specific inference". Title: "Inference engines are general: one runtime, many models. Husky runs one." Subtitle: "Woof, Underdog's Pareto-frontier model, is compiled in: every matrix shape, every kernel, the order of every byte on disk, decided before it runs. On your Mac and iPhone, even without wifi." Left panel "A general engine" / "one kernel for any shape" / "checks sizes at run time, converts at load". Right panel "Husky" with four rainbow-bordered matrices at named shapes: q · 2560 x 4096, k v · 2560 x 512, down · 12800 x 2560, gate · up · 2560 x 12800, beside a tall block labelled "Woof, 32 layers". Legend: "kernel compiled for that matrix" and "weights, in tile order".*
+> *Frame 1 (~0.6 s). The opening slide, and the clearest statement of the mechanism in the whole launch. Right rule "M5 Max · one decode step, on an edit". Title: "**Husky** - a model-specific inference engine up to 4.5× faster than Apple's MLX". Standfirst: "On a MacBook, Woof runs up to 730 tokens a second with Husky Flash on, and answers 5× sooner with the same weights. Built to run on your Mac and iPhone, even without wifi." Two panels of the same die. **MLX**, cornered "one read, one row": "CPU, the host" marked in red "waiting on the host"; "GPU, 40 cores" all empty; "bus, ~400 GB/s" carrying "1 row"; "Unified memory" holding "Woof, 2.4 GB" and "prompt, reread each turn"; footer "tokens out - **2 tokens so far** - 2 reads of 2.4 GB, 1 per read · a host gap between reads". **Husky**, cornered "one read, eight rows checked": "CPU, the host - next read already queued"; "GPU, 40 cores" fully coloured; "bus, ~400 GB/s" carrying "8 rows"; "Unified memory" holding "Woof, 2.4 GB" and "conversation state, kept"; footer "tokens out - **5 tokens so far** - 1 read of 2.4 GB, 5 per read · **an eight-row read costs 1.5× a one-row read**". The stated ~400 GB/s matches the 393 GB/s implied by 2.4 GB at 6.1 ms.*
+> ![[sigil-husky-001.png]]
+>
+> *Frame 2 (~1.9 s). Slide headed "Husky by Underdog", right rule "MSI · model-specific inference". Title: "Inference engines are general: one runtime, many models. Husky runs one." Subtitle: "Woof, Underdog's Pareto-frontier model, is compiled in: every matrix shape, every kernel, the order of every byte on disk, decided before it runs. On your Mac and iPhone, even without wifi." Left panel "A general engine" / "one kernel for any shape" / "checks sizes at run time, converts at load". Right panel "Husky" with four rainbow-bordered matrices at named shapes: q · 2560 x 4096, k v · 2560 x 512, down · 12800 x 2560, gate · up · 2560 x 12800, beside a tall block labelled "Woof, 32 layers". Legend: "kernel compiled for that matrix" and "weights, in tile order".*
 > ![[sigil-husky-002.png]]
 >
-> *Frame 2 (~6.8 s). The same slide as the self-reply photo, rendered in the video. Right rule "Metal · one decode layer". Title "Model-shaped Metal megakernels." Full text transcribed in section 3 below.*
+> *Frame 3 (~6.8 s). The same slide as the self-reply photo, rendered in the video. Right rule "Metal · one decode layer". Title "Model-shaped Metal megakernels." Full text transcribed in section 3 below.*
 > ![[sigil-husky-003.png]]
 >
-> *Frame 3 (~11.6 s). The benchmark chart. Right rule "Decode · tokens a second, M5 Max". Title: "Up to 730 tokens a second. Faster than MLX on all sixteen tasks, 1.3 to 4.5× with Flash on." Subtitle: "Flash is a small draft trained on Woof itself. It guesses the next seven tokens and Woof checks them. Same weights, same answers." Three-bar legend: MLX, Husky, "Husky, Flash on"; right column header "tokens a second: MLX · Husky · Flash on". Rows, MLX/Husky/Flash-on with the labelled multiple: Function edit 163/614/730 4.5×; Add a field to a JSON file 157/611/672 4.3×; Rename a SQL column 158/487/547 3.5×; Write a function 155/170/545 3.5×; Fix typos in a paragraph 159/463/535 3.4×; Invoice to JSON 164/208/496 3.0×; CSV to a table 158/287/462 2.9×; Data to a table 163/188/282 1.7×; Repeated transcript 153/164/273 1.8×; Tone rewrite 162/168/269 1.7×; Short email 151/164/260 1.7×; Project plan 158/171/246 1.6×; Meeting notes to to-dos 163/175/234 1.4×; Reply to an email thread 163/170/217 1.3×; Call summary 162/166/211 1.3×; Question over a document 159/193/210 1.3×.*
+> *Frame 4 (~11.6 s). The benchmark chart. Right rule "Decode · tokens a second, M5 Max". Title: "Up to 730 tokens a second. Faster than MLX on all sixteen tasks, 1.3 to 4.5× with Flash on." Subtitle: "Flash is a small draft trained on Woof itself. It guesses the next seven tokens and Woof checks them. Same weights, same answers." Three-bar legend: MLX, Husky, "Husky, Flash on"; right column header "tokens a second: MLX · Husky · Flash on". Rows, MLX/Husky/Flash-on with the labelled multiple: Function edit 163/614/730 4.5×; Add a field to a JSON file 157/611/672 4.3×; Rename a SQL column 158/487/547 3.5×; Write a function 155/170/545 3.5×; Fix typos in a paragraph 159/463/535 3.4×; Invoice to JSON 164/208/496 3.0×; CSV to a table 158/287/462 2.9×; Data to a table 163/188/282 1.7×; Repeated transcript 153/164/273 1.8×; Tone rewrite 162/168/269 1.7×; Short email 151/164/260 1.7×; Project plan 158/171/246 1.6×; Meeting notes to to-dos 163/175/234 1.4×; Reply to an email thread 163/170/217 1.3×; Call summary 162/166/211 1.3×; Question over a document 159/193/210 1.3×.*
 > ![[sigil-husky-004.png]]
 >
-> *Frame 4 (~14.2 s). The time-to-first-word slide. Right rule "First word · when a chat continues". Title: "One more message. MLX rereads the chat. Husky answers from where it left off." A mock chat: "Summarize the storage migration call." / "Five bullets, two decisions, three open questions." / "One more: who owns the certificate renewals?" Caption "time to the first word of the reply, 10× slow motion". Two bars: MLX **157 ms**, annotated "extends its prompt cache, then pays a fixed cost per call"; Husky **34 ms**, annotated "continues from the state it kept on the GPU". Footer: "29 to 39 ms on Husky, 137 to 177 ms on MLX, both engines continuing from their caches. 3.6 to 5.5× sooner."*
+> *Frame 5 (~14.2 s). The time-to-first-word slide. Right rule "First word · when a chat continues". Title: "One more message. MLX rereads the chat. Husky answers from where it left off." A mock chat: "Summarize the storage migration call." / "Five bullets, two decisions, three open questions." / "One more: who owns the certificate renewals?" Caption "time to the first word of the reply, 10× slow motion". Two bars: MLX **157 ms**, annotated "extends its prompt cache, then pays a fixed cost per call"; Husky **34 ms**, annotated "continues from the state it kept on the GPU". Footer: "29 to 39 ms on Husky, 137 to 177 ms on MLX, both engines continuing from their caches. 3.6 to 5.5× sooner."*
 > ![[sigil-husky-005.png]]
 >
-> *Frame 5 (~16.0 s). The live side-by-side race, and the frame that names the hardware. Header "Husky by Underdog". Left: "real time **1.20 s**", "both on the same **M5 Max MacBook Pro**, same Woof weights". Prompt: "Fix the spelling and grammar in this paragraph. Change nothing else and return the whole paragraph." Top stream "MLX / Apple's engine" counter **150 tokens a second**, part-way through a paragraph about a storage migration ("finished last night, about 40 terabytes in total... he needs the staging environment to himself from six to nine. Separ"). Bottom stream "Husky / Flash on" counter **537 tokens a second**, "done in 0.53 s", already finished ("...we can cover backend with contractors for a quarter."). Footer: "Woof served with Husky, Flash on - Underdog · the same M5 Max MacBook Pro, the same Woof weights · a real stream, replayed at the speed it arrived", and right "Up to **730** tok/s · 16 of 16 tasks faster than MLX · husky.underdog.ai".*
+> *Frame 6 (~16.0 s). The live side-by-side race, and the frame that names the hardware. Header "Husky by Underdog". Left: "real time **1.20 s**", "both on the same **M5 Max MacBook Pro**, same Woof weights". Prompt: "Fix the spelling and grammar in this paragraph. Change nothing else and return the whole paragraph." Top stream "MLX / Apple's engine" counter **150 tokens a second**, part-way through a paragraph about a storage migration ("finished last night, about 40 terabytes in total... he needs the staging environment to himself from six to nine. Separ"). Bottom stream "Husky / Flash on" counter **537 tokens a second**, "done in 0.53 s", already finished ("...we can cover backend with contractors for a quarter."). Footer: "Woof served with Husky, Flash on - Underdog · the same M5 Max MacBook Pro, the same Woof weights · a real stream, replayed at the speed it arrived", and right "Up to **730** tok/s · 16 of 16 tasks faster than MLX · husky.underdog.ai".*
 > ![[sigil-husky-006.png]]
 >
 > ### 3. The author self-reply (the mechanism)
