@@ -163,7 +163,6 @@ Agent code search, semantic retrieval, and the bottleneck between code generatio
 
 Hard-won operational insights from running agents.
 
-- [[learning - structured state files beat append-only logs for agent task persistence across compaction]] — JSON state files let agents reconstruct task context instantly after compaction
 - [[learning - soul files written as earned beliefs outperform rule-based instructions]] — belief-narrative SOUL.md makes LLMs internalize values rather than comply with checklists
 - [[social media platform login automation varies dramatically by platform]] — IG allows automated login, FB blocks all automated auth, TK rate-limits after 2-3 attempts; daily engagement works headless once authenticated
 
