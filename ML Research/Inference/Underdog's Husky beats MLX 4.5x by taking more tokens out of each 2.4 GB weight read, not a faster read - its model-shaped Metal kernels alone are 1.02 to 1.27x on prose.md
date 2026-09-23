@@ -22,7 +22,7 @@ That single sentence is the whole note. Husky did not make the step faster. It m
 
 ## Key takeaways
 
-- **The 4.5x and the ~6 ms step are not in conflict once you see that Husky emits several tokens per weight read.** MLX keeps 1.0 tokens per read of the weights; Husky keeps 5.4 on edits and 2.7 on prose with the Flash draft on. At 6.1 ms per step that is 164 tok/s single-token and 730 tok/s at 4.5 accepted tokens — the arithmetic closes exactly. This is the thesis of [[Modal argues speculative decoding is the only inference optimization that matters, and custom DFlash speculators turn acceptance length into 2-3x speedups]] restated on Apple silicon, and the roofline it obeys is [[Step 01 - Decode is memory-bandwidth-bound (the roofline)]].
+- **The 4.5x and the ~6 ms step are not in conflict once you see that Husky emits several tokens per weight read.** MLX keeps 1.0 tokens per read of the weights; Husky keeps 5.4 on edits and 2.7 on prose with the Flash draft on. At 6.1 ms per step that is 164 tok/s single-token and 730 tok/s at 4.5 accepted tokens — the arithmetic closes exactly. The catch is that `mlx-lm` ships speculative decoding too, through `--draft-model`, and the Method section never says whether the baseline was allowed one, so the headline multiple compares a drafted engine to an apparently undrafted one. This is the thesis of [[Modal argues speculative decoding is the only inference optimization that matters, and custom DFlash speculators turn acceptance length into 2-3x speedups]] restated on Apple silicon, and the roofline it obeys is [[Step 01 - Decode is memory-bandwidth-bound (the roofline)]].
 - **Strip the speculation and the megakernel story is a rounding error.** Husky's own Table 1 puts the engine alone at **1.02x to 1.27x over MLX on prose** (call summary 1.02x, tone rewrite 1.04x, question over a document 1.21x, invoice to JSON 1.27x). The 3.8x on a function edit is prompt lookup, not kernel fusion: "most of the file is already there." A tell anyone can check from the chart alone — MLX's bar is flat across all sixteen tasks (151 to 164 tok/s, a 9 percent spread) while Husky's spans 164 to 614, a 3.7x spread. Kernel fusion cannot be task-dependent; the same 2.4 GB is read whatever you ask. Whatever varies by task is a guesser, not a kernel.
 - **The write-up contains an honest negative result that the tweet inverts.** Husky ships *specialized* kernels, not a whole-step megakernel. The team built the first piece — a layer's whole MLP as one persistent dispatch with a grid barrier — and reports: "identical output, and **no faster**." Their explanation is that back-to-back dispatches in one Metal encoder already run with almost no gap, so a megakernel only pays when it overlaps the next stage's weight loads with the current stage's tail. The tweet's "we wrote model-shaped Metal Megakernels / the GPU never waits" describes the aspiration; the paper describes a measured null. Compare the same discipline in [[agentic kernel development ships to production by profiling the whole model first - 42.3 percent latency cut on Qwen-Image]], where microbenchmark wins evaporate on integration.
 - **Woof is public, contradicting most of the reply thread.** `ConwayResearch/Underdog-Woof-4B-1.1` sits on Hugging Face under Apache-2.0, ungated, 815 downloads; the Husky-packed build with the draft is `ConwayResearch/husky-flash`. It is a **Qwen3.5 4B** at 4 bits, group size 64, hidden 2560, 32 layers split **24 linear-attention and 8 full-attention** on a 3:1 interval. The "24 recurrence layers" of the tweet's slide are exactly those 24 linear-attention layers — Woof is a hybrid recurrent/attention model, not a plain transformer.
@@ -148,14 +148,14 @@ The tweet is thin, but the write-up answers nearly every fair objection raised i
 
 - **One machine, one chip.** Every number is a single M5 Max. @ddalcu's demand for M1 through M4 figures is unanswered, and @corysus asks the sharp version: is Husky M5-only? Kernels written for one part's simdgroup width and cache hierarchy do not automatically carry.
 - **Batch size is never stated.** Everything reads as batch 1, which is the honest regime for a local assistant but should be said.
+- **Whether the MLX baseline was allowed a draft model.** `mlx-lm` 0.31.3, the latest PyPI release at capture, ships its own speculative decoding through `--draft-model` and `--num-draft-tokens`, and the Method section does not say whether the MLX column used one. The Husky-alone column at 1.02x to 3.9x is the fair engine-versus-engine comparison on identical greedy output; the 1.3x to 4.5x headline is not, as far as the page shows. Worked through above.
+- **iPhone is claimed but never measured.** Both the opening slide and the MSI slide say "Built to run on your Mac and iPhone, even without wifi", and the underdog.ai FAQ says iPhone builds are "coming". Every number in the write-up is a Mac. The tweet does not mention iPhone at all, so the slides claim more than the post does.
 - **No quality or acceptance-rate table.** "Same weights, same answers" is asserted for greedy decoding and is architecturally plausible with rejection sampling, but there is no held-out benchmark for Woof and no α figure, only accepted-token counts.
 - **The engine is closed.** The weights are Apache-2.0; Husky itself is not published. A "Greyhound repository" and `husky serve` are referenced in the model card with no public link, and there is no GitHub organisation — searches for `husky metal megakernel` and `underdog.ai` return nothing relevant, and `underdogdotai` is not a GitHub org.
 - **The 270-to-206 dispatch figure has no counterpart in the write-up** and no methodology behind it.
 - **The slide's matrix dimensions do not match the published model.** The video slide shows `q 2560 x 4096`, `k v 2560 x 512`, `gate·up 2560 x 12800`, `down 12800 x 2560`. The config gives hidden 2560 and 16 heads x 256 head_dim = 4096, so `q` matches exactly — but `intermediate_size` is **9216**, not 12800. The 12,800 figure recurs in the prose ("walked a 12,800-wide input"), so it is probably the fused gate+up stride of an earlier Woof; either way the illustrated model is not `Woof-4B-1.1`.
 - **English only.** @VrianCao and @HaHoang411 ask about Chinese and multilingual; the model card says `language: en`. Unanswered. (The sibling ASR model, `Underdog-Bark-0.8B-1.0`, lists 30 languages — the LLM does not.)
-- **Prefill gets one line.** @indesjyo's "make prefill 10x, not decode" lands: prefill goes 3,094 to 5,150 tok/s, a 1.66x, which is the number that matters for long-context agent work and gets a single row.
-
-- **The Flash-on column compares a drafted engine to an undrafted one, unless stated otherwise.** mlx-lm 0.31.3 — the latest PyPI release at capture — ships its own speculative decoding (`--draft-model`, `--num-draft-tokens`), and the Method section does not say whether the MLX column used a draft. The Husky-alone column (1.02–3.9×) is the fair engine-vs-engine comparison on identical greedy output; the 1.3–4.5× headline is not, as far as the page shows.
+- **Prefill is under-sold rather than missing.** @indesjyo asks for prefill rather than decode, and Figure 4 half-answers: on a long prompt of 857 to 890 tokens, prefill goes 3,094 to 5,151 tokens a second, a 1.67x. But on a short prompt of 40 to 70 tokens it goes 259 to 1,355, a **5.2x**, the largest single multiple anywhere in the write-up and one the tweet never mentions. Short-prompt prefill is dominated by fixed per-call cost, which is exactly what Husky removes, so this is the cleanest demonstration of the engine's real strength and it is buried in the fourth figure.
 
 ## Is MSI a new idea
 
@@ -175,6 +175,7 @@ The distribution is the story: **roughly 120 of the 179 third-party replies are 
 - **Open-source pressure, ~6 replies:** @eldersavant "You're not on huggingface?", @zorrobyte "Where's the GitHub?", @kcwolfy_ "No one cares if it's not open source. Sorry.", @MgkMshrmBrkfst, @valkyr11393, @HaHoang411 ("opensourcing this would create a huge bomb"). The Hugging Face premise is simply wrong; the GitHub one is correct.
 - **@liminalsunset_** supplies the missing fact the thread needed, tersely: "4B params, 4-bit, to save the reading."
 - **@tensorquay** asks the best engineering question in the thread and gets no answer: "Can a Woof fine-tune reuse Husky's kernels if tensor shapes and the 4-bit layout stay the same? That would make local apps easier to maintain: ship new weights without retuning the engine each time." Given that specialisation is keyed to shapes and tile order, the answer is almost certainly yes — which would make MSI far more practical than "one engine per model" sounds, and is the thing worth confirming.
+- **@YiCasillas** makes the strongest pro-argument in the thread, in Chinese: "730 tokens/s 这种数字很抓眼，但更有意思的是你们没有把'通用性'当成免费的：知道模型形状后把多步合成一个 kernel，少掉 CPU/GPU 间的来回，才是真正把延迟压下去。" Translated: *"A number like 730 tokens/s is eye-catching, but what is more interesting is that you did not treat generality as free: knowing the model's shape and then fusing multiple steps into one kernel, cutting out the CPU-GPU round trips, is what actually brings the latency down."* The instinct is right about where the engineering is, and the write-up's own numbers say it pays in time-to-first-word rather than in throughput.
 - **@JoshConstine:** "Unclear how you are both shipping a consumer agent at lightspeed but also have time to just... fundamentally speed up inference."
 - **@indesjyo:** "你如果能讓Prefill x10倍 而不是decode" — make prefill 10x instead of decode.
 - **@rsms**, on the product rather than the engine: "I struggle to understand what underdog is. Tried making sense of the website on my iPhone but scrolljacking makes is hard to focus. Is it a Mac app? A website? A service?"
@@ -188,6 +189,10 @@ The distribution is the story: **roughly 120 of the 179 third-party replies are 
 - [[Step 01 - Decode is memory-bandwidth-bound (the roofline)]] — the physics Husky's own write-up restates verbatim.
 - [[Modal argues speculative decoding is the only inference optimization that matters, and custom DFlash speculators turn acceptance length into 2-3x speedups]] — the prior that predicted this result.
 - [[Step 04 - Draft models and the acceptance-rate lever (α = distributional overlap)]] — why a 7-token draft needs a cheap verify to pay.
+- [[Rachel Rapp explains how Baseten trains speculative-decoding draft models live from inference hidden states, raising accept rates 20%+ with no offline data storage]] — the closest match to Flash's design anywhere in the vault. Flash is a single layer reading Woof's hidden states from five layers, self-distilled on the target's own replies; Baseten trains the same shape of draft from inference hidden states. Read together they say draft-from-hidden-states is converging on a standard recipe.
+- [[From GPT-2 to Kimi K3 - a visual worklog on how attention architecture evolved to fix the KV cache with linear attention, DeltaNet, gating, and hybrid retrieval]] — the family Woof belongs to. Its 24 linear-attention layers interleaved 3:1 with 8 full-attention layers are exactly the hybrid this note traces, and the resident-grid trick only works because recurrence carries state instead of a growing cache.
+- [[DSpark (DeepSeek paper) couples a semi-autoregressive drafter with a hardware-aware confidence scheduler to raise accepted length 16-31% offline and shift DeepSeek-V4's serving Pareto frontier]] and [[Hao AI Lab argues DSpark and JetSpec split the speculative-decoding throughput-latency frontier by adding causality to cheap parallel drafting]] — the datacentre versions of the same lever, where Husky's adaptive lookup-versus-draft routing has a formal analogue in confidence scheduling.
+- [[SpecSpec specializes block-diffusion drafters with LoRA to speed speculative decoding on out-of-distribution languages]] — the distribution-shift risk for a draft self-distilled on 139,000 of one app's own conversations, and a reason the English-only limit may bite harder than it looks.
 - [[Ashutosh Maheshwari's sub-second LLM study list catalogs sixteen inference optimizations from KV-caching and speculative decoding to tensor parallelism and memory offloading]] — Husky is a stack of four items from this list.
 - [[Ahmad Osman's kernel curriculum - you don't run a model you run kernels, and here are eight mini-projects from RMSNorm in Triton to a custom op profiled inside vLLM]] — the fusion vocabulary, and the "47 tiny launches" complaint Husky is answering.
 - [[CUDA game kernels beat JAX RL environments 7x because PyTorch dispatch overhead dominates tiny networks not simulation]] — the case where dispatch removal *was* the whole speedup, and why it is not here.
@@ -405,7 +410,20 @@ The distribution is the story: **roughly 120 of the 179 third-party replies are 
 > ## Cite
 >
 > Wen, Sigil. "Husky: a model-specific inference engine up to 4.5× faster than Apple's MLX." Underdog, 20 September 2026\. https://husky.underdog.ai>
-> ### 5. ConwayResearch/husky-flash model card (verbatim)
+> ### 5. Figures rendered from husky.underdog.ai
+>
+> The page's figures are interactive SVG, so the markdown twin above carries their captions but not their content. Captured from the live page at 1280px. Figures 1, 5 and 6 are omitted: 1 and 5 duplicate video frames 1 and 2 above, and 6's animated dispatch bars do not draw in a headless capture.
+>
+> *Figure 2, with the page's own caption. Decode throughput across sixteen prompt types, three bars per prompt. Every value matches Table 1.*
+> ![[sigil-husky-fig2.png]]
+>
+> *Figure 3, with the page's own caption. Milliseconds to the first token on a continued chat, sorted by the multiple: Function edit 32 ms against 177 ms for 5.5x, down to Repeated transcript 39 ms against 140 ms for 3.6x.*
+> ![[sigil-husky-fig3.png]]
+>
+> *Figure 4, with the page's own caption. Cold prefill at the caller, the one chart with no counterpart in the video. Short prompt of 40 to 70 tokens: MLX 259 against Husky 1,355 prompt tokens a second, a 5.2x gap. Long prompt of 857 to 890 tokens: MLX 3,094 against Husky 5,151, a 1.67x gap. Inside the engines the long-prompt rates are 4,878 and 5,460.*
+> ![[sigil-husky-fig4.png]]
+>
+> ### 6. ConwayResearch/husky-flash model card (verbatim)
 >
 > ---
 > license: other
@@ -465,7 +483,7 @@ The distribution is the story: **roughly 120 of the 179 third-party replies are 
 >
 > Woof's licence applies to these weights, as for `ConwayResearch/woof-1.0-4B`.
 >
-> ### 6. underdog.ai (homepage, verbatim)
+> ### 7. underdog.ai (homepage, verbatim)
 >
 > Title: Underdog. The Most Loyal AI.
 >
@@ -895,7 +913,7 @@ The distribution is the story: **roughly 120 of the 179 third-party replies are 
 > > “I’m building Underdog _for myself._”
 >
 > [Read the founder’s note ↗](/founder)>
-> ### 7. Replies (180 blocks retrieved of 200 stated; the first is the author self-reply)
+> ### 8. Replies (180 blocks retrieved of 200 stated; the first is the author self-reply)
 >
 >
 > @0xSigil (Sigil Wen):
