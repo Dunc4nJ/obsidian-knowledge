@@ -18,7 +18,8 @@ description: LangChain's smithtune CLI closes the loop from LangSmith traces to 
 - **The most useful sentence in the blog is the admission of a failed run**: "An earlier, less selective training set reduced the F1 score after SFT." Data selection, not the training recipe, is the lever, and a bad selection makes the model actively worse. LangChain's fix was to add a per-trace review stage that oversamples traces where agents believed real issues existed. This is the same conclusion reached independently by [[Mercor's SkyRL recipe post-trains a 397B on 1928 expert tasks for 70 percent relative Pass@1 - and spends Steps 1-3 de-risking before any real compute]] and [[Bridgewater and Thinking Machines fine-tune Qwen3-235B to replicate expert investor judgment, beating frontier LLMs on financial information-filtering at 13.8x lower cost]].
 - **LangChain is now selling the step its own founder ranks last.** The blog says "We recommend that teams start with harness engineering," which is the argument of [[LangChain's Harrison Chase argues continual learning for AI agents extends beyond model fine-tuning to harness engineering and context updates]] and of [[Prime Intellect's fine-tune-last doctrine - 5x task timeouts lifted Terminal-Bench 14.7 points with no model change]]. The Engine result is honest about reaching that point first: "we had exhausted our ability to push it or GPT-5.6 Sol further via harness engineering." Fine-tune-last is still the doctrine; smithtune is the tooling for teams who have actually arrived at last.
 - **This completes a single-vendor loop: trace, store, search, mine, eval, train, deploy.** Traces land in LangSmith, [[SmithDB makes LangSmith 12x faster by treating agent observability as an LSM problem on object storage]] stores and searches them, [[LangSmith Engine turns production agent traces into issues evaluators and regression examples by separating screening from investigation]] mines them for failures, [[LangChain's Eval Engineering Skill builds Harbor-format evals from repo context and agent traces by interviewing the user]] turns them into evals, and smithtune now turns them into weights. That is the concrete instantiation of [[self-serve post-training infrastructure is emerging as the key layer between foundation models and enterprise adoption]], and it is exactly the dynamic described in [[Memory ownership follows harness ownership - Harrison Chase argues picking a closed harness is picking a permanent owner for your agent's data flywheel]]. Your traces become your training set, and whoever holds the traces holds the flywheel.
-- **Training on production traces is training on customer data, and the CLI makes you say so out loud.** `smithtune acknowledge-data-rights` blocks every workflow until an interactive terminal confirms it, and the prompt is blunt: "Internal-only use and open-weight models do not automatically make a use permitted." The blog never mentions this. The docs do, in a setup step.
+- **The pipeline quietly biases the training set toward short episodes.** A trajectory that overflows a council judge's context window is dropped, not truncated, and the coordinator is told never to shorten or split it to make it fit. Because the default judge is GLM-5.3-Flash, the judge's context, not the trainer's, is what bounds selection: a Kimi K3 run with a 196,608-token training window can still lose its longest trajectories to a judge that could not read them. Long-horizon behavior is what most teams would most want to teach, and it is the first thing filtered.
+- **Training on production traces is training on customer data, and the CLI makes you say so out loud.** `smithtune acknowledge-data-rights` blocks every workflow until an interactive terminal confirms it, and the 340-word document it gates is specific where the blog is silent: trajectories "may include complete conversations, system instructions, and tool context," provider agreements "may restrict distillation, training competing models, or other uses of model outputs," and "Technical validation and evaluation results do not verify legal compliance." The blog never mentions any of this. The docs do, in a setup step.
 
 ## The Pipeline
 
@@ -98,7 +99,13 @@ Two results go to LangSmith as feedback: `teacher_agreement` per action and `tra
 
 The council in `triage.py` is smaller than "a council of agents" suggests. `DEFAULT_COUNCIL` is **two** judges, both on Baseten Model APIs: `deepseek-ai/DeepSeek-V4.1-Flash` and `zai-org/GLM-5.3-Flash`. Between 1 and 16 slots are configurable across Fireworks, Baseten, OpenAI, and Anthropic. Aggregation, recorded verbatim in the run plan, is "all slots required; strict majority; ties drop" — so with the default two judges a trajectory survives only on a unanimous keep. The SKILL.md says this outright: "With two judges a trajectory is kept only when both vote keep; add a third judge for a majority vote."
 
-Each judge sees one whole trajectory and returns `{"keep": 0|1, "reason": "..."}`. The fixed prompt forbids per-turn scoring: "Judge all assistant behavior in that conversation together. Do not score turns separately or keep only the final answer... A good final answer does not excuse bad earlier behavior." Selection criteria come entirely from the user's `--rubric` or `--rule`; smithtune ships no default rubric and refuses to run without one. The optional `deepagents` extra adds a coordinator that dispatches judge subagents in batches, but the coordinator is explicitly barred from voting: "CLI validation and saved votes determine labels, never your final text." Votes land in `judgments.jsonl`, labels in `labels.jsonl`, and a summary in `report.md`.
+Each judge sees one whole trajectory and returns `{"keep": 0|1, "reason": "..."}`, validated against a Draft 2020-12 JSON schema. The fixed prompt forbids per-turn scoring: "Judge all assistant behavior in that conversation together. Do not score turns separately or keep only the final answer... A good final answer does not excuse bad earlier behavior." Selection criteria come entirely from the user's `--rubric` or `--rule`; smithtune ships no default rubric and refuses to run without one. The vote rule is stated verbatim in the coordinator prompt: "A strict majority gives 1; a tie gives 0."
+
+With the shipped default that arithmetic makes the council an AND gate rather than a vote. Two judges, strict majority, ties drop, means one dissent kills the trajectory. That is a conservative filter, which is probably the right default for training data, but "a council of agents to review and filter" in the blog reads as something more deliberative than two cheap models that must both say yes.
+
+The optional `deepagents` extra adds an orchestrator, not a voter. `triage_coordinator.py` builds it with `create_deep_agent`, a `StateBackend`, a `SubAgentMiddleware` carrying a single `trajectory-judge` subagent, a `SummarizationMiddleware`, and an `allowed_tools` middleware restricting it to exactly two tools, `code_mode` and `task`. It pulls up to 128 unattempted trajectory-judge pairs at a time and fans them out under the configured concurrency, with no shell, network, host files, or environment access. Its own text is never a verdict: "CLI validation and saved votes determine labels, never your final text." Votes land in `judgments.jsonl`, labels in `labels.jsonl`, and a summary in `report.md`.
+
+One filtering rule deserves more attention than it gets. A trajectory that overflows a council judge's context window is dropped with a keep of 0 and a reason, and the coordinator is explicitly told "Do not shorten, summarize, page, or split the input to make it fit." The run summary counts these separately as "trajectories that exceed a council model's context window." The consequence is a selection bias nobody advertises: **the training set skews short**, because the longest episodes are the ones most likely to be filtered. Worse, the binding constraint is the judge's context, not the trainer's. The default council runs GLM-5.3-Flash, so a Fireworks Kimi K3 run with a 196,608-token training window can still lose its long trajectories to a judge that could not read them. Long-horizon agent behavior is exactly what a practitioner would most want to teach, and it is the first thing this pipeline discards.
 
 This is the same machine as [[Applied Compute freezes a Sol-built 14-label taxonomy so Jev annotates the corpus - ECE 0.051 against Luna's 0.154 and 85 percent recall at 0.20, with every rival left at Jev's threshold]] and [[the Error Discovery skill builds a failure-mode taxonomy while you annotate, using active learning to pick the next traces]]: a human-written rubric frozen up front, then models applied at scale to label the corpus against it. The README is careful not to oversell it — "Council review helps assess quality; it does not guarantee good training data."
 
@@ -106,7 +113,9 @@ This is the same machine as [[Applied Compute freezes a Sol-built 14-label taxon
 
 > You are responsible for having permission to use your data for training and evaluation and to share it with selected providers. Internal-only use and open-weight models do not automatically make a use permitted.
 
-That is the honest framing of what this product does: it ships your production traces, including whatever your customers typed into your agent, to a third-party training provider. The blog does not mention data rights at all.
+The document it points to, `docs/data-rights-and-permitted-use.md`, is 340 words in four sections and is more specific than the prompt. **Your responsibility for data rights** notes that "Permission to access a trace or dataset does not necessarily include permission to use its contents for these purposes." **Provider terms and model licenses** warns that the agreements governing the services that produced your traces "may restrict distillation, training competing models, or other uses of model outputs" — which is the live question for anyone whose traces came from a frontier API and whose target is an open-weight model. **Data transfers and sensitive information** is the operative one: smithtune "may transmit data to LangSmith and selected training, triage, and evaluation providers," and "Selected trajectories may include complete conversations, system instructions, and tool context—not just individual responses," with an instruction to remove credentials and secrets before processing. **No grant of third-party rights** closes it: "Technical validation and evaluation results do not verify legal compliance."
+
+That is the honest framing of what this product does: it ships your production traces, including whatever your customers typed into your agent and whatever your system prompt says, to at least two third parties — a training provider and a judge provider, which need not be the same company. The blog does not mention data rights at all.
 
 ## Where It Sits in the LangSmith Stack
 
@@ -115,7 +124,7 @@ Fine-Tuning shipped the same day as three sibling posts: LangSmith Engine v2 red
 - **Capture** — trajectories, the format this post depends on, and the feedback-on-traces argument in [[LangChain's Harrison Chase argues agent observability needs feedback attached to traces to power learning]].
 - **Store and search** — [[SmithDB makes LangSmith 12x faster by treating agent observability as an LSM problem on object storage]], [[SmithDB builds a byte-budgeted FST inverted index to enable 400ms full-text search over enormous agent traces in object storage]], and [[SmithDB's 12x agent observability speedup was built on top of Apache DataFusion and Vortex not instead of them]].
 - **Mine** — [[LangSmith Engine turns production agent traces into issues evaluators and regression examples by separating screening from investigation]].
-- **Evaluate** — [[LangChain's Eval Engineering Skill builds Harbor-format evals from repo context and agent traces by interviewing the user]].
+- **Evaluate** — [[LangChain's Eval Engineering Skill builds Harbor-format evals from repo context and agent traces by interviewing the user]], by Vivek Trivedy, who is also on this byline. The same person is building the eval layer and the training layer, which explains why the two share the rubric-plus-judge shape.
 - **Train** — smithtune.
 - **Harness** — [[Deep Agents v0.6 splits the agent harness into five composable primitives - code interpreter, per-model profiles, typed streaming, delta channels, and ContextHub backend]], from the same author cluster.
 
@@ -154,7 +163,7 @@ From `capabilities.py`, the supported base models are a short, hard-coded list p
 | Baseten | `moonshotai/Kimi-K3` | per workspace |
 | Baseten | `zai-org/GLM-5.3-Flash` | per workspace |
 
-Fireworks limits are documented shared-pool training context lengths, and smithtune refuses any Fireworks model without such an entry. Baseten limits are queried live from the workspace, and the four models listed are those with verified cross-entropy training compatibility. `qwen3p8-27b` is the default and the only model that works on both providers.
+Fireworks limits are documented shared-pool training context lengths, and smithtune refuses outright any Fireworks model without such an entry, because there is no read-only API for pool eligibility. Preflight then queries the Fireworks model API for a `supervisedLoraTunable` flag and a `trainingContextLength`, with a code comment recording that DeepSeek 0731 and Muse Glimmer report that flag as false while still supporting serverless Training API LoRA — a provider metadata inconsistency smithtune works around rather than trusting. Baseten limits are queried live from the workspace, and the four models listed are those with verified cross-entropy training compatibility; the tokenizer must match the official base model identity exactly. `qwen3p8-27b` is the default and the only model that works on both providers.
 
 ## Links
 
@@ -766,6 +775,36 @@ Part of [[moc - Evaluation and Monitoring]].
 > | Configure models, splits, reasoning, or evaluation | [Preparation and evaluation reference](https://github.com/langchain-ai/smithtune/blob/main/docs/reference.md) |
 > | Deploy and manage endpoints | [Deployment](https://github.com/langchain-ai/smithtune/blob/main/docs/deployment.md) |
 > | Contribute to smithtune | [Development setup](https://github.com/langchain-ai/smithtune/blob/main/CONTRIBUTING.md) |
+>
+> #### docs/data-rights-and-permitted-use.md
+>
+> *[docs/data-rights-and-permitted-use.md](https://github.com/langchain-ai/smithtune/blob/main/docs/data-rights-and-permitted-use.md) - the document `smithtune acknowledge-data-rights` requires you to confirm you have read*
+>
+> # Data Rights and Permitted Use
+>
+> Version: 1
+>
+> smithtune helps you prepare agent trajectories, fine-tune models, and evaluate results. Its availability does not establish that a particular dataset, model, or use is authorized.
+>
+> ## Your responsibility for data rights
+>
+> You are responsible for ensuring that you have all rights, permissions, and any required consents to use the data you process with smithtune for your intended training, evaluation, and deployment. This includes prompts, system instructions, model-generated outputs, tool calls and results, code, and other content contained in your traces or datasets. Permission to access a trace or dataset does not necessarily include permission to use its contents for these purposes.
+>
+> ## Provider terms and model licenses
+>
+> Your use must comply with applicable law, relevant model and dataset licenses, and the agreements governing the services used to generate or process your data. These agreements may restrict distillation, training competing models, or other uses of model outputs. Do not use smithtune to violate or circumvent those restrictions.
+>
+> Ownership of model outputs, internal-only use, or selection of an open-weight target model does not, by itself, establish permission for your intended use. Review the agreements applicable to your workflow and obtain any required authorization before proceeding.
+>
+> ## Data transfers and sensitive information
+>
+> Depending on the commands and configuration you use, smithtune may transmit data to LangSmith and selected training, triage, and evaluation providers. Selected trajectories may include complete conversations, system instructions, and tool context—not just individual responses.
+>
+> Before processing or transmitting data, review its contents, remove credentials and other secrets, and ensure that any personal, confidential, or third-party information is authorized for the intended use and disclosure. You are responsible for selecting appropriate providers and complying with applicable privacy, confidentiality, and security obligations.
+>
+> ## No grant of third-party rights
+>
+> Support for a model, provider, or integration is not a representation that your intended use is permitted. smithtune’s software license does not grant rights to third-party data, model weights, or services, or override their applicable terms. Technical validation and evaluation results do not verify legal compliance.
 >
 > #### SKILL.md: the smithtune skill
 >
