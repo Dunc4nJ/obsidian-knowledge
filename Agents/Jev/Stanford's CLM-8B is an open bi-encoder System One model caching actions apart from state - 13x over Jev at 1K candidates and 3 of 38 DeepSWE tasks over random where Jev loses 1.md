@@ -20,7 +20,7 @@ description: CLM-8B puts two 20M-parameter projection heads on a frozen Qwen3-8B
 
 - **"Jev fails as a verifier, below pass@1" is a one-task deficit.** On DeepSWE that dashed line is random selection at 73.7% (28 of 38); Jev scores 71.1%, which is 27 of 38. One task, on a 38-task held-out set. Terminal-Bench 2.1 is the same shape: 83.1% against an 84.0% baseline. The claim is directionally true and it is also inside the noise a single task can produce. What is robust is the other bar: CLM's 81.6% is 31 of 38, three tasks clear of random and better than half the distance to the 89.5% oracle. The verifier half of the comparison is also not like-for-like — CLM was fine-tuned on DeepSWE trajectories while Jev was zero-shot.
 
-- **The latency comparison is a local GPU against a hosted API, but it lands in the vendor's claimed range, not the vault's measured one.** The Dino Run demo states the terms on screen: "Zero-Shot on 4090 GPU", CLM 16 ms, Jev 150 ms. Agentic latency is on an H100. So CLM runs on hardware the authors control while Jev answers over the network. Crucially, the Jev figures here (125–225 ms zero-shot, 131–449 ms agentic) sit inside TypeSafe's published 70–500 ms, and nowhere near the 14.69 s median that [[Praneeth Paikray measures Jev's calibration for the first time - ECE 0.173 and Brier 0.156 lose to a TF-IDF baseline, and GEPA nearly halves the probability error]] observed client-side. Whatever path these authors had to Jev was a good one, so the multiple is not inflated by a bad connection. But the floor of the comparison is still deployment: at a single candidate CLM is ~34 ms against Jev's ~150 ms, about 4x, before any caching advantage exists. The growth from 4x to 13x is the part the architecture earns.
+- **The latency comparison is a local GPU against a hosted API, and the blog says so once you expand its toggles.** The collapsed "Click to View More Experimental Details" block states the protocol verbatim: "All experiments use a 200-token state on a single 4090 GPU with 5 trials", with Jev "accessed through the TypeSafe API"; the agentic footnote adds "Latency is measured on an H100 GPU." So CLM runs on hardware the authors control while Jev answers over the network. Crucially, the Jev figures here (125–225 ms zero-shot, 131–449 ms agentic) sit inside TypeSafe's published 70–500 ms, and nowhere near the 14.69 s median that [[Praneeth Paikray measures Jev's calibration for the first time - ECE 0.173 and Brier 0.156 lose to a TF-IDF baseline, and GEPA nearly halves the probability error]] observed client-side. Whatever path these authors had to Jev was a good one, so the multiple is not inflated by a bad connection. But the floor of the comparison is still deployment: the blog's own numbers put CLM at 36 ms and Jev at 131 ms with a single candidate, 3.6x apart before any caching advantage exists. The growth from 3.6x to 13x is the part the architecture earns. Note also the sample size the same sentence admits — five trials, which is exactly the 5/5 scores in the zero-shot table.
 
 - **Nobody has checked whether these probabilities are calibrated.** A softmax over scaled cosines with a learned `logit_scale` produces a distribution, and the playground renders it to one decimal place, but the blog reports no ECE, Brier or reliability curve. The standing vault finding is that Jev itself is worse calibrated than a three-second TF-IDF logistic regression, so inheriting Jev's API shape inherits the open question. The head architecture makes it worse, not better: probabilities are relative to the candidate set, which `@latent_node` spotted in the replies when asking how you express "none of these fit".
 
@@ -30,9 +30,13 @@ description: CLM-8B puts two 20M-parameter projection heads on a frozen Qwen3-8B
 
 - **This is the first Jev reimplementation with a training recipe, published weights, and a compatibility play.** [[Featherless's Simple Jev reproduces Jev's API on stock open models by remapping every answer to a single-token letter and softmaxing only those logits - no classifier head, and the code stamps every answer calibrated False]] used stock logits with no training; [[jevlike]] trained a cross-attention option head; [[Varun Mathur's jevcache memoizes Jev decisions by sha256 of model, schema and redacted canonical state - the 60 to 80 percent repeat rate is asserted and dropping user_id collides two subjects]] cached around the API; [[Sutro's jev-align uses GEPA to rewrite Jev's decision criteria from five labeled examples - the demo moves labeled-set ambiguity 49.6 points but full-pool certainty only 0.5]] tuned the prompt. CLM is the first to ship scaling laws, 1 TB of pre-training embeddings, and an endpoint literally named `/v1/systemone`. Its zero-shot task list — WikiRacing, T-Rex — is TypeSafe's own demo set re-run.
 
+**Authorship.** The blog byline reads "Jacky Kwok†, Hangoo Kang, Tarun Suresh, Jon Saad-Falcon, Marco Pavone, Christopher Ré, Azalia Mirhoseini — Stanford University, NVIDIA Research", with the † footnote defined as **Project Lead**. Pavone holds the NVIDIA affiliation; the thread credits @HazyResearch. Posted Sep 23, 2026.
+
 ## What CLM Is
 
 A **Contrastive Language Model** is two encoders into one shared space. Each is a frozen LLM backbone whose final-token hidden state is L2-normalised and pushed through a trainable MLP projection head; only the head trains, and it is about 20M parameters. The score of a state-action pair is the cosine of their projections, scaled by a learned `logit_scale`.
+
+The blog gives the head's exact shape in a collapsed note: "a three-layer MLP that maps the 4,096-dimensional Qwen3-8B hidden state to a 512-dimensional embedding through a width of 1,536 (4096 → 1536 → 1536 → 512, GELU activations and a LayerNorm on the hidden layer)." That matches the defaults in `evaluation/bon_eval.py` — width 1536, depth 3, `layernorm` true, `projection_dim` 512.
 
 *The encoder side: a frozen LLM, last-token hidden state, L2 norm, and an MLP projection head as the only trainable part*
 ![[jackyk02-424285-blog-01.png]]
@@ -137,18 +141,21 @@ Four tasks, CLM-8B on a 4090 against hosted Jev.
 
 The "9x" of the headline is the T-Rex column. The two tasks where both models are 5/5 are the two with the biggest speedups, and the two where CLM trails are the two where the gap narrows. Sample sizes are small: 5 trials for the games, 30 for WikiRacing.
 
-**Where the speedup actually comes from.** The scaling plot separates the two effects cleanly. CLM is flat at 33–44 ms across three orders of magnitude of candidate count and candidate length. Jev is flat near 110–180 ms and then climbs. Constrained decoding on the same Qwen3-8B is the worst of the three past ~2^6 candidates.
+**How the latency was actually measured.** This is in a collapsed toggle on the blog, and it is the single most important methodological sentence in the release: "All experiments use a 200-token state on a single 4090 GPU with 5 trials." The two baselines are constrained decoding on the same Qwen3-8B — "a single prefill over the state and all candidate options, followed by a softmax over option labels" — and "Jev, accessed through the TypeSafe API." Agentic latency is separately stated as measured on an H100.
+
+**Where the speedup actually comes from.** The scaling plot separates the two effects cleanly, and the expanded blog gives the endpoints in prose.
 
 | Sweep | CLM | Jev | Constrained decoding | Stated gap |
 |---|---|---|---|---|
-| 1 candidate, 15 tokens each | ~34 ms | ~150 ms | ~44 ms | ~4x, deployment only |
-| 1,024 candidates, 15 tokens each | 44 ms | 579 ms | 4,285 ms | 13x |
-| 5 candidates, 2,048 tokens each | 36 ms | 333 ms | 3,402 ms | 9x |
+| 1 candidate, 15 tokens each | 36 ms | 131 ms | ~49 ms | 3.6x, deployment only |
+| 1,024 candidates, 15 tokens each | 44 ms | 579 ms | 4,285 ms | 13x over Jev, ~97x over constrained decoding |
+| 5 candidates, 1 token each | ~36 ms | ~110 ms | 49 ms | flat baseline |
+| 5 candidates, 2,048 tokens each | 36 ms | 333 ms | 3,402 ms | 9x over Jev, ~95x over constrained decoding |
 
 *Latency against number of candidates and against candidate length, with CLM flat and Jev and constrained decoding climbing*
 ![[jackyk02-424285-004.jpg]]
 
-There is no crossover: CLM is faster everywhere on this plot. But the left edge is the deployment gap — local GPU against hosted API, roughly 4x with no caching benefit in play — and only the climb from 4x to 13x is attributable to the architecture. Report the multiple with its candidate count attached, as `@YionxpYi` asked in the replies.
+There is no crossover: CLM is faster everywhere on this plot. But the left edge is the deployment gap — a local 4090 against a hosted API, 36 ms against 131 ms with no caching benefit in play — and only the climb from 3.6x to 13x is attributable to the architecture. Report the multiple with its candidate count attached, as `@YionxpYi` asked in the replies. The genuinely large number is the one against constrained decoding, roughly 97x, and that is an apples-to-apples comparison on the same backbone and the same GPU.
 
 ## Agentic Verification
 
@@ -174,7 +181,7 @@ The pass@1 and oracle figures are not in the blog or the thread. They come from 
 
 Read against those numbers, CLM captures three of the six tasks available between random selection and the oracle — it closes half the best-of-4 headroom. That is a real result. Jev's 27 of 38 is one task under random, which is the whole basis for "fails to serve as a verifier".
 
-Two asymmetries to carry forward. CLM was fine-tuned on DeepSWE training trajectories and Jev was not, so this is a tuned specialist against a zero-shot generalist. And the blog never states how trajectories reached Jev; with a 32k state limit and documented context rot, truncation is the obvious confound and it is unaddressed. The step-level scoring CLM uses is exactly the design that [[process reward models that verify each reasoning step outperform outcome-only scoring]] argues for, and the dataset card's own title calls these "DeepSWE PRM training embeddings" — the verifier is a process reward model wearing the CLM name.
+Two asymmetries to carry forward. CLM was fine-tuned on DeepSWE training trajectories and Jev was not, so this is a tuned specialist against a zero-shot generalist. And the blog never states how trajectories reached Jev — I expanded all four of the page's collapsed toggles and the expanded footnote covers the generators, the task counts and the H100, but says nothing about how a long trajectory was presented to a model with a 32k state limit and documented context rot. Truncation is the obvious confound and it is unaddressed. Nor is a pass@N ceiling published for Terminal-Bench, so only the DeepSWE headroom is knowable. The step-level scoring CLM uses is exactly the design that [[process reward models that verify each reasoning step outperform outcome-only scoring]] argues for, and the dataset card's own title calls these "DeepSWE PRM training embeddings" — the verifier is a process reward model wearing the CLM name.
 
 "SOTA on Terminal-Bench 2.1" should be read narrowly: 30 held-out tasks with a Fable 5 generator and best-of-5, not the public leaderboard, which [[Terminal-Bench leaderboard requires five full runs with raw logs to enforce reproducibility over cherry-picked results]] says demands five full runs with raw logs. The vault's nearest comparator, [[DeepSeek-V4.1-Flash runs at 200 tok-s on 4x RTX PRO 6000 Max-Q with only 64GB RAM because its 203GB Engram lives on NVMe - true for a 384GB-VRAM box, not for two cards]], carries Terminal-Bench 2.1 at 90.6 and DeepSWE at 74.2 for a single model with no verifier at all. And [[Prime Intellect's fine-tune-last doctrine - 5x task timeouts lifted Terminal-Bench 14.7 points with no model change]] is the standing reminder that harness changes move this benchmark more than models do.
 
@@ -225,7 +232,7 @@ Four videos, none with speech; the root explainer has music only and the demos a
 
 ## Replies
 
-Twenty replies at capture, nineteen from other people and one from the author. The substantive ones:
+The post showed 22 replies at fetch; 20 were retrievable, 19 from other people and one from the author, so three are unaccounted for. A root-URL thread fetch returns only 17 of them — it silently caps at 31 tweets — and `bird replies --all` recovered @Douglas_Schon and @latent_node on top. The substantive ones:
 
 - **@johnroodepic** named the mechanism before anyone else and got the only author reply: "the disaggregation is the part builders should steal: a loop scores the same state against many candidate actions, so the state embedding caches perfectly and each candidate collapses to a cheap dot product. that's the economics that makes per-turn decisions affordable." Kwok replied "Exactly!"
 - **@YionxpYi** asked the right question about the headline: "9× over Jev is a bold claim. Curious which workload they used for that number." Unanswered. The answer is T-Rex, and 13x is 1,024 candidates of 15 tokens.
@@ -411,7 +418,7 @@ The remaining nine are reactions: **@raw_works** "impressive stuff!", **@brandon
 >
 > Joint work with @hangoo_kang @TarunSures41845 @JonSaadFalcon @drmapavone @Azaliamirh and @HazyResearch
 
-> [!quote]- Replies - all 20 verbatim, in time order
+> [!quote]- Replies - all 20 retrievable of 22 shown on the post, verbatim, in time order
 >
 > **@johnroodepic (John Rood)** · Thu Sep 24 00:19:39 +0000 2026 · [link](https://x.com/johnroodepic/status/2102915831936266319)
 > @jackyk02 the disaggregation is the part builders should steal: a loop scores the same state against many candidate actions, so the state embedding caches perfectly and each candidate collapses to a cheap dot product. that's the economics that makes per-turn decisions affordable.
@@ -475,9 +482,11 @@ The remaining nine are reactions: **@raw_works** "impressive stuff!", **@brandon
 
 #### Blog (contrastive-lm.notion.site)
 
-> [!quote]- Full blog text, verbatim as rendered - 2,002 words
+> [!quote]- Full blog text, verbatim, with all four collapsed toggles expanded - 2,330 words
 >
 > Skip to content
+> Contrastive Language Models
+> Get Notion free
 > Contrastive Language Models
 > A System One Model for Fast and Generalizable Decision-Making
 > Jacky Kwok
@@ -501,17 +510,24 @@ The remaining nine are reactions: **@raw_works** "impressive stuff!", **@brandon
 > At deployment, given the current state and a set of candidate actions, CLM scores each action by how well its embedding aligns with the state embedding and selects the highest-scoring action.
 > Dino Run (CLM vs. Jev)
 > Super Mario Demo
+>                  CLM  (~4x Faster than Jev)                                                                Jev
 > WikiRacing Demo
+> Starting from the Wikipedia page on plate tectonics, can a CLM navigate to the destination page on bioluminescence?
 > Zero-shot Evaluation
 > Across computer-use, gaming, and tool-calling tasks, CLM-8B performs on par with Jev while running up to 9× faster. The speedups are most pronounced when the number of candidate actions is large (e.g., WikiRacing) or when actions can be frequently reused across states (e.g., T-Rex Game).
 > Agentic Benchmarks
 > We find that Jev fails to serve as a verifier for long-horizon tasks, performing below the random-selection (Pass@1) baseline. In contrast, with lightweight fine-tuning, CLM achieves SOTA performance on challenging agentic benchmarks, including DeepSWE (81.6%) and Terminal-Bench 2.1 (87.6%), while delivering 4–6× faster inference than Jev.
 > Click to View More Experimental Details
+> For each task, we sample multiple candidate solutions using Opus 5 for DeepSWE and Fable 5 for Terminal-Bench 2.1. CLM or Jev then serves as the verifier, selecting the best solution from the candidate set. We evaluate performance on 38 held-out DeepSWE tasks and 30 held-out Terminal-Bench 2.1 tasks. Latency is measured on an H100 GPU.
 > Model Architecture
 > A CLM consists of a state encoder and an action encoder, as illustrated in Figure 1. Both encoders map their respective inputs into a shared embedding space, where the score of a state–action pair is computed as the cosine similarity between their embeddings.
 > Each encoder consists of a frozen LLM backbone followed by a trainable projection head. We take the hidden state of the final token, normalize it, and pass it through a MLP projection head. Only the 20M-parameter projection head is trained; the LLM remains frozen and never receives gradients. This design makes our scaling experiments inexpensive to run. We precompute the LLM embeddings once, then reuse them to train projection heads across different setups. A full pre-training run on the Nemotron DQA dataset takes about an hour on a single RTX 4090 GPU.
 > Most importantly, since states and actions are disaggregated, their embeddings can be cached independently. In settings where the state evolves continuously (e.g., Super Mario) while the action set remains fixed, we only need to recompute the state embedding at each step and can reuse the cached action embeddings. This substantially reduces inference cost, with the efficiency gains becoming increasingly significant as the number of candidate actions and context length grows. At ~1k candidates, CLM is 13x faster than Jev.
 > Click to View More Experimental Details
+> Since candidate action embeddings are cached, each CLM query requires only a single forward pass over the state followed by cosine-similarity computation against the cached candidate embeddings. We measure the practical efficiency gains against two baselines: constrained decoding using the same Qwen3-8B backbone (a single prefill over the state and all candidate options, followed by a softmax over option labels) and Jev, accessed through the TypeSafe API. All experiments use a 200-token state on a single 4090 GPU with 5 trials.
+> Scaling the number of candidates. With 15 tokens per candidate, CLM latency increases only slightly, from 36 ms with 1 candidate to 44 ms with 1,024 candidates. Constrained decoding must process every candidate on every query, reaching 4.3 s and making it roughly 97× slower than CLM at 1k candidates. Jev increases from 131 ms to 579 ms, making CLM roughly 13× faster at 1,024 candidates.
+> Scaling candidate length. With the number of candidates fixed at 5, CLM latency remains essentially flat at ~36 ms as candidate length increases from 1 to 2,048 tokens. In contrast, constrained decoding grows from 49 ms to 3.4 s, making it approximately 95× slower than CLM. Jev reaches 333 ms, approximately 9× slower than CLM.
+> Note: The projection head is a three-layer MLP that maps the 4,096-dimensional Qwen3-8B hidden state to a 512-dimensional embedding through a width of 1,536 (4096 → 1536 → 1536 → 512, GELU activations and a LayerNorm on the hidden layer).
 > How does “Action Caching” work for CLM in Super Mario?
 > The 4 action embeddings are precomputed before gameplay begins. At each step, only the new game state passes through the state encoder. Its embedding
 > 𝑧
