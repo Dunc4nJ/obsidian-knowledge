@@ -10,7 +10,7 @@ type: learning
 
 ## Key Takeaways
 
-The core insight is that evals are not a one-shot setup but an iterative hypothesis-testing loop. This resonates with the broader pattern in [[effective agent evals combine deterministic graders model judges and human review across the full development lifecycle]] — you need multiple scorer types working together, not a single metric. The article provides a concrete worked example (Mermaid diagram generation) that makes the abstract advice tangible.
+The core insight is that evals are not a one-shot setup but an iterative hypothesis-testing loop. This resonates with the broader pattern in [[anthropic recommends combining deterministic graders model judges and human review for agent evals]] — you need multiple scorer types working together, not a single metric. The article provides a concrete worked example (Mermaid diagram generation) that makes the abstract advice tangible.
 
 Starting with just 5 data points is a surprisingly effective strategy. The article argues you'll find enough signal in 5 examples to iterate on before scaling up, which counters the common assumption that evals require large datasets to be meaningful. This aligns with [[deep agent evals need bespoke per-datapoint test logic not uniform evaluators]] — quality of evaluation design matters more than quantity of test cases.
 

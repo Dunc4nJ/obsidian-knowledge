@@ -21,7 +21,7 @@ type: research
 
 6. **The tool-design iteration loop can be automated.** Where [[designing agent tools is an iterative art shaped by model capabilities not fixed engineering rules]] frames tool design as human craft, AutoHarness automates this loop: generate harness → test against environment → refine based on failure feedback. The "art" becomes a search algorithm.
 
-7. **Evaluation via environment feedback closes the loop.** The training signal comes directly from game environments flagging illegal moves and providing rewards — a form of [[effective agent evals combine deterministic graders model judges and human review across the full development lifecycle|deterministic grading]] that's fully automated and scalable across 145 diverse games.
+7. **Evaluation via environment feedback closes the loop.** The training signal comes directly from game environments flagging illegal moves and providing rewards — a form of [[anthropic recommends combining deterministic graders model judges and human review for agent evals|deterministic grading]] that's fully automated and scalable across 145 diverse games.
 
 ## External Resources
 

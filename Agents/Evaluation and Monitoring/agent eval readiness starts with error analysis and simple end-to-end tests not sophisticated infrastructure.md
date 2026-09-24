@@ -13,7 +13,7 @@ The separation of capability evals (low initial pass rate, pushing forward) from
 
 State change verification is the sleeper insight. For agents that do things (schedule meetings, write files, update databases), checking the final text response is insufficient — you must verify the actual world state changed correctly. This is where [[deep agent evals need bespoke per-datapoint test logic not uniform evaluators]] becomes essential: each state change type needs its own verification logic.
 
-The grader design guidance is pragmatic: default to code-based deterministic checks, reserve LLM-as-judge for genuinely subjective assessments, and prefer binary pass/fail over numeric scales. This aligns with [[effective agent evals combine deterministic graders model judges and human review across the full development lifecycle]] — the right grader type depends on what you're measuring.
+The grader design guidance is pragmatic: default to code-based deterministic checks, reserve LLM-as-judge for genuinely subjective assessments, and prefer binary pass/fail over numeric scales. This aligns with [[anthropic recommends combining deterministic graders model judges and human review for agent evals]] — the right grader type depends on what you're measuring.
 
 The production flywheel — promoting high-pass capability evals into the regression suite, feeding production failures back into datasets — creates a self-improving eval system. The Witan Labs example is striking: a single extraction bug fix moved their benchmark from 50% to 73%, illustrating why you must [[a working offline eval turns vibes into repeatable measurement in 10 steps|rule out infrastructure issues before blaming the agent]].
 
