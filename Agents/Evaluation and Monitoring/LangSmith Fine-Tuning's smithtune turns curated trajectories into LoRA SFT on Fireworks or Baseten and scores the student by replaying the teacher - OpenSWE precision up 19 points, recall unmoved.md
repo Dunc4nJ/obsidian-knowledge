@@ -132,7 +132,7 @@ The loop is exactly [[the agent improvement loop is traces enriched with evals a
 
 ## The Post and Replies
 
-The launch post was light: 19 likes, 1 retweet, 7 replies as captured. LangChain's own self-reply carried the four-step summary. Baseten congratulated the launch and confirmed "smithtune training running on Baseten Loops," which the code corroborates: Loops is a first-class provider at 1,722 lines, the larger of the two integrations.
+The launch post was light: 19 likes, 1 retweet, and 7 replies shown on the post. Six of those seven were returned by retrieval and are reproduced below; one was not retrieved, so this capture is incomplete by a single reply. LangChain's own self-reply carried the four-step summary. Baseten congratulated the launch and confirmed "smithtune training running on Baseten Loops," which the code corroborates: Loops is a first-class provider at 1,722 lines, the larger of the two integrations.
 
 One reply is worth flagging as wrong. @ADLXBT described the mechanism as extracting pairs "so the weights adapt to your exact schema without manual labeling." The blog describes the opposite: the labeling step is human plus agent, and the README states that smithtune ships no default rubric and that `triage` refuses to run without one written by the user. Without a trusted pre-existing quality signal such as validated feedback scores, a human writes the rubric before any council runs. The "without manual labeling" claim inverts the post's actual recommendation.
 
@@ -1305,7 +1305,7 @@ Part of [[moc - Evaluation and Monitoring]].
 >
 > #### Replies
 >
-> *6 of the 7 replies were retrieved.*
+> *The post shows 7 replies. Six of the seven were returned by retrieval and appear below in full; one reply was not retrieved and is therefore missing from this capture.*
 >
 > @LangChain (LangChain):
 > 1️⃣ Identify + export trajectories from LangSmith
