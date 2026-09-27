@@ -14,7 +14,7 @@ description: Rosen's fourth Jev piece surveys twelve projects across eight DevOp
 
 - **One controlled number carries the entire piece.** SREGym ran ten Kubernetes incidents five times each in both conditions and got 20/50 baseline against 24/50 with Jev. That is four extra passes out of fifty, two problems regressed (3/5 to 1/5 and 4/5 to 3/5), two stayed at 0/5, and SREGym itself writes that five attempts per problem "are not enough to claim a general eight-point improvement." Rosen concedes the point in the article: "The architecture may be more important than the early benchmark." Everything else in the survey is a demo, a replay, or a vendor integration walkthrough.
 
-- **Jev Logs' headline recall is a forwarding artifact, and its own benchmark says so.** Routing 99.3% of anomalous HDFS records toward analysis while filtering under 1% of total records means the system forwards essentially everything. The benchmark's author states it plainly: Jev's high HDFS recall "is mostly conservatism (almost never retain), not a demonstration that it found the rare bad line." The BGL 100% is not Jev at all, because a local ERROR/FATAL rule protected all 750 alerts before Jev was consulted, and a severity-only baseline also scores 100% there. The benchmark's own cost model concludes that Jev "does not pay for itself when it barely filters." This is the same threshold-versus-recall bind the vault already recorded in [[Applied Compute freezes a Sol-built 14-label taxonomy so Jev annotates the corpus - ECE 0.051 against Luna's 0.154 and 85 percent recall at 0.20, with every rival left at Jev's threshold]].
+- **Jev Logs' headline recall is a forwarding artifact, and its own benchmark says so.** Routing 99.3% of anomalous HDFS records toward analysis while filtering under 1% of total records means the system forwards essentially everything. The benchmark's author states it plainly: Jev's high HDFS recall "is mostly conservatism (almost never retain), not a demonstration that it found the rare bad line." The BGL 100% is not Jev at all: 99.982% of that dataset's labeled alerts are already FATAL, a local ERROR/FATAL rule protected all 750 before Jev was consulted, and the card states plainly that "Jev was never asked about them." A severity-only baseline also scores 100% recall there, and the honest comparison is on how much each filters, where the baseline retains 59.2% of lines against Jev's 0.12%. The benchmark's own cost model then concludes that Jev "does not pay for itself when it barely filters." This is the same threshold-versus-recall bind the vault already recorded in [[Applied Compute freezes a Sol-built 14-label taxonomy so Jev annotates the corpus - ECE 0.051 against Luna's 0.154 and 85 percent recall at 0.20, with every rival left at Jev's threshold]].
 
 - **Cribl's post contains a loss Rosen does not mention.** He cites it for parser selection, but Cribl measured exactly that and Jev came last: 84.76% top-1 accuracy on a 28-logtype task against 92.38% for a purpose-built classifier and 95.71% for GPT-5.6 Terra, which Cribl describes as misclassifying 2-3x more often. The ">92% agreement" Rosen quotes is from a different experiment, and the committee is three frontier LLM judges over a 4,962-item intersection, not human reviewers. Jev's pairwise agreement with them runs 90.91% to 92.56%, just under the 92.54% to 95.00% the three judges manage with each other.
 
@@ -252,6 +252,10 @@ On calibration and thresholds, the gates in this article are only as good as the
 
 ## Not Yet Captured
 
+Rosen's own adjacent piece, not in the vault:
+
+- **"AI Is Outgrowing Our Programming Languages"** — Josh Rosen, 2026-09-25, an X Article of 53 blocks with 47 likes. Published two days before this one and quote-tweeted into the Quail thread. Not captured anywhere in the vault.
+
 Projects from this survey that would carry their own note:
 
 - **Jev Logs benchmark** — https://huggingface.co/datasets/reachjalil/jevlogs-log-triage-benchmark — the most rigorous independent Jev measurement seen so far: threshold sensitivity, naive baselines, a GPT-5.6 Luna head-to-head, prompt-injection pairs, and a cost model that concludes against its own tool. Deserves a full capture.
@@ -395,13 +399,236 @@ Projects from this survey that would carry their own note:
 >
 > Not captured. Four replies existed at fetch time. Two `bird replies --all` attempts failed, the second timing out at 100 seconds with no output. Not retried, to avoid rate-limiting the account.
 >
-> ### Supporting posts
+> ### Supporting sources
 >
-> The Cribl, Datadog, and SREGym posts are third-party sources rather than this note's source. Their load-bearing content - every published figure, both data tables, the agreement matrix, the worked Jev response, and the sentences this note relies on - is quoted and reproduced under "The Three Vendor Posts" above, with their charts saved alongside this note. Full text stays at the publishers:
+> These four documents are what the survey rests on. Each is quoted below from its own text, with the tables and figures that carry the numbers. Full originals stay at the publishers, linked under Links.
 >
-> - Cribl, "What TypeSafe's Jev means for telemetry," Connor Swanson and Jonathan Vengosh, 2026-09-17 - https://cribl.io/blog/what-typesafes-jev-means-for-telemetry/
-> - Datadog, "Using TypeSafe's Jev for evals in Datadog Agent Observability," Fouad Wahabi, Alex Barksdale, and Miguel Tulla Lizardi, 2026-09-24 - https://www.datadoghq.com/blog/jev-evals-agent-observability/
-> - SREGym, "Can Jev Make SRE Agents More Reliable?", Jackson Clark, Saad Mohammad Rafid Pial, Yiming Su, and Tianyin Xu, 2026-09-17 - https://sregym.com/blog/jev-sregym-lite
+> #### Jev Logs benchmark card
+>
+> `reachjalil/jevlogs-log-triage-benchmark` on Hugging Face. The dataset card for the benchmark Rosen cites in one sentence. Its author is considerably more careful than the survey is.
+>
+> The framing, in the card's own words:
+>
+> "A labeled evaluation of Jev Logs on sanitized public logs. Jev Logs asks TypeSafe's Jev, through Vercel AI Gateway, whether a log line is worth sending to an expensive reasoning model. This dataset is a public, token-accounted measurement of that routing decision, including the 0.3.0 in-memory cache and local retain rules."
+>
+> "**This is not a production-log study.** Labels come from Loghub. HDFS labels are **block-level**, then joined onto every line that mentions the block. BGL labels are **line-level alerts**. The evaluation sample oversamples the anomalous class to about 30% so recall is measurable; that mix is not a live traffic mix."
+>
+> Headline numbers, run 2026-09-16 under seed 20260916, package `jevlogs@0.3.0`, default `retainBelow = 0.1`, `timeoutMs = 2000`, concurrency 4:
+>
+> | Dataset | n | Anomalous | Anomaly recall (`route=analyze`) | Routing rate (`retain`) | Precision of `retain` | Share of anomalies caught by ERROR/FATAL protection alone | Latency p50 / p95 (ms) | Mean Jev input tokens |
+> | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | ---: |
+> | HDFS_v1 sample | 2500 | 750 | 0.9933 (745/750) | 0.0084 (21/2500) | 0.7619 (16/21) | 0.0000 | 968 / 1310 | 540.1 |
+> | BGL sample | 2500 | 750 | 1.0000 (750/750) | 0.0012 (3/2500) | 1.0000 (3/3) | 1.0000 | 902 / 1232 | 532.4 |
+> | Smoke (`sample.jsonl`) | 10 | 5 | 1.0000 | 0.2000 | 1.0000 | 0.4000 | 846 / 1069 | 523.5 |
+>
+> Total spend for the whole E1 to E8 run: 6,840 Jev calls with usage, 3,665,148 input tokens, 526,680 output tokens, $0.153936 estimated at $0.042 per million input tokens, output billed at $0.
+>
+> **What the ERROR/FATAL rule does by itself.** This is the section that dissolves Rosen's BGL figure:
+>
+> "Jev Logs never sends `ERROR` / `FATAL` / `CRITICAL` (or `severityNumber >= 17`) to the model. That local rule is doing most of the work on BGL and none of it on HDFS."
+>
+> On the HDFS population of 11,175,629 lines, only INFO and WARN appear, `0 / 288,250` anomalous lines carry an original ERROR/FATAL/CRITICAL, and "Protection cannot catch HDFS block anomalies." On the BGL population of 4,713,493 non-empty lines, "**348,398 / 348,460** labeled alerts are original `FATAL` (99.982%)."
+>
+> "On the BGL *sample*, 100% of the 750 alerts were protected. **Jev was never asked about them.** A severity-only baseline (analyze iff WARN or above) also gets 100% recall on this sample, and it retains 59.2% of lines. Jev retained 0.12%. For BGL alert labels, the local severity rule filters far more than Jev while matching recall."
+>
+> **Where Jev was uncertain.** "On HDFS, **2,479 / 2,500** decisions were `uncertain`. Diagnostic-value scores piled up just above the cutoff: many records at 25.5, 25.25, 25.75. Those cannot be retained no matter what the probability is. Only 21 records were eligible at the default rule."
+>
+> The threshold sweep, which is the sensitivity curve almost nobody else in the survey publishes: "Raising `retainBelow` from 0.1 to 0.2, **without new model calls**, moves HDFS routing from 0.84% retain to 10.56% retain and recall from 0.993 to 0.921. Further increases to 0.3 and 0.5 do not move the curve: remaining candidates are blocked by value > 25."
+>
+> **The five HDFS misses** are all one template, `dfs.DataBlockScanner: Verification succeeded for [BLOCK]`, scored low-value and low-priority at p = 0.07. "The Loghub HDFS label is a property of the **block**, copied onto every line that mentions it. A successful verification on an anomalous block is a reasonable line to skip for LLM analysis. These are disagreements with the joined label, not obviously missed incidents."
+>
+> **Naive baselines:**
+>
+> | Dataset | Method | Anomaly recall | Routing rate (retain) |
+> | --- | --- | ---: | ---: |
+> | HDFS | severity-only (WARN+) | 0.0507 | 0.9608 |
+> | HDFS | keyword | 0.0560 | 0.9592 |
+> | BGL | severity-only (WARN+) | 1.0000 | 0.5920 |
+> | BGL | keyword | 0.7627 | 0.5948 |
+>
+> And the card's own verdict on its headline number: "On HDFS, keyword and severity filters look like aggressive routers and miss almost every block-labeled anomaly, because those lines are mostly `INFO` 'received/verified block' traffic. Jev's high HDFS recall is mostly conservatism (almost never retain), not a demonstration that it found the rare bad line."
+>
+> **Consistency and adversarial text.** E4: 200 non-protected records, two fresh passes, "**0 route flips**," mean absolute change in `actionableProbability` 0.0135, max 0.08. E5: 40 pairs, clean against the same body plus an injected instruction to mark it low priority, "**1 route flip**, on a *normal* line," probability 0.07 to 0.34. "No anomalous pair flipped to `retain`. The injection did not talk Jev into dropping analysis."
+>
+> **Cost.** Using the package's own `estimateSavings()` over 1M logs at fetched Gateway prices, on the HDFS stratified sample the share still analyzed is 0.9916 and estimated GPT-4.1 spend comes out at $1025.50 against $1033.90 for filtering nothing. The card's conclusion: "**Jev is cheap; it does not pay for itself when it barely filters.**" Reweighted to HDFS's natural 2.58% anomaly rate, estimated retain is still only about 0.91%.
+>
+> **GPT-5.6 Luna head to head**, same Gateway key, same 400-line stratified slice:
+>
+> | | HDFS Luna | HDFS Jev | BGL Luna | BGL Jev |
+> | --- | ---: | ---: | ---: | ---: |
+> | Anomaly recall | 0.8333 | 0.9917 | 1.0000 | 1.0000 |
+> | Retain rate | 0.1400 | 0.0100 | 0.0200 | 0.0075 |
+> | Route agreement | 0.865 | | 0.9725 | |
+>
+> "Luna is willing to score HDFS lines `value <= 25`; Jev's scores sit just above 25, so the default rule barely retains."
+>
+> **The card's own limitations list:** HDFS ground truth is the wrong granularity for line-level triage; oversampled anomalies inflate how often protection fires on BGL relative to production mix; scores are not quantized, so many land at 25.25 to 25.75 and are ineligible to retain; one English injection string is not a red-team suite; downstream token counts are assumptions; the HDFS cache hit rate will not transfer to a mixed production stream; and "Logs are untrusted data. Nothing in this repo should be executed as instructions."
+>
+> #### Cribl
+>
+> "What TypeSafe's Jev means for telemetry," Connor Swanson and Jonathan Vengosh, Cribl AI Research, 2026-09-17.
+>
+> The log-type classification result, which Rosen does not cite:
+>
+> "While we are excited about the unit economics and low overhead, our initial experiments have shown there is still a sizable accuracy gap on use cases involving semi-structured log data. When tasked with classifying logs into 1 of 28 common logtypes (e.g. syslog, Cisco ASA, auditd), **Jev still misclassifies events 2-3x more frequently than a purpose-built classifier or GPT-5.6 Terra.**"
+>
+> "Jev's most common failure mode is putting known logtypes into an 'other' bucket, something we included in this task to simulate out-of-domain data. Jev was easily able to outshine Terra on both speed and cost, having **18x faster inference and 20x lower cost per prediction** on this task. Part of the poor performance we believe can be attributed to the structure of this task in particular. Specifically, we asked these models to pick the likeliest option among 28 choices. Our classier is purpose-built for this scenario and Terra is an incredibly capable model across an innumerable number of tasks; Jev simply is not designed for this. In most cases, there will likely not be 28 possible options and Jev is more than capable of performing as well as frontier models in those cases."
+>
+> The agent-grading result, which he does cite:
+>
+> "Another challenge we encounter daily on the AI Research team at Cribl is grading AI agent responses. Agent responses are long, nuanced, and rarely reducible to a deterministic scorer, so we decided on LLM-as-judge. It works, but it's a reasoning model doing a classification job. We pay frontier prices and wait on frontier latency to answer what amounts to a bounded question. **Jev held >92% agreement with our committee of LLM judges at roughly 1% the cost.**"
+>
+> The committee is named in the agreement matrix figure: Claude Sonnet 5, Gemini 3.6 Flash, and GPT-5.6 Terra, with every pair scored over the same 4,962-item intersection. No human oracle appears in the post.
+>
+> Their closing generalisation: "System One models don't make those decisions smarter, they make them cheap enough to make everywhere, which turns out to be the more useful property." And the list Rosen reuses as if it were results: "Once a typed decision costs effectively nothing, the list of places to put one grows fast: parser selection, PII detection, alert triage, schema inference. We're evaluating that list now."
+>
+> #### Datadog
+>
+> "Using TypeSafe's Jev for evals in Datadog Agent Observability," Fouad Wahabi, Alex Barksdale, and Miguel Tulla Lizardi, 2026-09-24. Confirmed: the post contains no agreement figure, no accuracy figure, and no span count. It is a tutorial.
+>
+> The rubric, two of its five questions, verbatim:
+>
+> ```python
+> from typesafe_sdk import Choice, Noul, NoulCriteria, TypeSafeClient
+>
+> # Pinned rather than jev-latest: the thresholds below were calibrated against
+> # this exact version, and an alias moves when a release ships.
+> JEV_MODEL = "jev-1.13.0"
+>
+> GROUNDED_THRESHOLD = 0.70
+>
+> QUESTIONS = {
+>     "grounded": Noul(
+>         instructions={
+>             "question": (
+>                 "Is every factual claim about Vega Air policy in `reply` stated in, or "
+>                 "directly restated from, `policy_context`?"
+>             ),
+>             "inspect": "reply",
+>             "scope": [
+>                 "Only policy claims count: fees, amounts, deadlines, weight limits, eligibility.",
+>                 "Ignore greetings, apologies, and offers to hand off to a human agent.",
+>                 "A reply that states no policy claims at all is grounded.",
+>             ],
+>         },
+>         criteria=NoulCriteria(
+>             true="Every policy claim in `reply` appears in `policy_context`.",
+>             false=(
+>                 "At least one policy claim in `reply` is absent from `policy_context`, "
+>                 "contradicts it, or changes a number, fee, or deadline."
+>             ),
+>         ),
+>     ),
+>     "failure_mode": Choice(
+>         instructions={
+>             "question": "What is the single biggest problem with `reply`?",
+>             "scope": (
+>                 "Pick `none` when the reply is fine. Pick `unclear` only when the reply "
+>                 "is too short or too garbled to judge."
+>             ),
+>         },
+>         criteria={
+>             "none": "The reply is accurate, on-policy, and useful.",
+>             "unsupported_claim": "The reply states a fee, rule, or number that is not in `policy_context`.",
+>             "missed_handoff": (
+>                 "`policy_context` does not cover the question and the reply neither says so "
+>                 "nor offers a human agent."
+>             ),
+>             "partial_answer": "The reply covers part of the question and silently drops the rest.",
+>             "unsafe_request": (
+>                 "The reply complies with a request for personal data or something outside "
+>                 "support scope."
+>             ),
+>             "unclear": "The reply is too short or too garbled to judge.",
+>         },
+>     ),
+>     # answers_question and offers_handoff are two more Nouls; customer_impact is a Score.
+> }
+> ```
+>
+> Why the `unclear` option exists: "A Choice question always returns the option with the highest probability, so Jev never abstains. If an evaluation needs a way to say 'cannot judge this one,' that outcome has to exist in the criteria."
+>
+> The one real response in the post, on a ticket about cancellation compensation where the retrieved policy only covered delays:
+>
+> ```json
+> {
+>   "model": "jev-1.13.0",
+>   "answers": {
+>     "grounded":         {"type": "noul", "noul": 0.63},
+>     "answers_question": {"type": "noul", "noul": 0.02},
+>     "offers_handoff":   {"type": "noul", "noul": 0.99},
+>     "failure_mode": {
+>       "type": "choice",
+>       "choice": "none",
+>       "confidence": 0.34,
+>       "probabilities": {
+>         "none": 0.46, "partial_answer": 0.42, "unsupported_claim": 0.11,
+>         "missed_handoff": 0.01, "unclear": 0.0, "unsafe_request": 0.0
+>       }
+>     },
+>     "customer_impact": {
+>       "type": "score",
+>       "score": 1.25,
+>       "confidence": 0.74,
+>       "probabilities": {"0": 0.01, "1": 0.76, "2": 0.21, "3": 0.02}
+>     }
+>   },
+>   "usage": {"input_tokens": 1181, "output_tokens": 139}
+> }
+> ```
+>
+> Their reading of the near-tie: "Jev picked `none`, but `none` at 0.46 and `partial_answer` at 0.42 are nearly tied, and confidence came back at 0.34. Flattening that to the string `none` throws the interesting part away. A near-tie between two categories is a signal in its own right, and a natural trigger for routing the trace to a human reviewer."
+>
+> On keeping thresholds out of the model: the composite verdict stays in code "because the thresholds are application policy rather than model judgment," and submitting the raw probability rather than a binarized verdict matters because "Binarizing at submission time destroys the distribution, so changing the threshold later means rerunning the judge over the whole backlog. Keeping the probability turns a threshold change into a query change."
+>
+> On state size: "Jev loses accuracy as the state fills with material the question doesn't need, so filter in code and send only what each question reads."
+>
+> And the closing caution: "Like any judge, Jev has known limitations, so measure its agreement with human reviewers and its repeatability on your own traffic before you rely on it."
+>
+> #### SREGym
+>
+> "Can Jev Make SRE Agents More Reliable?", Jackson Clark, Saad Mohammad Rafid Pial, Yiming Su, and Tianyin Xu, 2026-09-17.
+>
+> Setup, verbatim: "We integrated Jev into SREGym (our SOTA SRE benchmark) as a decision-support tool available to the agent during an incident. We then evaluated Jev using the Codex harness with `gpt-5.6-luna` across 10 SREGym-Lite problems (a problem may compose multiple faults). Our main metric is reliability - if an agent solves an incident three times out of five, can access to Jev help it get closer to five?"
+>
+> "**The Jev-assisted agent passed 24/50 attempts, compared with 20/50 without Jev, improving from 40% to 48%.**"
+>
+> The two tools:
+>
+> - "**`jev_plan` - choose tests.** The agent proposes three to five competing hypotheses and a read-only test for each. The tool adds a fresh, bounded snapshot of the namespace, then uses Jev Choice and Score questions to rank the proposed tests. It did not run those tests or reveal the benchmark answer; the agent still has to execute them and interpret the output."
+> - "**`jev_submit` - review results.** Jev reviews the evidence before submitting a diagnosis or mitigation result to the grader. A diagnosis needs evidence for the causal mechanism and a current application failure. A mitigation needs evidence that the applied repair addresses the cause, restored functionality, and appeared durable."
+>
+> The gate: "The submission gate asks Jev to vote twice per attempt: once before diagnosis and once before mitigation. **Every required question has to reach a probability of `0.70`**. If a review rejects a submission, the agent has to call jev_plan again and gather new evidence rather than merely rewording the same claim."
+>
+> Results by problem, out of 5 attempts each:
+>
+> | SRE problem | Without Jev | With Jev |
+> | --- | --- | --- |
+> | Request-filter CPU saturation (edge_request_filter_cpu_saturation) | 2/5 | 4/5 |
+> | Namespace memory limit (namespace_memory_limit) | 0/5 | 0/5 |
+> | Wrong pod selection (service_wrong_pod_selection_hotel_reservation) | 3/5 | 1/5 |
+> | Local traffic policy (internal_traffic_policy_local_astronomy_shop) | 0/5 | 3/5 |
+> | Network policy block (network_policy_block) | 1/5 | 2/5 |
+> | Duplicate PVC mounts (duplicate_pvc_mounts_social_network) | 4/5 | 3/5 |
+> | Misconfigured rolling update (rolling_update_misconfigured_social_network) | 0/5 | 0/5 |
+> | Stale rotated credentials (secret_rotation_stale_env_credentials_astronomy_shop) | 2/5 | 2/5 |
+> | Wrong DNS policy (wrong_dns_policy_astronomy_shop) | 3/5 | 4/5 |
+> | Valkey authentication (valkey_auth_disruption) | 5/5 | 5/5 |
+> | **Total passes** | **20/50** | **24/50** |
+>
+> Their own caveats, verbatim:
+>
+> "Five attempts per problem are not enough to claim a general eight-point improvement, and **two problems did regress**. But the current integration asks Jev for help at only a few fixed points and does not yet use repeated voting, continuous action guidance, or prospective safety checks."
+>
+> "In each case, Jev accepted evidence of current functionality without fully testing the invariant that made the repair durable and correct."
+>
+> "If the correct explanation and test never enter the candidate set, ranking the available options cannot recover them."
+>
+> "**We also want to evaluate Jev as a prospective safety reviewer for mitigation actions.** Before the agent changes a workload, Jev could assess blast radius, reversibility, and threatened invariants. We have not run that experiment. A safety experiment would need explicit unsafe-action labels and controlled measurements, not an inference from these pass rates."
+>
+> "**Agent capability is another useful axis.** Our experiment paired Jev with a lower-cost model (Luna). We would like to compare the same integration with a frontier model, a medium model, and a weaker model to learn whether Jev mainly lifts less capable agents or improves consistency across the board."
+>
+> "Jev improved this SREGym-Lite slice because it added useful friction before premature diagnosis and repair. But it is a decision aid, not an oracle. The strongest design pairs its fast evidence review with executable checks that encode the system invariant the recovery must preserve."
 
 ## Links
 
